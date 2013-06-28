@@ -1,0 +1,304 @@
+Keccak[r=3, c=1597] duplex: 04 
+
+Keccak[r=4, c=1596] duplex: 03 
+
+Keccak[r=5, c=1595] duplex: 08 
+
+Keccak[r=6, c=1594] duplex: 0d 
+
+Keccak[r=7, c=1593] duplex: 42 
+
+Keccak[r=8, c=1592] duplex: c1 
+
+Keccak[r=9, c=1591] duplex: 47 00 
+
+Keccak[r=10, c=1590] duplex: ff 01 
+
+Keccak[r=11, c=1589] duplex: cd 02 
+
+Keccak[r=12, c=1588] duplex: cc 01 
+
+Keccak[r=13, c=1587] duplex: 0c 0a 
+
+Keccak[r=14, c=1586] duplex: 9c 3a 
+
+Keccak[r=15, c=1585] duplex: e4 64 
+
+Keccak[r=16, c=1584] duplex: 95 10 
+
+Keccak[r=17, c=1583] duplex: 06 99 01 
+
+Keccak[r=18, c=1582] duplex: 6c 1f 03 
+
+Keccak[r=19, c=1581] duplex: ad d5 00 
+
+Keccak[r=20, c=1580] duplex: fa f4 07 
+
+Keccak[r=21, c=1579] duplex: 11 26 1c 
+
+Keccak[r=22, c=1578] duplex: 94 63 15 
+
+Keccak[r=23, c=1577] duplex: ed e8 62 
+
+Keccak[r=24, c=1576] duplex: 7b c0 ac 
+
+Keccak[r=25, c=1575] duplex: 01 5d 9a 01 
+
+Keccak[r=26, c=1574] duplex: 07 77 b5 03 
+
+Keccak[r=27, c=1573] duplex: 10 56 f4 02 
+
+Keccak[r=28, c=1572] duplex: bb af 05 08 
+
+Keccak[r=29, c=1571] duplex: 81 fc fa 19 
+
+Keccak[r=30, c=1570] duplex: 1a f7 52 3a 
+
+Keccak[r=31, c=1569] duplex: 5b f8 02 63 
+
+Keccak[r=32, c=1568] duplex: 98 26 e6 14 
+
+Keccak[r=33, c=1567] duplex: 9b cb 1b 1b 00 
+
+Keccak[r=34, c=1566] duplex: 87 27 11 b3 01 
+
+Keccak[r=35, c=1565] duplex: be 1e 45 ee 00 
+
+Keccak[r=36, c=1564] duplex: 98 0e 31 94 08 
+
+Keccak[r=37, c=1563] duplex: bd 2f 99 72 0c 
+
+Keccak[r=38, c=1562] duplex: 5d 99 65 e9 26 
+
+Keccak[r=39, c=1561] duplex: f5 6a e0 42 27 
+
+Keccak[r=40, c=1560] duplex: f5 2a 2b 16 7c 
+
+Keccak[r=41, c=1559] duplex: d4 41 fd 29 73 00 
+
+Keccak[r=42, c=1558] duplex: d0 ac ae 57 8e 02 
+
+Keccak[r=43, c=1557] duplex: a2 e2 32 43 6b 03 
+
+Keccak[r=44, c=1556] duplex: 6f 73 52 e2 56 0e 
+
+Keccak[r=45, c=1555] duplex: c6 12 ed e9 d3 17 
+
+Keccak[r=46, c=1554] duplex: 35 d9 68 05 10 0c 
+
+Keccak[r=47, c=1553] duplex: e6 f4 29 df 6d 42 
+
+Keccak[r=48, c=1552] duplex: 81 35 fe 4e a1 36 
+
+Keccak[r=49, c=1551] duplex: 13 50 2d 2e cc cf 00 
+
+Keccak[r=50, c=1550] duplex: 43 4d 55 83 f0 a3 00 
+
+Keccak[r=51, c=1549] duplex: f5 bd ef 94 09 7b 03 
+
+Keccak[r=52, c=1548] duplex: 7f 5a 4e ea f4 f9 0a 
+
+Keccak[r=53, c=1547] duplex: c2 a1 c3 c1 cc af 14 
+
+Keccak[r=54, c=1546] duplex: d9 fb c2 63 f8 0a 0b 
+
+Keccak[r=55, c=1545] duplex: 4b d0 d3 9c 6d 1b 5e 
+
+Keccak[r=56, c=1544] duplex: 8c 3b c8 39 6e e9 c9 
+
+Keccak[r=57, c=1543] duplex: 6c fb b7 76 f4 cb fb 00 
+
+Keccak[r=58, c=1542] duplex: ec 2b 21 f2 8f 34 a8 00 
+
+Keccak[r=59, c=1541] duplex: 04 f8 3f 01 e8 cb 89 03 
+
+Keccak[r=60, c=1540] duplex: 0a 54 ec 9c f7 71 2a 0c 
+
+Keccak[r=61, c=1539] duplex: 20 7e 75 cf ed 0e fe 11 
+
+Keccak[r=62, c=1538] duplex: 42 0a fd 42 d0 75 53 2d 
+
+Keccak[r=63, c=1537] duplex: f1 c8 e2 62 36 6d e4 4c 
+
+Keccak[r=64, c=1536] duplex: ea 3f 4c 6a 51 11 c9 f9 
+
+Keccak[r=65, c=1535] duplex: 87 8d 3d 97 63 42 49 7b 00 
+
+Keccak[r=66, c=1534] duplex: 06 c9 26 34 9b c2 11 28 03 
+
+Keccak[r=67, c=1533] duplex: 58 78 29 7a a8 e5 95 21 04 
+
+Keccak[r=68, c=1532] duplex: dd b9 d9 d4 6d 11 92 93 05 
+
+Keccak[r=73, c=1527] duplex: 29 0d f1 90 38 d9 02 ce b3 01 
+
+Keccak[r=78, c=1522] duplex: f6 38 5c b3 09 21 2c 39 c0 1f 
+
+Keccak[r=83, c=1517] duplex: ae d7 d1 cb 12 34 c0 a1 df 68 06 
+
+Keccak[r=88, c=1512] duplex: b1 88 be e8 52 4d 3c 4d 3b 19 26 
+
+Keccak[r=93, c=1507] duplex: 62 2a 40 e8 f8 e5 ec 76 6d fb 00 19 
+
+Keccak[r=98, c=1502] duplex: 3e 08 35 88 c4 a1 67 f8 f7 2e 40 31 02 
+
+Keccak[r=103, c=1497] duplex: 9f 85 72 96 33 89 97 10 81 a9 11 fc 60 
+
+Keccak[r=108, c=1492] duplex: 9e 7f f6 28 e6 f9 a1 e0 c5 98 50 62 f5 00 
+
+Keccak[r=113, c=1487] duplex: 3c 7b 75 fd 00 63 e6 dc 63 98 de 08 fb ec 01 
+
+Keccak[r=118, c=1482] duplex: 8c f0 dd 11 cd 8b 23 78 d8 a5 8d cd 2f 7f 39 
+
+Keccak[r=123, c=1477] duplex: f4 dd 18 70 bb 6e 48 ad 8c 37 36 67 8a b3 3b 05 
+
+Keccak[r=128, c=1472] duplex: 87 cd b4 63 22 ec ab 15 52 b0 9f 28 f0 25 62 2c 
+
+Keccak[r=133, c=1467] duplex: e2 5b fe fa 1f 62 77 84 63 73 5e c4 35 9f 8c aa 1c 
+
+Keccak[r=138, c=1462] duplex: 1c d6 5f a3 44 84 b7 52 39 5c 47 db c5 74 23 9a 09 01 
+
+Keccak[r=143, c=1457] duplex: c5 6c 18 ff 3a 2c 4e 52 ff 68 04 e6 fe e6 df f9 65 27 
+
+Keccak[r=148, c=1452] duplex: a9 7c 10 63 66 fa a3 a7 f5 f6 a2 65 a3 0f 87 7b e0 e1 03 
+
+Keccak[r=153, c=1447] duplex: 31 a9 53 1a 09 e0 7b 9c 22 32 cb cd 88 b8 11 7e 57 fe eb 01 
+
+Keccak[r=158, c=1442] duplex: 70 01 82 40 6f e1 33 0d 01 1c ae 0b eb 0f 16 a7 bb 81 97 06 
+
+Keccak[r=163, c=1437] duplex: 6d 0b 44 d9 32 bd a3 e7 f8 78 ef b4 f1 c1 f5 8f e3 f4 bf 6a 05 
+
+Keccak[r=168, c=1432] duplex: 4d fb 60 8a 4c a5 e6 d5 e9 8c 9d f1 d6 07 24 b1 f5 ec 60 d6 34 
+
+Keccak[r=173, c=1427] duplex: a8 47 18 d1 52 84 c0 7b 56 90 92 9e c0 30 5d 4e 14 6a be f8 2c 0c 
+
+Keccak[r=178, c=1422] duplex: 4b 3b 7e 52 6e 46 ae b2 4b e6 b6 ec df 60 29 be 6a f0 1d 19 6e e2 01 
+
+Keccak[r=183, c=1417] duplex: a1 aa 94 c6 46 a2 f2 46 3f 61 fe 95 5b e6 3a ab 52 e0 43 30 9e 1a 79 
+
+Keccak[r=188, c=1412] duplex: a1 c5 fb 4e 25 b9 4d ec 57 8f 6d 68 29 b7 e4 dc 9b 62 44 3b 96 ab 0d 0e 
+
+Keccak[r=193, c=1407] duplex: fd c9 c2 8b 8e 69 7f 69 d5 5c f5 2b 25 5d 4f 96 4d ee 0e 93 e5 80 30 74 00 
+
+Keccak[r=198, c=1402] duplex: f0 10 6d 57 38 fc 36 f8 85 60 ed d5 b2 2b 08 7d c2 0e d7 35 7b 4f 81 ea 1e 
+
+Keccak[r=203, c=1397] duplex: 0a a3 5e d7 45 3e db d1 ad 42 62 df 67 c5 86 26 ad e4 0b da 01 1a 60 bd 19 06 
+
+Keccak[r=208, c=1392] duplex: f3 e5 89 2b 3b bc 43 27 93 51 4e 7b bb 61 db 64 07 de ef 7a b0 30 33 0d 45 f9 
+
+Keccak[r=213, c=1387] duplex: 6d 3d ae 59 fd 1e 89 f3 8e 4a 35 b2 29 92 1a b0 03 20 7e 85 cc 4f 75 99 81 88 15 
+
+Keccak[r=218, c=1382] duplex: b1 7e 76 2d 38 a1 b6 61 e6 f7 71 ed 59 58 a7 6b 46 0a 7e 11 61 76 bf 67 0b 91 da 02 
+
+Keccak[r=223, c=1377] duplex: 4b c1 48 35 da 42 cc e1 1f 34 88 f6 5e 7b f1 3e bf 25 f5 93 e1 f9 13 23 f1 78 65 6f 
+
+Keccak[r=248, c=1352] duplex: 01 e8 26 49 73 1f 5d 51 01 81 fd f1 b9 6e 50 98 33 5f 2e fc 8d 1b c2 47 0c 17 53 bd 9e d3 6c 
+
+Keccak[r=273, c=1327] duplex: 5d 45 44 ef f4 a9 b8 49 de a0 3b 0b 76 ee e1 2d 9a ae c9 4d 7b a5 0d 45 d9 02 03 24 61 89 af 6f 17 da 01 
+
+Keccak[r=298, c=1302] duplex: c5 ee 6b db 07 7c 55 61 e5 0e d1 5e 2f 86 bf 7e 83 4e a9 35 72 4e 90 e1 33 35 6b 3a 4c e3 7c be fb b5 2c 00 61 00 
+
+Keccak[r=323, c=1277] duplex: bd 42 fa 1c 1c c3 82 8d f3 bc da 33 2a aa d4 69 c1 95 3d 81 22 da 82 b8 ab ca 00 92 7a f8 3d 0e 8f a4 b6 7b f6 5a 40 95 04 
+
+Keccak[r=348, c=1252] duplex: e3 20 b1 17 14 9e 47 07 f6 24 8b 5a 04 3f 3c 11 16 60 e6 97 88 db d5 9c 46 e2 ee 6a 3c 28 eb 89 51 79 4c 44 22 da 98 9c 49 71 94 09 
+
+Keccak[r=373, c=1227] duplex: 50 37 a3 a2 c0 dc 52 86 81 14 dc 4e 42 bd ef 36 e2 0d 18 94 fd a3 b9 78 48 10 f0 c8 fe 59 e6 80 9d 69 e5 9e b7 f8 a4 0c 35 61 a0 fc 94 9e 13 
+
+Keccak[r=398, c=1202] duplex: 59 2c 30 d8 71 3c 0c d4 fa b2 47 5d 2c fb 7e 99 ec 73 81 11 d8 39 86 05 b1 83 59 60 12 2e 8e 9a df 1f 6f da f7 8d 78 8d a9 1e 4e 0c 7d 74 eb b4 b1 2f 
+
+Keccak[r=423, c=1177] duplex: 34 ce cf 33 e0 f4 58 00 c6 da ec dd 26 a4 e5 e5 ad 15 8b 01 53 38 60 a5 e8 8d f8 53 91 05 88 f4 2a af 3d bd 2e 53 3b 35 e5 dc 2d 47 70 13 ce 7e 89 6a 13 3a 28 
+
+Keccak[r=448, c=1152] duplex: 42 20 36 2f ef 3f 2d 48 2a 55 4f 9e 22 21 0e 07 5e 6e e6 dd da d8 39 de 80 d8 ff a2 a3 8b a8 1e fc 40 6b a1 20 84 fd e8 dd cf 6a 23 b4 54 23 f8 4a 57 d2 dc 47 2f 96 73 
+
+Keccak[r=473, c=1127] duplex: b7 94 01 9e 60 7b 2f b1 19 9e 66 b0 7a 2b f6 49 bb 56 84 39 07 2f 75 cb 0d 1f 7b d5 2e de ec 98 4e 2c 62 0b cf 47 b0 92 ef 4c e6 48 18 cd 0c 08 99 41 6f 1b d2 53 b0 a8 a5 e2 96 01 
+
+Keccak[r=498, c=1102] duplex: 23 49 1f e7 da 7e 06 57 0b 26 9c 8d 01 2c 5c 8c ec e9 54 b2 93 d1 45 50 f2 9d 5e f4 2a 07 d6 02 74 c1 1c 61 f9 bd 59 0a e9 af 60 b9 d4 55 d6 dc a4 a3 f2 05 35 03 77 b5 8e 17 e9 e4 4f 0a 01 
+
+Keccak[r=523, c=1077] duplex: 28 a4 9f ab 72 f6 24 e3 d6 fd 2b e3 b3 6d 93 51 e2 83 42 5d a0 86 a0 b1 dd 74 90 57 cd a1 de 66 f0 f4 2a 92 ee c2 89 61 2c e5 75 d4 82 a4 32 f6 d3 a0 66 97 34 5b 75 45 a3 0a 24 19 0e d1 70 7f c1 03 
+
+Keccak[r=548, c=1052] duplex: 12 af db 09 a8 db ed 03 7a 3c 6e d1 64 3e 2f 51 36 e2 1c c3 1a fe c4 e3 47 b2 5e c4 ba d3 a9 80 c3 30 8c f1 b7 cc 01 1e 67 a7 a3 b5 f2 4a 97 32 2d b9 c4 f6 09 4d 8f e4 c9 aa 40 22 e6 25 85 70 fd 22 88 61 06 
+
+Keccak[r=573, c=1027] duplex: eb 32 99 7f 29 de a8 c5 54 d4 04 76 d4 17 86 ae de 96 6c 7f df 6c cf 30 ce 97 a6 7d 69 07 9a 58 73 74 98 63 19 b0 47 80 ed 07 96 7b 9e 50 b7 ee b7 0d ea d0 43 d6 47 93 53 6b 6a ed b9 af 9b 12 65 fe 01 36 88 1c 80 11 
+
+Keccak[r=598, c=1002] duplex: 06 dd bb 66 d2 62 8e 42 37 ba 19 93 ef 7a da 09 17 95 26 da 58 61 73 66 6d a5 fa 22 1b 0d be d0 0a 66 23 6a 6d f2 34 87 4b f8 28 e5 49 1b 63 ef 22 47 6c c7 1a e5 cd 6d fa 8f 33 7c f0 0a c0 f5 d8 33 20 9a 48 fa ba 5c 3b ca 3e 
+
+Keccak[r=623, c=977] duplex: 54 53 ef e5 35 e3 f3 27 d2 05 d0 c0 3f ee 4f 74 27 01 1e 4f 11 ba 96 ef 2a 08 1c 7b 53 e9 16 70 f4 ca 14 75 1c 6a 47 5f 48 80 04 c8 15 8d 64 f2 d2 5b 1b 6f 18 5f 1b 06 3d 68 4f f6 db a5 89 f4 2d e7 31 5b 31 99 85 01 e3 db 21 39 43 60 
+
+Keccak[r=648, c=952] duplex: 26 de 75 c9 59 ba ee 27 f0 16 d9 21 5b 5d e6 75 65 82 5c b4 1f 1b ae 97 c8 1d c7 b9 52 03 8a 63 b0 ef 71 32 0a a5 d5 00 bc d0 fb 73 7f 67 d1 7d 95 6a 25 7a 1e f2 0b b0 4e 5f 4b 8f 8e f1 e6 42 80 2f 7f 35 63 bf b6 ec 28 02 38 aa e2 da 86 e4 c3 
+
+Keccak[r=673, c=927] duplex: 5f 58 f5 08 68 18 9a 73 8b 81 86 89 fe 54 f1 6d 96 84 45 5e d5 15 36 7a 03 f5 c7 b4 d7 cc 08 b5 7a 55 0c 9f 85 f5 b5 a2 17 6c 1d b3 3c 6c b5 08 79 10 1c d5 b0 43 de 39 0f ef b7 87 9b 05 0b a6 98 75 c5 2b 9e cf c3 e9 24 df 4d 83 69 28 a8 83 70 55 f3 39 00 
+
+Keccak[r=698, c=902] duplex: 6e b3 43 79 3b 9b c5 5a 6b 56 88 91 cd 48 9f 5f 6d 55 13 46 c5 dc 78 86 0b a6 a4 22 dd 3e a1 90 fb c7 fa 45 a5 5b 9b ce 40 da 2d 51 21 06 af 47 02 37 8a 5a 36 fe ca 9e 17 e8 7a f6 67 b2 8f f1 2d 6d e1 1b 34 30 e8 1f 1b 6a 95 7b fc 73 31 5a b1 ce 80 09 04 37 be 01 
+
+Keccak[r=723, c=877] duplex: c8 a1 08 79 71 7d 55 3e d8 cd 5f 3d 85 a1 52 93 94 c9 93 ac 7c 32 24 20 aa c7 aa 30 0a 8b 31 a2 0c 30 1c e5 3a ea 30 20 6a e1 5a 6d 3c 32 86 d0 23 8a f4 75 e1 62 f1 f6 e0 27 fc 67 77 56 4d d8 da e8 08 e2 fe c7 39 18 f0 0d 22 41 b2 1c fd b8 e7 d7 b3 3e 72 6b f4 42 b4 70 01 
+
+Keccak[r=748, c=852] duplex: 98 53 95 e0 0a a9 ec 30 09 8d 00 05 98 92 20 ac 01 39 48 f3 1b 8c 75 c0 a9 15 53 ee ea b3 51 4d e3 bd de 65 fd c4 2c 5a 5b aa 78 e4 0b e0 a7 33 03 f8 0a 71 3e 62 8d b5 39 20 0f e9 6d 34 e2 f5 4c 39 a0 1e 09 9c 8c fd 9a 7b 95 d3 8f 1a 10 d7 10 8b 79 62 19 a7 13 d5 68 be 49 46 e3 0e 
+
+Keccak[r=773, c=827] duplex: fb f1 0f fa 43 45 dc 84 6c 84 f4 29 41 97 72 14 b5 18 a3 a7 35 59 67 6a 56 ab 48 f5 60 41 e0 62 13 f6 67 ae 8a 2e 3b 15 d8 2b 60 59 87 f2 54 18 31 c7 1f bc 1b 20 57 10 8a 57 cf 83 c1 21 84 a6 2b 89 70 c0 99 bd 8e e7 0d 87 56 56 58 25 6b e6 96 6c b8 bf 58 63 74 51 63 70 8f be bd b9 07 8f 17 
+
+Keccak[r=798, c=802] duplex: fb c6 d3 d5 38 d0 78 94 13 b8 77 ea 21 1c 63 72 47 d9 07 11 de b0 a3 2c 35 1c de 3f 93 37 05 4b c8 c9 e0 74 66 36 60 79 2b 05 4d dc 9b 02 17 16 8a 2f c7 34 c8 12 ea 70 ec a3 79 df 90 e3 92 3b 18 5c 7a 51 0e 15 26 05 c7 ab be bf da 5f 3f 95 57 08 6e 15 72 20 f0 5b 15 f0 13 06 51 f4 5a fa 27 c7 ec 39 
+
+Keccak[r=823, c=777] duplex: 5a 85 4a a2 5e f5 f3 df b5 f8 a6 d1 77 95 d0 ec 8a d3 0b ff 22 0b 9f 9a 6b 72 d9 a9 3e 3a 10 13 bf 69 e0 5d 72 52 7e 21 ae b9 58 83 f0 2a 6a d2 6a dd 88 ba 7e 0c 75 3a 82 1b 40 cd db 21 ab 54 b7 51 78 3c 8f 13 ba 42 99 63 8a a5 ed ce 1a de 78 d4 e7 16 41 b8 5f 1d 1f 88 ca da cd 62 4f e8 74 34 47 15 27 e3 5a 
+
+Keccak[r=848, c=752] duplex: 8a 1d cc 70 5d fb 14 d4 f7 b4 41 15 d9 16 b9 61 43 a0 bc 30 79 1e 99 55 7b 66 0c 8b cd 44 57 0d 64 11 67 77 a0 c8 b0 70 e9 8e 1b 10 98 77 e0 14 85 6b 68 50 eb ce e7 da c7 a3 a3 a7 fb e9 2f 88 13 de 56 76 d1 74 ea b7 f5 3a a7 46 9e 03 5b 39 2a f0 e4 6c 18 c6 2f 7b cd 12 81 ca e7 4d f6 b5 b1 7e ca 58 58 6f aa 8d 5c 4f 
+
+Keccak[r=873, c=727] duplex: 9b 25 11 3a 48 50 77 6e 08 59 5e 60 12 03 cb 80 63 53 38 cf 80 a3 21 fe 25 5f f1 c7 98 7c 9c c5 7e b2 02 c1 33 6d 49 80 8f f4 31 35 90 79 2d b3 af 5e 1c 7d 1d 3d de 2c 2e a6 67 90 81 3f ff 20 59 d9 59 44 ef 65 94 0b 05 b5 f4 c1 cc 83 79 e7 e7 70 d2 5a 32 0a 90 03 b2 87 01 56 76 01 a2 a5 9a a2 36 eb 7a 9a c0 4a 01 db ef aa bf 01 
+
+Keccak[r=898, c=702] duplex: a2 9f de 9e cb 78 d6 b8 25 15 f4 47 2c 1d 90 ee 72 8e d1 24 47 db 51 2b 19 61 ed 8a 37 c1 2a 10 4a 06 9d 02 64 06 34 8c 77 86 b1 01 8c 19 7d df 60 42 4b 36 3b da 32 54 e3 36 cd a3 6a 1b 0f 80 dd 78 77 4a 3b 9e b6 f1 d4 a7 ff 9b fc 6b b0 fa 7d a8 92 4c 47 69 ee 3a 1b 0d a9 31 4b 98 a1 d7 ec 2e 79 a2 57 9a 93 0a cc 7b cb c7 91 0a e3 9e 03 
+
+Keccak[r=923, c=677] duplex: 76 76 9e 43 7c a0 1c 38 cc b7 4b f3 a5 ec 64 aa b5 de 13 70 90 c9 b0 e0 58 79 44 b2 77 a5 f9 37 74 53 49 7b 2a da 3f 01 eb f8 b8 2d 0b 8c 00 3b 5e 28 b5 3d 0e ad be 1f 34 11 1e fc ef 97 bb ec a6 f0 f1 c8 b6 84 5d 48 6e 48 a2 7a 76 dd dd cb 90 4c 16 39 41 65 f0 b6 0d c4 28 93 9b 59 45 95 d3 c6 af 04 ac 02 29 ac ba dc f9 76 b0 c4 d8 91 5b 0a 3c 03 
+
+Keccak[r=948, c=652] duplex: ac 2a 7d 3d 9d 8d e4 a8 73 b1 b5 e1 22 d7 c4 98 9f 18 8d 05 b3 85 5d 36 a0 72 28 61 91 0f 2b 6e 38 41 77 ec 2c 2e 7a d5 7a 97 0e 65 f7 bf 82 c0 90 fd a6 75 d3 e5 cd 11 b5 26 16 5e a4 c7 e8 4e ec 13 3b 3e f2 b4 20 57 ec f0 fc db 93 66 62 19 b2 5b 9d e5 3e 03 12 38 dc 08 6b 7d aa 5d da 9e fa 0b 83 f3 9f 13 34 62 fc c3 86 06 d2 78 70 a1 0f ec 10 a3 0d 50 0d 
+
+Keccak[r=973, c=627] duplex: a8 f9 76 7d 15 cb b8 80 dd 8f fb 0d dd b1 41 84 d9 b6 81 5a fc a0 24 a7 ef 7f 41 43 6f f0 f8 18 ae 4f c6 a7 ee ec 3d f4 7c da fc fd 22 84 d5 db ae 44 24 8b 48 3b bd d4 e6 4f 1b eb 08 ca 54 84 f9 62 30 f6 1e 9d cf 46 d5 3e 12 2a ca cd c0 12 5b 2c 2a cd 27 98 95 e0 2e 2e 43 ba 5f 85 90 d2 8b 44 23 e2 c9 bb 26 ac a8 6a f3 6b fd d3 f2 ad 0a d0 75 8f e9 2a aa b8 0f 12 
+
+Keccak[r=998, c=602] duplex: 5d c4 c0 bc 2f dd 42 5f 2d 18 87 54 68 8b 57 0c cf 0c 34 dc dd a2 96 26 72 7e 05 04 06 68 84 15 20 71 f3 05 7f 51 6c a3 2d 08 a3 72 35 7d 7f 4c e3 5e 53 32 76 c1 27 0c d9 71 96 64 98 28 5c 3c f7 1f b9 a0 c9 6d 68 55 87 29 fe e0 ea 3c 1a 75 d8 5a f5 13 ba 6e 9a 0f c9 42 9c 18 c0 0d 7b 65 34 26 f4 b5 66 3f b5 da 1b 3f e6 3f 8e bb 00 57 ae 52 1d 77 6c 20 8c 1c 21 0e d7 d7 21 
+
+Keccak[r=1023, c=577] duplex: e9 ee ad 59 68 18 d7 74 2a bb bd 96 bf c4 5d 43 a6 69 8b 6b b4 69 80 7e aa 89 37 33 ac e1 3b c5 d0 48 09 00 89 e4 18 41 9a de a2 fb ba c4 19 e8 44 6d 27 5d 35 d8 53 ab 98 4d 87 25 1a fe c3 69 e8 e7 f5 8c 19 6b c8 54 cb 2b 40 e7 c2 42 b5 7a 4f f3 13 e5 85 4a 8e 9f d2 c2 18 c4 d9 ed 12 0b 5c b1 56 e7 ef ea 0d 63 33 1e 63 1a 27 45 88 97 3c 3a c1 ee 28 bd 89 37 9e c1 3a 29 f2 fa 65 3c 
+
+Keccak[r=1048, c=552] duplex: 7f 48 4a 79 45 02 4b 4a c9 f4 21 8d 89 e6 61 df f0 4d 40 8d 19 a4 0a e5 11 61 1b 53 80 a0 8c 12 74 7a 03 e3 70 5a e3 88 91 6a 0f 77 5b a5 95 30 71 0c 1a 76 74 19 1a 55 23 6f af 2f 34 63 88 ea bb 55 f2 3a 4c 2f 73 ca 3e fe 4b 33 0c f1 1d 27 5d 50 8c 96 5f 10 64 a7 d5 74 8f 09 53 69 cc 12 92 57 a1 69 7f ef 14 0f 20 58 b1 8e e3 45 86 f7 75 7d cc 16 86 ec bf a4 17 e8 f6 4d 4a 1a c1 97 38 3a c5 
+
+Keccak[r=1073, c=527] duplex: 84 93 9c 18 07 f0 f8 ef ac ab 94 45 a2 06 e9 de ce 2c 1e 0c 00 19 a4 01 73 fb 9b 4d 14 d2 a4 35 45 ae 94 9f 74 af 5c 7b 00 6d 54 22 91 ec 79 06 ae 12 a1 e1 57 1c d1 93 45 49 f9 4a 1f dd bc 24 a3 5c 3b 09 7d f5 f7 40 c2 45 a7 b2 bc 62 c7 e7 39 e5 af 1d df 01 3e 51 8e 78 9a 44 a1 e8 3a 17 9d 61 db 74 b3 4c 06 d4 de 29 33 7b 5c bb 4d d2 db 22 98 2f 30 e8 a1 ac 4f 35 83 68 cc 43 96 dc ca 1a d3 31 33 c5 00 
+
+Keccak[r=1098, c=502] duplex: 17 bd 41 d0 fd 92 bf 2b cf c4 f9 d4 d3 40 89 ab d6 fc c1 e0 48 e7 15 ab b2 9b 4b 0e 05 dc 7b 3d db 7c 39 f0 df 68 f0 c2 6e 33 24 8a dd f5 98 ae 8f 3e 1f f1 a3 14 94 4a 8e 21 e3 0e d0 67 be 0a 63 bc 13 f1 b0 0b 32 b8 cb 0e f5 43 68 5f 0d 00 09 92 bf f9 ca fb f9 31 a1 af 41 1c 16 a1 90 91 b8 fa e9 25 94 fb 98 65 39 1d 0d 75 33 1a 98 2c db f2 65 d4 cf cb 9f 88 eb 04 a5 ba f5 25 bc 59 09 a0 0d 6c b2 2f 94 9e e8 00 
+
+Keccak[r=1123, c=477] duplex: c8 46 82 9d a3 f9 c5 50 a7 bf ed 41 d8 05 9f 56 12 ff 29 7c f9 d6 a0 d0 8d 70 db 13 bb 67 a3 2a fd 77 fc 9c 4d 2b 47 09 ae 73 9d 4b cf 4d bd 97 aa 18 8e f9 5d 42 d6 67 9c 97 0b ad 50 73 5c fa 6b 08 af ae 26 f6 42 13 94 84 bb e0 52 a8 23 91 02 43 8b dd f4 90 8a da 4e 40 31 8a 04 f0 a5 ed bc 6c b4 b8 90 73 a1 b6 74 fa f1 6b bd df 2a 94 de b1 65 74 b3 48 60 83 fe 20 10 94 e0 35 8f 91 8a b5 7e 68 1f 75 81 d2 29 fc 5d de 01 
+
+Keccak[r=1148, c=452] duplex: 8b 3a 19 33 f5 22 dc 43 84 09 0c 36 10 62 68 a2 28 61 ec 95 ac a5 59 70 5a 5d 59 9b 39 ad 9f 3e f1 20 b2 23 18 65 46 37 bb 65 4d 47 a8 3b 4c 61 c2 6e fa 95 01 0a 70 d4 7f bb 76 77 56 57 85 96 aa b5 5c f1 26 32 06 70 84 db be ac 4c 4a 1d 58 2c de db 17 ad a8 87 ef a2 0b bb be 2a 4c 64 76 c5 d9 ce e4 31 78 11 8c 87 db 20 04 25 02 c9 98 dd 0a 9f c0 9c 2b 87 a9 6c 51 37 2f e0 98 e3 21 9a 0c 61 1e bf 00 56 c2 3d df 6b c2 a5 7e 5e 09 
+
+Keccak[r=1173, c=427] duplex: 80 60 b9 67 f6 1c 72 4a 3a 37 6e c1 6b 0c f2 65 b7 84 86 9a 5e 89 0e 42 f1 15 31 fb d7 c6 80 38 c3 be 7e 24 62 c3 4d e7 ce f2 6f cf c1 df f6 ff a9 e6 d2 57 ae e7 2f 9a 09 3c 07 e4 16 c1 f6 64 76 b4 6e 2f de 90 f0 c6 53 4a 56 83 54 3e 63 b3 69 91 47 94 b3 aa 7b 97 c9 ae 8d a0 cb dc 76 f5 62 fa 0e 5c f4 8d b6 75 f5 06 e7 e9 7f 5e 3c 1d 57 3d 1b 1e 49 aa a5 06 55 b2 1f 6e 0e a3 96 56 25 7b 44 19 39 c5 a9 79 e0 0b c5 cf b8 77 ee 52 ad dc 1b 
+
+Keccak[r=1198, c=402] duplex: 55 59 81 6d e3 58 11 37 a0 c0 ca 24 d6 1c fa 30 94 3e 04 4f 39 58 c5 e8 c5 05 64 37 1f dd fc 6d 06 84 ea 8f 3e bd 55 33 d7 08 f6 6e 40 5a 0e c2 d9 68 d5 3d 11 a3 73 67 f5 f1 07 03 03 f9 5b 3b e2 3c 22 93 2b 28 e3 f4 5e 5a ab 7a 69 1e 16 5d ff 88 e1 d1 a7 a7 90 28 e1 bb 52 9a 16 24 f5 e8 7b e1 ed 54 72 81 82 22 7b e6 c4 7b 75 be 0c 66 61 7e 25 96 20 81 ab 67 0c 8e 6a 0a f9 20 93 3c a3 63 8f 23 5c c8 fd d4 ad 59 f9 c9 b4 8d 92 e5 31 ad 18 1a 03 17 
+
+Keccak[r=1223, c=377] duplex: ea 26 c5 c6 cf a8 14 fe 28 3d 13 85 59 1a 49 8d 37 16 d7 95 5a 40 5c 33 df 29 98 b4 23 4b f1 df e3 53 34 3d ee 1a 98 d6 a7 58 f3 f0 39 b3 f9 7a 2e d9 ca 9e 93 ef 0b 48 fb 02 c1 8e df 1e 2d 37 89 d4 77 ef d1 6d 3c f2 b3 6d 66 72 09 03 be 61 1a 0d 3e e8 c1 4d 95 c3 3b e6 f9 2c 4a 76 56 3f bb 48 33 58 dc 62 51 ab 16 82 37 79 2b f3 15 a1 aa 26 7c fc be b2 96 c6 97 3a 62 45 a6 7e b4 28 6b 2b f4 8a af d4 b5 51 58 ae 96 6c 87 4e 5e 54 07 6c f1 17 a1 33 2a 0a 6c 
+
+Keccak[r=1248, c=352] duplex: fa 37 f8 8a fe 93 78 46 bf b1 1a 19 88 6b 3e 3f fe 81 f8 f1 40 13 29 24 a3 5c e4 eb 14 5b 38 9d 84 8a 28 88 6d 56 68 75 ce 7c 5e e8 c5 c3 c0 3e 3d 16 f6 8e 90 e9 a0 41 c9 74 01 cb b1 64 e1 6e 8f 44 3f 80 2f 06 df 07 4c 67 b0 3f 37 b7 47 f4 dc b0 a5 68 f5 e1 66 78 4a 6c 79 70 5b 56 6c d1 0c 53 84 03 ba 27 13 68 0a 12 61 fc cd 73 ac 9d b0 42 f0 bf 18 bf 7d 0a 6f f0 42 c1 05 f1 67 3f df c2 e2 2f d9 da 88 1d b5 2b aa 23 a5 0d b2 2a 07 04 0e a7 f8 35 44 5d f8 94 97 6a 
+
+Keccak[r=1273, c=327] duplex: 84 37 e5 6e d2 a3 e2 3a 59 c3 cc 26 a2 e1 4f 6b 2d 38 70 f3 10 6a 3c 04 c7 ac 0c c2 cc 7c 4d 7e 2b 0e 8e d8 53 a9 09 39 d0 d7 d4 62 3d b1 7a 9f 83 2d ce 65 7c 46 b2 ef ab 1c c2 80 97 fa 0e 0e a9 91 bd 90 d8 8a ec ca 84 90 93 6c 04 a1 1c fe 87 a5 4e 85 f1 f8 a6 42 89 ef f7 cd 68 87 fd 52 4a 29 be 3b 0b a6 68 81 3f be db 3e 1a 2e 1d 28 a2 a0 ec 3b 61 22 6e 39 1f 5a b5 84 9d 8f 7f 6a 96 bc 91 f9 ff 15 6b 14 71 b6 36 32 55 1e 99 ec 64 43 46 cc 8d 63 ee 6e 86 a4 fc c5 ce ea 88 01 
+
+Keccak[r=1298, c=302] duplex: 74 fd c2 c7 fc d0 90 10 11 94 f3 7c fe 86 d9 c1 b3 db 39 78 39 c6 d8 7a e2 69 0d 97 a6 54 ec b6 cd 24 cd c9 e2 3d 30 7a 61 d5 1b a8 e6 e5 f7 69 99 23 1e a6 ba e9 11 a3 ec 6e 87 d8 32 56 98 0a fc 94 0b 06 78 f8 c9 eb 4a 4c 9f 1e 30 33 58 a3 c7 94 a2 df 57 b7 ee d5 66 30 c7 c5 7e 30 2c 65 ed 84 b1 d1 af 43 55 8e a0 19 55 16 b3 f4 46 73 b6 a8 bc f3 fa 9f 13 db 71 47 7b 0a 10 6f 53 04 34 c0 49 a5 0a a7 12 ea 07 14 30 2d 72 bd df 7b 8a a9 98 c2 f2 40 2b 9e a8 12 58 e4 b9 07 f2 37 92 b2 00 
+
+Keccak[r=1323, c=277] duplex: 00 9e 55 ff db f5 be 4e d2 60 4e 1d 38 12 a9 d1 2f 2d 6a 8e 67 97 ce f5 ac 40 d0 5f a7 62 30 e4 cf 1d d5 ca 07 3b 32 40 25 71 af 31 a5 76 3d 33 6b bb 4d 66 67 00 45 1e 8a ce 69 9e 9a 70 15 cb c4 8f 5a a4 84 0a cb 5b ae 63 de 2f a0 08 a3 93 ba bd 5f ba 5f d5 41 a5 4e ab d5 2d 55 2d 4b 4d a3 96 13 06 c5 a3 3d c7 5d d7 53 12 bc 6a 9d 16 3b d3 e0 17 14 f1 04 8b 9f cb 64 f0 8f 54 b3 a5 0f 46 b0 f3 84 61 e9 b6 98 d6 f4 a4 fe f5 a9 10 f1 51 15 5e 39 88 88 59 18 b9 31 bf 62 30 7b b0 b1 0f 64 14 3b 04 
+
+Keccak[r=1348, c=252] duplex: 29 c2 a9 d2 4e 5b d1 17 64 ad 2c c9 a1 af 93 04 de e4 bb 6d f5 ef 75 a5 8c 16 9b 72 8b 71 5a 6e 02 c7 b6 31 40 cf 6a 2c 23 f3 b5 02 eb 0b 88 1b b3 12 f5 92 de 4b 8a 0e 94 f8 80 17 35 7c f1 0a 84 2a bd 5e d9 43 a7 43 84 93 a7 3f ef 51 aa 9f 45 db c0 f2 c5 8d 45 81 e9 10 81 64 17 e0 1e 7c cc e7 87 82 74 aa 53 a2 55 cd e9 2a 51 62 db 34 62 2b a2 13 fc e7 43 aa 8f 1f 46 e1 99 39 99 b4 0a 9b eb c6 57 55 a6 7f 63 df 93 7a 3c f1 55 12 a9 90 ae 40 1b 56 21 d2 ee ca 45 58 8b a3 43 5e 30 f6 f1 21 f8 0c 9b 86 00 
+
+Keccak[r=1373, c=227] duplex: e9 ff 29 fc 0c 0b 40 02 b4 91 5b f3 27 ac 26 5b 52 c7 0b 4d b4 c5 d5 ab d6 c1 dc 36 cb 96 53 2f 60 76 52 8b c3 fe 89 36 b4 29 71 51 ba 06 ca be 8a b5 08 fe f4 1a b6 fb 71 e0 be cd 3a 76 f3 7b 43 35 c2 49 82 b2 b1 03 dc b5 52 ef 98 89 e4 b6 24 1f 44 90 c0 ee 7d d0 e0 54 ce 0d 95 7a 97 78 18 5a a1 88 d8 a9 ea e4 09 71 ad c4 ab 2b 4b c6 54 5d 01 2c bf fe a3 5d 04 6f eb 0f 19 2c a9 dc a1 67 bc e9 49 f7 66 2d 05 ef ae 46 28 b7 3e 9b 0d 04 03 32 2d 69 1c 18 81 3d b0 ff 9f 1f c1 79 aa ed f8 49 06 fb 8d 67 5b 86 a1 05 
+
+Keccak[r=1398, c=202] duplex: 84 2a 13 35 68 a6 02 59 97 5b 48 b1 b5 66 2c 1c 2f b3 30 02 4a 89 ae 96 32 94 5f 8a b8 14 dd 18 b5 f7 b4 f4 6a 71 32 1d 3f 62 8a cb 97 6c f9 e2 e9 56 3e 1e 3d 45 82 5e 65 f8 00 c5 59 5b 5e 8c 11 a1 f1 b0 40 d3 32 21 6b fe 75 d0 af bf 1d 90 1d 14 76 c2 c7 0d 2b 98 21 be 94 d8 d1 b9 a9 71 e8 37 48 0c e2 19 c9 2a fb 03 8d ed 27 3e 3d 17 31 f3 8d 01 cd 05 ae 9f 92 3c fb 89 2e c5 db aa f9 89 bf 74 f5 2f f1 3a 12 a2 68 07 5d dc d1 25 90 eb 80 04 8d 43 b2 bc da f9 ac 21 1c 90 26 8d 53 6d 0c 3f fe 98 3c 3a 6d fa b0 8a 78 03 18 
+
+Keccak[r=1423, c=177] duplex: 74 d1 7d 5e e4 2c 77 14 6d 6e 49 0c 2f 57 70 ac 61 06 0d 40 d5 6a 74 3b d9 e6 6e 7f 9e c4 48 af 79 1f 45 ad 9c 31 9e c1 9e 51 50 7f b5 2c c8 df 18 f7 bc 2d 84 22 68 34 97 fc a7 01 b8 a2 c5 5c 0a 81 dd ad 13 82 2e 31 10 cb 0e 2f ad 67 86 78 d2 7a 25 f0 49 6f 90 98 af c4 ee 4f 94 77 b2 a0 6d 58 9c cb 81 bf b3 d3 42 04 36 39 db 78 b6 bf c4 cd 93 cc c1 37 8f 3c 85 2f 25 4a 16 e2 43 f7 30 5c b6 62 96 2b 52 bb ca ff de 64 6e 7d 01 97 30 dd 57 ad 9b 27 62 62 4a e4 59 76 49 9a d8 f3 e2 ce 3b 39 5a 98 fe c0 37 66 38 b5 be 16 45 d5 eb 69 
+
+Keccak[r=1448, c=152] duplex: 68 9e 9c 3e 5d 30 be f0 e0 9f 44 45 5a 8e 1a f1 40 6a a7 87 e0 e8 c5 c0 3d 97 80 5b ee ac db 4e 94 8f 8e 4a 5c 9b d0 47 48 75 8e 03 08 4a 46 2c 78 36 e3 93 a4 7b f6 2a fe 47 b5 40 e2 3d 6a d1 ef c0 89 b9 7d ab eb 6e 68 f7 cc 82 85 d0 37 63 44 66 54 6f c0 19 f9 7b 79 47 39 4b 86 aa d3 64 4c 97 43 98 72 7f 75 e3 17 8d 8a 47 fe fe 10 a2 96 d8 48 79 9d 0e 67 16 c4 7b 6f bc c8 58 2a 9e 8e f8 d6 be 6e e5 7c ea 81 d0 ae 9d 03 b4 b2 05 76 6a d8 ac 17 b8 21 1e cd 79 3d 98 4f 16 2a 1c 7b 9a 84 f3 23 d7 6f 07 38 c4 04 53 87 6b 66 27 1e 16 6a dd c8 
+
+Keccak[r=1473, c=127] duplex: 03 c3 f0 5f c4 7a 38 e9 a5 47 7f 0d 9d ec 5d c9 30 e7 2e c4 ec 20 eb 57 3f ad c4 5b 76 a3 0c 70 f1 8a 59 a2 58 41 f4 68 51 f2 53 15 03 e6 1b 7d 6e 71 d3 2f 0a 0f 59 13 ae e4 22 84 99 b2 d9 f9 3c f2 b7 5a 08 31 bc cc 8d 28 eb 76 42 a1 17 f3 db 7c 28 2b 4d c6 b2 c2 3a 59 cb 55 ae a9 38 f1 96 b4 13 70 ff 05 80 61 91 84 21 d4 96 8f 1f 78 f6 6b ec 50 bd 9e f5 57 f7 c3 78 d9 8b de e1 27 7c cc 12 2a 6a 67 42 a7 c2 31 2e f3 65 33 d0 a8 05 33 2a 5e 1c 03 01 48 7f 20 99 94 86 07 50 7c 6c 3d 5c 16 77 5a d8 a1 6d ba 26 1c a0 de b7 6f b3 7e 43 63 0e db dd 41 01 
+
+Keccak[r=1498, c=102] duplex: 49 6d ac f1 a5 e3 28 cb 34 7f c6 ce 40 16 3a ad 2b 0c 1c 10 18 c0 90 2a 1a ad 7f c1 c3 d8 9c 2c 3b fc b2 ba 2e 14 c8 76 42 53 a9 20 ec 32 e2 d4 5a 71 89 ef 73 52 65 8a b4 2b 7d 2d 20 c9 f9 ca 0e ab e1 fe 37 e4 6c 1c 67 3c 38 96 b3 77 5c 1f 7a cc 56 87 79 3d 62 f8 6d 39 57 f7 8c 78 a7 01 3b 21 0b 92 ad f2 75 0c 01 e3 c2 10 74 02 9a d0 15 f7 45 56 64 69 26 dd 89 ff c3 1d 6b 1c a3 37 ba aa bd 3a 44 f4 b8 d2 91 d0 03 9f f2 20 fe 6e 94 ec 2a 97 4f 01 17 c7 97 ab 30 21 82 89 f2 1c 3c f9 b1 1b 2d 44 ee 81 53 22 4c d6 5a f6 11 5a fb 61 57 56 83 bf 8c 39 a7 ab 8e 03 
+
+Keccak[r=1523, c=77] duplex: b9 f1 66 4d d8 22 1b 61 fc 0a 72 48 2c 75 d9 fa b5 9b d5 d1 80 52 a9 c4 be f3 8c 75 52 a6 90 82 62 e6 24 a3 64 af d8 ea be 7d 5d 32 c2 88 ef 2e c1 5c 04 22 f3 c3 89 5f 3c 8e 8a 1f 6a 27 28 68 4b 88 a9 5d 7c 93 77 b7 d2 fe ba 1d b8 7c f9 47 eb 58 b5 79 73 60 01 7b d2 85 40 6b e5 e0 11 97 9c 4f f2 d1 02 2b 3a b8 a7 16 ff f2 e4 de eb 39 7e 32 76 8f 22 3c 8f e1 74 e1 75 0d 38 24 33 1c c5 45 5f 85 79 6b 59 4c 4e 2e f0 38 b0 87 8e 2f af 25 5a 87 d3 d6 66 b5 b6 4b 2b b9 f8 68 45 a6 42 c6 e3 96 48 9f a9 b5 bf 12 c6 69 ad bf b6 32 c3 e3 ea f8 37 54 2e c6 e3 d8 72 b8 38 ea 02 
+
+Keccak[r=1548, c=52] duplex: f5 92 8c ba 9e 20 86 95 56 1d 30 d9 25 e4 51 1b 97 62 f8 47 50 fc dc 5b e3 75 ab ce ee ce cb 28 07 d6 f3 40 5c 33 38 c6 25 b2 2c 17 73 9a d2 f4 af 0f e1 68 12 ce 91 15 1d 16 46 ac 8e 8c ce 51 9b a4 8d d9 51 ef 8b 58 4e 90 e4 d8 8a f8 c2 ac 9c c5 a3 cc 22 c3 9e ef 8e 11 79 81 14 91 0c 7d 83 13 67 f5 4b 77 2f ad a4 8f 11 7f 64 93 cd cc f9 50 b2 0c 6a f4 de 24 5a 9c ff cd c9 63 45 13 a8 ce e4 af a5 83 c9 58 6b aa 0b 01 ac 8c 5b 9b 91 4a f5 9a 36 26 fd 61 99 db 85 8d b7 26 7a da 58 b0 b9 27 a0 41 75 d2 2a 7e ca 23 90 90 79 4c c5 ac cf 3c 45 3c 6d 21 09 a6 07 69 f4 66 7b 55 b3 09 
+
+Keccak[r=1573, c=27] duplex: 43 30 a3 a5 41 17 ac 46 4c 59 48 30 98 b0 8e 45 57 fa f6 3a 18 87 79 cf d6 ff c3 07 b4 4c 00 de 79 b3 9e 62 e1 f9 cd c7 35 3f 17 13 1e 17 5e fb 57 8c f1 2b 4e e2 0b 4c 94 f2 d2 d9 fd 78 48 4b 0f 50 7c fc ab 66 9c 16 17 c3 d4 4e ea 78 29 e0 21 4f ca 56 f3 7c 8f 1b 7a 0c 78 f5 e3 28 cb e3 cd 10 b9 96 65 89 eb 53 57 74 36 54 27 bf d0 53 39 7d 50 6b 20 0c f9 ac fc 4b d5 5c 1e 90 30 a2 7f dc 83 45 89 58 32 44 2e a2 5e ab 17 b9 b2 89 0b c1 0e 25 2d 5a 3e 4e d9 10 01 a6 1d bb d0 e0 10 a3 e8 03 15 78 ba eb f1 62 71 ba 65 2c b3 ed d2 b5 1c 0d 59 a1 3c a5 cb 52 06 3f c4 94 ed 35 3a a3 ad 5c 02 
+
+Keccak[r=1598, c=2] duplex: 53 68 8c f7 ac af c3 9d 79 d9 cd a9 fd 27 6e 13 02 aa 0d 4c c9 48 ef b4 05 d5 55 76 69 27 7b 67 26 f6 e5 90 10 f7 aa 72 58 9b 98 85 31 f1 a8 d8 b9 22 ba b3 30 48 1c e5 cf 3d 10 15 c0 47 58 bf 94 d6 75 41 e4 79 04 26 28 ea 95 ca ad b3 4e 94 8c bf 38 56 32 be ef e4 e5 5c 55 38 f0 44 eb a9 ab 9f d4 94 41 f4 d2 d6 2f de 41 f8 7e 43 e3 da 63 26 0c ed 89 29 c8 43 0c 78 a6 3e cc 0e be 67 e7 0b 99 27 02 f6 2b 42 8f 7e 61 0a 83 7b 05 5a 2a 7b 29 a3 01 01 fb 8d e6 ba bf 1b af 91 ca d2 3b ae cf f6 79 fb 85 49 a4 55 0a 6e 8d 96 e0 6f cd 77 ac de 4a 31 f9 95 b9 f1 27 c1 dc 7a 21 20 7c da f4 25 eb 77 58 12 
+
