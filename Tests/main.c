@@ -23,6 +23,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testDuplex.h"
 #include "testPermutationAndStateMgt.h"
 #include "testSponge.h"
+#include "timing.h"
 
 #ifdef KeccakReference
 void displayPermutationIntermediateValues()

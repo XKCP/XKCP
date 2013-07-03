@@ -147,12 +147,13 @@ int Keccak_SpongeSqueeze(Keccak_SpongeInstance *instance, unsigned char *data, u
     unsigned long long i, j;
     unsigned int partialBlock;
     unsigned int rateInBytes = instance->rate/8;
+    unsigned char *curData;
 
     if (!instance->squeezing)
         Keccak_SpongeAbsorbLastFewBits(instance, 0x01);
 
     i = 0;
-    unsigned char *curData = data;
+    curData = data;
     while(i < dataByteLen) {
         if ((instance->byteIOIndex == rateInBytes) && (dataByteLen >= (i + rateInBytes))) {
             // fast lane: processing whole blocks first

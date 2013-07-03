@@ -59,7 +59,6 @@ genKAT_main()
 STATUS_CODES
 genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimitedSuffix, unsigned int hashbitlen, unsigned int squeezedOutputLength, const char *fileName, const char *description)
 {
-    char        line[SUBMITTER_INFO_LEN];
     int         msglen, msgbytelen, done;
     BitSequence Msg[256];
     BitSequence Squeezed[SqueezingOutputLength/8];

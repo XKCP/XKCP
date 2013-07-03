@@ -73,23 +73,25 @@ void KeccakF1600_StateInitialize(void *state)
 void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     UINT8 laneAsBytes[8];
+    UINT32 low, high;
+    UINT32 temp, temp0, temp1;
+    UINT32 *stateAsHalfLanes = (UINT32*)state;
+
     memset(laneAsBytes, 0, 8);
     memcpy(laneAsBytes+offset, data, length);
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    UINT32 low = *((UINT32*)(laneAsBytes+0));
-    UINT32 high = *((UINT32*)(laneAsBytes+4));
+    low = *((UINT32*)(laneAsBytes+0));
+    high = *((UINT32*)(laneAsBytes+4));
 #else
-    UINT32 low = laneAsBytes[0] 
+    low = laneAsBytes[0] 
         | ((UINT32)(laneAsBytes[1]) << 8) 
         | ((UINT32)(laneAsBytes[2]) << 16)
         | ((UINT32)(laneAsBytes[3]) << 24);
-    UINT32 high = laneAsBytes[4] 
+    high = laneAsBytes[4] 
         | ((UINT32)(laneAsBytes[5]) << 8) 
         | ((UINT32)(laneAsBytes[6]) << 16)
         | ((UINT32)(laneAsBytes[7]) << 24);
 #endif
-    UINT32 even, odd, temp, temp0, temp1;
-    UINT32 *stateAsHalfLanes = (UINT32*)state;
     toBitInterleavingAndXOR(low, high, stateAsHalfLanes[lanePosition*2+0], stateAsHalfLanes[lanePosition*2+1], temp, temp0, temp1)
 }
 
@@ -149,8 +151,9 @@ void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePos
 {
     UINT32 *stateAsHalfLanes = (UINT32*)state;
     UINT32 low, high, temp, temp0, temp1;
-    fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], low, high, temp, temp0, temp1);
     UINT8 laneAsBytes[8];
+
+    fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], low, high, temp, temp0, temp1);
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     *((UINT32*)(laneAsBytes+0)) = low;
     *((UINT32*)(laneAsBytes+4)) = high;

@@ -12,6 +12,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include <string.h>
+#include <stdlib.h>
 #include "brg_endian.h"
 #include "KeccakF-1600-opt64-settings.h"
 #include "KeccakF-1600-interface.h"
@@ -87,7 +88,7 @@ void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, con
 
 /* ---------------------------------------------------------------- */
 
-inline void KeccakF1600_StateXORLanes_inline(void *state, const unsigned char *data, unsigned int laneCount)
+void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     unsigned int i = 0;
@@ -130,11 +131,6 @@ inline void KeccakF1600_StateXORLanes_inline(void *state, const unsigned char *d
 #endif
 }
 
-void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-{
-    KeccakF1600_StateXORLanes_inline(state, data, laneCount);
-}
-
 /* ---------------------------------------------------------------- */
 
 void KeccakF1600_StateComplementBit(void *state, unsigned int position)
@@ -160,9 +156,11 @@ void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePos
         lane = ~lane;
 #endif
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    UINT64 lane1[1];
-    lane1[0] = lane;
-    memcpy(data, (UINT8*)lane1+offset, length);
+    {
+        UINT64 lane1[1];
+        lane1[0] = lane;
+        memcpy(data, (UINT8*)lane1+offset, length);
+    }
 #else
     unsigned int i;
     lane >>= offset*8;
@@ -185,7 +183,7 @@ void fromWordToBytes(UINT8 *bytes, const UINT64 word)
 }
 #endif
 
-inline void KeccakF1600_StateExtractLanes_inline(const void *state, unsigned char *data, unsigned int laneCount)
+void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsigned int laneCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     memcpy(data, state, laneCount*8);
@@ -215,11 +213,6 @@ inline void KeccakF1600_StateExtractLanes_inline(const void *state, unsigned cha
         }
     }
 #endif
-}
-
-void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsigned int laneCount)
-{
-    KeccakF1600_StateExtractLanes_inline(state, data, laneCount);
 }
 
 /* ---------------------------------------------------------------- */

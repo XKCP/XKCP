@@ -254,7 +254,7 @@ void iota(UINT64 *A, unsigned int indexRound)
 
 void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
 {
-    memcpy(data, state+lanePosition*8+offset, length);
+    memcpy(data, (unsigned char*)state+lanePosition*8+offset, length);
 }
 
 /* ---------------------------------------------------------------- */

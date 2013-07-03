@@ -143,19 +143,22 @@ void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, con
 {
     if ((lanePosition < 25) && (offset < 8) && (offset+length <= 8)) {
         UINT8 laneAsBytes[8];
+        UINT32 low, high;
+        UINT32 lane[2];
+        UINT32 *stateAsHalfLanes;
+
         memset(laneAsBytes, 0, 8);
         memcpy(laneAsBytes+offset, data, length);
-        UINT32 low = laneAsBytes[0] 
+        low = laneAsBytes[0] 
             | ((UINT32)(laneAsBytes[1]) << 8) 
             | ((UINT32)(laneAsBytes[2]) << 16)
             | ((UINT32)(laneAsBytes[3]) << 24);
-        UINT32 high = laneAsBytes[4] 
+        high = laneAsBytes[4] 
             | ((UINT32)(laneAsBytes[5]) << 8) 
             | ((UINT32)(laneAsBytes[6]) << 16)
             | ((UINT32)(laneAsBytes[7]) << 24);
-        UINT32 lane[2];
         toBitInterleaving(low, high, lane, lane+1);
-        UINT32 *stateAsHalfLanes = (UINT32*)state;
+        stateAsHalfLanes = (UINT32*)state;
         stateAsHalfLanes[lanePosition*2+0] ^= lane[0];
         stateAsHalfLanes[lanePosition*2+1] ^= lane[1];
     }
@@ -169,18 +172,21 @@ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned 
         unsigned int lanePosition;
         for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
             UINT8 laneAsBytes[8];
+            UINT32 low, high;
+            UINT32 lane[2];
+            UINT32 *stateAsHalfLanes;
+
             memcpy(laneAsBytes, data+lanePosition*8, 8);
-            UINT32 low = laneAsBytes[0] 
+            low = laneAsBytes[0] 
                 | ((UINT32)(laneAsBytes[1]) << 8) 
                 | ((UINT32)(laneAsBytes[2]) << 16)
                 | ((UINT32)(laneAsBytes[3]) << 24);
-            UINT32 high = laneAsBytes[4] 
+            high = laneAsBytes[4] 
                 | ((UINT32)(laneAsBytes[5]) << 8) 
                 | ((UINT32)(laneAsBytes[6]) << 16)
                 | ((UINT32)(laneAsBytes[7]) << 24);
-            UINT32 lane[2];
             toBitInterleaving(low, high, lane, lane+1);
-            UINT32 *stateAsHalfLanes = (UINT32*)state;
+            stateAsHalfLanes = (UINT32*)state;
             stateAsHalfLanes[lanePosition*2+0] ^= lane[0];
             stateAsHalfLanes[lanePosition*2+1] ^= lane[1];
         }
@@ -211,12 +217,12 @@ void iota(UINT32 *A, unsigned int indexRound);
 
 void KeccakF1600_StatePermute(void *state)
 {
+    UINT32 *stateAsHalfLanes = (UINT32*)state;
     {
         UINT8 stateAsBytes[KeccakF_width/8];
         KeccakF1600_StateExtractLanes(state, stateAsBytes, KeccakF_width/8/KeccakF_laneInBytes);
         displayStateAsBytes(1, "Input of permutation", stateAsBytes);
     }
-    UINT32 *stateAsHalfLanes = (UINT32*)state;
     KeccakF1600_PermutationOnWords(stateAsHalfLanes);
     {
         UINT8 stateAsBytes[KeccakF_width/8];
@@ -336,8 +342,8 @@ void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePos
     if ((lanePosition < 25) && (offset < 8) && (offset+length <= 8)) {
         UINT32 *stateAsHalfLanes = (UINT32*)state;
         UINT32 lane[2];
-        fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], lane, lane+1);
         UINT8 laneAsBytes[8];
+        fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], lane, lane+1);
         laneAsBytes[0] = lane[0] & 0xFF;
         laneAsBytes[1] = (lane[0] >> 8) & 0xFF;
         laneAsBytes[2] = (lane[0] >> 16) & 0xFF;
@@ -359,8 +365,8 @@ void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsig
         for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
             UINT32 *stateAsHalfLanes = (UINT32*)state;
             UINT32 lane[2];
-            fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], lane, lane+1);
             UINT8 laneAsBytes[8];
+            fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], lane, lane+1);
             laneAsBytes[0] = lane[0] & 0xFF;
             laneAsBytes[1] = (lane[0] >> 8) & 0xFF;
             laneAsBytes[2] = (lane[0] >> 16) & 0xFF;

@@ -31,12 +31,13 @@ void accumulateState(void *stateAccumulated, const void *stateTest)
 
 void testPermutationAndStateMgt()
 {
+    unsigned char stateAccumulated[KeccakF_width/8];
+    unsigned char stateTest[KeccakF_width/8];
+
     KeccakF1600_Initialize();
 
-    unsigned char stateAccumulated[KeccakF_width/8];
     KeccakF1600_StateInitialize(stateAccumulated);
 
-    unsigned char stateTest[KeccakF_width/8];
     memset(stateTest, 0xAA, sizeof(stateTest));
     
     // Testing KeccakF1600_StateInitialize()
@@ -134,9 +135,10 @@ void testPermutationAndStateMgt()
     {
         unsigned char buffer[KeccakF_width/8];
         unsigned int i;
+        FILE *f;
     
         KeccakF1600_StateExtractLanes(stateAccumulated, buffer, 25);
-        FILE *f = fopen("TestPermutationAndStateMgt.txt", "w");
+        f = fopen("TestPermutationAndStateMgt.txt", "w");
         fprintf(f, "Testing Keccak-f[1600] permutation and state management: ");
         for(i=0; i<KeccakF_width/8; i++)
             fprintf(f, "%02x ", buffer[i]);
