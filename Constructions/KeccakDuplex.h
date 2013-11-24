@@ -16,6 +16,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include "KeccakF-1600-interface.h"
 
+#ifdef ALIGN
+#undef ALIGN
+#endif
+
 #if defined(__GNUC__)
 #define ALIGN __attribute__ ((aligned(32)))
 #elif defined(_MSC_VER)
