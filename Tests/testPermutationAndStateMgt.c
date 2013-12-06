@@ -49,30 +49,34 @@ void testPermutationAndStateMgt()
     
     // Testing KeccakF1600_StateXORBytesInLane()
     {
-        unsigned char buffer[KeccakF_width/8];
-        unsigned i, lanePosition, offset, length;
-        for(i=0; i<KeccakF_width/8; i++)
+        unsigned char buffer[KeccakF_laneInBytes+8];
+        unsigned i, lanePosition, offset, length, alignment;
+        for(i=0; i<sizeof(buffer); i++)
             buffer[i] = 0xF3 + 5*i;
         
+        for(alignment=0; alignment<8; alignment++)
         for(lanePosition=0; lanePosition<25; lanePosition++)
         for(offset=0; offset<KeccakF_laneInBytes; offset++)
-        for(length=1; length<=KeccakF_laneInBytes-offset; length++) {
-            KeccakF1600_StateXORBytesInLane(stateTest, lanePosition, buffer, offset, length);
+        for(length=0; length<=KeccakF_laneInBytes-offset; length++) {
+            KeccakF1600_StateXORBytesInLane(stateTest, lanePosition, buffer+alignment, offset, length);
             accumulateState(stateAccumulated, stateTest);
         }
     }
     KeccakF1600_StatePermute(stateTest);
-    
+
     // Testing KeccakF1600_StateXORLanes()
     {
-        unsigned char buffer[KeccakF_width/8];
-        unsigned i, laneCount;
-        for(i=0; i<KeccakF_width/8; i++)
-            buffer[i] = 0x74 - 3*i;
+        unsigned char buffer[KeccakF_width/8+8];
+        unsigned i, laneCount, alignment;
         
-        for(laneCount=0; laneCount<=25; laneCount++) {
-            KeccakF1600_StateXORLanes(stateTest, buffer, laneCount);
-            accumulateState(stateAccumulated, stateTest);
+        for(alignment=0; alignment<8; alignment++) {
+            for(i=0; i<KeccakF_width/8; i++)
+                buffer[i+alignment] = 0x74 - 3*i + 8*alignment;
+
+            for(laneCount=0; laneCount<=25; laneCount++) {
+                KeccakF1600_StateXORLanes(stateTest, buffer+alignment, laneCount);
+                accumulateState(stateAccumulated, stateTest);
+            }
         }
     }
     KeccakF1600_StatePermute(stateTest);
@@ -90,47 +94,50 @@ void testPermutationAndStateMgt()
 
     // Testing KeccakF1600_StateExtractBytesInLane()
     {
-        unsigned char buffer[KeccakF_width/8];
-        unsigned lanePosition, offset, length;
+        unsigned char buffer[KeccakF_width/8+8];
+        unsigned lanePosition, offset, length, alignment;
 
+        for(alignment=0; alignment<8; alignment++)
         for(lanePosition=0; lanePosition<25; lanePosition++)
         for(offset=0; offset<KeccakF_laneInBytes; offset++)
-        for(length=1; length<=KeccakF_laneInBytes-offset; length++) {
+        for(length=0; length<=KeccakF_laneInBytes-offset; length++) {
             memset(buffer, 0x3C+lanePosition+offset+length, sizeof(buffer));
-            KeccakF1600_StateExtractBytesInLane(stateTest, lanePosition, buffer, offset, length);
-            accumulateBuffer(stateAccumulated, buffer);
+            KeccakF1600_StateExtractBytesInLane(stateTest, lanePosition, buffer+alignment, offset, length);
+            accumulateBuffer(stateAccumulated, buffer+alignment);
         }
     }
     KeccakF1600_StatePermute(stateTest);
 
     // Testing KeccakF1600_StateExtractLanes()
     {
-        unsigned char buffer[KeccakF_width/8];
-        unsigned laneCount;
+        unsigned char buffer[KeccakF_width/8+8];
+        unsigned laneCount, alignment;
         
+        for(alignment=0; alignment<8; alignment++)
         for(laneCount=0; laneCount<=25; laneCount++) {
-            memset(buffer, 0xD1+laneCount, sizeof(buffer));
-            KeccakF1600_StateExtractLanes(stateTest, buffer, laneCount);
-            accumulateBuffer(stateAccumulated, buffer);
+            memset(buffer, 0xD1+laneCount+32*alignment, sizeof(buffer));
+            KeccakF1600_StateExtractLanes(stateTest, buffer+alignment, laneCount);
+            accumulateBuffer(stateAccumulated, buffer+alignment);
         }
     }
     KeccakF1600_StatePermute(stateTest);
 
     // Testing KeccakF1600_StateXORPermuteExtract()
     {
-        unsigned char buffer[KeccakF_width/8];
-        unsigned int i, inLaneCount, outLaneCount;
+        unsigned char buffer[KeccakF_width/8+8];
+        unsigned int i, inLaneCount, outLaneCount, alignment;
         
+        for(alignment=0; alignment<8; alignment++)
         for(inLaneCount=0; inLaneCount<=25; inLaneCount++)
         for(outLaneCount=0; outLaneCount<=25; outLaneCount++) {
             for(i=0; i<KeccakF_width/8; i++)
-                buffer[i] = 0xEB +3*i + 4*inLaneCount - outLaneCount;
-            KeccakF1600_StateXORPermuteExtract(stateTest, buffer, inLaneCount, buffer, outLaneCount);
+                buffer[i+alignment] = 0xEB +3*i + 4*inLaneCount - outLaneCount + 16*alignment;
+            KeccakF1600_StateXORPermuteExtract(stateTest, buffer+alignment, inLaneCount, buffer+alignment, outLaneCount);
             accumulateState(stateAccumulated, stateTest);
-            accumulateBuffer(stateAccumulated, buffer);
+            accumulateBuffer(stateAccumulated, buffer+alignment);
         }
     }
-    
+
     // Outputting the result
     {
         unsigned char buffer[KeccakF_width/8];
@@ -138,7 +145,7 @@ void testPermutationAndStateMgt()
         FILE *f;
     
         KeccakF1600_StateExtractLanes(stateAccumulated, buffer, 25);
-        f = fopen("TestPermutationAndStateMgt.txt", "w");
+        f = fopen("TestKeccakF-1600AndStateMgt.txt", "w");
         fprintf(f, "Testing Keccak-f[1600] permutation and state management: ");
         for(i=0; i<KeccakF_width/8; i++)
             fprintf(f, "%02x ", buffer[i]);
