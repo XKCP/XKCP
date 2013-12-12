@@ -1,4 +1,4 @@
-# Keccak(SakuraSequential|11)[r=1088, c=512] sponge function
+# Keccak(SakuraSequential|11)[r=1088, c=512], or potentially SHAKE256 (last partial byte aligned on most significant bit)
 
 Len = 0
 Msg = 00

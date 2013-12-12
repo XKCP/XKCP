@@ -32,26 +32,34 @@ void    fprintBstr(FILE *fp, char *S, BitSequence *A, int L);
 STATUS_CODES
 genKAT_main()
 {
-    // The following instances are from
-    // [Keccak team, Cryptology ePrint Archive, Report 2013/231, Table 4]
-    genShortMsgHash(1344, 256, 0x1F, 0, 4096, 
-        "ShortMsgKAT_KeccakSeqHash11c256.txt", 
-        "Keccak(SakuraSequential|11)[r=1344, c=256] sponge function");
-    genShortMsgHash(1344, 256, 0x33, 224, 0, 
-        "ShortMsgKAT_KeccakSeqHash001c256_n224.txt", 
-        "Keccak(SakuraSequential|001)[r=1344, c=256] 224-bit hash function");
-    genShortMsgHash(1344, 256, 0x37, 256, 0, 
-        "ShortMsgKAT_KeccakSeqHash101c256_n256.txt", 
-        "Keccak(SakuraSequential|101)[r=1344, c=256] 256-bit hash function");
+    // The following instances are based on mails by John Kelsey
+    // to the NIST hash forum on 1-Nov-2013 and 22-Nov-2013.
+    //
+    // Note: "SakuraSequential" translates into "input followed by 11",
+    // see http://keccak.noekeon.org/Sakura.pdf for more details.
+    //
+    // WARNING: This is provisional. The bit numbering convention we use here
+    // might differ from that of the upcoming NIST draft. Other details might
+    // change at NIST's discretion.
+    //
+    genShortMsgHash(1344, 256, 0x1F, 0, 4096,
+        "ShortMsgKAT_SHAKE128.txt",
+        "Keccak(SakuraSequential|11)[r=1344, c=256], or potentially SHAKE128 (last partial byte aligned on most significant bit)");
     genShortMsgHash(1088, 512, 0x1F, 0, 4096,
-        "ShortMsgKAT_KeccakSeqHash11c512.txt", 
-        "Keccak(SakuraSequential|11)[r=1088, c=512] sponge function");
-    genShortMsgHash(1088, 512, 0x33, 384, 0,
-        "ShortMsgKAT_KeccakSeqHash001c512_n384.txt", 
-        "Keccak(SakuraSequential|001)[r=1088, c=512] 384-bit hash function");
-    genShortMsgHash(1088, 512, 0x37, 512, 0, 
-        "ShortMsgKAT_KeccakSeqHash101c512_n512.txt", 
-        "Keccak(SakuraSequential|101)[r=1088, c=512] 512-bit hash function");
+        "ShortMsgKAT_SHAKE256.txt",
+        "Keccak(SakuraSequential|11)[r=1088, c=512], or potentially SHAKE256 (last partial byte aligned on most significant bit)");
+    genShortMsgHash(1152, 448, 0x1B, 224, 0,
+        "ShortMsgKAT_SHA3-224.txt",
+        "Keccak(SakuraSequential|01)[r=1152, c=448] truncated to 224 bits, or potentially SHA3-224 (last partial byte aligned on most significant bit)");
+    genShortMsgHash(1088, 512, 0x1B, 256, 0,
+        "ShortMsgKAT_SHA3-256.txt",
+        "Keccak(SakuraSequential|01)[r=1088, c=512] truncated to 256 bits, or potentially SHA3-256 (last partial byte aligned on most significant bit)");
+    genShortMsgHash(832, 768, 0x1B, 384, 0,
+        "ShortMsgKAT_SHA3-384.txt",
+        "Keccak(SakuraSequential|01)[r=832, c=768] truncated to 384 bits, or potentially SHA3-384 (last partial byte aligned on most significant bit)");
+    genShortMsgHash(576, 1024, 0x1B, 512, 0,
+        "ShortMsgKAT_SHA3-512.txt",
+        "Keccak(SakuraSequential|01)[r=576, c=1024] truncated to 512 bits, or potentially SHA3-512 (last partial byte aligned on most significant bit)");
 
     return KAT_SUCCESS;
 }
