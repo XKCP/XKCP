@@ -107,9 +107,9 @@ void displaySpongeIntermediateValuesOne(const unsigned char *message, unsigned i
 
 void displaySpongeIntermediateValuesFew(FILE *f, unsigned int rate, unsigned int capacity)
 {
-    const unsigned char *message1 = "\x53\x58\x7B\xC8";
+    const unsigned char *message1 = (unsigned char *) "\x53\x58\x7B\xC8";
     unsigned int message1Length = 29;
-    const unsigned char *message2 = 
+    const unsigned char *message2 = (unsigned char *)
         "\x83\xAF\x34\x27\x9C\xCB\x54\x30\xFE\xBE\xC0\x7A\x81\x95\x0D\x30"
         "\xF4\xB6\x6F\x48\x48\x26\xAF\xEE\x74\x56\xF0\x07\x1A\x51\xE1\xBB"
         "\xC5\x55\x70\xB5\xCC\x7E\xC6\xF9\x30\x9C\x17\xBF\x5B\xEF\xDD\x7C"
