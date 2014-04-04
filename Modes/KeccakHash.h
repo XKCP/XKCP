@@ -48,7 +48,7 @@ HashReturn Keccak_HashInitialize(Keccak_HashInstance *hashInstance, unsigned int
   * @param  hashInstance    Pointer to the hash instance initialized by Keccak_HashInitialize().
   * @param  data        Pointer to the input data. 
   *                     When @a databitLen is not a multiple of 8, the last bits of data must be
-  *                     in the most significant bits of the last byte (NIST convention).
+  *                     in the least significant bits of the last byte (little-endian convention).
   * @param  databitLen  The number of input bits provided in the input data.
   * @pre    In the previous call to Keccak_HashUpdate(), databitlen was a multiple of 8.
   * @return SUCCESS if successful, FAIL otherwise.

@@ -40,8 +40,8 @@ HashReturn Keccak_HashUpdate(Keccak_HashInstance *instance, const BitSequence *d
     else {
         HashReturn ret = Keccak_SpongeAbsorb(&instance->sponge, data, databitlen/8);
         if (ret == SUCCESS) {
-            // Align the last partial byte to the least significant bits
-            unsigned char lastByte = data[databitlen/8] >> (8 - (databitlen % 8));
+            // The last partial byte is assumed to be aligned on the least significant bits
+            unsigned char lastByte = data[databitlen/8];
             // Concatenate the last few bits provided here with those of the suffix
             unsigned short delimitedLastBytes = (unsigned short)lastByte | ((unsigned short)instance->delimitedSuffix << (databitlen % 8));
             if ((delimitedLastBytes & 0xFF00) == 0x0000) {
