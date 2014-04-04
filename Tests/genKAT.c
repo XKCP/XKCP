@@ -27,41 +27,82 @@ STATUS_CODES    genShortMsgHash(unsigned int rate, unsigned int capacity, unsign
 int     FindMarker(FILE *infile, const char *marker);
 int     ReadHex(FILE *infile, BitSequence *A, int Length, char *str);
 void    fprintBstr(FILE *fp, char *S, BitSequence *A, int L);
-
+void convertShortMsgToPureLSB();
 
 STATUS_CODES
 genKAT_main()
 {
-    // The following instances are based on mails by John Kelsey
-    // to the NIST hash forum on 1-Nov-2013 and 22-Nov-2013.
+    // The following instances are from the FIPS 202 draft.
+    // http://csrc.nist.gov/publications/
     //
     // Note: "SakuraSequential" translates into "input followed by 11",
     // see http://keccak.noekeon.org/Sakura.pdf for more details.
     //
-    // WARNING: This is provisional. The bit numbering convention we use here
-    // might differ from that of the upcoming NIST draft. Other details might
-    // change at NIST's discretion.
-    //
     genShortMsgHash(1344, 256, 0x1F, 0, 4096,
         "ShortMsgKAT_SHAKE128.txt",
-        "Keccak(SakuraSequential|11)[r=1344, c=256], or potentially SHAKE128 (last partial byte aligned on most significant bit)");
+        "Keccak(SakuraSequential|11)[r=1344, c=256], or SHAKE128 as in FIPS 202 draft");
     genShortMsgHash(1088, 512, 0x1F, 0, 4096,
         "ShortMsgKAT_SHAKE256.txt",
-        "Keccak(SakuraSequential|11)[r=1088, c=512], or potentially SHAKE256 (last partial byte aligned on most significant bit)");
-    genShortMsgHash(1152, 448, 0x1B, 224, 0,
+        "Keccak(SakuraSequential|11)[r=1088, c=512], or SHAKE256 as in FIPS 202 draft");
+    genShortMsgHash(1152, 448, 0x06, 224, 0,
         "ShortMsgKAT_SHA3-224.txt",
-        "Keccak(SakuraSequential|01)[r=1152, c=448] truncated to 224 bits, or potentially SHA3-224 (last partial byte aligned on most significant bit)");
-    genShortMsgHash(1088, 512, 0x1B, 256, 0,
+        "Keccak(input|01)[r=1152, c=448] truncated to 224 bits, or SHA3-224 as in FIPS 202 draft");
+    genShortMsgHash(1088, 512, 0x06, 256, 0,
         "ShortMsgKAT_SHA3-256.txt",
-        "Keccak(SakuraSequential|01)[r=1088, c=512] truncated to 256 bits, or potentially SHA3-256 (last partial byte aligned on most significant bit)");
-    genShortMsgHash(832, 768, 0x1B, 384, 0,
+        "Keccak(input|01)[r=1088, c=512] truncated to 256 bits, or SHA3-256 as in FIPS 202 draft");
+    genShortMsgHash(832, 768, 0x06, 384, 0,
         "ShortMsgKAT_SHA3-384.txt",
-        "Keccak(SakuraSequential|01)[r=832, c=768] truncated to 384 bits, or potentially SHA3-384 (last partial byte aligned on most significant bit)");
-    genShortMsgHash(576, 1024, 0x1B, 512, 0,
+        "Keccak(input|01)[r=832, c=768] truncated to 384 bits, or SHA3-384 as in FIPS 202 draft");
+    genShortMsgHash(576, 1024, 0x06, 512, 0,
         "ShortMsgKAT_SHA3-512.txt",
-        "Keccak(SakuraSequential|01)[r=576, c=1024] truncated to 512 bits, or potentially SHA3-512 (last partial byte aligned on most significant bit)");
+        "Keccak(input|01)[r=576, c=1024] truncated to 512 bits, or SHA3-512 as in FIPS 202 draft");
 
     return KAT_SUCCESS;
+}
+
+void convertShortMsgToPureLSB()
+{
+    int         msglen, msgbytelen, done;
+    BitSequence Msg[256];
+    BitSequence Squeezed[SqueezingOutputLength/8];
+    Keccak_HashInstance   hash;
+    FILE        *fp_in, *fp_out;
+
+    if ( (fp_in = fopen("ShortMsgKAT.txt", "r")) == NULL ) {
+        printf("Couldn't open <ShortMsgKAT.txt> for read\n");
+        return;
+    }
+
+    if ( (fp_out = fopen("ShortMsgKAT-PureLSB.txt", "w")) == NULL ) {
+        printf("Couldn't open <%s> for write\n", "ShortMsgKAT-PureLSB.txt");
+        return;
+    }
+
+    done = 0;
+    do {
+        if ( FindMarker(fp_in, "Len = ") )
+            fscanf(fp_in, "%d", &msglen);
+        else {
+            done = 1;
+            break;
+        }
+        msgbytelen = (msglen+7)/8;
+
+        if ( !ReadHex(fp_in, Msg, msgbytelen, "Msg = ") ) {
+            printf("ERROR: unable to read 'Msg' from <ShortMsgKAT.txt>\n");
+            return;
+        }
+        // Align the last byte on the least significant bit
+        if ((msglen % 8) != 0)
+            Msg[msgbytelen-1] = Msg[msgbytelen-1] >> (8-(msglen%8));
+
+        fprintf(fp_out, "\nLen = %d\n", msglen);
+        fprintBstr(fp_out, "Msg = ", Msg, msgbytelen);
+        fprintf(fp_out, "MD = ??\n", msglen);
+    } while ( !done );
+
+    fclose(fp_in);
+    fclose(fp_out);
 }
 
 STATUS_CODES

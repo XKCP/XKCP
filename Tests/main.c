@@ -71,45 +71,57 @@ void displayPermutationIntermediateValues()
     }
 }
 
-void alignLastByteOnLSB(const unsigned char *in, unsigned char *out, unsigned int length)
+unsigned int appendSuffixToMessage(char *out, const char *in, unsigned int inputLengthInBits, unsigned char delimitedSuffix)
 {
-    unsigned int lengthInBytes;
-
-    lengthInBytes = (length+7)/8;
-    memcpy(out, in, lengthInBytes);
-    if ((length % 8) != 0)
-        out[lengthInBytes-1] = out[lengthInBytes-1] >> (8-(length%8));
+    memcpy(out, in, (inputLengthInBits+7)/8);
+    if (delimitedSuffix == 0x00)
+        abort();
+    while(delimitedSuffix != 0x01) {
+        unsigned char bit = delimitedSuffix & 0x01;
+        out[inputLengthInBits/8] |= (bit << (inputLengthInBits%8));
+        inputLengthInBits++;
+        delimitedSuffix >>= 1;
+    }
+    return inputLengthInBits;
 }
 
-void displaySpongeIntermediateValuesOne(const unsigned char *message, unsigned int messageLength, unsigned int rate, unsigned int capacity)
+void displaySpongeIntermediateValuesOne(const unsigned char *message, unsigned int messageLength, unsigned char delimitedSuffix, unsigned int rate, unsigned int capacity, unsigned int outputLengthInBits)
 {
     Keccak_SpongeInstance sponge;
     unsigned char output[512];
-    unsigned char *messageInternal;
+    unsigned char *messageWithSuffix;
+    unsigned int messageLengthWithSuffix;
 
-    messageInternal = malloc((messageLength+7)/8);
-    alignLastByteOnLSB(message, messageInternal, messageLength);
-
-    displayBytes(1, "Input message (last byte aligned on MSB)", message, (messageLength+7)/8);
-    displayBits(2, "Input message (in bits)", message, messageLength, 1);
-    displayBits(2, "Input message (in bits, after the formal bit reordering)", messageInternal, messageLength, 0);
-    displayBytes(2, "Input message (last byte aligned on LSB)", messageInternal, (messageLength+7)/8);
+    displayBytes(1, "Input message (last byte aligned on LSB)", message, (messageLength+7)/8);
+    displayBits(2, "Input message (in bits)", message, messageLength, 0);
+    messageWithSuffix = malloc((messageLength+15)/8);
+    messageLengthWithSuffix = appendSuffixToMessage(messageWithSuffix, message, messageLength, delimitedSuffix);
+    if (delimitedSuffix != 0x01) {
+        unsigned char suffix[1];
+        suffix[0] = delimitedSuffix;
+        displayBytes(2, "Delimited suffix", suffix, 1);
+        displayBits(2, "Suffix (in bits)", suffix, messageLengthWithSuffix-messageLength, 0);
+        displayBits(2, "Input message with suffix appended to it (in bits)", messageWithSuffix, messageLengthWithSuffix, 0);
+        displayBytes(2, "Input message with suffix appended to it (last byte aligned on LSB)", messageWithSuffix, (messageLengthWithSuffix+7)/8);
+    }
 
     Keccak_SpongeInitialize(&sponge, rate, capacity);
     displayStateAsBytes(1, "Initial state", sponge.state);
-    Keccak_SpongeAbsorb(&sponge, messageInternal, messageLength/8);
-    if ((messageLength % 8) != 0)
-        Keccak_SpongeAbsorbLastFewBits(&sponge, messageInternal[messageLength/8] | (1 << (messageLength % 8)));
-    Keccak_SpongeSqueeze(&sponge, output, sizeof(output));
-
-    free(messageInternal);
+    Keccak_SpongeAbsorb(&sponge, messageWithSuffix, messageLengthWithSuffix/8);
+    if ((messageLengthWithSuffix % 8) != 0)
+        Keccak_SpongeAbsorbLastFewBits(&sponge, messageWithSuffix[messageLengthWithSuffix/8] | (1 << (messageLengthWithSuffix % 8)));
+    if (outputLengthInBits <= 8*sizeof(output))
+        Keccak_SpongeSqueeze(&sponge, output, (outputLengthInBits+7)/8);
+    else
+        abort();
 }
 
-void displaySpongeIntermediateValuesFew(FILE *f, unsigned int rate, unsigned int capacity)
+void displaySpongeIntermediateValuesFew(const char *fileName, unsigned char delimitedSuffix, unsigned int rate, unsigned int capacity, unsigned int desiredOutputLengthInBits)
 {
-    const unsigned char *message1 = (unsigned char *) "\x53\x58\x7B\xC8";
-    unsigned int message1Length = 29;
-    const unsigned char *message2 = (unsigned char *)
+    const unsigned char *message0 = (unsigned char *) "";
+    const unsigned char *message5 = (unsigned char *) "\x13"; // 11001
+    const unsigned char *message30 = (unsigned char *) "\x53\x58\x7B\x19"; // 110010100001101011011110100110
+    const unsigned char *message2008 = (unsigned char *)
         "\x83\xAF\x34\x27\x9C\xCB\x54\x30\xFE\xBE\xC0\x7A\x81\x95\x0D\x30"
         "\xF4\xB6\x6F\x48\x48\x26\xAF\xEE\x74\x56\xF0\x07\x1A\x51\xE1\xBB"
         "\xC5\x55\x70\xB5\xCC\x7E\xC6\xF9\x30\x9C\x17\xBF\x5B\xEF\xDD\x7C"
@@ -126,45 +138,52 @@ void displaySpongeIntermediateValuesFew(FILE *f, unsigned int rate, unsigned int
         "\x48\x4A\x5D\x3F\x3F\xB8\xC8\xF1\x5C\xE0\x56\xE5\xE5\xF8\xFE\xBE"
         "\x5E\x1F\xB5\x9D\x67\x40\x98\x0A\xA0\x6C\xA8\xA0\xC2\x0F\x57\x12"
         "\xB4\xCD\xE5\xD0\x32\xE9\x2A\xB8\x9F\x0A\xE1";
-    unsigned int message2Length = 2008;
+
+    FILE *f = fopen(fileName, "w");
+    if (f == NULL) {
+        printf("Could not open %s\n", fileName);
+        return;
+    }
+    displaySetIntermediateValueFile(f);
+    displaySetLevel(2);
 
     fprintf(f, "+++ Example with a small message +++\n");
     fprintf(f, "\n");
-    fprintf(f, "This is the message of length 29 from ShortMsgKAT.txt.\n");
+    fprintf(f, "This is the empty string.\n");
     fprintf(f, "\n");
-    displaySpongeIntermediateValuesOne(message1, message1Length, rate, capacity);
+    displaySpongeIntermediateValuesOne(message0, 0, delimitedSuffix, rate, capacity, desiredOutputLengthInBits);
+
+    fprintf(f, "+++ Example with a small message +++\n");
+    fprintf(f, "\n");
+    fprintf(f, "This is the message of length 5 from http://csrc.nist.gov/groups/ST/toolkit/examples.html .\n");
+    fprintf(f, "\n");
+    displaySpongeIntermediateValuesOne(message5, 5, delimitedSuffix, rate, capacity, desiredOutputLengthInBits);
+
+    fprintf(f, "+++ Example with a small message +++\n");
+    fprintf(f, "\n");
+    fprintf(f, "This is the message of length 30 from http://csrc.nist.gov/groups/ST/toolkit/examples.html .\n");
+    fprintf(f, "\n");
+    displaySpongeIntermediateValuesOne(message30, 30, delimitedSuffix, rate, capacity, desiredOutputLengthInBits);
 
     fprintf(f, "+++ Example with a larger message +++\n");
     fprintf(f, "\n");
     fprintf(f, "This is the message of length 2008 from ShortMsgKAT.txt.\n");
     fprintf(f, "\n");
-    displaySpongeIntermediateValuesOne(message2, message2Length, rate, capacity);
+    displaySpongeIntermediateValuesOne(message2008, 2008, delimitedSuffix, rate, capacity, desiredOutputLengthInBits);
+
+    fclose(f);
+    displaySetIntermediateValueFile(0);
 }
 
 void displaySpongeIntermediateValues()
 {
-    const unsigned int capacities[3] = {256, 512, 576};
-    char fileName[256];
-    FILE *f;
-    unsigned int i;
-
-    for(i=0; i<3; i++) {
-        unsigned int capacity = capacities[i];
-        unsigned int rate = 1600-capacity;
-        sprintf(fileName, "KeccakSpongeIntermediateValues_r%dc%d.txt", rate, capacity);
-        f = fopen(fileName, "w");
-        if (f == NULL)
-            printf("Could not open %s\n", fileName);
-        else {
-            displaySetIntermediateValueFile(f);
-            displaySetLevel(2);
-
-            displaySpongeIntermediateValuesFew(f, rate, capacity);
-
-            fclose(f);
-            displaySetIntermediateValueFile(0);
-        }
-    }
+    displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_r1344c256.txt", 0x01, 1344,  256, 4096);
+    displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_SHAKE128.txt", 0x1F, 1344,  256, 4096);
+    displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_SHAKE256.txt", 0x1F, 1088,  512, 4096);
+    displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_SHA3-224.txt", 0x06, 1152,  448,  224);
+    displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_SHA3-256.txt", 0x06, 1088,  512,  256);
+    displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_SHA3-384.txt", 0x06,  832,  768,  384);
+    displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_SHA3-512.txt", 0x06,  576, 1024,  512);
 }
 
 void displayDuplexIntermediateValuesOne(FILE *f, unsigned int rate, unsigned int capacity)
