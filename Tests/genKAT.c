@@ -27,10 +27,10 @@ STATUS_CODES    genShortMsgHash(unsigned int rate, unsigned int capacity, unsign
 int     FindMarker(FILE *infile, const char *marker);
 int     ReadHex(FILE *infile, BitSequence *A, int Length, char *str);
 void    fprintBstr(FILE *fp, char *S, BitSequence *A, int L);
-void convertShortMsgToPureLSB();
+void convertShortMsgToPureLSB(void);
 
 STATUS_CODES
-genKAT_main()
+genKAT_main(void)
 {
     // The following instances are from the FIPS 202 draft.
     // http://csrc.nist.gov/publications/
@@ -60,12 +60,10 @@ genKAT_main()
     return KAT_SUCCESS;
 }
 
-void convertShortMsgToPureLSB()
+void convertShortMsgToPureLSB(void)
 {
-    int         msglen, msgbytelen, done;
+    int         msglen, msgbytelen;
     BitSequence Msg[256];
-    BitSequence Squeezed[SqueezingOutputLength/8];
-    Keccak_HashInstance   hash;
     FILE        *fp_in, *fp_out;
 
     if ( (fp_in = fopen("ShortMsgKAT.txt", "r")) == NULL ) {
@@ -78,12 +76,10 @@ void convertShortMsgToPureLSB()
         return;
     }
 
-    done = 0;
     do {
         if ( FindMarker(fp_in, "Len = ") )
             fscanf(fp_in, "%d", &msglen);
         else {
-            done = 1;
             break;
         }
         msgbytelen = (msglen+7)/8;
@@ -98,8 +94,8 @@ void convertShortMsgToPureLSB()
 
         fprintf(fp_out, "\nLen = %d\n", msglen);
         fprintBstr(fp_out, "Msg = ", Msg, msgbytelen);
-        fprintf(fp_out, "MD = ??\n", msglen);
-    } while ( !done );
+        fprintf(fp_out, "MD = ??\n");
+    } while (1);
 
     fclose(fp_in);
     fclose(fp_out);
@@ -108,7 +104,7 @@ void convertShortMsgToPureLSB()
 STATUS_CODES
 genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimitedSuffix, unsigned int hashbitlen, unsigned int squeezedOutputLength, const char *fileName, const char *description)
 {
-    int         msglen, msgbytelen, done;
+    int         msglen, msgbytelen;
     BitSequence Msg[256];
     BitSequence Squeezed[SqueezingOutputLength/8];
     Keccak_HashInstance   hash;
@@ -130,12 +126,10 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
     }
     fprintf(fp_out, "# %s\n", description);
     
-    done = 0;
     do {
         if ( FindMarker(fp_in, "Len = ") )
             fscanf(fp_in, "%d", &msglen);
         else {
-            done = 1;
             break;
         }
         msgbytelen = (msglen+7)/8;
@@ -156,7 +150,7 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
             Keccak_HashSqueeze(&hash, Squeezed, squeezedOutputLength);
             fprintBstr(fp_out, "Squeezed = ", Squeezed, SqueezingOutputLength/8);
         }
-    } while ( !done );
+    } while ( 1 );
     printf("finished ShortMsgKAT for <%s>\n", fileName);
     
     fclose(fp_in);
@@ -205,7 +199,7 @@ int
 ReadHex(FILE *infile, BitSequence *A, int Length, char *str)
 {
     int         i, ch, started;
-    BitSequence ich;
+    BitSequence ich = '\0';
 
     if ( Length == 0 ) {
         A[0] = 0x00;

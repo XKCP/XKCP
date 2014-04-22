@@ -76,7 +76,8 @@ void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, con
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     if (length == 0)
         return;
-    UINT64 lane = ((UINT64*)data)[0];
+    UINT64 lane = 0;
+    memcpy(&lane, data, length);
     lane <<= (8-length)*8;
     lane >>= (8-length-offset)*8;
 #else
@@ -94,28 +95,37 @@ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned 
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     unsigned int i = 0;
-    for( ; (i+8)<=laneCount; i+=8) {
-        ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
-        ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
-        ((UINT64*)state)[i+2] ^= ((UINT64*)data)[i+2];
-        ((UINT64*)state)[i+3] ^= ((UINT64*)data)[i+3];
-        ((UINT64*)state)[i+4] ^= ((UINT64*)data)[i+4];
-        ((UINT64*)state)[i+5] ^= ((UINT64*)data)[i+5];
-        ((UINT64*)state)[i+6] ^= ((UINT64*)data)[i+6];
-        ((UINT64*)state)[i+7] ^= ((UINT64*)data)[i+7];
+    // If either pointer is misaligned, fall back to byte-wise xor.
+    if (((((uintptr_t)state) & 7) != 0) || ((((uintptr_t)data) & 7) != 0)) {
+      for (i = 0; i < laneCount * 8; i++) {
+        ((unsigned char*)state)[i] ^= data[i];
+      }
+    } else {
+      // Otherwise...
+      for( ; (i+8)<=laneCount; i+=8) {
+          ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
+          ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
+          ((UINT64*)state)[i+2] ^= ((UINT64*)data)[i+2];
+          ((UINT64*)state)[i+3] ^= ((UINT64*)data)[i+3];
+          ((UINT64*)state)[i+4] ^= ((UINT64*)data)[i+4];
+          ((UINT64*)state)[i+5] ^= ((UINT64*)data)[i+5];
+          ((UINT64*)state)[i+6] ^= ((UINT64*)data)[i+6];
+          ((UINT64*)state)[i+7] ^= ((UINT64*)data)[i+7];
+      }
+      for( ; (i+4)<=laneCount; i+=4) {
+          ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
+          ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
+          ((UINT64*)state)[i+2] ^= ((UINT64*)data)[i+2];
+          ((UINT64*)state)[i+3] ^= ((UINT64*)data)[i+3];
+      }
+      for( ; (i+2)<=laneCount; i+=2) {
+          ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
+          ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
+      }
+      if (i<laneCount) {
+          ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
+      }
     }
-    for( ; (i+4)<=laneCount; i+=4) {
-        ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
-        ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
-        ((UINT64*)state)[i+2] ^= ((UINT64*)data)[i+2];
-        ((UINT64*)state)[i+3] ^= ((UINT64*)data)[i+3];
-    }
-    for( ; (i+2)<=laneCount; i+=2) {
-        ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
-        ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
-    }
-    if (i<laneCount)
-        ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
 #else
     unsigned int i;
     UINT8 *curData = data;
