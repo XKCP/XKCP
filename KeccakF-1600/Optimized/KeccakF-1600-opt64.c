@@ -76,7 +76,8 @@ void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, con
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     if (length == 0)
         return;
-    UINT64 lane = ((UINT64*)data)[0];
+    UINT64 lane = 0;
+    memcpy(&lane, data, length);
     lane <<= (8-length)*8;
     lane >>= (8-length-offset)*8;
 #else
