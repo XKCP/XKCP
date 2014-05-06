@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
+Michaël Peeters and Gilles Van Assche. For more information, feedback or
+questions, please refer to our website: http://keccak.noekeon.org/
+
+Implementation by Ronny Van Keer and the designers,
+hereby denoted as "the implementer".
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
+-->
+<build>
+    <fragment name="common">
+        <h>Common/brg_endian.h</h>
+    </fragment>
+
+    <fragment name="keccak" inherits="common">
+        <c>Constructions/KeccakDuplex.c</c>
+        <c>Constructions/KeccakSponge.c</c>
+        <c>Modes/KeccakHash.c</c>
+        <c>Tests/genKAT.c</c>
+        <c>Tests/main.c</c>
+        <c>Tests/testDuplex.c</c>
+        <c>Tests/testPermutationAndStateMgt.c</c>
+        <c>Tests/testSponge.c</c>
+        <h>Constructions/KeccakDuplex.h</h>
+        <h>Constructions/KeccakSponge.h</h>
+        <h>Modes/KeccakHash.h</h>
+        <h>Tests/genKAT.h</h>
+        <h>Tests/testDuplex.h</h>
+        <h>Tests/testPermutationAndStateMgt.h</h>
+        <h>Tests/testSponge.h</h>
+    </fragment>
+
+    <fragment name="optimized">
+        <c>Tests/timing.c</c>
+        <h>Common/brg_endian.h</h>
+        <h>Tests/timing.h</h>
+        <gcc>-fomit-frame-pointer</gcc>
+        <gcc>-O3</gcc>
+        <gcc>-g0</gcc>
+        <gcc>-march=native</gcc>
+        <gcc>-mtune=native</gcc>
+    </fragment>
+
+    <!-- Keccak[r+c=1600] -->
+
+    <fragment name="width1600">
+        <h>KeccakF-1600/KeccakF-1600-interface.h</h>
+    </fragment>
+
+    <fragment name="reference1600" inherits="common width1600">
+        <c>KeccakF-1600/Reference/KeccakF-1600-reference.c</c>
+        <c>Tests/displayIntermediateValues.c</c>
+        <h>KeccakF-1600/Reference/KeccakF-1600-reference.h</h>
+        <h>Tests/displayIntermediateValues.h</h>
+        <gcc>-DKeccakReference</gcc>
+        <gcc>-O</gcc>
+    </fragment>
+
+    <fragment name="reference32BI" inherits="width1600">
+        <c>KeccakF-1600/Reference/KeccakF-1600-reference32BI.c</c>
+        <c>Tests/displayIntermediateValues.c</c>
+        <h>KeccakF-1600/Reference/KeccakF-1600-reference.h</h>
+        <h>Tests/displayIntermediateValues.h</h>
+        <gcc>-O</gcc>
+        <gcc>-DKeccakReference</gcc>
+        <gcc>-DKeccakReference32BI</gcc>
+    </fragment>
+
+    <fragment name="optimized64" inherits="width1600 optimized">
+        <c>KeccakF-1600/Optimized/KeccakF-1600-opt64.c</c>
+        <h>KeccakF-1600/Optimized/KeccakF-1600-opt64-settings.h</h>
+        <h>KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
+        <h>KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
+        <gcc>-m64</gcc>
+    </fragment>
+
+    <fragment name="inplace32BI" inherits="width1600 optimized">
+        <c>KeccakF-1600/Optimized/KeccakF-1600-inplace32BI.c</c>
+    </fragment>
+
+    <fragment name="compact64" inherits="width1600 optimized">
+        <c>KeccakF-1600/Compact/Keccak-compact64.c</c>
+        <gcc>-m64</gcc>
+    </fragment>
+
+    <target name="KeccakWidth1600Reference" inherits="keccak reference1600"/>
+    <target name="KeccakWidth1600Reference32BI" inherits="keccak reference32BI"/>
+    <target name="KeccakWidth1600Optimized64" inherits="keccak optimized64"/>
+    <target name="KeccakWidth1600Inplace32BI" inherits="keccak inplace32BI"/>
+    <target name="KeccakWidth1600Compact64" inherits="keccak compact64"/>
+
+</build>

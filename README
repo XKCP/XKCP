@@ -8,6 +8,11 @@ More information can be found:
 
 Code contributions are welcome.
 
+To build, the following tools are needed:
+* GCC
+* make
+* xsltproc
+
 The Keccak Team, June 2013
 Guido Bertoni, Joan Daemen, Michaël Peeters and Gilles Van Assche
 

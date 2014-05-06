@@ -24,13 +24,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "genKAT.h"
 #include "KeccakDuplex.h"
 #include "KeccakSponge.h"
-#include "KeccakF-1600-reference.h"
 #include "testDuplex.h"
 #include "testPermutationAndStateMgt.h"
 #include "testSponge.h"
 #include "timing.h"
 
 #ifdef KeccakReference
+
+#include "KeccakF-1600-reference.h"
+
 void displayPermutationIntermediateValues()
 {
     unsigned char state[KeccakF_width/8];
