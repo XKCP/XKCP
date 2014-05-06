@@ -105,11 +105,15 @@ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned 
     UINT32 t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
+#ifdef NO_MISALIGNED_ACCESSES
         UINT32 low;
         UINT32 high;
         memcpy(&low, pI++, 4);
         memcpy(&high, pI++, 4);
         toBitInterleavingAndXOR(low, high, *(pS++), *(pS++), t, x0, x1);
+#else
+        toBitInterleavingAndXOR(*(pI++), *(pI++), *(pS++), *(pS++), t, x0, x1)
+#endif
     }
 #else
     unsigned int lanePosition;
@@ -184,11 +188,15 @@ void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsig
     UINT32 t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
+#ifdef NO_MISALIGNED_ACCESSES
         UINT32 low;
         UINT32 high;
         fromBitInterleaving(*(pS++), *(pS++), low, high, t, x0, x1);
         memcpy(pI++, &low, 4);
         memcpy(pI++, &high, 4);
+#else
+        fromBitInterleaving(*(pS++), *(pS++), *(pI++), *(pI++), t, x0, x1)
+#endif
     }
 #else
     unsigned int lanePosition;
@@ -353,11 +361,15 @@ void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData
         UINT32 t, x0, x1;
         int i;
         for (i = inLaneCount-1; i >= 0; --i) {
+#ifdef NO_MISALIGNED_ACCESSES
             UINT32 low;
             UINT32 high;
             memcpy(&low, pI++, 4);
             memcpy(&high, pI++, 4);
             toBitInterleavingAndXOR(low, high, *(pS++), *(pS++), t, x0, x1);
+#else
+            toBitInterleavingAndXOR(*(pI++), *(pI++), *(pS++), *(pS++), t, x0, x1)
+#endif
         }
     }
 
@@ -944,11 +956,15 @@ void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData
         UINT32 t, x0, x1;
         int i;
         for (i = outLaneCount-1; i >= 0; --i) {
+#ifdef NO_MISALIGNED_ACCESSES
             UINT32 low;
             UINT32 high;
             fromBitInterleaving(*(pS++), *(pS++), low, high, t, x0, x1);
             memcpy(pI++, &low, 4);
             memcpy(pI++, &high, 4);
+#else
+            fromBitInterleaving(*(pS++), *(pS++), *(pI++), *(pI++), t, x0, x1)
+#endif
         }
     }
 }
