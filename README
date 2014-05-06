@@ -2,6 +2,8 @@ The Keccak Code Package
 
 This project gathers different implementations of the Keccak sponge function family. Its purpose is to replace the implementations originally in the "Keccak Reference and Optimized Code in C" with cleaner and more flexible code following the interface proposed in the note "A software interface for Keccak".
 
+This version supports the hash and extendable output functions defined in the FIPS 202 draft (http://csrc.nist.gov/groups/ST/hash/sha-3/sha-3_standard_fips202.html).
+
 More information can be found:
 * on the proposed software interface at http://keccak.noekeon.org/NoteSoftwareInterface.pdf
 * on Keccak in general at http://keccak.noekeon.org/
@@ -13,10 +15,9 @@ To build, the following tools are needed:
 * make
 * xsltproc
 
-The Keccak Team, June 2013
-Guido Bertoni, Joan Daemen, Michaël Peeters and Gilles Van Assche
+The Keccak, Keyak and Ketje Teams, May 2014
+Guido Bertoni, Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer
 
 Acknowledgments:
-- 32-bit in-place implementation by Ronny Van Keer
 - genKAT.c based on the SHA-3 contest's genKAT.c by NIST
 - brg_endian.h by Brian Gladman
