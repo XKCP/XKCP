@@ -10,11 +10,13 @@ To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
-
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "KeccakSponge.h"
+
+#include "tests.h"
 
 void testSponge(FILE *f, unsigned int rate, unsigned int capacity, int usingQueue)
 {
@@ -88,6 +90,7 @@ void testSponge(FILE *f, unsigned int rate, unsigned int capacity, int usingQueu
 
         for (i = 0; i < outputByteSize; i++)
             acc[i] ^= output[i];
+        assert(result == 0);
     }
     
     fprintf(f, "Keccak[r=%d, c=%d]: ", rate, capacity);
@@ -98,22 +101,22 @@ void testSponge(FILE *f, unsigned int rate, unsigned int capacity, int usingQueu
     #undef outputByteSize
 }
 
-void testSpongeWithQueue()
+void testSpongeWithQueue(void)
 {
     FILE *f;
     unsigned int rate;
-    
+
     f = fopen("TestSpongeWithQueue.txt", "w");
     for(rate = 64; rate <= 1600; rate += (rate < 1024) ? 64 : ((rate < 1344) ? 32 : 8))
         testSponge(f, rate, 1600-rate, 1);
     fclose(f);
 }
 
-void testSpongeWithoutQueue()
+void testSpongeWithoutQueue(void)
 {
     FILE *f;
     unsigned int rate;
-    
+
     f = fopen("TestSpongeWithoutQueue.txt", "w");
     for(rate = 64; rate <= 1600; rate += (rate < 1024) ? 64 : ((rate < 1344) ? 32 : 8))
         testSponge(f, rate, 1600-rate, 0);

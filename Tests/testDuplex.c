@@ -16,6 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include "KeccakDuplex.h"
 
+#include "tests.h"
+
 void testDuplexOneInstance(FILE *f, unsigned int rate, unsigned int capacity)
 {
     unsigned char acc[KeccakF_width/8];
@@ -26,13 +28,13 @@ void testDuplexOneInstance(FILE *f, unsigned int rate, unsigned int capacity)
 
     // Acumulated test vector
     memset(acc, 0x00, sizeof(acc));
-    
+
     Keccak_DuplexInitialize(&duplex, rate, capacity);
-    
+
     // Varying input size, maximum output size
     for(sigmaBitLength=0; sigmaBitLength<=rate-2; sigmaBitLength++) {
         unsigned int sigmaByteLenCeiling = (sigmaBitLength + 7)/8;
-        unsigned int ZByteLen = (rate + 7)/8;
+        ZByteLen = (rate + 7)/8;
         unsigned char delimitedSigmaEnd;
         unsigned char filler = 0xAA + sigmaBitLength;
 
@@ -56,7 +58,7 @@ void testDuplexOneInstance(FILE *f, unsigned int rate, unsigned int capacity)
                 abort();
             }
     }
-    
+
     // No input, varying output size
     for(ZByteLen=0; ZByteLen<=(rate+7)/8; ZByteLen++) {
         unsigned char filler = 0x33 + sigmaBitLength;
@@ -72,18 +74,18 @@ void testDuplexOneInstance(FILE *f, unsigned int rate, unsigned int capacity)
                 abort();
             }
     }
-    
+
     fprintf(f, "Keccak[r=%d, c=%d] duplex: ", rate, capacity);
     for(i=0; i<(rate+7)/8; i++)
         fprintf(f, "%02x ", acc[i]);
     fprintf(f, "\n\n");
 }
 
-void testDuplex()
+void testDuplex(void)
 {
     FILE *f;
     unsigned int rate;
-    
+
     f = fopen("TestDuplex.txt", "w");
     for(rate = 3; rate <= 1600-2; rate += (rate < 68) ? 1 : ((rate < 220) ? 5 : 25))
         testDuplexOneInstance(f, rate, 1600-rate);

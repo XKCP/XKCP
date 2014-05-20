@@ -210,11 +210,11 @@ uint_32t measureKeccakDuplexing1000blocks(uint_32t dtMin)
     measureTimingEnd
 }
 
-void doTiming()
+void doTiming(void)
 {
     uint_32t calibration;
     uint_32t measurement;
-    
+
     measureKeccakAbsorb1000blocks(0);
     calibration = calibrate();
 

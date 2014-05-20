@@ -12,7 +12,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include <stdio.h>
-#include "displayIntermediateValues.h"
+#include "tests.h"
 #include "KeccakF-1600-interface.h"
 
 FILE *intermediateValueFile = 0;
