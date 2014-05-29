@@ -32,6 +32,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Tests/testDuplex.h</h>
         <h>Tests/testPermutationAndStateMgt.h</h>
         <h>Tests/testSponge.h</h>
+        <gcc>-Wall</gcc>
+        <gcc>-Wpedantic</gcc>
+        <gcc>-Wextra</gcc>
+        <gcc>-std=c11</gcc>
     </fragment>
 
     <fragment name="optimized">
@@ -43,6 +47,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <gcc>-g0</gcc>
         <gcc>-march=native</gcc>
         <gcc>-mtune=native</gcc>
+        <gcc>-Wall</gcc>
+        <gcc>-Wpedantic</gcc>
+        <gcc>-Wextra</gcc>
+        <gcc>-std=c11</gcc>
     </fragment>
 
     <!-- Keccak[r+c=1600] -->
@@ -58,6 +66,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Tests/displayIntermediateValues.h</h>
         <gcc>-DKeccakReference</gcc>
         <gcc>-O</gcc>
+        <gcc>-Wall</gcc>
+        <gcc>-Wpedantic</gcc>
+        <gcc>-Wextra</gcc>
+        <gcc>-std=c11</gcc>
     </fragment>
 
     <fragment name="reference32BI" inherits="width1600">
@@ -68,6 +80,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <gcc>-O</gcc>
         <gcc>-DKeccakReference</gcc>
         <gcc>-DKeccakReference32BI</gcc>
+        <gcc>-Wall</gcc>
+        <gcc>-Wpedantic</gcc>
+        <gcc>-Wextra</gcc>
+        <gcc>-std=c11</gcc>
     </fragment>
 
     <fragment name="optimized64" inherits="width1600 optimized">
@@ -76,15 +92,27 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
         <h>KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
         <gcc>-m64</gcc>
+        <gcc>-Wall</gcc>
+        <gcc>-Wpedantic</gcc>
+        <gcc>-Wextra</gcc>
+        <gcc>-std=c11</gcc>
     </fragment>
 
     <fragment name="inplace32BI" inherits="width1600 optimized">
         <c>KeccakF-1600/Optimized/KeccakF-1600-inplace32BI.c</c>
+        <gcc>-Wall</gcc>
+        <gcc>-Wpedantic</gcc>
+        <gcc>-Wextra</gcc>
+        <gcc>-std=c11</gcc>
     </fragment>
 
     <fragment name="compact64" inherits="width1600 optimized">
         <c>KeccakF-1600/Compact/Keccak-compact64.c</c>
         <gcc>-m64</gcc>
+        <gcc>-Wall</gcc>
+        <gcc>-Wpedantic</gcc>
+        <gcc>-Wextra</gcc>
+        <gcc>-std=c11</gcc>
     </fragment>
 
     <target name="KeccakWidth1600Reference" inherits="keccak reference1600"/>
