@@ -81,7 +81,7 @@ int Keccak_Duplexing(Keccak_DuplexInstance *instance, const unsigned char *sigma
             Z+offsetBeyondLane, 0, beyondLaneBytes);
     }
     if (ZByteLen*8 > instance->rate) {
-        unsigned char mask = (1 << (instance->rate % 8)) - 1;
+        unsigned char mask = (unsigned char)(1 << (instance->rate % 8)) - 1;
         Z[ZByteLen-1] &= mask;
     }
 

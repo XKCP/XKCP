@@ -29,7 +29,7 @@ void accumulateState(void *stateAccumulated, const void *stateTest)
     accumulateBuffer(stateAccumulated, buffer);
 }
 
-void testPermutationAndStateMgt()
+void testPermutationAndStateMgt(void)
 {
     unsigned char stateAccumulated[KeccakF_width/8];
     unsigned char stateTest[KeccakF_width/8];
@@ -39,21 +39,21 @@ void testPermutationAndStateMgt()
     KeccakF1600_StateInitialize(stateAccumulated);
 
     memset(stateTest, 0xAA, sizeof(stateTest));
-    
+
     // Testing KeccakF1600_StateInitialize()
     {
         KeccakF1600_StateInitialize(stateTest);
         accumulateState(stateAccumulated, stateTest);
     }
     KeccakF1600_StatePermute(stateTest);
-    
+
     // Testing KeccakF1600_StateXORBytesInLane()
     {
         unsigned char buffer[KeccakF_laneInBytes+8];
         unsigned i, lanePosition, offset, length, alignment;
         for(i=0; i<sizeof(buffer); i++)
             buffer[i] = 0xF3 + 5*i;
-        
+
         for(alignment=0; alignment<8; alignment++)
         for(lanePosition=0; lanePosition<25; lanePosition++)
         for(offset=0; offset<KeccakF_laneInBytes; offset++)
@@ -68,7 +68,7 @@ void testPermutationAndStateMgt()
     {
         unsigned char buffer[KeccakF_width/8+8];
         unsigned i, laneCount, alignment;
-        
+
         for(alignment=0; alignment<8; alignment++) {
             for(i=0; i<KeccakF_width/8; i++)
                 buffer[i+alignment] = 0x74 - 3*i + 8*alignment;
@@ -80,11 +80,11 @@ void testPermutationAndStateMgt()
         }
     }
     KeccakF1600_StatePermute(stateTest);
-    
+
     // Testing KeccakF1600_StateComplementBit()
     {
         unsigned bitPosition;
-        
+
         for(bitPosition=0; bitPosition<KeccakF_width; bitPosition++) {
             KeccakF1600_StateComplementBit(stateTest, bitPosition);
             accumulateState(stateAccumulated, stateTest);
@@ -112,7 +112,7 @@ void testPermutationAndStateMgt()
     {
         unsigned char buffer[KeccakF_width/8+8];
         unsigned laneCount, alignment;
-        
+
         for(alignment=0; alignment<8; alignment++)
         for(laneCount=0; laneCount<=25; laneCount++) {
             memset(buffer, 0xD1+laneCount+32*alignment, sizeof(buffer));
@@ -126,7 +126,7 @@ void testPermutationAndStateMgt()
     {
         unsigned char buffer[KeccakF_width/8+8];
         unsigned int i, inLaneCount, outLaneCount, alignment;
-        
+
         for(alignment=0; alignment<8; alignment++)
         for(inLaneCount=0; inLaneCount<=25; inLaneCount++)
         for(outLaneCount=0; outLaneCount<=25; outLaneCount++) {
@@ -143,7 +143,7 @@ void testPermutationAndStateMgt()
         unsigned char buffer[KeccakF_width/8];
         unsigned int i;
         FILE *f;
-    
+
         KeccakF1600_StateExtractLanes(stateAccumulated, buffer, 25);
         f = fopen("TestKeccakF-1600AndStateMgt.txt", "w");
         fprintf(f, "Testing Keccak-f[1600] permutation and state management: ");

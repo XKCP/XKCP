@@ -10,5 +10,7 @@ To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
-
-void testPermutationAndStateMgt();
+#ifndef TESTS_TESTPERMUTATIONANDSTATEMGT_H
+#define TESTS_TESTPERMUTATIONANDSTATEMGT_H
+void testPermutationAndStateMgt(void);
+#endif

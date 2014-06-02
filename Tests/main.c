@@ -33,7 +33,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include "KeccakF-1600-reference.h"
 
-void displayPermutationIntermediateValues()
+void displayPermutationIntermediateValues(void)
 {
     unsigned char state[KeccakF_width/8];
     #ifdef KeccakReference32BI
@@ -177,7 +177,7 @@ void displaySpongeIntermediateValuesFew(const char *fileName, unsigned char deli
     displaySetIntermediateValueFile(0);
 }
 
-void displaySpongeIntermediateValues()
+void displaySpongeIntermediateValues(void)
 {
     displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_r1344c256.txt", 0x01, 1344,  256, 4096);
     displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_SHAKE128.txt", 0x1F, 1344,  256, 4096);
@@ -229,7 +229,7 @@ void displayDuplexIntermediateValuesOne(FILE *f, unsigned int rate, unsigned int
     }
 }
 
-void displayDuplexIntermediateValues()
+void displayDuplexIntermediateValues(void)
 {
     char fileName[256];
     FILE *f;
@@ -254,7 +254,7 @@ void displayDuplexIntermediateValues()
 }
 #endif
 
-int main()
+int main(void)
 {
     testPermutationAndStateMgt();
     testSpongeWithQueue();
