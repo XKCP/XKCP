@@ -1,10 +1,12 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
 
-Implementation by the designers,
-hereby denoted as "the implementer".
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -164,31 +166,92 @@ void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, con
     }
 }
 
+void KeccakF1600_StateXORBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+{
+    if ((offset < 200) && (offset+length <= 200)) {
+        unsigned int lanePosition = offset/8;
+        unsigned int offsetInLane = offset%8;
+        while(length > 0) {
+            unsigned int bytesInLane = 8 - offsetInLane;
+            if (bytesInLane > length)
+                bytesInLane = length;
+            KeccakF1600_StateXORBytesInLane(state, lanePosition, data, offsetInLane, bytesInLane);
+            length -= bytesInLane;
+            lanePosition++;
+            offsetInLane = 0;
+            data += bytesInLane;
+        }
+    }
+}
+
 /* ---------------------------------------------------------------- */
 
-void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-{
-    if (laneCount <= 25) {
-        unsigned int lanePosition;
-        for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
-            UINT8 laneAsBytes[8];
-            UINT32 low, high;
-            UINT32 lane[2];
-            UINT32 *stateAsHalfLanes;
+void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length);
 
-            memcpy(laneAsBytes, data+lanePosition*8, 8);
-            low = laneAsBytes[0] 
-                | ((UINT32)(laneAsBytes[1]) << 8) 
-                | ((UINT32)(laneAsBytes[2]) << 16)
-                | ((UINT32)(laneAsBytes[3]) << 24);
-            high = laneAsBytes[4] 
-                | ((UINT32)(laneAsBytes[5]) << 8) 
-                | ((UINT32)(laneAsBytes[6]) << 16)
-                | ((UINT32)(laneAsBytes[7]) << 24);
-            toBitInterleaving(low, high, lane, lane+1);
-            stateAsHalfLanes = (UINT32*)state;
-            stateAsHalfLanes[lanePosition*2+0] ^= lane[0];
-            stateAsHalfLanes[lanePosition*2+1] ^= lane[1];
+void KeccakF1600_StateOverwriteBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
+{
+    if ((lanePosition < 25) && (offset < 8) && (offset+length <= 8)) {
+        UINT8 laneAsBytes[8];
+        UINT32 low, high;
+        UINT32 lane[2];
+        UINT32 *stateAsHalfLanes;
+
+        KeccakF1600_StateExtractBytesInLane(state, lanePosition, laneAsBytes, 0, 8);
+        memcpy(laneAsBytes+offset, data, length);
+        low = laneAsBytes[0]
+            | ((UINT32)(laneAsBytes[1]) << 8)
+            | ((UINT32)(laneAsBytes[2]) << 16)
+            | ((UINT32)(laneAsBytes[3]) << 24);
+        high = laneAsBytes[4]
+            | ((UINT32)(laneAsBytes[5]) << 8)
+            | ((UINT32)(laneAsBytes[6]) << 16)
+            | ((UINT32)(laneAsBytes[7]) << 24);
+        toBitInterleaving(low, high, lane, lane+1);
+        stateAsHalfLanes = (UINT32*)state;
+        stateAsHalfLanes[lanePosition*2+0] = lane[0];
+        stateAsHalfLanes[lanePosition*2+1] = lane[1];
+    }
+}
+
+void KeccakF1600_StateOverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+{
+    if ((offset < 200) && (offset+length <= 200)) {
+        unsigned int lanePosition = offset/8;
+        unsigned int offsetInLane = offset%8;
+        while(length > 0) {
+            unsigned int bytesInLane = 8 - offsetInLane;
+            if (bytesInLane > length)
+                bytesInLane = length;
+            KeccakF1600_StateOverwriteBytesInLane(state, lanePosition, data, offsetInLane, bytesInLane);
+            length -= bytesInLane;
+            lanePosition++;
+            offsetInLane = 0;
+            data += bytesInLane;
+        }
+    }
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakF1600_StateOverwriteWithZeroes(void *state, unsigned int byteCount)
+{
+    if (byteCount <= 200) {
+        UINT8 laneAsBytes[8];
+        unsigned int lanePosition = 0;
+
+        memset(laneAsBytes, 0, 8);
+        while(byteCount > 0) {
+            if (byteCount < 8) {
+                KeccakF1600_StateOverwriteBytesInLane(state, lanePosition, laneAsBytes, 0, byteCount);
+                byteCount = 0;
+            }
+            else {
+                UINT32 *stateAsHalfLanes = (UINT32*)state;
+                stateAsHalfLanes[lanePosition*2+0] = 0;
+                stateAsHalfLanes[lanePosition*2+1] = 0;
+                byteCount -= 8;
+                lanePosition++;
+            }
         }
     }
 }
@@ -214,19 +277,20 @@ void rho(UINT32 *A);
 void pi(UINT32 *A);
 void chi(UINT32 *A);
 void iota(UINT32 *A, unsigned int indexRound);
+void KeccakF1600_StateExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length);
 
 void KeccakF1600_StatePermute(void *state)
 {
     UINT32 *stateAsHalfLanes = (UINT32*)state;
     {
         UINT8 stateAsBytes[KeccakF_width/8];
-        KeccakF1600_StateExtractLanes(state, stateAsBytes, KeccakF_width/8/KeccakF_laneInBytes);
+        KeccakF1600_StateExtractBytes(state, stateAsBytes, 0, KeccakF_width/8);
         displayStateAsBytes(1, "Input of permutation", stateAsBytes);
     }
     KeccakF1600_PermutationOnWords(stateAsHalfLanes);
     {
         UINT8 stateAsBytes[KeccakF_width/8];
-        KeccakF1600_StateExtractLanes(state, stateAsBytes, KeccakF_width/8/KeccakF_laneInBytes);
+        KeccakF1600_StateExtractBytes(state, stateAsBytes, 0, KeccakF_width/8);
         displayStateAsBytes(1, "State after permutation", stateAsBytes);
     }
 }
@@ -356,37 +420,54 @@ void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePos
     }
 }
 
-/* ---------------------------------------------------------------- */
-
-void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsigned int laneCount)
+void KeccakF1600_StateExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
-    if (laneCount <= 25) {
-        unsigned int lanePosition;
-        for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
-            UINT32 *stateAsHalfLanes = (UINT32*)state;
-            UINT32 lane[2];
-            UINT8 laneAsBytes[8];
-            fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], lane, lane+1);
-            laneAsBytes[0] = lane[0] & 0xFF;
-            laneAsBytes[1] = (lane[0] >> 8) & 0xFF;
-            laneAsBytes[2] = (lane[0] >> 16) & 0xFF;
-            laneAsBytes[3] = (lane[0] >> 24) & 0xFF;
-            laneAsBytes[4] = lane[1] & 0xFF;
-            laneAsBytes[5] = (lane[1] >> 8) & 0xFF;
-            laneAsBytes[6] = (lane[1] >> 16) & 0xFF;
-            laneAsBytes[7] = (lane[1] >> 24) & 0xFF;
-            memcpy(data+lanePosition*8, laneAsBytes, 8);
+    if ((offset < 200) && (offset+length <= 200)) {
+        unsigned int lanePosition = offset/8;
+        unsigned int offsetInLane = offset%8;
+        while(length > 0) {
+            unsigned int bytesInLane = 8 - offsetInLane;
+            if (bytesInLane > length)
+                bytesInLane = length;
+            KeccakF1600_StateExtractBytesInLane(state, lanePosition, data, offsetInLane, bytesInLane);
+            length -= bytesInLane;
+            lanePosition++;
+            offsetInLane = 0;
+            data += bytesInLane;
         }
     }
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData, unsigned int inLaneCount, unsigned char *outData, unsigned int outLaneCount)
+void KeccakF1600_StateExtractAndXORBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
 {
-    KeccakF1600_StateXORLanes(state, inData, inLaneCount);
-    KeccakF1600_StatePermute(state);
-    KeccakF1600_StateExtractLanes(state, outData, outLaneCount);
+    if ((lanePosition < 25) && (offset < 8) && (offset+length <= 8)) {
+        UINT8 laneAsBytes[8];
+        unsigned int i;
+
+        KeccakF1600_StateExtractBytesInLane(state, lanePosition, laneAsBytes, offset, length);
+        for(i=0; i<length; i++)
+            data[i] ^= laneAsBytes[i];
+    }
+}
+
+void KeccakF1600_StateExtractAndXORBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
+{
+    if ((offset < 200) && (offset+length <= 200)) {
+        unsigned int lanePosition = offset/8;
+        unsigned int offsetInLane = offset%8;
+        while(length > 0) {
+            unsigned int bytesInLane = 8 - offsetInLane;
+            if (bytesInLane > length)
+                bytesInLane = length;
+            KeccakF1600_StateExtractAndXORBytesInLane(state, lanePosition, data, offsetInLane, bytesInLane);
+            length -= bytesInLane;
+            lanePosition++;
+            offsetInLane = 0;
+            data += bytesInLane;
+        }
+    }
 }
 
 /* ---------------------------------------------------------------- */

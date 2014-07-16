@@ -1,10 +1,12 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
 
-Implementation by the designers and Ronny Van Keer,
-hereby denoted as "the implementer".
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -137,7 +139,7 @@ void KeccakF1600_StateXORBytesInLane(void *argState, unsigned int lanePosition, 
     tKeccakLane lane = 0;
     for(i=0; i<length; i++)
         lane |= ((tKeccakLane)data[i]) << ((i+offset)*8);
-    ((tKeccakLane*)state)[lanePosition] ^= lane;
+    ((tKeccakLane*)argState)[lanePosition] ^= lane;
     #endif
 }
 
@@ -153,7 +155,7 @@ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned 
     }
 #else
     tSmallUInt i;
-    UINT8 *curData = data;
+    const UINT8 *curData = data;
     for(i=0; i<laneCount; i++, curData+=8) {
         tKeccakLane lane = (tKeccakLane)curData[0]
             | ((tKeccakLane)curData[1] << 8)
@@ -165,6 +167,63 @@ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned 
             | ((tKeccakLane)curData[7] << 56);
         ((tKeccakLane*)state)[i] ^= lane;
     }
+#endif
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakF1600_StateOverwriteBytesInLane(void *argState, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
+{
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+    memcpy((unsigned char*)argState+lanePosition*8+offset, data, length);
+#else
+    unsigned int i;
+    tKeccakLane *state = (tKeccakLane*)argState;
+    tKeccakLane lane = state[lanePosition];
+    for(i=0; i<length; i++) {
+        lane &= ~(((tKeccakLane)0xFF) << ((i+offset)*8));
+        lane |= ((tKeccakLane)data[i]) << ((i+offset)*8);
+    }
+    state[lanePosition] = lane;
+#endif
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakF1600_StateOverwriteLanes(void *state, const unsigned char *data, unsigned int laneCount)
+{
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+    memcpy((unsigned char*)state, data, laneCount*8);
+#else
+    tSmallUInt i;
+    const UINT8 *curData = data;
+    for(i=0; i<laneCount; i++, curData+=8) {
+        tKeccakLane lane = (tKeccakLane)curData[0]
+            | ((tKeccakLane)curData[1] << 8)
+            | ((tKeccakLane)curData[2] << 16)
+            | ((tKeccakLane)curData[3] << 24)
+            | ((tKeccakLane)curData[4] << 32)
+            | ((tKeccakLane)curData[5] << 40)
+            | ((tKeccakLane)curData[6] << 48)
+            | ((tKeccakLane)curData[7] << 56);
+        ((tKeccakLane*)state)[i] = lane;
+    }
+#endif
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakF1600_StateOverwriteWithZeroes(void *argState, unsigned int byteCount)
+{
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+    memset((unsigned char*)argState, 0, byteCount);
+#else
+    tKeccakLane *state = (tKeccakLane*)argState;
+    unsigned int i, j;
+    for(i=0; i<byteCount/8; i++)
+        state[i] = 0;
+    for(j=0; j<byteCount%8; j++)
+        state[i] &= ~(((tKeccakLane)0xFF) << (j*8));
 #endif
 }
 
@@ -270,7 +329,7 @@ void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsig
     {
         for(j=0; j<(64/8); j++)
         {
-            bytes[data+(i*8] = state[i] >> (8*j)) & 0xFF;
+            data[(i*8)+j] = (((const tKeccakLane*)state)[i] >> (8*j)) & 0xFF;
         }
     }
 #endif
@@ -278,11 +337,35 @@ void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsig
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData, unsigned int inLaneCount, unsigned char *outData, unsigned int outLaneCount)
+void KeccakF1600_StateExtractAndXORBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
 {
-    KeccakF1600_StateXORLanes(state, inData, inLaneCount);
-    KeccakF1600_StatePermute(state);
-    KeccakF1600_StateExtractLanes(state, outData, outLaneCount);
+    tSmallUInt i;
+    tKeccakLane lane = ((tKeccakLane*)state)[lanePosition];
+    lane >>= offset*8;
+    for(i=0; i<length; i++) {
+        data[i] ^= lane & 0xFF;
+        lane >>= 8;
+    }
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakF1600_StateExtractAndXORLanes(const void *state, unsigned char *data, unsigned int laneCount)
+{
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+    tSmallUInt i;
+    for(i=0; i<laneCount; i++)
+        ((tKeccakLane*)data)[i] ^= ((const tKeccakLane*)state)[i];
+#else
+    tSmallUInt i, j;
+    for(i=0; i<laneCount; i++)
+    {
+        for(j=0; j<(64/8); j++)
+        {
+            data[(i*8)+j] ^= (((const tKeccakLane*)state)[i] >> (8*j)) & 0xFF;
+        }
+    }
+#endif
 }
 
 /* ---------------------------------------------------------------- */

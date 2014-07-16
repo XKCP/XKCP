@@ -1,37 +1,27 @@
 @
-@ The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-@ Michaël Peeters and Gilles Van Assche. For more information, feedback or
-@ questions, please refer to our website: http://keccak.noekeon.org/
+@ Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+@ Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+@ denoted as "the implementer".
 @
-@ Implementation by Ronny Van Keer, hereby denoted as "the implementer".
+@ For more information, feedback or questions, please refer to our websites:
+@ http://keccak.noekeon.org/
+@ http://keyak.noekeon.org/
+@ http://ketje.noekeon.org/
 @
 @ To the extent possible under law, the implementer has waived all copyright
 @ and related or neighboring rights to the source code in this file.
 @ http://creativecommons.org/publicdomain/zero/1.0/
 @
 
-@ WARNING: These functions work only on little endian CPU with@ ARMv7a architecture.
-@ 
-@ INFO: KeccakF1600_StatePermute() execution time is 7550 cycles on a Cortex-A8 (BeagleBone Black)
+@ WARNING: These functions work only on little endian CPU with@ ARMv7a architecture (ARM Cortex-A8, ...).
+ 
+@ INFO: Tested on a Cortex-A8 (BeagleBone Black)
 
-   @ PRESERVE8
+   
 .text
-   .align 8
-
-.global   KeccakF1600_Initialize
-.global   KeccakF1600_StateInitialize
-.global   KeccakF1600_StateComplementBit
-.global   KeccakF1600_StateXORLanes
-.global   KeccakF1600_StateXORBytesInLane
-.global   KeccakF1600_StateExtractLanes
-.global   KeccakF1600_StateExtractBytesInLane
-.global   KeccakF1600_StatePermute
-.global   KeccakF1600_StateXORPermuteExtract
-
-@//----------------------------------------------------------------------------
 
     @// Credit: Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002
-.macro    toBitInterleaving x0,x1,s0,s1,t,m55,m33,m0F,mFF
+.macro    toBitInterleaving x0,x1,s0,s1,t,m55,m33,m0F,mFF, over
 
     and     \t,\x0,\m55
     orr     \t,\t,\t, LSR #1
@@ -41,7 +31,11 @@
     orr     \t,\t,\t, LSR #4
     and     \t,\t,\mFF
     bfi     \t,\t,#8, #8
+	.if \over != 0
+    lsr     \s0,\t, #8
+	.else
     eor     \s0,\s0,\t, LSR #8
+	.endif
 
     and     \t,\x1,\m55
     orr     \t,\t,\t, LSR #1
@@ -61,7 +55,11 @@
     orr     \t,\t,\t, LSL #4
     and     \t,\t,\mFF, LSL #8
     orr     \t,\t,\t, LSL #8
+	.if \over != 0
+    lsr     \s1,\t, #16
+	.else
     eor     \s1,\s1,\t, LSR #16
+	.endif
 
     and     \t,\x1,\m55, LSL #1
     orr     \t,\t,\t, LSL #1
@@ -472,79 +470,69 @@
 @//
 @// void KeccakF1600_Initialize( void )
 @//
+.align 8
+.global   KeccakF1600_Initialize
 KeccakF1600_Initialize:  
+	bx		lr
 
-    bx      lr
-
-   
-   .align 8
 
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF1600_StateInitialize(void *state)
 @//
+.align 8
+.global   KeccakF1600_StateInitialize
 KeccakF1600_StateInitialize:  
+	push	{r4 - r5}
+	movs	r1, #0
+	movs	r2, #0
+	movs	r3, #0
+	movs	r4, #0
+	movs	r5, #0
+	stmia	r0!, { r1 - r5 }
+	stmia	r0!, { r1 - r5 }
+	stmia	r0!, { r1 - r5 }
+	stmia	r0!, { r1 - r5 }
+	stmia	r0!, { r1 - r5 }
+	stmia	r0!, { r1 - r5 }
+	stmia	r0!, { r1 - r5 }
+	stmia	r0!, { r1 - r5 }
+	stmia	r0!, { r1 - r5 }
+	stmia	r0!, { r1 - r5 }
+	pop		{r4 - r5}
+	bx		lr
 
-    push    {r4 - r5}
-
-    movs    r1, #0
-    movs    r2, #0
-    movs    r3, #0
-    movs    r4, #0
-    movs    r5, #0
-
-    stmia   r0!, { r1 - r5 }
-    stmia   r0!, { r1 - r5 }
-    stmia   r0!, { r1 - r5 }
-    stmia   r0!, { r1 - r5 }
-    stmia   r0!, { r1 - r5 }
-
-    stmia   r0!, { r1 - r5 }
-    stmia   r0!, { r1 - r5 }
-    stmia   r0!, { r1 - r5 }
-    stmia   r0!, { r1 - r5 }
-    stmia   r0!, { r1 - r5 }
-
-    pop     {r4 - r5}
-    bx      lr
-
-   
-   .align 8
 
 @//----------------------------------------------------------------------------
 @//
-@// void KeccakF1600_StateComplementBit(void *state, unsigned int position)
+@//	void KeccakF1600_StateComplementBit(void *state, unsigned int position)
 @//
+.align 8
+.global   KeccakF1600_StateComplementBit
 KeccakF1600_StateComplementBit:  
+	and		r3, r1, #1
+	lsrs	r2, r1, #6
+	add		r0, r0, r3, LSL #2
+	add		r0, r0, r2, LSL #3
+	movs	r2, #1
+	ubfx	r3, r1, #1, #5
+	lsls	r2, r2, r3
+	ldr		r3, [r0]
+	eors	r3, r3, r2
+	str		r3, [r0]
+	bx		lr
 
-    and     r3, r1, #1
-    lsrs    r2, r1, #6
-    add     r0, r0, r3, LSL #2
-    add     r0, r0, r2, LSL #3
-
-    movs    r2, #1
-    ubfx    r3, r1, #1, #5
-    lsls    r2, r2, r3
-
-    ldr     r3, [r0]
-    eors    r3, r3, r2
-    str     r3, [r0]
-    bx      lr
-
-   
-   .align 8
 
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
 @// 
+.align 8
+.global   KeccakF1600_StateXORLanes
 KeccakF1600_StateXORLanes:  
-
     cmp     r2, #0
     beq     KeccakF1600_StateXORLanes_Exit
-
     push    {r4 - r11}
-
     movw    r8, #0x5555
     movt    r8, #0x5555
     movw    r9, #0x3333
@@ -553,46 +541,40 @@ KeccakF1600_StateXORLanes:
     movt    r10, #0x0F0F
     movw    r11, #0x00FF
     movt    r11, #0x00FF
-
 KeccakF1600_StateXORLanes_LoopAligned:
     ldr     r4, [r1], #4
     ldr     r5, [r1], #4
     ldrd    r6, r7, [r0]
-    toBitInterleaving r4, r5, r6, r7, r3, r8, r9, r10, r11
+    toBitInterleaving r4, r5, r6, r7, r3, r8, r9, r10, r11, 0
     strd    r6, r7, [r0], #8
     subs    r2, r2, #1
     bne     KeccakF1600_StateXORLanes_LoopAligned
     pop     {r4 - r11}
 KeccakF1600_StateXORLanes_Exit:
     bx      lr
-
    
-   .align 8
 
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
 @//
+.align 8
+.global   KeccakF1600_StateXORBytesInLane
 KeccakF1600_StateXORBytesInLane:  
-
     push    {r4 - r11}
     ldr     r7, [sp, #8*4]
     cmp     r7, #0
     beq     KeccakF1600_StateXORBytesInLane_Exit
-    
     movs    r4, #0
     movs    r5, #0
     push    { r4 - r5 }
-
     add     r3, r3, sp
 KeccakF1600_StateXORBytesInLane_Loop:
     ldrb    r5, [r2], #1
     strb    r5, [r3], #1
     subs    r7, r7, #1
     bne     KeccakF1600_StateXORBytesInLane_Loop
-
     pop     { r4 - r5 }
-
     movw    r8, #0x5555
     movt    r8, #0x5555
     movw    r9, #0x3333
@@ -601,28 +583,136 @@ KeccakF1600_StateXORBytesInLane_Loop:
     movt    r10, #0x0F0F
     movw    r11, #0x00FF
     movt    r11, #0x00FF
-
     add     r0, r0, r1, LSL #3
     ldrd    r6, r7, [r0]
-    toBitInterleaving r4, r5, r6, r7, r3, r8, r9, r10, r11
+    toBitInterleaving r4, r5, r6, r7, r3, r8, r9, r10, r11, 0
     strd    r6, r7, [r0]
-
 KeccakF1600_StateXORBytesInLane_Exit:
     pop     {r4 - r11}
     bx      lr
-
    
-   .align 8
+
+@//----------------------------------------------------------------------------
+@//
+@// void KeccakF1600_StateOverwriteLanes(void *state, const unsigned char *data, unsigned int laneCount)
+@//
+.align 8
+.global   KeccakF1600_StateOverwriteLanes
+KeccakF1600_StateOverwriteLanes: 
+    cmp     r2, #0
+    beq     KeccakF1600_StateOverwriteLanes_Exit
+    push    {r4 - r11}
+    movw    r8, #0x5555
+    movt    r8, #0x5555
+    movw    r9, #0x3333
+    movt    r9, #0x3333
+    movw    r10, #0x0F0F
+    movt    r10, #0x0F0F
+    movw    r11, #0x00FF
+    movt    r11, #0x00FF
+KeccakF1600_StateOverwriteLanes_LoopAligned:
+    ldr     r4, [r1], #4
+    ldr     r5, [r1], #4
+    toBitInterleaving r4, r5, r6, r7, r3, r8, r9, r10, r11, 1
+    strd    r6, r7, [r0], #8
+    subs    r2, r2, #1
+    bne     KeccakF1600_StateOverwriteLanes_LoopAligned
+    pop     {r4 - r11}
+KeccakF1600_StateOverwriteLanes_Exit:
+    bx      lr
+   
+
+@//----------------------------------------------------------------------------
+@//
+@// void KeccakF1600_StateOverwriteBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
+@//
+.align 8
+.global   KeccakF1600_StateOverwriteBytesInLane
+KeccakF1600_StateOverwriteBytesInLane:
+    ldr     r12, [sp]
+    cmp     r12, #0
+    beq     KeccakF1600_StateOverwriteBytesInLane_Exit
+    push    {r4 - r11}
+	add		r0, r0, r1, LSL #3				@state += lanePosition * 8
+    movs    r4, #0
+   	movs    r5, #0
+	push	{ r4 - r5 }
+	lsl		r7, r3, #2
+	add		r3, r3, sp
+	movs	r1, #0x0F						@r1 mask to wipe nibbles(bit interleaved bytes) in state
+	lsls	r1, r1, r7
+	movs	r7, r1
+KeccakF1600_StateOverwriteBytesInLane_Loop:
+	orrs	r1, r1, r7
+	lsls	r7, r7, #4
+    ldrb    r5, [r2], #1
+    strb    r5, [r3], #1
+    subs    r12, r12, #1
+    bne     KeccakF1600_StateOverwriteBytesInLane_Loop
+    pop     { r4 - r5 }
+    movw    r8, #0x5555
+    movt    r8, #0x5555
+    movw    r9, #0x3333
+    movt    r9, #0x3333
+    movw    r10, #0x0F0F
+    movt    r10, #0x0F0F
+    movw    r11, #0x00FF
+    movt    r11, #0x00FF
+    toBitInterleaving r4, r5, r6, r7, r3, r8, r9, r10, r11, 1
+	ldrd	r4, r5, [r0]
+	bics	r4, r4, r1
+	bics	r5, r5, r1
+	orrs	r6, r6, r4
+	orrs	r7, r7, r5
+	strd	r6, r7, [r0]
+    pop     {r4 - r11}
+KeccakF1600_StateOverwriteBytesInLane_Exit:
+    bx      lr
+   
+
+@//----------------------------------------------------------------------------
+@//
+@// void KeccakF1600_StateOverwriteWithZeroes(void *state, unsigned int byteCount)
+@//
+.align 8
+.global   KeccakF1600_StateOverwriteWithZeroes
+KeccakF1600_StateOverwriteWithZeroes: 
+	push	{r4 - r5}
+	lsrs	r2, r1, #3
+	beq		KeccakF1600_StateOverwriteWithZeroes_Bytes
+	movs	r4, #0
+	movs	r5, #0
+KeccakF1600_StateOverwriteWithZeroes_LoopLanes:
+	strd	r4, r5, [r0], #8
+	subs	r2, r2, #1
+	bne		KeccakF1600_StateOverwriteWithZeroes_LoopLanes
+KeccakF1600_StateOverwriteWithZeroes_Bytes:
+	ands	r1, #7
+	beq		KeccakF1600_StateOverwriteWithZeroes_Exit
+	movs	r3, #0x0F						@r2 already zero, r3 = mask to wipe nibbles(bit interleaved bytes) in state
+KeccakF1600_StateOverwriteWithZeroes_LoopBytes:
+	orrs	r2, r2, r3
+	lsls	r3, r3, #4
+	subs	r1, r1, #1
+	bne		KeccakF1600_StateOverwriteWithZeroes_LoopBytes
+	ldrd	r4, r5, [r0]
+	bics	r4, r4, r2
+	bics	r5, r5, r2
+	strd	r4, r5, [r0], #8
+KeccakF1600_StateOverwriteWithZeroes_Exit:
+	pop		{r4 - r5}
+	bx		lr
+
 
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsigned int laneCount)
 @//
+.align 8
+.global   KeccakF1600_StateExtractLanes
 KeccakF1600_StateExtractLanes:  
-
     cmp     r2, #0
     beq     KeccakF1600_StateExtractLanes_Exit
-
     push    {r4 - r9}
     movw    r6, #0xFF00
     movw    r7, #0x00F0
@@ -639,28 +729,24 @@ KeccakF1600_StateExtractLanes_LoopAligned:
     str     r5, [r1], #4
     bne     KeccakF1600_StateExtractLanes_LoopAligned
     pop     {r4 - r9}
-
 KeccakF1600_StateExtractLanes_Exit:
     bx      lr
-
    
-   .align 8
 
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
 @//
+.align 8
+.global   KeccakF1600_StateExtractBytesInLane
 KeccakF1600_StateExtractBytesInLane:  
-
     push    {r4 - r9}
     ldr     r5, [sp, #6*4]
     cmp     r5, #0
     beq     KeccakF1600_StateExtractBytesInLane_Exit
-
     add     r0, r0, r1, LSL #3
     ldr     r1, [r0, #4]
     ldr     r0, [r0]
-
     movw    r6, #0xFF00
     movw    r7, #0x00F0
     movt    r7, #0x00F0
@@ -670,7 +756,6 @@ KeccakF1600_StateExtractBytesInLane:
     movt    r9, #0x2222
     fromBitInterleaving r0, r1, r4, r6, r7, r8, r9
     push    {r0, r1 }
-
     add     r0, sp, r3
 KeccakF1600_StateExtractBytesInLane_Loop:
     ldrb    r1, [r0], #1
@@ -681,52 +766,122 @@ KeccakF1600_StateExtractBytesInLane_Loop:
 KeccakF1600_StateExtractBytesInLane_Exit:
     pop     {r4 - r9}
     bx      lr
-
    
-   .align 8
-
-KeccakF1600_StatePermute_RoundConstantsWithTerminator:
-    @//     0           1
-		.long      0x00000001, 0x00000000
-		.long      0x00000000, 0x00000089
-		.long      0x00000000, 0x8000008b
-		.long      0x00000000, 0x80008080
-
-		.long      0x00000001, 0x0000008b
-		.long      0x00000001, 0x00008000
-		.long      0x00000001, 0x80008088
-		.long      0x00000001, 0x80000082
-
-		.long      0x00000000, 0x0000000b
-		.long      0x00000000, 0x0000000a
-		.long      0x00000001, 0x00008082
-		.long      0x00000000, 0x00008003
-
-		.long      0x00000001, 0x0000808b
-		.long      0x00000001, 0x8000000b
-		.long      0x00000001, 0x8000008a
-		.long      0x00000001, 0x80000081
-
-		.long      0x00000000, 0x80000081
-		.long      0x00000000, 0x80000008
-		.long      0x00000000, 0x00000083
-		.long      0x00000000, 0x80008003
-
-		.long      0x00000001, 0x80008088
-		.long      0x00000000, 0x80000088
-		.long      0x00000001, 0x00008000
-		.long      0x00000000, 0x80008082
-
-		.long      0x000000FF, 0 @//terminator
 
 @//----------------------------------------------------------------------------
 @//
-@// void KeccakF1600_StatePermute( const void *state )
+@// void KeccakF1600_StateExtractAndXORLanes(const void *state, unsigned char *data, unsigned int laneCount)
 @//
-KeccakF1600_StatePermute:  
+.align 8
+.global   KeccakF1600_StateExtractAndXORLanes
+KeccakF1600_StateExtractAndXORLanes:
+    cmp     r2, #0
+    beq     KeccakF1600_StateExtractAndXORLanes_Exit
+    push    {r4 - r9}
+    movw    r6, #0xFF00
+    movw    r7, #0x00F0
+    movt    r7, #0x00F0
+    movw    r8, #0x0C0C
+    movt    r8, #0x0C0C
+    movw    r9, #0x2222
+    movt    r9, #0x2222
+KeccakF1600_StateExtractAndXORLanes_LoopAligned:
+    ldrd    r4, r5, [r0], #8
+    fromBitInterleaving r4, r5, r3, r6, r7, r8, r9
+    ldr     r3, [r1]
+	eors	r4, r4, r3
+    str     r4, [r1], #4
+    ldr     r3, [r1]
+	eors	r5, r5, r3
+    subs    r2, r2, #1
+    str     r5, [r1], #4
+    bne     KeccakF1600_StateExtractAndXORLanes_LoopAligned
+    pop     {r4 - r9}
+KeccakF1600_StateExtractAndXORLanes_Exit:
+    bx      lr
+   
 
-    push    { r4 - r12, lr }
+@//----------------------------------------------------------------------------
+@//
+@// void KeccakF1600_StateExtractAndXORBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
+@//
+.align 8
+.global   KeccakF1600_StateExtractAndXORBytesInLane
+KeccakF1600_StateExtractAndXORBytesInLane:
+    push    {r4 - r9}
+    ldr     r5, [sp, #6*4]
+    cmp     r5, #0
+    beq     KeccakF1600_StateExtractAndXORBytesInLane_Exit
+    add     r0, r0, r1, LSL #3
+    ldr     r1, [r0, #4]
+    ldr     r0, [r0]
+    movw    r6, #0xFF00
+    movw    r7, #0x00F0
+    movt    r7, #0x00F0
+    movw    r8, #0x0C0C
+    movt    r8, #0x0C0C
+    movw    r9, #0x2222
+    movt    r9, #0x2222
+    fromBitInterleaving r0, r1, r4, r6, r7, r8, r9
+    push    {r0, r1 }
+    add     r0, sp, r3
+KeccakF1600_StateExtractAndXORBytesInLane_Loop:
+    ldrb    r1, [r0], #1
+    ldrb    r4, [r2]
+	eor		r1, r1, r4
+    subs    r5, r5, #1
+    strb    r1, [r2], #1
+    bne     KeccakF1600_StateExtractAndXORBytesInLane_Loop
+    add     sp, #8
+KeccakF1600_StateExtractAndXORBytesInLane_Exit:
+    pop     {r4 - r9}
+    bx      lr
+   
+
+.align 8
+KeccakF1600_StatePermute_RoundConstantsWithTerminator:
+	@//		0			1
+		.long 		0x00000001,	0x00000000
+		.long 		0x00000000,	0x00000089
+		.long 		0x00000000,	0x8000008b
+		.long 		0x00000000,	0x80008080
+
+		.long 		0x00000001,	0x0000008b
+		.long 		0x00000001,	0x00008000
+		.long 		0x00000001,	0x80008088
+		.long 		0x00000001,	0x80000082
+
+		.long 		0x00000000,	0x0000000b
+		.long 		0x00000000,	0x0000000a
+		.long 		0x00000001,	0x00008082
+		.long 		0x00000000,	0x00008003
+
+		.long 		0x00000001,	0x0000808b
+		.long 		0x00000001,	0x8000000b
+		.long 		0x00000001,	0x8000008a
+		.long 		0x00000001,	0x80000081
+
+		.long 		0x00000000,	0x80000081
+		.long 		0x00000000,	0x80000008
+		.long 		0x00000000,	0x00000083
+		.long 		0x00000000,	0x80008003
+
+		.long 		0x00000001,	0x80008088
+		.long 		0x00000000,	0x80000088
+		.long 		0x00000001,	0x00008000
+		.long 		0x00000000,	0x80008082
+
+		.long 		0x000000FF	@//terminator
+
+@//----------------------------------------------------------------------------
+@//
+@// void KeccakF1600_StatePermute( void *state )
+@//
+.align 8
+.global   KeccakF1600_StatePermute
+KeccakF1600_StatePermute:  
     adr     r1, KeccakF1600_StatePermute_RoundConstantsWithTerminator
+    push    { r4 - r12, lr }
     sub     sp, #mSize
     str     r1, [sp, #mRC]
 KeccakF1600_StatePermute_RoundLoop:
@@ -737,28 +892,226 @@ KeccakF1600_StatePermute_RoundLoop:
     bne     KeccakF1600_StatePermute_RoundLoop
     add     sp, #mSize
     pop     { r4 - r12, pc }
-
    
-   .align 8
 
-@//----------------------------------------------------------------------------
-@//
-@// void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData, unsigned int inLaneCount, unsigned char *outData, unsigned int outLaneCount)
-@//
-KeccakF1600_StateXORPermuteExtract:  
+@----------------------------------------------------------------------------
+@
+@ size_t KeccakF1600_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data, 
+@										size_t dataByteLen, unsigned char trailingBits )
+@
+.align 8
+.global 	KeccakF1600_SnP_FBWL_Absorb
+KeccakF1600_SnP_FBWL_Absorb:
+	push	{r4-r10,lr}
+	mov		r8, #0
+	lsr		r3, r3, #3						@ rx (nbrLanes) = dataByteLen / SnP_laneLengthInBytes
+	subs	r7, r3, r1						@ .if (nbrLanes >== laneCount)
+	bcc		KeccakF1600_SnP_FBWL_Absorb_Exit
+	mov		r4, r0
+	mov		r5, r1
+	mov		r6, r2
+	ldr		r1, [sp, #(8+0)*4]				@ Bit Interleave trailingBits 
+	and		r2, r1, #0x55
+	orr		r2, r2, r2, LSR #1
+	and		r2, r2, #0x33
+	orr		r2, r2, r2, LSR #2
+	and		r9, r2, #0x0F
+	and		r1, r1, #0xAA
+	orr		r1, r1, r1, LSL #1
+	and		r1, r1, #0xCC
+	orr		r1, r1, r1, LSL #2
+	lsr		r10, r1, #4
+KeccakF1600_SnP_FBWL_Absorb_Loop:
+	add		r8, r8, r5, LSL #3				@ processed += laneCount*SnP_laneLengthInBytes@
+	mov		r1, r6
+	mov		r2, r5
+	bl		KeccakF1600_StateXORLanes		@ (void *state, const unsigned char *data, unsigned int laneCount)
+	mov		r6, r1							@ save updated data pointer
+	ldr		r1, [r0, #0]					@ xor bit interleaved trailing bits
+	eor		r1, r1, r9
+	str		r1, [r0, #0]
+	ldr		r1, [r0, #4]
+	eor		r1, r1, r10
+	str		r1, [r0, #4]
+	mov		r0, r4
+	bl		KeccakF1600_StatePermute
+	subs	r7, r7, r5						@ rx (nbrLanes) = dataByteLen / SnP_laneLengthInBytes
+	bcs		KeccakF1600_SnP_FBWL_Absorb_Loop
+KeccakF1600_SnP_FBWL_Absorb_Exit:
+	mov		r0, r8
+	pop		{r4-r10,pc}
 
-    push    { r4 - r6, lr }
-    mov     r4, r0
-    mov     r5, r3
-    bl      KeccakF1600_StateXORLanes
-    mov     r0, r4
-    bl      KeccakF1600_StatePermute
-    mov     r0, r4
-    mov     r1, r5
-    ldr     r2, [sp, #16]
-    bl      KeccakF1600_StateExtractLanes
-    pop     { r4 - r6, pc }
 
-   
-   .align 8
+@----------------------------------------------------------------------------
+@
+@ size_t KeccakF1600_SnP_FBWL_Squeeze( void *state, unsigned int laneCount, unsigned char *data, size_t dataByteLen )
+@
+.align 8
+.global 	KeccakF1600_SnP_FBWL_Squeeze
+KeccakF1600_SnP_FBWL_Squeeze:
+	push	{r4-r8,lr}
+	mov		r8, #0
+	lsr		r3, r3, #3						@ rx (nbrLanes) = dataByteLen / SnP_laneLengthInBytes
+	subs	r7, r3, r1						@ .if (nbrLanes >== laneCount)
+	bcc		KeccakF1600_SnP_FBWL_Squeeze_Exit
+	mov		r4, r0
+	mov		r5, r1
+	mov		r6, r2
+KeccakF1600_SnP_FBWL_Squeeze_Loop:
+	add		r8, r8, r5, LSL #3				@ processed += laneCount*SnP_laneLengthInBytes@
+	bl		KeccakF1600_StatePermute
+	mov		r1, r6
+	mov		r2, r5
+	bl		KeccakF1600_StateExtractLanes	@ (const void *state, unsigned char *data, unsigned int laneCount)
+	mov		r6, r1							@ save updated data pointer
+	mov		r0, r4
+	subs	r7, r7, r5						@ nbrLanes -= laneCount
+	bcs		KeccakF1600_SnP_FBWL_Squeeze_Loop
+KeccakF1600_SnP_FBWL_Squeeze_Exit:
+	mov		r0, r8
+	pop		{r4-r8,pc}
+
+
+@----------------------------------------------------------------------------
+@
+@ size_t KeccakF1600_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+@										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits )
+@
+.align 8
+.global 	KeccakF1600_SnP_FBWL_Wrap
+KeccakF1600_SnP_FBWL_Wrap:
+	push	{r4-r10,lr}
+	mov		r8, #0
+	ldr		r4, [sp, #(8+0)*4]				@  
+	lsr		r4, r4, #3						@ r4: nbrLanes = dataByteLen / SnP_laneLengthInBytes
+	subs	r4, r4, r1						@ .if (nbrLanes >== laneCount)
+	bcc		KeccakF1600_SnP_FBWL_Wrap_Exit
+	mov		r5, r1							@ r5: laneCount
+	mov		r6, r2							@ r6: dataIn
+	mov		r7, r3							@ r7: dataOut
+	ldr		r1, [sp, #(8+1)*4]				@ r9,r10 Bit Interleave trailingBits 
+	and		r2, r1, #0x55
+	orr		r2, r2, r2, LSR #1
+	and		r2, r2, #0x33
+	orr		r2, r2, r2, LSR #2
+	and		r9, r2, #0x0F
+	and		r1, r1, #0xAA
+	orr		r1, r1, r1, LSL #1
+	and		r1, r1, #0xCC
+	orr		r1, r1, r1, LSL #2
+	lsr		r10, r1, #4
+KeccakF1600_SnP_FBWL_Wrap_Loop:
+	add		r8, r8, r5, LSL #3				@ processed += laneCount*SnP_laneLengthInBytes@
+	mov		r1, r6
+	mov		r2, r5
+	bl		KeccakF1600_StateXORLanes		@ (void *state, const unsigned char *data, unsigned int laneCount)
+	mov		r6, r1							@ save updated data pointer
+	sub		r0, r0, r5, LSL #3
+
+	mov		r1, r7
+	mov		r2, r5
+	bl		KeccakF1600_StateExtractLanes	@ (const void *state, unsigned char *data, unsigned int laneCount)
+	mov		r7, r1							@ save updated data pointer
+
+	ldr		r1, [r0, #0]					@ xor bit interleaved trailing bits
+	eor		r1, r1, r9
+	str		r1, [r0, #0]
+	ldr		r1, [r0, #4]
+	eor		r1, r1, r10
+	str		r1, [r0, #4]
+	sub		r0, r5, LSL #3					@ state pointer back to initial position
+	bl		KeccakF1600_StatePermute
+	subs	r4, r4, r5						@ dec nbrLanes 
+	bcs		KeccakF1600_SnP_FBWL_Wrap_Loop
+KeccakF1600_SnP_FBWL_Wrap_Exit:
+	mov		r0, r8
+	pop		{r4-r10,pc}
+
+
+@----------------------------------------------------------------------------
+@
+@ size_t KeccakF1600_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+@										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
+@
+.align 8
+.global 	KeccakF1600_SnP_FBWL_Unwrap
+KeccakF1600_SnP_FBWL_Unwrap:
+	push	{r4-r12,lr}
+	mov		r8, #0
+	ldr		r4, [sp, #(10+0)*4]				@  
+	lsr		r4, r4, #3						@ r4: nbrLanes = dataByteLen / SnP_laneLengthInBytes
+	subs	r4, r4, r1						@ .if (nbrLanes >== laneCount)
+	bcs		KeccakF1600_SnP_FBWL_Unwrap_WorkTodo
+	mov		r0, r8
+	pop		{r4-r12,pc}
+KeccakF1600_SnP_FBWL_Unwrap_WorkTodo:
+	mov		r5, r1							@ r5: laneCount
+	mov		r6, r2							@ r6: dataIn
+	mov		r7, r3							@ r7: dataOut
+	ldr		r1, [sp, #(10+1)*4]				@ r9,r12 Bit Interleave trailingBits 
+	and		r2, r1, #0x55
+	orr		r2, r2, r2, LSR #1
+	and		r2, r2, #0x33
+	orr		r2, r2, r2, LSR #2
+	and		r9, r2, #0x0F
+	and		r1, r1, #0xAA
+	orr		r1, r1, r1, LSL #1
+	and		r1, r1, #0xCC
+	orr		r1, r1, r1, LSL #2
+	lsr		r12, r1, #4
+KeccakF1600_SnP_FBWL_Unwrap_Loop:
+	add		r8, r8, r5, LSL #3				@ processed += laneCount*SnP_laneLengthInBytes@
+    push    {r4, r8, r9, r12}
+    movw    r4, #0x5555
+    movt    r4, #0x5555
+    movw    r8, #0x3333
+    movt    r8, #0x3333
+    movw    r9, #0x0F0F
+    movt    r9, #0x0F0F
+    movw    r12, #0x00FF
+    movt    r12, #0x00FF
+	mov		lr, r5
+KeccakF1600_SnP_FBWL_UnwrapLane_Loop1:
+	ldr		r1, [r6], #4
+	ldr		r2, [r6], #4
+	toBitInterleaving	r1, r2, r10, r11, r3, r4, r8, r9, r12, 1
+	ldrd	r2, r3, [r0]
+	strd	r10, r11, [r0], #8
+	eor		r2, r2, r10	
+	eor		r3, r3, r11
+	str		r2, [r7], #4
+	str		r3, [r7], #4
+	subs	lr, lr, #1
+	bne		KeccakF1600_SnP_FBWL_UnwrapLane_Loop1
+	sub		r7, r7, r5, LSL #3					@ dataOut pointer back to initial position
+    movw    r4, #0xFF00
+    movw    r8, #0x00F0
+    movt    r8, #0x00F0
+    movw    r9, #0x0C0C
+    movt    r9, #0x0C0C
+    movw    r12, #0x2222
+    movt    r12, #0x2222
+	mov		lr, r5
+KeccakF1600_SnP_FBWL_UnwrapLane_Loop2:
+	ldr		r1, [r7, #0]
+	ldr		r2, [r7, #4]
+    fromBitInterleaving r1, r2, r3, r4, r8, r9, r12
+    str     r1, [r7], #4
+    str     r2, [r7], #4
+	subs	lr, lr, #1
+	bne		KeccakF1600_SnP_FBWL_UnwrapLane_Loop2
+    pop		{r4, r8, r9, r12}
+	ldr		r1, [r0, #0]					@ xor bit interleaved trailing bits
+	eor		r1, r1, r9
+	str		r1, [r0, #0]
+	ldr		r1, [r0, #4]
+	eor		r1, r1, r12
+	str		r1, [r0, #4]
+	sub		r0, r5, LSL #3					@ state pointer back to initial position
+	bl		KeccakF1600_StatePermute
+	subs	r4, r4, r5						@ dec nbrLanes 
+	bcs		KeccakF1600_SnP_FBWL_Unwrap_Loop
+	mov		r0, r8
+	pop		{r4-r12,pc}
+
 

@@ -1,10 +1,12 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
 
-Implementation by the designers,
-hereby denoted as "the implementer".
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -14,7 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _KeccakSponge_h_
 #define _KeccakSponge_h_
 
-#include "KeccakF-1600-interface.h"
+#include "SnP-interface.h"
+#include <string.h>
 
 // on Mac OS-X and possibly others, ALIGN(x) is defined in param.h, and -Werror chokes on the redef.
 #ifdef ALIGN
@@ -38,7 +41,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
   */
 ALIGN typedef struct Keccak_SpongeInstanceStruct {
     /** The state processed by the permutation. */
-    ALIGN unsigned char state[KeccakF_width/8];
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
     /** The value of the rate in bits.*/
     unsigned int rate;
     /** The position in the state of the next byte to be input (when absorbing) or output (when squeezing). */
@@ -53,7 +56,8 @@ ALIGN typedef struct Keccak_SpongeInstanceStruct {
   * @param  spongeInstance  Pointer to the sponge instance to be initialized.
   * @param  rate        The value of the rate r.
   * @param  capacity    The value of the capacity c.
-  * @pre    One must have r+c=1600 and the rate a multiple of 8 bits (one byte) in this implementation.
+  * @pre    One must have r+c equal to the supported width of this implementation
+  *         and the rate a multiple of 8 bits (one byte) in this implementation.
   * @return Zero if successful, 1 otherwise.
   */
 int Keccak_SpongeInitialize(Keccak_SpongeInstance *spongeInstance, unsigned int rate, unsigned int capacity);
@@ -68,7 +72,7 @@ int Keccak_SpongeInitialize(Keccak_SpongeInstance *spongeInstance, unsigned int 
   *         must not have been called before.
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_SpongeAbsorb(Keccak_SpongeInstance *spongeInstance, const unsigned char *data, unsigned long long dataByteLen);
+int Keccak_SpongeAbsorb(Keccak_SpongeInstance *spongeInstance, const unsigned char *data, size_t dataByteLen);
 
 /**
   * Function to give input data bits for the sponge function to absorb
@@ -104,6 +108,6 @@ int Keccak_SpongeAbsorbLastFewBits(Keccak_SpongeInstance *spongeInstance, unsign
   * @param  dataByteLen The number of output bytes desired.
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_SpongeSqueeze(Keccak_SpongeInstance *spongeInstance, unsigned char *data, unsigned long long dataByteLen);
+int Keccak_SpongeSqueeze(Keccak_SpongeInstance *spongeInstance, unsigned char *data, size_t dataByteLen);
 
 #endif

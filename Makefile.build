@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <!--
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
 
-Implementation by Ronny Van Keer and the designers,
-hereby denoted as "the implementer".
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -23,14 +25,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Tests/genKAT.c</c>
         <c>Tests/main.c</c>
         <c>Tests/testDuplex.c</c>
-        <c>Tests/testPermutationAndStateMgt.c</c>
+        <c>Tests/testSnP.c</c>
         <c>Tests/testSponge.c</c>
         <h>Constructions/KeccakDuplex.h</h>
         <h>Constructions/KeccakSponge.h</h>
         <h>Modes/KeccakHash.h</h>
         <h>Tests/genKAT.h</h>
         <h>Tests/testDuplex.h</h>
-        <h>Tests/testPermutationAndStateMgt.h</h>
+        <h>Tests/testSnP.h</h>
         <h>Tests/testSponge.h</h>
     </fragment>
 
@@ -53,8 +55,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <fragment name="reference1600" inherits="common width1600">
         <c>KeccakF-1600/Reference/KeccakF-1600-reference.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
         <c>Tests/displayIntermediateValues.c</c>
-        <h>KeccakF-1600/Reference/KeccakF-1600-reference.h</h>
+        <h>KeccakF-1600/Reference/KeccakF-reference.h</h>
+        <h>KeccakF-1600/Reference/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
         <gcc>-DKeccakReference</gcc>
         <gcc>-O</gcc>
@@ -62,8 +67,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <fragment name="reference32BI" inherits="width1600">
         <c>KeccakF-1600/Reference/KeccakF-1600-reference32BI.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
         <c>Tests/displayIntermediateValues.c</c>
-        <h>KeccakF-1600/Reference/KeccakF-1600-reference.h</h>
+        <h>KeccakF-1600/Reference/KeccakF-reference.h</h>
+        <h>KeccakF-1600/Reference/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
         <gcc>-O</gcc>
         <gcc>-DKeccakReference</gcc>
@@ -71,19 +79,31 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <fragment name="optimized64" inherits="width1600 optimized">
-        <c>KeccakF-1600/Optimized/KeccakF-1600-opt64.c</c>
-        <h>KeccakF-1600/Optimized/KeccakF-1600-opt64-settings.h</h>
+        <c>KeccakF-1600/Optimized64/KeccakF-1600-opt64.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>KeccakF-1600/Optimized64/KeccakF-1600-opt64-settings.h</h>
         <h>KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
-        <h>KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
+        <h>KeccakF-1600/Optimized64/KeccakF-1600-64.macros</h>
+        <h>KeccakF-1600/Optimized64/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <h>SnP/SnP-Relaned.h</h>
         <gcc>-m64</gcc>
     </fragment>
 
     <fragment name="inplace32BI" inherits="width1600 optimized">
-        <c>KeccakF-1600/Optimized/KeccakF-1600-inplace32BI.c</c>
+        <c>KeccakF-1600/Inplace32BI/KeccakF-1600-inplace32BI.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>KeccakF-1600/Inplace32BI/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <h>SnP/SnP-Relaned.h</h>
     </fragment>
 
     <fragment name="compact64" inherits="width1600 optimized">
-        <c>KeccakF-1600/Compact/Keccak-compact64.c</c>
+        <c>KeccakF-1600/Compact64/Keccak-compact64.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>KeccakF-1600/Compact64/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <h>SnP/SnP-Relaned.h</h>
         <gcc>-m64</gcc>
     </fragment>
 

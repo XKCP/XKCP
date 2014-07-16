@@ -38,10 +38,7 @@ State after permutation:
 --- Switching to squeezing phase ---
 
 Squeezed block (part):
-6B 4E 03 42 36 67 DB B7 3B 6E 15 45 4F 0E B1 AB D4 59 7F 9A 1B 07 8E 3F 
-
-Squeezed block (part):
-5B 5A 6B C7 
+6B 4E 03 42 36 67 DB B7 3B 6E 15 45 4F 0E B1 AB D4 59 7F 9A 1B 07 8E 3F 5B 5A 6B C7 
 
 +++ Example with a small message +++
 
@@ -83,10 +80,7 @@ FF BA D5 DA 96 BA D7 17 89 33 02 06 DC 67 68 EC AE B1 B3 2D CA 6B 33 01 48 96 74
 --- Switching to squeezing phase ---
 
 Squeezed block (part):
-FF BA D5 DA 96 BA D7 17 89 33 02 06 DC 67 68 EC AE B1 B3 2D CA 6B 33 01 
-
-Squeezed block (part):
-48 96 74 AB 
+FF BA D5 DA 96 BA D7 17 89 33 02 06 DC 67 68 EC AE B1 B3 2D CA 6B 33 01 48 96 74 AB 
 
 +++ Example with a small message +++
 
@@ -131,10 +125,7 @@ D6 66 A5 14 CC 9D BA 25 AC 1B A6 9E D3 93 04 60 DE AA C9 85 1B 5F 0B AA B0 07 DF
 --- Switching to squeezing phase ---
 
 Squeezed block (part):
-D6 66 A5 14 CC 9D BA 25 AC 1B A6 9E D3 93 04 60 DE AA C9 85 1B 5F 0B AA 
-
-Squeezed block (part):
-B0 07 DF 3B 
+D6 66 A5 14 CC 9D BA 25 AC 1B A6 9E D3 93 04 60 DE AA C9 85 1B 5F 0B AA B0 07 DF 3B 
 
 +++ Example with a larger message +++
 
@@ -188,8 +179,5 @@ State after permutation:
 --- Switching to squeezing phase ---
 
 Squeezed block (part):
-84 A4 BD 2E 3F A2 6C 4F B0 1F E8 19 53 39 8F 5B 4B 57 04 94 43 54 B5 1B 
-
-Squeezed block (part):
-88 7F D9 90 
+84 A4 BD 2E 3F A2 6C 4F B0 1F E8 19 53 39 8F 5B 4B 57 04 94 43 54 B5 1B 88 7F D9 90 
 

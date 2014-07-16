@@ -1,11 +1,16 @@
 The Keccak Code Package
 
-This project gathers different implementations of the Keccak sponge function family. Its purpose is to replace the implementations originally in the "Keccak Reference and Optimized Code in C" with cleaner and more flexible code following the interface proposed in the note "A software interface for Keccak".
+This project gathers different implementations of the Keccak sponge function family. Its purpose is to replace the implementations originally in the "Keccak Reference and Optimized Code in C" with cleaner and more flexible code following (an improved version of) the interface proposed in the note "A software interface for Keccak".
 
-This version supports the hash and extendable output functions defined in the FIPS 202 draft (http://csrc.nist.gov/groups/ST/hash/sha-3/sha-3_standard_fips202.html).
+This version supports the hash and extendable output functions (XOFs) defined in the FIPS 202 draft (http://csrc.nist.gov/groups/ST/hash/sha-3/sha-3_standard_fips202.html).
+
+Since this commit (July 2014), the structure of the Keccak Code Package has gone through some significant changes. These include:
+* The internal interface at permutation has been improved and renamed into "SnP" for "state and permutation" (see SnP.h for more details).
+* The duplex construction has gained some extended functionality.
+These changes prepare for the inclusion of other permutations, as well as of the authenticated encryption schemes Ketje and Keyak.
 
 More information can be found:
-* on the proposed software interface at http://keccak.noekeon.org/NoteSoftwareInterface.pdf
+* on the proposed software interface at http://keccak.noekeon.org/NoteSoftwareInterface.pdf (to be updated!)
 * on Keccak in general at http://keccak.noekeon.org/
 
 Code contributions are welcome.
@@ -15,7 +20,7 @@ To build, the following tools are needed:
 * make
 * xsltproc
 
-The Keccak, Keyak and Ketje Teams, May 2014
+The Keccak, Keyak and Ketje Teams, July 2014
 Guido Bertoni, Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer
 
 Acknowledgments:

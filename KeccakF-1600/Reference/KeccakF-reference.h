@@ -13,9 +13,14 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _TestSponge_h_
-#define _TestSponge_h_
+#ifndef _KeccakFReference_h_
+#define _KeccakFReference_h_
+#include "KeccakF-1600-interface.h"
 
-void testSponge(void);
+void displayRoundConstants(FILE *f);
+void displayRhoOffsets(FILE *f);
+
+#define KeccakF_Initialize                   KeccakF1600_Initialize
+#define KeccakF_StatePermute                KeccakF1600_StatePermute
 
 #endif

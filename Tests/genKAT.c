@@ -1,7 +1,8 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 This code is based on genKAT.c by NIST.
 */
@@ -32,6 +33,7 @@ void convertShortMsgToPureLSB(void);
 STATUS_CODES
 genKAT_main(void)
 {
+#if (KeccakF_width == 1600)
     // The following instances are from the FIPS 202 draft.
     // http://csrc.nist.gov/publications/
     //
@@ -56,6 +58,7 @@ genKAT_main(void)
     genShortMsgHash(576, 1024, 0x06, 512, 0,
         "ShortMsgKAT_SHA3-512.txt",
         "Keccak(input|01)[r=576, c=1024] truncated to 512 bits, or SHA3-512 as in FIPS 202 draft");
+#endif
 
     return KAT_SUCCESS;
 }

@@ -1,10 +1,12 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
 
-Implementation by the designers,
-hereby denoted as "the implementer".
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -790,6 +792,202 @@ const UINT64 KeccakF1600RoundConstants[24] = {
         } \
     }
 
+#define XORinputAndTrailingBits(X, input, laneCount, trailingBits) \
+    if (laneCount < 16) { \
+        if (laneCount < 8) { \
+            if (laneCount < 4) { \
+                if (laneCount < 2) { \
+                    if (laneCount < 1) { \
+                        X##ba ^= trailingBits; \
+                    } \
+                    else { \
+                        X##ba ^= input[ 0]; \
+                        X##be ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    X##ba ^= input[ 0]; \
+                    X##be ^= input[ 1]; \
+                    if (laneCount < 3) { \
+                        X##bi ^= trailingBits; \
+                    } \
+                    else { \
+                        X##bi ^= input[ 2]; \
+                        X##bo ^= trailingBits; \
+                    } \
+                } \
+            } \
+            else { \
+                X##ba ^= input[ 0]; \
+                X##be ^= input[ 1]; \
+                X##bi ^= input[ 2]; \
+                X##bo ^= input[ 3]; \
+                if (laneCount < 6) { \
+                    if (laneCount < 5) { \
+                        X##bu ^= trailingBits; \
+                    } \
+                    else { \
+                        X##bu ^= input[ 4]; \
+                        X##ga ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    X##bu ^= input[ 4]; \
+                    X##ga ^= input[ 5]; \
+                    if (laneCount < 7) { \
+                        X##ge ^= trailingBits; \
+                    } \
+                    else { \
+                        X##ge ^= input[ 6]; \
+                        X##gi ^= trailingBits; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            X##ba ^= input[ 0]; \
+            X##be ^= input[ 1]; \
+            X##bi ^= input[ 2]; \
+            X##bo ^= input[ 3]; \
+            X##bu ^= input[ 4]; \
+            X##ga ^= input[ 5]; \
+            X##ge ^= input[ 6]; \
+            X##gi ^= input[ 7]; \
+            if (laneCount < 12) { \
+                if (laneCount < 10) { \
+                    if (laneCount < 9) { \
+                        X##go ^= trailingBits; \
+                    } \
+                    else { \
+                        X##go ^= input[ 8]; \
+                        X##gu ^= trailingBits ; \
+                    } \
+                } \
+                else { \
+                    X##go ^= input[ 8]; \
+                    X##gu ^= input[ 9]; \
+                    if (laneCount < 11) { \
+                        X##ka ^= trailingBits; \
+                    } \
+                    else { \
+                        X##ka ^= input[10]; \
+                        X##ke ^= trailingBits; \
+                    } \
+                } \
+            } \
+            else { \
+                X##go ^= input[ 8]; \
+                X##gu ^= input[ 9]; \
+                X##ka ^= input[10]; \
+                X##ke ^= input[11]; \
+                if (laneCount < 14) { \
+                    if (laneCount < 13) { \
+                        X##ki ^= trailingBits; \
+                    } \
+                    else { \
+                        X##ki ^= input[12]; \
+                        X##ko ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    X##ki ^= input[12]; \
+                    X##ko ^= input[13]; \
+                    if (laneCount < 15) { \
+                        X##ku ^= trailingBits; \
+                    } \
+                    else { \
+                        X##ku ^= input[14]; \
+                        X##ma ^= trailingBits; \
+                    } \
+                } \
+            } \
+        } \
+    } \
+    else { \
+        X##ba ^= input[ 0]; \
+        X##be ^= input[ 1]; \
+        X##bi ^= input[ 2]; \
+        X##bo ^= input[ 3]; \
+        X##bu ^= input[ 4]; \
+        X##ga ^= input[ 5]; \
+        X##ge ^= input[ 6]; \
+        X##gi ^= input[ 7]; \
+        X##go ^= input[ 8]; \
+        X##gu ^= input[ 9]; \
+        X##ka ^= input[10]; \
+        X##ke ^= input[11]; \
+        X##ki ^= input[12]; \
+        X##ko ^= input[13]; \
+        X##ku ^= input[14]; \
+        X##ma ^= input[15]; \
+        if (laneCount < 24) { \
+            if (laneCount < 20) { \
+                if (laneCount < 18) { \
+                    if (laneCount < 17) { \
+                        X##me ^= trailingBits; \
+                    } \
+                    else { \
+                        X##me ^= input[16]; \
+                        X##mi ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    X##me ^= input[16]; \
+                    X##mi ^= input[17]; \
+                    if (laneCount < 19) { \
+                        X##mo ^= trailingBits; \
+                    } \
+                    else { \
+                        X##mo ^= input[18]; \
+                        X##mu ^= trailingBits; \
+                    } \
+                } \
+            } \
+            else { \
+                X##me ^= input[16]; \
+                X##mi ^= input[17]; \
+                X##mo ^= input[18]; \
+                X##mu ^= input[19]; \
+                if (laneCount < 22) { \
+                    if (laneCount < 21) { \
+                        X##sa ^= trailingBits; \
+                    } \
+                    else { \
+                        X##sa ^= input[20]; \
+                        X##se ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    X##sa ^= input[20]; \
+                    X##se ^= input[21]; \
+                    if (laneCount < 23) { \
+                        X##si ^= trailingBits; \
+                    } \
+                    else { \
+                        X##si ^= input[22]; \
+                        X##so ^= trailingBits; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            X##me ^= input[16]; \
+            X##mi ^= input[17]; \
+            X##mo ^= input[18]; \
+            X##mu ^= input[19]; \
+            X##sa ^= input[20]; \
+            X##se ^= input[21]; \
+            X##si ^= input[22]; \
+            X##so ^= input[23]; \
+            if (laneCount < 25) { \
+                X##su ^= trailingBits; \
+            } \
+            else { \
+                X##su ^= input[24]; \
+            } \
+        } \
+    }
+
 #ifdef UseBebigokimisa
 
 #define copyToStateAndOutput(X, state, output, laneCount) \
@@ -1049,6 +1247,167 @@ const UINT64 KeccakF1600RoundConstants[24] = {
             } \
         } \
     }
+
+#define output(X, output, laneCount) \
+    if (laneCount < 16) { \
+        if (laneCount < 8) { \
+            if (laneCount < 4) { \
+                if (laneCount < 2) { \
+                    if (laneCount >= 1) { \
+                        output[ 0] = X##ba; \
+                    } \
+                } \
+                else { \
+                    output[ 0] = X##ba; \
+                    output[ 1] = ~X##be; \
+                    if (laneCount >= 3) { \
+                        output[ 2] = ~X##bi; \
+                    } \
+                } \
+            } \
+            else { \
+                output[ 0] = X##ba; \
+                output[ 1] = ~X##be; \
+                output[ 2] = ~X##bi; \
+                output[ 3] = X##bo; \
+                if (laneCount < 6) { \
+                    if (laneCount >= 5) { \
+                        output[ 4] = X##bu; \
+                    } \
+                } \
+                else { \
+                    output[ 4] = X##bu; \
+                    output[ 5] = X##ga; \
+                    if (laneCount >= 7) { \
+                        output[ 6] = X##ge; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            output[ 0] = X##ba; \
+            output[ 1] = ~X##be; \
+            output[ 2] = ~X##bi; \
+            output[ 3] = X##bo; \
+            output[ 4] = X##bu; \
+            output[ 5] = X##ga; \
+            output[ 6] = X##ge; \
+            output[ 7] = X##gi; \
+            if (laneCount < 12) { \
+                if (laneCount < 10) { \
+                    if (laneCount >= 9) { \
+                        output[ 8] = ~X##go; \
+                    } \
+                } \
+                else { \
+                    output[ 8] = ~X##go; \
+                    output[ 9] = X##gu; \
+                    if (laneCount >= 11) { \
+                        output[10] = X##ka; \
+                    } \
+                } \
+            } \
+            else { \
+                output[ 8] = ~X##go; \
+                output[ 9] = X##gu; \
+                output[10] = X##ka; \
+                output[11] = X##ke; \
+                if (laneCount < 14) { \
+                    if (laneCount >= 13) { \
+                        output[12] = ~X##ki; \
+                    } \
+                } \
+                else { \
+                    output[12] = ~X##ki; \
+                    output[13] = X##ko; \
+                    if (laneCount >= 15) { \
+                        output[14] = X##ku; \
+                    } \
+                } \
+            } \
+        } \
+    } \
+    else { \
+        output[ 0] = X##ba; \
+        output[ 1] = ~X##be; \
+        output[ 2] = ~X##bi; \
+        output[ 3] = X##bo; \
+        output[ 4] = X##bu; \
+        output[ 5] = X##ga; \
+        output[ 6] = X##ge; \
+        output[ 7] = X##gi; \
+        output[ 8] = ~X##go; \
+        output[ 9] = X##gu; \
+        output[10] = X##ka; \
+        output[11] = X##ke; \
+        output[12] = ~X##ki; \
+        output[13] = X##ko; \
+        output[14] = X##ku; \
+        output[15] = X##ma; \
+        if (laneCount < 24) { \
+            if (laneCount < 20) { \
+                if (laneCount < 18) { \
+                    if (laneCount >= 17) { \
+                        output[16] = X##me; \
+                    } \
+                } \
+                else { \
+                    output[16] = X##me; \
+                    output[17] = ~X##mi; \
+                    if (laneCount >= 19) { \
+                        output[18] = X##mo; \
+                    } \
+                } \
+            } \
+            else { \
+                output[16] = X##me; \
+                output[17] = ~X##mi; \
+                output[18] = X##mo; \
+                output[19] = X##mu; \
+                if (laneCount < 22) { \
+                    if (laneCount >= 21) { \
+                        output[20] = ~X##sa; \
+                    } \
+                } \
+                else { \
+                    output[20] = ~X##sa; \
+                    output[21] = X##se; \
+                    if (laneCount >= 23) { \
+                        output[22] = X##si; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            output[16] = X##me; \
+            output[17] = ~X##mi; \
+            output[18] = X##mo; \
+            output[19] = X##mu; \
+            output[20] = ~X##sa; \
+            output[21] = X##se; \
+            output[22] = X##si; \
+            output[23] = X##so; \
+            if (laneCount >= 25) { \
+                output[24] = X##su; \
+            } \
+        } \
+    }
+
+#define wrapOne(X, input, output, index, name) \
+    X##name ^= input[index]; \
+    output[index] = X##name;
+
+#define wrapOneInvert(X, input, output, index, name) \
+    X##name ^= input[index]; \
+    output[index] = ~X##name;
+
+#define unwrapOne(X, input, output, index, name) \
+    output[index] = input[index] ^ X##name; \
+    X##name ^= output[index];
+
+#define unwrapOneInvert(X, input, output, index, name) \
+    output[index] = ~(input[index] ^ X##name); \
+    X##name ^= output[index]; \
 
 #else // UseBebigokimisa
 
@@ -1310,4 +1669,557 @@ const UINT64 KeccakF1600RoundConstants[24] = {
         } \
     }
 
+#define output(X, output, laneCount) \
+    if (laneCount < 16) { \
+        if (laneCount < 8) { \
+            if (laneCount < 4) { \
+                if (laneCount < 2) { \
+                    if (laneCount >= 1) { \
+                        output[ 0] = X##ba; \
+                    } \
+                } \
+                else { \
+                    output[ 0] = X##ba; \
+                    output[ 1] = X##be; \
+                    if (laneCount >= 3) { \
+                        output[ 2] = X##bi; \
+                    } \
+                } \
+            } \
+            else { \
+                output[ 0] = X##ba; \
+                output[ 1] = X##be; \
+                output[ 2] = X##bi; \
+                output[ 3] = X##bo; \
+                if (laneCount < 6) { \
+                    if (laneCount >= 5) { \
+                        output[ 4] = X##bu; \
+                    } \
+                } \
+                else { \
+                    output[ 4] = X##bu; \
+                    output[ 5] = X##ga; \
+                    if (laneCount >= 7) { \
+                        output[ 6] = X##ge; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            output[ 0] = X##ba; \
+            output[ 1] = X##be; \
+            output[ 2] = X##bi; \
+            output[ 3] = X##bo; \
+            output[ 4] = X##bu; \
+            output[ 5] = X##ga; \
+            output[ 6] = X##ge; \
+            output[ 7] = X##gi; \
+            if (laneCount < 12) { \
+                if (laneCount < 10) { \
+                    if (laneCount >= 9) { \
+                        output[ 8] = X##go; \
+                    } \
+                } \
+                else { \
+                    output[ 8] = X##go; \
+                    output[ 9] = X##gu; \
+                    if (laneCount >= 11) { \
+                        output[10] = X##ka; \
+                    } \
+                } \
+            } \
+            else { \
+                output[ 8] = X##go; \
+                output[ 9] = X##gu; \
+                output[10] = X##ka; \
+                output[11] = X##ke; \
+                if (laneCount < 14) { \
+                    if (laneCount >= 13) { \
+                        output[12] = X##ki; \
+                    } \
+                } \
+                else { \
+                    output[12] = X##ki; \
+                    output[13] = X##ko; \
+                    if (laneCount >= 15) { \
+                        output[14] = X##ku; \
+                    } \
+                } \
+            } \
+        } \
+    } \
+    else { \
+        output[ 0] = X##ba; \
+        output[ 1] = X##be; \
+        output[ 2] = X##bi; \
+        output[ 3] = X##bo; \
+        output[ 4] = X##bu; \
+        output[ 5] = X##ga; \
+        output[ 6] = X##ge; \
+        output[ 7] = X##gi; \
+        output[ 8] = X##go; \
+        output[ 9] = X##gu; \
+        output[10] = X##ka; \
+        output[11] = X##ke; \
+        output[12] = X##ki; \
+        output[13] = X##ko; \
+        output[14] = X##ku; \
+        output[15] = X##ma; \
+        if (laneCount < 24) { \
+            if (laneCount < 20) { \
+                if (laneCount < 18) { \
+                    if (laneCount >= 17) { \
+                        output[16] = X##me; \
+                    } \
+                } \
+                else { \
+                    output[16] = X##me; \
+                    output[17] = X##mi; \
+                    if (laneCount >= 19) { \
+                        output[18] = X##mo; \
+                    } \
+                } \
+            } \
+            else { \
+                output[16] = X##me; \
+                output[17] = X##mi; \
+                output[18] = X##mo; \
+                output[19] = X##mu; \
+                if (laneCount < 22) { \
+                    if (laneCount >= 21) { \
+                        output[20] = X##sa; \
+                    } \
+                } \
+                else { \
+                    output[20] = X##sa; \
+                    output[21] = X##se; \
+                    if (laneCount >= 23) { \
+                        output[22] = X##si; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            output[16] = X##me; \
+            output[17] = X##mi; \
+            output[18] = X##mo; \
+            output[19] = X##mu; \
+            output[20] = X##sa; \
+            output[21] = X##se; \
+            output[22] = X##si; \
+            output[23] = X##so; \
+            if (laneCount >= 25) { \
+                output[24] = X##su; \
+            } \
+        } \
+    }
+
+#define wrapOne(X, input, output, index, name) \
+    X##name ^= input[index]; \
+    output[index] = X##name;
+
+#define wrapOneInvert(X, input, output, index, name) \
+    X##name ^= input[index]; \
+    output[index] = X##name;
+
+#define unwrapOne(X, input, output, index, name) \
+    output[index] = input[index] ^ X##name; \
+    X##name ^= output[index];
+
+#define unwrapOneInvert(X, input, output, index, name) \
+    output[index] = input[index] ^ X##name; \
+    X##name ^= output[index];
+
 #endif
+
+#define wrap(X, input, output, laneCount, trailingBits) \
+    if (laneCount < 16) { \
+        if (laneCount < 8) { \
+            if (laneCount < 4) { \
+                if (laneCount < 2) { \
+                    if (laneCount < 1) { \
+                        X##ba ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOne(X, input, output, 0, ba) \
+                        X##be ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    wrapOne(X, input, output, 0, ba) \
+                    wrapOneInvert(X, input, output, 1, be) \
+                    if (laneCount < 3) { \
+                        X##bi ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOneInvert(X, input, output, 2, bi) \
+                        X##bo ^= trailingBits; \
+                    } \
+                } \
+            } \
+            else { \
+                wrapOne(X, input, output, 0, ba) \
+                wrapOneInvert(X, input, output, 1, be) \
+                wrapOneInvert(X, input, output, 2, bi) \
+                wrapOne(X, input, output, 3, bo) \
+                if (laneCount < 6) { \
+                    if (laneCount < 5) { \
+                        X##bu ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOne(X, input, output, 4, bu) \
+                        X##ga ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    wrapOne(X, input, output, 4, bu) \
+                    wrapOne(X, input, output, 5, ga) \
+                    if (laneCount < 7) { \
+                        X##ge ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOne(X, input, output, 6, ge) \
+                        X##gi ^= trailingBits; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            wrapOne(X, input, output, 0, ba) \
+            wrapOneInvert(X, input, output, 1, be) \
+            wrapOneInvert(X, input, output, 2, bi) \
+            wrapOne(X, input, output, 3, bo) \
+            wrapOne(X, input, output, 4, bu) \
+            wrapOne(X, input, output, 5, ga) \
+            wrapOne(X, input, output, 6, ge) \
+            wrapOne(X, input, output, 7, gi) \
+            if (laneCount < 12) { \
+                if (laneCount < 10) { \
+                    if (laneCount < 9) { \
+                        X##go ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOneInvert(X, input, output, 8, go) \
+                        X##gu ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    wrapOneInvert(X, input, output, 8, go) \
+                    wrapOne(X, input, output, 9, gu) \
+                    if (laneCount < 11) { \
+                        X##ka ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOne(X, input, output, 10, ka) \
+                        X##ke ^= trailingBits; \
+                    } \
+                } \
+            } \
+            else { \
+                wrapOneInvert(X, input, output, 8, go) \
+                wrapOne(X, input, output, 9, gu) \
+                wrapOne(X, input, output, 10, ka) \
+                wrapOne(X, input, output, 11, ke) \
+                if (laneCount < 14) { \
+                    if (laneCount < 13) { \
+                        X##ki ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOneInvert(X, input, output, 12, ki) \
+                        X##ko ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    wrapOneInvert(X, input, output, 12, ki) \
+                    wrapOne(X, input, output, 13, ko) \
+                    if (laneCount < 15) { \
+                        X##ku ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOne(X, input, output, 14, ku) \
+                        X##ma ^= trailingBits; \
+                    } \
+                } \
+            } \
+        } \
+    } \
+    else { \
+        wrapOne(X, input, output, 0, ba) \
+        wrapOneInvert(X, input, output, 1, be) \
+        wrapOneInvert(X, input, output, 2, bi) \
+        wrapOne(X, input, output, 3, bo) \
+        wrapOne(X, input, output, 4, bu) \
+        wrapOne(X, input, output, 5, ga) \
+        wrapOne(X, input, output, 6, ge) \
+        wrapOne(X, input, output, 7, gi) \
+        wrapOneInvert(X, input, output, 8, go) \
+        wrapOne(X, input, output, 9, gu) \
+        wrapOne(X, input, output, 10, ka) \
+        wrapOne(X, input, output, 11, ke) \
+        wrapOneInvert(X, input, output, 12, ki) \
+        wrapOne(X, input, output, 13, ko) \
+        wrapOne(X, input, output, 14, ku) \
+        wrapOne(X, input, output, 15, ma) \
+        if (laneCount < 24) { \
+            if (laneCount < 20) { \
+                if (laneCount < 18) { \
+                    if (laneCount < 17) { \
+                        X##me ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOne(X, input, output, 16, me) \
+                        X##mi ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    wrapOne(X, input, output, 16, me) \
+                    wrapOneInvert(X, input, output, 17, mi) \
+                    if (laneCount < 19) { \
+                        X##mo ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOne(X, input, output, 18, mo) \
+                        X##mu ^= trailingBits; \
+                    } \
+                } \
+            } \
+            else { \
+                wrapOne(X, input, output, 16, me) \
+                wrapOneInvert(X, input, output, 17, mi) \
+                wrapOne(X, input, output, 18, mo) \
+                wrapOne(X, input, output, 19, mu) \
+                if (laneCount < 22) { \
+                    if (laneCount < 21) { \
+                        X##sa ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOneInvert(X, input, output, 20, sa) \
+                        X##se ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    wrapOneInvert(X, input, output, 20, sa) \
+                    wrapOne(X, input, output, 21, se) \
+                    if (laneCount < 23) { \
+                        X##si ^= trailingBits; \
+                    } \
+                    else { \
+                        wrapOne(X, input, output, 22, si) \
+                        X##so ^= trailingBits; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            wrapOne(X, input, output, 16, me) \
+            wrapOneInvert(X, input, output, 17, mi) \
+            wrapOne(X, input, output, 18, mo) \
+            wrapOne(X, input, output, 19, mu) \
+            wrapOneInvert(X, input, output, 20, sa) \
+            wrapOne(X, input, output, 21, se) \
+            wrapOne(X, input, output, 22, si) \
+            wrapOne(X, input, output, 23, so) \
+            if (laneCount < 25) { \
+                X##su ^= trailingBits; \
+            } \
+            else { \
+                wrapOne(X, input, output, 24, su) \
+            } \
+        } \
+    }
+
+#define unwrap(X, input, output, laneCount, trailingBits) \
+    if (laneCount < 16) { \
+        if (laneCount < 8) { \
+            if (laneCount < 4) { \
+                if (laneCount < 2) { \
+                    if (laneCount < 1) { \
+                        X##ba ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOne(X, input, output, 0, ba) \
+                        X##be ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    unwrapOne(X, input, output, 0, ba) \
+                    unwrapOneInvert(X, input, output, 1, be) \
+                    if (laneCount < 3) { \
+                        X##bi ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOneInvert(X, input, output, 2, bi) \
+                        X##bo ^= trailingBits; \
+                    } \
+                } \
+            } \
+            else { \
+                unwrapOne(X, input, output, 0, ba) \
+                unwrapOneInvert(X, input, output, 1, be) \
+                unwrapOneInvert(X, input, output, 2, bi) \
+                unwrapOne(X, input, output, 3, bo) \
+                if (laneCount < 6) { \
+                    if (laneCount < 5) { \
+                        X##bu ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOne(X, input, output, 4, bu) \
+                        X##ga ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    unwrapOne(X, input, output, 4, bu) \
+                    unwrapOne(X, input, output, 5, ga) \
+                    if (laneCount < 7) { \
+                        X##ge ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOne(X, input, output, 6, ge) \
+                        X##gi ^= trailingBits; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            unwrapOne(X, input, output, 0, ba) \
+            unwrapOneInvert(X, input, output, 1, be) \
+            unwrapOneInvert(X, input, output, 2, bi) \
+            unwrapOne(X, input, output, 3, bo) \
+            unwrapOne(X, input, output, 4, bu) \
+            unwrapOne(X, input, output, 5, ga) \
+            unwrapOne(X, input, output, 6, ge) \
+            unwrapOne(X, input, output, 7, gi) \
+            if (laneCount < 12) { \
+                if (laneCount < 10) { \
+                    if (laneCount < 9) { \
+                        X##go ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOneInvert(X, input, output, 8, go) \
+                        X##gu ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    unwrapOneInvert(X, input, output, 8, go) \
+                    unwrapOne(X, input, output, 9, gu) \
+                    if (laneCount < 11) { \
+                        X##ka ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOne(X, input, output, 10, ka) \
+                        X##ke ^= trailingBits; \
+                    } \
+                } \
+            } \
+            else { \
+                unwrapOneInvert(X, input, output, 8, go) \
+                unwrapOne(X, input, output, 9, gu) \
+                unwrapOne(X, input, output, 10, ka) \
+                unwrapOne(X, input, output, 11, ke) \
+                if (laneCount < 14) { \
+                    if (laneCount < 13) { \
+                        X##ki ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOneInvert(X, input, output, 12, ki) \
+                        X##ko ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    unwrapOneInvert(X, input, output, 12, ki) \
+                    unwrapOne(X, input, output, 13, ko) \
+                    if (laneCount < 15) { \
+                        X##ku ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOne(X, input, output, 14, ku) \
+                        X##ma ^= trailingBits; \
+                    } \
+                } \
+            } \
+        } \
+    } \
+    else { \
+        unwrapOne(X, input, output, 0, ba) \
+        unwrapOneInvert(X, input, output, 1, be) \
+        unwrapOneInvert(X, input, output, 2, bi) \
+        unwrapOne(X, input, output, 3, bo) \
+        unwrapOne(X, input, output, 4, bu) \
+        unwrapOne(X, input, output, 5, ga) \
+        unwrapOne(X, input, output, 6, ge) \
+        unwrapOne(X, input, output, 7, gi) \
+        unwrapOneInvert(X, input, output, 8, go) \
+        unwrapOne(X, input, output, 9, gu) \
+        unwrapOne(X, input, output, 10, ka) \
+        unwrapOne(X, input, output, 11, ke) \
+        unwrapOneInvert(X, input, output, 12, ki) \
+        unwrapOne(X, input, output, 13, ko) \
+        unwrapOne(X, input, output, 14, ku) \
+        unwrapOne(X, input, output, 15, ma) \
+        if (laneCount < 24) { \
+            if (laneCount < 20) { \
+                if (laneCount < 18) { \
+                    if (laneCount < 17) { \
+                        X##me ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOne(X, input, output, 16, me) \
+                        X##mi ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    unwrapOne(X, input, output, 16, me) \
+                    unwrapOneInvert(X, input, output, 17, mi) \
+                    if (laneCount < 19) { \
+                        X##mo ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOne(X, input, output, 18, mo) \
+                        X##mu ^= trailingBits; \
+                    } \
+                } \
+            } \
+            else { \
+                unwrapOne(X, input, output, 16, me) \
+                unwrapOneInvert(X, input, output, 17, mi) \
+                unwrapOne(X, input, output, 18, mo) \
+                unwrapOne(X, input, output, 19, mu) \
+                if (laneCount < 22) { \
+                    if (laneCount < 21) { \
+                        X##sa ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOneInvert(X, input, output, 20, sa) \
+                        X##se ^= trailingBits; \
+                    } \
+                } \
+                else { \
+                    unwrapOneInvert(X, input, output, 20, sa) \
+                    unwrapOne(X, input, output, 21, se) \
+                    if (laneCount < 23) { \
+                        X##si ^= trailingBits; \
+                    } \
+                    else { \
+                        unwrapOne(X, input, output, 22, si) \
+                        X##so ^= trailingBits; \
+                    } \
+                } \
+            } \
+        } \
+        else { \
+            unwrapOne(X, input, output, 16, me) \
+            unwrapOneInvert(X, input, output, 17, mi) \
+            unwrapOne(X, input, output, 18, mo) \
+            unwrapOne(X, input, output, 19, mu) \
+            unwrapOneInvert(X, input, output, 20, sa) \
+            unwrapOne(X, input, output, 21, se) \
+            unwrapOne(X, input, output, 22, si) \
+            unwrapOne(X, input, output, 23, so) \
+            if (laneCount < 25) { \
+                X##su ^= trailingBits; \
+            } \
+            else { \
+                unwrapOne(X, input, output, 24, su) \
+            } \
+        } \
+    }

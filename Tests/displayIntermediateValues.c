@@ -1,10 +1,12 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
 
-Implementation by the designers,
-hereby denoted as "the implementer".
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -13,7 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <stdio.h>
 #include "displayIntermediateValues.h"
-#include "KeccakF-1600-interface.h"
+#include "SnP-interface.h"
 
 FILE *intermediateValueFile = 0;
 int displayLevel = 0;
@@ -62,16 +64,17 @@ void displayBits(int level, const char *text, const unsigned char *data, unsigne
 
 void displayStateAsBytes(int level, const char *text, const unsigned char *state)
 {
-    displayBytes(level, text, state, KeccakF_width/8);
+    displayBytes(level, text, state, SnP_width/8);
 }
 
+#if (SnP_laneLengthInBytes == 8)
 void displayStateAs32bitWords(int level, const char *text, const unsigned int *state)
 {
     unsigned int i;
 
     if ((intermediateValueFile) && (level <= displayLevel)) {
         fprintf(intermediateValueFile, "%s:\n", text);
-        for(i=0; i<KeccakF_width/64; i++) {
+        for(i=0; i<SnP_width/64; i++) {
             fprintf(intermediateValueFile, "%08X:%08X", (unsigned int)state[2*i+0], (unsigned int)state[2*i+1]);
             if ((i%5) == 4)
                 fprintf(intermediateValueFile, "\n");
@@ -80,14 +83,28 @@ void displayStateAs32bitWords(int level, const char *text, const unsigned int *s
         }
     }
 }
+#endif
 
-void displayStateAs64bitWords(int level, const char *text, const unsigned long long int *state)
+void displayStateAsLanes(int level, const char *text, void *statePointer)
 {
     unsigned int i;
+#if (SnP_laneLengthInBytes == 8)
+    unsigned long long int *state = statePointer;
+#endif
+#if (SnP_laneLengthInBytes == 4)
+    unsigned int *state = statePointer;
+#endif
+#if (SnP_laneLengthInBytes == 2)
+    unsigned short *state = statePointer;
+#endif
+#if (SnP_laneLengthInBytes == 1)
+    unsigned char *state = statePointer;
+#endif
 
     if ((intermediateValueFile) && (level <= displayLevel)) {
         fprintf(intermediateValueFile, "%s:\n", text);
-        for(i=0; i<KeccakF_width/64; i++) {
+#if (SnP_laneLengthInBytes == 8)
+        for(i=0; i<25; i++) {
             fprintf(intermediateValueFile, "%08X", (unsigned int)(state[i] >> 32));
             fprintf(intermediateValueFile, "%08X", (unsigned int)(state[i] & 0xFFFFFFFFULL));
             if ((i%5) == 4)
@@ -95,6 +112,30 @@ void displayStateAs64bitWords(int level, const char *text, const unsigned long l
             else
                 fprintf(intermediateValueFile, " ");
         }
+#endif
+#if (SnP_laneLengthInBytes == 4)
+        for(i=0; i<25; i++) {
+            fprintf(intermediateValueFile, "%08X", state[i]);
+            if ((i%5) == 4)
+                fprintf(intermediateValueFile, "\n");
+            else
+                fprintf(intermediateValueFile, " ");
+        }
+#endif
+#if (SnP_laneLengthInBytes == 2)
+        for(i=0; i<25; i++) {
+            fprintf(intermediateValueFile, "%04X ", state[i]);
+            if ((i%5) == 4)
+                fprintf(intermediateValueFile, "\n");
+        }
+#endif
+#if (SnP_laneLengthInBytes == 1)
+        for(i=0; i<25; i++) {
+            fprintf(intermediateValueFile, "%02X ", state[i]);
+            if ((i%5) == 4)
+                fprintf(intermediateValueFile, "\n");
+        }
+#endif
     }
 }
 

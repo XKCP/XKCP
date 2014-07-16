@@ -1,10 +1,12 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
 
-Implementation by the designers,
-hereby denoted as "the implementer".
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -47,6 +49,8 @@ typedef unsigned long long int UINT64;
 
 #include "KeccakF-1600-64.macros"
 #include "KeccakF-1600-unrolling.macros"
+
+void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData, unsigned int inLaneCount, unsigned char *outData, unsigned int outLaneCount);
 
 /* ---------------------------------------------------------------- */
 
@@ -153,6 +157,76 @@ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned 
 
 /* ---------------------------------------------------------------- */
 
+void KeccakF1600_StateOverwriteBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
+{
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+#ifdef UseLaneComplementing
+    if ((lanePosition == 1) || (lanePosition == 2) || (lanePosition == 8) || (lanePosition == 12) || (lanePosition == 17) || (lanePosition == 20)) {
+        unsigned int i;
+        for(i=0; i<length; i++)
+            ((unsigned char*)state)[lanePosition*8+offset+i] = ~data[i];
+    }
+    else
+#endif
+    {
+        memcpy((unsigned char*)state+lanePosition*8+offset, data, length);
+    }
+#else
+#error "Not yet implemented"
+#endif
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakF1600_StateOverwriteLanes(void *state, const unsigned char *data, unsigned int laneCount)
+{
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+#ifdef UseLaneComplementing
+    unsigned int lanePosition;
+
+    for(lanePosition=0; lanePosition<laneCount; lanePosition++)
+        if ((lanePosition == 1) || (lanePosition == 2) || (lanePosition == 8) || (lanePosition == 12) || (lanePosition == 17) || (lanePosition == 20))
+            ((UINT64*)state)[lanePosition] = ~((const UINT64*)data)[lanePosition];
+        else
+            ((UINT64*)state)[lanePosition] = ((const UINT64*)data)[lanePosition];
+#else
+    memcpy(state, data, laneCount*8);
+#endif
+#else
+#error "Not yet implemented"
+#endif
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakF1600_StateOverwriteWithZeroes(void *state, unsigned int byteCount)
+{
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+#ifdef UseLaneComplementing
+    unsigned int lanePosition;
+
+    for(lanePosition=0; lanePosition<byteCount/8; lanePosition++)
+        if ((lanePosition == 1) || (lanePosition == 2) || (lanePosition == 8) || (lanePosition == 12) || (lanePosition == 17) || (lanePosition == 20))
+            ((UINT64*)state)[lanePosition] = ~0;
+        else
+            ((UINT64*)state)[lanePosition] = 0;
+    if (byteCount%8 != 0) {
+        lanePosition = byteCount/8;
+        if ((lanePosition == 1) || (lanePosition == 2) || (lanePosition == 8) || (lanePosition == 12) || (lanePosition == 17) || (lanePosition == 20))
+            memset(state+lanePosition*8, 0xFF, byteCount%8);
+        else
+            memset(state+lanePosition*8, 0, byteCount%8);
+    }
+#else
+    memset(state, 0, byteCount);
+#endif
+#else
+#error "Not yet implemented"
+#endif
+}
+
+/* ---------------------------------------------------------------- */
+
 void KeccakF1600_StateComplementBit(void *state, unsigned int position)
 {
     UINT64 lane = (UINT64)1 << (position%64);
@@ -237,6 +311,74 @@ void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsig
 
 /* ---------------------------------------------------------------- */
 
+void KeccakF1600_StateExtractAndXORBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
+{
+    UINT64 lane = ((UINT64*)state)[lanePosition];
+#ifdef UseLaneComplementing
+    if ((lanePosition == 1) || (lanePosition == 2) || (lanePosition == 8) || (lanePosition == 12) || (lanePosition == 17) || (lanePosition == 20))
+        lane = ~lane;
+#endif
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+    {
+        unsigned int i;
+        UINT64 lane1[1];
+        lane1[0] = lane;
+        for(i=0; i<length; i++)
+            data[i] ^= ((UINT8*)lane1)[offset+i];
+    }
+#else
+    unsigned int i;
+    lane >>= offset*8;
+    for(i=0; i<length; i++) {
+        data[i] ^= lane & 0xFF;
+        lane >>= 8;
+    }
+#endif
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakF1600_StateExtractAndXORLanes(const void *state, unsigned char *data, unsigned int laneCount)
+{
+    unsigned int i;
+#if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
+    unsigned char temp[8];
+    unsigned int j;
+#endif
+
+    for(i=0; i<laneCount; i++) {
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+        ((UINT64*)data)[i] ^= ((const UINT64*)state)[i];
+#else
+        fromWordToBytes(temp, ((const UINT64*)state)[i]);
+        for(j=0; j<8; j++)
+            data[i*8+j] ^= temp[j];
+#endif
+    }
+#ifdef UseLaneComplementing
+    if (laneCount > 1) {
+        ((UINT64*)data)[ 1] = ~((UINT64*)data)[ 1];
+        if (laneCount > 2) {
+            ((UINT64*)data)[ 2] = ~((UINT64*)data)[ 2];
+            if (laneCount > 8) {
+                ((UINT64*)data)[ 8] = ~((UINT64*)data)[ 8];
+                if (laneCount > 12) {
+                    ((UINT64*)data)[12] = ~((UINT64*)data)[12];
+                    if (laneCount > 17) {
+                        ((UINT64*)data)[17] = ~((UINT64*)data)[17];
+                        if (laneCount > 20) {
+                            ((UINT64*)data)[20] = ~((UINT64*)data)[20];
+                        }
+                    }
+                }
+            }
+        }
+    }
+#endif
+}
+
+/* ---------------------------------------------------------------- */
+
 #ifdef ProvideFastAbsorb1344
 void KeccakF1600_StateXORPermuteExtract_absorb1344(void *state, const unsigned char *inData, unsigned int inLaneCount)
 {
@@ -297,3 +439,97 @@ void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData
 }
 
 /* ---------------------------------------------------------------- */
+
+size_t KeccakF1600_FBWL_Absorb(void *state, unsigned int laneCount, unsigned char *data, size_t dataByteLen, unsigned char trailingBits)
+{
+    size_t originalDataByteLen = dataByteLen;
+    declareABCDE
+    #if (Unrolling != 24)
+    unsigned int i;
+    #endif
+    UINT64 *stateAsLanes = (UINT64*)state;
+    UINT64 *inDataAsLanes = (UINT64*)data;
+
+    copyFromState(A, stateAsLanes)
+    while(dataByteLen >= laneCount*8) {
+        XORinputAndTrailingBits(A, inDataAsLanes, laneCount, ((UINT64)trailingBits))
+        rounds
+        inDataAsLanes += laneCount;
+        dataByteLen -= laneCount*8;
+    }
+    copyToState(stateAsLanes, A)
+    return originalDataByteLen - dataByteLen;
+}
+
+/* ---------------------------------------------------------------- */
+
+size_t KeccakF1600_FBWL_Squeeze(void *state, unsigned int laneCount, unsigned char *data, size_t dataByteLen)
+{
+    size_t originalDataByteLen = dataByteLen;
+    declareABCDE
+    #if (Unrolling != 24)
+    unsigned int i;
+    #endif
+    UINT64 *stateAsLanes = (UINT64*)state;
+    UINT64 *outDataAsLanes = (UINT64*)data;
+
+    copyFromState(A, stateAsLanes)
+    while(dataByteLen >= laneCount*8) {
+        rounds
+        output(A, outDataAsLanes, laneCount)
+        outDataAsLanes += laneCount;
+        dataByteLen -= laneCount*8;
+    }
+    copyToState(stateAsLanes, A)
+    return originalDataByteLen - dataByteLen;
+}
+
+/* ---------------------------------------------------------------- */
+
+size_t KeccakF1600_FBWL_Wrap(void *state, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
+{
+    size_t originalDataByteLen = dataByteLen;
+    declareABCDE
+    #if (Unrolling != 24)
+    unsigned int i;
+    #endif
+    UINT64 *stateAsLanes = (UINT64*)state;
+    UINT64 *inDataAsLanes = (UINT64*)dataIn;
+    UINT64 *outDataAsLanes = (UINT64*)dataOut;
+
+    copyFromState(A, stateAsLanes)
+    while(dataByteLen >= laneCount*8) {
+        wrap(A, inDataAsLanes, outDataAsLanes, laneCount, ((UINT64)trailingBits))
+        rounds
+        inDataAsLanes += laneCount;
+        outDataAsLanes += laneCount;
+        dataByteLen -= laneCount*8;
+    }
+    copyToState(stateAsLanes, A)
+    return originalDataByteLen - dataByteLen;
+}
+
+/* ---------------------------------------------------------------- */
+
+size_t KeccakF1600_FBWL_Unwrap(void *state, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
+{
+    size_t originalDataByteLen = dataByteLen;
+    declareABCDE
+    #if (Unrolling != 24)
+    unsigned int i;
+    #endif
+    UINT64 *stateAsLanes = (UINT64*)state;
+    UINT64 *inDataAsLanes = (UINT64*)dataIn;
+    UINT64 *outDataAsLanes = (UINT64*)dataOut;
+
+    copyFromState(A, stateAsLanes)
+    while(dataByteLen >= laneCount*8) {
+        unwrap(A, inDataAsLanes, outDataAsLanes, laneCount, ((UINT64)trailingBits))
+        rounds
+        inDataAsLanes += laneCount;
+        outDataAsLanes += laneCount;
+        dataByteLen -= laneCount*8;
+    }
+    copyToState(stateAsLanes, A)
+    return originalDataByteLen - dataByteLen;
+}

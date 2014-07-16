@@ -1,10 +1,12 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
 
-Implementation by the designers,
-hereby denoted as "the implementer".
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -13,7 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <string.h>
 #include "KeccakSponge.h"
-#include "KeccakF-1600-interface.h"
+#include "SnP-interface.h"
 #ifdef KeccakReference
 #include "displayIntermediateValues.h"
 #endif
@@ -22,12 +24,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 int Keccak_SpongeInitialize(Keccak_SpongeInstance *instance, unsigned int rate, unsigned int capacity)
 {
-    if (rate+capacity != 1600)
+    if (rate+capacity != SnP_width)
         return 1;
-    if ((rate <= 0) || (rate > 1600) || ((rate % 8) != 0))
+    if ((rate <= 0) || (rate > SnP_width) || ((rate % 8) != 0))
         return 1;
-    KeccakF1600_Initialize();
-    KeccakF1600_StateInitialize(instance->state);
+    SnP_StaticInitialize();
+    SnP_Initialize(instance->state);
     instance->rate = rate;
     instance->byteIOIndex = 0;
     instance->squeezing = 0;
@@ -37,9 +39,9 @@ int Keccak_SpongeInitialize(Keccak_SpongeInstance *instance, unsigned int rate, 
 
 /* ---------------------------------------------------------------- */
 
-int Keccak_SpongeAbsorb(Keccak_SpongeInstance *instance, const unsigned char *data, unsigned long long dataByteLen)
+int Keccak_SpongeAbsorb(Keccak_SpongeInstance *instance, const unsigned char *data, size_t dataByteLen)
 {
-    unsigned long long i, j;
+    size_t i, j;
     unsigned int partialBlock;
     const unsigned char *curData;
     unsigned int rateInBytes = instance->rate/8;
@@ -51,19 +53,24 @@ int Keccak_SpongeAbsorb(Keccak_SpongeInstance *instance, const unsigned char *da
     curData = data;
     while(i < dataByteLen) {
         if ((instance->byteIOIndex == 0) && (dataByteLen >= (i + rateInBytes))) {
-            // fast lane: processing whole blocks first
-            for(j=dataByteLen-i; j>=rateInBytes; j-=rateInBytes) {
-                #ifdef KeccakReference
-                displayBytes(1, "Block to be absorbed", curData, rateInBytes);
-                #endif
-                if ((rateInBytes % KeccakF_laneInBytes) > 0)
-                    KeccakF1600_StateXORBytesInLane(instance->state, rateInBytes/KeccakF_laneInBytes,
-                        curData+(rateInBytes/KeccakF_laneInBytes)*KeccakF_laneInBytes, 
-                        0, rateInBytes%KeccakF_laneInBytes);
-                KeccakF1600_StateXORPermuteExtract(instance->state, curData, rateInBytes/KeccakF_laneInBytes, 0, 0);
-                curData+=rateInBytes;
+            // processing full blocks first
+            if ((rateInBytes % SnP_laneLengthInBytes) == 0) {
+                // fast lane: whole lane rate
+                j = SnP_FBWL_Absorb(instance->state, rateInBytes/SnP_laneLengthInBytes, curData, dataByteLen - i, 0);
+                i += j;
+                curData += j;
             }
-            i = dataByteLen - j;
+            else {
+                for(j=dataByteLen-i; j>=rateInBytes; j-=rateInBytes) {
+                    #ifdef KeccakReference
+                    displayBytes(1, "Block to be absorbed", curData, rateInBytes);
+                    #endif
+                    SnP_XORBytes(instance->state, curData, 0, rateInBytes);
+                    SnP_Permute(instance->state);
+                    curData+=rateInBytes;
+                }
+                i = dataByteLen - j;
+            }
         }
         else {
             // normal lane: using the message queue
@@ -74,24 +81,12 @@ int Keccak_SpongeAbsorb(Keccak_SpongeInstance *instance, const unsigned char *da
             displayBytes(1, "Block to be absorbed (part)", curData, partialBlock);
             #endif
             i += partialBlock;
-            if ((instance->byteIOIndex == 0) && (partialBlock >= KeccakF_laneInBytes)) {
-                KeccakF1600_StateXORLanes(instance->state, curData, partialBlock/KeccakF_laneInBytes);
-                curData += (partialBlock/KeccakF_laneInBytes)*KeccakF_laneInBytes;
-                instance->byteIOIndex += (partialBlock/KeccakF_laneInBytes)*KeccakF_laneInBytes;
-                partialBlock -= (partialBlock/KeccakF_laneInBytes)*KeccakF_laneInBytes;
-            }
-            while(partialBlock > 0) {
-                unsigned int offsetInLane = instance->byteIOIndex % KeccakF_laneInBytes;
-                unsigned int bytesInLane = KeccakF_laneInBytes - offsetInLane;
-                if (bytesInLane > partialBlock)
-                    bytesInLane = partialBlock;
-                KeccakF1600_StateXORBytesInLane(instance->state, instance->byteIOIndex/KeccakF_laneInBytes, curData, offsetInLane, bytesInLane);
-                curData += bytesInLane;
-                instance->byteIOIndex += bytesInLane;
-                partialBlock -= bytesInLane;
-            }
+
+            SnP_XORBytes(instance->state, curData, instance->byteIOIndex, partialBlock);
+            curData += partialBlock;
+            instance->byteIOIndex += partialBlock;
             if (instance->byteIOIndex == rateInBytes) {
-                KeccakF1600_StatePermute(instance->state);
+                SnP_Permute(instance->state);
                 instance->byteIOIndex = 0;
             }
         }
@@ -116,22 +111,21 @@ int Keccak_SpongeAbsorbLastFewBits(Keccak_SpongeInstance *instance, unsigned cha
     displayBytes(1, "Block to be absorbed (last few bits + first bit of padding)", delimitedData1, 1);
     #endif
     // Last few bits, whose delimiter coincides with first bit of padding
-    KeccakF1600_StateXORBytesInLane(instance->state, instance->byteIOIndex/KeccakF_laneInBytes, 
-        delimitedData1, instance->byteIOIndex%KeccakF_laneInBytes, 1);
+    SnP_XORBytes(instance->state, delimitedData1, instance->byteIOIndex, 1);
     // If the first bit of padding is at position rate-1, we need a whole new block for the second bit of padding
     if ((delimitedData >= 0x80) && (instance->byteIOIndex == (rateInBytes-1)))
-        KeccakF1600_StatePermute(instance->state);
+        SnP_Permute(instance->state);
     // Second bit of padding
-    KeccakF1600_StateComplementBit(instance->state, rateInBytes*8-1);
+    SnP_ComplementBit(instance->state, rateInBytes*8-1);
     #ifdef KeccakReference
     {
-        unsigned char block[KeccakF_width/8];
-        memset(block, 0, KeccakF_width/8);
+        unsigned char block[SnP_width/8];
+        memset(block, 0, SnP_width/8);
         block[rateInBytes-1] = 0x80;
         displayBytes(1, "Second bit of padding", block, rateInBytes);
     }
     #endif
-    KeccakF1600_StatePermute(instance->state);
+    SnP_Permute(instance->state);
     instance->byteIOIndex = 0;
     instance->squeezing = 1;
     #ifdef KeccakReference
@@ -142,9 +136,9 @@ int Keccak_SpongeAbsorbLastFewBits(Keccak_SpongeInstance *instance, unsigned cha
 
 /* ---------------------------------------------------------------- */
 
-int Keccak_SpongeSqueeze(Keccak_SpongeInstance *instance, unsigned char *data, unsigned long long dataByteLen)
+int Keccak_SpongeSqueeze(Keccak_SpongeInstance *instance, unsigned char *data, size_t dataByteLen)
 {
-    unsigned long long i, j;
+    size_t i, j;
     unsigned int partialBlock;
     unsigned int rateInBytes = instance->rate/8;
     unsigned char *curData;
@@ -156,52 +150,42 @@ int Keccak_SpongeSqueeze(Keccak_SpongeInstance *instance, unsigned char *data, u
     curData = data;
     while(i < dataByteLen) {
         if ((instance->byteIOIndex == rateInBytes) && (dataByteLen >= (i + rateInBytes))) {
-            // fast lane: processing whole blocks first
-            for(j=dataByteLen-i; j>=rateInBytes; j-=rateInBytes) {
-                KeccakF1600_StateXORPermuteExtract(instance->state, 0, 0, curData, rateInBytes/KeccakF_laneInBytes);
-                if ((rateInBytes % KeccakF_laneInBytes) > 0)
-                    KeccakF1600_StateExtractBytesInLane(instance->state, rateInBytes/KeccakF_laneInBytes,
-                        curData+(rateInBytes/KeccakF_laneInBytes)*KeccakF_laneInBytes, 0, 
-                        rateInBytes%KeccakF_laneInBytes);
-                #ifdef KeccakReference
-                displayBytes(1, "Squeezed block", curData, rateInBytes);
-                #endif
-                curData+=rateInBytes;
+            // processing full blocks first
+            if ((rateInBytes % SnP_laneLengthInBytes) == 0) {
+                // fast lane: whole lane rate
+                j = SnP_FBWL_Squeeze(instance->state, rateInBytes/SnP_laneLengthInBytes, curData, dataByteLen - i);
+                i += j;
+                curData += j;
             }
-            i = dataByteLen - j;
+            else {
+                for(j=dataByteLen-i; j>=rateInBytes; j-=rateInBytes) {
+                    SnP_Permute(instance->state);
+                    SnP_ExtractBytes(instance->state, curData, 0, rateInBytes);
+                    #ifdef KeccakReference
+                    displayBytes(1, "Squeezed block", curData, rateInBytes);
+                    #endif
+                    curData+=rateInBytes;
+                }
+                i = dataByteLen - j;
+            }
         }
         else {
             // normal lane: using the message queue
             if (instance->byteIOIndex == rateInBytes) {
-                KeccakF1600_StatePermute(instance->state);
+                SnP_Permute(instance->state);
                 instance->byteIOIndex = 0;
             }
             partialBlock = (unsigned int)(dataByteLen - i);
             if (partialBlock+instance->byteIOIndex > rateInBytes)
                 partialBlock = rateInBytes-instance->byteIOIndex;
             i += partialBlock;
-            if ((instance->byteIOIndex == 0) && (partialBlock >= KeccakF_laneInBytes)) {
-                KeccakF1600_StateExtractLanes(instance->state, curData, partialBlock/KeccakF_laneInBytes);
-                #ifdef KeccakReference
-                displayBytes(1, "Squeezed block (part)", curData, (partialBlock/KeccakF_laneInBytes)*KeccakF_laneInBytes);
-                #endif
-                curData += (partialBlock/KeccakF_laneInBytes)*KeccakF_laneInBytes;
-                instance->byteIOIndex += (partialBlock/KeccakF_laneInBytes)*KeccakF_laneInBytes;
-                partialBlock -= (partialBlock/KeccakF_laneInBytes)*KeccakF_laneInBytes;
-            }
-            while(partialBlock > 0) {
-                unsigned int offsetInLane = instance->byteIOIndex % KeccakF_laneInBytes;
-                unsigned int bytesInLane = KeccakF_laneInBytes-offsetInLane;
-                if (bytesInLane > partialBlock)
-                    bytesInLane = partialBlock;
-                KeccakF1600_StateExtractBytesInLane(instance->state, instance->byteIOIndex/KeccakF_laneInBytes, curData, offsetInLane, bytesInLane);
-                #ifdef KeccakReference
-                displayBytes(1, "Squeezed block (part)", curData, bytesInLane);
-                #endif
-                curData += bytesInLane;
-                instance->byteIOIndex += bytesInLane;
-                partialBlock -= bytesInLane;
-            }
+
+            SnP_ExtractBytes(instance->state, curData, instance->byteIOIndex, partialBlock);
+            #ifdef KeccakReference
+            displayBytes(1, "Squeezed block (part)", curData, partialBlock);
+            #endif
+            curData += partialBlock;
+            instance->byteIOIndex += partialBlock;
         }
     }
     return 0;

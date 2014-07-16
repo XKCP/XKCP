@@ -1,9 +1,9 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 */
-
 
 #include <stdio.h>
 
@@ -77,7 +77,7 @@ uint_32t calibrate()
     return dtMin;
 }
 
-#include "KeccakF-1600-interface.h"
+#include "SnP-interface.h"
 #include "KeccakDuplex.h"
 #include "KeccakSponge.h"
 
@@ -95,82 +95,205 @@ uint_32t calibrate()
         } \
     return tMin;
 
-uint_32t measureKeccakF1600_StatePermute(uint_32t dtMin)
+uint_32t measureSnP_Permute(uint_32t dtMin)
 {
-    ALIGN unsigned char state[KeccakF_width/8];
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
 
     measureTimingBegin
-    KeccakF1600_StatePermute(state);
+    SnP_Permute(state);
     measureTimingEnd
 }
 
-uint_32t measureKeccakF1600_StateXORPermuteExtract_0_0(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Absorb_16lanes_1(uint_32t dtMin)
 {
-    ALIGN unsigned char state[KeccakF_width/8];
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
 
     measureTimingBegin
-    KeccakF1600_StateXORPermuteExtract(state, 0, 0, 0, 0);
+    SnP_FBWL_Absorb(&state, 16, data, 1*16*SnP_laneLengthInBytes, 0x12);
     measureTimingEnd
 }
 
-uint_32t measureKeccakF1600_StateXORPermuteExtract_16_0(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Absorb_16lanes_10(uint_32t dtMin)
 {
-    ALIGN unsigned char state[KeccakF_width/8];
-    ALIGN unsigned char data[200];
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
 
     measureTimingBegin
-    KeccakF1600_StateXORPermuteExtract(state, data, 16, 0, 0);
+    SnP_FBWL_Absorb(&state, 16, data, 10*16*SnP_laneLengthInBytes, 0x12);
     measureTimingEnd
 }
 
-uint_32t measureKeccakF1600_StateXORPermuteExtract_17_0(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Absorb_16lanes_100(uint_32t dtMin)
 {
-    ALIGN unsigned char state[KeccakF_width/8];
-    ALIGN unsigned char data[200];
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
 
     measureTimingBegin
-    KeccakF1600_StateXORPermuteExtract(state, data, 17, 0, 0);
+    SnP_FBWL_Absorb(&state, 16, data, 100*16*SnP_laneLengthInBytes, 0x12);
     measureTimingEnd
 }
 
-uint_32t measureKeccakF1600_StateXORPermuteExtract_21_0(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Absorb_16lanes_1000(uint_32t dtMin)
 {
-    ALIGN unsigned char state[KeccakF_width/8];
-    ALIGN unsigned char data[200];
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
 
     measureTimingBegin
-    KeccakF1600_StateXORPermuteExtract(state, data, 21, 0, 0);
+    SnP_FBWL_Absorb(&state, 16, data, 1000*16*SnP_laneLengthInBytes, 0x12);
     measureTimingEnd
 }
 
-uint_32t measureKeccakF1600_StateXORPermuteExtract_0_16(uint_32t dtMin)
+void measureSnP_FBWL_Absorb_16lanes(uint_32t dtMin, uint_32t *measurements)
 {
-    ALIGN unsigned char state[KeccakF_width/8];
-    ALIGN unsigned char data[200];
+    measurements[0] = measureSnP_FBWL_Absorb_16lanes_1(dtMin);
+    measurements[1] = measureSnP_FBWL_Absorb_16lanes_10(dtMin);
+    measurements[2] = measureSnP_FBWL_Absorb_16lanes_100(dtMin);
+    measurements[3] = measureSnP_FBWL_Absorb_16lanes_1000(dtMin);
+}
+
+uint_32t measureSnP_FBWL_Squeeze_16lanes_1(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
 
     measureTimingBegin
-    KeccakF1600_StateXORPermuteExtract(state, 0, 0, data, 16);
+    SnP_FBWL_Squeeze(&state, 16, data, 1*16*SnP_laneLengthInBytes);
     measureTimingEnd
 }
 
-uint_32t measureKeccakF1600_StateXORPermuteExtract_0_17(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Squeeze_16lanes_10(uint_32t dtMin)
 {
-    ALIGN unsigned char state[KeccakF_width/8];
-    ALIGN unsigned char data[200];
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
 
     measureTimingBegin
-    KeccakF1600_StateXORPermuteExtract(state, 0, 0, data, 17);
+    SnP_FBWL_Squeeze(&state, 16, data, 10*16*SnP_laneLengthInBytes);
     measureTimingEnd
 }
 
-uint_32t measureKeccakF1600_StateXORPermuteExtract_0_21(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Squeeze_16lanes_100(uint_32t dtMin)
 {
-    ALIGN unsigned char state[KeccakF_width/8];
-    ALIGN unsigned char data[200];
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
 
     measureTimingBegin
-    KeccakF1600_StateXORPermuteExtract(state, 0, 0, data, 21);
+    SnP_FBWL_Squeeze(&state, 16, data, 100*16*SnP_laneLengthInBytes);
     measureTimingEnd
+}
+
+uint_32t measureSnP_FBWL_Squeeze_16lanes_1000(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
+
+    measureTimingBegin
+    SnP_FBWL_Squeeze(&state, 16, data, 1000*16*SnP_laneLengthInBytes);
+    measureTimingEnd
+}
+
+void measureSnP_FBWL_Squeeze_16lanes(uint_32t dtMin, uint_32t *measurements)
+{
+    measurements[0] = measureSnP_FBWL_Squeeze_16lanes_1(dtMin);
+    measurements[1] = measureSnP_FBWL_Squeeze_16lanes_10(dtMin);
+    measurements[2] = measureSnP_FBWL_Squeeze_16lanes_100(dtMin);
+    measurements[3] = measureSnP_FBWL_Squeeze_16lanes_1000(dtMin);
+}
+
+uint_32t measureSnP_FBWL_Wrap_16lanes_1(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
+
+    measureTimingBegin
+    SnP_FBWL_Wrap(&state, 16, data, data, 1*16*SnP_laneLengthInBytes, 0x01);
+    measureTimingEnd
+}
+
+uint_32t measureSnP_FBWL_Wrap_16lanes_10(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
+
+    measureTimingBegin
+    SnP_FBWL_Wrap(&state, 16, data, data, 10*16*SnP_laneLengthInBytes, 0x01);
+    measureTimingEnd
+}
+
+uint_32t measureSnP_FBWL_Wrap_16lanes_100(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
+
+    measureTimingBegin
+    SnP_FBWL_Wrap(&state, 16, data, data, 100*16*SnP_laneLengthInBytes, 0x01);
+    measureTimingEnd
+}
+
+uint_32t measureSnP_FBWL_Wrap_16lanes_1000(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
+
+    measureTimingBegin
+    SnP_FBWL_Wrap(&state, 16, data, data, 1000*16*SnP_laneLengthInBytes, 0x01);
+    measureTimingEnd
+}
+
+void measureSnP_FBWL_Wrap_16lanes(uint_32t dtMin, uint_32t *measurements)
+{
+    measurements[0] = measureSnP_FBWL_Wrap_16lanes_1(dtMin);
+    measurements[1] = measureSnP_FBWL_Wrap_16lanes_10(dtMin);
+    measurements[2] = measureSnP_FBWL_Wrap_16lanes_100(dtMin);
+    measurements[3] = measureSnP_FBWL_Wrap_16lanes_1000(dtMin);
+}
+
+uint_32t measureSnP_FBWL_Unwrap_16lanes_1(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
+
+    measureTimingBegin
+    SnP_FBWL_Unwrap(&state, 16, data, data, 1*16*SnP_laneLengthInBytes, 0x01);
+    measureTimingEnd
+}
+
+uint_32t measureSnP_FBWL_Unwrap_16lanes_10(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
+
+    measureTimingBegin
+    SnP_FBWL_Unwrap(&state, 16, data, data, 10*16*SnP_laneLengthInBytes, 0x01);
+    measureTimingEnd
+}
+
+uint_32t measureSnP_FBWL_Unwrap_16lanes_100(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
+
+    measureTimingBegin
+    SnP_FBWL_Unwrap(&state, 16, data, data, 100*16*SnP_laneLengthInBytes, 0x01);
+    measureTimingEnd
+}
+
+uint_32t measureSnP_FBWL_Unwrap_16lanes_1000(uint_32t dtMin)
+{
+    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    ALIGN unsigned char data[1000*200];
+
+    measureTimingBegin
+    SnP_FBWL_Unwrap(&state, 16, data, data, 1000*16*SnP_laneLengthInBytes, 0x01);
+    measureTimingEnd
+}
+
+void measureSnP_FBWL_Unwrap_16lanes(uint_32t dtMin, uint_32t *measurements)
+{
+    measurements[0] = measureSnP_FBWL_Unwrap_16lanes_1(dtMin);
+    measurements[1] = measureSnP_FBWL_Unwrap_16lanes_10(dtMin);
+    measurements[2] = measureSnP_FBWL_Unwrap_16lanes_100(dtMin);
+    measurements[3] = measureSnP_FBWL_Unwrap_16lanes_1000(dtMin);
 }
 
 uint_32t measureKeccakAbsorb1000blocks(uint_32t dtMin)
@@ -210,43 +333,42 @@ uint_32t measureKeccakDuplexing1000blocks(uint_32t dtMin)
     measureTimingEnd
 }
 
+void displayMeasurements1101001000(uint_32t *measurements)
+{
+    printf("       1 block:  %d\n", measurements[0]);
+    printf("      10 blocks: %d\n", measurements[1]);
+    printf("     100 blocks: %d\n", measurements[2]);
+    printf("    1000 blocks: %d\n", measurements[3]);
+    printf("\n");
+}
+
 void doTiming(void)
 {
     uint_32t calibration;
     uint_32t measurement;
+    uint_32t measurements[4];
 
     measureKeccakAbsorb1000blocks(0);
     calibration = calibrate();
 
-    measurement = measureKeccakF1600_StatePermute(calibration);
+    measurement = measureSnP_Permute(calibration);
     printf("Cycles for KeccakF1600_StatePermute(state): %d\n\n", measurement);
 
-    measurement = measureKeccakF1600_StateXORPermuteExtract_0_0(calibration);
-    printf("Cycles for KeccakF1600_StateXORPermuteExtract(state, 0, 0, 0, 0): %d\n\n", measurement);
+    measureSnP_FBWL_Absorb_16lanes(calibration, measurements);
+    printf("Cycles for SnP_FBWL_Absorb(state, 16 lanes): \n");
+    displayMeasurements1101001000(measurements);
 
-    measurement = measureKeccakF1600_StateXORPermuteExtract_16_0(calibration);
-    printf("Cycles for KeccakF1600_StateXORPermuteExtract(state, data, 16, 0, 0): %d\n", measurement);
-    printf("Cycles per byte for rate 1024: %f\n\n", measurement/128.0);
+    measureSnP_FBWL_Squeeze_16lanes(calibration, measurements);
+    printf("Cycles for SnP_FBWL_Squeeze(state, 16 lanes): \n");
+    displayMeasurements1101001000(measurements);
 
-    measurement = measureKeccakF1600_StateXORPermuteExtract_17_0(calibration);
-    printf("Cycles for KeccakF1600_StateXORPermuteExtract(state, data, 17, 0, 0): %d\n", measurement);
-    printf("Cycles per byte for rate 1088: %f\n\n", measurement/136.0);
+    measureSnP_FBWL_Wrap_16lanes(calibration, measurements);
+    printf("Cycles for SnP_FBWL_Wrap(state, 16 lanes): \n");
+    displayMeasurements1101001000(measurements);
 
-    measurement = measureKeccakF1600_StateXORPermuteExtract_21_0(calibration);
-    printf("Cycles for KeccakF1600_StateXORPermuteExtract(state, data, 21, 0, 0): %d\n", measurement);
-    printf("Cycles per byte for rate 1344: %f\n\n", measurement/168.0);
-
-    measurement = measureKeccakF1600_StateXORPermuteExtract_0_16(calibration);
-    printf("Cycles for KeccakF1600_StateXORPermuteExtract(state, 0, 0, data, 16): %d\n", measurement);
-    printf("Cycles per byte for rate 1024: %f\n\n", measurement/128.0);
-
-    measurement = measureKeccakF1600_StateXORPermuteExtract_0_17(calibration);
-    printf("Cycles for KeccakF1600_StateXORPermuteExtract(state, 0, 0, data, 17): %d\n", measurement);
-    printf("Cycles per byte for rate 1088: %f\n\n", measurement/136.0);
-
-    measurement = measureKeccakF1600_StateXORPermuteExtract_0_21(calibration);
-    printf("Cycles for KeccakF1600_StateXORPermuteExtract(state, 0, 0, data, 21): %d\n", measurement);
-    printf("Cycles per byte for rate 1344: %f\n\n", measurement/168.0);
+    measureSnP_FBWL_Unwrap_16lanes(calibration, measurements);
+    printf("Cycles for SnP_FBWL_Unwrap(state, 16 lanes): \n");
+    displayMeasurements1101001000(measurements);
 
     measurement = measureKeccakAbsorb1000blocks(calibration);
     printf("Cycles for Keccak_SpongeInitialize, Absorb (1000 blocks) and AbsorbLastFewBits: %d\n\n", measurement);

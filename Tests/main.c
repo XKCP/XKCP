@@ -1,10 +1,12 @@
 /*
-The Keccak sponge function, designed by Guido Bertoni, Joan Daemen,
-Michaël Peeters and Gilles Van Assche. For more information, feedback or
-questions, please refer to our website: http://keccak.noekeon.org/
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
 
-Implementation by the designers,
-hereby denoted as "the implementer".
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -20,34 +22,34 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "displayIntermediateValues.h"
 #include "genKAT.h"
-#include "KeccakDuplex.h"
-#include "KeccakSponge.h"
 #include "testDuplex.h"
-#include "testPermutationAndStateMgt.h"
+#include "testSnP.h"
 #include "testSponge.h"
 #include "timing.h"
 
 #ifdef KeccakReference
-
-#include "KeccakF-1600-reference.h"
-
-void displayPermutationIntermediateValues(void)
+#include "displayIntermediateValues.h"
+#include "KeccakF-reference.h"
+#include "KeccakDuplex.h"
+#include "KeccakSponge.h"
+void displayPermutationIntermediateValues()
 {
     unsigned char state[KeccakF_width/8];
+#if (KeccakF_width == 1600)
     #ifdef KeccakReference32BI
     const char *fileName = "KeccakF-1600-IntermediateValues32BI.txt";
     #else
     const char *fileName = "KeccakF-1600-IntermediateValues.txt";
     #endif
+#endif
     FILE *f;
 
     f = fopen(fileName, "w");
     if (f == NULL)
         printf("Could not open %s\n", fileName);
     else {
-        KeccakF1600_Initialize();
+        KeccakF_Initialize();
         fprintf(f, "+++ The round constants +++\n");
         fprintf(f, "\n");
         displayRoundConstants(f);
@@ -62,17 +64,18 @@ void displayPermutationIntermediateValues(void)
         fprintf(f, "+++ Example with the all-zero input +++\n");
         fprintf(f, "\n");
         memset(state, 0, KeccakF_width/8);
-        KeccakF1600_StatePermute(state);
+        KeccakF_StatePermute(state);
 
         fprintf(f, "+++ Example taking the previous output as input +++\n");
         fprintf(f, "\n");
-        KeccakF1600_StatePermute(state);
+        KeccakF_StatePermute(state);
 
         fclose(f);
         displaySetIntermediateValueFile(0);
     }
 }
 
+#if (KeccakF_width == 1600)
 unsigned int appendSuffixToMessage(char *out, const char *in, unsigned int inputLengthInBits, unsigned char delimitedSuffix)
 {
     memcpy(out, in, (inputLengthInBits+7)/8);
@@ -173,9 +176,9 @@ void displaySpongeIntermediateValuesFew(const char *fileName, unsigned char deli
     fprintf(f, "\n");
     displaySpongeIntermediateValuesOne(message2008, 2008, delimitedSuffix, rate, capacity, desiredOutputLengthInBits);
 
-    fclose(f);
-    displaySetIntermediateValueFile(0);
-}
+            fclose(f);
+            displaySetIntermediateValueFile(0);
+        }
 
 void displaySpongeIntermediateValues(void)
 {
@@ -252,18 +255,20 @@ void displayDuplexIntermediateValues(void)
         }
     }
 }
-#endif
+#endif /* KeccakF_width == 1600 */
+#endif /* defined KeccakReference */
 
 int main(void)
 {
-    testPermutationAndStateMgt();
-    testSpongeWithQueue();
-    testSpongeWithoutQueue();
+    testSnP();
+    testSponge();
     testDuplex();
 #ifdef KeccakReference
     displayPermutationIntermediateValues();
+#if (KeccakF_width == 1600)
     displaySpongeIntermediateValues();
     displayDuplexIntermediateValues();
+#endif
 #else
     doTiming();
 #endif
