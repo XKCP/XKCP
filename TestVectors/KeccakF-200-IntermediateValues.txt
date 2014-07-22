@@ -1,0 +1,1265 @@
++++ The round constants +++
+
+RC[00][0][0] = 01
+RC[01][0][0] = 82
+RC[02][0][0] = 8A
+RC[03][0][0] = 00
+RC[04][0][0] = 8B
+RC[05][0][0] = 01
+RC[06][0][0] = 81
+RC[07][0][0] = 09
+RC[08][0][0] = 8A
+RC[09][0][0] = 88
+RC[10][0][0] = 09
+RC[11][0][0] = 0A
+RC[12][0][0] = 8B
+RC[13][0][0] = 8B
+RC[14][0][0] = 89
+RC[15][0][0] = 03
+RC[16][0][0] = 02
+RC[17][0][0] = 80
+
++++ The rho offsets +++
+
+RhoOffset[0][0] =  0
+RhoOffset[1][0] =  1
+RhoOffset[2][0] =  6
+RhoOffset[3][0] =  4
+RhoOffset[4][0] =  3
+RhoOffset[0][1] =  4
+RhoOffset[1][1] =  4
+RhoOffset[2][1] =  6
+RhoOffset[3][1] =  7
+RhoOffset[4][1] =  4
+RhoOffset[0][2] =  3
+RhoOffset[1][2] =  2
+RhoOffset[2][2] =  3
+RhoOffset[3][2] =  1
+RhoOffset[4][2] =  7
+RhoOffset[0][3] =  1
+RhoOffset[1][3] =  5
+RhoOffset[2][3] =  7
+RhoOffset[3][3] =  5
+RhoOffset[4][3] =  0
+RhoOffset[0][4] =  2
+RhoOffset[1][4] =  2
+RhoOffset[2][4] =  5
+RhoOffset[3][4] =  0
+RhoOffset[4][4] =  6
+
++++ Example with the all-zero input +++
+
+Input of permutation:
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+
+Same, with lanes as 8-bit words:
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+
+--- Round 0 ---
+
+After theta:
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+After rho:
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+After pi:
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+After chi:
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+After iota:
+01 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+00 00 00 00 00 
+
+--- Round 1 ---
+
+After theta:
+01 01 00 00 02 
+00 01 00 00 02 
+00 01 00 00 02 
+00 01 00 00 02 
+00 01 00 00 02 
+After rho:
+01 02 00 00 10 
+00 10 00 00 20 
+00 04 00 00 01 
+00 20 00 00 02 
+00 04 00 00 80 
+After pi:
+01 10 00 00 80 
+00 20 00 20 00 
+02 00 00 02 00 
+10 00 04 00 00 
+00 00 01 00 04 
+After chi:
+01 10 80 01 90 
+00 00 00 20 20 
+02 02 00 00 00 
+14 00 04 10 00 
+01 00 05 00 04 
+After iota:
+83 10 80 01 90 
+00 00 00 20 20 
+02 02 00 00 00 
+14 00 04 10 00 
+01 00 05 00 04 
+
+--- Round 2 ---
+
+After theta:
+13 87 F0 E9 88 
+90 97 70 C8 38 
+92 95 70 E8 18 
+84 97 74 F8 18 
+91 97 75 E8 1C 
+After rho:
+13 0F 3C 9E 44 
+09 79 1C 64 83 
+94 56 83 D1 0C 
+09 F2 3A 1F 18 
+46 5E AE E8 07 
+After pi:
+13 79 83 1F 07 
+9E 83 94 F2 AE 
+0F 1C D1 18 46 
+44 09 56 3A E8 
+3C 64 0C 09 5E 
+After chi:
+91 65 83 0F 6F 
+8A E1 98 E2 AF 
+CE 14 97 11 56 
+12 21 96 3E E1 
+34 65 5A 29 1E 
+After iota:
+1B 65 83 0F 6F 
+8A E1 98 E2 AF 
+CE 14 97 11 56 
+12 21 96 3E E1 
+34 65 5A 29 1E 
+
+--- Round 3 ---
+
+After theta:
+DB 9C 80 9D 76 
+4A 18 9B 70 B6 
+0E ED 94 83 4F 
+D2 D8 95 AC F8 
+F4 9C 59 BB 07 
+After rho:
+DB 39 20 D9 B3 
+A4 81 E6 38 6B 
+70 B7 A4 07 A7 
+A5 1B CA 95 F8 
+D3 72 2B BB C1 
+After pi:
+DB 81 A4 95 C1 
+D9 6B 70 1B 2B 
+39 E6 07 F8 D3 
+B3 A4 B7 CA BB 
+20 38 A7 A5 72 
+After chi:
+FF 90 E4 8F C1 
+C9 60 50 CB 09 
+38 1E 04 D0 15 
+A0 EC 86 CA BF 
+A7 38 F5 A5 6A 
+After iota:
+FF 90 E4 8F C1 
+C9 60 50 CB 09 
+38 1E 04 D0 15 
+A0 EC 86 CA BF 
+A7 38 F5 A5 6A 
+
+--- Round 4 ---
+
+After theta:
+83 1E 29 5C 28 
+B5 EE 9D 18 E0 
+44 90 C9 03 FC 
+DC 62 4B 19 56 
+DB B6 38 76 83 
+After rho:
+83 3C 4A C5 41 
+5B EE 67 0C 0E 
+22 42 4E 06 7E 
+B9 4C A5 23 56 
+6F DA 07 76 E0 
+After pi:
+83 EE 4E 23 E0 
+C5 0E 22 4C 07 
+3C 67 06 56 6F 
+41 5B 42 A5 76 
+4A 0C 7E B9 DA 
+After chi:
+83 CF 8E 20 8C 
+E5 42 21 8C 0D 
+3C 37 2F 46 2C 
+41 FE 10 A4 6C 
+38 8D 3C B9 DE 
+After iota:
+08 CF 8E 20 8C 
+E5 42 21 8C 0D 
+3C 37 2F 46 2C 
+41 FE 10 A4 6C 
+38 8D 3C B9 DE 
+
+--- Round 5 ---
+
+After theta:
+84 3E A8 B2 2A 
+69 B3 07 1E AB 
+B0 C6 09 D4 8A 
+CD 0F 36 36 CA 
+B4 7C 1A 2B 78 
+After rho:
+84 7C 2A 2B 51 
+96 3B C1 0F BA 
+85 1B 48 A9 45 
+9B E1 1B C6 CA 
+D2 F1 43 2B 1E 
+After pi:
+84 3B 48 C6 1E 
+2B BA 85 E1 43 
+7C C1 A9 CA D2 
+51 96 1B 1B 2B 
+2A 0F 45 9B F1 
+After chi:
+C4 BD 50 46 25 
+2E DA 87 C9 D3 
+54 83 B9 E6 53 
+58 96 3B 4B AD 
+6A 95 25 91 F4 
+After iota:
+C5 BD 50 46 25 
+2E DA 87 C9 D3 
+54 83 B9 E6 53 
+58 96 3B 4B AD 
+6A 95 25 91 F4 
+
+--- Round 6 ---
+
+After theta:
+F6 D0 D0 CF 8D 
+1D B7 07 40 7B 
+67 EE 39 6F FB 
+6B FB BB C2 05 
+59 F8 A5 18 5C 
+After rho:
+F6 A1 34 FC 6C 
+D1 7B C1 20 B7 
+3B BB C9 DE FD 
+D6 7F DD 58 05 
+65 E3 B4 18 17 
+After pi:
+F6 7B C9 58 17 
+FC B7 3B 7F B4 
+A1 C1 DE 05 65 
+6C D1 BB DD 18 
+34 20 FD D6 E3 
+After chi:
+76 6B CE B8 1E 
+F4 F3 BB 37 B7 
+BF C0 BE 85 25 
+46 95 BB B9 89 
+E9 22 DC C2 E3 
+After iota:
+F7 6B CE B8 1E 
+F4 F3 BB 37 B7 
+BF C0 BE 85 25 
+46 95 BB B9 89 
+E9 22 DC C2 E3 
+
+--- Round 7 ---
+
+After theta:
+CE 21 C3 D9 49 
+CD B9 B6 56 E0 
+86 8A B3 E4 72 
+7F DF B6 D8 DE 
+D0 68 D1 A3 B4 
+After rho:
+CE 42 F0 9D 4A 
+DC 9B AD 2B 0E 
+34 2A 9D C9 39 
+FE FB 5B 1B DE 
+43 A1 3A A3 2D 
+After pi:
+CE 9B 9D 1B 2D 
+9D 0E 34 FB 3A 
+42 AD C9 DE 43 
+4A DC 2A 5B A3 
+F0 2B 39 FE A1 
+After chi:
+CA 99 B9 D9 3C 
+AD C5 34 7E 38 
+02 BB C8 DE EE 
+68 8D 8A 13 37 
+E0 ED 38 AE AA 
+After iota:
+C3 99 B9 D9 3C 
+AD C5 34 7E 38 
+02 BB C8 DE EE 
+68 8D 8A 13 37 
+E0 ED 38 AE AA 
+
+--- Round 8 ---
+
+After theta:
+BB 92 B7 C0 31 
+D5 CE 3A 67 35 
+7A B0 C6 C7 E3 
+10 86 84 0A 3A 
+98 E6 36 B7 A7 
+After rho:
+BB 25 ED 0C 89 
+5D EC 8E B3 53 
+D3 C2 36 8F F1 
+20 D0 42 41 3A 
+62 9B C6 B7 E9 
+After pi:
+BB EC 36 41 E9 
+0C 53 D3 D0 C6 
+25 8E 8F 3A 62 
+89 5D C2 42 B7 
+ED B3 F1 20 9B 
+After chi:
+A9 AD 9E 53 AD 
+8C 53 D5 D8 95 
+24 BE CF 3F E8 
+0B 5D 77 4A E3 
+AD B3 6A 44 89 
+After iota:
+23 AD 9E 53 AD 
+8C 53 D5 D8 95 
+24 BE CF 3F E8 
+0B 5D 77 4A E3 
+AD B3 6A 44 89 
+
+--- Round 9 ---
+
+After theta:
+C4 B3 45 BF 4D 
+6B 4D 0E 34 75 
+C3 A0 14 D3 08 
+EC 43 AC A6 03 
+4A AD B1 A8 69 
+After rho:
+C4 67 51 FB 6A 
+B6 D4 83 1A 57 
+1E 82 A0 A7 04 
+D9 68 56 D4 03 
+29 B6 36 A8 5A 
+After pi:
+C4 D4 A0 D4 5A 
+FB 57 1E 68 36 
+67 83 A7 03 29 
+6A B6 82 56 A8 
+51 1A 04 D9 B6 
+After chi:
+E4 80 AA 50 4A 
+F3 37 08 A1 32 
+43 83 8F 45 A9 
+6A E2 2A 14 3C 
+55 C3 22 98 BC 
+After iota:
+6C 80 AA 50 4A 
+F3 37 08 A1 32 
+43 83 8F 45 A9 
+6A E2 2A 14 3C 
+55 C3 22 98 BC 
+
+--- Round 10 ---
+
+After theta:
+17 29 CF D7 B5 
+88 9E 6D 26 CD 
+38 2A EA C2 56 
+11 4B 4F 93 C3 
+2E 6A 47 1F 43 
+After rho:
+17 52 F3 7D AD 
+88 E9 5B 13 DC 
+C1 A8 57 85 2B 
+22 69 A7 72 C3 
+B8 A9 E8 1F D0 
+After pi:
+17 E9 57 72 D0 
+7D DC C1 69 E8 
+52 5B 85 C3 B8 
+AD 88 A8 A7 1F 
+F3 13 2B 22 A9 
+After chi:
+01 C9 D7 75 38 
+7C F4 41 7C 68 
+D6 19 BD 81 B1 
+8D 8F B0 07 1F 
+DB 13 A2 70 A9 
+After iota:
+08 C9 D7 75 38 
+7C F4 41 7C 68 
+D6 19 BD 81 B1 
+8D 8F B0 07 1F 
+DB 13 A2 70 A9 
+
+--- Round 11 ---
+
+After theta:
+2E 4F 90 E2 2E 
+5A 72 06 EB 7E 
+F0 9F FA 16 A7 
+AB 09 F7 90 09 
+FD 95 E5 E7 BF 
+After rho:
+2E 9E 24 2E 71 
+A5 27 81 F5 E7 
+87 7E D7 2C D3 
+57 21 FB 12 09 
+F7 56 BC E7 EF 
+After pi:
+2E 27 D7 12 EF 
+2E E7 87 21 BC 
+9E 81 2C 09 F7 
+71 A5 7E FB E7 
+24 F5 D3 57 56 
+After chi:
+FE 27 3A 12 EE 
+2E C7 1B 23 7D 
+B2 80 DA 01 F6 
+2B 24 7A EB 63 
+26 F1 D3 77 87 
+After iota:
+F4 27 3A 12 EE 
+2E C7 1B 23 7D 
+B2 80 DA 01 F6 
+2B 24 7A EB 63 
+26 F1 D3 77 87 
+
+--- Round 12 ---
+
+After theta:
+1E E6 D6 43 88 
+C4 06 F7 72 1B 
+58 41 36 50 90 
+C1 E5 96 BA 05 
+CC 30 3F 26 E1 
+After rho:
+1E CD B5 34 44 
+4C 60 FD 39 B1 
+C2 05 B1 A0 48 
+83 BC 4B 57 05 
+33 C0 E7 26 78 
+After pi:
+1E 60 B1 57 78 
+34 B1 C2 BC E7 
+CD FD A0 05 33 
+44 4C 05 4B 26 
+B5 39 48 83 C0 
+After chi:
+8F 26 99 51 18 
+76 8D 81 AC 66 
+CD F8 92 C9 03 
+45 06 21 0B 2E 
+F5 BA 08 B6 C8 
+After iota:
+04 26 99 51 18 
+76 8D 81 AC 66 
+CD F8 92 C9 03 
+45 06 21 0B 2E 
+F5 BA 08 B6 C8 
+
+--- Round 13 ---
+
+After theta:
+40 6E 65 C5 8F 
+32 C5 7D 38 F1 
+89 B0 6E 5D 94 
+01 4E DD 9F B9 
+B1 F2 F4 22 5F 
+After rho:
+40 DC 59 5C 7C 
+23 5C 5F 1C 1F 
+4C C2 73 BA 4A 
+02 C9 EE F3 B9 
+C6 CB 9E 22 D7 
+After pi:
+40 5C 73 F3 D7 
+5C 1F 4C C9 9E 
+DC 5F BA B9 C6 
+7C 23 C2 EE 22 
+59 1C 4A 02 CB 
+After chi:
+63 DC 77 F3 CB 
+1C 9E 5A 89 9D 
+7C 5E FC A1 C5 
+BC 0F C2 B2 21 
+1B 1C 83 12 CF 
+After iota:
+E8 DC 77 F3 CB 
+1C 9E 5A 89 9D 
+7C 5E FC A1 C5 
+BC 0F C2 B2 21 
+1B 1C 83 12 CF 
+
+--- Round 14 ---
+
+After theta:
+8B D2 8E 99 EE 
+7F 90 A3 E3 B8 
+1F 50 05 CB E0 
+DF 01 3B D8 04 
+78 12 7A 78 EA 
+After rho:
+8B A5 A3 99 77 
+F7 09 E8 F1 8B 
+F8 41 28 97 70 
+BF 20 9D 1B 04 
+E1 48 4F 78 BA 
+After pi:
+8B 09 28 1B BA 
+99 8B F8 20 4F 
+A5 E8 97 04 E1 
+77 F7 41 9D 78 
+A3 F1 70 BF 48 
+After chi:
+AB 1A 88 1A BA 
+E9 8B B7 B0 4D 
+B2 E8 76 00 A9 
+77 6B 21 9A F8 
+A3 7E 30 1C 18 
+After iota:
+22 1A 88 1A BA 
+E9 8B B7 B0 4D 
+B2 E8 76 00 A9 
+77 6B 21 9A F8 
+A3 7E 30 1C 18 
+
+--- Round 15 ---
+
+After theta:
+44 07 BC 3F CD 
+8F 96 83 95 3A 
+D4 F5 42 25 DE 
+11 76 15 BF 8F 
+C5 63 04 39 6F 
+After rho:
+44 0E 2F F3 6E 
+F8 69 E0 CA A3 
+A6 D7 12 4A 6F 
+22 CE 8A F7 8F 
+17 8D 80 39 DB 
+After pi:
+44 69 12 F7 DB 
+F3 A3 A6 CE 80 
+0E E0 4A 8F 17 
+6E F8 D7 8A 39 
+2F CA 6F 22 8D 
+After chi:
+56 8C 1A F3 F2 
+F7 EB A6 BD 80 
+04 65 5A 87 F7 
+69 F0 E6 CC A9 
+0A CA E2 00 4D 
+After iota:
+55 8C 1A F3 F2 
+F7 EB A6 BD 80 
+04 65 5A 87 F7 
+69 F0 E6 CC A9 
+0A CA E2 00 4D 
+
+--- Round 16 ---
+
+After theta:
+44 8C 28 D3 7C 
+E6 EB 94 9D 0E 
+15 65 68 A7 79 
+78 F0 D4 EC 27 
+1B CA D0 20 C3 
+After rho:
+44 19 0A 3D E3 
+6E BE 25 CE E0 
+A8 95 43 4F BC 
+F0 1E 6A 9D 27 
+6C 2B 1A 20 F0 
+After pi:
+44 BE 43 9D F0 
+3D E0 A8 1E 1A 
+19 25 4F 27 6C 
+E3 6E 95 6A 20 
+0A CE BC F0 2B 
+After chi:
+05 22 23 99 4A 
+35 F6 A8 3B DA 
+53 05 07 36 48 
+72 04 95 A9 2C 
+3A 8E B7 F0 EF 
+After iota:
+07 22 23 99 4A 
+35 F6 A8 3B DA 
+53 05 07 36 48 
+72 04 95 A9 2C 
+3A 8E B7 F0 EF 
+
+--- Round 17 ---
+
+After theta:
+AA 56 E3 01 D5 
+98 82 68 A3 45 
+FE 71 C7 AE D7 
+DF 70 55 31 B3 
+97 FA 77 68 70 
+After rho:
+AA AC F8 10 AE 
+89 28 1A D1 54 
+F7 C5 3E 5D EB 
+BF 0E AA 26 B3 
+5E EB EE 68 1C 
+After pi:
+AA 28 3E 26 1C 
+10 54 F7 0E EE 
+AC 1A 5D B3 5E 
+AE 89 C5 AA 68 
+F8 D1 EB BF EB 
+After chi:
+BC 28 26 84 1C 
+B3 5C 17 1E AA 
+E9 B8 11 13 4C 
+EA A3 85 2C 69 
+D2 C5 AB AF EA 
+After iota:
+3C 28 26 84 1C 
+B3 5C 17 1E AA 
+E9 B8 11 13 4C 
+EA A3 85 2C 69 
+D2 C5 AB AF EA 
+State after permutation:
+3C 28 26 84 1C B3 5C 17 1E AA E9 B8 11 13 4C EA A3 85 2C 69 D2 C5 AB AF EA 
+
++++ Example taking the previous output as input +++
+
+Input of permutation:
+3C 28 26 84 1C B3 5C 17 1E AA E9 B8 11 13 4C EA A3 85 2C 69 D2 C5 AB AF EA 
+
+Same, with lanes as 8-bit words:
+3C 28 26 84 1C 
+B3 5C 17 1E AA 
+E9 B8 11 13 4C 
+EA A3 85 2C 69 
+D2 C5 AB AF EA 
+
+--- Round 0 ---
+
+After theta:
+10 6A 98 78 AA 
+9F 1E A9 E2 1C 
+C5 FA AF EF FA 
+C6 E1 3B D0 DF 
+FE 87 15 53 5C 
+After rho:
+10 D4 26 87 55 
+F9 E1 6A 71 C1 
+2E EB 7D DF 7D 
+8D 3C 9D 1A DF 
+FB 1E A2 53 17 
+After pi:
+10 E1 7D 1A 17 
+87 C1 2E 3C A2 
+D4 6A DF DF FB 
+55 F9 EB 9D 53 
+26 71 7D 8D 1E 
+After chi:
+0C E3 78 1A F6 
+A9 D1 AC 39 E2 
+41 6A FF DB D1 
+57 ED A9 99 FB 
+2A F1 6F AD 4F 
+After iota:
+0D E3 78 1A F6 
+A9 D1 AC 39 E2 
+41 6A FF DB D1 
+57 ED A9 99 FB 
+2A F1 6F AD 4F 
+
+--- Round 1 ---
+
+After theta:
+F4 A0 A5 15 0B 
+50 92 71 36 1F 
+B8 29 22 D4 2C 
+AE AE 74 96 06 
+D3 B2 B2 A2 B2 
+After rho:
+F4 41 69 51 58 
+05 29 5C 1B F1 
+C5 A4 11 A9 16 
+5D D5 3A D2 06 
+4F CA 56 A2 AC 
+After pi:
+F4 29 11 D2 AC 
+51 F1 C5 D5 56 
+41 5C A9 06 4F 
+58 05 A4 3A A2 
+69 1B 16 5D CA 
+After chi:
+E4 EB 3D 82 A5 
+55 E1 C7 D4 F6 
+E0 5A E0 06 53 
+F8 1F 24 62 A7 
+6D 52 94 7C D8 
+After iota:
+66 EB 3D 82 A5 
+55 E1 C7 D4 F6 
+E0 5A E0 06 53 
+F8 1F 24 62 A7 
+6D 52 94 7C D8 
+
+--- Round 2 ---
+
+After theta:
+23 F8 BC D6 67 
+10 F2 46 80 34 
+A5 49 61 52 91 
+BD 0C A5 36 65 
+28 41 15 28 1A 
+After rho:
+23 F1 2F 6D 3B 
+01 2F 91 40 43 
+2D 25 0B A4 C8 
+7B 81 D2 C6 65 
+A0 05 A2 28 86 
+After pi:
+23 2F 0B C6 86 
+6D 43 2D 81 A2 
+F1 91 A4 65 A0 
+3B 01 25 D2 28 
+2F 40 C8 7B 05 
+After chi:
+23 EB 0B E7 8A 
+41 C3 0F CC A0 
+D5 D0 24 34 A0 
+1F D3 0D C1 28 
+A7 73 CC 51 45 
+After iota:
+A9 EB 0B E7 8A 
+41 C3 0F CC A0 
+D5 D0 24 34 A0 
+1F D3 0D C1 28 
+A7 73 CC 51 45 
+
+--- Round 3 ---
+
+After theta:
+FE AD 4C C9 0E 
+16 85 48 E2 24 
+82 96 63 1A 24 
+48 95 4A EF AC 
+F0 35 8B 7F C1 
+After rho:
+FE 5B 13 9C 70 
+61 58 12 71 42 
+14 5A 1B 34 12 
+90 B2 25 FD AC 
+C3 D4 71 7F 70 
+After pi:
+FE 58 1B FD 70 
+9C 42 14 B2 71 
+5B 12 34 AC C3 
+70 61 5A 25 7F 
+13 71 12 90 D4 
+After chi:
+FD BC 1B 73 70 
+88 E0 55 3E 33 
+7F 9A 77 B4 C3 
+6A 44 00 25 7E 
+11 F1 56 93 B4 
+After iota:
+FD BC 1B 73 70 
+88 E0 55 3E 33 
+7F 9A 77 B4 C3 
+6A 44 00 25 7E 
+11 F1 56 93 B4 
+
+--- Round 4 ---
+
+After theta:
+51 13 F6 88 DD 
+24 4F B8 C5 9E 
+D3 35 9A 4F 6E 
+C6 EB ED DE D3 
+BD 5E BB 68 19 
+After rho:
+51 26 BD 88 EE 
+42 F4 2E E2 E9 
+9E D4 D4 9E 37 
+8D 7D F6 DB D3 
+F6 79 77 68 46 
+After pi:
+51 F4 D4 DB 46 
+88 E9 9E 7D 77 
+26 2E 9E D3 F6 
+EE 42 D4 F6 68 
+BD E2 37 8D 79 
+After chi:
+51 FF D0 CA E2 
+9E 88 9C F5 16 
+B6 6F BA D3 FE 
+7A 60 DC 70 68 
+A8 6A 47 09 3B 
+After iota:
+DA FF D0 CA E2 
+9E 88 9C F5 16 
+B6 6F BA D3 FE 
+7A 60 DC 70 68 
+A8 6A 47 09 3B 
+
+--- Round 5 ---
+
+After theta:
+A7 05 E9 15 37 
+E3 72 A5 2A C3 
+CB 95 83 0C 2B 
+07 9A E5 AF BD 
+D5 90 7E D6 EE 
+After rho:
+A7 0A 7A 51 B9 
+3E 27 69 15 3C 
+5E 56 1C 18 95 
+0E 53 F2 F5 BD 
+57 42 CF D6 BB 
+After pi:
+A7 27 1C F5 BB 
+51 3C 5E 53 CF 
+0A 69 18 BD 57 
+B9 3E 56 F2 D6 
+7A 15 95 0E 42 
+After chi:
+BF C6 16 F1 BB 
+13 3D D2 43 E3 
+1A CC 5A B5 36 
+F9 9E 52 DB D0 
+FA 1F D5 36 47 
+After iota:
+BE C6 16 F1 BB 
+13 3D D2 43 E3 
+1A CC 5A B5 36 
+F9 9E 52 DB D0 
+FA 1F D5 36 47 
+
+--- Round 6 ---
+
+After theta:
+2A 40 75 1B 38 
+87 BB B1 A9 60 
+8E 4A 39 5F B5 
+6D 18 31 31 53 
+6E 99 B6 DC C4 
+After rho:
+2A 80 5D B1 C1 
+78 BB 6C D4 06 
+74 29 C9 BE DA 
+DA 03 98 26 53 
+B9 66 D6 DC 31 
+After pi:
+2A BB C9 26 31 
+B1 06 74 03 D6 
+80 6C BE 53 B9 
+C1 78 29 98 DC 
+5D D4 DA DA 66 
+After chi:
+6A 9D D8 2C A0 
+C1 05 A0 22 D0 
+12 2D 16 53 D5 
+C0 E8 6D 99 E4 
+57 D4 FE C3 E6 
+After iota:
+EB 9D D8 2C A0 
+C1 05 A0 22 D0 
+12 2D 16 53 D5 
+C0 E8 6D 99 E4 
+57 D4 FE C3 E6 
+
+--- Round 7 ---
+
+After theta:
+5F C9 5F 9E F8 
+75 51 27 90 88 
+A6 79 91 E1 8D 
+74 BC EA 2B BC 
+E3 80 79 71 BE 
+After rho:
+5F 93 D7 E9 C7 
+57 15 C9 48 88 
+35 E5 8C C3 C6 
+E8 97 75 65 BC 
+8F 02 2F 71 AF 
+After pi:
+5F 15 8C 65 AF 
+E9 88 35 97 2F 
+93 C9 C3 BC 8F 
+C7 57 E5 75 71 
+D7 48 C6 E8 02 
+After chi:
+D7 74 06 35 AF 
+DC 0A 1D 57 2F 
+91 F5 C0 AC C7 
+67 47 E5 F3 61 
+51 60 C4 3D 0A 
+After iota:
+DE 74 06 35 AF 
+DC 0A 1D 57 2F 
+91 F5 C0 AC C7 
+67 47 E5 F3 61 
+51 60 C4 3D 0A 
+
+--- Round 8 ---
+
+After theta:
+AB 24 AA 97 E4 
+A9 5A B1 F5 64 
+E4 A5 6C 0E 8C 
+12 17 49 51 2A 
+24 30 68 9F 41 
+After rho:
+AB 48 AA 79 27 
+9A A5 6C FA 46 
+27 96 63 1C 46 
+24 E2 A4 2A 2A 
+90 C0 0D 9F 50 
+After pi:
+AB A5 63 2A 50 
+79 46 27 E2 0D 
+48 6C 1C 2A 90 
+27 9A 96 A4 9F 
+AA FA 46 24 C0 
+After chi:
+E9 AD 33 81 54 
+58 86 2A 92 0B 
+58 4E 8C 62 B4 
+23 BA 8D 84 07 
+AE DA 86 0E 90 
+After iota:
+63 AD 33 81 54 
+58 86 2A 92 0B 
+58 4E 8C 62 B4 
+23 BA 8D 84 07 
+AE DA 86 0E 90 
+
+--- Round 9 ---
+
+After theta:
+15 7E C1 E7 72 
+2E 55 D8 F4 2D 
+2E 9D 7E 04 92 
+55 69 7F E2 21 
+D8 09 74 68 B6 
+After rho:
+15 FC 70 7E 93 
+E2 55 36 7A D2 
+71 76 F3 08 49 
+AA 2D BF 5C 21 
+63 24 8E 68 AD 
+After pi:
+15 55 F3 5C AD 
+7E D2 71 2D 8E 
+FC 36 08 21 63 
+93 E2 76 BF 68 
+70 7A 49 AA 24 
+After chi:
+B7 59 52 4C ED 
+5F DE F3 5D 0E 
+F4 17 4A BD 61 
+87 6B 36 2C 08 
+71 D8 4D FA 2E 
+After iota:
+3F 59 52 4C ED 
+5F DE F3 5D 0E 
+F4 17 4A BD 61 
+87 6B 36 2C 08 
+71 D8 4D FA 2E 
+
+--- Round 10 ---
+
+After theta:
+DD 1A 85 95 53 
+BD 9D 24 84 B0 
+16 54 9D 64 DF 
+65 28 E1 F5 B6 
+93 9B 9A 23 90 
+After rho:
+DD 34 61 59 9A 
+DB D9 09 42 0B 
+B0 51 EC C8 EF 
+CA 05 F0 BE B6 
+4E 6E 53 23 24 
+After pi:
+DD D9 EC BE 24 
+59 0B B0 05 53 
+34 09 C8 B6 4E 
+9A DB 51 F0 23 
+61 42 EF CA 6E 
+After chi:
+F9 CB EC 67 24 
+E9 0E E2 0D 51 
+F4 3F 80 86 47 
+9A 7B 52 68 62 
+CC 42 CB CB 6C 
+After iota:
+F0 CB EC 67 24 
+E9 0E E2 0D 51 
+F4 3F 80 86 47 
+9A 7B 52 68 62 
+CC 42 CB CB 6C 
+
+--- Round 11 ---
+
+After theta:
+4B 5E B1 08 1C 
+52 9B BF 62 69 
+4F AA DD E9 7F 
+21 EE 0F 07 5A 
+77 D7 96 A4 54 
+After rho:
+4B BC 6C 80 E0 
+25 B9 EF 31 96 
+7A AA EE D3 BF 
+42 DD 87 E0 5A 
+DD 5F D2 A4 15 
+After pi:
+4B B9 EE E0 15 
+80 96 7A DD D2 
+BC EF D3 5A DD 
+E0 25 AA 87 A4 
+6C 31 BF 42 5F 
+After chi:
+0D B9 FB AA A5 
+E8 13 78 DD C4 
+AC E7 56 7A 9E 
+6A 20 8A C7 A1 
+E2 71 A2 62 4E 
+After iota:
+07 B9 FB AA A5 
+E8 13 78 DD C4 
+AC E7 56 7A 9E 
+6A 20 8A C7 A1 
+E2 71 A2 62 4E 
+
+--- Round 12 ---
+
+After theta:
+2F 89 B6 77 9A 
+C0 23 35 00 FB 
+84 D7 1B A7 A1 
+42 10 C7 1A 9E 
+CA 41 EF BF 71 
+After rho:
+2F 13 AD 77 D4 
+0C 32 4D 00 BF 
+24 5F D8 4F D0 
+84 02 E3 43 9E 
+2B 05 FD BF 5C 
+After pi:
+2F 32 D8 43 5C 
+77 BF 24 02 FD 
+13 4D 4F 9E 2B 
+D4 0C 5F E3 BF 
+AD 00 D0 84 05 
+After chi:
+E7 31 C4 60 4C 
+77 BD D9 00 75 
+11 DD 6E 8E 67 
+87 AC 43 A3 B7 
+7D 04 D1 2C 05 
+After iota:
+6C 31 C4 60 4C 
+77 BD D9 00 75 
+11 DD 6E 8E 67 
+87 AC 43 A3 B7 
+7D 04 D1 2C 05 
+
+--- Round 13 ---
+
+After theta:
+73 02 FF 58 CC 
+68 8E E2 38 F5 
+0E EE 55 B6 E7 
+98 9F 78 9B 37 
+62 37 EA 14 85 
+After rho:
+73 04 FF 85 66 
+86 E8 B8 1C 5F 
+70 BB AA 6D F3 
+31 F3 3C 73 37 
+89 DC 5D 14 61 
+After pi:
+73 E8 AA 73 61 
+85 5F 70 F3 5D 
+04 B8 6D 37 89 
+66 86 BB 3C 14 
+FF 1C F3 31 DC 
+After chi:
+71 B9 AA 61 E9 
+A5 DC 7C 73 07 
+41 AA E5 33 31 
+5F 82 BB 5E 94 
+1C 1C 3F 12 DC 
+After iota:
+FA B9 AA 61 E9 
+A5 DC 7C 73 07 
+41 AA E5 33 31 
+5F 82 BB 5E 94 
+1C 1C 3F 12 DC 
+
+--- Round 14 ---
+
+After theta:
+CF 8B 21 F9 3E 
+90 EE F7 EB D0 
+74 98 6E AB E6 
+6A B0 30 C6 43 
+29 2E B4 8A 0B 
+After rho:
+CF 17 48 9F F1 
+09 EE FD F5 0D 
+A3 62 73 57 73 
+D4 16 18 D8 43 
+A4 B8 96 8A C2 
+After pi:
+CF EE 73 D8 C2 
+9F 0D A3 16 96 
+17 FD 57 43 A4 
+F1 09 62 18 8A 
+48 F5 73 D4 B8 
+After chi:
+DE 66 71 D5 E2 
+3D 19 23 1F 96 
+15 FD F3 50 4C 
+93 11 E0 69 82 
+4A 71 5B 94 0D 
+After iota:
+57 66 71 D5 E2 
+3D 19 23 1F 96 
+15 FD F3 50 4C 
+93 11 E0 69 82 
+4A 71 5B 94 0D 
+
+--- Round 15 ---
+
+After theta:
+25 F4 5D A0 C8 
+4F 8B 0F 6A BC 
+67 6F DF 25 66 
+E1 83 CC 1C A8 
+38 E3 77 E1 27 
+After rho:
+25 E9 57 0A 46 
+F4 B8 C3 35 CB 
+3B BD FE 4A 33 
+C3 70 66 83 A8 
+E0 8F EE E1 C9 
+After pi:
+25 B8 FE 83 C9 
+0A CB 3B 70 EE 
+E9 C3 4A A8 E0 
+46 F4 BD 66 E1 
+57 35 33 C3 8F 
+After chi:
+63 B9 B6 A7 51 
+3A 8B B5 70 2F 
+E1 63 0A A1 E2 
+4F B6 3C 60 51 
+55 F5 3F 93 AF 
+After iota:
+60 B9 B6 A7 51 
+3A 8B B5 70 2F 
+E1 63 0A A1 E2 
+4F B6 3C 60 51 
+55 F5 3F 93 AF 
+
+--- Round 16 ---
+
+After theta:
+26 0C AF 69 97 
+7C 3E AC BE E9 
+A7 D6 13 6F 24 
+09 03 25 AE 97 
+13 40 26 5D 69 
+After rho:
+26 18 EB 96 BC 
+C7 E3 2B 5F 9E 
+3D 5B 98 DE 12 
+12 60 92 D5 97 
+4C 01 C4 5D 5A 
+After pi:
+26 E3 98 D5 5A 
+96 9E 3D 60 C4 
+18 2B DE 97 4C 
+BC C7 5B 92 5D 
+EB 5F 12 12 01 
+After chi:
+3E A6 92 F1 9B 
+B7 DE B9 72 CC 
+CC 2A 96 87 6F 
+A4 47 16 32 1E 
+EB 5F 13 F8 15 
+After iota:
+3C A6 92 F1 9B 
+B7 DE B9 72 CC 
+CC 2A 96 87 6F 
+A4 47 16 32 1E 
+EB 5F 13 F8 15 
+
+--- Round 17 ---
+
+After theta:
+9B DF 45 2F 45 
+10 A7 6E AC 12 
+6B 53 41 59 B1 
+03 3E C1 EC C0 
+4C 26 C4 26 CB 
+After rho:
+9B BF 51 F2 2A 
+01 7A 9B 56 21 
+5B 4D 0A B2 D8 
+06 C7 E0 9D C0 
+31 98 98 26 F2 
+After pi:
+9B 7A 0A 9D F2 
+F2 21 5B C7 98 
+BF 9B B2 C0 31 
+2A 01 4D E0 26 
+51 56 D8 06 98 
+After chi:
+9B EF 68 94 92 
+A8 A5 43 A5 99 
+9F DB 83 4E 31 
+66 A1 4B E8 27 
+D9 50 40 47 9E 
+After iota:
+1B EF 68 94 92 
+A8 A5 43 A5 99 
+9F DB 83 4E 31 
+66 A1 4B E8 27 
+D9 50 40 47 9E 
+State after permutation:
+1B EF 68 94 92 A8 A5 43 A5 99 9F DB 83 4E 31 66 A1 4B E8 27 D9 50 40 47 9E 
+

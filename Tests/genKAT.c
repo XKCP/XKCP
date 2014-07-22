@@ -81,6 +81,11 @@ genKAT_main(void)
         "Keccak[r=240, c=160]");
 #endif
 
+#if (KeccakF_width == 200)
+    genShortMsgHash(  40,  160,  0x01, 0, 4096,
+        "ShortMsgKAT_Keccakr40c160.txt",
+        "Keccak[r=40, c=160]");
+#endif
     return KAT_SUCCESS;
 }
 

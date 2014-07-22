@@ -170,4 +170,24 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <target name="KeccakWidth400Reference" inherits="keccak reference400"/>
 
+    <!-- Keccak[r+c=200] -->
+
+    <fragment name="width200">
+        <h>KeccakF-200/KeccakF-200-interface.h</h>
+    </fragment>
+
+    <fragment name="reference200" inherits="common width200">
+        <c>KeccakF-200/Reference/KeccakF-200-reference.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <c>Tests/displayIntermediateValues.c</c>
+        <h>KeccakF-200/Reference/KeccakF-reference.h</h>
+        <h>KeccakF-200/Reference/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <h>Tests/displayIntermediateValues.h</h>
+        <gcc>-DKeccakReference</gcc>
+        <gcc>-O</gcc>
+    </fragment>
+
+    <target name="KeccakWidth200Reference" inherits="keccak reference200"/>
+
 </build>

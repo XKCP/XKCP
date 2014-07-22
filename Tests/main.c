@@ -49,6 +49,9 @@ void displayPermutationIntermediateValues()
 #if (KeccakF_width == 400)
     const char *fileName = "KeccakF-400-IntermediateValues.txt";
 #endif
+#if (KeccakF_width == 200)
+    const char *fileName = "KeccakF-200-IntermediateValues.txt";
+#endif
     FILE *f;
 
     f = fopen(fileName, "w");
