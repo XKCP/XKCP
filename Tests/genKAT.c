@@ -72,6 +72,15 @@ genKAT_main(void)
         "Keccak[r=640, c=160]");
 #endif
 
+#if (KeccakF_width == 400)
+    genShortMsgHash( 144,  256,  0x01, 0, 4096,
+        "ShortMsgKAT_Keccakr144c256.txt",
+        "Keccak[r=144, c=256]");
+    genShortMsgHash( 240,  160,  0x01, 0, 4096,
+        "ShortMsgKAT_Keccakr240c160.txt",
+        "Keccak[r=240, c=160]");
+#endif
+
     return KAT_SUCCESS;
 }
 
