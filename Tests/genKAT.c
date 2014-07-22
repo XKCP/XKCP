@@ -60,6 +60,18 @@ genKAT_main(void)
         "Keccak(input|01)[r=576, c=1024] truncated to 512 bits, or SHA3-512 as in FIPS 202 draft");
 #endif
 
+#if (KeccakF_width == 800)
+    genShortMsgHash( 288,  512,  0x01, 0, 4096,
+        "ShortMsgKAT_Keccakr288c512.txt",
+        "Keccak[r=288, c=512]");
+    genShortMsgHash( 544,  256,  0x01, 0, 4096,
+        "ShortMsgKAT_Keccakr544c256.txt",
+        "Keccak[r=544, c=256]");
+    genShortMsgHash( 640,  160,  0x01, 0, 4096,
+        "ShortMsgKAT_Keccakr640c160.txt",
+        "Keccak[r=640, c=160]");
+#endif
+
     return KAT_SUCCESS;
 }
 

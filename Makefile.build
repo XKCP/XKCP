@@ -130,4 +130,24 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <target name="KeccakWidth1600Asmx86-64" inherits="keccak asmx86-64"/>
     <target name="KeccakWidth1600Asmx86-64-shld" inherits="keccak asmx86-64-shld"/>
 
+    <!-- Keccak[r+c=800] -->
+
+    <fragment name="width800">
+        <h>KeccakF-800/KeccakF-800-interface.h</h>
+    </fragment>
+
+    <fragment name="reference800" inherits="common width800">
+        <c>KeccakF-800/Reference/KeccakF-800-reference.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <c>Tests/displayIntermediateValues.c</c>
+        <h>KeccakF-800/Reference/KeccakF-reference.h</h>
+        <h>KeccakF-800/Reference/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <h>Tests/displayIntermediateValues.h</h>
+        <gcc>-DKeccakReference</gcc>
+        <gcc>-O</gcc>
+    </fragment>
+
+    <target name="KeccakWidth800Reference" inherits="keccak reference800"/>
+
 </build>
