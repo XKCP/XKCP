@@ -22,7 +22,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if !(defined(Ketje))
+#if !(defined(Keyak)) && !(defined(Ketje))
 #include "genKAT.h"
 #include "testDuplex.h"
 #include "testSponge.h"
@@ -31,8 +31,18 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 #endif
 
+#ifdef Keyak
+#include "NumberOfParallelInstances.h"
+#include "testKeyak.h"
+#endif
 #ifdef Ketje
 #include "testKetje.h"
+#endif
+
+#ifdef PlSnP_P
+#include "testPlSnP.h"
+#else
+#include "testSnP.h"
 #endif
 
 #ifdef KeccakReference
@@ -274,7 +284,16 @@ void displayDuplexIntermediateValues(void)
 #endif /* KeccakF_width == 1600 */
 #endif /* defined KeccakReference */
 
-#if defined(Ketje)
+#ifdef Keyak
+int main()
+{
+    testSnP();
+#ifdef PlSnP_P
+    testPlSnP();
+#endif
+    testKeyak();
+}
+#elif defined(Ketje)
 int main()
 {
     testSnP();
@@ -284,6 +303,9 @@ int main()
 int main()
 {
     testSnP();
+#ifdef PlSnP_P
+    testPlSnP();
+#endif
     testSponge();
     testDuplex();
 #ifdef KeccakReference

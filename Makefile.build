@@ -203,10 +203,151 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <target name="KeccakWidth200Reference" inherits="keccak reference200"/>
 
+    <!-- Keyak -->
+
     <fragment name="crypto_aead_test">
         <h>CAESAR/test_crypto_aead.h</h>
         <c>CAESAR/test_crypto_aead.c</c>
     </fragment>
+
+    <fragment name="keyak" inherits="common">
+        <h>Constructions/KeccakDuplex.h</h>
+        <c>Constructions/KeccakDuplex.c</c>
+        <h>Modes/Keyak.h</h>
+        <c>Modes/Keyak.c</c>
+        <gcc>-DKeyak</gcc>
+    </fragment>
+
+    <fragment name="keyak_tests" inherits="keyak">
+        <c>Tests/main.c</c>
+        <h>Tests/testKeyak.h</h>
+        <c>Tests/testKeyak.c</c>
+        <h>Tests/testSnP.h</h>
+        <c>Tests/testSnP.c</c>
+    </fragment>
+
+    <fragment name="width800rounds12">
+        <h>KeccakP-800-12/KeccakP-800-12-interface.h</h>
+        <h>KeccakF-800/KeccakF-800-interface.h</h>
+    </fragment>
+
+    <fragment name="P1">
+        <h>PlSnP/None/NumberOfParallelInstances.h</h>
+    </fragment>
+
+    <fragment name="P2">
+        <h>PlSnP/2/NumberOfParallelInstances.h</h>
+    </fragment>
+
+    <fragment name="P4">
+        <h>PlSnP/4/NumberOfParallelInstances.h</h>
+    </fragment>
+
+    <!-- River Keyak -->
+
+    <fragment name="width800rounds12_reference" inherits="common width800rounds12">
+        <c>Tests/displayIntermediateValues.c</c>
+        <h>Tests/displayIntermediateValues.h</h>
+        <c>KeccakF-800/Reference/KeccakF-800-reference.c</c>
+        <c>KeccakP-800-12/Reference/KeccakP-800-12-reference.c</c>
+        <h>KeccakP-800-12/Reference/SnP-interface.h</h>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>SnP/SnP-FBWL-default.h</h>
+    </fragment>
+
+    <target name="RiverKeyakReference" inherits="keyak_tests width800rounds12_reference P1"/>
+
+    <fragment name="RiverKeyakReferenceCAESAR" inherits="keyak width800rounds12_reference P1">
+        <c>CAESAR/RiverKeyak/encrypt.c</c>
+        <h>CAESAR/RiverKeyak/api.h</h>
+    </fragment>
+
+    <target name="crypto_aead/riverkeyakv1/ref" inherits="RiverKeyakReferenceCAESAR"/>
+
+    <target name="RiverKeyakReferenceCAESARTest" inherits="RiverKeyakReferenceCAESAR crypto_aead_test">
+        <c>CAESAR/RiverKeyak/selftest.c</c>
+    </target>
+
+    <fragment name="width1600rounds12">
+        <h>KeccakP-1600-12/KeccakP-1600-12-interface.h</h>
+        <h>KeccakF-1600/KeccakF-1600-interface.h</h>
+    </fragment>
+
+    <!-- Lake Keyak -->
+
+    <fragment name="width1600rounds12_reference" inherits="common width1600rounds12">
+        <c>Tests/displayIntermediateValues.c</c>
+        <h>Tests/displayIntermediateValues.h</h>
+        <c>KeccakF-1600/Reference/KeccakF-1600-reference.c</c>
+        <c>KeccakP-1600-12/Reference/KeccakP-1600-12-reference.c</c>
+        <h>KeccakP-1600-12/Reference/SnP-interface.h</h>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>SnP/SnP-FBWL-default.h</h>
+    </fragment>
+
+    <target name="LakeKeyakReference" inherits="keyak_tests width1600rounds12_reference P1"/>
+
+    <fragment name="LakeKeyakReferenceCAESAR" inherits="keyak width1600rounds12_reference P1">
+        <c>CAESAR/LakeKeyak/encrypt.c</c>
+        <h>CAESAR/LakeKeyak/api.h</h>
+    </fragment>
+
+    <target name="crypto_aead/lakekeyakv1/ref" inherits="LakeKeyakReferenceCAESAR"/>
+
+    <target name="LakeKeyakReferenceCAESARTest" inherits="LakeKeyakReferenceCAESAR crypto_aead_test">
+        <c>CAESAR/LakeKeyak/selftest.c</c>
+    </target>
+
+    <!-- Sea Keyak -->
+
+    <fragment name="parallel">
+        <h>Constructions/KeccakParallelDuplex.h</h>
+        <c>Constructions/KeccakParallelDuplex.c</c>
+    </fragment>
+
+    <fragment name="serial_fallback" inherits="parallel">
+        <c>PlSnP/SerialFallback/SerialFallback.c</c>
+	<h>PlSnP/SerialFallback/PlSnP-interface.h</h>
+        <c>PlSnP/PlSnP-FBWL-default.c</c>
+        <h>PlSnP/PlSnP-FBWL-default.h</h>
+    </fragment>
+
+    <fragment name="parallel_tests" inherits="parallel">
+        <c>Tests/testPlSnP.c</c>
+        <h>Tests/testPlSnP.h</h>
+    </fragment>
+
+    <fragment name="reference_sea" inherits="width1600rounds12_reference serial_fallback parallel_tests P2"/>
+
+    <target name="SeaKeyakReference" inherits="keyak_tests reference_sea"/>
+
+    <fragment name="SeaKeyakReferenceCAESAR" inherits="keyak reference_sea">
+        <c>CAESAR/SeaKeyak/encrypt.c</c>
+        <h>CAESAR/SeaKeyak/api.h</h>
+    </fragment>
+
+    <target name="crypto_aead/seakeyakv1/ref" inherits="SeaKeyakReferenceCAESAR"/>
+
+    <target name="SeaKeyakReferenceCAESARTest" inherits="SeaKeyakReferenceCAESAR crypto_aead_test">
+        <c>CAESAR/SeaKeyak/selftest.c</c>
+    </target>
+
+    <!-- Ocean Keyak -->
+
+    <fragment name="reference_ocean" inherits="width1600rounds12_reference serial_fallback parallel_tests P4" />
+
+    <target name="OceanKeyakReference" inherits="keyak_tests reference_ocean"/>
+
+    <fragment name="OceanKeyakReferenceCAESAR" inherits="keyak reference_ocean">
+        <c>CAESAR/OceanKeyak/encrypt.c</c>
+        <h>CAESAR/OceanKeyak/api.h</h>
+    </fragment>
+
+    <target name="crypto_aead/oceankeyakv1/ref" inherits="OceanKeyakReferenceCAESAR"/>
+
+    <target name="OceanKeyakReferenceCAESARTest" inherits="OceanKeyakReferenceCAESAR crypto_aead_test">
+        <c>CAESAR/OceanKeyak/selftest.c</c>
+    </target>
 
     <!-- Ketje -->
 
