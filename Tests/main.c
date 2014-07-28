@@ -22,11 +22,18 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if !(defined(Ketje))
 #include "genKAT.h"
 #include "testDuplex.h"
-#include "testSnP.h"
 #include "testSponge.h"
+#ifndef KeccakReference
 #include "timing.h"
+#endif
+#endif
+
+#ifdef Ketje
+#include "testKetje.h"
+#endif
 
 #ifdef KeccakReference
 #include "displayIntermediateValues.h"
@@ -267,7 +274,14 @@ void displayDuplexIntermediateValues(void)
 #endif /* KeccakF_width == 1600 */
 #endif /* defined KeccakReference */
 
-int main(void)
+#if defined(Ketje)
+int main()
+{
+    testSnP();
+    testKetje();
+}
+#else
+int main()
 {
     testSnP();
     testSponge();
@@ -283,3 +297,4 @@ int main(void)
 #endif
     return genKAT_main();
 }
+#endif

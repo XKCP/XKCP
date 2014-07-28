@@ -139,6 +139,7 @@ void testSnP(void)
     }
     SnP_Permute(stateTest);
 
+#ifndef Ketje
     // Testing SnP_FBWL_Absorb()
     {
         unsigned char buffer[SnP_laneLengthInBytes*100+10+8];
@@ -238,6 +239,18 @@ void testSnP(void)
         }
         accumulateState(stateAccumulated, stateTest);
     }
+#endif
+#if defined(Ketje)
+    // Testing KeccakP_StatePermute()
+	{
+        unsigned int nr;
+
+		for(nr=1; nr <= SnP_maxRounds; nr++) {
+			SnP_PermuteRounds(stateTest, nr);
+            accumulateState(stateAccumulated, stateTest);
+        }
+	}
+#endif
 
 #ifdef OUTPUT
     // Outputting the result
@@ -248,10 +261,18 @@ void testSnP(void)
         char fileName[100];
     
         SnP_ExtractBytes(stateAccumulated, buffer, 0, SnP_width/8);
+#if defined(Ketje)
+        sprintf(fileName, "SnP/KeccakP-%d.txt", SnP_width);
+#else
         sprintf(fileName, "SnP/KeccakF-%d.txt", SnP_width);
+#endif
         f = fopen(fileName, "w");
         assert(f != NULL);
+#if defined(Ketje)
+        fprintf(f, "Testing SnP with Keccak-p[%d, nr 1 to %d]: ", SnP_width, MaxRound);
+#else
         fprintf(f, "Testing SnP with Keccak-f[%d]: ", SnP_width);
+#endif
         fprintf(f, "\"");
         for(i=0; i<SnP_width/8; i++)
             fprintf(f, "\\x%02x", buffer[i]);
@@ -273,6 +294,12 @@ void testSnP(void)
 #endif
 #ifdef KeccakF_200
             "\x5b\x6c\x69\xea\x3a\xea\xeb\x71\xb4\xc7\xaa\x66\xa9\x31\x65\xc8\x30\xb2\xa8\x86\x6c\x1e\xd2\x53\x32";
+#endif
+#ifdef KeccakP_400
+            "\xf8\x5e\xae\x44\xcd\x42\x09\xec\x2f\xb0\x32\x29\xcf\xd7\x23\x12\x04\x76\xb2\x7b\x7b\xe2\xc5\x38\x4d\xcf\x57\xe8\x84\x62\xbb\x56\xc2\x74\x6e\x08\x17\x3c\x16\x31\xb9\x95\x32\xa4\x8d\xeb\x08\x8e\x93\xd5";
+#endif
+#ifdef KeccakP_200
+            "\xa4\x79\x05\xc3\xa1\xcf\x6a\x0f\xd0\x8a\xef\xcb\x74\x85\x63\x5e\xb0\x1a\x79\xde\xb1\xda\xe3\xad\x73";
 #endif
         unsigned char buffer[SnP_width/8];
         SnP_ExtractBytes(stateAccumulated, buffer, 0, SnP_width/8);

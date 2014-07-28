@@ -203,4 +203,77 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <target name="KeccakWidth200Reference" inherits="keccak reference200"/>
 
+    <fragment name="crypto_aead_test">
+        <h>CAESAR/test_crypto_aead.h</h>
+        <c>CAESAR/test_crypto_aead.c</c>
+    </fragment>
+
+    <!-- Ketje -->
+
+    <fragment name="ketje" inherits="common">
+        <h>Ketje/Ket/Reference/Ket.h</h>
+        <h>Ketje/Ketje.h</h>
+        <c>Ketje/Ket/Reference/Ket.c</c>
+        <c>Ketje/Ketje.c</c>
+    </fragment>
+
+    <fragment name="ketje_tests" inherits="ketje">
+        <h>Tests/testSnP.h</h>
+        <c>Tests/main.c</c>
+        <h>Tests/testKetje.h</h>
+        <c>Tests/testKetje.c</c>
+        <c>Tests/testSnP.c</c>
+        <define>Ketje</define>
+    </fragment>
+
+    <!-- KetjeJr -->
+
+    <fragment name="keccakP200reference" inherits="common">
+        <h>KeccakP-200/KeccakP-200-interface.h</h>
+        <c>KeccakP-200/Reference/KeccakP-200-reference.c</c>
+        <h>KeccakP-200/Reference/SnP-interface.h</h>
+        <h>KeccakF-200/KeccakF-200-interface.h</h>
+        <c>KeccakF-200/Reference/KeccakF-200-reference.c</c>
+        <c>Tests/displayIntermediateValues.c</c>
+        <h>Tests/displayIntermediateValues.h</h>
+    </fragment>
+
+    <target name="KetjeJrReference" inherits="ketje_tests keccakP200reference"/>
+
+    <fragment name="KetjeJrReferenceCAESAR" inherits="ketje keccakP200reference">
+        <c>CAESAR/KetjeJr/encrypt.c</c>
+        <h>CAESAR/KetjeJr/api.h</h>
+    </fragment>
+
+    <target name="crypto_aead/ketjejrv1/ref" inherits="KetjeJrReferenceCAESAR"/>
+
+    <target name="KetjeJrReferenceCAESARTest" inherits="KetjeJrReferenceCAESAR crypto_aead_test">
+        <c>CAESAR/KetjeJr/selftest.c</c>
+    </target>
+
+    <!-- KetjeSr -->
+
+    <fragment name="keccakP400reference" inherits="common">
+        <h>KeccakP-400/KeccakP-400-interface.h</h>
+        <c>KeccakP-400/Reference/KeccakP-400-reference.c</c>
+        <h>KeccakP-400/Reference/SnP-interface.h</h>
+        <h>KeccakF-400/KeccakF-400-interface.h</h>
+        <c>KeccakF-400/Reference/KeccakF-400-reference.c</c>
+        <c>Tests/displayIntermediateValues.c</c>
+        <h>Tests/displayIntermediateValues.h</h>
+    </fragment>
+
+    <target name="KetjeSrReference" inherits="ketje_tests keccakP400reference"/>
+
+    <fragment name="KetjeSrReferenceCAESAR" inherits="ketje keccakP400reference">
+        <c>CAESAR/KetjeSr/encrypt.c</c>
+        <h>CAESAR/KetjeSr/api.h</h>
+    </fragment>
+
+    <target name="crypto_aead/ketjesrv1/ref" inherits="KetjeSrReferenceCAESAR"/>
+
+    <target name="KetjeSrReferenceCAESARTest" inherits="KetjeSrReferenceCAESAR crypto_aead_test">
+        <c>CAESAR/KetjeSr/selftest.c</c>
+    </target>
+
 </build>

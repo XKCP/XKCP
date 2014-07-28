@@ -1,0 +1,1016 @@
+***
+initialize with key of 382 bits, nonce of 0 bits:
+key: c3 d5 e7 f9 0c 1e 30 42 54 66 78 8a 9c ae c0 d2 e4 f6 09 1b 2d 3f 51 63 75 87 99 ab bd cf e1 f3 06 18 2a 3c 4e 60 72 84 96 a8 ba cc de f0 03 15
+nonce:
+
+associated data:
+plaintext:
+ciphertext:
+tag: 61 c6 3f d7 0a cc 11 78 36 90 04 27 04 aa 78 2f
+
+associated data:
+plaintext: 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87
+ciphertext: 41 46 e8 2f ce bc b9 57 3f 5b 9f f8 86 b0 05 0c ab 96 cd bb f5 2b 58 65 7f a8 ba d3 5c 60 16 83 02 4e 57 2e bd 99 e3 a9 79 fa d3 4a d0 31 75 ee ae 36 78 f7 e2 61 9c 61 25 f0 5b 4d dd c2 1a c0 99 87 87 e6 32 fc 9a c4 38 27 c9 24 8b de 70 a5 f7 75 13 fc 72 26 07 a6 52 08 dd fd e9 fa 42 1c 19 78 db 29 82 48 d3 5e 8c 4c fe 56 c3 9d 62 c7 38 98 7f 30 6f 90 ac 0c fd dc 57 6a ac 49 d6 41 6b 57 67 3d 45 86 9d 46 ee c5 37 1b f1 fd b4 12 32 0a 6b 74 aa 50 59 7d 31 80 39 89 d1 f5 8d 55 89 a1 1f 17 46 78 52 1c 14 92 45 58 8a 92 83 8d 7e 9a 63 24 6d 3b c7 09 fb 92 49 55 89 c3 e7 85 d1 1f 56 10 82 cf f1 01 fd 60 8f f8 1f fd f7 eb 95 62 02 df 54 81 ae f4 11 52 20 06 1e 84 fe e6 e5 44 99 39 63 59 40 72 40 34 91 d7 0d 9f 37 84 3d 2b d2 be c8 fa 1d cb 1b d9 f8 f0 c0 ca 8f 16 15 dd 4f 92 43 55 2d 25 db b8 e2 25 79 8c 68 99 5e ce 1b c5 21 02 8f 95 36 0b b1 77 7f 18 cf
+tag: 6c 5b 6e 7b d4 2a 47 9c 6c 70 54 7c bc 18 93 05
+
+associated data: 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75
+plaintext:
+ciphertext:
+tag: 29 97 c9 81 42 a7 79 6e ab 7f 78 f3 5f 93 d8 dc
+
+***
+initialize with key of 282 bits, nonce of 100 bits:
+key: c3 3a b0 27 9d 14 8a 01 77 ed 64 da 51 c7 3e b4 2b a1 18 8e 05 7b f1 68 de 55 cb 42 b8 2f a5 1c 92 09 7f 01
+nonce: c3 01 3e 7b b8 f5 33 70 ad ea 28 65 02
+
+associated data:
+plaintext:
+ciphertext:
+tag: 47 47 66 f6 4e 80 bb eb 97 79 33 74 c3 9f 19 2c
+
+associated data:
+plaintext: bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14
+ciphertext: aa f9 0d 56 21 dc 74 34 60 f9 3b ad 9f 22 4b 4b 34 bd 2a 02 70 78 52 43 a6 87 c0 ef 66 5c e8 f9 96 45 a7 1a 57 9c ca e8 40 8a 22 77 86 ba 6d 6f ba 34 14 e0 e8 7f 80 4f a4 70 74 48 1a e9 ff 31 0f 7d b9 e4 de 0c f7 8a 23 99 9b a0 dc 6a e5 bc 35 47 c8 cf a8 5e b5 cb a5 b1 a1 3d 6d d7 a1 5b 26 24 39 2e 33 7f b3 4a 19 41 f3 9e 74 7d 78 5e 89 b7 7d 96 e0 d2 88 c4 29 5f 74 c4 55 ba 0e 4d 39 1a 0c 67 a2 dd d7 0b bf f5 51 44 97 0d 80 a1 25 5e b9 d3 e6 dd 0a cd 81 aa b1 14 4b fb 73 5d 1d 0a 0b 47 e5 f8 3b d2 a8 8d 20 c5 03 5b d1 44 93 c5 16 c5 d8 ef 7a 01 1f d6 44
+tag: 85 66 06 b5 12 7b 46 12 7f 04 15 e2 28 73 bf c3
+
+associated data: c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c
+plaintext:
+ciphertext:
+tag: 2f a4 3b 84 43 5a 76 60 d4 f1 e4 9c 4e e3 88 eb
+
+associated data: c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28 c1 5b f4 8e 28
+plaintext: 6a 6d 70 73 76 79 7c 7f 82 85 88 8b 8e 91 94 97 9a 9d a0 a3 a6 a9 ac af b2 b5 b8 bb be c1 c4 c7 ca cd d0 d3 d6 d9 dc df e2 e5 e8 eb ee f1 f4 f7 fa fd 01 04 07 0a 0d 10 13 16 19 1c 1f 22 25 28 2b 2e 31 34 37 3a 3d 40 43 46 49 4c 4f 52 55 58 5b 5e 61 64 67 6a 6d 70 73 76 79 7c 7f 82 85 88 8b 8e 91 94 97 9a 9d a0 a3 a6 a9 ac af b2 b5 b8 bb be c1 c4 c7 ca cd d0 d3 d6 d9 dc df e2 e5 e8 eb ee f1 f4 f7 fa fd 01 04 07 0a 0d 10 13 16 19 1c 1f 22 25 28 2b 2e 31 34 37 3a 3d 40 43 46 49 4c 4f 52 55 58 5b 5e 61 64 67 6a 6d 70 73 76 79 7c 7f 82 85 88 8b 8e 91 94 97 9a 9d a0 a3 a6 a9 ac af b2 b5 b8 bb be c1 c4 c7 ca cd d0 d3 d6 d9 dc df e2 e5 e8 eb ee f1 f4 f7 fa fd 01 04 07 0a 0d 10 13 16 19 1c 1f 22 25 28 2b 2e 31 34 37 3a 3d 40 43 46 49 4c 4f 52 55 58 5b 5e 61 64 67 6a 6d 70 73 76 79 7c 7f 82 85 88 8b 8e 91 94 97 9a 9d a0 a3 a6 a9 ac af b2 b5 b8 bb be c1 c4 c7 ca cd d0 d3 d6 d9 dc df e2 e5 e8 eb ee f1 f4 f7 fa fd 01 04 07 0a 0d 10 13 16 19 1c 1f 22 25 28 2b 2e 31 34 37 3a 3d 40 43 46 49 4c 4f 52 55 58 5b 5e 61 64 67 6a 6d 70 73 76 79 7c 7f 82 85 88 8b 8e 91 94 97 9a
+ciphertext: f5 22 a8 f3 25 2f a8 23 39 32 7e 9c f4 f5 95 93 97 15 40 99 42 6a 55 21 b0 98 1b 4a aa 9f c2 eb 9e 58 18 cb 73 d9 95 af 86 74 4c 80 5f 1e 31 2b 96 1a 53 55 55 33 2e bc 8d bb ba 25 5b 8b 83 e3 05 28 e7 d2 17 93 e1 96 2d 28 ee 86 8d cf 61 a3 87 06 a6 6f 2e 67 c5 ef 26 e3 66 d5 03 e6 7d 43 72 d2 09 2f 86 ef c3 5b 21 81 ee 33 1a 80 66 4d e3 c1 eb 7e a5 0d b9 5a b1 ef 35 81 75 35 ce 5d 30 27 40 7f 72 5e 52 d1 76 56 2c 2d b1 1f ba 8d 49 df 4b 86 01 6f 86 5e f2 79 e0 fd 6f a3 38 2d 71 de 5d eb f5 90 d9 a9 b2 2d 25 3f 9c 13 7f 1f fd f5 59 ca e9 8b 21 67 8b e3 6a 48 ce e4 b5 d3 f9 ea f7 89 b9 88 a7 8a f6 92 8e fd 89 40 f9 b4 73 21 59 ad 78 37 87 a9 31 7a ad bf 6e 4e c4 ee 2f a6 81 c0 dd 9e 37 0c b5 31 49 cc 22 33 05 c5 81 d7 7f 60 7a 19 05 8e 42 d7 fc 5b b5 6e 8d 22 9b c0 57 e8 07 ed d9 fe da 16 d8 5f 78 57 5e 87 6c 40 20 80 66 f9 ec 1c 8d 3b 13 a6 8c 47 8a 52 75 85 1c 11 b3 07 60 de b7 6e 4c a3 96 2a 34 1c 8a e0 0d ec 57 32 87 da eb 8d d5 dc 0f 5c 1b 80 8d fa 1e 90 05 b5 8f 7a 23 91 ac 8d d6 3d 74 8e 03 35 4a 85 a2 0a a6 95 ad a3 fd 43 93 4f 25 1c a6 39 47 e0 cd
+tag: 88 a9 f9 11 9c e6 a1 3f 52 f9 eb 69 96 a3 3d 0b
+
+***
+initialize with key of 182 bits, nonce of 200 bits:
+key: c3 9e 79 54 2f 0a e4 bf 9a 75 50 2b 06 e0 bb 96 71 4c 27 02 dc b7 12
+nonce: c3 9d 77 51 2b 05 de b8 92 6c 46 20 f9 d3 ad 87 61 3b 15 ee c8 a2 7c 56 30
+
+associated data:
+plaintext:
+ciphertext:
+tag: 40 b7 5a 8c c9 af 6b b9 da 2d fd ff 53 16 39 60
+
+associated data:
+plaintext: 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0
+ciphertext: 17 c8 49 a4 47 b4 74 df e4 4b 2f d9 ad 4e cd 8d 45 49 a8 5c eb a8 82 e1 b5 14 5f 4b b0 68 c6 59 f6 70 47 87 32 3d a0 52 df 29 d0 de a6 ba 74 2d a7 ce d3 14 9f 57 fe 96 d6 cd be 10 73 31 ce 9d 7b 7e 41 88 3d f4 d4 c5 30 9b 5a a6 ee 57 83 5c 0e 91 01 91 89 45 aa
+tag: c4 90 ec 6a 50 9c 0f 88 18 5c b5 1e 59 3a ef 11
+
+associated data:
+plaintext: dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50
+ciphertext: fb ed 1e c2 2b 10 f2 10 cd c2 77 f2 7c 41 58 b8 2c 5f 13 0b ca 05 36 bc 48 06 8e 9d 64 9a 35 89 0c 14 7f 86 34 e9 d7 f0 6e 43 9d 4e 47 c1 95 20 20 bd 36 89 a0 3e 91 6d aa 3a ed da 12 7f f7 11 a1 50 07 24 7b 2f c7 93 18 19 18 8f 25 46 3d a2 f7 8b f4 0e 05 fb ff 93 37 e1 1d 00 fc c4 79 51 c9 3b 4f de f8 23 13 7e 2f 9b 77 c4 06 9f be 4c 8c e3 c8 e1 18 2f e3 98 4b 88 af 21 ca f2 08 44 c7 07 fd cf d8 00 8d 53 b8 b5 c9 d8 e6 21 1d 47 bc 19 f9 b0 07 65 8b 65 10 82 20 b8 5e c0 fa 91 a1 56 85 69 5c 1c c0 8f 5c e7 e7 87 16 e8 bc 32 08 24 94 f0 44 03 5d 9d 4e 05 d1 24 7e 0e 2e 8c 26 06 28 9b 5a db e4 93 8e 49 a7 fb 88 62 07 3d 2a ad 10 45 20 8a fa 90 c4
+tag: 22 4c a0 4d eb 9e bd c7 0d 94 25 bb 17 e3 f0 93
+
+associated data: 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23
+plaintext:
+ciphertext:
+tag: 92 83 06 a9 02 96 a9 bb 76 93 aa ac 24 4a 6b 92
+
+associated data: 60 7f 9e bd dc fb 1b 3a 59 78 97 b6 d5 f4 14 33 52 71 90 af ce ed 0d 2c 4b 6a 89 a8 c7 e6 06 25 44 63 82 a1 c0 df fe 1e 3d 5c 7b 9a b9 d8 f7 17 36 55 74 93 b2 d1 f0 10 2f 4e 6d 8c ab ca e9 09 28 47 66 85 a4 c3 e2 02 21 40 5f 7e 9d bc db fa 1a 39 58 77 96 b5 d4 f3 13 32 51 70 8f
+plaintext: ef 92 35 d7 7a 1d bf 62 05 a7 4a ec 8f 32 d4 77 1a bc 5f 02 a4 47 e9 8c 2f d1 74 17 b9 5c fe a1 44 e6 89 2c ce 71 14 b6 59 fb 9e 41 e3 86 29 cb 6e 11 b3 56 f8 9b 3e e0 83 26 c8 6b 0e b0 53 f5 98 3b dd 80 23 c5 68 0b ad 50 f2 95 38 da 7d 20 c2 65 08 aa 4d ef 92 35 d7 7a 1d bf 62 05 a7 4a ec 8f 32 d4 77 1a bc 5f 02 a4 47 e9 8c 2f d1 74 17 b9 5c fe a1 44 e6 89 2c ce 71 14 b6 59 fb 9e 41 e3 86 29 cb 6e 11 b3 56 f8 9b 3e e0 83 26 c8 6b 0e b0 53 f5 98 3b dd 80 23 c5 68 0b ad 50 f2 95 38 da 7d 20 c2 65 08 aa 4d ef 92 35 d7 7a 1d bf 62 05 a7 4a ec 8f 32 d4 77 1a bc 5f 02 a4 47 e9 8c 2f d1 74 17 b9 5c fe a1 44 e6 89 2c ce 71 14 b6 59 fb 9e 41 e3 86 29 cb 6e 11 b3 56 f8 9b 3e e0 83 26 c8 6b 0e b0 53 f5 98
+ciphertext: 5a 10 6d dc 36 23 b8 1d 62 74 f8 ca ef 97 dc 56 e2 1d a4 ea 65 e4 49 a6 bc b5 ff 58 e2 bb 32 91 26 a4 38 30 69 a0 0e c1 0a 29 d8 28 9d d8 7e c4 8a df e3 35 c2 ad 44 dd 7e d3 bb cd d1 e7 a7 79 47 c1 0d d4 fc ae 50 d9 9e ef 68 b6 f5 9a c4 81 cc c5 c2 ef 91 c6 1b 45 8b 08 89 2d b8 af 2b 0e 23 d0 1b b7 f4 6d 5b cc a7 dc 2f e7 8f 4c be c8 e0 75 e6 66 f2 af 74 b6 b6 e5 d1 bc bd 62 1c d1 4c 9d fd 8d 52 0d 56 28 e0 22 e4 0d b0 85 73 af 35 ff f8 7a 4a a9 58 c6 49 1a 51 5a e5 fc 67 73 f8 c9 36 26 22 77 71 6b f9 be c0 ee fd ed 5a f6 43 35 c1 c7 fd d7 95 32 88 7e fe a2 4a 80 12 68 59 b2 13 f0 ca 24 38 ad 39 cb 74 ab 3e ef 69 9b c0 c1 73 88 cd 22 ac 0f 24 10 66 07 8f b0 79 83 bd 9f 39 14 dc b4 3d 70 ce 84 5f
+tag: 9d 06 c9 61 63 40 75 fb 98 f2 ef f5 cd 9c f9 a7
+
+associated data: dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8
+plaintext:
+ciphertext:
+tag: de 24 fb fb 03 d2 be d7 00 b2 8c c8 4f 8a 35 36
+
+associated data: dc 78 14 af 4b e6 82 1e b9 55 f0 8c 28 c3 5f fa 96 32 cd 69 05 a0 3c d7 73 0f aa 46 e1 7d 19 b4 50 eb 87 23 be 5a f5 91 2d c8 64 00 9b 37 d2 6e 0a a5 41 dc 78 14 af 4b e6 82 1e b9 55 f0 8c 28 c3 5f fa 96 32 cd 69 05 a0 3c d7 73 0f aa 46 e1 7d 19 b4 50 eb 87 23 be 5a f5 91 2d c8 64 00 9b 37 d2 6e 0a a5 41 dc 78 14 af 4b e6 82 1e b9 55 f0 8c 28 c3 5f fa 96 32 cd 69 05 a0 3c d7 73 0f aa 46 e1 7d 19 b4 50 eb 87 23 be 5a f5 91 2d c8 64 00 9b 37 d2 6e 0a a5 41 dc 78 14 af 4b e6 82 1e b9 55 f0 8c 28 c3 5f fa 96 32 cd 69 05 a0 3c d7 73 0f aa 46 e1 7d 19 b4 50 eb 87 23 be 5a f5 91 2d c8 64 00 9b 37 d2 6e 0a a5 41 dc 78 14 af 4b e6 82 1e b9 55 f0 8c 28
+plaintext: 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a a8 c6 e4 03 21 3f 5d 7b 99 b7 d5 f3 12 30 4e 6c 8a
+ciphertext: 11 6d c4 ee 79 5f 11 d6 72 bd ea d5 31 3d d4 72 e6 2a ed 30 1f f4 c5 bb d7 e4 83 f2 fa 85 f2 8b 66 dc f1 d0 3c 8d 94 52 66 e6 fd 84 36 d6 8b 5f ac 2b dd ce 69 90 a5 48 99 cd 27 09 19 c2 80 8f 35 82 5c 37 af 83 de 11 ff dc c6 a9 55 1b 6d 2b 33 13 22 1c d0 a4 0d 3c 57 de 03 f6 6f 87 02 1f 89 d7 50 75 a1 7f 59 d7 6f 80 5d 5d d7 f5 49 5e 85 c7 42 ad a4 0a 85 d5 8b 4c f6 7d 77 7a 02 5c bf 30 9e e2 52 15 42 e2 99 90 84 a2 2b c2 ca 8f ba d0 52 a3 9a f7 d1 e7 c2 e2 2d 74 a8 08 6e 80 b7 15 80 97 1b e6 2e a5 c0 30 4d 89 62 95 11 3d 60 d3 b3 b1 5e a6 00 18 5d bd 29 e4 35 05 f3 ac 67 e6 98 a6 dc 9d a9 4e 04 e6 b1 b1 29 94 92 8e 60 75 09 6d 4f 94 26 58 4c 32 b1 0b be 06 43 e4 35 71 eb 2f d8 65 0b bd de b3 34 14 67 f0 19 7a 10 6c 6d 68 37 17 87 29 bd 00 bb 01 93 de ae 9f fb 96 c3 d6 e8 56 de a3 2b 34 4f a2 6a 37 e0 34 ad 06 91 75 03 c9 63 e5 df 35 1d 0a 46 11 6f 7a c1 a1 a8 d5 f3 30 16 8b 5e 90 7f e7 c7 a8 af 8b c6 5e 49 e1 e1 f2 fc fb 31 cd 33 7c ca 11 d7 be ff b5 24 e1 12 a8 a0 f4 42 f0 63 83 2f 31 4a a7 44 82 40 9b dc 24 79 0d e0 9d 11 8a c6 07 8d f6 5d ce 66 e2 b1 25 86
+tag: 03 68 30 ac df cc 20 f3 d4 94 7f 49 8e d0 5a 01
+
+associated data: 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34
+plaintext:
+ciphertext:
+tag: fb 51 5a c3 a8 d8 c4 89 3c 09 cc 04 a3 85 69 1f
+
+***
+initialize with key of 155 bits, nonce of 227 bits:
+key: c3 b9 af a5 9b 91 87 7d 73 69 5f 55 4b 41 37 2d 23 19 0f 05
+nonce: c3 82 41 00 be 7d 3c fa b9 78 37 f5 b4 73 32 f0 af 6e 2d eb aa 69 28 e6 a5 64 23 e1 00
+
+associated data:
+plaintext:
+ciphertext:
+tag: 50 6a b6 bc 7d be ed b6 ce ce 08 bf 25 5f 21 05
+
+associated data:
+plaintext: 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37
+ciphertext: 36 b5 45 74 7b a0 45 70 65 8a 26 1c a7 5a 2c ed cc 31 e9 79 04 25 1f 22 06 32 d1 3e 33 19 b5 26 06 b9 a1 ea 65 17 cc d2 ab 3a af 96 1b 93 81 75 82 9b 4b bb 9b e4 04 8d 74 61 bc ce
+tag: 20 b8 a9 d0 bf 54 19 8d ba 95 7c bc 65 99 9a a1
+
+associated data:
+plaintext: 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb
+ciphertext: 7e a3 ed f0 53 39 2e ff 7d 60 15 e1 cb b5 c1 01 70 9f 6f b4 63 56 01 c4 7b c6 81 7d 67 a0 28 f2 eb 9d a1 86 18 7a fc bd 13 56 9b 90 6f 26 e2 d7 62 87 19 39 6d 7c 12 fa ef 9d cc 68 c6 a2 ec e0 32 c5 3d 9b a4 ea cf a9 d5 0f 1a f9 3f 9c a0 69 a5 f7 2a 62 3e d5 59 b9 51 f2 e1 9c 53 ca f1 1b 3b 01 40 82 4a e2 44 bb f4 63 3a 0e 2c d7 33 f8 50 4a 1c ba c3 b5 49 29 91 27 76 7f 35 87 5b 2c d5 34 66 9e 67 b6 8b 2b 87 e1 26 55 88 d3 62 d8 d9 36 05 13 9b f9
+tag: 9a 6d 7c fc 84 e6 8a 38 5d ff 17 1d cd ad 0d 01
+
+associated data:
+plaintext: 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa
+ciphertext: a8 a7 72 80 77 e1 6f 17 94 b1 a7 63 d2 38 30 02 f3 e2 e0 fc fa b7 bf d6 88 9b 27 b3 5c 0b 72 1a 6f 2b 02 d4 59 7e b0 ae fc 47 7a 77 5f 57 90 0a d9 cd 3a ed fb ed ab fd 5f cb 1e 68 0d da 0c 5c 11 be 23 9c 35 94 e9 48 13 d4 0e 50 a8 0f d9 e4 f0 9a f3 bc e4 16 b9 3a 9e 45 06 82 b2 3c 2f cb 8f 48 d6 2f 08 0e 3c 14 7b ad f6 5b ce d5 af d6 31 d0 2d 6f a5 a1 41 7f 97 9e d5 f9 c2 69 56 1b 8a 6c fd 04 46 6b 50 bd b2 20 85 88 52 40 85 4a 93 1a 4b 69 d7 4e f0 df fd 32 47 3d a1 b3 62 9b 55 e6 b4 4d 6f 80 d6 59 60 4f dc 9a 60 bb 50 71 5c 76 c4 29 e3 c6 0f 54 85 e6 1a 25 60 e4 41 21 9f 8f 07 b6 ef 0c f9 cf 83 c1 b5 31 16 9a 79 55 ea 16 ba d0 1c 8c 8b a2 45 e6 49 99 80 8f 4b 00 c4 51 af 33 b7 55 e2 e8 9d ac f3 d5 2b e3 cb c0 dd 15 20 31 2e 96 98 6c f0 bc f1 ca a6 56 c9 33 0f 43 13 fc 42 0f 02 ac ed 25 d6 20 e5 af 10 ac 09 71 5e f9 15 0b 6c 21 4f 4f ef f4 99
+tag: 6d be 3a a3 8f e1 0c 90 07 41 0b 11 7c 3c e7 ed
+
+associated data: 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb
+plaintext:
+ciphertext:
+tag: 17 68 bf b0 81 f6 f7 29 1f 0a d8 30 16 3d 97 bc
+
+associated data: 46 44 42 40 3e 3c 3a 38 36 34 32 30 2e 2c 2a 28 26 24 22 20 1e 1c 1a 18 16 14 12 10 0e 0c 0a 08 06 04 02 00 fd fb f9 f7 f5 f3 f1 ef ed eb e9 e7 e5 e3 e1 df dd db d9 d7 d5 d3 d1 cf cd cb c9 c7 c5 c3 c1
+plaintext: cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78 01 89 12 9a 23 ab 34 bc 45 cd 56 de 67 ef 78
+ciphertext: 31 42 f2 76 dc 00 bc d7 3c fb d4 cf 49 4d 96 95 0c 81 f8 8b b2 11 39 32 41 d7 64 a9 3d 1a d2 c1 67 d3 61 60 8b 4c 7b df 80 b1 74 42 59 a4 1c 58 df c2 37 01 56 60 a1 93 ad 42 fd b8 8c 06 64 dd 98 a4 1f ea 61 ff 9d 4a fb 06 fb 47 72 38 fe e3 b7 2e f8 ae c2 0c 3f b7 1f 47 1b ca d6 14 c2 1f b7 65 8d 04 bd 42 19 f3 86 19 47 aa 0b 65 61 a8 b9 f3 70 11 26 59 eb ed 2d dc ef f8 52 d2 e9 c1 9a 71 19 49 71 e7 d3 bd b8 38 3e ae c9 da 3a 46 7e 4c 72 80 d8 32 fe 50 b1 ce 34 dd 05 32 33 eb bf 0c 82 7e dc bd 7a ed ee 8c 73 78 2f a2 f9 36 c5 f8 4b d6 e9 f8 aa 2e 29 81 fa ce fc 21 18 fe 19 52 e8 d6 b8 a4 e0 68 ec
+tag: 5d 78 00 3c 2c ca 3e e6 50 7a 99 13 94 94 52 89
+
+associated data: 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b
+plaintext:
+ciphertext:
+tag: 79 ba a1 96 bb 86 ad 76 80 65 94 38 94 21 3b 1c
+
+associated data: 9f f5 4c a2 f8 4f a5 fb 52 a8 fe 55 ab 02 58 ae 05 5b b1 08 5e b4 0b 61 b7 0e 64 ba 11 67 bd 14 6a c0 17 6d c3 1a 70 c6 1d 73 c9 20 76 cc 23 79 cf 26 7c d2 29 7f d5 2c 82 d8 2f 85 db 32 88 de 35 8b e1 38 8e e4 3b 91 e7 3e 94 ea 41 97 ed 44 9a f0 47 9d f3 4a a0 f6 4d a3 f9 50 a6 fc 53 a9 00 56 ac 03 59 af 06 5c b2 09 5f b5 0c 62 b8 0f 65 bb 12 68 be 15 6b c1 18 6e c4 1b 71 c7 1e 74 ca 21 77 cd 24 7a d0 27 7d d3 2a 80 d6 2d 83 d9 30 86 dc 33 89 df 36 8c e2 39 8f e5
+plaintext: 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27 09 ea cc ae 90 72 54 36 18 f9 db bd 9f 81 63 45 27
+ciphertext: c7 e4 1c ee 4d f4 7d 06 30 5e 0e f2 bb 75 76 6c 86 bd 65 e3 f3 f0 a7 9f 59 d7 0e 00 40 10 6a e6 55 42 af 35 3d 7c 29 37 4c 9f e8 62 fe e4 8c 78 47 ff d4 b5 f1 89 60 97 6a 5e 38 6e 0d f7 ab 58 3c 2c d0 74 af 7f 6a 39 44 23 d0 98 19 c7 f1 b2 f2 37 bc fa 95 90 c9 69 5c 2f b7 b5 0d f4 42 7a 56 5f 38 87 3e 41 17 73 79 01 ac ad f6 99 3a f9 5e 51 50 03 14 e6 64 72 e1 26 70 ca 46 64 bb 35 2c 8d 73 be c6 22 0c 97 57 d3 fa c3 79 f5 3a ae 3e 50 fd 55 34 b8 80 15 60 29 4c 3e 22 da 0a 70 d4 d2 51 a4 de 31 a3 d0 74 09 c5 05 05 37 0d 0f f0 db 97 b8 9f 72 cb df 27 80 c2 28 79 8c 74 ba bb 26 95 29 64 e4 50 3c 66 b5 fe a3 95 50 94 ec 23 7f d4 78 09 ce 6e 8f 71 4a 52 90 ec c3 12 36 4d 9f 77 7f e8 86 53 5e 3b cf eb 16 0e d1 a7 c5 45 14 f2 2a be 19 a0 b9 1e 63 7e a4 f2 47 d3 b8 4d d5 f0 d6 40 d9 3b 68 51 c3 4e fb 7b 34 e4 e6 82 a1 a2 97 30 f1 86 bd 79 ef fa 4a 59 db e9 2f 53 ed
+tag: 73 f4 d7 44 7c f9 e1 a5 9e 76 16 09 9e 26 5e f6
+
+associated data: 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6
+plaintext:
+ciphertext:
+tag: 97 b1 9e 02 21 42 53 ef 67 08 2a c2 06 4e ea 5f
+
+***
+initialize with key of 128 bits, nonce of 254 bits:
+key: c3 d3 e3 f3 04 14 24 34 44 54 64 74 84 94 a4 b4
+nonce: c3 67 0b ae 52 f5 99 3d e0 84 28 cb 6f 13 b6 5a fd a1 45 e8 8c 30 d3 77 1b be 62 06 a9 4d f0 14
+
+associated data:
+plaintext:
+ciphertext:
+tag: d3 96 9e c1 b3 f7 27 ce 7b f7 6b 2d f1 f3 7c 77
+
+associated data:
+plaintext: 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd
+ciphertext: b0 b2 9c a1 a7 bd fb 11 89 18 38 c7 6e 9c c6 04 91 b2 0b eb d1 ec 22 6b f5 4a c1 74 ad ad 8a 1f 84
+tag: 00 5d 7e e7 07 36 dd 34 6e 3b a9 c6 6d 20 63 25
+
+associated data:
+plaintext: 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6 2c 71 b6 fb 41
+ciphertext: de b5 6a 0c 7e 8a 3f 42 24 96 3a ed 7a 2f 54 ee c7 ce 3d f1 ba ce d5 19 a0 d1 fc 01 cf bf 8c 9e 2f 2a f0 ad 66 d9 a6 3c 67 78 d2 9e c2 a5 f0 60 25 a0 bb 15 53 b3 30 0f 32 fe e7 28 51 61 8f 34 c9 d5 25 7d a9 b6 30 f0 97 2b e9 7a 91 86 ca 30 2e b9
+tag: f3 1c 82 80 86 b1 a9 5d da 2b d0 7f 27 d0 56 b3
+
+associated data:
+plaintext: a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91
+ciphertext: 44 c9 5c e4 40 3a 34 82 59 b6 ae 87 60 50 50 72 4b a8 48 bc bc 21 18 e3 05 9d eb b2 12 f0 23 1a 36 93 63 be e3 3f 76 42 90 63 20 04 84 5f cb b6 f2 53 9a c7 69 3b 82 04 1d 70 7d a8 3c 9b f6 95 6f 24 2b 9b 47 05 0e 53 f1 f2 30 6c 7f f0 b5 60 68 48 47 58 fb fe 23 6a 21 01 eb 80 da fe 61 8c bd 05 3d fb ce 45 76 a5 6a 0a 82 a5 b2 7d bc 21 3c 8a 0d e6 7e 06 bb cb 63 57 07 65 dc 64 f4 2d d3 b5 49 68 61 23 8c 76 9f 1e 78 5d 59 b1 51 78 3b 41 f7 68 88 6b f2 f7 4c 33 8b 09
+tag: dc ed b8 41 a7 2b 5d 67 cc d4 ff 36 cb 40 86 5f
+
+associated data:
+plaintext: 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a
+ciphertext: 81 49 41 24 6a c5 61 d4 ea 5f d6 ba 2f 6f 8d 2f 08 47 52 0a 1b ce b4 10 0a e6 de 9a 77 19 bd 18 51 4c 21 26 e6 1a a3 c2 a2 42 52 26 0a 37 1c 91 a8 9e 76 2e 0f 1b df f3 0b b7 94 84 06 69 21 60 2e bc 6c f2 7f b6 d0 ce 56 71 53 39 2b 62 ef 24 69 67 9b eb 1f 10 6d 87 82 1c 7f 00 39 f6 69 3f c2 33 36 ca 23 1f c7 36 4e e6 35 77 d5 02 db 31 72 ad c3 0e f6 81 0c e2 63 6b 7a b5 f2 33 c5 08 0c 8d 12 ce 10 fa 0d e2 fe 72 f5 2e 26 79 b2 07 84 00 92 c6 9a 75 d2 a3 f5 11 50 8c ec f3 3f 8e 1d 5a 4f 26 1e 18 c5 1c 0f 17 c8 83 40 01 9f 35 e1 32 0f 3e 0e 0c 3b fa fc 05 92 28 0c 41 16 2a 91 4b c0 ee f2 3d a6 58 e0 a7 8d 58 00 3a 80 cc 73 42 6b 3e a1 33 71 bc aa 53 7e 95 f3 3a 0a 39 eb eb 06 a3 ee b4 5b 07 67 62 1a 8e 5d 08 be 2f ac 7a 25 7d 78 35 25 85 ae a4 f5 cb 4e 4d 25 44 54 88 b1 1e 77 d8 51 14 23 54 c0
+tag: fa 48 04 5a 38 d1 58 2b cc d2 4c 50 21 c3 a3 fa
+
+associated data: 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f
+plaintext:
+ciphertext:
+tag: 91 a1 e1 df ac 4c db a1 05 ca 89 1c bd 60 c8 89
+
+associated data: 2b 08 e4 c1 9e 7b 58 35 12 ee cb a8 85 62 3f 1c f8 d5 b2 8f 6c 49 26 03 df bc 99 76 53 30 0d e9 c6 a3 80 5d 3a 17 f3 d0
+plaintext: ac 1a 87 f4 62 cf 3d aa 18 85 f2 60 cd 3b a8 16 83 f0 5e cb 39 a6 14 81 ee 5c c9 37 a4 12 7f ec 5a c7 35 a2 10 7d ea 58 c5 33 a0 0e 7b e8 56 c3 31 9e 0c 79 e6 54 c1 2f 9c 0a 77 e4 52 bf 2d 9a 08 75 e2 50 bd 2b 98 06 73 e0 4e bb 29 96 04 71 de 4c b9 27 94 02 6f dc 4a b7 25 92 00 6d da 48 b5 23 90 fd 6b d8 46 b3 21 8e fb 69 d6 44 b1 1f 8c f9 67 d4 42 af 1d 8a f7 65 d2 40 ad 1b 88 f5 63 d0 3e ab 19 86 f3 61 ce 3c a9 17 84 f1 5f cc 3a a7 15 82 ef 5d ca 38 a5 13 80 ed 5b c8 36 a3 11 7e eb 59 c6 34 a1 0f
+ciphertext: ac ca 3c ed 69 51 ae 80 e1 81 90 08 22 8a c6 66 2c 7a d8 6d b8 7b eb 92 47 d5 cf 37 58 f8 06 00 5d 94 85 de 14 b6 80 d4 46 54 2b 8b 4e ce 67 e9 c7 be 90 d8 61 37 61 35 02 9b eb fd 7e e7 86 a6 19 14 da c8 26 0a 41 aa 86 59 1a 6a 37 9a fa 2c ff 0c 50 66 3b 97 5b 89 19 af 99 72 32 2c 8d 1b 00 7c dc e8 c8 b6 f2 02 ff 82 5a 35 e5 25 8e 7a 04 6c 21 c4 10 93 de 28 73 de dc 7e fd b1 b8 cc f3 49 ce 33 f9 75 bb db bb 32 c8 8f b9 d8 4b 4e 30 00 45 7d bc 67 b0 d9 1e ef 50 3c cd 89 d7 40 38 86 c0 83 8d 5c ec 9a
+tag: 1b 38 94 33 85 82 5e 3a 66 5b e2 10 50 67 31 ed
+
+associated data: 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23
+plaintext:
+ciphertext:
+tag: f7 e0 67 e7 e1 c0 01 4f bb e9 69 7b a3 e3 1f f9
+
+associated data: 60 71 82 93 a4 b5 c6 d7 e8 f9 0b 1c 2d 3e 4f 60 71 82 93 a4 b5 c6 d7 e8 f9 0b 1c 2d 3e 4f 60 71 82 93 a4 b5 c6 d7 e8 f9 0b 1c 2d 3e 4f 60 71 82 93 a4 b5 c6 d7 e8 f9 0b 1c 2d 3e 4f 60 71 82 93 a4 b5 c6 d7 e8 f9 0b 1c 2d 3e 4f 60 71 82 93 a4 b5 c6 d7 e8 f9 0b 1c 2d 3e 4f 60 71 82
+plaintext: e1 84 27 c9 6c 0f b1 54 f6 99 3c de 81 24 c6 69 0c ae 51 f3 96 39 db 7e 21 c3 66 09 ab 4e f0 93 36 d8 7b 1e c0 63 06 a8 4b ed 90 33 d5 78 1b bd 60 03 a5 48 ea 8d 30 d2 75 18 ba 5d 00 a2 45 e7 8a 2d cf 72 15 b7 5a fc 9f 42 e4 87 2a cc 6f 12 b4 57 f9 9c 3f e1 84 27 c9 6c 0f b1 54 f6 99 3c de 81 24 c6 69 0c ae 51 f3 96 39 db 7e 21 c3 66 09 ab 4e f0 93 36 d8 7b 1e c0 63 06 a8 4b ed 90 33 d5 78 1b bd 60 03 a5 48 ea 8d 30 d2 75 18 ba 5d 00 a2 45 e7 8a 2d cf 72 15 b7 5a fc 9f 42 e4 87 2a cc 6f 12 b4 57 f9 9c 3f e1 84 27 c9 6c 0f b1 54 f6 99 3c de 81 24 c6 69 0c ae 51 f3 96 39 db 7e 21 c3 66 09 ab 4e f0 93 36 d8 7b 1e c0 63 06 a8 4b ed 90 33 d5 78 1b bd 60 03 a5
+ciphertext: 1c 1a eb 79 64 53 6b 36 f3 73 7b 9e 80 67 15 05 4d df b6 c0 93 25 3c 71 8f f3 c8 65 51 ea 6e e2 1d fe a5 d2 8e 7b fd 77 cc c8 a1 81 12 4c ab bb b9 74 ff b3 cf 9a 01 a0 13 a8 7f 8f 0d f2 07 1e 9d 60 df 62 2d fa f9 f7 91 2a cb 3d f2 5b 55 b1 8a 05 c7 d6 7b 4e 0c eb 4e a7 98 5b 03 8d 97 1b b1 26 47 d5 af cb 9b c4 82 fc 6b d4 c2 47 e2 23 ee e8 97 16 bd bc 38 40 51 84 08 ff 41 86 92 80 81 09 40 aa 36 6e fa b2 58 c6 ce d0 cc 83 af f6 4c 40 69 ca 13 97 c6 8a ed c7 77 e6 b5 f9 fa cb 21 19 65 ef 22 6e c2 aa 52 38 23 f1 90 f2 e8 df f5 7d 2c f5 6d c5 b3 98 e6 a9 d1 4f f0 1d 40 9b 2f 7b d4 53 fd 58 58 77 3b e6 97 d3 96 d9 d9 12 10 fa ab 2d ae a6 26 3e c9 b8 4e 38 62
+tag: 12 ca fa 0a 87 65 33 ac de f6 34 29 a4 78 35 0e
+
+associated data: a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4
+plaintext:
+ciphertext:
+tag: 5d b6 ee 42 42 8d 4f 12 b3 8f bf 41 69 d5 c5 8d
+
+associated data: a7 00 58 b0 09 61 b9 12 6a c2 1b 73 cb 24 7c d4 2d 85 dd 36 8e e6 3f 97 ef 48 a0 f8 51 a9 02 5a b2 0b 63 bb 14 6c c4 1d 75 cd 26 7e d6 2f 87 df 38 90 e8 41 99 f1 4a a2 fa 53 ab 04 5c b4 0d 65 bd 16 6e c6 1f 77 cf 28 80 d8 31 89 e1 3a 92 ea 43 9b f3 4c a4 fc 55 ad 06 5e b6 0f 67 bf 18 70 c8 21 79 d1 2a 82 da 33 8b e3 3c 94 ec 45 9d f5 4e a6 fe 57 af 08 60 b8 11 69 c1 1a 72 ca 23 7b d3 2c 84 dc 35 8d e5 3e 96 ee 47 9f f7 50 a8 01 59 b1 0a 62 ba 13 6b c3 1c 74 cc 25 7d d5 2e 86 de 37 8f e7
+plaintext: 29 13 fc e6 d0 ba a4 8e 78 62 4c 36 20 0a f3 dd c7 b1 9b 85 6f 59 43 2d 17 01 ea d4 be a8 92 7c 66 50 3a 24 0e f7 e1 cb b5 9f 89 73 5d 47 31 1b 05 ee d8 c2 ac 96 80 6a 54 3e 28 12 fb e5 cf b9 a3 8d 77 61 4b 35 1f 09 f2 dc c6 b0 9a 84 6e 58 42 2c 16 00 e9 d3 bd a7 91 7b 65 4f 39 23 0d f6 e0 ca b4 9e 88 72 5c 46 30 1a 04 ed d7 c1 ab 95 7f 69 53 3d 27 11 fa e4 ce b8 a2 8c 76 60 4a 34 1e 08 f1 db c5 af 99 83 6d 57 41 2b 15 fe e8 d2 bc a6 90 7a 64 4e 38 22 0c f5 df c9 b3 9d 87 71 5b 45 2f 19 03 ec d6 c0 aa 94 7e 68 52 3c 26 10 f9 e3 cd b7 a1 8b 75 5f 49 33 1d 07 f0 da c4 ae 98 82 6c 56 40 2a 14 fd e7 d1 bb a5 8f 79 63 4d 37 21 0b f4 de c8 b2 9c 86 70 5a 44 2e 18 02 eb d5 bf a9 93 7d 67 51 3b 25 0f f8 e2 cc b6 a0 8a 74 5e 48 32 1c 06 ef d9 c3 ad 97 81 6b 55 3f 29 13 fc e6 d0 ba a4 8e 78 62 4c 36 20 0a f3 dd c7 b1 9b 85 6f 59 43 2d 17 01 ea d4 be a8 92 7c 66 50 3a 24 0e
+ciphertext: 5f a8 5f de 1d 66 97 c0 65 75 19 41 1c fd ca 1b 9f 8c 91 3f 07 34 44 74 22 59 e9 80 16 e1 c8 d8 62 8e d7 29 32 db f6 7c 62 12 ce 64 c4 12 c1 d4 84 33 c5 42 f6 a5 16 9d 34 cf 81 5a 90 80 71 64 d5 11 ed 4b 61 2f f8 fd 3a 2f 61 19 f2 91 42 04 c2 50 24 02 e1 d9 97 ae fc f1 be af ba 7d 2c 20 1e be 7b c5 cd aa 09 21 e2 ec 30 b1 90 bd 51 6c 5a 94 ed 72 c3 f8 4f 98 2e d6 90 ef 1e d4 c0 2b 92 45 da 5f dc b5 7e 70 30 eb 31 9d 18 4a fc be 29 dd ae 3e a4 3c 30 bf 09 fc 75 14 46 d2 e2 d1 86 a1 89 d1 60 6f ec 2f e0 c5 7b 8d fd 0e 59 04 ba 51 a1 8e 5e 6e a2 ff 95 6b ba 60 1e 42 39 b5 02 33 e2 e1 fe b1 50 d9 44 44 6c 55 f3 e0 80 62 0a 42 0b 41 8f 84 ab c4 66 aa 08 f8 88 34 6b 2e 50 4d b9 e5 4b 35 25 d5 09 3f b8 32 bd 64 b8 6e 42 34 52 fa d7 a9 2b 1e 95 39 a8 36 b7 7a 62 d0 58 aa fe 3d 60 f1 1a 78 b4 0f 3c 61 e1 52 96 a4 ec 15 4b 95 5c f2 13 d2 38 e4 d7 88 ff 73 07 61 e5 3b fa ec
+tag: 99 50 25 6f 3d f9 a3 76 82 c3 48 60 08 61 d9 55
+
+associated data: 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e
+plaintext:
+ciphertext:
+tag: 60 28 3a 6b 4d cf 67 91 8b 3a 94 f4 a2 6e 1a c0
+
+associated data: 06 bc 73 2a e0 97 4e 05 bb 72 29 df 96 4d 04 ba 71 28 de 95 4c 03 b9 70 27 dd 94 4b 02 b8 6f 26 dc 93 4a 01 b7 6e 25 db 92 49 00 b6 6d 24 da 91 48 fe b5 6c 23 d9 90 47 fd b4 6b 22 d8 8f 46 fc b3 6a 21 d7 8e 45 fb b2 69 20 d6 8d 44 fa b1 68 1f d5 8c 43 f9 b0 67 1e d4 8b 42 f8 af 66 1d d3 8a 41 f7 ae 65 1c d2 89 40 f6 ad 64 1b d1 88 3f f5 ac 63 1a d0 87 3e f4 ab 62 19 cf 86 3d f3 aa 61 18 ce 85 3c f2 a9 60 17 cd 84 3b f1 a8 5f 16 cc 83 3a f0 a7 5e 15 cb 82 39 ef a6 5d 14 ca 81 38 ee a5 5c 13 c9 80 37 ed a4 5b 12 c8 7f 36 ec a3 5a 11 c7 7e 35 eb a2 59 10 c6 7d 34 ea a1 58 0f c5 7c 33 e9 a0 57 0e c4 7b 32 e8 9f 56 0d c3 7a 31 e7 9e 55 0c c2 79 30 e6 9d 54 0b c1 78 2f e5 9c 53 0a c0 77 2e e4 9b 52 09 bf 76 2d e3 9a 51 08 be 75 2c e2 99 50 07 bd 74 2b e1 98 4f 06 bc 73
+plaintext: 87 ce 16 5d a4 eb 33 7a c1 09 50 97 de 26 6d b4 fb 43 8a d1 19 60 a7 ee 36 7d c4 0c 53 9a e1 29 70 b7 fe 46 8d d4 1c 63 aa f1 39 80 c7 0f 56 9d e4 2c 73 ba 02 49 90 d7 1f 66 ad f4 3c 83 ca 12 59 a0 e7 2f 76 bd 05 4c 93 da 22 69 b0 f7 3f 86 cd 15 5c a3 ea 32 79 c0 08 4f 96 dd 25 6c b3 fa 42 89 d0 18 5f a6 ed 35 7c c3 0b 52 99 e0 28 6f b6 fd 45 8c d3 1b 62 a9 f0 38 7f c6 0e 55 9c e3 2b 72 b9 01 48 8f d6 1e 65 ac f3 3b 82 c9 11 58 9f e6 2e 75 bc 04 4b 92 d9 21 68 af f6 3e 85 cc 14 5b a2 e9 31 78 bf 07 4e 95 dc 24 6b b2 f9 41 88 cf 17 5e a5 ec 34 7b c2 0a 51 98 df 27 6e b5 fc 44 8b d2 1a 61 a8 ef 37 7e c5 0d 54 9b e2 2a 71 b8 00 47 8e d5 1d 64 ab f2 3a 81 c8 10 57 9e e5 2d 74 bb 03 4a 91 d8 20 67 ae f5 3d 84 cb 13 5a a1 e8 30 77 be 06 4d 94 db 23 6a b1 f8 40 87 ce 16 5d a4 eb 33 7a c1 09 50 97 de 26 6d b4 fb 43 8a d1 19 60 a7 ee 36 7d c4 0c 53 9a e1 29 70 b7 fe 46 8d d4 1c 63 aa f1 39 80 c7 0f 56 9d e4 2c 73 ba 02 49 90 d7 1f 66 ad f4 3c 83 ca 12 59 a0 e7 2f 76 bd 05 4c 93 da 22 69 b0 f7 3f 86 cd 15 5c a3 ea 32 79 c0 08 4f 96 dd 25 6c b3 fa 42 89 d0 18 5f a6 ed 35 7c c3 0b 52 99 e0 28 6f b6 fd 45 8c d3 1b 62 a9 f0 38 7f c6 0e 55 9c e3 2b 72 b9
+ciphertext: e1 77 66 2d 54 c9 15 9d 80 ed 3e 89 a0 66 2c 72 fa ac 44 3c c7 ef 0d 91 01 05 60 59 eb ef bd 8a 04 69 d0 d4 04 60 20 c4 a6 fb 6d 9c f0 8c d7 da 5b 4b 86 68 5d eb 38 d2 6e 83 ab 27 79 30 91 ed 32 80 ce ac 14 08 2a aa 8a f0 0c db 98 c7 58 3f 18 23 db a5 35 e3 6d 48 9a 96 92 97 99 01 b7 d4 29 3e 79 24 22 62 37 14 97 14 3d 78 37 7e 32 4c 58 1c cf be 63 c1 ea 56 6f 98 fd 76 7b 3f a5 05 bf c7 18 68 fa d5 ff 7f f9 77 2c 98 6a fc 78 1f 69 a6 85 2b f7 90 29 0c 18 f2 96 60 0f 56 19 b2 db f1 49 76 46 3c 92 a0 57 5f 24 64 5e 4a a0 48 49 c0 27 02 13 15 bd a7 25 f5 8b 8f 94 bb 6c fb 93 ee d6 37 59 43 20 a5 ac 05 4d 1e fe cf 03 1a 40 8e 70 b9 81 ea cd 24 1a e4 39 89 a7 98 e4 c2 65 1e 5a 20 9e aa 28 09 af c7 8b 1c 92 37 a2 be a3 ad 1e ac 8c a7 0d bb a5 ee 1c 62 08 d0 cb b1 66 80 ed a2 a2 f9 54 cc ff a9 ab 01 84 6f 88 4e b0 83 95 eb 24 b3 b5 14 7d 00 b5 5a d0 ea 7c 21 f7 21 75 04 11 bb 5a fc 7f d2 58 4d b2 39 95 a6 bc 3a b0 aa 98 9f 9e e9 4d 25 51 05 cb f3 ad 7f f1 d9 83 8c d7 67 f7 79 c0 ec c0 a4 11 f4 a1 4b ee 46 c1 35 db 04 1a 43 12 06 db 3a 95 2a 66 af 63 02 fd d0 c2 1c d1 d2 69 9f 90 aa 07 cf 7e a0 fe b7 ca 5d 74 d9 73 a9 3f 6a 46 a0 39 63 36 6d 8d 8e
+tag: 21 98 cd 05 93 7e d0 ec ed 00 48 0b 20 10 61 47
+
+associated data: 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e
+plaintext:
+ciphertext:
+tag: 9e d3 01 dd c8 7e 10 e4 f0 0e 27 07 c2 22 e9 cc
+
+***
+initialize with key of 112 bits, nonce of 270 bits:
+key: c3 e3 04 24 44 64 84 a4 c4 e4 05 25 45 65
+nonce: c3 57 ea 7e 12 a5 39 cc 60 f3 87 1b ae 42 d5 69 fc 90 24 b7 4b de 72 06 99 2d c0 54 e7 7b 0f a2 36 09
+
+associated data:
+plaintext:
+ciphertext:
+tag: 66 b4 8e 90 a8 a8 84 16 42 6f c2 ed 21 13 3a b7
+
+associated data:
+plaintext: 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69
+ciphertext: cc 40 90 45 95 eb 39 c5 42 1f 1f 4d 9b 7a 59 b9 60
+tag: b1 15 0d 76 89 9f 43 e4 71 de ad 6d d9 30 41 35
+
+associated data:
+plaintext: 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46
+ciphertext: 63 67 cd e7 91 a6 8c b3 75 40 58 3b 31 02 59 ae ec 5b f7 5b 42 d3 7a e2 ba e6 e1 ed fa a6 9f a2 4d 0d 3d 4e 56 45 e6 97 09 0b
+tag: fa d6 f6 8d ab 96 4c 89 55 77 81 52 71 a7 fc fc
+
+associated data:
+plaintext: 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4
+ciphertext: 94 60 76 de a7 1e 44 f6 51 89 4e 08 5c b9 5d 10 d3 32 55 84 b3 76 7e 43 74 68 28 35 4f a1 b0 69 bf 94 1c 28 9e 5a 28 6d f3 44 b3 81 ba e0 6d cc 5a d8 e4 c5 96 f2 0c 25 eb 74 f2 30 67 bf ba 9a d8 84 15 71 80 5e 3f 77 75 db a9 f8 64 5f 65 81
+tag: ab a5 03 a0 7e 27 bc 28 d7 84 cc 11 ba 3e 24 b4
+
+associated data:
+plaintext: 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a
+ciphertext: da 33 3a d3 55 ce 46 53 67 6c 1f 55 1f 4b 82 e7 d2 fb 09 1f f1 89 03 a3 12 f3 2a fb b2 87 8b ff f9 1b df 3c 57 c4 7d d7 9c db a8 54 bc d2 c0 64 a8 b2 f6 b6 98 ad 87 03 c7 95 ab c8 3a 03 e9 a5 48 d3 a3 06 bb cd 2b 9e 24 91 77 e9 96 75 ff 5d ba 94 49 9c df 1d 78 42 5d f7 d6 68 2c a8 10 fd 0a 34 cf 4f 89 06 9a db 15 c7 8b a6 06 06 9d 78 e6 96 b4 f8 12 6b 56 4d ad 56 da 92 02 19 27 05 fa 6d 0b 04 11 82 97 69 69
+tag: 36 fa f2 01 a3 d8 63 d8 bc 11 62 74 b1 68 76 b5
+
+associated data:
+plaintext: e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af f4 3a 7f c4 0a 4f 94 d9 1f 64 a9 ee 34 79 be 04 49 8e d3 19 5e a3 e8 2e 73 b8 fd 43 88 cd 13 58 9d e2 28 6d b2 f7 3d 82 c7 0d 52 97 dc 22 67 ac f1 37 7c c1 07 4c 91 d6 1c 61 a6 eb 31 76 bb 01 46 8b d0 16 5b a0 e5 2b 70 b5 fa 40 85 ca 10 55 9a df 25 6a af
+ciphertext: 70 c8 8c 1d 46 15 7a fa 2b ce 46 cd 89 c6 a0 ca 58 61 95 59 ce 28 93 b1 09 ee 9d 82 16 4b 2f 85 00 da bf 26 b1 d3 a9 45 c6 61 bf 7a 67 1c bf d3 e2 fc 6c d4 22 54 64 49 3c 2c b0 96 69 f2 34 50 a4 55 50 8d a0 ba 40 10 82 5b 8c d6 f7 47 69 1a 97 bd 00 50 b2 b3 de 5a 9b 99 09 a5 3c 52 6a 5f 23 4e a5 50 e6 b6 40 62 ee ce da b4 ef 32 63 c7 ea 79 fd cc 91 09 d4 fa d5 34 37 65 09 c4 65 b2 c1 e7 74 3f b5 81 dc a5 dd e1 13 97 b6 4c 5c 85 e8 3f e7 b1 a5 b6 61 48 00 7c ae 13 a9 09 85 cf 3f 4a b4 08 de 06 13 8a 97 ab 63 ca 07 c5 c7 36 fc be 6b 6a 16 74 ef a1 23 30 a7 b2 bd 1e 36 05 ee 4a 0d 3f 42 5c 47 a3 4d eb 2a e3 ea 05 83 8d 55 7d a7 63 98 55 dd 28 58 18 67 dc f6 ee
+tag: 25 ea 7c f7 56 36 05 c6 91 ed e7 44 c1 20 c5 13
+
+associated data:
+plaintext: 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2
+ciphertext: 8a b4 ad 31 8b ea 3f 54 89 4c e1 0c a0 f8 9c eb 87 ce 40 10 63 ac bf 50 d8 92 af 42 d3 30 96 c4 97 c5 8b 0c 39 a6 7e 50 15 71 65 d8 99 29 8a a0 f3 ec b1 37 7e 51 fa f9 3d cf ae 2f 21 ef 74 12 41 c2 28 68 c8 66 20 3f 9d d9 ca ba 6c 4f 56 e6 93 62 33 46 1d 2c 03 14 78 97 dc 61 1f 0b 17 41 e4 e4 7e ba 0a 8a 5f dc 87 b4 3f c5 9a a5 b6 fe 57 6c dd 05 0a a8 1f 9f 70 65 c6 33 ba 1b 22 95 12 b4 64 f0 62 a6 d0 1f 4e d8 7b 4a f2 21 d4 45 85 e7 c4 6e db 3f 8d e9 0a 9e ea bc a4 60 c4 24 87 4e f8 d5 c6 bb 0b c0 fb 8b fd c6 ae c6 b5 fe 98 20 eb 8d 7f f4 37 f8 a1 1b a7 c0 18 42 b9 8f 13 1d 10 7a 7a 0f 31 38 46 b4 9a 4f c5 46 db 5b 9d d0 d9 61 a3 c1 b0 c1 56 44 a5 48 39 c7 bc d5 ab 71 18 4b 8c b1 6d 7c bb 9d d8 e3 13 46 dd c9 c0 28 ce c0 29 34 fe 02 65 f9 75 4e f2 35 53 78 62 67 f1 fe 80 fc aa 98 32 0f 9e 05 fe 10 fd f2 28 93 d1 6d 9a 45 cc 49 1e f2 06 7e 42 40 c9 91 e5 75 c9 08 fe c1 e5 01 f6 8b 02 c4 27 f1 c9 d2 d3 62 c9 e7 42 06 00 bf 11 93 a0 bc 14 04 cd dd a5 36 92 d8 7c e0 2f 75 2e 9a 94 ba 07 61 a0 bc 8a e8 2d f5 82 d0 61 61 64 76 e7 3b 07 ee
+tag: 9d 23 3f b9 2b ae 4e fb 2a 27 c1 5b bf ed c9 c5
+
+associated data: 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01
+plaintext:
+ciphertext:
+tag: 66 3f 13 b7 c8 05 32 e2 3c a8 44 ab aa 77 e8 de
+
+associated data: 1c e5 af 79 43 0d d6 a0 6a 34 fd c7 91 5b 25 ee b8 82 4c 16 df a9 73 3d 07
+plaintext: 99 f7 56 b4 13 71 cf 2e 8c ea 49 a7 06 64 c2 21 7f dd 3c 9a f8 57 b5 14 72 d0 2f 8d eb 4a a8 07 65 c3 22 80 de 3d 9b f9 58 b6 15 73 d1 30 8e ec 4b a9 08 66 c4 23 81 df 3e 9c fa 59 b7 16 74 d2 31 8f ed 4c aa 09 67 c5 24 82 e0 3f 9d fb 5a b8 17 75 d3 32 90 ee 4d ab 0a 68 c6 25 83 e1 40 9e fc 5b b9 18 76 d4 33 91 ef 4e ac 0b 69 c7 26 84 e2 41 9f fd 5c ba 19 77 d5 34 92 f0 4f ad 0c 6a c8 27 85 e3 42 a0 fe 5d bb 1a 78 d6 35 93 f1 50 ae 0d 6b c9 28
+ciphertext: 60 fa 26 36 c1 2f b2 80 4b 7f e9 06 bf 00 8e 6d 7a 2c 8c ff 8a b7 08 74 05 c2 b4 c9 93 8f 83 41 b4 5f 18 64 4a b5 ff 44 df 1a 83 81 32 83 7f 65 37 60 fd 61 74 57 30 4a d4 97 4c 84 57 9c 81 77 22 91 ac 29 25 bc a2 9f 98 b4 00 9d 37 04 b5 0f 02 ef 41 f8 e6 f1 e9 98 38 89 aa 5e 13 da cb 91 28 8f 40 f1 0e 81 5b 6f bd 8c d1 85 3b dd 4e 51 70 99 77 d5 df 45 b7 45 c8 e5 72 c5 48 09 c0 0f ab 43 33 dd 33 20 78 69 08 b5 42 d3 ab d8 61 35 e7 8b 23 c7 01
+tag: 58 fc 02 ba eb 5a cd 8e fa 42 67 0a c1 af 1a 60
+
+associated data: 1c c4 6d 16 be 67 10 b8 61 0a b2 5b 04 ac 55 fd a6 4f f7 a0 49 f1 9a 43 eb
+plaintext: 79 d7 36 94 f2 51 af 0e 6c ca 29 87 e5 44 a2 01 5f bd 1c 7a d8 37 95 f3 52 b0 0f 6d cb 2a 88 e6 45 a3 02 60 be 1d 7b d9 38 96 f4 53 b1 10 6e cc 2b 89 e7 46 a4 03 61 bf 1e 7c da 39 97 f5 54 b2 11 6f cd 2c 8a e8 47 a5 04 62 c0 1f 7d db 3a 98 f6 55 b3 12 70 ce 2d 8b e9 48 a6 05 63 c1 20 7e dc 3b 99 f7 56 b4 13 71 cf 2e 8c ea 49 a7 06 64 c2 21 7f dd 3c 9a f8 57 b5 14 72 d0 2f 8d eb 4a a8 07 65 c3 22 80 de 3d 9b f9 58 b6 15 73 d1 30 8e ec 4b a9 08 66 c4 23 81 df 3e 9c fa 59 b7 16 74 d2 31 8f ed 4c aa 09 67 c5 24 82 e0 3f 9d fb 5a b8 17 75 d3 32 90 ee 4d ab 0a 68 c6 25 83 e1 40 9e fc 5b b9 18 76 d4 33 91 ef 4e ac 0b 69 c7 26 84 e2 41 9f fd 5c ba 19 77 d5 34 92 f0 4f ad 0c 6a c8 27 85 e3 42 a0 fe 5d bb 1a 78 d6 35 93 f1 50 ae 0d 6b c9 28 86 e4 43 a1 00 5e bc 1b 79 d7 36 94 f2 51 af 0e 6c ca 29 87 e5 44 a2 01 5f bd 1c 7a d8 37 95 f3 52 b0 0f 6d cb 2a 88 e6 45 a3 02 60 be 1d 7b d9 38 96 f4 53 b1 10 6e cc 2b 89 e7 46 a4 03 61 bf 1e 7c da 39 97 f5 54 b2 11 6f cd 2c 8a e8 47 a5 04 62 c0 1f 7d db 3a 98 f6 55 b3 12 70 ce 2d 8b e9 48 a6 05 63 c1 20 7e dc 3b 99 f7 56 b4 13 71 cf 2e 8c ea 49 a7 06 64 c2 21 7f dd 3c
+ciphertext: e5 fb 43 9f 1b a4 64 f1 a3 5c 59 5f 05 3b 0b 4b 55 eb d2 8a 99 cd 63 2e 4a f3 9b a0 16 6c 87 ee d0 b4 89 28 07 89 03 d6 0f 58 1b 2f 56 db 47 92 0a d9 d5 d3 29 63 aa 63 19 0f 44 9e 41 86 8c e7 84 06 ad 17 f7 8a 12 ff 22 da da 22 b4 68 34 dd d9 1d 9e 73 a0 44 01 5b bd 0e 42 e3 c2 df 92 37 c7 ac aa 86 7f cb 90 4f 1c de 13 ef 83 02 46 5c ed 11 48 72 7f 46 be 7e f1 46 7b 86 74 19 37 be 24 9d 40 c3 4f 57 f0 c6 5c 12 21 fb 45 e1 c7 99 38 ea 2f 19 15 68 04 46 a3 10 70 c5 a9 0d e0 d1 ef f7 79 15 79 ea 06 8f 1e 45 34 bb 1d 2e 11 af 0a 5a d9 01 58 46 30 27 8e 8a 33 d6 d4 9a e3 a1 99 0e 49 db 62 1d 09 52 03 7e 23 77 e8 f1 a4 65 d9 79 d8 2f 2d 1c 5c a6 b8 e0 77 12 22 04 c8 24 8c 2f e9 bf 04 61 db cb 8d d9 0a fd ec 46 f5 0e 25 0d 20 b8 ce 9f 63 ce 71 0b b4 75 6b 45 22 a1 df 99 80 15 9a a9 aa 3a f0 f0 65 75 95 8d 5f cf 84 6e 9b 7e 1e a4 a9 0d 67 04 87 85 a2 ba 36 7d 92 b0 31 36 4f b0 c8 ab 54 8d d4 26 74 cf 8a bd 83 d9 84 1e 7d 8d de f1 ec 11 1e ef be 68 e3 ee 38 9d 4c d5 88 bf 9e 2e db 6b bd 1c 49 80 58 aa 01 1e e8 ac c9 cc 37 d6 49 eb c7 87 41 44 0a 03 69 7c 49 61 d5 19 22 a6 79 19 b4 25 70 ad 38 2f 7f e6 3e 4b
+tag: 75 e9 ef ab d3 e9 dc c0 3e fd c8 1b b4 5c 24 90
+
+associated data: 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc
+plaintext:
+ciphertext:
+tag: cc 86 26 72 44 6d a6 24 ff 8f d1 78 e9 0c 52 d6
+
+associated data: 3d 28 13 fd e8 d3 be a9 94 7f 6a 55 40 2b 16 01 eb d6 c1 ac 97 82 6d 58 43 2e 19 04 ee d9 c4 af 9a 85 70 5b 46 31 1c 07 f1 dc c7 b2 9d 88 73 5e 49 34 1f 0a f4 df ca b5 a0 8b
+plaintext: ba 3a b9 39 b8 38 b7 37 b6 36 b5 35 b4 34 b3 33 b2 32 b1 31 b0 30 af 2f ae 2e ad 2d ac 2c ab 2b aa 2a a9 29 a8 28 a7 27 a6 26 a5 25 a4 24 a3 23 a2 22 a1 21 a0 20 9f 1f 9e 1e 9d 1d 9c 1c 9b 1b 9a 1a 99 19 98 18 97 17 96 16 95 15 94 14 93 13 92 12 91 11 90 10 8f 0f 8e 0e 8d 0d 8c 0c 8b 0b 8a 0a 89 09 88 08 87 07 86 06 85 05 84 04 83 03 82 02 81 01 80 00 7f fe 7e fd 7d fc 7c fb 7b fa 7a f9 79 f8 78 f7 77 f6 76 f5 75 f4 74 f3 73 f2 72 f1 71 f0 70 ef 6f ee 6e ed 6d ec 6c eb 6b ea 6a e9 69 e8 68 e7 67 e6 66 e5 65 e4 64 e3 63 e2 62 e1 61 e0 60 df
+ciphertext: 4e 91 4c 32 52 cc c5 54 eb 14 35 ae 95 f0 e0 99 5c 9a 09 9e 24 3d 0b 25 19 1b 59 dc d6 fe a7 6f 2a 89 3f b8 6e 80 5e 1e 19 b5 84 68 3d 0f b3 8d a6 d0 d3 7d 24 16 81 99 d4 44 6e bd 3c 31 85 7c a9 6e d1 b9 d8 3a fd 8d 10 33 6c de a0 46 c4 0c f2 75 a2 b8 cd 4f 67 02 7d 08 ba 16 21 98 b2 94 ad 24 0a 34 c0 46 ce 89 05 af 23 83 44 db cc 6c e4 e7 9d 94 dd 28 cc c9 5a 19 93 52 63 25 ad 5f 5f 92 8c 97 52 d7 53 5a 2e 23 30 6c 2f e3 b4 b0 de 79 8e 90 73 38 d0 7a f0 af 93 fe 8a d4 48 88 b4 2c 95 fe 11 5f a8 9c 1a 2c 85 1f 56 f5 f7 33 d3 e8 d6 3b df 79
+tag: 38 33 91 85 d7 3c db fa 5a 0b 8a 27 ed a2 64 3e
+
+associated data: 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02
+plaintext:
+ciphertext:
+tag: 39 f5 03 06 85 de 20 15 2e 9c 22 56 ac b0 c0 27
+
+associated data: 69 7f 95 ab c1 d7 ed 04 1a 30 46 5c 72 88 9e b4 ca e0 f6 0d 23 39 4f 65 7b 91 a7 bd d3 e9 00 16 2c 42 58 6e 84 9a b0 c6 dc f2 09 1f 35 4b 61 77 8d a3 b9 cf e5 fb 12 28 3e 54 6a 80 96 ac c2 d8 ee 05 1b 31 47 5d 73 89 9f b5 cb e1 f7 0e 24 3a 50 66 7c 92 a8 be d4 ea 01 17 2d 43 59 6f 85 9b b1 c7 dd f3 0a 20
+plaintext: e6 92 3e e9 95 41 ec 98 44 ef 9b 47 f2 9e 4a f5 a1 4d f8 a4 50 fb a7 53 fe aa 56 02 ad 59 05 b0 5c 08 b3 5f 0b b6 62 0e b9 65 11 bc 68 14 bf 6b 17 c2 6e 1a c5 71 1d c8 74 20 cb 77 23 ce 7a 26 d1 7d 29 d4 80 2c d7 83 2f da 86 32 dd 89 35 e0 8c 38 e3 8f 3b e6 92 3e e9 95 41 ec 98 44 ef 9b 47 f2 9e 4a f5 a1 4d f8 a4 50 fb a7 53 fe aa 56 02 ad 59 05 b0 5c 08 b3 5f 0b b6 62 0e b9 65 11 bc 68 14 bf 6b 17 c2 6e 1a c5 71 1d c8 74 20 cb 77 23 ce 7a 26 d1 7d 29 d4 80 2c d7 83 2f da 86 32 dd 89 35 e0 8c 38 e3 8f 3b e6 92 3e e9 95 41 ec 98 44 ef 9b 47 f2 9e 4a f5 a1 4d f8 a4 50 fb a7 53 fe aa 56 02 ad 59 05 b0 5c 08 b3 5f 0b b6 62 0e b9 65 11 bc 68 14 bf 6b 17 c2 6e 1a c5 71 1d c8
+ciphertext: 12 e6 43 f5 41 30 71 6e 2c 49 23 ca 8b d2 ba 2f 0a 51 32 a1 26 ca 82 09 1b 8b 0e b5 ec ae ba 60 42 ca 2e bc b2 62 17 5a 16 a8 f7 7b 21 b2 76 b2 e7 e6 0a 08 07 8c 19 a5 a8 34 b0 ff b2 d8 70 04 95 27 ed 39 1a 5c 71 a7 30 88 d2 45 97 be f0 e6 0f cf 51 df ed ab af 65 12 fd 54 7f 2b d3 41 fd 88 b5 c8 5e 50 97 f8 48 f2 95 70 e9 aa 60 ee 96 da b6 1b 8c 58 ad f8 a0 c8 a0 e0 e4 d4 d6 76 cb 04 f5 96 72 53 b6 28 5f 9f 70 df 38 97 ce 28 fd 94 e6 99 cf 53 9a 05 35 1b f7 f2 7b dd b5 3a af de 52 97 ac 7c ff 99 e3 84 a0 7b 31 c5 e6 8d 6f 0f 86 cb 40 d1 35 1d 0d 18 54 c7 07 2c 21 0b 3b 01 03 96 76 c3 a7 70 00 10 78 c9 e5 92 9d 7b 46 04 b3 8c 57 1f 57 3c 51 0d 31 81 f1 39 0d d6 d5 e4 81
+tag: 72 e1 a6 cf f5 e4 61 03 1b 0f aa 33 80 d6 8e d5
+
+associated data: a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45
+plaintext:
+ciphertext:
+tag: 10 03 e4 e7 98 ef 2b 07 b9 6d c7 c1 2a 14 7e 2c
+
+associated data: a4 f5 47 98 e9 3b 8c dd 2f 80 d1 23 74 c5 17 68 b9 0b 5c ad fe 50 a1 f2 44 95 e6 38 89 da 2c 7d ce 20 71 c2 14 65 b6 08 59 aa fb 4d 9e ef 41 92 e3 35 86 d7 29 7a cb 1d 6e bf 11 62 b3 05 56 a7 f8 4a 9b ec 3e 8f e0 32 83 d4 26 77 c8 1a 6b bc 0e 5f b0 02 53 a4 f5 47 98 e9 3b 8c dd 2f 80 d1 23 74 c5 17 68 b9 0b 5c ad fe 50 a1 f2 44 95 e6 38 89 da 2c 7d ce 20 71 c2 14 65 b6 08 59 aa fb 4d 9e ef 41 92 e3 35 86 d7 29 7a cb 1d 6e bf 11 62 b3 05 56 a7 f8 4a 9b ec 3e 8f e0 32 83 d4 26 77
+plaintext: 22 09 ef d6 bd a4 8b 72 59 40 27 0e f4 db c2 a9 90 77 5e 45 2c 13 f9 e0 c7 ae 95 7c 63 4a 31 18 fe e5 cc b3 9a 81 68 4f 36 1d 04 ea d1 b8 9f 86 6d 54 3b 22 09 ef d6 bd a4 8b 72 59 40 27 0e f4 db c2 a9 90 77 5e 45 2c 13 f9 e0 c7 ae 95 7c 63 4a 31 18 fe e5 cc b3 9a 81 68 4f 36 1d 04 ea d1 b8 9f 86 6d 54 3b 22 09 ef d6 bd a4 8b 72 59 40 27 0e f4 db c2 a9 90 77 5e 45 2c 13 f9 e0 c7 ae 95 7c 63 4a 31 18 fe e5 cc b3 9a 81 68 4f 36 1d 04 ea d1 b8 9f 86 6d 54 3b 22 09 ef d6 bd a4 8b 72 59 40 27 0e f4 db c2 a9 90 77 5e 45 2c 13 f9 e0 c7 ae 95 7c 63 4a 31 18 fe e5 cc b3 9a 81 68 4f 36 1d 04 ea d1 b8 9f 86 6d 54 3b 22 09 ef d6 bd a4 8b 72 59 40 27 0e f4 db c2 a9 90 77 5e 45 2c 13 f9 e0 c7 ae 95 7c 63 4a 31 18 fe e5 cc b3 9a 81 68 4f 36 1d 04 ea d1 b8 9f 86 6d 54 3b 22 09 ef d6 bd a4 8b 72 59 40 27 0e f4 db c2 a9 90 77 5e 45 2c 13 f9 e0 c7 ae 95 7c 63 4a
+ciphertext: 54 00 ee ea 72 a0 60 03 1b 2a e4 9d 73 76 e4 2b c6 d3 26 4d 70 24 aa 47 be 56 47 92 79 9d 1a 51 09 8a 55 fb b6 46 11 61 6f 3c ba 1f d9 60 31 88 a6 a5 98 a9 99 3a df 37 39 ed 20 25 05 14 5c 02 68 e6 17 1b fb 41 91 29 bc d8 ac be 43 45 55 f9 68 9a 4a 43 1a 0e 18 6e 1a 9b e9 85 b5 1e 69 3e ec b4 ea 47 fd 67 33 1a ef cd 5e ac bd 37 c9 89 d0 3f 6e 22 fb 5f 63 34 b6 f9 40 ce 98 6f 97 c3 c4 b0 59 29 bd 4a a7 89 62 da 10 ea 32 75 05 ab af f2 81 8c a8 ae b6 a6 cb 68 96 cb 22 f4 4a 8c a1 8c d0 14 0b cf 5e e9 59 5f 95 c7 0b db e8 e0 4d 56 bf f2 f8 3b f8 fe 19 3e be f2 2d a1 2d d2 1b 36 83 65 80 01 db 3c 4d 2c bf 21 f4 12 61 68 98 1d 8c e2 b5 3b 07 8e 2a 32 ce d4 c6 03 81 89 4f c7 4e dd 2e 06 bb f1 a6 bb 7c 11 76 bd 2c b2 82 26 94 16 e4 3c ca bc 6d 6d 45 e2 b3 19 35 be 0a 53 da 34 ee e6 2d 58 36 7a 29 4f 12 e0 f9 5b fc 6b 75 09 69 6f c1 a0 7d 17 08 2c 05
+tag: 24 98 b6 0f fe 5d 17 ba ce e3 80 04 ea 65 0b c6
+
+associated data: f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b
+plaintext:
+ciphertext:
+tag: ef 01 86 1c 31 7d d9 59 7a 61 a7 ab 18 19 6c cc
+
+associated data: f2 92 32 d1 71 11 b0 50 ef 8f 2f ce 6e 0e ad 4d ec 8c 2c cb 6b 0b aa 4a e9 89 29 c8 68 08 a7 47 e6 86 26 c5 65 05 a4 44 e3 83 23 c2 62 02 a1 41 e0 80 20 bf 5f fe 9e 3e dd 7d 1d bc 5c fb 9b 3b da 7a 1a b9 59 f8 98 38 d7 77 17 b6 56 f5 95 35 d4 74 14 b3 53 f2 92 32 d1 71 11 b0 50 ef 8f 2f ce 6e 0e ad 4d ec 8c 2c cb 6b 0b aa 4a e9 89 29 c8 68 08 a7 47 e6 86 26 c5 65 05 a4 44 e3 83 23 c2 62 02 a1 41 e0 80 20 bf 5f fe 9e 3e dd 7d 1d bc 5c fb 9b 3b da 7a 1a b9 59 f8 98 38 d7 77 17 b6 56 f5 95 35 d4 74 14 b3 53 f2 92 32 d1 71 11 b0 50 ef 8f 2f ce 6e 0e ad 4d ec 8c 2c cb 6b 0b aa 4a e9 89 29 c8 68 08 a7 47 e6 86 26 c5 65 05 a4 44 e3 83 23 c2 62 02 a1 41 e0 80 20 bf 5f fe 9e 3e dd 7d 1d bc 5c fb 9b 3b da 7a 1a b9 59
+plaintext: 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42
+ciphertext: b2 44 40 02 b3 9f 35 25 97 f2 91 1b f8 fb fe cd 30 ab b8 18 d1 0a 1c 8d 35 0b e7 7f e2 8f df df 15 ff 24 8d 1e cf b5 64 35 a8 fc 44 6c de 74 77 77 7c 7f 28 ec 52 59 67 0a 22 1a 5d 03 14 26 2b 6e 87 32 5e 19 19 b1 e0 d3 48 67 56 24 62 a0 62 21 cc 8b cf 59 8f 84 b4 c2 bb 48 cb 31 f5 98 ac 96 d7 f3 c0 8c 5c a6 95 ab 4d 15 58 f8 57 61 6c d4 1d 7e 23 c1 5f 37 fb 08 91 1d 85 ec 3f 25 a4 cd 20 b3 26 fa 55 d9 69 de a1 a3 98 41 e8 33 70 39 95 62 58 3b d4 2a 40 a4 b9 e1 47 6d 43 38 7a 4d d0 18 db 2b 51 ea 23 e6 7c 5a 0a b1 03 1a 77 69 2f 39 90 6b 17 75 5b 9e 85 74 42 6b e0 5d e2 01 f7 45 07 57 1d 17 0f 2a 33 df a2 32 d3 f0 8c b1 b3 da a8 ea 8e 9f 7e 8f 44 5f 80 35 82 e5 8e 9f 3c 0a c3 81 39 66 72 36 1a d3 cc d9 f1 7b 3f 8c 84 74 fd 3f 13 fc ec 1c c8 70 73 e2 3b 74 12 e6 11 a8 30 2d 75 f0 3f bb 70 13 74 6d 15 84 b6 1e aa 2f 91 15 d1 d8 46 18 90 75 8f f9 c0 b7 9c 0e 99 8a 30 b1 51 dd 98 1a b9 2a 4c d2 00 00 4a 5d f8 52 c7 8d b1 e1 be f8 65 66 df b3 8e 4a 29 5d f8 17 a9 90 52 85 69 52 c6 2d ba 53 87 72 73 d4 92 65 59 71 26 6a 6f 05 d0 f6 ea b0 68 4b 7c 8e 67 d3 e2 4b 68 53 95 69 34 84
+tag: 01 b5 f9 6e 7c ec a6 50 c0 55 52 38 6e bc 65 5e
+
+associated data: 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19
+plaintext:
+ciphertext:
+tag: dc 1d 93 cd d8 87 69 d6 af 83 d4 9a 3e 08 bb c7
+
+***
+initialize with key of 96 bits, nonce of 286 bits:
+key: c3 f3 24 54 84 b4 e4 15 45 75 a5 d5
+nonce: c3 47 ca 4e d1 55 d8 5c df 63 e6 6a ed 71 f4 78 fb 7f 03 86 0a 8d 11 94 18 9b 1f a2 26 a9 2d b0 34 b7 3b 3e
+
+associated data:
+plaintext:
+ciphertext:
+tag: 88 cc fc a8 b2 83 b7 27 cc 68 2e e2 e8 b7 92 17
+
+associated data:
+plaintext: 05
+ciphertext: b9
+tag: 44 44 1e ff 1b e1 c4 30 4f 37 17 cb ad fe b9 45
+
+associated data:
+plaintext: 06 4b
+ciphertext: e0 e5
+tag: 91 89 cf 77 80 17 91 a8 dc 10 23 a3 0e 9d 73 bb
+
+associated data:
+plaintext: 08 4d 92 d7
+ciphertext: c7 0a a3 e9
+tag: d7 bc da 7b 73 a8 f1 6c 69 e7 8e 21 6d 5f 75 a2
+
+associated data:
+plaintext: 0b 50 95 da 20 65 aa
+ciphertext: f5 11 a7 b9 b4 ad b9
+tag: 68 20 3f ac a7 32 f8 00 04 35 8f 04 5d 7c ea 08
+
+associated data:
+plaintext: 0f 54 99 de 24 69 ae f3 39 7e c3
+ciphertext: bc c7 9f 79 54 00 80 59 19 32 bc
+tag: 55 2f c9 2a 07 e5 a1 19 be 83 85 34 ef 91 53 fd
+
+associated data:
+plaintext: 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69
+ciphertext: 04 3d 99 56 c4 9e 7a 2b 91 a7 8e b5 df 27 ec 6e af
+tag: b9 08 b5 10 b1 39 42 d9 70 13 42 d5 79 0e ff 0c
+
+associated data:
+plaintext: 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1
+ciphertext: cf c1 2c a7 85 f2 9c e3 c5 46 a0 56 3a 00 79 2e ec 9d b4 a8 73 44 5f e6 e7 f3
+tag: 05 b2 e4 44 ca b9 fa b1 a9 cc f4 c4 fe 5e d3 e4
+
+associated data:
+plaintext: 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9
+ciphertext: 4e b4 38 4e 79 2b 5b 4f c8 ec fe 4f 27 85 cb d5 40 aa fe 7d 99 fb 0d 62 3a 2f 64 66 26 a8 96 37 b4 aa 87 cf 87 90 66 55
+tag: 14 e0 7d b2 8d 3d 1a b9 f3 0b 89 e9 a5 f4 e4 38
+
+associated data:
+plaintext: 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d
+ciphertext: 97 39 43 7a d4 43 78 1f d3 16 c5 c4 35 14 7d 3c 4b 3d af 25 22 4a fd ca dd 95 20 66 25 44 f9 16 e9 79 10 0c 3a c0 11 bf 9e d3 9e 6f 87 ce 7d 54 e9 07 3d 7f 1d 23 d0 4e c2 7f 20 50 fa
+tag: b3 46 ba f7 7a 16 06 40 4c 09 24 14 7a 3b 5d 1b
+
+associated data:
+plaintext: 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00
+ciphertext: c3 24 d3 0b 83 4b 56 42 10 e4 6c ac 12 8e 78 a4 a7 ce ae 6b 3b ab ad 83 fd cc bd cd a0 5c 82 63 83 14 26 0d 7e ad a2 e6 ad 39 11 c1 b1 4a d5 29 64 72 7c 0b b1 fb ae 3f 79 7f 4a fe 9d f9 ef 21 9c a5 75 78 93 52 57 1f 86 3c 51 78 e2 da 7f 83 9c ed be 2c 08 d0 fd d1 ee 50 db e7
+tag: 03 19 2c 86 78 f7 51 67 6d 18 79 99 1a c6 13 15
+
+associated data:
+plaintext: 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6
+ciphertext: 85 b9 ca be 4b 6f c6 62 17 38 42 98 81 40 05 de e3 e0 f4 44 5d 0a 6d cb 50 ff 0f 68 2d 08 50 f0 b2 78 dd cb b3 9a 04 d0 9c f9 47 6a ca 5b f2 01 02 7b 77 9f a7 57 da 83 f9 3e 4b a9 b9 70 12 fd cc 88 18 c7 6f a3 6b dd 4b 65 3d dc 6b 07 9a f4 6c a7 25 33 10 89 e9 e6 26 d1 64 8b 4d b4 97 71 3f c8 1b b4 ad f3 19 c1 e6 c2 d7 e4 67 db 49 ec 86 e6 bc ec 2c be 43 44 fe 6b 88 d3 10 ef df 6b b0 28 8d 86 87 f2 a0 0f 41 1a fa
+tag: b9 7a f7 95 4e 6c 7f f1 34 36 07 87 2b 7c 61 05
+
+associated data:
+plaintext: d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e
+ciphertext: 23 2b d1 2a ee 6b 80 33 45 56 94 77 fa 88 96 6c 25 b3 08 6f 6b 71 bb 03 1b 41 1b 73 4a 63 1c 9c 3c 61 88 5f b3 c2 43 cc ea 11 33 c4 e0 d9 34 d8 ca 69 8c 8d d4 47 43 d9 4a d7 ee 3e 92 0c 28 a5 0d a9 2b 81 98 1a 11 f3 54 83 6e d2 93 45 8b db c8 c9 1d f3 bb a7 6a 36 44 38 37 57 59 d7 fe 26 a7 6b a9 55 be ee f8 33 07 86 4d ee b4 ee 45 49 11 a3 d5 48 39 c8 68 40 74 fa 5e 39 32 ba 99 04 a4 e1 b4 8f d9 6e b5 0a 66 a3 c7 29 5e 62 54 01 8a 61 c4 9a 81 4c 06 2d d6 4d 34 0b 31 e3 e2 14 9f 85 12 87 fa 4f 45 b4 68 9c a9 d6 23 ff 5b 83 54 58 1e ac 67 b2 20 f7 4b bc 29 3c 30 dd c2 33 b5 de 33 7a e4 f2 9b df 89 92 4d 04 82 18 5d 2c a5
+tag: 9e 8e 99 49 e5 50 52 48 08 14 a6 a3 b5 ad de c7
+
+associated data:
+plaintext: 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0
+ciphertext: 6d a9 d5 43 f7 16 27 e5 3e 49 3b 72 9c 93 be c9 b1 a5 59 cc 3d ae d7 36 21 28 29 88 0b 6c 04 75 85 d1 a5 a7 19 b4 26 60 cc 2b b4 ca ff 88 90 9e 0c ad 70 1a c5 4a 14 e8 e8 9b a0 82 f5 80 6b bc df 6b 5d 2c 6f a9 15 8a f8 d9 25 56 dd 35 d5 43 44 99 7c 4d ad 38 25 4a 16 2c 4c 7e c1 5b f7 c5 12 aa d1 5d bf 2b 6c 01 a4 b6 a1 38 92 00 0b 17 7e cc cf 07 6f 00 19 d3 a2 a3 c1 f7 5a 1f 7a 0c e7 34 4e 48 e2 3e 85 af 5c b0 b8 19 73 9e fa a4 0d 7b e3 f1 c7 7e 64 eb 21 4e ff 2f f6 7c de 42 c1 a9 72 ea 97 98 3a 17 df 2d 48 28 f5 e5 50 09 bd 3e 6a d9 8c 96 40 0b 1f 21 67 f0 08 03 b3 1a 17 bc 6a 0b 7a 33 05 e2 d0 f9 89 4c 80 99 e8 aa 5c 91 5e da f2 60 c5 62 47 cc 62 2b 37 76 dc ae 0b 74 f1 bb 25 8c e1 1b 4e d3 17 ef b6 f3 61 a7 bf 7f a4 bd f5 66 ff 89 10 13 58 a4 b3 a9 4a f5 e3 d4 5a d0 f5 78 58 7d b0 20 5a e3 e3 ac e2 c5 f1 0b f2 e6 47 50 82 e2 f7 db 0d db ff 34 70 41 d6 6c f3 88 25 d5 22 dc 9f 06 18 ba 30 ce 67 58 f0 95 fc ee 91 66 99 cc 58 0f
+tag: f7 7a 0f fb b2 47 2e 00 7a ab 6a 76 e4 ab 5c 1e
+
+associated data: 0c 40 74 a8 dc 11 45 79 ad
+plaintext:
+ciphertext:
+tag: 0e a4 a9 6a 6a ec 9f bd 6a e9 96 87 06 90 eb dc
+
+associated data: 0c c1 77 2d e2 98 4e 04 b9
+plaintext: 85 d3 22 70 be 0d 5b a9 f7 46 94 e2 31 7f cd 1c 6a b8 07 55 a3 f1 40 8e dc 2b 79 c7 16 64 b2 01 4f 9d eb 3a 88 d6 25 73 c1 10 5e ac fa 49 97 e5 34 82 d0 1f 6d bb 0a 58 a6 f4 43 91 df 2e 7c ca 19 67 b5 04 52 a0 ee 3d 8b d9 28 76 c4 13 61 af fd 4c 9a e8 37 85 d3 22 70 be 0d 5b a9 f7 46 94 e2 31 7f cd 1c 6a b8 07 55 a3 f1 40 8e dc 2b 79 c7 16 64 b2 01 4f 9d eb 3a 88 d6 25 73 c1 10 5e ac
+ciphertext: 63 ea 38 e7 0c 27 ea fa ab 31 7d 56 b6 ee 66 a2 73 7d 84 da 94 31 2d d7 d0 1b d8 98 f4 1a eb 93 a5 fe 28 ba c8 7d 27 6a 32 5b 4c 52 2d 29 ea 21 c7 ef 74 7f 07 19 40 c7 e9 68 e0 56 d4 ca 5a a9 2e b7 12 f8 8a d3 c2 30 4f f8 53 2b 76 08 07 92 e9 a2 e3 3a 9a ac 80 9b 72 ef fa 4e ef 5d eb 47 5f 9a 67 4e c8 f9 43 bc 24 1c 41 46 eb a8 58 f5 0c 3b d5 7e 90 d7 56 ad 63 65 c0 a6 81 25 df 3a f1
+tag: 80 de 6a ad 70 ff be a6 e0 49 21 58 13 d4 5f 2b
+
+associated data: 0c 82 f8 6f e5 5c d2 49 bf
+plaintext: 47 95 e3 32 80 ce 1d 6b b9 08 56 a4 f2 41 8f dd 2c 7a c8 17 65 b3 02 50 9e ec 3b 89 d7 26 74 c2 11 5f ad fb 4a 98 e6 35 83 d1 20 6e bc 0b 59 a7 f5 44 92 e0 2f 7d cb 1a 68 b6 05 53 a1 ef 3e 8c da 29 77 c5 14 62 b0 fe 4d 9b e9 38 86 d4 23 71 bf 0e 5c aa f8 47 95 e3 32 80 ce 1d 6b b9 08 56 a4 f2 41 8f dd 2c 7a c8 17 65 b3 02 50 9e ec 3b 89 d7 26 74 c2 11 5f ad fb 4a 98 e6 35 83 d1 20 6e bc 0b 59 a7 f5 44 92 e0 2f 7d cb 1a 68 b6 05 53 a1 ef 3e 8c da 29 77 c5 14 62 b0 fe 4d 9b e9 38 86 d4 23 71 bf 0e 5c aa f8 47 95 e3 32 80 ce 1d 6b b9 08 56 a4 f2 41 8f dd 2c 7a c8 17 65 b3 02 50 9e ec 3b 89 d7 26 74 c2 11 5f ad fb 4a 98 e6 35 83 d1 20 6e bc 0b 59 a7 f5 44 92 e0 2f 7d cb 1a 68 b6 05 53 a1 ef 3e 8c da 29 77 c5 14 62 b0 fe 4d 9b e9 38 86 d4 23 71 bf 0e 5c aa f8 47 95 e3 32 80 ce 1d 6b b9 08 56 a4 f2 41 8f dd 2c 7a c8 17 65 b3 02 50 9e ec 3b 89 d7 26 74 c2 11 5f ad fb 4a 98 e6 35 83 d1 20 6e bc 0b 59 a7 f5 44 92 e0 2f 7d cb 1a 68 b6 05 53 a1 ef 3e 8c da 29 77
+ciphertext: ad 51 f7 f3 d3 08 ee 35 32 7f 63 bf 09 ad 87 db 60 c7 b9 b0 bf 3d bd c9 83 55 58 a0 fe 61 c9 6e c4 e9 43 0b cb e0 2c 53 83 50 1c ba 98 74 a1 9e a2 04 39 6f 5c 59 f6 dd 60 ef 49 b5 28 dc 3d 46 07 18 14 9a fc 63 92 6b a1 69 cd 04 a6 29 37 00 11 75 ec 5e 31 09 b2 b4 8b 70 d8 1a b7 b4 3f 3d 58 42 fe 31 b1 c6 d9 a3 7f 82 e7 6e 90 58 14 52 3f 64 3c 5d a8 f9 17 c3 c4 44 1f 56 14 ea 5e 04 b0 fb d1 7f 04 5e fd 9c 61 4e 47 fc 44 c0 1a ea a2 0d d6 34 da 3c b1 ef c6 30 ee a2 6d 62 b6 e0 31 f2 e7 c2 21 43 df 6f 31 16 7b 4c 37 4c 81 ba 08 d0 07 2d 1c 35 15 90 a0 67 ba af bc 45 1d d3 5c f8 88 4d be a0 1e 00 c2 fc 0d 07 99 f8 35 91 50 8c 60 02 ea c9 0f fa d8 5d 77 6a 20 cb 38 68 26 27 fe 0e 90 64 b4 49 4a 00 0c 78 52 0c 52 16 21 fd a2 65 b1 52 04 b8 7b 86 e6 ae f9 3f 8a 43 1e 1f 79 01 b3 eb d3 0b 9e 30 1c 7a 68 94 5c ab cb 97 ec fc 45 bf 08 21 84 3c 5a 94 89 fb 6f 13 1f 42 a4 62 fc a2 31 2a 13 2e 4a 38 4e af a0 bf 1f 33 e5 b7 ad ff 36 c7 bd 1d d7 f5 4e 7f d7 c1 43 d2
+tag: f1 fb 12 1c 02 64 25 5b 16 41 42 04 f1 cc 22 cf
+
+associated data: 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c
+plaintext:
+ciphertext:
+tag: 42 be e4 2d 83 86 16 96 3d fa 22 0f b1 42 1c 5b
+
+associated data: 18 d9 9b 5d 1f e0 a2 64 26 e7 a9 6b 2d ee b0 72 34 f5 b7 79 3b
+plaintext: 91 eb 46 a0 fa 55 af 0a 64 be 19 73 cd 28 82 dc 37 91 eb 46 a0 fa 55 af 0a 64 be 19 73 cd 28 82 dc 37 91 eb 46 a0 fa 55 af 0a 64 be 19 73 cd 28 82 dc 37 91 eb 46 a0 fa 55 af 0a 64 be 19 73 cd 28 82 dc 37 91 eb 46 a0 fa 55 af 0a 64 be 19 73 cd 28 82 dc 37 91 eb 46 a0 fa 55 af 0a 64 be 19 73 cd 28 82 dc 37 91 eb 46 a0 fa 55 af 0a 64 be 19 73 cd 28 82 dc 37 91 eb 46 a0 fa 55 af 0a 64 be 19 73 cd 28 82 dc 37 91 eb 46 a0 fa
+ciphertext: 06 e4 cd 2c 46 b3 26 dd ab 1f 98 ea 7a f0 00 1c ff 35 23 f4 39 29 73 b4 56 20 26 9d 27 84 a9 c7 35 b9 fe 1a e0 f5 7b 99 bf ca 98 e1 70 e9 70 66 45 60 b3 8a 03 7c c8 15 c2 25 ee 90 9f e7 4f 26 fd 0e c5 45 77 25 94 56 5d 78 de 55 45 bf b9 73 74 59 57 6d 75 90 e0 74 a9 7c b4 53 0c ff 37 52 da e1 3c 34 46 f4 ce b8 2a 71 27 7b f5 2f 80 a1 03 4f a9 3c e9 b5 53 de 30 72 24 fe f7 f2 1b 60 69 fa 49 06 66 e8 45 16 ea 73 e8 8a d9
+tag: ff af 17 f0 3a f1 63 fe ac 08 45 ef d3 6e 01 4a
+
+associated data: 18 ac 41 d5 6a fe 93 28 bc 51 e5 7a 0f a3 38 cc 61 f5 8a 1f b3
+plaintext: 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47 a1 fb 56 b0 0b 65 bf 1a 74 ce 29 83 dd 38 92 ec 47
+ciphertext: f1 9a ee c8 da 9c b2 31 b1 6e e3 92 2e bf 2e 08 45 37 4e 4a c8 8d a4 75 01 40 45 35 bc 88 6f 2c 63 31 7c be 5d e5 fc 9b 7d 87 68 38 eb c2 dd b2 a8 04 c3 0b bc 4a a2 8a 4c 9c bd 87 d8 e0 14 65 c6 2c c6 84 0d 27 2b ef 97 d4 60 86 05 d6 a7 55 aa 2c 92 6e cb 3f e6 e1 82 3b 58 97 2c 71 34 a0 22 65 59 db 63 90 8b e4 1e 97 82 12 81 3e a9 6b 71 a2 ce 75 ad d0 c1 0e 39 30 0c 66 97 61 13 21 ac c9 ce 67 8a 58 08 55 09 4d d2 db eb 82 ed 1b 56 58 5b 0a d8 f4 b3 af eb 3c e4 db 64 24 1c f2 fb 91 e9 c3 36 b2 72 9c e0 f4 4d 2d 50 61 dc 3c d6 c8 6e 43 7f 73 c6 fe cd 7c 30 0c 0d d9 62 c1 02 59 c6 e5 1e 43 aa 83 cf 71 08 2a 19 e6 ba fe 32 f3 89 d4 24 9e a6 f6 d2 94 98 a2 9a 64 52 e2 29 e1 9f ab d1 51 a7 3c 17 1b 0a 14 28 f6 66 ab 5d e5 e8 98 e0 78 cf 4f ae 82 71 0d fd a8 ec 5b 7a 43 b5 17 a7 35 41 a3 42 34 b0 38 c1 0b 80 8d ae 1e c8 99 78 f1 9e 5d 13 0c ec 28 f6 5c 2d 8b be 4e a2 23 4b 0e d7 59 e7 97 2d d0 69 1b 19 28 31 a8 66 60 90 5a b8 6e 0d f0 c4 38 07 44 34 8f 38 0f 37 a1 d7 7b 95 6b a4 91 d0 16 f5 60 8b 56 3d 96 8f f5 42 78 25 fe b8 91 26 b0 f0 d0 4c 63
+tag: 08 58 2c 31 c6 02 91 d4 62 dd c5 bd 60 8c 10 7a
+
+associated data: 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f
+plaintext:
+ciphertext:
+tag: c0 1c 64 2f 71 45 17 03 f0 a1 6f 31 d0 6e 30 7e
+
+associated data: 28 f9 cb 9d 6f 41 13 e4 b6 88 5a 2c fd cf a1 73 45 17 e8 ba 8c 5e 30 02 d3 a5 77 49 1b ec be 90 62 34 06 d7 a9
+plaintext: a1 0c 76 e0 4b b5 20 8a f4 5f c9 34 9e 09 73 dd 48 b2 1d 87 f1 5c c6 31 9b 06 70 da 45 af 1a 84 ee 59 c3 2e 98 03 6d d7 42 ac 17 81 eb 56 c0 2b 95 00 6a d4 3f a9 14 7e e8 53 bd 28 92 fc 67 d1 3c a6 11 7b e5 50 ba 25 8f f9 64 ce 39 a3 0e 78 e2 4d b7 22 8c f6 61 cb 36 a0 0b 75 df 4a b4 1f 89 f3 5e c8 33 9d 08 72 dc 47 b1 1c 86 f0 5b c5 30 9a 05 6f d9 44 ae 19 83 ed 58 c2 2d 97 02 6c d6 41 ab 16 80 ea 55 bf 2a 94 fe 69 d3 3e a8 13 7d e7 52 bc 27 91 fb 66 d0 3b a5 10 7a
+ciphertext: 84 6b 15 fc ed 97 8a 43 bd 7b 84 c1 51 35 66 bd 64 a0 37 d9 82 b5 4f 58 8c 40 f6 ee 5d 01 26 bd c8 1a 1d 0a 9d 82 94 de 66 d3 ea 77 eb f9 96 ec 96 0b 2e f5 54 a4 fd 5b 64 c7 e6 77 54 7a 26 41 f3 73 3f ba bb 83 02 73 f2 91 da 62 a6 df 45 bd df e2 1a d8 2c e3 d5 3b 43 2b 29 2c dc 17 e5 17 67 bb b6 a8 92 eb 04 ca 5b b1 33 ae 00 e8 12 53 eb 5e ea f6 f7 13 67 c6 3e 68 70 e1 70 bb 02 53 d7 7c b9 a8 6f 30 47 4c 90 07 b1 ad df 62 5c c0 64 26 2c 3c 3d d1 c5 c7 17 e4 52 7b ac
+tag: 59 7e f4 bc bb d6 29 f2 6a 9e 9e 39 3b 4f e8 df
+
+associated data: 28 e4 a1 5e 1b d7 94 51 0e ca 87 44 01 bd 7a 37 f3 b0 6d 2a e6 a3 60 1d d9 96 53 10 cc 89 46 03 bf 7c 39 f5 b2
+plaintext: 8d f7 62 cc 37 a1 0c 76 e0 4b b5 20 8a f4 5f c9 34 9e 09 73 dd 48 b2 1d 87 f1 5c c6 31 9b 06 70 da 45 af 1a 84 ee 59 c3 2e 98 03 6d d7 42 ac 17 81 eb 56 c0 2b 95 00 6a d4 3f a9 14 7e e8 53 bd 28 92 fc 67 d1 3c a6 11 7b e5 50 ba 25 8f f9 64 ce 39 a3 0e 78 e2 4d b7 22 8c f6 61 cb 36 a0 0b 75 df 4a b4 1f 89 f3 5e c8 33 9d 08 72 dc 47 b1 1c 86 f0 5b c5 30 9a 05 6f d9 44 ae 19 83 ed 58 c2 2d 97 02 6c d6 41 ab 16 80 ea 55 bf 2a 94 fe 69 d3 3e a8 13 7d e7 52 bc 27 91 fb 66 d0 3b a5 10 7a e4 4f b9 24 8e f8 63 cd 38 a2 0d 77 e1 4c b6 21 8b f5 60 ca 35 9f 0a 74 de 49 b3 1e 88 f2 5d c7 32 9c 07 71 db 46 b0 1b 85 ef 5a c4 2f 99 04 6e d8 43 ad 18 82 ec 57 c1 2c 96 01 6b d5 40 aa 15 7f e9 54 be 29 93 fd 68 d2 3d a7 12 7c e6 51 bb 26 90 fa 65 cf 3a a4 0f 79 e3 4e b8 23 8d f7 62 cc 37 a1 0c 76 e0 4b b5 20 8a f4 5f c9 34 9e 09 73 dd 48 b2 1d 87 f1 5c c6 31 9b 06 70 da 45 af 1a 84 ee 59 c3 2e 98 03 6d d7 42 ac 17 81 eb 56 c0 2b 95 00 6a d4 3f a9 14 7e e8 53 bd 28 92 fc 67 d1 3c a6 11 7b e5 50 ba 25 8f f9 64 ce 39 a3 0e 78 e2 4d b7 22 8c f6 61 cb 36 a0 0b 75 df 4a b4 1f 89 f3 5e c8 33 9d 08 72 dc 47 b1 1c 86 f0 5b c5 30 9a 05 6f d9 44 ae 19 83 ed 58 c2 2d 97 02 6c d6 41 ab 16
+ciphertext: c5 42 84 93 cb f1 f1 30 21 07 8d ec b0 cd 50 c3 56 dd 25 08 29 74 eb 47 3d f2 02 0f e6 1c 33 8a eb 4c c1 46 d8 2f 4c 1b 1f 79 40 99 8a 4e dd 00 6c b6 4d cf 24 e5 36 55 5b 60 55 d5 9c 96 aa 10 c1 59 82 96 b4 9a e5 5f ad b0 d0 22 e5 d0 f2 7e 27 f8 5d a6 bd 22 9b 5c e4 aa ce 98 9c bd 6d d1 a0 aa 2e 27 e8 a8 1b b7 f4 55 89 e2 b7 30 b3 1b 9b 7d 81 70 ea a3 33 f5 3a 67 14 8f 15 47 10 2e 83 56 71 57 78 33 e2 db 19 90 e6 85 9e ca 79 9b 11 53 11 df 00 5e 30 fe 09 1b 6d 85 10 37 70 67 4d 80 f9 db 19 7f f9 79 85 19 2c b2 72 f3 89 cb b5 36 9b 39 6f de 00 08 99 76 48 8e 45 a7 c9 3a 56 1f 11 83 d7 d8 b1 8d 74 c0 e6 91 3d a6 75 e8 1e 0b 2e e2 a5 fa f7 10 63 92 f5 3a af b4 d1 09 ce 06 76 07 9f 57 8d c5 2e af ad 82 2c 4e d0 5c c0 bc 4c 6f dc 53 16 ae 3f cc cb 84 21 54 ca 80 b1 3f ca 96 27 6d 5c 15 c7 57 ea c1 db 5a 51 31 61 be c8 8f de 19 67 8c e6 3e e3 27 d6 9a 40 05 d4 de e7 50 14 13 b0 0c a4 bd 7c 37 e0 66 53 69 25 c2 e3 6d 92 e2 c4 74 f2 1f 13 0f 6a 84 7d 48 48 f9 9a b6 c1 78 50 67 b1 ff 3c d4 c0 d4 84 9b ef d3 65 a6 de e3 92 b0 3e 94 f8 54 d1 25 c5 17 b0 ab 7e 53 81 0e b9 18 7c 68 53 6c ab 24 e8 e0 c3 ea a1 64 d7 32 3a 08 c5 0b c1 c3 e8 02 c0 1e f4 fd fa 47 7a 97 52 b3
+tag: 50 75 5a fd 7f ea bd ff 7d a1 6a 6b f9 4e 0e 58
+
+associated data: 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc
+plaintext:
+ciphertext:
+tag: 1a c5 35 33 0a 3c 5d 88 fd d9 c4 c7 38 6c c0 64
+
+associated data: 3d 24 0b f1 d8 bf a6 8d 74 5b 42 29 10 f6 dd c4 ab 92 79 60 47 2e 15 fb e2 c9 b0 97 7e 65 4c 33 1a 01 e7 ce b5 9c 83 6a 51 38 1f 06 ec d3 ba a1 88 6f 56 3d 24 0b f1 d8 bf a6
+plaintext: b6 36 b5 35 b4 34 b3 33 b2 32 b1 31 b0 30 af 2f ae 2e ad 2d ac 2c ab 2b aa 2a a9 29 a8 28 a7 27 a6 26 a5 25 a4 24 a3 23 a2 22 a1 21 a0 20 9f 1f 9e 1e 9d 1d 9c 1c 9b 1b 9a 1a 99 19 98 18 97 17 96 16 95 15 94 14 93 13 92 12 91 11 90 10 8f 0f 8e 0e 8d 0d 8c 0c 8b 0b 8a 0a 89 09 88 08 87 07 86 06 85 05 84 04 83 03 82 02 81 01 80 00 7f fe 7e fd 7d fc 7c fb 7b fa 7a f9 79 f8 78 f7 77 f6 76 f5 75 f4 74 f3 73 f2 72 f1 71 f0 70 ef 6f ee 6e ed 6d ec 6c eb 6b ea 6a e9 69 e8 68 e7 67 e6 66 e5 65 e4 64 e3 63 e2 62 e1 61 e0 60 df 5f de 5e dd
+ciphertext: 69 11 24 f4 b5 e7 80 56 d2 0f c0 e2 ba 65 9c 82 ea d7 ab 33 81 71 6e 4d a2 5d 2f 4b e7 8b 99 33 dd 4f 53 27 f8 35 48 da 11 19 06 2b 25 a7 85 51 1d 20 12 3f 31 d7 44 ee 41 82 9f 3d 26 f3 fb fb 02 06 9d 06 fc e2 75 bf a7 b0 1b 9a 51 ad 0d cc 1f 62 11 7e 2b 32 87 6b 5b b1 3e 8f bd 1a 90 51 f6 c3 6e a9 9b a1 68 22 bc c9 a4 70 63 47 fa eb 06 b4 1b 81 2e a1 4a 79 dd aa 92 85 c7 80 96 eb ef b5 3d e3 ed 5c 5e e1 5e 95 34 75 60 b6 40 e1 3a e8 2c a0 a2 f8 69 17 eb 0d 0c 7b 04 07 a6 f5 24 de 76 61 94 a1 e4 27 77 2b ec 91 61 a0 75 33 51 38
+tag: 84 71 88 f8 c7 23 57 e4 6b 26 b2 d4 bd da 81 b4
+
+associated data: 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae
+plaintext:
+ciphertext:
+tag: 56 2d a8 2e 1a d6 d5 a2 69 ea 23 ee e5 58 22 e3
+
+associated data: 59 5b 5d 5f 61 63 65 67 69 6b 6d 6f 71 73 75 77 79 7b 7d 7f 81 83 85 87 89 8b 8d 8f 91 93 95 97 99 9b 9d 9f a1 a3 a5 a7 a9 ab ad af b1 b3 b5 b7 b9 bb bd bf c1 c3 c5 c7 c9 cb cd cf d1 d3 d5 d7 d9 db dd df e1 e3 e5 e7 e9 eb ed ef f1 f3 f5 f7 f9 fb fd 00 02 04
+plaintext: d2 6e 0a a5 41 dc 78 14 af 4b e6 82 1e b9 55 f0 8c 28 c3 5f fa 96 32 cd 69 05 a0 3c d7 73 0f aa 46 e1 7d 19 b4 50 eb 87 23 be 5a f5 91 2d c8 64 00 9b 37 d2 6e 0a a5 41 dc 78 14 af 4b e6 82 1e b9 55 f0 8c 28 c3 5f fa 96 32 cd 69 05 a0 3c d7 73 0f aa 46 e1 7d 19 b4 50 eb 87 23 be 5a f5 91 2d c8 64 00 9b 37 d2 6e 0a a5 41 dc 78 14 af 4b e6 82 1e b9 55 f0 8c 28 c3 5f fa 96 32 cd 69 05 a0 3c d7 73 0f aa 46 e1 7d 19 b4 50 eb 87 23 be 5a f5 91 2d c8 64 00 9b 37 d2 6e 0a a5 41 dc 78 14 af 4b e6 82 1e b9 55 f0 8c 28 c3 5f fa 96 32 cd 69 05 a0 3c d7 73 0f aa 46 e1 7d 19 b4 50 eb 87 23 be 5a f5 91 2d c8 64 00 9b 37 d2 6e
+ciphertext: d9 b0 1d bd 54 0d 7c 80 f3 fb b9 4c 32 2d e1 62 d3 5f ff 04 08 3a e6 1f 0b 89 ca 55 06 8c e5 ac 05 8d db 48 47 eb 06 11 2a 43 d3 7d 87 fa 81 91 8a 92 8a e7 d9 eb 3c f0 67 13 68 5f 19 db 81 f8 aa fb 9c be dc 11 23 a4 c0 e3 df eb a9 ac 39 d2 71 df 46 f6 71 70 0a 9c 33 d5 81 97 7c d6 c3 0e 73 b7 2c 81 4f d9 50 2f dd e2 60 23 5d 96 8a 08 67 38 33 37 82 f6 39 72 5b 50 c2 10 33 6e 11 5c e2 de 57 0e d8 c0 7c bb a4 72 e8 93 c9 95 ce 2c 83 12 06 fe 23 db 39 bf e8 34 14 15 f9 37 09 5e 9a 50 3c 33 5f 4d 12 e5 74 a2 dc db a2 c8 0d fc 8a 04 00 1a 0b af c4 d1 d1 74 ee a2 61 6c 1c d6 5e ea bf 57 33 3a 87 1f 45 fe 05 3c 57 c1
+tag: 9a fe ac 75 c1 9a 97 62 fb 8e 84 f2 da 3e ae 81
+
+associated data: 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f
+plaintext:
+ciphertext:
+tag: 6a b5 ca 61 94 1a 1c f1 70 1a 0e 64 3b a1 42 98
+
+associated data: 7e a5 cc f3 1b 42 69 90 b7 de 06 2d 54 7b a2 c9 f0 18 3f 66 8d b4 db 03 2a 51 78 9f c6 ed 15 3c 63 8a b1 d8 00 27 4e 75 9c c3 ea 12 39 60 87 ae d5 fc 24 4b 72 99 c0 e7 0f 36 5d 84 ab d2 f9 21 48 6f 96 bd e4 0c 33 5a 81 a8 cf f6 1e 45 6c 93 ba e1 09 30 57 7e a5 cc f3 1b 42 69 90 b7 de 06 2d 54 7b a2 c9 f0 18 3f 66 8d b4 db 03 2a 51 78 9f c6 ed 15 3c 63 8a b1 d8 00 27
+plaintext: f7 b8 79 3a fa bb 7c 3d fd be 7f 40 01 c1 82 43 04 c4 85 46 07 c7 88 49 0a ca 8b 4c 0d cd 8e 4f 10 d0 91 52 13 d3 94 55 16 d6 97 58 19 d9 9a 5b 1c dc 9d 5e 1f df a0 61 22 e2 a3 64 25 e5 a6 67 28 e8 a9 6a 2b eb ac 6d 2e ee af 70 31 f1 b2 73 34 f4 b5 76 37 f7 b8 79 3a fa bb 7c 3d fd be 7f 40 01 c1 82 43 04 c4 85 46 07 c7 88 49 0a ca 8b 4c 0d cd 8e 4f 10 d0 91 52 13 d3 94 55 16 d6 97 58 19 d9 9a 5b 1c dc 9d 5e 1f df a0 61 22 e2 a3 64 25 e5 a6 67 28 e8 a9 6a 2b eb ac 6d 2e ee af 70 31 f1 b2 73 34 f4 b5 76 37 f7 b8 79 3a fa bb 7c 3d fd be 7f 40 01 c1 82 43 04 c4 85 46 07 c7 88 49 0a ca 8b 4c 0d cd 8e 4f 10 d0 91 52 13 d3 94 55 16 d6 97 58 19 d9 9a 5b 1c dc 9d 5e 1f df a0 61 22 e2 a3 64 25 e5 a6 67 28 e8 a9 6a 2b eb ac 6d 2e
+ciphertext: f4 b1 78 5c 7f 30 c8 be 93 8f 23 f1 ec d0 c0 a6 6e fd ea 73 c8 38 da 6d 25 a0 ab 6f 37 78 82 11 83 da 15 91 39 d7 7b d6 0d 69 44 02 9f 64 b1 6f 55 2b 46 ab da 83 83 12 96 58 ee d8 46 7f ca 4a 3a fb 7b 57 72 7e f7 ee 11 71 eb 0e 7a 5b 10 67 d7 85 82 b6 2b 72 76 c8 9b 54 6b 0a d4 95 5e f2 f3 18 eb 82 3c ad 22 71 9e 3a 57 54 c3 34 15 40 0d a3 01 5f 80 20 2e 53 13 7f 6c e5 1d dc 46 95 84 02 be 21 89 5b 95 4e 21 ea 70 cd a1 c0 35 ed 5a 9f 54 18 4c 7e 78 69 70 00 88 e4 c3 08 2a 27 be 7a 32 27 96 54 93 dd d2 04 31 56 00 7f a4 bb ed 04 c1 83 ec 6e 0b f7 42 9d 8d a4 b3 c6 5c 91 f3 ba f2 9a c9 44 3d ff 36 fe de 32 f4 07 6b 81 d4 a7 6d f9 00 b4 13 9f ff 71 f2 fa 17 bc 0c f2 53 9c 47 cf c8 91 be 50 b5 f3 11 8b a4 03 b0 22 37 d6 57
+tag: 5e f9 fb 47 d2 3e 48 ab 3b e5 a7 6d 2f ab e2 38
+
+associated data: b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3
+plaintext:
+ciphertext:
+tag: 07 ab 9c 8d 94 90 ef a3 28 e0 3c 6a cd 6a d8 a2
+
+associated data: b0 0a 63 bc 16 6f c8 22 7b d4 2e 87 e0 3a 93 ec 46 9f f8 52 ab 05 5e b7 11 6a c3 1d 76 cf 29 82 db 35 8e e7 41 9a f3 4d a6 00 59 b2 0c 65 be 18 71 ca 24 7d d6 30 89 e2 3c 95 ee 48 a1 fa 54 ad 07 60 b9 13 6c c5 1f 78 d1 2b 84 dd 37 90 e9 43 9c f5 4f a8 02 5b b4 0e 67 c0 1a 73 cc 26 7f d8 32 8b e4 3e 97 f0 4a a3 fc 56 af 09 62 bb 15 6e c7 21 7a d3 2d 86 df 39 92 eb 45 9e f7 51 aa 04 5d b6 10 69 c2 1c 75 ce 28 81 da 34 8d e6 40 99 f2 4c a5 fe 58 b1 0b 64 bd 17 70 c9 23 7c d5 2f 88 e1 3b 94 ed 47 a0 f9 53 ac 06 5f b8
+plaintext: 2a 1d 10 03 f5 e8 db ce c1 b4 a7 9a 8d 80 73 66 59 4c 3f 32 25 18 0b fd f0 e3 d6 c9 bc af a2 95 88 7b 6e 61 54 47 3a 2d 20 13 06 f8 eb de d1 c4 b7 aa 9d 90 83 76 69 5c 4f 42 35 28 1b 0e 01 f3 e6 d9 cc bf b2 a5 98 8b 7e 71 64 57 4a 3d 30 23 16 09 fb ee e1 d4 c7 ba ad a0 93 86 79 6c 5f 52 45 38 2b 1e 11 04 f6 e9 dc cf c2 b5 a8 9b 8e 81 74 67 5a 4d 40 33 26 19 0c fe f1 e4 d7 ca bd b0 a3 96 89 7c 6f 62 55 48 3b 2e 21 14 07 f9 ec df d2 c5 b8 ab 9e 91 84 77 6a 5d 50 43 36 29 1c 0f 02 f4 e7 da cd c0 b3 a6 99 8c 7f 72 65 58 4b 3e 31 24 17 0a fc ef e2 d5 c8 bb ae a1 94 87 7a 6d 60 53 46 39 2c 1f 12 05 f7 ea dd d0 c3 b6 a9 9c 8f 82 75 68 5b 4e 41 34 27 1a 0d 00 f2 e5 d8 cb be b1 a4 97 8a 7d 70 63 56 49 3c 2f 22 15 08 fa ed e0 d3 c6 b9 ac 9f 92 85 78 6b 5e 51 44 37 2a 1d 10 03 f5 e8 db ce c1 b4 a7 9a 8d 80 73 66 59 4c 3f 32 25 18 0b fd f0 e3 d6 c9 bc af a2 95 88 7b 6e 61 54 47
+ciphertext: 51 28 3f 6c 97 6b 22 36 86 d8 85 29 5e d1 81 88 53 36 a5 d0 a4 35 d8 80 4b ee de 26 2a bf 69 d0 3c e7 83 17 db ab 22 10 1f 74 39 97 97 0c b0 db b1 8b 2b 1f f2 05 30 cf c3 a6 5e 8b f3 e4 73 19 fc 17 f0 17 7d 17 1a 0b bc 03 5c 94 3f 10 13 e1 23 90 69 75 4e 75 ee cc ff 29 ca c4 27 af 84 7e 1c cc 16 b1 ba be d9 5d 67 10 dc 59 84 3b b5 a9 35 b1 7f d4 3a c9 02 0f b9 63 8c 32 41 3e 0f 3b f5 d3 3e 1e 1c 6a 6d d9 4b 7d c0 45 ed a6 ff 3d c1 a6 5b a7 bc c5 68 f4 51 00 36 a0 a6 d0 82 92 58 81 0b 23 7e 4d 81 53 5e dd ba b1 64 91 1f bf 85 80 c9 5d 90 57 ce 7f 8f cb 59 b3 d4 d4 68 6f f2 ba fe 83 b2 78 2e d9 ff 98 4e b2 bb 11 ce 1c 21 5a 74 40 ce 17 30 1a 2b f8 6c 66 57 bd 00 16 6d 4b b1 f5 c1 43 69 c8 d4 be 40 7f 17 20 e8 4a cf 2e 47 89 97 2a 48 71 24 99 2c 10 66 07 2f 07 b4 a4 b2 36 b2 66 88 ef f9 0a 1f 3d 47 07 81 66 b7 92 96 91 e0 a3 42 98 c3 ef d5 77 9a 87 ca d6 52 eb c3 02 bf
+tag: 42 19 4f 2b f4 61 6b 7c e9 22 9f 69 b8 64 89 32
+
+associated data: f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b
+plaintext:
+ciphertext:
+tag: 4b a1 c4 7b 2b de 0e 60 cc b5 72 31 48 7d ab 0f
+
+associated data: f2 8e 2a c5 61 fc 98 34 cf 6b 07 a2 3e d9 75 11 ac 48 e3 7f 1b b6 52 ed 89 25 c0 5c f7 93 2f ca 66 02 9d 39 d4 70 0c a7 43 de 7a 16 b1 4d e8 84 20 bb 57 f2 8e 2a c5 61 fc 98 34 cf 6b 07 a2 3e d9 75 11 ac 48 e3 7f 1b b6 52 ed 89 25 c0 5c f7 93 2f ca 66 02 9d 39 d4 70 0c a7 43 de 7a 16 b1 4d e8 84 20 bb 57 f2 8e 2a c5 61 fc 98 34 cf 6b 07 a2 3e d9 75 11 ac 48 e3 7f 1b b6 52 ed 89 25 c0 5c f7 93 2f ca 66 02 9d 39 d4 70 0c a7 43 de 7a 16 b1 4d e8 84 20 bb 57 f2 8e 2a c5 61 fc 98 34 cf 6b 07 a2 3e d9 75 11 ac 48 e3 7f 1b b6 52 ed 89 25 c0 5c f7 93 2f ca 66 02 9d 39 d4 70 0c a7 43 de 7a 16 b1 4d e8 84 20 bb 57 f2 8e 2a c5 61 fc 98 34 cf 6b 07 a2 3e d9 75 11 ac 48 e3 7f 1b b6 52 ed 89 25 c0 5c f7 93 2f ca 66 02 9d
+plaintext: 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d
+ciphertext: 1e 57 8b dc 27 fa a5 1c e0 68 eb 17 78 c0 9d 19 c5 d1 16 ee ab 38 34 4e 27 0c 9c 39 ac bf aa 9d 83 3c 5e c9 38 e4 9a 74 33 08 f2 1f e0 ad 71 02 10 f0 79 e6 3a ca 27 08 36 44 89 22 65 80 63 3a 82 b0 21 8f 06 0a 60 f5 46 29 41 9e da d9 57 4b 37 ad 18 20 bc e0 fc 8f 29 fd 7a 57 5e 33 15 0f 5c ff fc 36 d6 24 ae 6e df 06 06 c0 1c 4c 51 ef 42 89 e9 fe 07 f5 45 12 ef 58 c6 13 37 93 ea 99 2c 64 45 d6 b7 2c 13 d5 f2 b4 09 6c 4d 39 0a 49 4e e6 d6 49 1c ae 62 2b 3a b7 5e cc a1 63 cf 63 22 e1 5c a1 b9 2a c3 54 41 ae 46 55 a1 72 4f c8 db f8 a5 65 be 7b 60 83 32 0a 06 ec ee e8 8e c1 9c b1 37 78 b4 c8 0a 4d 5d e5 f2 57 23 5d a3 6d 74 50 19 c6 a4 67 13 f9 57 2c 36 ed 2c 06 bc 53 0c cd 75 91 73 97 16 3e 11 fe 48 fb 3a cf db 6a 55 4a 8c 6c 06 28 73 66 a4 af 1c af bd de 57 b2 cc 37 ad 63 de 3e 39 18 7d 3c b7 14 a7 23 c3 66 53 03 0c c2 af 60 28 c1 9e b1 51 d1 b7 10 f6 a0 29 17 ff c4 a4 db 15 53 87 79 64 ac 3f 17 fd 35 6e 41 23 ea 69 f2 9e 5d 86 35 15 3d 0a 82 e2 97 a9 30 48 18 7f 7b d2 71 c0 99 69 f9 2c 1d f1 c4 d3 0f c4 49 c5 17 20 6a 8d f2 60 62 6b 63 0a ee 27 ff a6 ad f8 e1 59
+tag: 30 eb 42 87 e8 a6 3f c6 79 07 c9 f4 2d 2f 1e bb
+
+associated data: 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5
+plaintext:
+ciphertext:
+tag: 9e cc 3e dc 1a 9f 8f 99 95 7b d5 37 fa 35 9b 84
+
+***
+initialize with key of 96 bits, nonce of 125 bits:
+key: c3 53 e2 72 02 91 21 b0 40 cf 5f ee
+nonce: c3 47 ca 4e d1 55 d8 5c df 63 e6 6a ed 71 f4 18
+
+associated data:
+plaintext:
+ciphertext:
+tag: 1e aa cf 64 4a 37 72 21 ec 7b 9d 47 bf 22 77 e4
+
+associated data:
+plaintext: 05
+ciphertext: a7
+tag: 0f e9 59 25 f7 67 d5 5d c3 2a 45 c3 4c 26 53 63
+
+associated data:
+plaintext: 06 4b
+ciphertext: 58 ef
+tag: 9c 0e 7c 30 ba 0b f9 d9 bb 7c 16 51 67 43 16 e2
+
+associated data:
+plaintext: 08 4d 92 d7
+ciphertext: 33 8e f5 f4
+tag: 37 7e b2 14 8c bd ac d8 5b 7d dc f4 b0 c7 ee d5
+
+associated data:
+plaintext: 0b 50 95 da 20 65 aa
+ciphertext: 0a 77 99 bd 4f c7 a8
+tag: d4 5d b8 31 88 6b e0 d9 db e4 9e 27 c6 a7 91 3c
+
+associated data:
+plaintext: 0f 54 99 de 24 69 ae f3 39 7e c3
+ciphertext: 44 2e 8b c6 63 52 e9 ce 37 62 f5
+tag: 50 58 ce bd 84 34 b6 9b 04 cf 53 99 8b 0d b2 e0
+
+associated data:
+plaintext: 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69
+ciphertext: db 16 8b bc 78 c9 80 ef 26 cc 09 cf 35 ad 4f 16 16
+tag: 50 61 8c 7d 63 b4 41 18 76 ad d2 74 85 6d d3 42
+
+associated data:
+plaintext: 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1
+ciphertext: 84 82 5b a6 9d 39 04 79 7b dd 80 7a 22 d0 73 b8 86 3c 37 9b 15 bd 40 d7 40 65
+tag: 2e d1 6a c1 52 d9 d1 92 ff ef ad 89 4f a8 66 12
+
+associated data:
+plaintext: 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9
+ciphertext: b2 00 25 bc 23 8e 30 03 e2 4c d0 6d cc ba 67 b7 2a 43 6d 23 29 46 c2 e0 ef 07 89 9e a8 4e f7 b0 90 50 4f 84 ba 7d 2a ce
+tag: 7b 04 b4 67 22 dc d3 2a 9f a3 d0 b3 80 05 c7 4d
+
+associated data:
+plaintext: 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d
+ciphertext: cf 8d 1d a0 06 d8 1b 1c 1b 65 c0 14 e3 62 30 dc 8d b2 5c 37 d7 16 fb 4c a7 c6 4b 26 b5 67 97 07 24 25 27 ad a4 06 41 56 7c 9b 53 e4 7a 8a 0a 10 30 fc 26 42 64 23 08 67 69 91 e4 29 e7
+tag: b2 20 43 60 ea 12 28 a3 a4 52 50 b1 f0 46 96 b3
+
+associated data:
+plaintext: 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00
+ciphertext: b5 5a 08 c6 30 6d c1 8d 92 66 71 78 d9 aa 3c e1 79 4b e9 3e b3 fb 36 f1 04 9b ab da 19 24 70 85 7d ff 1f fb 98 b7 b7 7b 87 2e 82 a7 d5 87 c3 74 24 2c 6b f6 7f b2 dc 43 02 5c 13 7c e0 de dd e9 ba d3 f8 e1 f8 84 7e ea 03 4b a3 1d 41 e6 53 47 b1 5f 35 61 22 8e 66 c4 74 22 fc 5a
+tag: 66 00 39 1a 2a 06 27 17 9f 17 60 7c 53 37 84 eb
+
+associated data:
+plaintext: 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6
+ciphertext: 3d e6 c5 39 91 b1 3d 30 59 25 6d fb e0 a5 3b 6e 17 ac 02 e3 fc 2e 04 a4 19 2c 23 7d 53 02 95 0f 3e 5d c5 95 46 88 37 c4 b4 f1 9e f9 2a 38 e9 3d 09 b5 7c cf 20 94 50 d5 95 41 1b b4 cc 67 d3 c8 5f da f5 1d d6 f2 a2 09 60 4e 5e d7 78 a5 8a 25 5e 91 ea e2 74 04 04 9a a3 4b e2 a9 89 83 ae 23 62 81 87 b4 33 23 b3 ff 7d 68 4a 88 68 19 b7 7b 7f ea 93 62 fd 7a 27 b1 ff dd 87 51 ef c2 ff 4f b7 b3 75 c3 95 1e 03 e1 7a 53 51
+tag: 26 32 b7 44 35 73 5e db a6 5d db 0f 48 fa 09 42
+
+associated data:
+plaintext: d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e
+ciphertext: 9e f5 f2 88 d4 43 50 20 4b ca 0a 9f 92 7b ac 05 28 7f 8c 18 74 53 80 d6 66 be b5 1a 35 ee 2a fb 6e a6 16 8e be 01 66 23 37 cf 59 a9 da 4e 5f 04 a5 13 85 bf 06 41 3d d6 63 65 2c 57 ce 7d 4a 08 17 d6 c5 4c b0 b1 fe 15 8d 13 57 72 dd ae e8 e0 af 0d 27 9a 3f 73 40 c1 48 b6 6b 23 6e 8a cc 2c ba f3 e1 4b d8 14 2c 23 8c 64 94 bc d1 1e 79 05 78 63 bc 04 13 c2 c6 e4 f3 af 6a 8d 9a ad a8 ee ec 47 71 0e 89 a6 c5 84 cc ec 56 90 f7 a9 3a b3 7b a0 53 9a 57 c7 a9 61 41 f2 62 0f 18 94 a4 0d 17 cd 1d 44 a7 12 5f b5 97 23 e5 e3 4c 54 32 6a b2 c7 53 9e 7a 4d 20 36 0a 78 c4 db ac a6 f1 6b e0 76 9a 1d 90 37 12 ed 78 da e0 e3 1b d5 25 6b ab
+tag: c1 41 26 8b a0 2b 24 6b cc f6 34 66 6f 17 c9 e5
+
+associated data:
+plaintext: 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0
+ciphertext: 93 38 18 b0 a7 2e c2 69 a6 75 87 a5 d4 e0 69 1e e2 4a 3c d6 0e d5 98 42 48 fe 6d 54 2a 3a 1b 12 95 13 9a 62 8e be 76 7f b0 39 e1 4c 1f db bb ee b8 99 bf ed a6 ba 77 2a ed 53 43 9d e9 79 ac 7f 61 2d 2e 03 f4 19 f3 55 1d a5 1a 3b 64 2a 1c 28 3e a5 de 4b b9 32 a3 49 f9 cd 0b 1f 54 e2 c3 4e a2 36 cf 91 11 72 96 37 ac 81 7b 14 a3 e8 71 76 ba f1 27 de fb ee c6 a8 9e eb 7e 9f f3 5b 6f 82 a7 18 1d 85 d0 85 8a fe 37 ab 3f 69 75 de 5b 92 e7 71 b4 1d 92 50 4c 3a e7 e8 5c bc 5e 43 b0 8f 24 b0 9b 97 3a 6e 78 21 c6 96 3d d8 4f 5e 09 30 d6 05 10 6b 3f 90 a7 44 c0 b4 7e 01 db 93 c4 81 27 d6 78 90 64 e8 59 e5 67 c7 92 ee 0e 8e a6 a3 04 84 00 46 ec e9 00 d1 bd b2 3b a0 06 84 bd c8 f0 08 64 8f 49 10 23 25 82 7e 02 44 92 34 b2 ad 30 8f 1e d9 28 b5 2c d4 51 bb e6 ea 3e 12 82 7a d8 ef e8 72 e8 7c 81 0a 3f 92 0c 81 f0 7a fa f3 31 31 01 12 80 3f cb 4d ac a0 78 72 64 5c 5b b1 bb f6 d4 cc f7 ef df 30 98 d8 db f4 90 fa 45 ef 06 ad f0 8d 37 5d 9c f5 01 5f
+tag: 46 89 76 f7 57 4d f2 53 31 f7 aa fb e8 93 b8 10
+
+associated data: 07 3b 6f a3
+plaintext:
+ciphertext:
+tag: 37 21 db e6 5c a6 e7 e7 2c e3 4e 37 43 7f 30 28
+
+associated data: 07 8f 18 a0
+plaintext: 58 a1 ea 34 7d c6 10 59 a2 eb 35 7e c7 11 5a a3 ec 36 7f c8 12 5b a4 ed 37 80 c9 13 5c a5 ee 38 81 ca 14 5d a6 ef 39 82 cb 15 5e a7 f0 3a 83 cc 16 5f a8 f1 3b 84 cd 17 60 a9 f2 3c 85 ce 18 61 aa f3 3d 86 cf 19 62 ab f4 3e 87 d0 1a 63 ac f5 3f 88 d1 1b
+ciphertext: f1 71 82 08 4b 5a d5 8f f3 c7 7d 51 f2 a0 c7 86 a0 32 e5 63 03 81 25 5a 17 19 b3 dc 67 11 29 a5 b0 91 6c 6a 44 0a 23 0a 5d 4e a2 e0 39 d0 6e 7a 8e da 7c a7 3c ad 21 ae e7 e5 a5 29 bf 9b 28 fa fe ba 6d 1f 1b 05 dc dd 45 66 ef 00 92 ae bc 26 15 2a 20 35
+tag: bc bc d2 76 99 fb 5d d2 23 f4 cf 07 9c 0f 39 82
+
+associated data: 07 0d 13 19
+plaintext: d6 20 69 b2 fb 45 8e d7 21 6a b3 fc 46 8f d8 22 6b b4 fd 47 90 d9 23 6c b5 fe 48 91 da 24 6d b6 00 49 92 db 25 6e b7 01 4a 93 dc 26 6f b8 02 4b 94 dd 27 70 b9 03 4c 95 de 28 71 ba 04 4d 96 df 29 72 bb 05 4e 97 e0 2a 73 bc 06 4f 98 e1 2b 74 bd 07 50 99 e2 2c 75 be 08 51 9a e3 2d 76 bf 09 52 9b e4 2e 77 c0 0a 53 9c e5 2f 78 c1 0b 54 9d e6 30 79 c2 0c 55 9e e7 31 7a c3 0d 56 9f e8 32 7b c4 0e 57 a0 e9 33 7c c5 0f 58 a1 ea 34 7d c6 10 59 a2 eb 35 7e c7 11 5a a3 ec 36 7f c8 12 5b a4 ed 37 80 c9 13 5c a5 ee 38 81 ca 14 5d a6 ef 39 82 cb 15 5e a7 f0 3a 83 cc 16 5f a8 f1 3b 84 cd 17 60 a9 f2 3c 85 ce 18 61 aa f3 3d 86 cf 19 62 ab
+ciphertext: 90 69 71 fb 14 28 d3 da 4d 31 01 56 f9 2c 2f 96 2d 35 06 2d 20 4b 15 cf f7 e0 52 dc d1 54 f0 04 08 2c 63 2d 5c 8d a3 0a 42 d9 42 82 c4 24 9a a8 24 6f a2 cb 55 77 74 12 a3 72 96 ce 6f 12 8d 64 7e 2d 98 1a de 48 73 66 3c 1f 2b d4 80 c5 18 3e 38 66 42 f4 0e 47 76 29 63 67 99 1d 2f 27 d3 62 20 67 9a b0 bc 00 7c 2f de a5 bd c7 73 a7 8a 6b 7a 0a a1 f5 b7 27 1b d2 72 75 14 73 a4 ff 50 2b 37 02 ff 66 2c 32 36 93 13 37 e4 2f ac 10 1f 39 38 18 4e 77 f8 96 b2 ae 44 28 23 fd 71 af f5 0e ab 52 f2 dc 63 89 00 41 a7 98 18 83 ec bb 64 01 18 c0 35 de 3a f5 ba 18 dc 20 5f 4d 00 0a 97 16 52 66 ea 9f 5e 26 a6 ac 82 00 84 53 96 6a f4 31 fe 86
+tag: 55 3c b6 63 a7 5f 39 31 95 e8 7d 42 cb d0 0a 9e
+
+associated data: 07 ca 8e 52
+plaintext: 94 dd 27 70 b9 03 4c 95 de 28 71 ba 04 4d 96 df 29 72 bb 05 4e 97 e0 2a 73 bc 06 4f 98 e1 2b 74 bd 07 50 99 e2 2c 75 be 08 51 9a e3 2d 76 bf 09 52 9b e4 2e 77 c0 0a 53 9c e5 2f 78 c1 0b 54 9d e6 30 79 c2 0c 55 9e e7 31 7a c3 0d 56 9f e8 32 7b c4 0e 57 a0 e9 33 7c c5 0f 58 a1 ea 34 7d c6 10 59 a2 eb 35 7e c7 11 5a a3 ec 36 7f c8 12 5b a4 ed 37 80 c9 13 5c a5 ee 38 81 ca 14 5d a6 ef 39 82 cb 15 5e a7 f0 3a 83 cc 16 5f a8 f1 3b 84 cd 17 60 a9 f2 3c 85 ce 18 61 aa f3 3d 86 cf 19 62 ab f4 3e 87 d0 1a 63 ac f5 3f 88 d1 1b 64 ad f6 40 89 d2 1c 65 ae f7 41 8a d3 1d 66 af f8 42 8b d4 1e 67 b0 f9 43 8c d5 1f 68 b1 fa 44 8d d6 20 69 b2 fb 45 8e d7 21 6a b3 fc 46 8f d8 22 6b b4 fd 47 90 d9 23 6c b5 fe 48 91 da 24 6d b6 00 49 92 db 25 6e b7 01 4a 93 dc 26 6f b8 02 4b 94 dd 27 70 b9 03 4c 95 de 28 71 ba 04 4d 96 df 29 72 bb 05 4e 97 e0 2a 73 bc 06 4f 98 e1 2b 74 bd 07 50 99 e2 2c 75 be 08 51 9a e3 2d 76 bf 09 52 9b e4 2e 77 c0 0a 53 9c e5 2f 78 c1 0b 54 9d e6 30 79 c2 0c 55 9e e7 31 7a c3 0d 56 9f e8 32 7b c4 0e 57 a0 e9 33 7c c5 0f 58 a1 ea 34 7d c6 10 59 a2 eb 35 7e c7 11 5a a3 ec 36 7f c8 12 5b a4 ed 37 80 c9 13 5c a5 ee 38 81 ca 14 5d a6 ef 39 82 cb 15 5e a7 f0 3a 83 cc 16 5f a8 f1 3b 84
+ciphertext: c2 f5 b8 2d b7 d2 41 d1 ef 9d c2 92 0b 45 ea 16 98 d8 be ec 2f 08 03 e7 0f c4 e7 d7 38 7d e4 c6 46 dd 84 a3 e2 6c 5d cd bf 21 ed c1 df bd 25 cc 7b 07 6d 49 68 c5 9e 51 20 06 76 25 31 50 4a 02 29 03 8a 3a 47 b8 78 ff fb 34 c0 7e 5e 32 e2 db 31 81 45 c5 de 0a 80 9e f0 d9 26 50 88 fa f8 6d 28 f3 7c 09 cb 2a a4 19 87 ce d0 c5 13 10 9c 62 57 ec 7a 23 21 a2 63 85 89 88 e0 ed a6 18 db 95 83 30 2b 33 b5 2a 45 f8 22 d7 21 d4 7b d0 8d 7a b8 2a 6d d4 cf d9 be cd 06 17 c1 29 b5 76 7b 17 3f f1 8a 33 7f d9 78 2e b5 01 b6 bc bb 2e 3a 06 ef 32 37 1c cd d7 82 79 11 76 ae a5 78 72 8c 43 14 cb 03 01 3a 19 44 2b 42 69 78 c7 cf 11 4a 49 8c 3b 74 fd 26 aa 4a ee 61 f2 b3 68 56 6f 07 7c bd 2f a4 51 30 99 e3 59 90 de 9b cb f3 eb 22 42 fc f2 fc fb 71 06 8d fc 1b a3 97 ab 51 ef 46 36 ae f3 20 51 33 d4 0d 99 dd 85 b5 00 ab 82 a0 c4 12 d3 82 f7 ff 42 3a a9 58 75 03 90 d5 2e bc fe db 8e b0 7a 84 54 87 9d 8f 84 73 73 5f fc 58 91 b7 70 31 15 7c c3 df 56 be e7 b7 4f cd 27 17 8e 0d 7e 77 7d fb af 44 99 bf bb ff 27 12 31 00 1d 35 1c 3a 39 03 7e 0d 19 04 3f d2 3b 87 87 d9 08 e4 f7 2f 6f 64 ea 4b 33 f9 c1 53 26 5b e5 d2 9c df 5e bc 75 92 ec 3b 62 d9 14 41 9c 51 fb ff bc c7 b5 5c ac 4e ab 74 22 e9 1a fc 55 76 4d 0d
+tag: a0 0d c1 07 d5 05 a3 e3 ef e1 9a c0 87 94 06 3e
+
+associated data: 0c 40 74 a8 dc 11 45 79 ad
+plaintext:
+ciphertext:
+tag: ce 94 87 e1 4b de d9 fd 50 56 5f db 7c 32 7b 0e
+
+associated data: 0c 99 27 b4 42 cf 5d ea 78
+plaintext: 5d ab f9 48 96 e4 33 81 cf 1e 6c ba 09 57 a5 f3 42 90 de 2d 7b c9 18 66 b4 03 51 9f ed 3c 8a d8 27 75 c3 12 60 ae fc 4b 99 e7 36 84 d2 21 6f bd 0c 5a a8 f6 45 93 e1 30 7e cc 1b 69 b7 06 54 a2 f0 3f 8d db 2a 78 c6 15 63 b1 00 4e 9c ea 39 87 d5 24 72 c0 0f 5d ab f9 48
+ciphertext: 88 48 a1 11 28 ce 6b 1a 5c 59 b8 10 44 e7 f3 32 30 a6 76 c8 16 24 36 e4 f7 59 d9 4d b7 50 69 e6 c5 e6 cf be c0 60 cf a5 f1 41 9c 6d aa 78 90 21 fa e7 df 84 c5 c4 58 8e 2e e0 62 2e 33 62 58 cf 0a ed f2 4d 46 14 a9 6b 4c 8d f5 a2 cf 19 9c fe 08 8b 11 71 25 95 b1 cb 06
+tag: 71 91 b4 17 81 5c dc 71 d2 ce 9c 87 0c e1 c0 91
+
+associated data: 0c 1e 30 42 54 66 78 8a 9c
+plaintext: e2 31 7f cd 1c 6a b8 07 55 a3 f1 40 8e dc 2b 79 c7 16 64 b2 01 4f 9d eb 3a 88 d6 25 73 c1 10 5e ac fa 49 97 e5 34 82 d0 1f 6d bb 0a 58 a6 f4 43 91 df 2e 7c ca 19 67 b5 04 52 a0 ee 3d 8b d9 28 76 c4 13 61 af fd 4c 9a e8 37 85 d3 22 70 be 0d 5b a9 f7 46 94 e2 31 7f cd 1c 6a b8 07 55 a3 f1 40 8e dc 2b 79 c7 16 64 b2 01 4f 9d eb 3a 88 d6 25 73 c1 10 5e ac fa 49 97 e5 34 82 d0 1f 6d bb 0a 58 a6 f4 43 91 df 2e 7c ca 19 67 b5 04 52 a0 ee 3d 8b d9 28 76 c4 13 61 af fd 4c 9a e8 37 85 d3 22 70 be 0d 5b a9 f7 46 94 e2 31 7f cd 1c 6a b8 07 55 a3 f1 40 8e dc 2b 79 c7 16 64 b2 01 4f 9d eb 3a 88 d6 25 73 c1 10 5e ac fa 49 97 e5 34 82 d0 1f 6d bb 0a 58 a6 f4 43 91 df 2e 7c
+ciphertext: 0c 05 18 4f 74 4d 8a ef 2a 9a 89 a6 3f 9b 90 62 c6 e1 d4 42 e8 5e 3f c2 6f b1 ca 5a c0 48 98 45 a9 6f 2a 3e 09 b1 c2 ca 9f 08 75 4c bb c1 e4 66 bc d0 c4 26 ee f0 c0 f3 98 ac 81 9e b2 7f 12 7b bd d7 ec 93 79 95 f6 4b 77 32 f3 fc 0a 27 a6 bc c1 e6 16 1f 48 63 ab 5a d4 1d d4 8e b6 6b 9d 4e 8a e0 40 75 1d 48 1d 87 f4 9a 1e 57 02 16 36 85 87 2c d3 f9 00 95 43 ec 49 22 47 89 7b 00 ee b4 d4 be 0c 29 3c e5 14 70 e6 e2 92 d9 91 a1 3d f5 9a 6e 9c ab f3 ec 4f 74 f0 21 49 f2 68 c2 c7 9a f3 e9 40 35 65 39 77 18 24 ed cd 91 5d b9 46 83 f3 54 dc fe 1d a7 11 d2 c0 ff 49 2f 40 1f 70 57 d6 92 43 76 61 52 e3 6e 93 ed 9f 97 b3 a4 f9 8b 98 c5 33 57 63 8a ef cd 40 45 1c 40 a4 a9
+tag: 93 db 7c 5d 2a af 50 c3 2f a1 fe 9a 23 37 4e 69
+
+associated data: 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22
+plaintext:
+ciphertext:
+tag: 24 fa 36 8d 11 5e 0f 21 ae 70 23 fb da d9 4e be
+
+associated data: 13 a7 3c d0 65 f9 8e 23 b7 4c e0 75 0a 9e 33 c7
+plaintext: 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f 64 b9 0f
+ciphertext: e8 76 f0 ea 18 d1 58 c3 23 80 4b 00 60 27 68 3b 96 bc 47 29 f0 f5 7e a3 15 38 cb 4c b4 a7 01 16 a1 c5 7b b0 57 e4 a9 ee 2b e4 08 8b 46 7a 33 ac 68 74 0b 39 61 f9 59 c4 a6 50 aa 42 cc 8d db 82 91 55 04 06 71 95 4c a3 aa e4 26 94 ef 3a 13 bb a2 81 88 87 b0 88 51 90 bb 11 20 ec 2d 9c 24 4b
+tag: 3c 6d e8 cc 3d 4f 12 62 8b c5 13 7f ad 13 e4 16
+
+associated data: 13 37 5b 7f a3 c7 eb 10 34 58 7c a0 c4 e8 0d 31
+plaintext: f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f f4 4a 9f
+ciphertext: 87 ab 7f 4e 74 41 80 bf 29 e1 1a e0 95 f9 66 e6 b5 28 93 99 77 33 fd e2 10 b9 ec 91 3d 42 47 29 a3 9a 9b 28 34 f2 da de 60 72 3e 71 b9 f0 10 2b c5 29 b9 8b 25 79 8b 58 03 78 6d aa f5 b9 07 e5 6f 32 6d 50 00 7e 39 b0 8d ed 8b 18 09 fe 86 71 3d bc 82 05 2e 13 95 3b 6e 7f ea e9 85 cc 6a a5 19 79 65 c1 48 0e 52 c2 7e ff 39 78 e3 54 43 cf f7 d4 bf fa a5 7e 40 90 22 8b 83 26 ec 93 9a 39 1f 6e 21 1c 9c f4 af 1a a0 8d 66 55 b1 ba 5a 72 1e 19 96 7f 73 66 02 03 de f4 52 79 a5 a5 c1 9d 63 73 31 09 2b 33 23 99 6b 90 98 9d 02 f6 ea 6f d2 c8 56 28 e7 11 a8 8c 4f 9a 32 fd 55 15 cc 44 ff 4a c1 63 71 4d cb 65 1b c1 1e be f5 31 7c a9 e7 96 ac 8f 37 f0 33 06 c4 1d 97 5b 25 4a d8 4f 49 22 d9 0e 82 2e c7 0d fc 73 95 fb b4 73 1e ce
+tag: be 2f 76 65 88 e0 66 c5 f8 82 b8 15 cc 38 45 d9
+
+associated data: 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01
+plaintext:
+ciphertext:
+tag: 05 c6 5d 85 13 f0 44 3e 91 c7 30 63 eb d4 c0 f0
+
+associated data: 1c b9 57 f4 92 30 cd 6b 09 a6 44 e1 7f 1d ba 58 f5 93 31 ce 6c 0a a7 45 e2
+plaintext: 6d cb 2a 88 e6 45 a3 02 60 be 1d 7b d9 38 96 f4 53 b1 10 6e cc 2b 89 e7 46 a4 03 61 bf 1e 7c da 39 97 f5 54 b2 11 6f cd 2c 8a e8 47 a5 04 62 c0 1f 7d db 3a 98 f6 55 b3 12 70 ce 2d 8b e9 48 a6 05 63 c1 20 7e dc 3b 99 f7 56 b4 13 71 cf 2e 8c ea 49 a7 06 64 c2 21 7f dd 3c 9a f8 57 b5 14 72 d0 2f 8d eb 4a a8 07 65 c3
+ciphertext: 58 b7 ce 41 5f 39 2e 21 1c 88 24 c8 80 29 b0 f5 39 d4 d5 ea d4 f7 db 2e 80 ff 35 ad 2e 25 20 b9 00 d5 7b 90 3e 23 0c 07 51 fb e4 e0 45 d6 e3 b8 7a 02 9c 3b 9c bd 94 5e 18 6a 0f be 5e 75 53 d7 f2 98 79 01 f4 89 2a 12 02 4e 35 0b 94 45 e3 17 3d b5 6d 00 36 57 94 23 74 6c 30 8a c1 59 b4 9f 70 17 9f 9e 97 fb ba fe 91
+tag: 7d e1 99 4e 32 19 8f 7e 7a 96 d4 a7 b7 40 81 f0
+
+associated data: 1c 56 90 ca 05 3f 79 b3 ed 28 62 9c d6 11 4b 85 bf f9 34 6e a8 e2 1d 57 91
+plaintext: 0b 69 c7 26 84 e2 41 9f fd 5c ba 19 77 d5 34 92 f0 4f ad 0c 6a c8 27 85 e3 42 a0 fe 5d bb 1a 78 d6 35 93 f1 50 ae 0d 6b c9 28 86 e4 43 a1 00 5e bc 1b 79 d7 36 94 f2 51 af 0e 6c ca 29 87 e5 44 a2 01 5f bd 1c 7a d8 37 95 f3 52 b0 0f 6d cb 2a 88 e6 45 a3 02 60 be 1d 7b d9 38 96 f4 53 b1 10 6e cc 2b 89 e7 46 a4 03 61 bf 1e 7c da 39 97 f5 54 b2 11 6f cd 2c 8a e8 47 a5 04 62 c0 1f 7d db 3a 98 f6 55 b3 12 70 ce 2d 8b e9 48 a6 05 63 c1 20 7e dc 3b 99 f7 56 b4 13 71 cf 2e 8c ea 49 a7 06 64 c2 21 7f dd 3c 9a f8 57 b5 14 72 d0 2f 8d eb 4a a8 07 65 c3 22 80 de 3d 9b f9 58 b6 15 73 d1 30 8e ec 4b a9 08 66 c4 23 81 df 3e 9c fa 59 b7 16 74 d2 31 8f ed 4c aa 09 67 c5 24 82 e0 3f 9d fb 5a b8 17 75 d3 32 90 ee 4d ab 0a 68 c6 25 83 e1 40 9e fc 5b b9 18 76 d4 33 91 ef 4e ac 0b 69 c7 26 84 e2 41
+ciphertext: ff 8f a5 92 bd 13 7b e4 dd 95 cd 45 05 a4 e8 02 09 9c dd 4e 57 c7 1f 96 f6 c6 44 19 d7 d0 14 61 4c bc b1 62 3b dc 43 15 9e 66 6b de 64 fc aa d6 f8 5e 7e 57 e0 9a 2f 4b 44 b9 c7 bb 3d aa 08 9f 51 36 30 ea c3 cc 53 2a 4b bc 52 9e f1 ab b9 f0 f0 46 8c db de 9b 03 78 e1 4a 42 b8 c3 fe 35 24 51 a6 ed ee 4f ed 72 93 b8 53 ac 2e 2f 01 df e0 96 e5 5c fe 44 c7 16 14 6b 0c 7d a4 89 7f 14 5e d5 5d 31 73 4e ad fa e6 3c bd 68 b2 41 96 a5 31 f9 4b c7 e1 9a c2 79 6c 1f 8a 88 b3 82 c8 90 d2 eb 47 49 1c fd 45 ac 56 98 e7 e6 cc 9a 68 88 ea 14 6a 05 80 3f e0 eb a1 b1 7d ae 37 f1 3c af ae 4b 3d 71 97 b1 8a 09 ab a5 f1 30 93 09 14 07 0d c0 44 be dc 3a 6d 51 a4 34 a8 a6 ef 54 24 e6 c5 b1 60 f4 f7 7c bb 4b d8 62 48 7b 5e 36 e9 4a 52 d5 64 75 4f 3a 48 db ad 53 7e ba f7 03 b7 b1 91 c4 97 08 52 1e d3
+tag: 24 49 57 35 37 b0 e2 0e 73 05 ae 1b 2a d4 0e cf
+
+associated data: 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f
+plaintext:
+ciphertext:
+tag: 94 53 6d 4d 1c 81 75 79 7c 49 a8 f5 32 0d 1c 35
+
+associated data: 28 d1 7b 25 ce 78 22 cb 75 1f c8 72 1c c5 6f 19 c2 6c 16 bf 69 13 bc 66 10 b9 63 0d b6 60 0a b3 5d 07 b0 5a 04
+plaintext: 79 e3 4e b8 23 8d f7 62 cc 37 a1 0c 76 e0 4b b5 20 8a f4 5f c9 34 9e 09 73 dd 48 b2 1d 87 f1 5c c6 31 9b 06 70 da 45 af 1a 84 ee 59 c3 2e 98 03 6d d7 42 ac 17 81 eb 56 c0 2b 95 00 6a d4 3f a9 14 7e e8 53 bd 28 92 fc 67 d1 3c a6 11 7b e5 50 ba 25 8f f9 64 ce 39 a3 0e 78 e2 4d b7 22 8c f6 61 cb 36 a0 0b 75 df 4a b4 1f 89 f3 5e c8 33 9d 08 72 dc 47 b1
+ciphertext: a7 2e 74 1a 3b c8 cb 3e 48 3f 3e e3 59 9b 1e 9e 41 5e 59 fc 06 b0 bd 36 35 34 d8 3a 4c 2f 28 59 33 9b 10 4f 9c eb 06 13 9b 6f 6c 05 53 d7 11 3e 54 53 05 c7 a7 b8 b5 0b f5 e3 b2 36 21 79 0e e0 27 ca 12 0d 0a 3c b2 18 f0 be a8 6b 35 8a bc 47 4f 72 30 a6 f3 0e b7 ba 60 a0 10 1d bd 2a 00 0e f6 1c 60 25 38 b0 78 7b ac c7 96 52 cd 08 95 9a 11 94 c9 27 05
+tag: ff 72 c9 13 c5 b5 46 03 f2 a8 37 f2 70 e7 43 be
+
+associated data: 28 80 d8 31 89 e1 3a 92 ea 43 9b f3 4c a4 fc 55 ad 06 5e b6 0f 67 bf 18 70 c8 21 79 d1 2a 82 da 33 8b e3 3c 94
+plaintext: 29 93 fd 68 d2 3d a7 12 7c e6 51 bb 26 90 fa 65 cf 3a a4 0f 79 e3 4e b8 23 8d f7 62 cc 37 a1 0c 76 e0 4b b5 20 8a f4 5f c9 34 9e 09 73 dd 48 b2 1d 87 f1 5c c6 31 9b 06 70 da 45 af 1a 84 ee 59 c3 2e 98 03 6d d7 42 ac 17 81 eb 56 c0 2b 95 00 6a d4 3f a9 14 7e e8 53 bd 28 92 fc 67 d1 3c a6 11 7b e5 50 ba 25 8f f9 64 ce 39 a3 0e 78 e2 4d b7 22 8c f6 61 cb 36 a0 0b 75 df 4a b4 1f 89 f3 5e c8 33 9d 08 72 dc 47 b1 1c 86 f0 5b c5 30 9a 05 6f d9 44 ae 19 83 ed 58 c2 2d 97 02 6c d6 41 ab 16 80 ea 55 bf 2a 94 fe 69 d3 3e a8 13 7d e7 52 bc 27 91 fb 66 d0 3b a5 10 7a e4 4f b9 24 8e f8 63 cd 38 a2 0d 77 e1 4c b6 21 8b f5 60 ca 35 9f 0a 74 de 49 b3 1e 88 f2 5d c7 32 9c 07 71 db 46 b0 1b 85 ef 5a c4 2f 99 04 6e d8 43 ad 18 82 ec 57 c1 2c 96 01 6b d5 40 aa 15 7f e9 54 be 29 93 fd 68 d2 3d a7 12 7c e6 51 bb 26 90 fa 65 cf 3a a4 0f 79 e3 4e b8 23 8d f7 62 cc 37 a1 0c 76 e0 4b b5 20
+ciphertext: 37 4c de be 7f ea 5c 8a 92 2d cc 9c ad 1c 7c 68 98 69 8c 2d 2c ef 64 c8 06 cd 55 88 cb 34 22 4b b9 d3 e1 26 37 68 6e 21 38 bc 82 16 1b 8a 2f e5 60 ed d6 cc 6d 99 23 b6 be 12 80 a7 51 68 12 7f 30 37 02 e1 a4 c5 8b e1 58 e9 48 fa 20 63 cd 30 e4 f3 34 8b 4d 67 de 3f 81 dd 86 19 89 4b 02 ae 53 56 f6 2f fe 51 fc e9 f1 98 3b 39 43 09 48 e4 30 b9 50 fa 8a 39 60 42 4a 02 a1 08 89 a7 5e 77 96 06 39 d1 96 1d a2 00 4e 32 5f c6 cc 71 01 60 81 92 0a 05 eb 2e 84 f3 0f ba 2a b1 83 3c f0 40 92 06 5b 1a 1c 88 03 18 9a 4d 10 df 34 45 c5 8e 4a d3 c5 6f c7 27 a6 fa 8e 9c 20 3d e3 91 23 3e 89 37 a4 0b cb 3f 1b 3e 4b 82 df 66 4d 79 1b 78 c4 0e 5c cc 79 da 6d fe e7 77 45 93 fc e6 52 f1 6a b7 05 be 7e 1b a2 e7 6f c3 a4 da a3 5f 7e 38 4c 94 54 79 1a 3f bd 90 cd ec dc c1 62 5e 0b 0b 46 ad 8f d8 bb 89 96 9f d3 21 e5 38 9d 50 8a eb 47 46 eb 38 17 e1 5b a2 3a 91 50 80 e1 f0 17 87 eb 40 a7 d3
+tag: 64 e4 07 d5 52 93 15 47 4f 5b d5 04 8c bb 03 b2
+
+associated data: 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2
+plaintext:
+ciphertext:
+tag: 5b c4 0b c2 c3 a7 35 6b a2 14 a8 cc ca c6 db af
+
+associated data: 38 f1 ab 65 1f d8 92 4c 06 bf 79 33 ec a6 60 1a d3 8d 47 01 ba 74 2e e7 a1 5b 15 ce 88 42 fb b5 6f 29 e2 9c 56 10 c9 83 3d f6 b0 6a 24 dd 97 51 0b c4 7e 38 f1
+plaintext: 89 04 7e f8 73 ed 68 e2 5d d7 52 cc 47 c1 3c b6 31 ab 26 a0 1b 95 10 8a 05 7f f9 74 ee 69 e3 5e d8 53 cd 48 c2 3d b7 32 ac 27 a1 1c 96 11 8b 06 80 fa 75 ef 6a e4 5f d9 54 ce 49 c3 3e b8 33 ad 28 a2 1d 97 12 8c 07 81 fb 76 f0 6b e5 60 da 55 cf 4a c4 3f b9 34 ae 29 a3 1e 98 13 8d 08 82 fc 77 f1 6c e6 61 db 56 d0 4b c5 40 ba 35 af 2a a4 1f 99 14 8e 09 83 fd 78 f2 6d e7 62 dc 57 d1 4c c6 41 bb 36 b0
+ciphertext: b0 a3 ba 2a ec 31 af 01 18 bc 81 fa 65 85 0a 39 9c 44 f4 97 1e f1 10 9d e3 4c 7b 60 bd 92 6f a6 17 27 be fd 00 b6 d7 28 06 d0 aa 7a 49 64 93 b0 7e 45 d1 d9 e6 b5 cc 84 3b 3a ee 98 3b 40 7c 86 dd 77 88 c3 52 55 31 ae 8c 61 7c 56 6d f6 be 35 71 48 f5 25 a3 31 3d 63 1b 31 f4 41 bc f0 32 45 ef 7c 4d 2e 26 e1 29 7a 6e c9 32 bd 43 52 60 ed 4f fb 50 1f db 69 47 d5 2f bc 1c a5 de d8 61 bc 6a ac 50 e5 f4
+tag: 11 29 46 47 f6 5f 4b 0d d8 7f d7 23 d1 82 cc 94
+
+associated data: 38 b8 39 b9 3a ba 3b bb 3c bc 3d bd 3e be 3f bf 40 c0 41 c1 42 c2 43 c3 44 c4 45 c5 46 c6 47 c7 48 c8 49 c9 4a ca 4b cb 4c cc 4d cd 4e ce 4f cf 50 d0 51 d1 52
+plaintext: 51 cb 46 c0 3b b5 30 aa 25 9f 1a 94 0f 89 04 7e f8 73 ed 68 e2 5d d7 52 cc 47 c1 3c b6 31 ab 26 a0 1b 95 10 8a 05 7f f9 74 ee 69 e3 5e d8 53 cd 48 c2 3d b7 32 ac 27 a1 1c 96 11 8b 06 80 fa 75 ef 6a e4 5f d9 54 ce 49 c3 3e b8 33 ad 28 a2 1d 97 12 8c 07 81 fb 76 f0 6b e5 60 da 55 cf 4a c4 3f b9 34 ae 29 a3 1e 98 13 8d 08 82 fc 77 f1 6c e6 61 db 56 d0 4b c5 40 ba 35 af 2a a4 1f 99 14 8e 09 83 fd 78 f2 6d e7 62 dc 57 d1 4c c6 41 bb 36 b0 2b a5 20 9a 15 8f 0a 84 fe 79 f3 6e e8 63 dd 58 d2 4d c7 42 bc 37 b1 2c a6 21 9b 16 90 0b 85 00 7a f4 6f e9 64 de 59 d3 4e c8 43 bd 38 b2 2d a7 22 9c 17 91 0c 86 01 7b f5 70 ea 65 df 5a d4 4f c9 44 be 39 b3 2e a8 23 9d 18 92 0d 87 02 7c f6 71 eb 66 e0 5b d5 50 ca 45 bf 3a b4 2f a9 24 9e 19 93 0e 88 03 7d f7 72 ec 67 e1 5c d6 51 cb 46 c0 3b b5 30 aa 25 9f 1a 94 0f 89 04 7e f8 73 ed 68 e2 5d d7 52 cc 47 c1 3c b6 31 ab 26 a0 1b 95 10 8a 05 7f f9 74 ee 69 e3 5e d8 53 cd 48 c2 3d b7 32 ac 27 a1 1c 96 11 8b 06 80 fa 75 ef 6a e4 5f d9 54 ce 49 c3 3e b8 33 ad
+ciphertext: cf 57 82 0a 35 b1 2b 56 2c 8c 86 59 6d 80 0e e7 27 45 ce 1a 9c 98 c4 cb 9f 74 cb ef 1f 2d 1b af 6b bc ac 84 84 78 61 62 8e 8d 16 52 71 fe 0c cb 4b ad 31 22 41 2a 88 39 41 76 96 28 cb a2 4e 12 eb 49 45 83 11 6b 58 1b 58 c8 5c 67 96 83 7e 55 4a 49 ba 14 e6 e6 23 5f 11 48 fa c4 ac b9 23 21 7f f9 5d 7a 55 83 60 ce 27 b0 06 54 b5 d7 8d 8b 0b 8c 78 62 19 b3 86 6c 55 19 64 62 8e 50 f3 33 92 ff 06 94 2e e2 f4 86 29 6f e0 9d 5d cf 7d 0c 8b 21 90 6a d4 47 8a bf 16 d1 aa 6d 1e 69 dd fe 3e 4f 28 3c 76 76 05 c3 e3 16 1e 17 9f 79 d6 6b f0 ea 4e 21 de 25 9e 15 5c 83 3a 42 1c 54 94 0c 7d 34 54 40 5d 15 dc 3e 74 f6 a1 c6 c0 5a 03 13 6a ca ca f6 12 64 2c fa a8 a2 1d ef db 10 3e 00 e9 4d 9a fc cc a9 a4 8d 9a c3 32 23 83 d6 59 94 11 9f e1 54 3b 48 c0 68 84 00 8a 8d ea 7c 8a ca 36 7e e9 c6 ba 16 9c 84 a8 98 00 54 51 35 19 a3 d9 94 e3 51 78 23 9e 11 c2 a8 e2 43 9b 68 00 bc d2 68 36 89 1c 4a 2c 11 be ac 0f 64 4a 64 04 31 00 28 be 16 43 b9 c0 f4 85 29 58 ad 74 26 65 72 5d e0 bb 54 3a 91 86 26 35 8b 49 6d
+tag: 3b 62 07 2e ec bd 6f 57 17 9d 57 95 13 01 cb 3e
+
+associated data: 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30
+plaintext:
+ciphertext:
+tag: 8d 38 ef 6b 2c 1a 78 58 0c 7d e0 b7 ad 2a d7 f2
+
+associated data: 4d 1c ea b9 88 57 26 f4 c3 92 61 30 fe cd 9c 6b 3a 09 d7 a6 75 44 13 e1 b0 7f 4e 1d eb ba 89 58 27 f5 c4 93 62 31 00 ce 9d 6c 3b 0a d8 a7 76 45 14 e2 b1 80 4f 1e ec bb 8a 59 28 f6 c5 94 63 32 01 cf 9e 6d 3c 0b d9 a8 77 46
+plaintext: 9e 2e bd 4d dc 6c fb 8b 1b aa 3a c9 59 e8 78 08 97 27 b6 46 d5 65 f4 84 14 a3 33 c2 52 e1 71 01 90 20 af 3f ce 5e ed 7d 0d 9c 2c bb 4b da 6a f9 89 19 a8 38 c7 57 e6 76 06 95 25 b4 44 d3 63 f2 82 12 a1 31 c0 50 df 6f fe 8e 1e ad 3d cc 5c eb 7b 0b 9a 2a b9 49 d8 68 f7 87 17 a6 36 c5 55 e4 74 04 93 23 b2 42 d1 61 f0 80 10 9f 2f be 4e dd 6d fc 8c 1c ab 3b ca 5a e9 79 09 98 28 b7 47 d6 66 f5 85 15 a4 34 c3 53 e2 72 02 91 21 b0 40 cf 5f ee 7e 0e 9d 2d bc 4c db 6b
+ciphertext: b0 c9 ce 60 69 84 89 1c a4 f7 0a dc ab bf f0 d1 52 90 e8 4a a0 30 ca ba eb 01 a6 a0 fd 3b d5 92 6f 5a 15 37 5f 29 44 3a 5f e3 c1 cb ab 24 cc 8e fe 9c f9 22 39 3c d6 09 bc 15 4d 03 43 1c 1a 87 62 f2 cb 55 a6 56 3e 98 f4 4f 8a b5 81 a0 9a b2 94 bd 81 83 12 2b cc 22 ab a5 70 25 99 f2 0a df 1b 11 98 b8 1c 2b b4 f4 e7 5c b8 df 8c c0 8d 6c fb d9 32 96 13 e7 5f 91 9c 16 56 82 92 64 e9 ee fc 85 32 e3 f4 23 ea d9 5d a5 9b 4c 16 99 c8 77 ea 3f 7d 92 b5 9a f7 d0 42 d2
+tag: af 04 d9 36 fa 0f 0e a4 c8 b2 2e db 44 b3 d9 5d
+
+associated data: 4d 03 b8 6e 24 d9 8f 45 fa b0 66 1c d1 87 3d f2 a8 5e 14 c9 7f 35 ea a0 56 0c c1 77 2d e2 98 4e 04 b9 6f 25 da 90 46 fb b1 67 1d d2 88 3e f3 a9 5f 15 ca 80 36 eb a1 57 0d c2 78 2e e3 99 4f 05 ba 70 26 db 91 47 fc b2 68 1e
+plaintext: 86 16 a5 35 c4 54 e3 73 03 92 22 b1 41 d0 60 ef 7f 0f 9e 2e bd 4d dc 6c fb 8b 1b aa 3a c9 59 e8 78 08 97 27 b6 46 d5 65 f4 84 14 a3 33 c2 52 e1 71 01 90 20 af 3f ce 5e ed 7d 0d 9c 2c bb 4b da 6a f9 89 19 a8 38 c7 57 e6 76 06 95 25 b4 44 d3 63 f2 82 12 a1 31 c0 50 df 6f fe 8e 1e ad 3d cc 5c eb 7b 0b 9a 2a b9 49 d8 68 f7 87 17 a6 36 c5 55 e4 74 04 93 23 b2 42 d1 61 f0 80 10 9f 2f be 4e dd 6d fc 8c 1c ab 3b ca 5a e9 79 09 98 28 b7 47 d6 66 f5 85 15 a4 34 c3 53 e2 72 02 91 21 b0 40 cf 5f ee 7e 0e 9d 2d bc 4c db 6b fa 8a 1a a9 39 c8 58 e7 77 07 96 26 b5 45 d4 64 f3 83 13 a2 32 c1 51 e0 70 00 8f 1f ae 3e cd 5d ec 7c 0c 9b 2b ba 4a d9 69 f8 88 18 a7 37 c6 56 e5 75 05 94 24 b3 43 d2 62 f1 81 11 a0 30 bf 4f de 6e fd 8d 1d ac 3c cb 5b ea 7a 0a 99 29 b8 48 d7 67 f6 86 16 a5 35 c4 54 e3 73 03 92 22 b1 41 d0 60 ef 7f 0f 9e 2e bd 4d dc 6c fb 8b 1b aa 3a c9 59 e8 78 08 97 27 b6 46 d5 65 f4 84 14 a3 33 c2 52 e1 71 01 90 20 af 3f ce 5e ed 7d 0d 9c 2c bb 4b da 6a f9 89 19 a8 38 c7 57 e6 76 06 95 25 b4 44 d3 63 f2 82 12 a1 31 c0 50 df 6f fe 8e 1e ad 3d cc 5c eb 7b 0b 9a 2a b9 49 d8 68 f7 87 17 a6 36 c5 55 e4 74 04 93 23 b2 42 d1 61 f0 80 10 9f 2f be 4e dd
+ciphertext: 45 fa 1b ad de 47 00 af 4d 81 ef 4a 75 55 60 04 28 16 53 e6 78 c8 90 96 84 28 d9 00 16 10 6e 46 d3 dd 72 44 71 4d 88 c8 8b c9 e2 fb 4e 58 53 69 75 28 58 94 95 d4 36 4e 30 88 bf a4 ec 6b 6b d3 f2 68 aa 7f 80 1b a9 d2 f6 53 ea aa 6c 3c 1d ab d9 85 bc 3d 30 e8 91 ea c2 37 58 73 7b 69 f2 22 29 3a 63 62 ac a9 98 b4 2f c3 f5 a9 fd e5 c6 c1 fb 17 8b ea ed 1b 0f 78 58 c1 01 ad 86 22 63 1d 71 6d 7a 16 d5 1e 7d f9 6d 52 aa cc 64 b2 fc 7e 54 7d 64 63 f1 c7 0e 8b 62 cf 0f 70 75 99 b0 b8 21 a3 fc 89 89 f3 b5 72 25 0c 19 61 c9 19 61 61 dc 13 fb 8c b8 cd e1 45 75 af 79 11 9c 4c 5e 2d e3 f9 37 a7 ab 29 34 e1 5c 73 b9 f6 ec f7 b0 9f 00 ca 6c 96 66 6a ec 16 84 d2 4d 86 dd 49 76 e4 dc 81 4c 7a f8 56 c5 64 27 f6 ed 51 47 14 43 1a bc 1c d7 90 93 03 cc 01 b3 03 9c 10 45 3d a7 3f 1e 3c d4 84 7a 23 df d9 f6 ad b1 70 4e 75 6c bb 3d 72 5f 19 7c fd 61 c7 fc f9 91 a5 05 5a 6c 2c 8e 5e 6a b6 17 7a 83 24 e2 50 29 3b 27 b2 ec 06 4e e5 85 7c 6b c3 a2 62 f1 89 64 97 28 b2 f4 b6 25 35 08 35 e5 57 20 b2 f8 e9 67 d9 6a a9 0d 6d 6a c1 a5 de c5 7e 2c e1 f1 0d 88 58 e7 b4 28 db e5 4a 73 42 5f f1 17 36 1e df bd bd 37 bd 01 62 6f cd 0f 4e c0 c5 e3 9e 63 4f 3f 4f 27 ce be 6c 65
+tag: 04 71 d6 0a 1d e5 14 a2 86 79 31 28 de 16 b4 15
+
+associated data: 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02
+plaintext:
+ciphertext:
+tag: 11 60 9a 8e d9 7d f3 e5 9a 4a 54 b0 1d b0 6f f6
+
+associated data: 69 54 3f 2a 15 00 ea d5 c0 ab 96 81 6c 57 42 2d 18 03 ed d8 c3 ae 99 84 6f 5a 45 30 1b 06 f0 db c6 b1 9c 87 72 5d 48 33 1e 09 f3 de c9 b4 9f 8a 75 60 4b 36 21 0c f6 e1 cc b7 a2 8d 78 63 4e 39 24 0f f9 e4 cf ba a5 90 7b 66 51 3c 27 12 fc e7 d2 bd a8 93 7e 69 54 3f 2a 15 00 ea d5 c0 ab 96 81 6c 57 42 2d 18
+plaintext: ba 66 12 bd 69 15 c0 6c 18 c3 6f 1b c6 72 1e c9 75 21 cc 78 24 cf 7b 27 d2 7e 2a d5 81 2d d8 84 30 db 87 33 de 8a 36 e1 8d 39 e4 90 3c e7 93 3f ea 96 42 ed 99 45 f0 9c 48 f3 9f 4b f6 a2 4e f9 a5 51 fc a8 54 00 ab 57 03 ae 5a 06 b1 5d 09 b4 60 0c b7 63 0f ba 66 12 bd 69 15 c0 6c 18 c3 6f 1b c6 72 1e c9 75 21 cc 78 24 cf 7b 27 d2 7e 2a d5 81 2d d8 84 30 db 87 33 de 8a 36 e1 8d 39 e4 90 3c e7 93 3f ea 96 42 ed 99 45 f0 9c 48 f3 9f 4b f6 a2 4e f9 a5 51 fc a8 54 00 ab 57 03 ae 5a 06 b1 5d 09 b4 60 0c b7 63 0f ba 66 12 bd 69 15 c0 6c 18 c3 6f 1b
+ciphertext: ee 8e f3 09 a5 f3 63 dd 50 05 aa 57 b8 6d bf d0 11 b4 3d 03 f7 fb b3 be 36 48 9a df 45 ae f8 f4 30 24 f0 a7 0a 31 21 ad f5 c5 5e 3d 10 7c fb e4 ef bd 19 2a 32 6f 43 df 05 bb e6 37 3e 4b e9 23 53 ad a2 51 05 4a 0f 82 08 6f e2 cb c4 05 cc e6 39 ad 54 ae 28 5e 0e 5f b2 0b 5f f7 0f 40 00 8e cd 7b d8 79 79 70 d7 ef b8 a1 07 c1 96 1d 68 4b dd ac 26 79 0c 15 57 66 da 8d d9 e4 2a bd d0 14 81 64 e7 80 16 bd d6 fb 1f d1 7a fe 50 55 f7 67 63 fb 61 d7 c4 9b c6 e9 e0 3a 1e d4 d9 ec f4 ed 6d 97 56 84 16 2c fa 3e c3 70 a3 7d 35 44 7d df b5 9b 2d 7b 07 9c
+tag: 55 6b fb 6e 00 80 a6 5b a5 2c c1 39 72 f2 c4 bd
+
+associated data: 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7
+plaintext:
+ciphertext:
+tag: d7 74 ed f5 59 c7 d9 51 a3 d5 95 b4 da 3b 38 b0
+
+associated data: 8f 9f af bf cf df ef 00 10 20 30 40 50 60 70 80 90 a0 b0 c0 d0 e0 f0 01 11 21 31 41 51 61 71 81 91 a1 b1 c1 d1 e1 f1 02 12 22 32 42 52 62 72 82 92 a2 b2 c2 d2 e2 f2 03 13 23 33 43 53 63 73 83 93 a3 b3 c3 d3 e3 f3 04 14 24 34 44 54 64 74 84 94 a4 b4 c4 d4 e4 f4 05 15 25 35 45 55 65 75 85 95 a5 b5 c5 d5 e5 f5 06 16 26 36 46 56 66 76 86 96 a6 b6 c6 d6 e6 f6 07 17 27 37 47 57 67 77 87 97 a7 b7 c7 d7 e7 f7 08 18 28 38 48
+plaintext: e0 b2 84 56 28 f9 cb 9d 6f 41 13 e4 b6 88 5a 2c fd cf a1 73 45 17 e8 ba 8c 5e 30 02 d3 a5 77 49 1b ec be 90 62 34 06 d7 a9 7b 4d 1f f0 c2 94 66 38 0a db ad 7f 51 23 f4 c6 98 6a 3c 0e df b1 83 55 27 f8 ca 9c 6e 40 12 e3 b5 87 59 2b fc ce a0 72 44 16 e7 b9 8b 5d 2f 01 d2 a4 76 48 1a eb bd 8f 61 33 05 d6 a8 7a 4c 1e ef c1 93 65 37 09 da ac 7e 50 22 f3 c5 97 69 3b 0d de b0 82 54 26 f7 c9 9b 6d 3f 11 e2 b4 86 58 2a fb cd 9f 71 43 15 e6 b8 8a 5c 2e 00 d1 a3 75 47 19 ea bc 8e 60 32 04 d5 a7 79 4b 1d ee c0 92 64 36 08 d9 ab 7d 4f 21 f2 c4 96 68 3a 0c dd af 81 53 25 f6 c8 9a 6c 3e 10 e1 b3 85 57 29 fa cc 9e 70 42 14 e5 b7 89 5b 2d fe d0 a2 74 46 18 e9 bb 8d 5f
+ciphertext: c2 14 69 9a a0 27 64 d8 f7 f6 91 5b 79 7e aa 18 55 a9 b8 98 41 ca 4d a2 80 53 1f 90 fd a3 f1 e0 34 58 32 20 66 05 40 40 88 d3 ee 73 ec e8 ca e0 8d 01 c6 c2 ec 69 24 bf d6 7f ab 2b f4 4f 1b 0d f8 a6 dc 71 ee 3d 55 dc 2c 3f 74 e2 7b 01 b4 df ea 1d a6 7b 6f b2 54 d4 62 ea e8 31 aa 2a b8 b1 1c 7b 16 61 9c a1 3b 80 16 93 c3 c7 18 a5 16 a7 f0 d3 49 5f ee ce 17 ab b8 c5 45 db de d5 8a 71 92 6b 4d ee 07 b4 20 e1 2a d2 5f 5a 14 67 85 66 99 e2 ce 8d 55 20 26 2f af 1b 3a 29 65 7b f9 84 7e c2 c7 df 75 6e d4 94 b9 9f 75 38 36 31 ab 2e 65 b7 c1 28 fc 06 e2 0e 8e 8c d8 7f 3e 37 a2 05 93 f4 90 f0 6f ef dc a1 65 2b f8 2c e2 13 fc 3e 77 c3 f5 f1 06 ee be be d8 e1 8c 29
+tag: d9 2b 23 2d 1d 6a 08 cd 39 eb ad 38 14 db 14 76
+
+associated data: c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c
+plaintext:
+ciphertext:
+tag: f2 20 20 e0 47 05 52 8f a6 07 b9 61 3b 43 e8 f0
+
+associated data: c1 04 46 88 ca 0d 4f 91 d3 16 58 9a dc 1f 61 a3 e5 28 6a ac ee 31 73 b5 f7 3a 7c be 01 43 85 c7 0a 4c 8e d0 13 55 97 d9 1c 5e a0 e2 25 67 a9 eb 2e 70 b2 f4 37 79 bb fd 40 82 c4 07 49 8b cd 10 52 94 d6 19 5b 9d df 22 64 a6 e8 2b 6d af f1 34 76 b8 fa 3d 7f c1 04 46 88 ca 0d 4f 91 d3 16 58 9a dc 1f 61 a3 e5 28 6a ac ee 31 73 b5 f7 3a 7c be 01 43 85 c7 0a 4c 8e d0 13 55 97 d9 1c 5e a0 e2 25 67 a9 eb 2e 70 b2 f4 37 79 bb fd 40 82 c4 07 49 8b cd 10 52 94 d6 19 5b 9d df 22 64 a6 e8 2b 6d af f1 34 76 b8 fa 3d 7f c1 04 46 88 ca 0d 4f 91 d3 16 58 9a dc 1f 61 a3 e5 28 6a ac
+plaintext: 13 16 19 1c 1f 22 25 28 2b 2e 31 34 37 3a 3d 40 43 46 49 4c 4f 52 55 58 5b 5e 61 64 67 6a 6d 70 73 76 79 7c 7f 82 85 88 8b 8e 91 94 97 9a 9d a0 a3 a6 a9 ac af b2 b5 b8 bb be c1 c4 c7 ca cd d0 d3 d6 d9 dc df e2 e5 e8 eb ee f1 f4 f7 fa fd 01 04 07 0a 0d 10 13 16 19 1c 1f 22 25 28 2b 2e 31 34 37 3a 3d 40 43 46 49 4c 4f 52 55 58 5b 5e 61 64 67 6a 6d 70 73 76 79 7c 7f 82 85 88 8b 8e 91 94 97 9a 9d a0 a3 a6 a9 ac af b2 b5 b8 bb be c1 c4 c7 ca cd d0 d3 d6 d9 dc df e2 e5 e8 eb ee f1 f4 f7 fa fd 01 04 07 0a 0d 10 13 16 19 1c 1f 22 25 28 2b 2e 31 34 37 3a 3d 40 43 46 49 4c 4f 52 55 58 5b 5e 61 64 67 6a 6d 70 73 76 79 7c 7f 82 85 88 8b 8e 91 94 97 9a 9d a0 a3 a6 a9 ac af b2 b5 b8 bb be c1 c4 c7 ca cd d0 d3 d6 d9 dc df e2 e5 e8 eb ee f1 f4 f7 fa fd 01 04 07 0a 0d 10 13 16 19 1c 1f 22 25 28 2b 2e 31 34 37 3a 3d
+ciphertext: cb b2 d8 8d 9d 71 17 c7 f8 d2 bd 9b b9 ce 10 2a f4 08 ff db 39 c1 07 41 cc f0 5d 3a eb ac 2f 68 4d aa b0 4c 77 c5 d2 24 c2 67 63 3e f4 bb d1 bf f9 da 23 2a 54 6a 49 07 c1 0d f2 69 fc e1 7f d9 b4 01 4a f2 fa 17 db 49 ab ef 78 37 0d 04 68 39 36 19 ec 8a 51 1d c5 2a 4a 02 08 4c cc 42 ad 94 c5 c0 fb 16 5e f0 3a f9 bb 47 cd 10 83 8a 86 b6 52 a2 51 a7 9e 64 bd 5e 6f ea 5f eb f2 95 86 b8 de 4f 1e 2c 6b 75 58 25 b3 ab 60 0a ff 8c 70 03 b0 c3 75 2f 14 3c 72 08 94 8b ef a9 8c d6 75 3e 98 ff 5c e2 89 a0 30 76 9a 81 e3 8e 96 43 5e 60 07 3e 83 70 a9 0a cc 24 0a 11 c8 45 1b 36 0e ad 80 f7 a5 b1 0a df b7 f3 53 3e f7 b9 0f d6 24 cf cc 9d b6 a2 4d e8 cc bb 77 e9 83 84 b2 ea 9c d1 96 3f c3 27 08 8a 05 5c 81 d2 eb a7 5f bd 03 35 78 36 5d 1d 9d eb 94 3f 73 61 87 a3 c6 dc b3 86 01 98 22 6b de 2d 90 1c 7f 35 2b 1c f4 46
+tag: 83 08 b8 43 2a 66 1f b1 e2 8b 13 63 6f 8b 98 8f
+
+associated data: 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39
+plaintext:
+ciphertext:
+tag: be ec 03 0e 65 7a 1e 62 74 45 e6 0c fd ef a8 03
+
+associated data: 05 8a 10 95 1b a0 26 ab 31 b6 3c c1 47 cc 52 d7 5d e2 68 ed 73 f8 7e 04 89 0f 94 1a 9f 25 aa 30 b5 3b c0 46 cb 51 d6 5c e1 67 ec 72 f7 7d 03 88 0e 93 19 9e 24 a9 2f b4 3a bf 45 ca 50 d5 5b e0 66 eb 71 f6 7c 02 87 0d 92 18 9d 23 a8 2e b3 39 be 44 c9 4f d4 5a df 65 ea 70 f5 7b 01 86 0c 91 17 9c 22 a7 2d b2 38 bd 43 c8 4e d3 59 de 64 e9 6f f4 7a 00 85 0b 90 16 9b 21 a6 2c b1 37 bc 42 c7 4d d2 58 dd 63 e8 6e f3 79 fe 84 0a 8f 15 9a 20 a5 2b b0 36 bb 41 c6 4c d1 57 dc 62 e7 6d f2 78 fd 83 09 8e 14 99 1f a4 2a af 35 ba 40 c5 4b d0 56 db 61 e6 6c f1 77 fc 82 08 8d 13 98 1e a3 29 ae 34 b9 3f c4 4a cf 55 da 60 e5 6b f0 76 fb 81 07 8c 12 97 1d a2 28 ad 33 b8 3e c3 49 ce 54 d9 5f e4 6a ef 75 fa 80 06 8b 11 96 1c a1 27 ac 32 b7 3d c2 48 cd 53 d8 5e e3 69 ee 74 f9 7f 05 8a
+plaintext: 56 9c e2 29 6f b5 fb 42 88 ce 15 5b a1 e7 2e 74 ba 01 47 8d d3 1a 60 a6 ec 33 79 bf 06 4c 92 d8 1f 65 ab f1 38 7e c4 0b 51 97 dd 24 6a b0 f6 3d 83 c9 10 56 9c e2 29 6f b5 fb 42 88 ce 15 5b a1 e7 2e 74 ba 01 47 8d d3 1a 60 a6 ec 33 79 bf 06 4c 92 d8 1f 65 ab f1 38 7e c4 0b 51 97 dd 24 6a b0 f6 3d 83 c9 10 56 9c e2 29 6f b5 fb 42 88 ce 15 5b a1 e7 2e 74 ba 01 47 8d d3 1a 60 a6 ec 33 79 bf 06 4c 92 d8 1f 65 ab f1 38 7e c4 0b 51 97 dd 24 6a b0 f6 3d 83 c9 10 56 9c e2 29 6f b5 fb 42 88 ce 15 5b a1 e7 2e 74 ba 01 47 8d d3 1a 60 a6 ec 33 79 bf 06 4c 92 d8 1f 65 ab f1 38 7e c4 0b 51 97 dd 24 6a b0 f6 3d 83 c9 10 56 9c e2 29 6f b5 fb 42 88 ce 15 5b a1 e7 2e 74 ba 01 47 8d d3 1a 60 a6 ec 33 79 bf 06 4c 92 d8 1f 65 ab f1 38 7e c4 0b 51 97 dd 24 6a b0 f6 3d 83 c9 10 56 9c e2 29 6f b5 fb 42 88 ce 15 5b a1 e7 2e 74 ba 01 47 8d d3 1a 60 a6 ec 33 79 bf 06 4c 92 d8 1f 65 ab f1 38 7e c4 0b 51 97 dd 24 6a b0 f6 3d 83 c9 10 56 9c e2 29 6f b5 fb 42 88 ce 15 5b a1 e7 2e 74 ba 01 47 8d d3 1a 60 a6 ec 33 79 bf 06 4c 92
+ciphertext: c6 f8 75 7a 92 8d ec be 3f e8 51 f6 d8 2a c2 54 58 5d df b9 74 3a a4 54 98 2b 73 fd 2a c7 9a 6b b3 ca 0f 25 39 ae 37 ed d8 25 4e 46 5e 21 d1 88 19 a6 3a 74 26 d4 36 8e 8b ef 23 b1 77 1d 6b eb 7c da e8 d0 8f da eb ce e7 8d a7 53 3b 71 a3 0c 42 e5 bc dc da 78 00 9c a7 7d 1d 70 e2 1e 80 d4 23 29 02 61 bf 5f 9b 6a c9 b5 cc 80 f4 27 34 59 ce ff a4 36 25 3c f8 9c 94 a9 f5 f4 e5 f6 49 70 0d e5 7d cf 38 55 94 93 c5 bc 73 49 e3 ba 96 e3 46 98 50 23 09 3a 48 ff 90 7d 56 75 05 32 05 61 5e 55 31 02 fa ce 96 1b df 1d 34 69 d5 9d 10 a0 2b b9 e5 1c a1 1f 45 c1 c0 99 f6 9d d6 46 f0 84 c1 18 46 2c d4 17 9c d9 25 66 8b d8 cc 1b be e7 e3 73 f6 d9 38 76 a2 47 9c a0 a9 e9 e6 97 92 bc 2c f3 98 6a f1 a3 a3 3b ff fe b2 67 0f 28 28 2a 1d 52 98 d3 74 57 1c 9d a6 68 57 23 15 37 10 35 a7 46 be f4 31 bf 3e 52 fc 91 4b d3 3b 36 a4 91 a8 ea bd 68 78 0c be a6 4f 51 bb 04 ab 54 36 ad 9e 2a 0c b0 41 42 6e e5 04 29 2b 50 38 93 d6 07 63 24 cd b1 5f 43 6d 55 b4 88 24 4a 9c 4b 83 2e 35 74 21 73 79 d4 04 a9 e2 3a 04 71 53 9b 60 1e 73
+tag: 7f d6 0f a1 80 93 62 9a dd 66 fb 9f 4f ee 9e f6
+
+associated data: 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8
+plaintext:
+ciphertext:
+tag: 8d a2 4a b5 81 e8 5f 7a 69 30 18 92 9f 92 7b 5d
+
+***
+initialize with key of 96 bits, nonce of 60 bits:
+key: c3 12 60 ae fc 4b 99 e7 36 84 d2 21
+nonce: c3 47 ca 4e d1 55 d8 0c
+
+associated data:
+plaintext:
+ciphertext:
+tag: bd aa be bc 60 d3 4f d8 ee 1b f5 6e 7e e0 2a 26
+
+associated data:
+plaintext: 05
+ciphertext: 2d
+tag: b2 87 c3 c4 48 d0 69 03 21 5c ac e3 50 41 8c 4f
+
+associated data:
+plaintext: 06 4b
+ciphertext: 95 18
+tag: 97 0f eb 59 d1 6c ae 71 9b f9 6e 1b bf 24 f6 c4
+
+associated data:
+plaintext: 08 4d 92 d7
+ciphertext: e6 00 9f f0
+tag: be d1 cd 3e 82 dc c1 50 4e eb 5f db 42 77 e0 46
+
+associated data:
+plaintext: 0b 50 95 da 20 65 aa
+ciphertext: c5 d6 71 39 fb 5c 14
+tag: 87 b0 6b 5f 14 4f d5 8a 6b bb e6 e6 b5 c2 b4 5e
+
+associated data:
+plaintext: 0f 54 99 de 24 69 ae f3 39 7e c3
+ciphertext: b7 11 4d f1 34 d5 de b8 43 b5 a6
+tag: 51 49 25 93 13 55 21 70 f7 a7 b0 5a da f5 fa aa
+
+associated data:
+plaintext: 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69
+ciphertext: 14 29 c9 22 7f b9 88 6f fd 70 7e 4d b0 8b 79 71 57
+tag: a4 0e 01 d3 f9 e6 57 1d f5 63 fb 06 46 fe be 68
+
+associated data:
+plaintext: 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1
+ciphertext: a2 06 ca 63 ec 7c 02 a4 c0 c3 7c 6d de cc 53 0f 77 86 8d 7e 68 32 75 fc 5f 10
+tag: c7 56 54 f2 93 73 f6 96 50 37 c7 5f cc 76 71 b0
+
+associated data:
+plaintext: 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9
+ciphertext: 34 c2 d1 82 f8 8a b8 eb 94 85 9a 57 65 19 b2 c1 3c f4 e8 f2 fd 9d 72 b9 3e 15 13 83 f3 e8 2e 55 70 c7 40 d6 14 5d e0 76
+tag: c3 98 1b 6e b4 ec c8 c6 4c 79 cf ad 0a a2 4b 0e
+
+associated data:
+plaintext: 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d
+ciphertext: 84 f7 08 d4 53 51 21 e6 63 ea 2d a1 77 50 4c 51 a3 9f 07 da a6 5d 45 69 c5 9f 19 07 de 33 b7 de f3 9f 83 cc 45 cc 46 75 a7 9d 1c 6f 46 62 88 7a f2 ec 57 87 de b1 a6 9d 2e 77 9f d3 80
+tag: a2 a4 7b 61 9d 7b c6 f2 de a5 b0 1c fe 22 54 9b
+
+associated data:
+plaintext: 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00
+ciphertext: b1 0f 85 65 f6 6d 4a 86 b6 92 d2 58 04 48 34 93 f1 a3 1c b7 af be c9 e4 41 31 70 4a 4a 72 e9 e1 99 32 fa 26 df 73 05 1b 4a 70 05 5a 78 77 69 c2 cb eb 05 2d dc b0 62 f3 7c dd 4f c5 da d4 92 21 b3 97 29 86 a0 8a 9f 5d f7 72 7d 75 d5 86 1a ce a1 bc 3e 2b 6c bf 83 b7 5c 6c a3 e7
+tag: 81 4a f0 ca 82 95 a6 26 38 15 b3 b6 b0 e8 1c 77
+
+associated data:
+plaintext: 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6 2c 71 b6 fb 41 86 cb 11 56 9b e0 26 6b b0 f5 3b 80 c5 0b 50 95 da 20 65 aa ef 35 7a bf 05 4a 8f d4 1a 5f a4 e9 2f 74 b9 fe 44 89 ce 14 59 9e e3 29 6e b3 f8 3e 83 c8 0e 53 98 dd 23 68 ad f2 38 7d c2 08 4d 92 d7 1d 62 a7 ec 32 77 bc 02 47 8c d1 17 5c a1 e6
+ciphertext: 06 76 fc cd 44 b4 d2 52 5e 8f a5 a4 bf d6 eb 01 fd 14 de 4d bb 3d d3 74 38 52 22 47 45 0a 56 33 4e 33 20 07 62 95 fa e4 74 9c d9 d5 ab 9b a2 df 09 1b c6 52 a5 c1 0f c8 8b 49 1c 41 c8 8a 41 96 c8 33 7f e4 27 fb 9e 11 a0 7d 0d 21 73 82 4b fc d3 95 fc bb e7 b0 e4 b6 1e ac ab f4 7e 21 ff 01 87 c9 5c 0e d3 b2 1e bf 1b 7c 47 50 8b 9e 8d 48 1f 48 5e 46 76 ae 3a 21 d7 46 7b bf 87 1b f7 07 ec c6 1f 49 87 75 5f 05 a9 79 69
+tag: 72 aa 9e e2 fc d8 fc d4 6d 01 07 4f b5 71 b3 96
+
+associated data:
+plaintext: d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e
+ciphertext: 7d 22 a5 3a 98 70 9a 07 bd 1d b3 03 36 e9 f1 69 43 84 c1 91 e8 3c 92 ba b5 dc 49 3b 00 19 25 7c 02 b2 86 97 ca 59 8e e6 c0 5c 92 a8 14 07 bd bc 6a 6d 06 23 b2 b9 9a bd 05 f0 b7 4a 8e 23 28 96 c8 93 3f a3 67 3d 2d 69 f0 f8 ff e4 5a e8 5e 44 a3 13 a1 fb b8 2c 95 35 32 af a1 e3 cc 52 dc 11 51 36 0c b0 14 47 cb 3b 62 27 79 87 98 20 fd 17 5e b4 c5 14 62 8e a6 4f 05 2a 5e fe b4 06 d6 9c fa 2b a6 b6 68 a9 f5 60 04 6a 1f 7d b1 1f 0b 12 d7 88 22 86 09 bb f7 14 29 8a 9e aa 1a a3 1a 5d 1d 74 a6 c9 29 c3 52 37 13 8c 91 3f b5 54 2c fd ba 99 64 02 d8 e9 eb c0 e6 55 75 bc ba 4e 49 14 33 38 62 7a 87 9e 0a 03 26 7b 33 30 74 0f ab cf 85
+tag: 0f 44 f2 ce c2 2b 5e 15 51 0e d8 5f fe 40 fe 55
+
+associated data:
+plaintext: 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0 36 7b c0 06 4b 90 d5 1b 60 a5 ea 30 75 ba 00 45 8a cf 15 5a 9f e4 2a 6f b4 f9 3f 84 c9 0f 54 99 de 24 69 ae f3 39 7e c3 09 4e 93 d8 1e 63 a8 ed 33 78 bd 03 48 8d d2 18 5d a2 e7 2d 72 b7 fc 42 87 cc 12 57 9c e1 27 6c b1 f6 3c 81 c6 0c 51 96 db 21 66 ab f0
+ciphertext: 4d 72 84 fb b8 59 0a 9e e9 c5 2d bc 4a 19 4e 50 63 2b 96 a5 31 15 cc 14 27 44 78 9e dc 13 f1 75 c9 f6 5d 65 21 3c f1 8c 56 b0 3c 79 06 93 ff 45 24 1a 5d 43 c9 17 df 68 cf de 3f 1f 18 d9 26 21 af a8 3b 7d 3b f9 32 cb fe 7a 5a f1 e7 03 c3 42 11 e0 61 c0 98 3f 49 82 e4 b2 ff 98 39 e7 4f e0 99 0d 8b c7 f1 7e b2 33 c5 5a b9 3a 5e 2e fe e0 73 7e db a5 6f ff 1b b5 33 e6 a0 cf be bc 28 cc fc af e2 76 5a 6d 39 f9 d6 eb 2a 92 85 83 9f d2 eb 81 ca c4 be ff c6 5a 6a 87 03 27 bd 33 78 bc 6c c0 3b 1e 67 9e 40 a0 98 3a 4a 04 40 43 9d 2a cd 99 11 eb a4 12 b9 6e 03 69 40 1f 94 3d 78 18 91 67 7f f3 29 f0 03 e1 f7 17 78 5c 68 df 44 c2 2c 81 c7 66 4d 8a d8 4d d5 7f 87 2d 10 cf fc b6 21 31 00 78 d3 b5 dd d8 22 d6 64 62 f6 17 2c 6e 58 ee 0a 45 f7 0f 07 49 37 59 a5 79 f4 ac 33 eb 3f 19 36 2f f1 87 e0 7c 35 f5 ed 06 6f 47 37 c3 9b f4 9c 06 cc 2c 50 b9 ec 64 71 a0 2f 5c 2b 14 b6 24 79 5c 73 91 17 79 e8 69 78 cb bc 0e b9 c0 d3 de e3 0d 4e 53 8c 4d 0f 68
+tag: 7d 74 be 73 51 81 f7 fd 8b f9 44 ed 33 e9 46 e5
+
+associated data: 05 39
+plaintext:
+ciphertext:
+tag: aa 87 42 31 63 74 c6 9b ac 51 03 46 46 b3 7a 73
+
+associated data: 05 7b
+plaintext: 46 8d d4 1c 63 aa f1 39 80 c7 0f 56 9d e4 2c 73 ba 02 49 90 d7 1f 66 ad f4 3c 83 ca 12 59 a0 e7 2f 76 bd 05 4c 93 da 22 69 b0 f7 3f 86 cd 15 5c a3 ea 32 79 c0 08 4f 96 dd 25 6c b3 fa 42 89 d0 18 5f
+ciphertext: 82 40 70 c7 91 59 11 55 ad 7f f7 db ad e9 bf ae 0e 6c 21 d4 08 39 fd 10 1e d9 95 ed 62 bd 03 51 93 f0 63 f2 1e aa fe 9a 55 03 fe 8d be 28 1b 37 bf d1 19 f7 5f 4d 90 05 c4 0e 93 83 f2 6c 29 c4 a2 fe
+tag: b8 74 4f 4d 98 d0 76 55 3c 85 b2 53 85 25 b9 52
+
+associated data: 05 de
+plaintext: a9 f0 38 7f c6 0e 55 9c e3 2b 72 b9 01 48 8f d6 1e 65 ac f3 3b 82 c9 11 58 9f e6 2e 75 bc 04 4b 92 d9 21 68 af f6 3e 85 cc 14 5b a2 e9 31 78 bf 07 4e 95 dc 24 6b b2 f9 41 88 cf 17 5e a5 ec 34 7b c2 0a 51 98 df 27 6e b5 fc 44 8b d2 1a 61 a8 ef 37 7e c5 0d 54 9b e2 2a 71 b8 00 47 8e d5 1d 64 ab f2 3a 81 c8 10 57 9e e5 2d 74 bb 03 4a 91 d8 20 67 ae f5 3d 84 cb 13 5a a1 e8 30 77 be 06 4d 94 db 23 6a b1 f8 40 87 ce 16 5d a4 eb 33 7a c1 09 50 97 de 26 6d b4 fb 43 8a d1 19 60 a7 ee 36 7d c4 0c 53
+ciphertext: 57 65 16 71 02 6f 18 68 00 57 c3 c2 cc 57 f7 f9 e5 a1 d5 58 9e af 9f cf 3e b2 6d 0b bf e7 a7 40 f5 14 98 ca 44 78 10 03 de a5 f3 55 d8 de 8f 98 d6 08 eb 3f 07 84 dd 52 39 59 a2 00 43 db 09 bb 63 b9 8e 19 ce a3 20 ab 1a 36 9e e1 3e 86 91 6e 9b b8 51 ef c7 e6 ab b7 67 d0 86 6c 0c ba 1b a9 f8 9f cc e8 30 bf 5d 7a 95 9f 60 26 96 0b a3 dc ec a5 0d d4 6c b1 b7 10 5c b5 03 b4 31 4d 36 61 25 4c 64 0f be a7 37 01 02 9c 8d 03 9c 87 84 27 f6 2d b8 61 1d 8a 06 df 15 cd 1b d1 b1 e4 61 48 f3 85 08 71 ac
+tag: a3 ba 8c bb 91 f6 8a c9 ad a1 69 42 1f 0e 6e d8
+
+associated data: 05 72
+plaintext: 3e 85 cc 14 5b a2 e9 31 78 bf 07 4e 95 dc 24 6b b2 f9 41 88 cf 17 5e a5 ec 34 7b c2 0a 51 98 df 27 6e b5 fc 44 8b d2 1a 61 a8 ef 37 7e c5 0d 54 9b e2 2a 71 b8 00 47 8e d5 1d 64 ab f2 3a 81 c8 10 57 9e e5 2d 74 bb 03 4a 91 d8 20 67 ae f5 3d 84 cb 13 5a a1 e8 30 77 be 06 4d 94 db 23 6a b1 f8 40 87 ce 16 5d a4 eb 33 7a c1 09 50 97 de 26 6d b4 fb 43 8a d1 19 60 a7 ee 36 7d c4 0c 53 9a e1 29 70 b7 fe 46 8d d4 1c 63 aa f1 39 80 c7 0f 56 9d e4 2c 73 ba 02 49 90 d7 1f 66 ad f4 3c 83 ca 12 59 a0 e7 2f 76 bd 05 4c 93 da 22 69 b0 f7 3f 86 cd 15 5c a3 ea 32 79 c0 08 4f 96 dd 25 6c b3 fa 42 89 d0 18 5f a6 ed 35 7c c3 0b 52 99 e0 28 6f b6 fd 45 8c d3 1b 62 a9 f0 38 7f c6 0e 55 9c e3 2b 72 b9 01 48 8f d6 1e 65 ac f3 3b 82 c9 11 58 9f e6 2e 75 bc 04 4b 92 d9 21 68 af f6 3e 85 cc 14 5b a2 e9 31 78 bf 07 4e 95 dc 24 6b b2 f9 41 88 cf 17 5e a5 ec 34 7b c2 0a 51 98 df 27 6e b5 fc 44 8b d2 1a 61 a8 ef 37 7e c5 0d 54 9b e2 2a 71 b8 00 47 8e d5 1d
+ciphertext: 68 23 9d 52 ff 91 34 6a d2 2d b5 d6 e0 a2 d0 14 d6 df 62 e7 25 9b 65 6a f6 5e 14 d1 d5 aa 9d 6e 19 a8 ba ec 02 48 f9 58 a6 8a 7f ce 0b 0d 72 f9 8a eb 6d 7c 40 90 05 5b d8 86 a0 3a cb 69 72 31 f9 07 a1 f3 d8 3a 23 2a 81 68 14 31 48 35 c1 c1 89 b3 e4 aa 23 ec c1 98 7f b2 25 46 80 c7 7e c3 56 cf 29 06 7b ab f6 e9 25 0d af cd 5a da 36 e6 57 e0 40 1b bc b8 48 dd 2b db 01 18 87 4e 90 fd 7c 48 ef e7 1f 8d 18 af a4 fc 59 3e a9 a9 1d 35 f2 f9 db e2 8b 2c 01 43 a5 16 89 f1 82 e6 9e fd 84 4b db d9 3b ac 3c a7 26 97 0f e6 fb 96 67 e0 c1 b2 b2 2c c2 fa f8 ed 71 1f b1 b7 f0 e6 f6 78 83 3e 04 7f b9 89 8c 54 f3 0c 81 0e 5d e9 9f 30 a9 6d 36 11 f3 4f 3e b4 18 9f c0 9c 02 ef ba 8b 84 18 aa 91 40 dd 5c c5 13 cc 86 be c8 92 4e c9 59 14 af a7 29 37 66 32 ca f8 bb 93 6d 3a 7f da 41 00 4f 77 ee fa 16 f0 6e a7 d6 33 2e aa a3 4f 54 33 21 3a 75 f9 7e 17 d4 03 8f 8c d2 db 97 3b a6 5f 0b 98 f0 a1 fc 44 6d fd 49 40 fe 95 93 b2 83 a8 40 95 2f 0a c6 87 3e
+tag: 4b 8b 1a e5 79 91 0c de 3a 9a e3 64 00 b8 fa 7c
+
+associated data: 07 3b 6f a3
+plaintext:
+ciphertext:
+tag: 66 ca 99 30 f6 5c 05 be 83 3a d2 c2 42 18 3c 56
+
+associated data: 07 7f f7 70
+plaintext: 48 91 da 24 6d b6 00 49 92 db 25 6e b7 01 4a 93 dc 26 6f b8 02 4b 94 dd 27 70 b9 03 4c 95 de 28 71 ba 04 4d 96 df 29 72 bb 05 4e 97 e0 2a 73 bc 06 4f 98 e1 2b 74 bd 07 50 99 e2 2c 75 be 08 51 9a e3 2d 76
+ciphertext: fa 40 05 63 e6 31 4e ea 35 eb 36 96 aa 80 ee 7c aa 01 f6 77 ca b2 56 96 ac 1a 66 3f db 08 b3 81 39 cb 08 60 0f 2f 83 ae 0d d9 4d 90 a1 5b d0 62 b1 52 c4 66 1d 2a d6 c8 e8 62 60 5c 84 3d c0 e7 d6 8e 41 01
+tag: fb d4 cd c6 ce ae 98 8b 0d 8b 62 f4 8c ea 34 c9
+
+associated data: 07 e5 c4 a3
+plaintext: ae f7 41 8a d3 1d 66 af f8 42 8b d4 1e 67 b0 f9 43 8c d5 1f 68 b1 fa 44 8d d6 20 69 b2 fb 45 8e d7 21 6a b3 fc 46 8f d8 22 6b b4 fd 47 90 d9 23 6c b5 fe 48 91 da 24 6d b6 00 49 92 db 25 6e b7 01 4a 93 dc 26 6f b8 02 4b 94 dd 27 70 b9 03 4c 95 de 28 71 ba 04 4d 96 df 29 72 bb 05 4e 97 e0 2a 73 bc 06 4f 98 e1 2b 74 bd 07 50 99 e2 2c 75 be 08 51 9a e3 2d 76 bf 09 52 9b e4 2e 77 c0 0a 53 9c e5 2f 78 c1 0b 54 9d e6 30 79 c2 0c 55 9e e7 31 7a c3 0d 56 9f e8 32 7b c4 0e 57 a0 e9 33 7c c5 0f 58 a1 ea 34 7d c6 10
+ciphertext: 33 a9 9d 43 f8 f1 57 32 b2 ff 33 05 84 29 a2 94 85 89 0b f4 26 36 b7 b7 a8 9e 76 94 7d 93 f3 80 f2 a8 2d 21 1e bc af 58 33 4a 0d 50 e9 57 18 05 7d e5 82 9a 38 20 e3 0d d1 b7 69 32 84 a9 1b c8 4f ce 9b 3f 04 26 f6 20 b0 96 6f 80 1e 0a 44 5d 51 d2 9b b8 c3 8e a3 02 ee 60 1b f8 cb c5 1f b4 62 b6 1f 1f 9c c4 f6 40 1d 64 a1 92 0e 8f e5 f4 b6 04 b4 54 51 df f2 45 5f 91 9e 74 6f 7b 1c 48 cf cc c5 fe 09 b3 6c 56 15 6c c8 9a d0 e7 b7 e0 fd 02 72 e9 5a c7 f3 c8 72 99 b4 f2 a3 f6 44 d7 7e 2e 9b 7a 3a d0 ec 9f 0f b0
+tag: 46 21 e8 8a 1c f5 3d 46 db 09 84 46 9c f2 5b 3a
+
+associated data: 07 7e f5 6d
+plaintext: 48 91 da 24 6d b6 00 49 92 db 25 6e b7 01 4a 93 dc 26 6f b8 02 4b 94 dd 27 70 b9 03 4c 95 de 28 71 ba 04 4d 96 df 29 72 bb 05 4e 97 e0 2a 73 bc 06 4f 98 e1 2b 74 bd 07 50 99 e2 2c 75 be 08 51 9a e3 2d 76 bf 09 52 9b e4 2e 77 c0 0a 53 9c e5 2f 78 c1 0b 54 9d e6 30 79 c2 0c 55 9e e7 31 7a c3 0d 56 9f e8 32 7b c4 0e 57 a0 e9 33 7c c5 0f 58 a1 ea 34 7d c6 10 59 a2 eb 35 7e c7 11 5a a3 ec 36 7f c8 12 5b a4 ed 37 80 c9 13 5c a5 ee 38 81 ca 14 5d a6 ef 39 82 cb 15 5e a7 f0 3a 83 cc 16 5f a8 f1 3b 84 cd 17 60 a9 f2 3c 85 ce 18 61 aa f3 3d 86 cf 19 62 ab f4 3e 87 d0 1a 63 ac f5 3f 88 d1 1b 64 ad f6 40 89 d2 1c 65 ae f7 41 8a d3 1d 66 af f8 42 8b d4 1e 67 b0 f9 43 8c d5 1f 68 b1 fa 44 8d d6 20 69 b2 fb 45 8e d7 21 6a b3 fc 46 8f d8 22 6b b4 fd 47 90 d9 23 6c b5 fe 48 91 da 24 6d b6 00 49 92 db 25 6e b7 01 4a 93 dc 26 6f b8 02 4b 94 dd 27 70 b9 03 4c 95 de 28 71 ba 04 4d 96 df 29 72 bb 05 4e 97 e0 2a 73 bc 06 4f 98 e1 2b 74 bd 07 50 99 e2 2c 75 be 08 51 9a e3 2d 76
+ciphertext: 47 70 19 ac 4b 4e 4b 8e fe 92 06 e6 5c 5f cc 8e fa be 3a 47 cb e4 32 1d ca 78 4f bc 4b e8 05 25 2f 03 a3 b4 24 47 ed c1 48 e8 e7 97 6f 3b f0 25 95 66 d3 16 85 a2 af 5d b3 c4 6b 97 e3 cb 66 de 37 4e b8 a0 ed e6 f8 84 52 48 b9 80 3b 6d 54 9c 3d 69 5a b1 93 36 37 4c 34 f1 c9 d7 a9 63 01 f3 76 95 a9 71 58 f3 fb 37 32 24 5a b5 b2 47 36 00 d2 60 4f 79 26 6d d5 e8 bd 32 ae 41 fb c4 7c 5c ae c5 51 ac 6f 32 c5 4f 91 63 d2 c6 5d 9f 84 9c 17 4c ae db 8d eb a7 f6 dd 35 74 55 c2 e3 a0 38 a7 a3 38 6c c7 12 76 b9 51 8c 07 ed 92 82 d8 fd 2b 32 9f ad 30 22 20 15 40 1f 35 d9 f2 6c ef ec 5b f0 38 b0 62 7b 83 c9 df 99 d8 9c 6a b3 8e 54 21 76 dd 31 a6 25 b6 6d b4 a7 57 e6 0d 68 6c 11 81 ce 82 69 88 c7 cc bd ca 6c 6e 71 e0 c8 4d 52 ee 98 3d 6a 8a 55 e3 72 2f 58 f4 bd 96 66 c8 68 dc bf e4 50 7a 7a 6f 28 83 c9 a8 6d af 6e cd 55 64 c4 7e cb 0a 00 ee 55 01 15 a8 51 2d 79 30 18 44 25 6c 8c fc 09 66 ee 53 41 ce 54 5c 8b 34 3c cb d0 db 35 8c 0d 9b 5d 8d 06 5d 4b 1e 00 32 ea 25 73 df
+tag: 43 55 29 19 10 3c 5b bc 58 b8 18 08 8e 75 31 1c
+
+associated data: 0a 3e 72 a6 da 0f 43
+plaintext:
+ciphertext:
+tag: f0 29 04 9c bb 4e 46 30 78 88 18 ad 0e 6d 51 1f
+
+associated data: 0a 85 01 7c f7 73 ee
+plaintext: 4b 97 e3 30 7c c8 15 61 ad f9 46 92 de 2b 77 c3 10 5c a8 f4 41 8d d9 26 72 be 0b 57 a3 ef 3c 88 d4 21 6d b9 06 52 9e ea 37 83 cf 1c 68 b4 01 4d 99 e5 32 7e ca 17 63 af fb 48 94 e0 2d 79 c5 12 5e aa f6 43 8f db 28
+ciphertext: 22 f7 f3 58 2f 65 9b 75 b7 4c a6 f6 03 73 22 ea 49 a5 7e 77 51 d4 d4 76 ab 2b 59 08 ae 32 6c 23 d5 e1 57 ad 87 ff 9d 49 8e 07 48 eb 22 77 f6 05 b9 e5 bd 10 21 53 f0 81 dc 0b fa 0c d1 b6 f7 fc 13 70 49 fb 26 e1 67
+tag: f7 52 bc f5 e2 b9 12 69 9f 89 03 99 56 bf d8 99
+
+associated data: 0a ef d5 bb a1 87 6d
+plaintext: b5 02 4e 9a e6 33 7f cb 18 64 b0 fc 49 95 e1 2e 7a c6 13 5f ab f7 44 90 dc 29 75 c1 0e 5a a6 f2 3f 8b d7 24 70 bc 09 55 a1 ed 3a 86 d2 1f 6b b7 04 50 9c e8 35 81 cd 1a 66 b2 fe 4b 97 e3 30 7c c8 15 61 ad f9 46 92 de 2b 77 c3 10 5c a8 f4 41 8d d9 26 72 be 0b 57 a3 ef 3c 88 d4 21 6d b9 06 52 9e ea 37 83 cf 1c 68 b4 01 4d 99 e5 32 7e ca 17 63 af fb 48 94 e0 2d 79 c5 12 5e aa f6 43 8f db 28 74 c0 0d 59 a5 f1 3e 8a d6 23 6f bb 08 54 a0 ec 39 85 d1 1e 6a b6 03 4f 9b e7 34 80 cc 19 65 b1 fd 4a 96 e2 2f 7b c7 14 60 ac f8 45 91 dd 2a
+ciphertext: db 94 48 00 6d f4 76 2a 0f 99 ed 11 5f a5 2f b7 c4 aa db ea c5 e9 9d a1 fa 8f 58 f7 5b d2 9a 4f 78 19 8d 50 0e de 5f 88 c8 a6 16 1e 20 7e db a9 57 9c 51 d3 50 f1 70 61 53 39 b5 1d e4 7f 69 19 53 f7 6a 11 cc 68 3a e4 e5 59 c7 5b 22 ad ac 6b c6 ad f1 ac f4 38 a3 3f 41 ef c4 08 8e 1d 1b 1f 9f 20 12 1c ea 9e 84 3a 25 fe 09 67 f0 09 86 39 21 13 7c fb 0c dc 5d 6a 99 5b 07 a5 ce 23 c4 c6 bb 69 29 0a aa fc da df f3 6c 5d 39 db 72 d1 c0 b5 1f 82 04 4f e6 5b ee 3a 79 3b 43 83 0c 96 0c 0b 06 b7 ae 25 a8 12 8c 94 f0 fa ad bd 61 4c d6 d2
+tag: a0 76 e9 9a 29 df 5b 29 c7 5e e8 9f 9e 47 32 ab
+
+associated data: 0a 8e 13 97 1c a0 25
+plaintext: 55 a1 ed 3a 86 d2 1f 6b b7 04 50 9c e8 35 81 cd 1a 66 b2 fe 4b 97 e3 30 7c c8 15 61 ad f9 46 92 de 2b 77 c3 10 5c a8 f4 41 8d d9 26 72 be 0b 57 a3 ef 3c 88 d4 21 6d b9 06 52 9e ea 37 83 cf 1c 68 b4 01 4d 99 e5 32 7e ca 17 63 af fb 48 94 e0 2d 79 c5 12 5e aa f6 43 8f db 28 74 c0 0d 59 a5 f1 3e 8a d6 23 6f bb 08 54 a0 ec 39 85 d1 1e 6a b6 03 4f 9b e7 34 80 cc 19 65 b1 fd 4a 96 e2 2f 7b c7 14 60 ac f8 45 91 dd 2a 76 c2 0f 5b a7 f3 40 8c d8 25 71 bd 0a 56 a2 ee 3b 87 d3 20 6c b8 05 51 9d e9 36 82 ce 1b 67 b3 00 4c 98 e4 31 7d c9 16 62 ae fa 47 93 df 2c 78 c4 11 5d a9 f5 42 8e da 27 73 bf 0c 58 a4 f0 3d 89 d5 22 6e ba 07 53 9f eb 38 84 d0 1d 69 b5 02 4e 9a e6 33 7f cb 18 64 b0 fc 49 95 e1 2e 7a c6 13 5f ab f7 44 90 dc 29 75 c1 0e 5a a6 f2 3f 8b d7 24 70 bc 09 55 a1 ed 3a 86 d2 1f 6b b7 04 50 9c e8 35 81 cd 1a 66 b2 fe 4b 97 e3 30 7c c8 15 61 ad f9 46 92 de 2b 77 c3 10 5c a8 f4 41 8d d9 26 72 be 0b 57 a3 ef 3c 88 d4 21 6d b9 06 52 9e ea 37 83 cf 1c 68 b4 01 4d 99 e5 32 7e ca 17 63 af fb 48 94 e0 2d
+ciphertext: 5c ac 5f 58 7e 66 f7 2c 35 ab 5e 00 30 5e 5f ec e0 9b b5 b7 56 2d b1 45 d5 3a cf 05 fe 06 92 2d 6c e4 02 16 ec 1d f2 56 0c 35 51 c3 4a a8 3a 8f d3 0d 17 a0 c2 9b 1e e0 e2 1f fe 1d 55 64 85 bf 80 2a 21 a3 06 e6 90 f6 64 8e b8 f9 65 dd 8a c1 ab 4d 43 92 c1 69 84 7a ac 88 c1 76 f0 2f da 11 29 19 c6 2a 13 4d d9 54 12 8e e1 00 7b 8d 82 80 52 7c d4 7c 6c e4 1d 77 34 2b 78 df ed 93 bb ac b1 f3 fd d0 cc 12 59 0c 53 3c ce de d0 45 13 24 09 39 e9 0a e4 dc af c7 5f 00 ab 48 6c 19 77 ab 8d aa 23 79 ea 18 e5 a5 d0 6a e4 b5 12 44 35 42 57 40 6c 86 f7 b4 68 6b 4b 25 c6 c4 77 40 e1 18 6f 7d 1a a9 2b 99 31 22 ed 0c 22 78 f4 f8 b5 3c 30 10 37 13 42 2d d2 ae c1 b4 14 05 09 6c 0e 7a 48 9d 88 03 16 05 4b 06 ab a4 a9 54 0d 14 83 74 c3 11 91 5e 5f 9e 2a 4e 4a f9 38 fd 34 2d ee 19 f9 ff db 19 53 e0 bf 32 37 cc 42 6f 75 15 77 46 e5 35 d5 71 ba e9 8b 95 b7 99 65 78 07 f3 89 e0 32 68 12 6a d0 3c 4b f7 30 f9 80 e0 5d 3e 21 6e 47 59 01 fb a9 e0 c6 84 8c 57 81 4a 48 b0 b1 b6 b1 7d bd a4 c9 a7 5d 0f 1c ad 87 b6 95 00 5f 92
+tag: d5 b0 16 bb 2b 04 24 a6 9f 62 0a fc 6b cb e0 10
+
+associated data: 0e 42 76 aa de 13 47 7b af e3 18
+plaintext:
+ciphertext:
+tag: ad 1f c6 84 d1 54 58 02 db ee d9 d1 67 ed 6a a0
+
+associated data: 0e 8d 0d 8c 0c 8b 0b 8a 0a 89 09
+plaintext: 4f 9f ef 40 90 e0 31 81 d1 22 72 c2 13 63 b3 04 54 a4 f4 45 95 e5 36 86 d6 27 77 c7 18 68 b8 09 59 a9 f9 4a 9a ea 3b 8b db 2c 7c cc 1d 6d bd 0e 5e ae fe 4f 9f ef 40 90 e0 31 81 d1 22 72 c2 13 63 b3 04 54 a4 f4 45 95 e5 36 86
+ciphertext: 95 8d 51 72 da 6d 50 1e c9 d9 b5 12 2e a4 65 b2 ad 08 58 e5 a1 b1 0a 96 67 c9 d7 4f 44 46 52 5d a0 e1 a2 fc 3e c1 e2 01 17 34 6e 25 db 58 29 da f5 ba 70 de 45 99 a3 f4 3f 71 cd 91 64 88 01 3b 95 e0 a9 b9 d7 2f 24 b6 0e d0 bf
+tag: 1d 25 17 58 12 b8 6f c5 05 94 d5 a9 4b 75 24 b4
+
+associated data: 0e fd ed dd cd bd ad 9d 8d 7d 6d
+plaintext: bf 10 60 b0 01 51 a1 f1 42 92 e2 33 83 d3 24 74 c4 15 65 b5 06 56 a6 f6 47 97 e7 38 88 d8 29 79 c9 1a 6a ba 0b 5b ab fb 4c 9c ec 3d 8d dd 2e 7e ce 1f 6f bf 10 60 b0 01 51 a1 f1 42 92 e2 33 83 d3 24 74 c4 15 65 b5 06 56 a6 f6 47 97 e7 38 88 d8 29 79 c9 1a 6a ba 0b 5b ab fb 4c 9c ec 3d 8d dd 2e 7e ce 1f 6f bf 10 60 b0 01 51 a1 f1 42 92 e2 33 83 d3 24 74 c4 15 65 b5 06 56 a6 f6 47 97 e7 38 88 d8 29 79 c9 1a 6a ba 0b 5b ab fb 4c 9c ec 3d 8d dd 2e 7e ce 1f 6f bf 10 60 b0 01 51 a1 f1 42 92 e2 33 83 d3 24 74 c4 15 65 b5 06 56 a6 f6 47 97 e7 38 88 d8 29 79 c9 1a
+ciphertext: 24 b7 df 04 e1 cc 67 6f c6 53 b9 f0 65 12 33 1b 50 30 0c b6 a9 3a fb 38 5a da 01 a3 85 4a 11 08 05 de 55 80 11 0a 53 01 68 52 af 59 81 ef 2e 1b 10 33 27 99 47 29 80 67 01 f9 af 85 34 4e d1 99 01 e9 a5 e5 77 d6 08 f4 cd dc cb 2e d1 cc ce 98 56 6d f4 0e 44 ac 05 e8 4e fa fd e2 09 7a 88 78 fe 44 1a 4a 6c f2 83 34 bd 06 84 ba 6f 9a 80 31 92 0d 55 79 6f b1 4e b5 e7 3b 08 4f f1 53 60 4a 5e 1f 94 b3 1c d9 43 53 f2 06 eb 22 80 92 52 43 10 6d ed c8 d7 3f 7b a4 4d ba 11 78 dc e6 b9 64 3e 5a 9a 04 58 61 f4 3e 33 ae 7c d8 69 30 22 ac 8a 73 fb 2e 57 24 3d 3e 91 e0 9a
+tag: c9 76 ba 82 49 82 f9 e1 c6 2b 98 f6 4a fa 30 cc
+
+associated data: 0e a5 3d d4 6c 04 9b 33 ca 62 f9
+plaintext: 68 b8 09 59 a9 f9 4a 9a ea 3b 8b db 2c 7c cc 1d 6d bd 0e 5e ae fe 4f 9f ef 40 90 e0 31 81 d1 22 72 c2 13 63 b3 04 54 a4 f4 45 95 e5 36 86 d6 27 77 c7 18 68 b8 09 59 a9 f9 4a 9a ea 3b 8b db 2c 7c cc 1d 6d bd 0e 5e ae fe 4f 9f ef 40 90 e0 31 81 d1 22 72 c2 13 63 b3 04 54 a4 f4 45 95 e5 36 86 d6 27 77 c7 18 68 b8 09 59 a9 f9 4a 9a ea 3b 8b db 2c 7c cc 1d 6d bd 0e 5e ae fe 4f 9f ef 40 90 e0 31 81 d1 22 72 c2 13 63 b3 04 54 a4 f4 45 95 e5 36 86 d6 27 77 c7 18 68 b8 09 59 a9 f9 4a 9a ea 3b 8b db 2c 7c cc 1d 6d bd 0e 5e ae fe 4f 9f ef 40 90 e0 31 81 d1 22 72 c2 13 63 b3 04 54 a4 f4 45 95 e5 36 86 d6 27 77 c7 18 68 b8 09 59 a9 f9 4a 9a ea 3b 8b db 2c 7c cc 1d 6d bd 0e 5e ae fe 4f 9f ef 40 90 e0 31 81 d1 22 72 c2 13 63 b3 04 54 a4 f4 45 95 e5 36 86 d6 27 77 c7 18 68 b8 09 59 a9 f9 4a 9a ea 3b 8b db 2c 7c cc 1d 6d bd 0e 5e ae fe 4f 9f ef 40 90 e0 31 81 d1 22 72 c2 13 63 b3 04 54 a4 f4 45 95 e5 36 86 d6 27 77 c7 18 68 b8 09 59 a9 f9 4a 9a ea 3b 8b db 2c 7c cc 1d 6d bd 0e 5e ae fe 4f 9f ef 40 90 e0 31 81 d1 22 72 c2 13 63 b3 04 54 a4 f4 45 95 e5 36 86 d6 27 77
+ciphertext: 89 9c 60 d5 db 19 79 b1 85 be 9a 33 18 06 e7 86 4f f9 80 75 a3 99 d0 1f 33 c5 36 6c 47 9e 5c 1b f2 2d a4 dc 30 02 0f 8e f8 ff b6 fe af b0 38 54 2e 5f 33 ac 6c 36 4b 68 e2 a2 7f 40 6f f7 39 cd 92 90 c9 a3 27 34 84 ac 99 01 b0 ad 84 79 ab 69 4f a2 e1 41 c7 9b 78 31 d4 15 c4 34 f9 ee 6e 61 d0 93 d3 1b df aa fb 95 6f d5 8a 9f a5 dd 54 45 ad 04 ee da e0 70 40 bf d3 b6 ab 53 46 15 5f a6 05 33 c6 40 c2 2e 76 71 9f 1a 9f 7b 71 0d c0 ca 2c ad 29 a1 fe e3 70 25 24 37 f8 71 c9 5d 16 cd 85 8f 6c 3a c7 10 c6 87 68 38 51 ee b0 80 25 43 d6 f3 a3 24 c7 fe 31 a7 04 d6 41 8d 17 5d 19 83 ed 28 15 d9 e6 db c0 9b f7 a1 bc ae c7 75 0e 53 e5 93 7a 96 b1 dc 9d 23 49 75 9e a1 d3 c8 cc 5b 61 80 ec 8d 52 04 f2 95 b8 51 75 a5 c1 3a ee 4a 85 a6 e2 a8 c0 15 ce c9 95 ae 16 9b d1 50 ce db 8b 30 e3 22 77 f5 3c 39 76 f0 39 d9 33 82 6f 20 85 92 54 a4 c6 57 48 1d 62 4a 43 04 e3 d8 08 e9 ac 74 71 4e 1a 2d ba 0c 37 a4 20 99 b6 e5 d2 54 81 1b ab de ee 64 ce 97 6b dc b0 55 ed 2b d5 0c 06 c9 b7 50 e3 f5 da 15 25 29 ee 93 3c e6 dc 72 8b 82 90 f3 80 fb 1b 90 68 b2 9a f0 0c 59 a9 bf 65 65 eb
+tag: 13 0b fc c1 3b 21 01 ae fe 51 04 3e ef e6 6a d0
+
+associated data: 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22
+plaintext:
+ciphertext:
+tag: 49 4f 0f 82 20 13 94 a1 c1 96 62 d9 df 20 cb 2e
+
+associated data: 13 97 1c a0 25 a9 2e b2 37 bb 40 c4 49 cd 52 d6
+plaintext: 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9 fe 54 a9
+ciphertext: ff 10 31 c2 ac e0 25 da f9 da a0 07 c0 2c 24 3d a7 1b 1c 9e 61 4d c1 ed 6e 9b 41 b1 a3 07 ea 10 78 94 4b ac dd 61 38 ca 81 bd d6 4a 4a d9 e2 a5 f8 e6 05 42 be 08 66 4c b2 b3 1a 5f 96 85 19 93 9e 18 cd b6 3d 9a dc 5f db 3c 31 40 0f aa 77 0a
+tag: f0 d7 a2 be cc f6 c4 f7 2e b9 82 05 1d c4 5f 07
+
+associated data: 13 10 0d 0a 07 04 01 fd fa f7 f4 f1 ee eb e8 e5
+plaintext: cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22 77 cc 22
+ciphertext: b4 88 7f 28 b5 a6 50 cb fc d9 57 04 b9 af 0f 3e 84 f0 cd af 72 4e 76 d3 9d 29 71 0e b0 72 56 25 7e 0c 1a e1 90 39 22 88 c7 3c 91 c0 02 c9 b6 5b cc 74 79 bc 0e fa 91 7a 64 59 04 28 a6 f0 d6 06 ae 63 e9 49 82 25 84 61 e5 32 2a 99 43 6c 9b 64 00 21 9b 90 d4 e8 dc 31 1a 5d da 5d 64 b7 a3 1e 99 d1 83 71 7f 85 87 43 09 68 6e b2 1a e4 2c 70 83 68 fd 93 f9 f9 75 dd bd 42 f0 db 6c 74 11 4e 5f 38 0c a9 25 b8 78 79 19 93 bc 68 46 9d 4b 49 67 71 d8 dd b1 6f 9f a9 a2 3d 1a 61 70 53 ac f5 20 ee 32 8a d1 c8 50 ff 39 64 cb 7b a9 d7 d8 ea 1d ce d7 01 f8 ca 85 0b d2 02 1d 7c b1 76 a3 f7 f7 01 e9 25 f3 ea 39 a4
+tag: 8f 69 07 4e 2f a1 3c e7 7d 7d 66 b3 71 57 7d 80
+
+associated data: 13 c3 74 25 d5 86 37 e7 98 49 f9 aa 5b 0c bc 6d
+plaintext: 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6 2c 81 d6
+ciphertext: 7d f7 21 4f 65 1b ca 21 30 d6 dd af 90 5e 45 28 55 d2 6d fd 7e 94 6e 60 5b ae 36 e3 72 2c 9e 00 27 8e d1 33 d5 24 a5 27 fb 31 90 38 ea 71 d4 7c 37 67 88 f2 48 0e 07 49 76 2b 0d 50 74 90 fb b9 d8 be 39 b6 8f cd cc b6 af 85 89 f3 2d b8 74 8c 6d d5 84 ae ee 26 c3 04 b4 5a 18 89 4b 13 41 97 c1 f9 65 03 d3 a6 4a 99 21 22 c5 6d d9 06 89 57 ad 3a b8 8d 8a 69 ab 61 e8 98 f3 70 8a 3b 70 42 d8 cc 2b c8 c2 5c 33 64 67 a8 0e dd fd 11 ce 5b d3 8b cd 64 6c 87 43 1f 6a d8 1e 76 64 c2 40 df 59 df de 94 c1 5a fe 9a 7b 2d a2 5e 8d 3d 1a c3 20 16 e1 49 2a 43 af 60 75 93 23 37 f9 17 59 c4 0d 73 fd 4a 42 5e 85 42 25 cb 1b 3f 4c b9 80 54 b6 8a db 4b 85 e5 ba 5d c8 e9 c9 cf 74 a4 b9 e9 10 d3 62 1e cb d9 68 ac dc c2 0e d7 dd 04 25 2c 9e 17 1d 9d a7 ae 2b a6 48 79 fc e7 28 e8 66 30 5a 76 4c 96 d3 2d cd 9a 72 c3 d5 6a 4e d8 ac de a9 3f c5 f2 f5 4b f9 e4 8c ac f0 85 d2 12 de 33 e7 0f 04 13 f6 22 e8 5f ba f1 3f f2 62 01 ff f8 dc 2a b7 22 83 a6 36 74 9f aa 83 2f 12 0b 61 72 48 28 cd 7a 16 91 ae 5c 0e 36 53 ac e9 17 53 80 24 65 66 cc 63 59 70 91 8d 4f 03 ea 58 eb 1d 43 0e d7 47 d4 a6 6e 90 28 99 50 5a d6 a9 b2 a3 bf 6e 8a cb af 19 cc b8 44 d2 46 92 41
+tag: c0 74 b9 81 6b be d1 b3 2b 45 b2 3d 00 eb 22 78
+
+associated data: 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96
+plaintext:
+ciphertext:
+tag: c7 f4 21 d3 95 f0 d3 70 63 45 d6 1b f0 f5 19 13
+
+associated data: 1a a5 31 bc 48 d3 5f ea 76 02 8d 19 a4 30 bb 47 d2 5e e9 75 01 8c 18
+plaintext: 5b b7 14 70 cc 29 85 e1 3e 9a f6 53 af 0c 68 c4 21 7d d9 36 92 ee 4b a7 04 60 bc 19 75 d1 2e 8a e6 43 9f fb 58 b4 11 6d c9 26 82 de 3b 97 f3 50 ac 09 65 c1 1e 7a d6 33 8f eb 48 a4 01 5d b9 16 72 ce 2b 87 e3 40 9c f8 55 b1 0e 6a c6 23 7f db 38 94 f0 4d a9 06 62
+ciphertext: 6c 67 7d 48 3c 31 b3 b9 a3 0c a9 e9 8e a7 27 e6 9b 2e c7 b4 1a dc 2a 52 81 bc 16 55 57 37 eb 26 b7 17 06 d2 bb 26 93 23 2a fd a4 df 24 99 ff fc d9 fa a9 f4 0b a4 d8 b8 e9 a1 f4 3d 78 93 94 c2 86 44 08 3b 65 0e cc 1e be 2f f9 61 6a 36 c0 a3 6a 8f bb ed 9e f9 c7
+tag: 08 4b a1 6e 83 69 7e 35 de 99 3e b3 2f a0 31 5e
+
+associated data: 1a 27 34 41 4e 5b 68 75 82 8f 9c a9 b6 c3 d0 dd ea f7 05 12 1f 2c 39
+plaintext: dd 3a 96 f2 4f ab 08 64 c0 1d 79 d5 32 8e ea 47 a3 00 5c b8 15 71 cd 2a 86 e2 3f 9b f7 54 b0 0d 69 c5 22 7e da 37 93 ef 4c a8 05 61 bd 1a 76 d2 2f 8b e7 44 a0 fc 59 b5 12 6e ca 27 83 df 3c 98 f4 51 ad 0a 66 c2 1f 7b d7 34 90 ec 49 a5 02 5e ba 17 73 cf 2c 88 e4 41 9d f9 56 b2 0f 6b c7 24 80 dc 39 95 f1 4e aa 07 63 bf 1c 78 d4 31 8d e9 46 a2 fe 5b b7 14 70 cc 29 85 e1 3e 9a f6 53 af 0c 68 c4 21 7d d9 36 92 ee 4b a7 04 60 bc 19 75 d1 2e 8a e6 43 9f fb 58 b4 11 6d c9 26 82 de 3b 97 f3 50 ac 09 65 c1 1e 7a d6 33 8f eb 48 a4 01 5d b9 16 72 ce 2b 87 e3 40 9c f8 55 b1 0e 6a c6 23 7f db 38 94 f0 4d a9 06 62 be 1b 77 d3 30 8c e8 45 a1 fd 5a b6 13 6f cb
+ciphertext: bb bf a6 0c e7 6a f4 5a a4 a7 e3 fb a5 e0 a3 6d d1 45 84 21 50 97 f5 89 d6 07 38 78 cf 0a 3c 23 e7 e1 3c 43 a9 62 a2 6f bb 3a 52 8c 8e f3 14 91 9b 95 d3 3a e3 88 73 1d 83 33 31 0b e4 fa 94 44 53 e9 2a b2 d9 6b 86 24 f1 85 e3 a3 a3 f9 a3 06 8a 45 35 97 a9 c3 7e 90 a8 ad c8 d1 c7 e8 61 73 fe 92 0d 26 8d 0a 5a 82 c7 45 07 90 19 53 83 5e 7f 61 ff 1b f3 7d f6 84 ec 00 4f 3f fd b1 76 a9 7d b1 eb 53 d0 fe a1 28 2f 80 87 03 19 da 9e 31 83 ec 80 4b 32 bb 71 a5 49 20 53 1e 9d 91 6c 4c 4b 61 17 78 a4 44 de 26 41 e8 f7 1f 9d 02 99 d8 db c5 3a 6d 84 0f e0 8c 8c bc be 55 36 99 72 1d ce a4 68 83 77 31 89 67 6f 37 6c e3 cd 15 dd 96 d4 34 68 fd ee 5c cc 51 30
+tag: 58 6f 0e fe e9 f9 dc 42 99 c9 05 78 a3 f3 01 39
+
+associated data: 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75
+plaintext:
+ciphertext:
+tag: 6c f7 5b 41 42 bc b0 cd 10 b6 52 78 c3 38 25 01
+
+associated data: 23 b7 4c e0 75 0a 9e 33 c7 5c f0 85 1a ae 43 d7 6c 01 95 2a be 53 e7 7c 11 a5 3a ce 63 f7 8c 21
+plaintext: 64 c9 2f 94 f9 5f c4 2a 8f f4 5a bf 25 8a ef 55 ba 20 85 ea 50 b5 1b 80 e5 4b b0 16 7b e0 46 ab 11 76 db 41 a6 0c 71 d6 3c a1 07 6c d1 37 9c 02 67 cc 32 97 fc 62 c7 2d 92 f7 5d c2 28 8d f2 58 bd 23 88 ed 53 b8 1e 83 e8 4e b3 19 7e e3 49 ae 14 79 de 44 a9 0f 74 d9 3f a4 0a 6f d4 3a 9f 05
+ciphertext: 66 a8 6d 59 bb 27 62 4d 63 51 14 dd d7 b5 e3 54 04 6c 3d 8a d7 b2 e2 93 61 8c f6 ab 13 6a f1 f8 1d 64 28 43 56 26 47 8d 6e 71 65 9b 19 d2 a2 fa f6 c5 80 1b 84 08 f2 73 c9 96 e8 16 0b 61 8a 9d b0 76 e7 c5 76 78 e2 49 5a 36 d0 98 24 b8 f8 ed 4c d4 36 e4 44 c5 f4 36 f8 a5 b0 82 99 2f 18 84
+tag: bd 7f 21 05 c3 80 97 f0 09 9f db 58 fc cd fe 46
+
+associated data: 23 47 6b 8f b3 d7 fb 20 44 68 8c b0 d4 f8 1d 41 65 89 ad d1 f5 1a 3e 62 86 aa ce f2 17 3b 5f 83
+plaintext: f4 5a bf 25 8a ef 55 ba 20 85 ea 50 b5 1b 80 e5 4b b0 16 7b e0 46 ab 11 76 db 41 a6 0c 71 d6 3c a1 07 6c d1 37 9c 02 67 cc 32 97 fc 62 c7 2d 92 f7 5d c2 28 8d f2 58 bd 23 88 ed 53 b8 1e 83 e8 4e b3 19 7e e3 49 ae 14 79 de 44 a9 0f 74 d9 3f a4 0a 6f d4 3a 9f 05 6a cf 35 9a 00 65 ca 30 95 fa 60 c5 2b 90 f5 5b c0 26 8b f0 56 bb 21 86 eb 51 b6 1c 81 e6 4c b1 17 7c e1 47 ac 12 77 dc 42 a7 0d 72 d7 3d a2 08 6d d2 38 9d 03 68 cd 33 98 fd 63 c8 2e 93 f8 5e c3 29 8e f3 59 be 24 89 ee 54 b9 1f 84 e9 4f b4 1a 7f e4 4a af 15 7a df 45 aa 10 75 da 40 a5 0b 70 d5 3b a0 06 6b d0 36 9b 01 66 cb 31 96 fb 61 c6 2c 91 f6 5c c1 27 8c f1 57 bc 22 87 ec 52 b7 1d 82 e7 4d b2 18 7d e2 48 ad 13 78 dd 43 a8 0e 73 d8 3e a3 09 6e d3 39 9e
+ciphertext: fd c2 bc a0 b0 8b d3 a9 a1 f8 3b 4c 74 bd 48 6a 49 f3 d8 8f fe f2 e9 d8 13 72 1e 91 e5 a0 bf f3 0e 89 ee 20 fc 49 9b ac 28 5b 63 86 6a e7 f3 41 9c 9b 5f 2d 9d 38 f0 6d 19 91 85 a0 f8 79 67 26 2d 8c 15 fa ef 1b 79 e1 0d 23 47 04 02 c6 e8 6d 19 66 42 c6 d9 31 c4 68 f9 89 94 e2 66 77 a9 48 d1 34 d9 72 7b df dd 0c 1d 10 44 27 50 23 71 78 a2 47 ae 7e 8c 14 58 e3 e9 90 eb c5 44 66 be 24 0b 71 7f 05 ff af fe ae 99 7c 44 d3 b4 61 d5 fb 45 a8 2f a5 68 fa a7 e8 ee 1c 8d c5 6e a6 67 67 5d 70 61 92 65 60 3b 44 fb 7e d2 e2 d9 f8 9a 45 d1 16 4f a0 65 dc bf 7e 61 74 8b 6a 02 97 cb fb d3 b4 32 f9 96 a0 78 fe 37 15 a7 34 3d 03 2b f1 ed b4 33 38 f6 5a 0e 47 e0 fd 53 34 70 5b 24 b9 d8 8a 1f 17 5f 98 39 62 ea 30 9a 77 5f aa 6d c3
+tag: a0 ba 58 8e 19 11 6d 46 b6 58 b8 83 40 00 ee 1f
+
+associated data: 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3
+plaintext:
+ciphertext:
+tag: fb 93 9f a6 5b 22 68 94 27 b9 97 ac 62 3e b0 c0
+
+associated data: 2f cf 70 11 b1 52 f2 93 34 d4 75 16 b6 57 f7 98 39 d9 7a 1b bb 5c fc 9d 3e de 7f 20 c0 61 02 a2 43 e3 84 25 c5 66 07 a7 48 e8 89 2a
+plaintext: 70 e1 53 c4 36 a7 19 8a fb 6d de 50 c1 33 a4 16 87 f8 6a db 4d be 30 a1 13 84 f5 67 d8 4a bb 2d 9e 10 81 f2 64 d5 47 b8 2a 9b 0d 7e ef 61 d2 44 b5 27 98 0a 7b ec 5e cf 41 b2 24 95 07 78 e9 5b cc 3e af 21 92 04 75 e6 58 c9 3b ac 1e 8f 01 72 e3 55 c6 38 a9 1b 8c fd 6f e0 52 c3 35 a6 18 89 fa 6c dd 4f c0 32 a3 15 86 f7 69 da
+ciphertext: bc 7c 66 64 4e d7 10 f5 08 b0 3e d9 c5 67 25 7c d4 6a a4 7f 54 25 7a 20 5e 87 c0 a2 ea b7 81 ce bd ae 92 e2 21 fa a5 d9 61 d1 60 77 ef 87 fd ee 5f d9 55 c7 90 63 a3 51 b3 3d d5 81 bd 73 2f 93 fc e3 71 bb 7c 6c 71 c0 9a 2f 2c 12 2a 65 a1 23 40 65 cb 56 22 32 ac ad 61 e1 da 08 54 79 7a 02 25 ea a9 a6 ae 29 41 b0 ff 61 9e 7a
+tag: ea 2c ef c2 de 6e 82 a9 ac ab f2 d3 06 67 7b e6
+
+associated data: 2f 71 b3 f5 38 7a bc fe 41 83 c5 08 4a 8c ce 11 53 95 d7 1a 5c 9e e0 23 65 a7 e9 2c 6e b0 f2 35 77 b9 fb 3e 80 c2 05 47 89 cb 0e 50
+plaintext: 13 84 f5 67 d8 4a bb 2d 9e 10 81 f2 64 d5 47 b8 2a 9b 0d 7e ef 61 d2 44 b5 27 98 0a 7b ec 5e cf 41 b2 24 95 07 78 e9 5b cc 3e af 21 92 04 75 e6 58 c9 3b ac 1e 8f 01 72 e3 55 c6 38 a9 1b 8c fd 6f e0 52 c3 35 a6 18 89 fa 6c dd 4f c0 32 a3 15 86 f7 69 da 4c bd 2f a0 12 83 f4 66 d7 49 ba 2c 9d 0f 80 f1 63 d4 46 b7 29 9a 0c 7d ee 60 d1 43 b4 26 97 09 7a eb 5d ce 40 b1 23 94 06 77 e8 5a cb 3d ae 20 91 03 74 e5 57 c8 3a ab 1d 8e 00 71 e2 54 c5 37 a8 1a 8b fc 6e df 51 c2 34 a5 17 88 f9 6b dc 4e bf 31 a2 14 85 f6 68 d9 4b bc 2e 9f 11 82 f3 65 d6 48 b9 2b 9c 0e 7f f0 62 d3 45 b6 28 99 0b 7c ed 5f d0 42 b3 25 96 08 79 ea 5c cd 3f b0 22 93 05 76 e7 59 ca 3c ad 1f 90 02 73 e4 56 c7 39 aa 1c 8d fe 70 e1 53 c4 36 a7 19 8a fb 6d de 50 c1 33 a4 16 87 f8 6a db 4d be 30 a1 13 84 f5 67 d8 4a bb 2d 9e 10 81 f2 64 d5 47
+ciphertext: 2d 5c c5 b6 ce f2 47 ce 8d 23 4c c7 c4 88 69 35 5f 17 db e5 5a 8d dd 50 15 e8 f4 ac 5a 2f 12 0c 0d cf 23 72 8d 88 d5 b1 21 3d 8d 70 30 a4 78 ec f1 86 eb 56 bd 4f 55 8a 4d 24 6a 54 9a 49 7a 33 4f 37 9d 78 99 a6 b7 b8 20 31 ad a1 ab 58 ca 08 c8 c5 30 3e 04 aa 5a 01 a4 15 ba a5 88 c8 c1 ea 24 25 84 3e d3 2c 9a 68 38 35 30 41 a0 06 87 d4 6a 0f 78 14 12 cf aa 81 6e 6a 0a 95 a1 58 72 2d a8 c2 2e 6d b9 77 34 2c 02 71 e6 03 f5 e4 c8 86 a6 37 cb 36 0d 7c 17 2c 32 e8 8c 0c 90 d7 6b 37 d0 1b e7 db e7 07 ba 3f 39 e0 6b 75 20 c0 bd ab 94 66 20 a4 c6 db f5 20 fb 56 31 56 bd 8a 9b 14 85 b1 95 2c 8c 75 41 93 0a a3 d5 bf 51 61 05 a0 6b 4f 2c 55 80 d7 f3 f2 83 2e 58 ca 52 01 8e 10 8b 67 70 61 55 41 37 99 f2 a2 01 98 50 70 3d 2b 1b 93 18 d4 34 f6 6b 6b 97 f6 05 4d 55 38 5a 86 d9 c7 37 1a b7 d6 d6 4f 44 cc d6 a1 9d 13
+tag: e3 08 4b 1a df 38 79 02 10 e0 82 48 6b 70 bd c6
+
+associated data: 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47
+plaintext:
+ciphertext:
+tag: 0a 68 12 87 04 01 f2 0e 69 63 73 5d 43 97 25 77
+
+associated data: 3f ef a0 51 02 b2 63 14 c4 75 26 d6 87 38 e8 99 4a fa ab 5c 0d bd 6e 1f cf 80 31 e1 92 43 f3 a4 55 06 b6 67 18 c8 79 2a da 8b 3c ec 9d 4e fe af 60 11 c1 72 23 d3 84 35 e5 96 47 f7
+plaintext: 80 02 83 05 86 08 89 0b 8c 0e 8f 11 92 14 95 17 98 1a 9b 1d 9e 20 a1 23 a4 26 a7 29 aa 2c ad 2f b0 32 b3 35 b6 38 b9 3b bc 3e bf 41 c2 44 c5 47 c8 4a cb 4d ce 50 d1 53 d4 56 d7 59 da 5c dd 5f e0 62 e3 65 e6 68 e9 6b ec 6e ef 71 f2 74 f5 77 f8 7a fb 7d fe 80 02 83 05 86 08 89 0b 8c 0e 8f 11 92 14 95 17 98 1a 9b 1d 9e 20 a1 23 a4 26 a7 29 aa 2c ad 2f b0 32 b3 35 b6 38 b9
+ciphertext: 58 ca 97 fe 6e 2a e4 43 0c 07 95 0a b5 77 b2 5b eb 2e 40 a2 56 de 4d 00 3d e5 22 ae db 3a 45 32 9d eb 00 04 c4 00 e4 7d ee 3d 26 d9 92 e1 8a 47 b9 8a b5 01 37 16 0d 68 80 6c 18 5a cc af 8d bf 5f 8a ce e7 6d 3f 23 51 eb dc f3 f6 95 69 fc ba 3f 1a 49 0d 22 84 e5 48 8a b2 84 9c 2c 2e 28 c5 35 5a 81 ae 95 c6 19 e6 9e 5d 26 63 76 1e 08 1d 14 4a 83 4f 82 00 a5 19 15 f4 8f e3
+tag: e7 58 25 72 74 e0 e4 7d f4 6c 08 0a 40 1b 34 84
+
+associated data: 3f a9 14 7e e8 53 bd 28 92 fc 67 d1 3c a6 11 7b e5 50 ba 25 8f f9 64 ce 39 a3 0e 78 e2 4d b7 22 8c f6 61 cb 36 a0 0b 75 df 4a b4 1f 89 f3 5e c8 33 9d 08 72 dc 47 b1 1c 86 f0 5b c5
+plaintext: 3b bc 3e bf 41 c2 44 c5 47 c8 4a cb 4d ce 50 d1 53 d4 56 d7 59 da 5c dd 5f e0 62 e3 65 e6 68 e9 6b ec 6e ef 71 f2 74 f5 77 f8 7a fb 7d fe 80 02 83 05 86 08 89 0b 8c 0e 8f 11 92 14 95 17 98 1a 9b 1d 9e 20 a1 23 a4 26 a7 29 aa 2c ad 2f b0 32 b3 35 b6 38 b9 3b bc 3e bf 41 c2 44 c5 47 c8 4a cb 4d ce 50 d1 53 d4 56 d7 59 da 5c dd 5f e0 62 e3 65 e6 68 e9 6b ec 6e ef 71 f2 74 f5 77 f8 7a fb 7d fe 80 02 83 05 86 08 89 0b 8c 0e 8f 11 92 14 95 17 98 1a 9b 1d 9e 20 a1 23 a4 26 a7 29 aa 2c ad 2f b0 32 b3 35 b6 38 b9 3b bc 3e bf 41 c2 44 c5 47 c8 4a cb 4d ce 50 d1 53 d4 56 d7 59 da 5c dd 5f e0 62 e3 65 e6 68 e9 6b ec 6e ef 71 f2 74 f5 77 f8 7a fb 7d fe 80 02 83 05 86 08 89 0b 8c 0e 8f 11 92 14 95 17 98 1a 9b 1d 9e 20 a1 23 a4 26 a7 29 aa 2c ad 2f b0 32 b3 35 b6 38 b9 3b bc 3e bf 41 c2 44 c5 47 c8 4a cb 4d ce 50 d1 53 d4 56 d7 59 da 5c dd 5f e0 62 e3 65 e6 68 e9 6b ec 6e ef 71 f2 74 f5 77 f8 7a fb 7d fe 80 02 83 05 86 08 89 0b 8c
+ciphertext: 99 f4 95 0e dc c7 71 47 fc e1 2a 91 4c af 18 44 45 ad 35 e6 9d 2d cd 7c b5 c2 fa e9 74 b3 e6 81 6a 2c fe c6 bc 13 25 fd 8e 40 cc 28 5f d5 92 77 0d 19 68 b4 fa 8a 23 2c bf b0 00 7b 78 3f f8 02 31 79 d9 1a c4 2f 57 df a3 da 41 6a 63 59 d2 58 90 c3 b4 b4 50 a0 9e 03 25 82 d2 e2 e6 6d 13 d6 6c 76 2f 92 6b 90 b1 e7 1c fe ea dd b1 c6 72 45 08 1d b6 32 88 86 07 1f dd 14 27 eb aa d5 13 a6 86 b3 59 24 61 b0 b9 e8 7c 14 dd b9 8e dd 9b 8c d1 1c 2e 25 40 ad 83 a2 be a4 99 a5 b5 49 65 f1 30 44 3f 5a 05 e4 b8 47 f0 bc 85 97 0c 2f 1b 58 37 76 85 25 85 81 25 96 a8 ae 9c ef 59 e5 4b 56 6a a1 8a c4 80 dd 49 70 99 93 f1 a2 3e 5c 33 df e8 54 ac fa a2 85 00 f1 1c 6c 82 51 8d 88 e1 3b c1 21 e4 a8 96 8c be 5c 37 f5 45 4e 46 f3 07 28 c2 87 0c 01 47 21 de 83 94 e1 e0 53 50 d8 9e 3f 3e 4c c0 c8 34 75 70 52 f1 bf d3 69 e9 68 50 65 ac c3 68 8d 3b dd 1d 5a 27 9e 87 54 82 1c e8 23 bd 50 ad d8 a2 cb 3c ee a9 3d 01 e3 91 38 ea 52 3b c7 e8 98 c9 60
+tag: 77 85 f4 4d 5d 02 77 6c 19 54 b2 cf 05 ff 35 9a
+
+associated data: 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9
+plaintext:
+ciphertext:
+tag: f0 ce 51 0a f4 67 81 dc b0 56 af 57 27 8b f3 8d
+
+associated data: 55 1c e2 a9 70 37 fd c4 8b 52 19 df a6 6d 34 fa c1 88 4f 16 dc a3 6a 31 f7 be 85 4c 13 d9 a0 67 2e f4 bb 82 49 10 d6 9d 64 2b f1 b8 7f 46 0d d3 9a 61 28 ee b5 7c 43 0a d0 97 5e 25 eb b2 79 40 07 cd 94 5b 22 e8 af 76 3d 04 ca 91 58 1f e5 ac 73 3a
+plaintext: 96 2e c5 5d f4 8c 24 bb 53 ea 82 1a b1 49 e0 78 10 a7 3f d6 6e 06 9d 35 cc 64 fb 93 2b c2 5a f1 89 21 b8 50 e7 7f 17 ae 46 dd 75 0d a4 3c d3 6b 03 9a 32 c9 61 f8 90 28 bf 57 ee 86 1e b5 4d e4 7c 14 ab 43 da 72 0a a1 39 d0 68 00 97 2f c6 5e f5 8d 25 bc 54 eb 83 1b b2 4a e1 79 11 a8 40 d7 6f 07 9e 36 cd 65 fc 94 2c c3 5b f2 8a 22 b9 51 e8 80 18 af 47 de 76 0e a5 3d d4 6c 04 9b 33 ca 62 f9 91 29 c0 58 ef 87 1f b6 4e e5 7d 15 ac 44 db 73
+ciphertext: 50 67 02 8c 7f f7 2c f6 d1 ba f8 51 15 56 f6 3c cd 40 1a 20 39 1e 86 23 75 bf 13 bc 37 f7 8b 26 59 e9 65 09 ad 99 3f e9 36 1b 38 f5 ff 26 c6 7c e8 b0 26 b2 f6 6b 52 7b b1 13 13 df 2d 6b a0 ff ac 58 ab d7 c6 a0 ec 96 33 8e e8 e0 d5 7c f3 e8 81 79 5a 36 69 24 88 d5 88 de 9c 10 b1 87 bf 2e 03 07 46 6f 4b 28 80 06 43 63 79 56 34 95 43 2b 3e 57 99 03 26 57 85 73 43 86 3c da 73 12 a7 6e 75 f5 31 5f ad 3f 1c eb d7 0d 9e 6b 3a cd a2 ff 47 78
+tag: 00 97 39 19 0b 08 9b 7e 52 dc f7 1e 80 82 06 aa
+
+associated data: 55 f6 98 3a db 7d 1f c0 62 04 a5 47 e8 8a 2c cd 6f 11 b2 54 f5 97 39 da 7c 1e bf 61 03 a4 46 e7 89 2b cc 6e 10 b1 53 f4 96 38 d9 7b 1d be 60 02 a3 45 e6 88 2a cb 6d 0f b0 52 f3 95 37 d8 7a 1c bd 5f 01 a2 44 e5 87 29 ca 6c 0e af 51 f2 94 36 d7 79
+plaintext: 72 0a a1 39 d0 68 00 97 2f c6 5e f5 8d 25 bc 54 eb 83 1b b2 4a e1 79 11 a8 40 d7 6f 07 9e 36 cd 65 fc 94 2c c3 5b f2 8a 22 b9 51 e8 80 18 af 47 de 76 0e a5 3d d4 6c 04 9b 33 ca 62 f9 91 29 c0 58 ef 87 1f b6 4e e5 7d 15 ac 44 db 73 0b a2 3a d1 69 01 98 30 c7 5f f6 8e 26 bd 55 ec 84 1c b3 4b e2 7a 12 a9 41 d8 70 08 9f 37 ce 66 fd 95 2d c4 5c f3 8b 23 ba 52 e9 81 19 b0 48 df 77 0f a6 3e d5 6d 05 9c 34 cb 63 fa 92 2a c1 59 f0 88 20 b7 4f e6 7e 16 ad 45 dc 74 0c a3 3b d2 6a 02 99 31 c8 60 f7 8f 27 be 56 ed 85 1d b4 4c e3 7b 13 aa 42 d9 71 09 a0 38 cf 67 fe 96 2e c5 5d f4 8c 24 bb 53 ea 82 1a b1 49 e0 78 10 a7 3f d6 6e 06 9d 35 cc 64 fb 93 2b c2 5a f1 89 21 b8 50 e7 7f 17 ae 46 dd 75 0d a4 3c d3 6b 03 9a 32 c9 61 f8 90 28 bf 57 ee 86 1e b5 4d e4 7c 14 ab 43 da 72 0a a1 39 d0 68 00 97 2f c6 5e f5 8d 25 bc 54 eb 83 1b b2 4a e1 79 11 a8 40 d7 6f 07 9e 36 cd 65 fc 94 2c c3 5b f2 8a 22 b9 51 e8 80 18 af 47 de 76 0e a5 3d d4 6c 04 9b 33 ca 62 f9 91 29 c0 58 ef 87 1f b6 4e e5 7d 15 ac 44 db 73 0b a2 3a d1 69 01 98 30 c7 5f f6 8e 26 bd 55 ec 84 1c b3 4b e2 7a 12 a9 41 d8 70 08 9f 37 ce 66 fd
+ciphertext: cd 75 d4 1b b7 ea 10 b1 2d be 64 8d 8a ff 63 f0 45 c6 d0 89 c4 90 11 31 47 07 fe b5 f6 1c 4a a3 b1 8b ba 3e 00 25 06 d8 1e ce cf 89 e6 39 d5 a6 51 92 e3 d2 cc 3c 8a 98 b0 c5 71 39 08 e3 d6 4d 84 fe 9e a3 73 83 5b 82 16 3b 1d e6 ff bd eb 02 dd 3d ba 64 03 71 1d f7 91 2f a7 ff 7b 6c 73 66 70 50 01 47 c5 55 9f 04 59 9b d8 9c fd f2 ec d9 4e b1 ad f4 71 46 01 d9 36 52 f0 76 9b 90 0d b6 91 d0 14 74 5e 58 b7 96 41 07 92 52 ac ca 4f c0 f3 3c 6e 87 30 8e 00 71 2a 6f 3a 9a 90 25 6e f7 dc 7d 75 7d d2 a9 22 d9 a7 07 43 53 63 ed f3 0d a3 95 3b 33 18 af 29 73 ae 13 24 e5 93 ac ed 6a e6 c8 bb 78 09 80 53 7b f4 27 bc 49 79 86 2e a2 81 0a c9 d6 e6 b6 c2 09 ed 16 d3 8b d8 2f 8b 27 41 62 15 34 84 72 54 e2 75 e0 f7 d5 2d f0 f6 47 19 bd a1 b7 59 81 12 ce 87 9a f4 d6 11 b3 7b b1 02 ec 1e c9 83 2a b4 4f ba cc 71 43 0c 21 56 c6 05 b6 98 fd c6 96 8b 64 82 21 2a 78 1b b5 0d d4 b8 f5 f7 29 41 ef 93 7c 32 fb e9 9a 5b e7 a7 19 97 5b e9 19 c5 20 36 dc 80 ab ca 25 a9 31 be d3 0d 4a 91 e4 d4 09 91 67 05 37 33 29 c2 1a 80 be d6 c8 f3 e3 91 62 51 a9 91 b0 64 aa c6 78 4b 52 f1 13 1f 01 28 89 d2 55 95 db 5e cd 79
+tag: de 98 c3 6c dd 43 ad 25 d8 91 87 6b 09 38 02 de
+
+associated data: 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0
+plaintext:
+ciphertext:
+tag: fa 3f b2 75 21 ff 61 eb 05 af e8 e7 04 f0 25 89
+
+associated data: 72 56 3a 1e 02 e5 c9 ad 91 75 59 3d 21 05 e8 cc b0 94 78 5c 40 24 08 eb cf b3 97 7b 5f 43 27 0b ee d2 b6 9a 7e 62 46 2a 0e f1 d5 b9 9d 81 65 49 2d 11 f4 d8 bc a0 84 68 4c 30 14 f7 db bf a3 87 6b 4f 33 17 fa de c2 a6 8a 6e 52 36 1a fd e1 c5 a9 8d 71 55 39 1d 01 e4 c8 ac 90 74 58 3c 20 04 e7 cb af 93 77 5b 3f 23 07 ea ce b2 96 7a 5e
+plaintext: b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86 3b ef a4 59 0e c2 77 2c e0 95 4a fe b3 68 1d d1 86
+ciphertext: af f4 c4 81 05 cc 4a 83 6a 8e f4 5b 9e e6 34 b3 18 c2 89 9e 91 f4 94 f2 92 4f 10 52 76 fd 8d 79 42 61 66 74 73 8f c1 a8 b2 4c e2 d2 18 cd 76 43 69 68 43 32 ca a7 3c 63 43 b1 0e de e8 d5 9d 7c e5 a2 59 5e db b3 6f b9 14 b8 b2 67 ca 7f 5e a3 5f 72 22 89 ef 57 26 32 01 bc ba b9 05 88 24 ff 64 71 07 12 33 d1 9f 78 b6 2d 87 e0 fb ca c3 2e b7 c3 ad be c5 68 a0 ca 47 cb cd e5 1a b4 56 fb 51 41 eb ad 71 0e ec 0b 64 f7 6a f0 f3 6b 15 a2 c5 8a 83 e1 28 50 85 a7 a7 0d 21 bd 75 eb 51 b0 1f 3c e2 a8 f3 5d a0 2f d8 12 48 bc 65 ff 37
+tag: b1 8a 50 dd 59 dc c8 db 6e 64 7b 11 ae ce 3f 1a
+
+associated data: 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb
+plaintext:
+ciphertext:
+tag: 20 3f c2 22 7d f8 53 3c 93 96 00 60 ad 50 59 80
+
+associated data: 99 a3 ad b7 c1 cb d5 df e9 f3 fd 08 12 1c 26 30 3a 44 4e 58 62 6c 76 80 8a 94 9e a8 b2 bc c6 d0 da e4 ee f8 03 0d 17 21 2b 35 3f 49 53 5d 67 71 7b 85 8f 99 a3 ad b7 c1 cb d5 df e9 f3 fd 08 12 1c 26 30 3a 44 4e 58 62 6c 76 80 8a 94 9e a8 b2 bc c6 d0 da e4 ee f8 03 0d 17 21 2b 35 3f 49 53 5d 67 71 7b 85 8f 99 a3 ad b7 c1 cb d5 df e9 f3 fd 08 12 1c 26 30 3a 44 4e 58 62 6c 76 80 8a 94 9e a8 b2 bc c6 d0 da e4 ee f8 03 0d 17 21 2b 35 3f 49 53 5d 67 71
+plaintext: da b6 92 6e 4a 26 02 dd b9 95 71 4d 29 05 e0 bc 98 74 50 2c 08 e3 bf 9b 77 53 2f 0b e6 c2 9e 7a 56 32 0e e9 c5 a1 7d 59 35 11 ec c8 a4 80 5c 38 14 ef cb a7 83 5f 3b 17 f2 ce aa 86 62 3e 1a f5 d1 ad 89 65 41 1d f8 d4 b0 8c 68 44 20 fb d7 b3 8f 6b 47 23 fe da b6 92 6e 4a 26 02 dd b9 95 71 4d 29 05 e0 bc 98 74 50 2c 08 e3 bf 9b 77 53 2f 0b e6 c2 9e 7a 56 32 0e e9 c5 a1 7d 59 35 11 ec c8 a4 80 5c 38 14 ef cb a7 83 5f 3b 17 f2 ce aa 86 62 3e 1a f5 d1 ad 89 65 41 1d f8 d4 b0 8c 68 44 20 fb d7 b3 8f 6b 47 23 fe da b6 92 6e 4a 26 02 dd b9 95 71 4d 29 05 e0 bc 98 74 50 2c 08 e3 bf 9b 77 53 2f 0b e6 c2 9e 7a 56 32 0e e9 c5 a1 7d 59 35 11 ec c8
+ciphertext: 8a b5 10 74 a2 13 a0 ad 0e e4 d4 a5 fc dc 42 7e d8 ad 0f b7 ca 1d fd 89 bf 87 e0 06 13 58 e7 cb 35 b1 1d 03 36 f8 d9 c7 cb ac a1 17 de a5 65 94 94 a4 98 b8 8a 79 2f 2e d4 49 e0 e5 6d 23 62 e1 95 11 22 00 c1 27 a5 07 bf 4f 14 1d 97 63 db be fb 52 cf 12 40 dc 03 8c 86 41 1f ab 78 b7 fe 5b bb e1 ba af 76 76 98 b3 3b 20 8d e8 7e e1 59 84 4c c9 e5 1f b7 de 39 a5 72 aa 96 a1 99 75 77 fc ed 3a 01 0d da 24 f0 6c 12 54 60 26 31 7f 60 2a c0 7e 9f 4a 5e c1 30 95 4f 81 0b 79 ac 9e bb 42 bc ca d1 0e 93 10 c0 68 d8 20 37 bc 9a e0 36 ac 32 5b 0e 8f 19 e6 bf e0 2f 74 53 2a 22 31 0a d4 28 1d 30 da a2 5c ce 2e 5b 2c a3 d4 36 b4 f8 2d 8f b1 3b 75 d6 15
+tag: 2b de a3 47 e0 bb 62 10 0b 87 c2 b4 3b 55 04 90
+
+associated data: cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca
+plaintext:
+ciphertext:
+tag: 8d 94 d3 84 78 87 10 ae f9 d5 c0 19 13 1e 84 fd
+
+associated data: cd 0c 4a 88 c6 05 43 81 bf fd 3c 7a b8 f6 35 73 b1 ef 2e 6c aa e8 27 65 a3 e1 20 5e 9c da 19 57 95 d3 12 50 8e cc 0b 49 87 c5 04 42 80 be fc 3b 79 b7 f5 34 72 b0 ee 2d 6b a9 e7 26 64 a2 e0 1f 5d 9b d9 18 56 94 d2 11 4f 8d cb 0a 48 86 c4 03 41 7f bd fb 3a 78 b6 f4 33 71 af ed 2c 6a a8 e6 25 63 a1 df 1e 5c 9a d8 17 55 93 d1 10 4e 8c ca 09 47 85 c3 02 40 7e bc fa 39 77 b5 f3 32 70 ae ec 2b 69 a7 e5 24 62 a0 de 1d 5b 99 d7 16 54 92 d0 0f 4d 8b c9 08 46 84 c2 01 3f 7d bb f9 38 76 b4 f2 31 6f ad eb 2a 68 a6 e4 23 61 9f dd 1c 5a 98 d6 15 53 91 cf 0e 4c 8a c8 07 45 83 c1 00 3e 7c ba f8 37 75 b3 f1 30 6e ac
+plaintext: 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5 b4 c3 d2 e1 f0 00 0f 1e 2d 3c 4b 5a 69 78 87 96 a5
+ciphertext: 16 8b cc fe db db 82 bc 15 c0 27 69 c4 9d bc 57 35 09 fb fc 5d 90 27 ef 7a 4c 59 21 43 20 5b 16 6f b9 06 ba a8 19 d5 13 b7 82 2a 9d f7 f5 3c 46 3a d6 c7 57 14 97 01 9f ef 46 2c ee e6 3d 4b b9 12 0c 6e f6 30 4d 28 e4 fd 9f d3 07 25 d2 63 02 7c a4 99 72 a0 9b 3d 55 6f 23 fb 05 44 09 6f 31 58 cd 6b c9 19 e5 7b 61 b5 91 fa 6a 1a 6c 8f 1d 2e df 2f 20 da 2e 51 24 95 6d b3 76 2c b6 00 72 1d aa bc a3 84 b2 36 4e 60 cc 0a 1a 0c ec 42 f4 d0 b6 b7 13 0d 58 98 99 38 92 5d 71 ca 52 63 57 16 3c e8 59 8b 91 9d ae 3b dd 49 76 4c da dc 8d 40 0a 25 36 9f 9d 7a 65 40 78 2d 8e 5f 11 dc df 5a 7f ce 79 69 1c c1 a8 9b b0 05 1d e0 d8 4c e0 4f 3f 46 5b 11 c1 89 1f 96 2b 70 0c 22 47 6c 05 b4 6f a1 bc 3b 7b b7 52 c5 25 09 28 9a ea c2 d6 c3 dc 49 ee 45 18 72 e9 65 70 df e6 33 25 af 2b 9b 3d ed 63 3f c4 ce da c4 77
+tag: dc 50 6d 10 e6 ed 6f 4a 57 60 b4 99 bd f2 5f e1
+
+associated data: 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22
+plaintext:
+ciphertext:
+tag: fb af f6 58 08 f7 46 f5 fd df 6e 7a 4e e8 fe 5a
+
+associated data: 13 96 1a 9d 21 a4 28 ab 2f b2 36 b9 3d c0 44 c7 4b ce 52 d5 59 dc 60 e3 67 ea 6e f1 75 f8 7c 00 83 07 8a 0e 91 15 98 1c 9f 23 a6 2a ad 31 b4 38 bb 3f c2 46 c9 4d d0 54 d7 5b de 62 e5 69 ec 70 f3 77 fa 7e 02 85 09 8c 10 93 17 9a 1e a1 25 a8 2c af 33 b6 3a bd 41 c4 48 cb 4f d2 56 d9 5d e0 64 e7 6b ee 72 f5 79 fc 80 04 87 0b 8e 12 95 19 9c 20 a3 27 aa 2e b1 35 b8 3c bf 43 c6 4a cd 51 d4 58 db 5f e2 66 e9 6d f0 74 f7 7b fe 82 06 89 0d 90 14 97 1b 9e 22 a5 29 ac 30 b3 37 ba 3e c1 45 c8 4c cf 53 d6 5a dd 61 e4 68 eb 6f f2 76 f9 7d 01 84 08 8b 0f 92 16 99 1d a0 24 a7 2b ae 32 b5 39 bc 40 c3 47 ca 4e d1 55 d8 5c df 63 e6 6a ed 71 f4 78 fb 7f 03 86 0a 8d 11 94 18 9b 1f a2 26 a9 2d b0 34 b7 3b be 42 c5 49 cc 50 d3 57 da 5e e1 65 e8 6c ef 73 f6 7a fd 81 05 88 0c 8f 13 96 1a 9d 21 a4 28 ab 2f b2 36 b9 3d c0 44 c7
+plaintext: 54 a8 fc 51 a5 f9 4e a2 f6 4b 9f f3 48 9c f0 45 99 ed 42 96 ea 3f 93 e7 3c 90 e4 39 8d e1 36 8a de 33 87 db 30 84 d8 2d 81 d5 2a 7e d2 27 7b cf 24 78 cc 21 75 c9 1e 72 c6 1b 6f c3 18 6c c0 15 69 bd 12 66 ba 0f 63 b7 0c 60 b4 09 5d b1 06 5a ae 03 57 ab 00 54 a8 fc 51 a5 f9 4e a2 f6 4b 9f f3 48 9c f0 45 99 ed 42 96 ea 3f 93 e7 3c 90 e4 39 8d e1 36 8a de 33 87 db 30 84 d8 2d 81 d5 2a 7e d2 27 7b cf 24 78 cc 21 75 c9 1e 72 c6 1b 6f c3 18 6c c0 15 69 bd 12 66 ba 0f 63 b7 0c 60 b4 09 5d b1 06 5a ae 03 57 ab 00 54 a8 fc 51 a5 f9 4e a2 f6 4b 9f f3 48 9c f0 45 99 ed 42 96 ea 3f 93 e7 3c 90 e4 39 8d e1 36 8a de 33 87 db 30 84 d8 2d 81 d5 2a 7e d2 27 7b cf 24 78 cc 21 75 c9 1e 72 c6 1b 6f c3 18 6c c0 15 69 bd 12 66 ba 0f 63 b7 0c 60 b4 09 5d b1 06 5a ae 03 57 ab 00 54 a8 fc 51 a5 f9 4e a2 f6 4b 9f f3 48 9c f0 45 99 ed 42 96 ea 3f 93 e7 3c 90 e4 39 8d e1 36 8a de 33 87 db 30 84 d8 2d 81 d5 2a 7e d2 27 7b cf 24 78 cc 21 75 c9 1e 72 c6 1b 6f c3 18 6c c0 15 69 bd 12 66 ba 0f 63 b7 0c 60 b4 09 5d b1 06 5a
+ciphertext: 72 f2 1e e5 38 a1 43 be a0 69 da c2 79 26 a7 d7 6e a4 42 3f f6 93 e2 55 3c 9e 74 97 b1 fa b8 ee e3 fd 42 d3 c4 40 50 b5 18 52 ab 58 86 7e e3 ff 7c ac 1a ac 99 12 85 c9 c1 7c b0 71 d1 2c 78 5f f8 56 0a 3a 81 d2 de c3 cd 13 74 46 27 1e 3c ed 3c 33 af a8 75 8d 88 51 3d c9 4f bf 60 8c 5f 14 36 24 45 ae 80 9d 6a 1c f2 1d ff 93 b5 9b 53 de ea 56 ea 11 cf 45 bb e8 9d 87 e6 46 9d 51 79 5f e8 f1 de d3 ca 32 0f a5 61 b9 97 dc dc 8b 7b 14 47 b2 d1 9e 56 59 6b 08 db c7 99 f5 1e 1f aa 5e f1 01 22 69 53 c8 f4 4f 4e 59 97 7e c4 f7 ec 80 25 9c c6 10 d2 61 da 6d 4a a8 ef 61 fd 8a 38 48 44 18 00 7d 09 78 c5 10 2b 14 d1 8a 8c 9c 7e 6e c9 82 a8 ec ef b0 f9 70 32 56 e8 03 45 b9 d5 76 95 25 ac d1 b7 aa fd 0d 88 76 31 4f 65 c6 64 92 fc e0 25 0c 38 ee a0 cd 8e b9 e9 f0 1e c9 10 08 91 13 35 de b6 66 45 f8 b8 9b 39 8b 4d 2a 5d 21 df 3a 9b 00 f8 35 43 ed df 1c c0 00 6f 42 2d 57 e5 fc ac 96 03 8a 37 52 62 31 bc a7 a1 82 40 bf 77 de 17 24 0e 41 48 21 e0 0f 47 61 1a bd c1 9a d0 18 6f 20 62 26 db ac 98 0d e7 2a 4e e7 63
+tag: 21 f1 c4 67 16 49 ac ec a7 ab 9d 2f 14 30 3b ca
+
+associated data: 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41 75 a9 dd 12 46 7a ae e2 17 4b 7f b3 e7 1c 50 84 b8 ec 21 55 89 bd f1 26 5a 8e c2 f6 2b 5f 93 c7 fb 30 64 98 cc 01 35 69 9d d1 06 3a 6e a2 d6 0b 3f 73 a7 db 10 44 78 ac e0 15 49 7d b1 e5 1a 4e 82 b6 ea 1f 53 87 bb ef 24 58 8c c0 f4 29 5d 91 c5 f9 2e 62 96 ca fe 33 67 9b cf 04 38 6c a0 d4 09 3d 71 a5 d9 0e 42 76 aa de 13 47 7b af e3 18 4c 80 b4 e8 1d 51 85 b9 ed 22 56 8a be f2 27 5b 8f c3 f7 2c 60 94 c8 fc 31 65 99 cd 02 36 6a 9e d2 07 3b 6f a3 d7 0c 40 74 a8 dc 11 45 79 ad e1 16 4a 7e b2 e6 1b 4f 83 b7 eb 20 54 88 bc f0 25 59 8d c1 f5 2a 5e 92 c6 fa 2f 63 97 cb 00 34 68 9c d0 05 39 6d a1 d5 0a 3e 72 a6 da 0f 43 77 ab df 14 48 7c b0 e4 19 4d 81 b5 e9 1e 52 86 ba ee 23 57 8b bf f3 28 5c 90 c4 f8 2d 61 95 c9 fd 32 66 9a ce 03 37 6b 9f d3 08 3c 70 a4 d8 0d 41
+plaintext:
+ciphertext:
+tag: 12 1e eb a5 c1 1d 9c e4 5f 8e 1e d2 a6 70 02 c0
+
+overall checksum: 4a 31 c7 51 18 7f 03 2c 78 c3 cf 36 51 0b e3 b3
