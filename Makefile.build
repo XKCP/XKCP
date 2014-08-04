@@ -343,6 +343,24 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
     </target>
 
+    <fragment name="width1600rounds12_asmx86-64-common" inherits="width1600rounds12 optimized">
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>KeccakP-1600-12/OptimizedAsmX86-64/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <gcc>-m64</gcc>
+    </fragment>
+
+    <fragment name="width1600rounds12_asmx86-64" inherits="width1600rounds12_asmx86-64-common">
+        <c>KeccakP-1600-12/OptimizedAsmX86-64/KeccakP-1600-12-x86-64-gas.s</c>
+    </fragment>
+
+    <fragment name="width1600rounds12_asmx86-64-shld" inherits="width1600rounds12_asmx86-64-common">
+        <c>KeccakP-1600-12/OptimizedAsmX86-64/KeccakP-1600-12-x86-64-shld-gas.s</c>
+    </fragment>
+
+    <target name="LakeKeyakAsmx86-64" inherits="keyak_tests width1600rounds12_asmx86-64 P1"/>
+    <target name="LakeKeyakAsmx86-64-shld" inherits="keyak_tests width1600rounds12_asmx86-64-shld P1"/>
+
     <!-- Sea Keyak -->
 
     <fragment name="parallel">

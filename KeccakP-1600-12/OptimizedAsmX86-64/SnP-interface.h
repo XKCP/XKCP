@@ -18,7 +18,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 // Important note: State must be 256 bit (32 bytes) aligned.
 
-#include "KeccakF-1600-interface.h"
+#include "KeccakP-1600-12-interface.h"
 
 typedef	unsigned long long tKeccakLane;
 
@@ -33,13 +33,13 @@ typedef	unsigned long long tKeccakLane;
 #define SnP_XORBytes                        KeccakF1600_StateXORBytes
 #define SnP_OverwriteBytes                  KeccakF1600_StateOverwriteBytes
 #define SnP_OverwriteWithZeroes             KeccakF1600_StateOverwriteWithZeroes
-#define SnP_Permute                         KeccakF1600_StatePermute
+#define SnP_Permute                         KeccakP1600_12_StatePermute
 #define SnP_ExtractBytes                    KeccakF1600_StateExtractBytes
 #define SnP_ExtractAndXORBytes              KeccakF1600_StateExtractAndXORBytes
 
-#define SnP_FBWL_Absorb                     KeccakF1600_SnP_FBWL_Absorb
-#define SnP_FBWL_Squeeze                    KeccakF1600_SnP_FBWL_Squeeze
-#define SnP_FBWL_Wrap                       KeccakF1600_SnP_FBWL_Wrap
-#define SnP_FBWL_Unwrap                     KeccakF1600_SnP_FBWL_Unwrap
+#define SnP_FBWL_Absorb                     KeccakP1600_12_SnP_FBWL_Absorb
+#define SnP_FBWL_Squeeze                    KeccakP1600_12_SnP_FBWL_Squeeze
+#define SnP_FBWL_Wrap                       KeccakP1600_12_SnP_FBWL_Wrap
+#define SnP_FBWL_Unwrap                     KeccakP1600_12_SnP_FBWL_Unwrap
 
 #endif
