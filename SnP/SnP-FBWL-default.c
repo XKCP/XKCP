@@ -80,9 +80,9 @@ size_t SnP_FBWL_Unwrap_Default(void *state, unsigned int laneCount, const unsign
 {
     size_t processed = 0;
 
+    if (dataIn != dataOut)
+        memcpy(dataOut, dataIn, dataByteLen);
     while(dataByteLen >= laneCount*SnP_laneLengthInBytes) {
-        if (dataIn != dataOut)
-            memcpy(dataOut, dataIn, laneCount*SnP_laneLengthInBytes);
         SnP_ExtractAndXORBytes(state, dataOut, 0, laneCount*SnP_laneLengthInBytes);
         SnP_XORBytes(state, dataOut, 0, laneCount*SnP_laneLengthInBytes);
         SnP_XORBytes(state, &trailingBits, laneCount*SnP_laneLengthInBytes, 1);
