@@ -50,6 +50,32 @@ typedef unsigned long long int UINT64;
 #include "KeccakF-1600-64.macros"
 #include "KeccakF-1600-unrolling.macros"
 
+const UINT64 KeccakF1600RoundConstants[24] = {
+    0x0000000000000001ULL,
+    0x0000000000008082ULL,
+    0x800000000000808aULL,
+    0x8000000080008000ULL,
+    0x000000000000808bULL,
+    0x0000000080000001ULL,
+    0x8000000080008081ULL,
+    0x8000000000008009ULL,
+    0x000000000000008aULL,
+    0x0000000000000088ULL,
+    0x0000000080008009ULL,
+    0x000000008000000aULL,
+    0x000000008000808bULL,
+    0x800000000000008bULL,
+    0x8000000000008089ULL,
+    0x8000000000008003ULL,
+    0x8000000000008002ULL,
+    0x8000000000000080ULL,
+    0x000000000000800aULL,
+    0x800000008000000aULL,
+    0x8000000080008081ULL,
+    0x8000000000008080ULL,
+    0x0000000080000001ULL,
+    0x8000000080008008ULL };
+
 void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData, unsigned int inLaneCount, unsigned char *outData, unsigned int outLaneCount);
 
 /* ---------------------------------------------------------------- */
@@ -237,7 +263,15 @@ void KeccakF1600_StateComplementBit(void *state, unsigned int position)
 
 void KeccakF1600_StatePermute(void *state)
 {
-    KeccakF1600_StateXORPermuteExtract(state, 0, 0, 0, 0);
+    declareABCDE
+    #ifndef FullUnrolling
+    unsigned int i;
+    #endif
+    UINT64 *stateAsLanes = (UINT64*)state;
+
+    copyFromState(A, stateAsLanes)
+    rounds
+    copyToState(stateAsLanes, A)
 }
 
 /* ---------------------------------------------------------------- */
@@ -379,72 +413,11 @@ void KeccakF1600_StateExtractAndXORLanes(const void *state, unsigned char *data,
 
 /* ---------------------------------------------------------------- */
 
-#ifdef ProvideFastAbsorb1344
-void KeccakF1600_StateXORPermuteExtract_absorb1344(void *state, const unsigned char *inData, unsigned int inLaneCount)
-{
-    declareABCDE
-    #if (Unrolling != 24)
-    unsigned int i;
-    #endif
-    UINT64 *stateAsLanes = (UINT64*)state;
-    UINT64 *inDataAsLanes = (UINT64*)inData;
-    
-    copyFromStateAndXOR(A, stateAsLanes, inDataAsLanes, 21)
-    rounds
-    copyToState(stateAsLanes, A)
-}
-#endif
-
-#ifdef ProvideFastSqueeze1344
-void KeccakF1600_StateXORPermuteExtract_squeeze1344(void *state, unsigned char *outData, unsigned int outLaneCount)
-{
-    declareABCDE
-    #if (Unrolling != 24)
-    unsigned int i;
-    #endif
-    UINT64 *stateAsLanes = (UINT64*)state;
-    UINT64 *outDataAsLanes = (UINT64*)outData;
-    
-    copyFromStateAndXOR(A, stateAsLanes, outDataAsLanes, 0)
-    rounds
-    copyToStateAndOutput(A, stateAsLanes, outDataAsLanes, 21)
-}
-#endif
-
-void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData, unsigned int inLaneCount, unsigned char *outData, unsigned int outLaneCount)
-{
-#ifdef ProvideFastAbsorb1344
-    if ((inLaneCount == 21) && (outLaneCount == 0))
-        KeccakF1600_StateXORPermuteExtract_absorb1344(state, inData, inLaneCount);
-    else
-#endif
-#ifdef ProvideFastSqueeze1344
-    if ((inLaneCount == 0) && (outLaneCount == 21))
-        KeccakF1600_StateXORPermuteExtract_squeeze1344(state, outData, outLaneCount);
-    else
-#endif
-    {
-        declareABCDE
-        #if (Unrolling != 24)
-        unsigned int i;
-        #endif
-        UINT64 *stateAsLanes = (UINT64*)state;
-        UINT64 *inDataAsLanes = (UINT64*)inData;
-        UINT64 *outDataAsLanes = (UINT64*)outData;
-        
-        copyFromStateAndXOR(A, stateAsLanes, inDataAsLanes, inLaneCount)
-        rounds
-        copyToStateAndOutput(A, stateAsLanes, outDataAsLanes, outLaneCount)
-    }
-}
-
-/* ---------------------------------------------------------------- */
-
-size_t KeccakF1600_FBWL_Absorb(void *state, unsigned int laneCount, unsigned char *data, size_t dataByteLen, unsigned char trailingBits)
+size_t KeccakF1600_FBWL_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen, unsigned char trailingBits)
 {
     size_t originalDataByteLen = dataByteLen;
     declareABCDE
-    #if (Unrolling != 24)
+    #ifndef FullUnrolling
     unsigned int i;
     #endif
     UINT64 *stateAsLanes = (UINT64*)state;
@@ -467,7 +440,7 @@ size_t KeccakF1600_FBWL_Squeeze(void *state, unsigned int laneCount, unsigned ch
 {
     size_t originalDataByteLen = dataByteLen;
     declareABCDE
-    #if (Unrolling != 24)
+    #ifndef FullUnrolling
     unsigned int i;
     #endif
     UINT64 *stateAsLanes = (UINT64*)state;
@@ -490,7 +463,7 @@ size_t KeccakF1600_FBWL_Wrap(void *state, unsigned int laneCount, const unsigned
 {
     size_t originalDataByteLen = dataByteLen;
     declareABCDE
-    #if (Unrolling != 24)
+    #ifndef FullUnrolling
     unsigned int i;
     #endif
     UINT64 *stateAsLanes = (UINT64*)state;
@@ -515,7 +488,7 @@ size_t KeccakF1600_FBWL_Unwrap(void *state, unsigned int laneCount, const unsign
 {
     size_t originalDataByteLen = dataByteLen;
     declareABCDE
-    #if (Unrolling != 24)
+    #ifndef FullUnrolling
     unsigned int i;
     #endif
     UINT64 *stateAsLanes = (UINT64*)state;

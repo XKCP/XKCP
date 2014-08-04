@@ -80,9 +80,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <fragment name="optimized64" inherits="width1600 optimized">
         <c>KeccakF-1600/Optimized64/KeccakF-1600-opt64.c</c>
-        <c>SnP/SnP-FBWL-default.c</c>
         <h>KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
-        <h>KeccakF-1600/Optimized64/KeccakF-1600-64.macros</h>
+        <h>KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
         <h>KeccakF-1600/Optimized64/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>SnP/SnP-Relaned.h</h>
@@ -126,17 +125,17 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <target name="KeccakWidth1600Opt64u6" inherits="keccak optimized64">
         <h>KeccakF-1600/Optimized64/u6/KeccakF-1600-opt64-settings.h</h>
     </target>
-    <target name="KeccakWidth1600Opt64u24" inherits="keccak optimized64">
-        <h>KeccakF-1600/Optimized64/u24/KeccakF-1600-opt64-settings.h</h>
+    <target name="KeccakWidth1600Opt64ufull" inherits="keccak optimized64">
+        <h>KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="KeccakWidth1600Opt64LCu6" inherits="keccak optimized64">
         <h>KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
     </target>
-    <target name="KeccakWidth1600Opt64LCu24" inherits="keccak optimized64">
-        <h>KeccakF-1600/Optimized64/LCu24/KeccakF-1600-opt64-settings.h</h>
+    <target name="KeccakWidth1600Opt64LCufull" inherits="keccak optimized64">
+        <h>KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
     </target>
-    <target name="KeccakWidth1600Opt64LCu24shld" inherits="keccak optimized64">
-        <h>KeccakF-1600/Optimized64/LCu24shld/KeccakF-1600-opt64-settings.h</h>
+    <target name="KeccakWidth1600Opt64LCufullshld" inherits="keccak optimized64">
+        <h>KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="KeccakWidth1600Inplace32BI" inherits="keccak inplace32BI"/>
     <target name="KeccakWidth1600Compact64" inherits="keccak compact64"/>

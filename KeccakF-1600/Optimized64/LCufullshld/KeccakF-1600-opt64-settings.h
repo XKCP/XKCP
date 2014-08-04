@@ -1,3 +1,3 @@
-#define Unrolling 24
+#define FullUnrolling
 #define UseLaneComplementing
 #define UseSHLD
