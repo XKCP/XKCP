@@ -160,7 +160,16 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <gcc>-O</gcc>
     </fragment>
 
+    <fragment name="compact800" inherits="width800 optimized">
+        <c>KeccakF-800/Compact/KeccakF-800-compact.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>KeccakF-800/Compact/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+
     <target name="KeccakWidth800Reference" inherits="keccak reference800"/>
+    <target name="KeccakWidth800Compact" inherits="keccak compact800"/>
 
     <!-- Keccak[r+c=400] -->
 
@@ -200,7 +209,16 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <gcc>-O</gcc>
     </fragment>
 
+    <fragment name="compact200" inherits="width200 optimized">
+        <c>KeccakF-200/Compact/KeccakF-200-compact.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>KeccakF-200/Compact/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+
     <target name="KeccakWidth200Reference" inherits="keccak reference200"/>
+    <target name="KeccakWidth200Compact" inherits="keccak compact200"/>
 
     <!-- Keyak -->
 
