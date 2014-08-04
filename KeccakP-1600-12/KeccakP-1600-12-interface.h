@@ -25,5 +25,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
   * @param  state   Pointer to the state.
   */
 void KeccakP1600_12_StatePermute(void *state);
+size_t KeccakP1600_12_FBWL_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen, unsigned char trailingBits);
+size_t KeccakP1600_12_FBWL_Squeeze(void *state, unsigned int laneCount, unsigned char *data, size_t dataByteLen);
+size_t KeccakP1600_12_FBWL_Wrap(void *state, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
+size_t KeccakP1600_12_FBWL_Unwrap(void *state, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
 
 #endif
