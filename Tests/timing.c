@@ -107,7 +107,7 @@ uint_32t measureSnP_Permute(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Absorb_16lanes_1(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Absorb(&state, 16, data, 1*16*SnP_laneLengthInBytes, 0x12);
@@ -117,7 +117,7 @@ uint_32t measureSnP_FBWL_Absorb_16lanes_1(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Absorb_16lanes_10(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Absorb(&state, 16, data, 10*16*SnP_laneLengthInBytes, 0x12);
@@ -127,7 +127,7 @@ uint_32t measureSnP_FBWL_Absorb_16lanes_10(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Absorb_16lanes_100(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Absorb(&state, 16, data, 100*16*SnP_laneLengthInBytes, 0x12);
@@ -137,7 +137,7 @@ uint_32t measureSnP_FBWL_Absorb_16lanes_100(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Absorb_16lanes_1000(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Absorb(&state, 16, data, 1000*16*SnP_laneLengthInBytes, 0x12);
@@ -155,7 +155,7 @@ void measureSnP_FBWL_Absorb_16lanes(uint_32t dtMin, uint_32t *measurements)
 uint_32t measureSnP_FBWL_Squeeze_16lanes_1(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Squeeze(&state, 16, data, 1*16*SnP_laneLengthInBytes);
@@ -165,7 +165,7 @@ uint_32t measureSnP_FBWL_Squeeze_16lanes_1(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Squeeze_16lanes_10(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Squeeze(&state, 16, data, 10*16*SnP_laneLengthInBytes);
@@ -175,7 +175,7 @@ uint_32t measureSnP_FBWL_Squeeze_16lanes_10(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Squeeze_16lanes_100(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Squeeze(&state, 16, data, 100*16*SnP_laneLengthInBytes);
@@ -185,7 +185,7 @@ uint_32t measureSnP_FBWL_Squeeze_16lanes_100(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Squeeze_16lanes_1000(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Squeeze(&state, 16, data, 1000*16*SnP_laneLengthInBytes);
@@ -203,7 +203,7 @@ void measureSnP_FBWL_Squeeze_16lanes(uint_32t dtMin, uint_32t *measurements)
 uint_32t measureSnP_FBWL_Wrap_16lanes_1(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Wrap(&state, 16, data, data, 1*16*SnP_laneLengthInBytes, 0x01);
@@ -213,7 +213,7 @@ uint_32t measureSnP_FBWL_Wrap_16lanes_1(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Wrap_16lanes_10(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Wrap(&state, 16, data, data, 10*16*SnP_laneLengthInBytes, 0x01);
@@ -223,7 +223,7 @@ uint_32t measureSnP_FBWL_Wrap_16lanes_10(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Wrap_16lanes_100(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Wrap(&state, 16, data, data, 100*16*SnP_laneLengthInBytes, 0x01);
@@ -233,7 +233,7 @@ uint_32t measureSnP_FBWL_Wrap_16lanes_100(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Wrap_16lanes_1000(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Wrap(&state, 16, data, data, 1000*16*SnP_laneLengthInBytes, 0x01);
@@ -251,7 +251,7 @@ void measureSnP_FBWL_Wrap_16lanes(uint_32t dtMin, uint_32t *measurements)
 uint_32t measureSnP_FBWL_Unwrap_16lanes_1(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Unwrap(&state, 16, data, data, 1*16*SnP_laneLengthInBytes, 0x01);
@@ -261,7 +261,7 @@ uint_32t measureSnP_FBWL_Unwrap_16lanes_1(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Unwrap_16lanes_10(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Unwrap(&state, 16, data, data, 10*16*SnP_laneLengthInBytes, 0x01);
@@ -271,7 +271,7 @@ uint_32t measureSnP_FBWL_Unwrap_16lanes_10(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Unwrap_16lanes_100(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Unwrap(&state, 16, data, data, 100*16*SnP_laneLengthInBytes, 0x01);
@@ -281,7 +281,7 @@ uint_32t measureSnP_FBWL_Unwrap_16lanes_100(uint_32t dtMin)
 uint_32t measureSnP_FBWL_Unwrap_16lanes_1000(uint_32t dtMin)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*200];
+    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
 
     measureTimingBegin
     SnP_FBWL_Unwrap(&state, 16, data, data, 1000*16*SnP_laneLengthInBytes, 0x01);
@@ -302,8 +302,8 @@ uint_32t measureKeccakAbsorb1000blocks(uint_32t dtMin)
     ALIGN unsigned char data[1000*200];
 
     measureTimingBegin
-    Keccak_SpongeInitialize(&sponge, 1344, 256);
-    Keccak_SpongeAbsorb(&sponge, data, 999*1344/8+1);
+    Keccak_SpongeInitialize(&sponge, SnP_width-256, 256);
+    Keccak_SpongeAbsorb(&sponge, data, 999*(SnP_width-256)/8+1);
     Keccak_SpongeAbsorbLastFewBits(&sponge, 0x01);
     measureTimingEnd
 }
@@ -314,8 +314,8 @@ uint_32t measureKeccakSqueeze1000blocks(uint_32t dtMin)
     ALIGN unsigned char data[1000*200];
 
     measureTimingBegin
-    Keccak_SpongeInitialize(&sponge, 1344, 256);
-    Keccak_SpongeSqueeze(&sponge, data, 1000*1344/8);
+    Keccak_SpongeInitialize(&sponge, SnP_width-256, 256);
+    Keccak_SpongeSqueeze(&sponge, data, 1000*(SnP_width-256)/8);
     measureTimingEnd
 }
 
@@ -327,9 +327,9 @@ uint_32t measureKeccakDuplexing1000blocks(uint_32t dtMin)
     ALIGN unsigned char dataOut[200];
 
     measureTimingBegin
-    Keccak_DuplexInitialize(&duplex, 1344+3, 256-3);
+    Keccak_DuplexInitialize(&duplex, SnP_width-256+3, 256-3);
     for(j=0; j<1000; j++)
-        Keccak_Duplexing(&duplex, dataIn, 1344/8, dataOut, 1344/8, 0x03);
+        Keccak_Duplexing(&duplex, dataIn, (SnP_width-256)/8, dataOut, (SnP_width-256)/8, 0x03);
     measureTimingEnd
 }
 
