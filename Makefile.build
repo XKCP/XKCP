@@ -230,6 +230,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="keyak" inherits="common">
         <h>Constructions/KeccakDuplex.h</h>
         <c>Constructions/KeccakDuplex.c</c>
+        <h>Constructions/KeccakSponge.h</h>
+        <c>Constructions/KeccakSponge.c</c>
         <h>Modes/Keyak.h</h>
         <c>Modes/Keyak.c</c>
         <gcc>-DKeyak</gcc>
@@ -270,6 +272,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>KeccakP-800-12/Reference/SnP-interface.h</h>
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/SnP-FBWL-default.h</h>
+        <gcc>-DKeyakReference</gcc>
     </fragment>
 
     <target name="RiverKeyakReference" inherits="keyak_tests width800rounds12_reference P1"/>
@@ -300,6 +303,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>KeccakP-1600-12/Reference/SnP-interface.h</h>
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/SnP-FBWL-default.h</h>
+        <gcc>-DKeyakReference</gcc>
     </fragment>
 
     <target name="LakeKeyakReference" inherits="keyak_tests width1600rounds12_reference P1"/>

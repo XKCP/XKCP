@@ -291,7 +291,11 @@ int main()
 #ifdef PlSnP_P
     testPlSnP();
 #endif
+#ifndef KeyakReference
+    doTiming();
+#endif
     testKeyak();
+    return 0;
 }
 #elif defined(Ketje)
 int main()
