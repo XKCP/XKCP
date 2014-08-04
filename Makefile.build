@@ -297,6 +297,34 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>CAESAR/LakeKeyak/selftest.c</c>
     </target>
 
+    <fragment name="width1600rounds12_optimized64" inherits="common width1600rounds12 optimized">
+        <c>KeccakF-1600/Optimized64/KeccakF-1600-opt64.c</c>
+        <h>KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
+        <h>KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
+        <c>KeccakP-1600-12/Optimized64/KeccakP-1600-12-opt64.c</c>
+        <h>KeccakP-1600-12/Optimized64/KeccakP-1600-12-unrolling.macros</h>
+        <h>KeccakP-1600-12/Optimized64/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+        <gcc>-m64</gcc>
+    </fragment>
+
+    <target name="LakeKeyakOpt64u6" inherits="keyak_tests width1600rounds12_optimized64 P1">
+        <h>KeccakF-1600/Optimized64/u6/KeccakF-1600-opt64-settings.h</h>
+    </target>
+    <target name="LakeKeyakOpt64ufull" inherits="keyak_tests width1600rounds12_optimized64 P1">
+        <h>KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
+    </target>
+    <target name="LakeKeyakOpt64LCu6" inherits="keyak_tests width1600rounds12_optimized64 P1">
+        <h>KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
+    </target>
+    <target name="LakeKeyakOpt64LCufull" inherits="keyak_tests width1600rounds12_optimized64 P1">
+        <h>KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
+    </target>
+    <target name="LakeKeyakOpt64LCufullshld" inherits="keyak_tests width1600rounds12_optimized64 P1">
+        <h>KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
+    </target>
+
     <!-- Sea Keyak -->
 
     <fragment name="parallel">
