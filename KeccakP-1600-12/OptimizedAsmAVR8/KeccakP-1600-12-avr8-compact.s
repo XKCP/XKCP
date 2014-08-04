@@ -38,15 +38,8 @@
 .global KeccakF1600_StateInitialize
 KeccakF1600_StateInitialize:
     movw    rZ, r24
-    ldi     r23, 5*5        ; clear state (8 bytes/1 lane per iteration)
+    ldi     r23, 5*5*8
 KeccakF1600_StateInitialize_Loop:
-    st      z+, zero
-    st      z+, zero
-    st      z+, zero
-    st      z+, zero
-    st      z+, zero
-    st      z+, zero
-    st      z+, zero
     st      z+, zero
     dec     r23
     brne    KeccakF1600_StateInitialize_Loop
@@ -72,7 +65,7 @@ KeccakF1600_StateComplementBit_Loop:
     dec     r20
     brne    KeccakF1600_StateComplementBit_Loop
 KeccakF1600_StateComplementBit_LoopEnd:
-    lsr     r23              ; bytenumber = position >> 3
+    lsr     r23             ; bytenumber = position >> 3
     ror     r22
     lsr     r23
     ror     r22
@@ -96,62 +89,21 @@ KeccakF1600_StateComplementBit_LoopEnd:
 ;
 .global KeccakF1600_StateXORBytes
 KeccakF1600_StateXORBytes:
+    tst     r18
+    breq    KeccakF1600_StateXORBytes_End
     movw    rZ, r24
     add     rZ, r20
     adc     rZ+1, zero
     movw    rX, r22
-    subi    r18, 8
-    brcs    KeccakF1600_StateXORBytes_Byte
-    ;do 8 bytes per iteration
-KeccakF1600_StateXORBytes_Loop8:
-    ld      r21, X+
-    ld      r0, Z
-    eor     r0, r21
-    st      Z+, r0
-    ld      r21, X+
-    ld      r0, Z
-    eor     r0, r21
-    st      Z+, r0
-    ld      r21, X+
-    ld      r0, Z
-    eor     r0, r21
-    st      Z+, r0
-    ld      r21, X+
-    ld      r0, Z
-    eor     r0, r21
-    st      Z+, r0
-    ld      r21, X+
-    ld      r0, Z
-    eor     r0, r21
-    st      Z+, r0
-    ld      r21, X+
-    ld      r0, Z
-    eor     r0, r21
-    st      Z+, r0
-    ld      r21, X+
-    ld      r0, Z
-    eor     r0, r21
-    st      Z+, r0
-    ld      r21, X+
-    ld      r0, Z
-    eor     r0, r21
-    st      Z+, r0
-    subi    r18, 8
-    brcc    KeccakF1600_StateXORBytes_Loop8
-KeccakF1600_StateXORBytes_Byte:
-    ldi     r19, 8
-    add     r18, r19
-    breq    KeccakF1600_StateXORBytes_End
-KeccakF1600_StateXORBytes_Loop1:
+KeccakF1600_StateXORBytes_Loop:
     ld      r21, X+
     ld      r0, Z
     eor     r0, r21
     st      Z+, r0
     dec     r18
-    brne    KeccakF1600_StateXORBytes_Loop1
+    brne    KeccakF1600_StateXORBytes_Loop
 KeccakF1600_StateXORBytes_End:
     ret
-
 
 ;----------------------------------------------------------------------------
 ;
@@ -164,41 +116,17 @@ KeccakF1600_StateXORBytes_End:
 ;
 .global KeccakF1600_StateOverwriteBytes
 KeccakF1600_StateOverwriteBytes:
+    tst     r18
+    breq    KeccakF1600_StateOverwriteBytes_End
     movw    rZ, r24
     add     rZ, r20
     adc     rZ+1, zero
     movw    rX, r22
-    subi    r18, 8
-    brcs    KeccakF1600_StateOverwriteBytes_Byte
-    ;do 8 bytes per iteration
-KeccakF1600_StateOverwriteBytes_Loop8:
-    ld      r0, X+
-    st      Z+, r0
-    ld      r0, X+
-    st      Z+, r0
-    ld      r0, X+
-    st      Z+, r0
-    ld      r0, X+
-    st      Z+, r0
-    ld      r0, X+
-    st      Z+, r0
-    ld      r0, X+
-    st      Z+, r0
-    ld      r0, X+
-    st      Z+, r0
-    ld      r0, X+
-    st      Z+, r0
-    subi    r18, 8
-    brcc    KeccakF1600_StateOverwriteBytes_Loop8
-KeccakF1600_StateOverwriteBytes_Byte:
-    ldi     r19, 8
-    add     r18, r19
-    breq    KeccakF1600_StateOverwriteBytes_End
-KeccakF1600_StateOverwriteBytes_Loop1:
+KeccakF1600_StateOverwriteBytes_Loop:
     ld      r0, X+
     st      Z+, r0
     dec     r18
-    brne    KeccakF1600_StateOverwriteBytes_Loop1
+    brne    KeccakF1600_StateOverwriteBytes_Loop
 KeccakF1600_StateOverwriteBytes_End:
     ret
 
@@ -211,30 +139,13 @@ KeccakF1600_StateOverwriteBytes_End:
 ;
 .global KeccakF1600_StateOverwriteWithZeroes
 KeccakF1600_StateOverwriteWithZeroes:
-    movw    rZ, r24         ; rZ = state
-    mov     r23, r22
-    lsr     r23
-    lsr     r23
-    lsr     r23
-    breq    KeccakF1600_StateOverwriteWithZeroes_Bytes
-KeccakF1600_StateOverwriteWithZeroes_LoopLanes:
-    st      Z+, r1
-    st      Z+, r1
-    st      Z+, r1
-    st      Z+, r1
-    st      Z+, r1
-    st      Z+, r1
-    st      Z+, r1
-    st      Z+, r1
-    dec     r23
-    brne    KeccakF1600_StateOverwriteWithZeroes_LoopLanes
-KeccakF1600_StateOverwriteWithZeroes_Bytes:
-    andi    r22, 7
+    tst     r22
     breq    KeccakF1600_StateOverwriteWithZeroes_End
-KeccakF1600_StateOverwriteWithZeroes_LoopBytes:
+    movw    rZ, r24         ; rZ = state
+KeccakF1600_StateOverwriteWithZeroes_Loop:
     st      Z+, r1
     dec     r22
-    brne    KeccakF1600_StateOverwriteWithZeroes_LoopBytes
+    brne    KeccakF1600_StateOverwriteWithZeroes_Loop
 KeccakF1600_StateOverwriteWithZeroes_End:
     ret
 
@@ -249,41 +160,17 @@ KeccakF1600_StateOverwriteWithZeroes_End:
 ;
 .global KeccakF1600_StateExtractBytes
 KeccakF1600_StateExtractBytes:
+    tst     r18
+    breq    KeccakF1600_StateExtractBytes_End
     movw    rZ, r24
     add     rZ, r20
     adc     rZ+1, zero
     movw    rX, r22
-    subi    r18, 8
-    brcs    KeccakF1600_StateExtractBytes_Byte
-    ;do 8 bytes per iteration
-KeccakF1600_StateExtractBytes_Loop8:
-    ld      r0, Z+
-    st      X+, r0
-    ld      r0, Z+
-    st      X+, r0
-    ld      r0, Z+
-    st      X+, r0
-    ld      r0, Z+
-    st      X+, r0
-    ld      r0, Z+
-    st      X+, r0
-    ld      r0, Z+
-    st      X+, r0
-    ld      r0, Z+
-    st      X+, r0
-    ld      r0, Z+
-    st      X+, r0
-    subi    r18, 8
-    brcc    KeccakF1600_StateExtractBytes_Loop8
-KeccakF1600_StateExtractBytes_Byte:
-    ldi     r19, 8
-    add     r18, r19
-    breq    KeccakF1600_StateExtractBytes_End
-KeccakF1600_StateExtractBytes_Loop1:
+KeccakF1600_StateExtractBytes_Loop:
     ld      r0, Z+
     st      X+, r0
     dec     r18
-    brne    KeccakF1600_StateExtractBytes_Loop1
+    brne    KeccakF1600_StateExtractBytes_Loop
 KeccakF1600_StateExtractBytes_End:
     ret
 
@@ -298,67 +185,27 @@ KeccakF1600_StateExtractBytes_End:
 ;
 .global KeccakF1600_StateExtractAndXORBytes
 KeccakF1600_StateExtractAndXORBytes:
+    tst     r18
+    breq    KeccakF1600_StateExtractAndXORBytes_End
     movw    rZ, r24
     add     rZ, r20
     adc     rZ+1, zero
     movw    rX, r22
-    subi    r18, 8
-    brcs    KeccakF1600_StateExtractAndXORBytes_Byte
-    ;do 8 bytes per iteration
-KeccakF1600_StateExtractAndXORBytes_Loop8:
-    ld      r21, Z+
-    ld      r0, X
-    eor     r0, r21
-    st      X+, r0
-    ld      r21, Z+
-    ld      r0, X
-    eor     r0, r21
-    st      X+, r0
-    ld      r21, Z+
-    ld      r0, X
-    eor     r0, r21
-    st      X+, r0
-    ld      r21, Z+
-    ld      r0, X
-    eor     r0, r21
-    st      X+, r0
-    ld      r21, Z+
-    ld      r0, X
-    eor     r0, r21
-    st      X+, r0
-    ld      r21, Z+
-    ld      r0, X
-    eor     r0, r21
-    st      X+, r0
-    ld      r21, Z+
-    ld      r0, X
-    eor     r0, r21
-    st      X+, r0
-    ld      r21, Z+
-    ld      r0, X
-    eor     r0, r21
-    st      X+, r0
-    subi    r18, 8
-    brcc    KeccakF1600_StateExtractAndXORBytes_Loop8
-KeccakF1600_StateExtractAndXORBytes_Byte:
-    ldi     r19, 8
-    add     r18, r19
-    breq    KeccakF1600_StateExtractAndXORBytes_End
-KeccakF1600_StateExtractAndXORBytes_Loop1:
-    ld      r21, Z+
-    ld      r0, X
+KeccakF1600_StateExtractAndXORBytes_Loop:
+    ld      r21, X
+    ld      r0, Z+
     eor     r0, r21
     st      X+, r0
     dec     r18
-    brne    KeccakF1600_StateExtractAndXORBytes_Loop1
+    brne    KeccakF1600_StateExtractAndXORBytes_Loop
 KeccakF1600_StateExtractAndXORBytes_End:
     ret
 
 
 #define ROT_BIT(a)      ((a) & 7)
-#define ROT_BYTE(a)     ((((a)/8 + !!(((a)%8) > 4)) & 7) * 9)
+#define ROT_BYTE(a)     (((a)/8 + !!(((a)%8) > 4)) & 7)
 
-KeccakF1600_RhoPiConstants:
+KeccakP1600_12_RhoPiConstants:
     .BYTE   ROT_BIT( 1), ROT_BYTE( 3), 10 * 8
     .BYTE   ROT_BIT( 3), ROT_BYTE( 6),  7 * 8
     .BYTE   ROT_BIT( 6), ROT_BYTE(10), 11 * 8
@@ -384,19 +231,7 @@ KeccakF1600_RhoPiConstants:
     .BYTE   ROT_BIT(20), ROT_BYTE(44),  6 * 8
     .BYTE   ROT_BIT(44), ROT_BYTE( 1),  1 * 8
 
-KeccakF1600_RoundConstants:
-    .BYTE   0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x82, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x8a, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80
-    .BYTE   0x00, 0x80, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80
-    .BYTE   0x8b, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x01, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x81, 0x80, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80
-    .BYTE   0x09, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80
-    .BYTE   0x8a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x88, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x09, 0x80, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x0a, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
+KeccakP1600_12_RoundConstants:
     .BYTE   0x8b, 0x80, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
     .BYTE   0x8b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80
     .BYTE   0x89, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80
@@ -417,12 +252,12 @@ KeccakF1600_RoundConstants:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF1600_StatePermute( void *state )
+; void KeccakP1600_12_StatePermute( void *state )
 ;
-.global KeccakF1600_StatePermute
-KeccakF1600_StatePermute:
-    ldi     pRound,   lo8(KeccakF1600_RoundConstants)
-    ldi     pRound+1, hi8(KeccakF1600_RoundConstants)
+.global KeccakP1600_12_StatePermute
+KeccakP1600_12_StatePermute:
+    ldi     pRound,   lo8(KeccakP1600_12_RoundConstants)
+    ldi     pRound+1, hi8(KeccakP1600_12_RoundConstants)
     push    r2
     push    r3
     push    r4
@@ -445,121 +280,42 @@ KeccakF1600_StatePermute:
     ; Allocate C variables (5*8)
     in      rZ,   sp
     in      rZ+1, sp+1
-    sbiw     rZ, 40
+    sbiw    rZ, 40
     in      r0, 0x3F
     cli
     out     sp+1, rZ+1
-    out     sp, rZ          ; Z points to 5 C lanes
+    out     sp, rZ                ; Z points to 5 C lanes
     out     0x3F, r0
 
     ; Variables used in multiple operations
-    #define rTemp        2        // 8 regs (2-9)
-    #define rTempBis    10        // 8 regs (10-17)
-    #define rTempTer    18        // 4 regs (18-21)
+    #define rTemp        2      // 8 regs (2-9)
+    #define rTempBis    10      // 8 regs (10-17)
+    #define rTempTer    18      // 2 regs (18-19)
+    #define pRound      22      // 2 regs (22-23)
 
     ; Initial Prepare Theta
-    #define TCIPx        rTempTer
+    #define TCIPx               rTempTer
 
-    ldi     TCIPx, 5
     movw    rY, rpState
+    ldi     TCIPx, 5*8
 KeccakInitialPrepTheta_Loop:
-    ld      rTemp+0, Y+     ; state[x]
-    ld      rTemp+1, Y+
-    ld      rTemp+2, Y+
-    ld      rTemp+3, Y+
-    ld      rTemp+4, Y+
-    ld      rTemp+5, Y+
-    ld      rTemp+6, Y+
-    ld      rTemp+7, Y+
-
-    adiw    rY, 32
-    ld      r0, Y+          ; state[5+x]
-    eor     rTemp+0, r0
-    ld      r0, Y+
-    eor     rTemp+1, r0
-    ld      r0, Y+
-    eor     rTemp+2, r0
-    ld      r0, Y+
-    eor     rTemp+3, r0
-    ld      r0, Y+
-    eor     rTemp+4, r0
-    ld      r0, Y+
-    eor     rTemp+5, r0
-    ld      r0, Y+
-    eor     rTemp+6, r0
-    ld      r0, Y+
-    eor     rTemp+7, r0
-
-    adiw    rY, 32
-    ld      r0, Y+          ; state[10+x]
-    eor     rTemp+0, r0
-    ld      r0, Y+
-    eor     rTemp+1, r0
-    ld      r0, Y+
-    eor     rTemp+2, r0
-    ld      r0, Y+
-    eor     rTemp+3, r0
-    ld      r0, Y+
-    eor     rTemp+4, r0
-    ld      r0, Y+
-    eor     rTemp+5, r0
-    ld      r0, Y+
-    eor     rTemp+6, r0
-    ld      r0, Y+
-    eor     rTemp+7, r0
-
-    adiw    rY, 32
-    ld      r0, Y+          ; state[15+x]
-    eor     rTemp+0, r0
-    ld      r0, Y+
-    eor     rTemp+1, r0
-    ld      r0, Y+
-    eor     rTemp+2, r0
-    ld      r0, Y+
-    eor     rTemp+3, r0
-    ld      r0, Y+
-    eor     rTemp+4, r0
-    ld      r0, Y+
-    eor     rTemp+5, r0
-    ld      r0, Y+
-    eor     rTemp+6, r0
-    ld      r0, Y+
-    eor     rTemp+7, r0
-
-    adiw    rY, 32
-    ld      r0, Y+          ; state[20+x]
-    eor     rTemp+0, r0
-    ld      r0, Y+
-    eor     rTemp+1, r0
-    ld      r0, Y+
-    eor     rTemp+2, r0
-    ld      r0, Y+
-    eor     rTemp+3, r0
-    ld      r0, Y+
-    eor     rTemp+4, r0
-    ld      r0, Y+
-    eor     rTemp+5, r0
-    ld      r0, Y+
-    eor     rTemp+6, r0
-    ld      r0, Y+
-    eor     rTemp+7, r0
-
-    st      Z+, rTemp+0
-    st      Z+, rTemp+1
-    st      Z+, rTemp+2
-    st      Z+, rTemp+3
-    st      Z+, rTemp+4
-    st      Z+, rTemp+5
-    st      Z+, rTemp+6
-    st      Z+, rTemp+7
-
-    subi    rY, 160
+    ld      r0, Y
+    adiw    rY, 40
+    ld      rTemp, Y
+    adiw    rY, 40
+    eor     r0, rTemp
+    ld      rTemp, Y
+    adiw    rY, 40
+    eor     r0, rTemp
+    ld      rTemp, Y
+    eor     r0, rTemp
+    ldd     rTemp, Y+40
+    eor     r0, rTemp
+    st      Z+, r0
+    subi    rY, 119
     sbc     rY+1, zero
-
-    subi    TCIPx,                 1
-    breq    KeccakInitialPrepTheta_Done
-    rjmp    KeccakInitialPrepTheta_Loop
-KeccakInitialPrepTheta_Done:
+    dec     TCIPx
+    brne    KeccakInitialPrepTheta_Loop
     #undef  TCIPx
 
 Keccak_RoundLoop:
@@ -570,11 +326,11 @@ Keccak_RoundLoop:
     #define TCcoordX        rTempTer
     #define TCcoordY        rTempTer+1
 
-    in      TCminus,   sp
+    in      TCminus, sp
     in      TCminus+1, sp+1
-    movw    TCplus,  TCminus
+    movw    TCplus, TCminus
     adiw    TCminus, 4*8
-    adiw    TCplus,  1*8
+    adiw    TCplus, 1*8
     movw    rY, rpState
 
     ldi     TCcoordX, 0x16
@@ -668,11 +424,10 @@ KeccakTheta_End:
     #undef  TCcoordX
     #undef  TCcoordY
 
+
     ; Rho Pi
-    #define RPpConst    rTempTer        // 2 regs
-    #define RPindex     rTempTer+2
-    #define RPpBitRot   rX
-    #define RPpByteRot  pRound
+    #define RPindex         rTempTer+0
+    #define RPTemp          rTempTer+1
 
     sbiw    rY, 32
 
@@ -685,40 +440,69 @@ KeccakTheta_End:
     ld      rTemp+6, Y+
     ld      rTemp+7, Y+
 
-    push    pRound
-    push    pRound+1
-    ldi     RPpConst,   lo8(KeccakF1600_RhoPiConstants)
-    ldi     RPpConst+1, hi8(KeccakF1600_RhoPiConstants)
-    ldi     RPpBitRot,   pm_lo8(bit_rot_jmp_table)
-    ldi     RPpBitRot+1, pm_hi8(bit_rot_jmp_table)
-    ldi     RPpByteRot,   pm_lo8(rotate64_0byte_left)
-    ldi     RPpByteRot+1, pm_hi8(rotate64_0byte_left)
+    ldi     rZ,   lo8(KeccakP1600_12_RhoPiConstants)
+    ldi     rZ+1, hi8(KeccakP1600_12_RhoPiConstants)
 
 KeccakRhoPi_Loop:
-    ; get rotation codes and state index
-    movw    rZ, RPpConst
-    lpm     r0, Z+          ; bits
-    lpm     rTempBis, Z+    ; bytes
-    lpm     RPindex, Z+
-    movw    RPpConst, rZ
-
     ; do bit rotation
-    movw    rZ, RPpBitRot
-    add     rZ, r0
-    adc     rZ+1, zero
-    ijmp
+    lpm     RPTemp, Z+      ; get number of bits to rotate
+    cpi     RPTemp, 5
+    brcs    rotate64_nbit_leftOrNot
+    neg     RPTemp
+    andi    RPTemp, 3
+
+rotate64_nbit_right:
+    bst     rTemp, 0
+    ror     rTemp+7
+    ror     rTemp+6
+    ror     rTemp+5
+    ror     rTemp+4
+    ror     rTemp+3
+    ror     rTemp+2
+    ror     rTemp+1
+    ror     rTemp
+    bld     rTemp+7, 7
+    dec     RPTemp
+    brne    rotate64_nbit_right
+    rjmp    KeccakRhoPi_RhoBitRotateDone
+
+rotate64_nbit_leftOrNot:
+    tst     RPTemp
+    breq    KeccakRhoPi_RhoBitRotateDone
+rotate64_nbit_left:
+    lsl     rTemp
+    rol     rTemp+1
+    rol     rTemp+2
+    rol     rTemp+3
+    rol     rTemp+4
+    rol     rTemp+5
+    rol     rTemp+6
+    rol     rTemp+7
+    adc     rTemp, r1
+    dec     RPTemp
+    brne    rotate64_nbit_left
 
 KeccakRhoPi_RhoBitRotateDone:
+    lpm     r0, Z+          ; get number of bytes to rotate
+    lpm     RPindex, Z+     ; get index in state
     movw    rY, rpState
     add     rY, RPindex
     adc     rY+1, zero
 
-    movw    rZ, RPpByteRot
-    add     rZ, rTempBis
-    adc     rZ+1, zero
-    ijmp
+    ldi     rX, rTempBis
+    add     rX, r0
+    mov     rX+1, zero
+    ldi     RPTemp, 8
+KeccakRhoPi_PiByteRotLoop:
+    ld      r0, Y+
+    st      X+, r0
+    cpi     rX, rTempBis+8
+    brne    KeccakRhoPi_PiByteRotFirst
+    ldi     rX, rTempBis
+KeccakRhoPi_PiByteRotFirst:
+    dec     RPTemp
+    brne    KeccakRhoPi_PiByteRotLoop
 
-KeccakRhoPi_PiStore:
     sbiw    rY, 8
     st      Y+, rTemp+0
     st      Y+, rTemp+1
@@ -736,14 +520,9 @@ KeccakRhoPi_PiStore:
 KeccakRhoPi_RhoDone:
     subi    RPindex, 8
     brne    KeccakRhoPi_Loop
-    pop     pRound+1
-    pop     pRound
 
-    #undef  RPpConst
     #undef  RPindex
-    #undef  RPpBitrot
-    #undef  RPpByteRot
-
+    #undef  RPTemp
 
     ; Chi Iota prepare Theta
     #define CIPTa0          rTemp
@@ -759,9 +538,9 @@ KeccakRhoPi_RhoDone:
     #define CIPTz           rTempBis+6
     #define CIPTy           rTempBis+7
 
-    in      rX, sp          ; 5 * C
-    in      rX+1, sp+1
     movw    rY, rpState
+    in      rX, sp          ; 5 C lanes
+    in      rX+1, sp+1
     movw    rZ, pRound
 
     ldi     CIPTz, 8
@@ -825,7 +604,7 @@ KeccakChiIotaPrepareTheta_yLoop:
     subi    rY, 200
     sbc     rY+1, zero
 
-    lpm     r0, Z+            ;Round Constant
+    lpm     r0, Z+          ; Round Constant
     ld      CIPTa0, Y
     eor     CIPTa0, r0
     st      Y+, CIPTa0
@@ -864,8 +643,13 @@ KeccakChiIotaPrepareTheta_yLoop:
     rjmp    Keccak_RoundLoop
 Keccak_Done:
 
+    #undef  rTemp
+    #undef  rTempBis
+    #undef  rTempTer
+    #undef  pRound
+
     ; Free C(on stack) and registers
-    in      rX, sp            ; free 5 C lanes
+    in      rX, sp          ; free 5 C lanes
     in      rX+1, sp+1
     adiw    rX, 40
     in      r0, 0x3F
@@ -893,188 +677,6 @@ Keccak_Done:
     pop     r3
     pop     r2
     ret
-
-bit_rot_jmp_table:
-    rjmp    KeccakRhoPi_RhoBitRotateDone
-    rjmp    rotate64_1bit_left
-    rjmp    rotate64_2bit_left
-    rjmp    rotate64_3bit_left
-    rjmp    rotate64_4bit_left
-    rjmp    rotate64_3bit_right
-    rjmp    rotate64_2bit_right
-    rjmp    rotate64_1bit_right
-
-rotate64_4bit_left:
-    lsl     rTemp
-    rol     rTemp+1
-    rol     rTemp+2
-    rol     rTemp+3
-    rol     rTemp+4
-    rol     rTemp+5
-    rol     rTemp+6
-    rol     rTemp+7
-    adc     rTemp, r1
-rotate64_3bit_left:
-    lsl     rTemp
-    rol     rTemp+1
-    rol     rTemp+2
-    rol     rTemp+3
-    rol     rTemp+4
-    rol     rTemp+5
-    rol     rTemp+6
-    rol     rTemp+7
-    adc     rTemp, r1
-rotate64_2bit_left:
-    lsl     rTemp
-    rol     rTemp+1
-    rol     rTemp+2
-    rol     rTemp+3
-    rol     rTemp+4
-    rol     rTemp+5
-    rol     rTemp+6
-    rol     rTemp+7
-    adc     rTemp, r1
-rotate64_1bit_left:
-    lsl     rTemp
-    rol     rTemp+1
-    rol     rTemp+2
-    rol     rTemp+3
-    rol     rTemp+4
-    rol     rTemp+5
-    rol     rTemp+6
-    rol     rTemp+7
-    adc     rTemp, r1
-    rjmp    KeccakRhoPi_RhoBitRotateDone
-
-rotate64_3bit_right:
-    bst     rTemp, 0
-    ror     rTemp+7
-    ror     rTemp+6
-    ror     rTemp+5
-    ror     rTemp+4
-    ror     rTemp+3
-    ror     rTemp+2
-    ror     rTemp+1
-    ror     rTemp
-    bld     rTemp+7, 7
-rotate64_2bit_right:
-    bst     rTemp, 0
-    ror     rTemp+7
-    ror     rTemp+6
-    ror     rTemp+5
-    ror     rTemp+4
-    ror     rTemp+3
-    ror     rTemp+2
-    ror     rTemp+1
-    ror     rTemp
-    bld     rTemp+7, 7
-rotate64_1bit_right:
-    bst     rTemp, 0
-    ror     rTemp+7
-    ror     rTemp+6
-    ror     rTemp+5
-    ror     rTemp+4
-    ror     rTemp+3
-    ror     rTemp+2
-    ror     rTemp+1
-    ror     rTemp
-    bld     rTemp+7, 7
-    rjmp    KeccakRhoPi_RhoBitRotateDone
-
-; Each byte rotate routine must be 9 instructions long.
-
-rotate64_0byte_left:
-    ld      rTempBis+0, Y+
-    ld      rTempBis+1, Y+
-    ld      rTempBis+2, Y+
-    ld      rTempBis+3, Y+
-    ld      rTempBis+4, Y+
-    ld      rTempBis+5, Y+
-    ld      rTempBis+6, Y+
-    ld      rTempBis+7, Y+
-    rjmp    KeccakRhoPi_PiStore
-
-rotate64_1byte_left:
-    ld      rTempBis+1, Y+
-    ld      rTempBis+2, Y+
-    ld      rTempBis+3, Y+
-    ld      rTempBis+4, Y+
-    ld      rTempBis+5, Y+
-    ld      rTempBis+6, Y+
-    ld      rTempBis+7, Y+
-    ld      rTempBis+0, Y+
-    rjmp    KeccakRhoPi_PiStore
-
-rotate64_2byte_left:
-    ld      rTempBis+2, Y+
-    ld      rTempBis+3, Y+
-    ld      rTempBis+4, Y+
-    ld      rTempBis+5, Y+
-    ld      rTempBis+6, Y+
-    ld      rTempBis+7, Y+
-    ld      rTempBis+0, Y+
-    ld      rTempBis+1, Y+
-    rjmp    KeccakRhoPi_PiStore
-
-rotate64_3byte_left:
-    ld      rTempBis+3, Y+
-    ld      rTempBis+4, Y+
-    ld      rTempBis+5, Y+
-    ld      rTempBis+6, Y+
-    ld      rTempBis+7, Y+
-    ld      rTempBis+0, Y+
-    ld      rTempBis+1, Y+
-    ld      rTempBis+2, Y+
-    rjmp    KeccakRhoPi_PiStore
-
-rotate64_4byte_left:
-    ld      rTempBis+4, Y+
-    ld      rTempBis+5, Y+
-    ld      rTempBis+6, Y+
-    ld      rTempBis+7, Y+
-    ld      rTempBis+0, Y+
-    ld      rTempBis+1, Y+
-    ld      rTempBis+2, Y+
-    ld      rTempBis+3, Y+
-    rjmp    KeccakRhoPi_PiStore
-
-rotate64_5byte_left:
-    ld      rTempBis+5, Y+
-    ld      rTempBis+6, Y+
-    ld      rTempBis+7, Y+
-    ld      rTempBis+0, Y+
-    ld      rTempBis+1, Y+
-    ld      rTempBis+2, Y+
-    ld      rTempBis+3, Y+
-    ld      rTempBis+4, Y+
-    rjmp    KeccakRhoPi_PiStore
-
-rotate64_6byte_left:
-    ld      rTempBis+6, Y+
-    ld      rTempBis+7, Y+
-    ld      rTempBis+0, Y+
-    ld      rTempBis+1, Y+
-    ld      rTempBis+2, Y+
-    ld      rTempBis+3, Y+
-    ld      rTempBis+4, Y+
-    ld      rTempBis+5, Y+
-    rjmp    KeccakRhoPi_PiStore
-
-rotate64_7byte_left:
-    ld      rTempBis+7, Y+
-    ld      rTempBis+0, Y+
-    ld      rTempBis+1, Y+
-    ld      rTempBis+2, Y+
-    ld      rTempBis+3, Y+
-    ld      rTempBis+4, Y+
-    ld      rTempBis+5, Y+
-    ld      rTempBis+6, Y+
-    rjmp    KeccakRhoPi_PiStore
-
-    #undef  rTemp
-    #undef  rTempBis
-    #undef  rTempTer
-    #undef  pRound
 
     #undef  rpState
     #undef  zero    

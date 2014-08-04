@@ -321,18 +321,25 @@ KeccakF200_RoundConstants:
     .BYTE   0x03
     .BYTE   0x02
     .BYTE   0x80
+KeccakP200_RoundConstants:
 
     .text
 
+
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF200_StatePermute( void *state )
+; void KeccakP200_StatePermute( void *state, unsigned int nr )
 ;
-.global KeccakF200_StatePermute
-KeccakF200_StatePermute:
-    ldi     r22, lo8(KeccakF200_RoundConstants)
-    ldi     r23, hi8(KeccakF200_RoundConstants)
-
+; argument state   is passed in r24:r25
+; argument nr      is passed in r22:r23
+;
+.global KeccakP200_StatePermute
+KeccakP200_StatePermute:
+    mov     r0, r22
+    ldi     r22, lo8(KeccakP200_RoundConstants)
+    ldi     r23, hi8(KeccakP200_RoundConstants)
+    sub     r22, r0
+    sbc     r23, r1
     push    r2
     push    r3
     push    r4
@@ -386,7 +393,7 @@ KeccakF200_StatePermute:
     ld      _su, Y
 
     ldi     zero, 0
-KeccakF200_StatePermute_RoundLoop:
+KeccakP200_StatePermute_RoundLoop:
     push    rZ
     push    rZ1
 
@@ -560,9 +567,9 @@ KeccakF200_StatePermute_RoundLoop:
 
     ; Check for last round constant
     cpi     c0, 0x80
-    breq    KeccakF200_StatePermute_Done
-    rjmp    KeccakF200_StatePermute_RoundLoop
-KeccakF200_StatePermute_Done:
+    breq    KeccakP200_StatePermute_Done
+    rjmp    KeccakP200_StatePermute_RoundLoop
+KeccakP200_StatePermute_Done:
 
     ; store registers to RAM state
     pop     rY1

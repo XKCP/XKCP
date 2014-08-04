@@ -358,7 +358,7 @@ KeccakF1600_StateExtractAndXORBytes_End:
 #define ROT_BIT(a)      ((a) & 7)
 #define ROT_BYTE(a)     ((((a)/8 + !!(((a)%8) > 4)) & 7) * 9)
 
-KeccakF1600_RhoPiConstants:
+KeccakP1600_12_RhoPiConstants:
     .BYTE   ROT_BIT( 1), ROT_BYTE( 3), 10 * 8
     .BYTE   ROT_BIT( 3), ROT_BYTE( 6),  7 * 8
     .BYTE   ROT_BIT( 6), ROT_BYTE(10), 11 * 8
@@ -384,19 +384,7 @@ KeccakF1600_RhoPiConstants:
     .BYTE   ROT_BIT(20), ROT_BYTE(44),  6 * 8
     .BYTE   ROT_BIT(44), ROT_BYTE( 1),  1 * 8
 
-KeccakF1600_RoundConstants:
-    .BYTE   0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x82, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x8a, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80
-    .BYTE   0x00, 0x80, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80
-    .BYTE   0x8b, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x01, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x81, 0x80, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80
-    .BYTE   0x09, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80
-    .BYTE   0x8a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x88, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x09, 0x80, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
-    .BYTE   0x0a, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
+KeccakP1600_12_RoundConstants:
     .BYTE   0x8b, 0x80, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
     .BYTE   0x8b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80
     .BYTE   0x89, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80
@@ -417,12 +405,12 @@ KeccakF1600_RoundConstants:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF1600_StatePermute( void *state )
+; void KeccakP1600_12_StatePermute( void *state )
 ;
-.global KeccakF1600_StatePermute
-KeccakF1600_StatePermute:
-    ldi     pRound,   lo8(KeccakF1600_RoundConstants)
-    ldi     pRound+1, hi8(KeccakF1600_RoundConstants)
+.global KeccakP1600_12_StatePermute
+KeccakP1600_12_StatePermute:
+    ldi     pRound,   lo8(KeccakP1600_12_RoundConstants)
+    ldi     pRound+1, hi8(KeccakP1600_12_RoundConstants)
     push    r2
     push    r3
     push    r4
@@ -687,8 +675,8 @@ KeccakTheta_End:
 
     push    pRound
     push    pRound+1
-    ldi     RPpConst,   lo8(KeccakF1600_RhoPiConstants)
-    ldi     RPpConst+1, hi8(KeccakF1600_RhoPiConstants)
+    ldi     RPpConst,   lo8(KeccakP1600_12_RhoPiConstants)
+    ldi     RPpConst+1, hi8(KeccakP1600_12_RhoPiConstants)
     ldi     RPpBitRot,   pm_lo8(bit_rot_jmp_table)
     ldi     RPpBitRot+1, pm_hi8(bit_rot_jmp_table)
     ldi     RPpByteRot,   pm_lo8(rotate64_0byte_left)
