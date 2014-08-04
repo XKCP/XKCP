@@ -417,7 +417,6 @@ KeccakF200_StateExtractAndXORBytesInLane_Exit:
 	pop		{r4,pc}
 
 
-SECTION_KECCAK_F_START:
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF200_StatePermute( void *state )
@@ -437,7 +436,6 @@ KeccakF200_StatePermute:
 	adr		r7, KeccakF200_StatePermute_RoundConstants
 	b		KeccakF200_StatePermute_RoundLoop
 	nop
-SECTION_KECCAK_F_END:
 KeccakF200_StatePermute_RoundConstants:
 		.byte 		0x01
 		.byte 		0x82

@@ -373,7 +373,6 @@ KeccakF200_StateExtractAndXORBytesInLane_Exit
 	bx		lr
 	ENDP
 
-SECTION_KECCAK_F_START
 ;//----------------------------------------------------------------------------
 ;//
 ;// void KeccakF200_StatePermute( void *state )
@@ -383,7 +382,6 @@ SECTION_KECCAK_F_START
 KeccakF200_StatePermute   PROC
 	push		{r4-r12,lr}
 	adr			lr, KeccakF200_StatePermute_RoundConstants
-SECTION_KECCAK_F_END
 	;//	Load state into registers
 	ldr			r8, [r0, #_ba]		; B-aeio
 	ldr			r9, [r0, #_ga]		; G-aeio

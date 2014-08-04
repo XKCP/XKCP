@@ -446,7 +446,6 @@ KeccakF400_StateExtractAndXORBytesInLane_Exit:
 	bx		lr
 
 
-SECTION_KECCAK_F_START:
 @@//----------------------------------------------------------------------------
 @//
 @// void KeccakF400_StatePermute( void *state )
@@ -457,7 +456,6 @@ KeccakF400_StatePermute:
 	push		{r4-r12,lr}
 	sub			sp, sp, #2*25+6
 	adr			r8, KeccakF400_StatePermute_RoundConstants
-SECTION_KECCAK_F_END:
 KeccakF400_StatePermuteIntern:
     ldrh		r9, [r0, #_sa] 
     ldrh		r10, [r0, #_se] 

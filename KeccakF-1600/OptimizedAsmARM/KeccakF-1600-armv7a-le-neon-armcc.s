@@ -17,15 +17,6 @@
 ; WARNING: State must be 256 bit (32 bytes) aligned, best is 64-byte (cache alignment).
 ; INFO: Tested on Cortex-A8 (BeagleBone Black), using gcc.
 
-SECTION_KECCAK_P_START
-; !!
-; todo
-;	Apply Theta: pipeline with store/reload some neon regs
-;	Chi: pipeline with store/reload some neon regs
-;	KeccakRound: loop unroll 
-
-; FBWL : expand trailing bits byte on stack and load in one vld1 instruction
-SECTION_KECCAK_P_END
 
     PRESERVE8
     AREA    |.text|, CODE, READONLY

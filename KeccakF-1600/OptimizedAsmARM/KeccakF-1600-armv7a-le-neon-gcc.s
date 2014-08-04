@@ -17,15 +17,6 @@
 @ WARNING: State must be 256 bit (32 bytes) aligned, best is 64-byte (cache alignment).
 @ INFO: Tested on Cortex-A8 (BeagleBone Black), using gcc.
 
-SECTION_KECCAK_P_START:
-@ !!
-@ todo
-@	Apply Theta: pipeline with store/reload some neon regs
-@	Chi: pipeline with store/reload some neon regs
-@	KeccakRound: loop unroll 
-
-@ FBWL : expand trailing bits byte on stack and load in one vld1 instruction
-SECTION_KECCAK_P_END:
 
    
 .text
@@ -1026,7 +1017,7 @@ KeccakF1600_SnP_FBWL_Wrap_LoopLessThan16Lanes:
 
     vld1.64 d30, [r2], r7
 	veor.64	d8, d8, d30
-    vst1.64 d8, [r9], r7
+    vst1.64 d8, [r9], r7
     vld1.64 d30, [r2], r7
 	veor.64	d6, d6, d30
     vst1.64 d6, [r9], r7
@@ -1259,7 +1250,7 @@ KeccakF1600_SnP_FBWL_Unwrap_LoopLessThan16Lanes:
 
 	veor.64	d30, d30, d30
 	add		r1, sp, #(8+16+1)*4
-	vld1.8	{d30[0]}, [r1]
+	vld1.8	{d30[0]}, [r1]
 	bl		KeccakF1600_StateXORandPermuteAsmOnly
 	subs	r8, r8, r5							@ nbrLanes -= laneCount
 	bcs		KeccakF1600_SnP_FBWL_Unwrap_LoopLessThan16Lanes
