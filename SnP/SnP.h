@@ -115,7 +115,7 @@ void SnP_ExtractAndXORBytes(const void *state, unsigned char *data, unsigned int
   * @param  dataByteLen The length of the input data in bytes.
   * @param  trailingBits    The byte to XOR at the end of each block.
   * @returns    The number of bytes processed.
-  * @pre    0 < @a laneCount < 25
+  * @pre    0 < @a laneCount < SnP_laneCount
   */
 size_t SnP_FBWL_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen, unsigned char trailingBits);
 
@@ -129,7 +129,7 @@ size_t SnP_FBWL_Absorb(void *state, unsigned int laneCount, const unsigned char 
   * @param  data    Pointer to the area to use as output.
   * @param  dataByteLen The length of the output area in bytes.
   * @returns    The number of bytes produced.
-  * @pre    0 < @a laneCount ≤ 25
+  * @pre    0 < @a laneCount ≤ SnP_laneCount
   */
 size_t SnP_FBWL_Squeeze(void *state, unsigned int laneCount, unsigned char *data, size_t dataByteLen);
 
@@ -149,7 +149,7 @@ size_t SnP_FBWL_Squeeze(void *state, unsigned int laneCount, unsigned char *data
   * @returns    The number of bytes processed and produced.
   * @note   @a dataIn and @a dataOut can point to the same buffer, in which case
   *         the data are processed in-place.
-  * @pre    0 < @a laneCount < 25
+  * @pre    0 < @a laneCount < SnP_laneCount
   */
 size_t SnP_FBWL_Wrap(void *state, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
 
@@ -169,7 +169,7 @@ size_t SnP_FBWL_Wrap(void *state, unsigned int laneCount, const unsigned char *d
   * @returns    The number of bytes processed and produced.
   * @note   @a dataIn and @a dataOut can point to the same buffer, in which case
   *         the data are processed in-place.
-  * @pre    0 < @a laneCount < 25
+  * @pre    0 < @a laneCount < SnP_laneCount
   */
 size_t SnP_FBWL_Unwrap(void *state, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
 

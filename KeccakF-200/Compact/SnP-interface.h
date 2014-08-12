@@ -22,6 +22,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define SnP_width                           KeccakF_width
 #define SnP_stateSizeInBytes                KeccakF_stateSizeInBytes
 #define SnP_laneLengthInBytes               KeccakF_laneInBytes
+#define SnP_laneCount                       25
 
 #define SnP_StaticInitialize()
 #define SnP_Initialize                      KeccakF200_StateInitialize

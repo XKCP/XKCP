@@ -23,6 +23,7 @@ typedef	unsigned short tKeccakLane;
 #define SnP_width                           KeccakF_width
 #define SnP_stateSizeInBytes                KeccakF_stateSizeInBytes
 #define SnP_laneLengthInBytes               KeccakF_laneInBytes
+#define SnP_laneCount                       25
 #define SnP_maxRounds                       20
 
 #define SnP_StaticInitialize()
