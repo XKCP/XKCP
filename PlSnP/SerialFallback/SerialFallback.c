@@ -36,13 +36,13 @@ void PlSnP_XORBytes_Serial(void *states, unsigned int instanceIndex, const unsig
     SnP_XORBytes(stateWithIndex(instanceIndex), data, offset, length);
 }
 
-void PlSnP_XORLanesAll_Serial(void *states, const unsigned char *data, unsigned int laneCount)
+void PlSnP_XORLanesAll_Serial(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
     unsigned int i;
 
     for(i=0; i<PlSnP_P; i++) {
         SnP_XORBytes(stateWithIndex(i), data, 0, laneCount*SnP_laneLengthInBytes);
-        data += laneCount*SnP_laneLengthInBytes;
+        data += laneOffset*SnP_laneLengthInBytes;
     }
 }
 
@@ -51,13 +51,13 @@ void PlSnP_OverwriteBytes_Serial(void *states, unsigned int instanceIndex, const
     SnP_OverwriteBytes(stateWithIndex(instanceIndex), data, offset, length);
 }
 
-void PlSnP_OverwriteLanesAll_Serial(void *states, const unsigned char *data, unsigned int laneCount)
+void PlSnP_OverwriteLanesAll_Serial(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
     unsigned int i;
 
     for(i=0; i<PlSnP_P; i++) {
         SnP_OverwriteBytes(stateWithIndex(i), data, 0, laneCount*SnP_laneLengthInBytes);
-        data += laneCount*SnP_laneLengthInBytes;
+        data += laneOffset*SnP_laneLengthInBytes;
     }
 }
 
@@ -97,13 +97,13 @@ void PlSnP_ExtractBytes_Serial(void *states, unsigned int instanceIndex, unsigne
     SnP_ExtractBytes(stateWithIndex(instanceIndex), data, offset, length);
 }
 
-void PlSnP_ExtractLanesAll_Serial(const void *states, unsigned char *data, unsigned int laneCount)
+void PlSnP_ExtractLanesAll_Serial(const void *states, unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
     unsigned int i;
 
     for(i=0; i<PlSnP_P; i++) {
         SnP_ExtractBytes(stateWithIndex(i), data, 0, laneCount*SnP_laneLengthInBytes);
-        data += laneCount*SnP_laneLengthInBytes;
+        data += laneOffset*SnP_laneLengthInBytes;
     }
 }
 
@@ -112,12 +112,12 @@ void PlSnP_ExtractAndXORBytes_Serial(void *states, unsigned int instanceIndex, u
     SnP_ExtractAndXORBytes(stateWithIndex(instanceIndex), data, offset, length);
 }
 
-void PlSnP_ExtractAndXORLanesAll_Serial(const void *states, unsigned char *data, unsigned int laneCount)
+void PlSnP_ExtractAndXORLanesAll_Serial(const void *states, unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
     unsigned int i;
 
     for(i=0; i<PlSnP_P; i++) {
         SnP_ExtractAndXORBytes(stateWithIndex(i), data, 0, laneCount*SnP_laneLengthInBytes);
-        data += laneCount*SnP_laneLengthInBytes;
+        data += laneOffset*SnP_laneLengthInBytes;
     }
 }

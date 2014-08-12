@@ -18,9 +18,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <string.h>
 
-size_t PlSnP_FBWL_Absorb_Default(void *states, unsigned int laneCount, const unsigned char *data, size_t dataByteLen, unsigned char trailingBits);
-size_t PlSnP_FBWL_Squeeze_Default(void *states, unsigned int laneCount, unsigned char *data, size_t dataByteLen);
-size_t PlSnP_FBWL_Wrap_Default(void *states, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
-size_t PlSnP_FBWL_Unwrap_Default(void *states, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
+size_t PlSnP_FBWL_Absorb_Default(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen, unsigned char trailingBits);
+size_t PlSnP_FBWL_Squeeze_Default(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, unsigned char *data, size_t dataByteLen);
+size_t PlSnP_FBWL_Wrap_Default(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
+size_t PlSnP_FBWL_Unwrap_Default(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
 
 #endif

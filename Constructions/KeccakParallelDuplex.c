@@ -98,7 +98,7 @@ int Keccak_ParallelDuplexingFeedPartialInterleavedInput(Keccak_ParallelDuplexIns
         return 1;
 
     if ((totalInputIndex == 0) && ((rho_maxInBytes % KeccakF_laneInBytes) == 0) && (inByteLen == rho_maxInBytes*PlSnP_P)) {
-        PlSnP_XORLanesAll(instances->states, in, rho_maxInBytes/KeccakF_laneInBytes);
+        PlSnP_XORLanesAll(instances->states, in, rho_maxInBytes/KeccakF_laneInBytes, rho_maxInBytes/KeccakF_laneInBytes);
         for(i=0; i<PlSnP_P; i++)
             instances->byteInputIndex[i] = rho_maxInBytes;
         return 0;
@@ -165,7 +165,7 @@ int Keccak_ParallelDuplexingOverwritePartialInterleavedInput(Keccak_ParallelDupl
         return 1;
 
     if ((totalInputIndex == 0) && ((rho_maxInBytes % KeccakF_laneInBytes) == 0) && (inByteLen == rho_maxInBytes*PlSnP_P)) {
-        PlSnP_OverwriteLanesAll(instances->states, in, rho_maxInBytes/KeccakF_laneInBytes);
+        PlSnP_OverwriteLanesAll(instances->states, in, rho_maxInBytes/KeccakF_laneInBytes, rho_maxInBytes/KeccakF_laneInBytes);
         for(i=0; i<PlSnP_P; i++)
             instances->byteInputIndex[i] = rho_maxInBytes;
         return 0;
@@ -291,7 +291,7 @@ int Keccak_ParallelDuplexingGetFurtherInterleavedOutputAndXOR(Keccak_ParallelDup
         return 1;
 
     if ((totalOutputIndex == 0) && ((rho_maxInBytes % KeccakF_laneInBytes) == 0) && (outByteLen == rho_maxInBytes*PlSnP_P)) {
-        PlSnP_ExtractAndXORLanesAll(instances->states, out, rho_maxInBytes/KeccakF_laneInBytes);
+        PlSnP_ExtractAndXORLanesAll(instances->states, out, rho_maxInBytes/KeccakF_laneInBytes, rho_maxInBytes/KeccakF_laneInBytes);
         for(i=0; i<PlSnP_P; i++)
             instances->byteOutputIndex[i] = rho_maxInBytes;
         return 0;
@@ -351,7 +351,7 @@ size_t Keccak_ParallelDuplexingFBWLAbsorb(Keccak_ParallelDuplexInstances *instan
     if (totalIndexes != 0)
         return 0;
 
-    return PlSnP_FBWL_Absorb(instances->states, laneCount, dataIn, dataByteLen, trailingBits);
+    return PlSnP_FBWL_Absorb(instances->states, laneCount, laneCount, PlSnP_P*laneCount, dataIn, dataByteLen, trailingBits);
 }
 
 size_t Keccak_ParallelDuplexingFBWLWrap(Keccak_ParallelDuplexInstances *instances, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
@@ -371,7 +371,7 @@ size_t Keccak_ParallelDuplexingFBWLWrap(Keccak_ParallelDuplexInstances *instance
     if (Keccak_ParallelDuplexGetTotalInputIndex(instances) != 0)
         return 0;
 
-    result = PlSnP_FBWL_Wrap(instances->states, laneCount, dataIn, dataOut, dataByteLen, trailingBits);
+    result = PlSnP_FBWL_Wrap(instances->states, laneCount, laneCount, PlSnP_P*laneCount, dataIn, dataOut, dataByteLen, trailingBits);
     if (result > 0)
         for(i=0; i<PlSnP_P; i++)
             instances->byteOutputIndex[i] = 0;
@@ -398,7 +398,7 @@ size_t Keccak_ParallelDuplexingFBWLUnwrap(Keccak_ParallelDuplexInstances *instan
     if (totalIndexes != 0)
         return 0;
 
-    return PlSnP_FBWL_Unwrap(instances->states, laneCount, dataIn, dataOut, dataByteLen, trailingBits);
+    return PlSnP_FBWL_Unwrap(instances->states, laneCount, laneCount, PlSnP_P*laneCount, dataIn, dataOut, dataByteLen, trailingBits);
 }
 
 unsigned int Keccak_ParallelDuplexGetTotalInputIndex(Keccak_ParallelDuplexInstances *instances)

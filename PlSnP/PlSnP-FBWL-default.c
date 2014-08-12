@@ -16,73 +16,80 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include "PlSnP-interface.h"
 
-size_t PlSnP_FBWL_Absorb_Default(void *states, unsigned int laneCount, const unsigned char *data, size_t dataByteLen, unsigned char trailingBits)
+size_t PlSnP_FBWL_Absorb_Default(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen, unsigned char trailingBits)
 {
     unsigned int i;
-    size_t processed = 0;
+    const unsigned char *dataStart = data;
 
-    while(dataByteLen >= laneCount*PlSnP_P*SnP_laneLengthInBytes) {
-        PlSnP_XORLanesAll(states, data, laneCount);
+    while(dataByteLen >= (laneOffsetParallel*PlSnP_P - laneOffsetParallel + laneCount)*SnP_laneLengthInBytes) {
+        PlSnP_XORLanesAll(states, data, laneCount, laneOffsetParallel);
         for(i=0; i<PlSnP_P; i++)
             PlSnP_XORBytes(states, i, &trailingBits, laneCount*SnP_laneLengthInBytes, 1);
         PlSnP_PermuteAll(states);
-        data += laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        dataByteLen -= laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        processed += laneCount*PlSnP_P*SnP_laneLengthInBytes;
+        data += laneOffsetSerial*SnP_laneLengthInBytes;
+        dataByteLen -= laneOffsetSerial*SnP_laneLengthInBytes;
     }
-    return processed;
+    return data - dataStart;
 }
 
-size_t PlSnP_FBWL_Squeeze_Default(void *states, unsigned int laneCount, unsigned char *data, size_t dataByteLen)
+size_t PlSnP_FBWL_Squeeze_Default(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, unsigned char *data, size_t dataByteLen)
 {
-    size_t processed = 0;
+    const unsigned char *dataStart = data;
 
-    while(dataByteLen >= laneCount*PlSnP_P*SnP_laneLengthInBytes) {
+    while(dataByteLen >= (laneOffsetParallel*PlSnP_P - laneOffsetParallel + laneCount)*SnP_laneLengthInBytes) {
         PlSnP_PermuteAll(states);
-        PlSnP_ExtractLanesAll(states, data, laneCount);
-        data += laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        dataByteLen -= laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        processed += laneCount*PlSnP_P*SnP_laneLengthInBytes;
+        PlSnP_ExtractLanesAll(states, data, laneCount, laneOffsetParallel);
+        data += laneOffsetSerial*SnP_laneLengthInBytes;
+        dataByteLen -= laneOffsetSerial*SnP_laneLengthInBytes;
     }
-    return processed;
+    return data - dataStart;
 }
 
-size_t PlSnP_FBWL_Wrap_Default(void *states, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
+size_t PlSnP_FBWL_Wrap_Default(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
 {
     unsigned int i;
-    size_t processed = 0;
+    const unsigned char *dataInStart = dataIn;
 
-    while(dataByteLen >= laneCount*PlSnP_P*SnP_laneLengthInBytes) {
-        PlSnP_XORLanesAll(states, dataIn, laneCount);
-        PlSnP_ExtractLanesAll(states, dataOut, laneCount);
+    while(dataByteLen >= (laneOffsetParallel*PlSnP_P - laneOffsetParallel + laneCount)*SnP_laneLengthInBytes) {
+        PlSnP_XORLanesAll(states, dataIn, laneCount, laneOffsetParallel);
+        PlSnP_ExtractLanesAll(states, dataOut, laneCount, laneOffsetParallel);
         for(i=0; i<PlSnP_P; i++)
             PlSnP_XORBytes(states, i, &trailingBits, laneCount*SnP_laneLengthInBytes, 1);
         PlSnP_PermuteAll(states);
-        dataIn += laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        dataOut += laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        dataByteLen -= laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        processed += laneCount*PlSnP_P*SnP_laneLengthInBytes;
+        dataIn += laneOffsetSerial*SnP_laneLengthInBytes;
+        dataOut += laneOffsetSerial*SnP_laneLengthInBytes;
+        dataByteLen -= laneOffsetSerial*SnP_laneLengthInBytes;
     }
-    return processed;
+    return dataIn - dataInStart;
 }
 
-size_t PlSnP_FBWL_Unwrap_Default(void *states, unsigned int laneCount, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
+size_t PlSnP_FBWL_Unwrap_Default(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
 {
     unsigned int i;
-    size_t processed = 0;
+    const unsigned char *dataInStart = dataIn;
 
-    while(dataByteLen >= laneCount*PlSnP_P*SnP_laneLengthInBytes) {
-        if (dataIn != dataOut)
-            memcpy(dataOut, dataIn, laneCount*PlSnP_P*SnP_laneLengthInBytes);
-        PlSnP_ExtractAndXORLanesAll(states, dataOut, laneCount);
-        PlSnP_XORLanesAll(states, dataOut, laneCount);
+    while(dataByteLen >= (laneOffsetParallel*PlSnP_P - laneOffsetParallel + laneCount)*SnP_laneLengthInBytes) {
+        if (dataIn != dataOut) {
+            if (laneOffsetParallel == laneCount)
+                memcpy(dataOut, dataIn, laneCount*PlSnP_P*SnP_laneLengthInBytes);
+            else {
+                const unsigned char *curIn = dataIn;
+                unsigned char *curOut = dataOut;
+                for(i=0; i<PlSnP_P; i++) {
+                    memcpy(curOut, curIn, laneCount*SnP_laneLengthInBytes);
+                    curIn += laneOffsetParallel*SnP_laneLengthInBytes;
+                    curOut += laneOffsetParallel*SnP_laneLengthInBytes;
+                }
+            }
+        }
+        PlSnP_ExtractAndXORLanesAll(states, dataOut, laneCount, laneOffsetParallel);
+        PlSnP_XORLanesAll(states, dataOut, laneCount, laneOffsetParallel);
         for(i=0; i<PlSnP_P; i++)
             PlSnP_XORBytes(states, i, &trailingBits, laneCount*SnP_laneLengthInBytes, 1);
         PlSnP_PermuteAll(states);
-        dataIn += laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        dataOut += laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        dataByteLen -= laneCount*PlSnP_P*SnP_laneLengthInBytes;
-        processed += laneCount*PlSnP_P*SnP_laneLengthInBytes;
+        dataIn += laneOffsetSerial*SnP_laneLengthInBytes;
+        dataOut += laneOffsetSerial*SnP_laneLengthInBytes;
+        dataByteLen -= laneOffsetSerial*SnP_laneLengthInBytes;
     }
-    return processed;
+    return dataIn - dataInStart;
 }
