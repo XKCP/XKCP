@@ -650,9 +650,9 @@ KeccakF1600_StateXORBytes_Bytes:
 KeccakF1600_StateXORBytes_BytesLoop:
     movb    (arg2), %al
     xorb    %al, (arg1)
-    incq    arg2
-    incq    arg1
-    decq    arg4
+    addq    $1, arg2
+    addq    $1, arg1
+    subq    $1, arg4
     jnz     KeccakF1600_StateXORBytes_BytesLoop
 KeccakF1600_StateXORBytes_Exit:
     popq   rT1o
@@ -722,10 +722,10 @@ KeccakF1600_StateOverwriteBytes_BytesLoop:
     movb    (arg2), %al
     xorb    (arg5), %al
     movb    %al, (arg1)
-    incq    arg2
-    incq    arg5
-    incq    arg1
-    decq    arg4
+    addq    $1, arg2
+    addq    $1, arg5
+    addq    $1, arg1
+    subq    $1, arg4
     jnz     KeccakF1600_StateOverwriteBytes_BytesLoop
 KeccakF1600_StateOverwriteBytes_Exit:
     retq
@@ -757,9 +757,9 @@ KeccakF1600_StateOverwriteWithZeroes_BytesLoop:
     movb    $0, %al
     xorb    (arg5), %al
     movb    %al, (arg1)
-    incq    arg5
-    incq    arg1
-    decq    arg2
+    addq    $1, arg5
+    addq    $1, arg1
+    subq    $1, arg2
     jnz     KeccakF1600_StateOverwriteWithZeroes_BytesLoop
 KeccakF1600_StateOverwriteWithZeroes_Exit:
     retq
@@ -794,10 +794,10 @@ KeccakF1600_StateExtractBytes_BytesLoop:
     movb    (arg1), %al
     xorb    (arg5), %al
     movb    %al, (arg2)
-    incq    arg2
-    incq    arg5
-    incq    arg1
-    decq    arg4
+    addq    $1, arg2
+    addq    $1, arg5
+    addq    $1, arg1
+    subq    $1, arg4
     jnz     KeccakF1600_StateExtractBytes_BytesLoop
 KeccakF1600_StateExtractBytes_Exit:
     retq
@@ -832,10 +832,10 @@ KeccakF1600_StateExtractAndXORBytes_BytesLoop:
     movb    (arg1), %al
     xorb    (arg5), %al
     xorb    %al, (arg2)
-    incq    arg2
-    incq    arg5
-    incq    arg1
-    decq    arg4
+    addq    $1, arg2
+    addq    $1, arg5
+    addq    $1, arg1
+    subq    $1, arg4
     jnz     KeccakF1600_StateExtractAndXORBytes_BytesLoop
 KeccakF1600_StateExtractAndXORBytes_Exit:
     retq

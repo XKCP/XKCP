@@ -16,6 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _KeccakF1600Interface_h_
 #define _KeccakF1600Interface_h_
 
+#include <string.h>
+
 #define KeccakF_width 1600
 #define KeccakF_laneInBytes 8
 #define KeccakF_stateSizeInBytes (KeccakF_width/8)
