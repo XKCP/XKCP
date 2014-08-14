@@ -50,15 +50,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Keccak[r+c=1600] -->
 
     <fragment name="width1600">
-        <h>KeccakF-1600/KeccakF-1600-interface.h</h>
+        <h>SnP/KeccakF-1600/KeccakF-1600-interface.h</h>
     </fragment>
 
     <fragment name="reference1600" inherits="common width1600">
-        <c>KeccakF-1600/Reference/KeccakF-1600-reference.c</c>
+        <c>SnP/KeccakF-1600/Reference/KeccakF-1600-reference.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
         <c>Tests/displayIntermediateValues.c</c>
-        <h>KeccakF-1600/Reference/KeccakF-reference.h</h>
-        <h>KeccakF-1600/Reference/SnP-interface.h</h>
+        <h>SnP/KeccakF-1600/Reference/KeccakF-reference.h</h>
+        <h>SnP/KeccakF-1600/Reference/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
         <gcc>-DKeccakReference</gcc>
@@ -66,11 +66,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <fragment name="reference32BI" inherits="width1600">
-        <c>KeccakF-1600/Reference/KeccakF-1600-reference32BI.c</c>
+        <c>SnP/KeccakF-1600/Reference/KeccakF-1600-reference32BI.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
         <c>Tests/displayIntermediateValues.c</c>
-        <h>KeccakF-1600/Reference/KeccakF-reference.h</h>
-        <h>KeccakF-1600/Reference/SnP-interface.h</h>
+        <h>SnP/KeccakF-1600/Reference/KeccakF-reference.h</h>
+        <h>SnP/KeccakF-1600/Reference/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
         <gcc>-O</gcc>
@@ -79,27 +79,27 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <fragment name="optimized64" inherits="width1600 optimized">
-        <c>KeccakF-1600/Optimized64/KeccakF-1600-opt64.c</c>
-        <h>KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
-        <h>KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
-        <h>KeccakF-1600/Optimized64/SnP-interface.h</h>
+        <c>SnP/KeccakF-1600/Optimized64/KeccakF-1600-opt64.c</c>
+        <h>SnP/KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
+        <h>SnP/KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
+        <h>SnP/KeccakF-1600/Optimized64/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>SnP/SnP-Relaned.h</h>
         <gcc>-m64</gcc>
     </fragment>
 
     <fragment name="inplace32BI" inherits="width1600 optimized">
-        <c>KeccakF-1600/Inplace32BI/KeccakF-1600-inplace32BI.c</c>
+        <c>SnP/KeccakF-1600/Inplace32BI/KeccakF-1600-inplace32BI.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
-        <h>KeccakF-1600/Inplace32BI/SnP-interface.h</h>
+        <h>SnP/KeccakF-1600/Inplace32BI/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>SnP/SnP-Relaned.h</h>
     </fragment>
 
     <fragment name="compact64" inherits="width1600 optimized">
-        <c>KeccakF-1600/Compact64/Keccak-compact64.c</c>
+        <c>SnP/KeccakF-1600/Compact64/Keccak-compact64.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
-        <h>KeccakF-1600/Compact64/SnP-interface.h</h>
+        <h>SnP/KeccakF-1600/Compact64/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>SnP/SnP-Relaned.h</h>
         <gcc>-m64</gcc>
@@ -107,35 +107,35 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <fragment name="asmx86-64-common" inherits="width1600 optimized">
         <c>SnP/SnP-FBWL-default.c</c>
-        <h>KeccakF-1600/OptimizedAsmX86-64/SnP-interface.h</h>
+        <h>SnP/KeccakF-1600/OptimizedAsmX86-64/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <gcc>-m64</gcc>
     </fragment>
 
     <fragment name="asmx86-64" inherits="asmx86-64-common">
-        <c>KeccakF-1600/OptimizedAsmX86-64/KeccakF-1600-x86-64-gas.s</c>
+        <c>SnP/KeccakF-1600/OptimizedAsmX86-64/KeccakF-1600-x86-64-gas.s</c>
     </fragment>
 
     <fragment name="asmx86-64-shld" inherits="asmx86-64-common">
-        <c>KeccakF-1600/OptimizedAsmX86-64/KeccakF-1600-x86-64-shld-gas.s</c>
+        <c>SnP/KeccakF-1600/OptimizedAsmX86-64/KeccakF-1600-x86-64-shld-gas.s</c>
     </fragment>
 
     <target name="KeccakWidth1600Reference" inherits="keccak reference1600"/>
     <target name="KeccakWidth1600Reference32BI" inherits="keccak reference32BI"/>
     <target name="KeccakWidth1600Opt64u6" inherits="keccak optimized64">
-        <h>KeccakF-1600/Optimized64/u6/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/u6/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="KeccakWidth1600Opt64ufull" inherits="keccak optimized64">
-        <h>KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="KeccakWidth1600Opt64LCu6" inherits="keccak optimized64">
-        <h>KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="KeccakWidth1600Opt64LCufull" inherits="keccak optimized64">
-        <h>KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="KeccakWidth1600Opt64LCufullshld" inherits="keccak optimized64">
-        <h>KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="KeccakWidth1600Inplace32BI" inherits="keccak inplace32BI"/>
     <target name="KeccakWidth1600Compact64" inherits="keccak compact64"/>
@@ -145,15 +145,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Keccak[r+c=800] -->
 
     <fragment name="width800">
-        <h>KeccakF-800/KeccakF-800-interface.h</h>
+        <h>SnP/KeccakF-800/KeccakF-800-interface.h</h>
     </fragment>
 
     <fragment name="reference800" inherits="common width800">
-        <c>KeccakF-800/Reference/KeccakF-800-reference.c</c>
+        <c>SnP/KeccakF-800/Reference/KeccakF-800-reference.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
         <c>Tests/displayIntermediateValues.c</c>
-        <h>KeccakF-800/Reference/KeccakF-reference.h</h>
-        <h>KeccakF-800/Reference/SnP-interface.h</h>
+        <h>SnP/KeccakF-800/Reference/KeccakF-reference.h</h>
+        <h>SnP/KeccakF-800/Reference/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
         <gcc>-DKeccakReference</gcc>
@@ -161,9 +161,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <fragment name="compact800" inherits="width800 optimized">
-        <c>KeccakF-800/Compact/KeccakF-800-compact.c</c>
+        <c>SnP/KeccakF-800/Compact/KeccakF-800-compact.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
-        <h>KeccakF-800/Compact/SnP-interface.h</h>
+        <h>SnP/KeccakF-800/Compact/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>SnP/SnP-Relaned.h</h>
     </fragment>
@@ -174,15 +174,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Keccak[r+c=400] -->
 
     <fragment name="width400">
-        <h>KeccakF-400/KeccakF-400-interface.h</h>
+        <h>SnP/KeccakF-400/KeccakF-400-interface.h</h>
     </fragment>
 
     <fragment name="reference400" inherits="common width400">
-        <c>KeccakF-400/Reference/KeccakF-400-reference.c</c>
+        <c>SnP/KeccakF-400/Reference/KeccakF-400-reference.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
         <c>Tests/displayIntermediateValues.c</c>
-        <h>KeccakF-400/Reference/KeccakF-reference.h</h>
-        <h>KeccakF-400/Reference/SnP-interface.h</h>
+        <h>SnP/KeccakF-400/Reference/KeccakF-reference.h</h>
+        <h>SnP/KeccakF-400/Reference/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
         <gcc>-DKeccakReference</gcc>
@@ -194,15 +194,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Keccak[r+c=200] -->
 
     <fragment name="width200">
-        <h>KeccakF-200/KeccakF-200-interface.h</h>
+        <h>SnP/KeccakF-200/KeccakF-200-interface.h</h>
     </fragment>
 
     <fragment name="reference200" inherits="common width200">
-        <c>KeccakF-200/Reference/KeccakF-200-reference.c</c>
+        <c>SnP/KeccakF-200/Reference/KeccakF-200-reference.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
         <c>Tests/displayIntermediateValues.c</c>
-        <h>KeccakF-200/Reference/KeccakF-reference.h</h>
-        <h>KeccakF-200/Reference/SnP-interface.h</h>
+        <h>SnP/KeccakF-200/Reference/KeccakF-reference.h</h>
+        <h>SnP/KeccakF-200/Reference/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
         <gcc>-DKeccakReference</gcc>
@@ -210,9 +210,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <fragment name="compact200" inherits="width200 optimized">
-        <c>KeccakF-200/Compact/KeccakF-200-compact.c</c>
+        <c>SnP/KeccakF-200/Compact/KeccakF-200-compact.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
-        <h>KeccakF-200/Compact/SnP-interface.h</h>
+        <h>SnP/KeccakF-200/Compact/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>SnP/SnP-Relaned.h</h>
     </fragment>
@@ -246,8 +246,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <fragment name="width800rounds12">
-        <h>KeccakP-800-12/KeccakP-800-12-interface.h</h>
-        <h>KeccakF-800/KeccakF-800-interface.h</h>
+        <h>SnP/KeccakP-800-12/KeccakP-800-12-interface.h</h>
+        <h>SnP/KeccakF-800/KeccakF-800-interface.h</h>
     </fragment>
 
     <fragment name="P1">
@@ -267,9 +267,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="width800rounds12_reference" inherits="common width800rounds12">
         <c>Tests/displayIntermediateValues.c</c>
         <h>Tests/displayIntermediateValues.h</h>
-        <c>KeccakF-800/Reference/KeccakF-800-reference.c</c>
-        <c>KeccakP-800-12/Reference/KeccakP-800-12-reference.c</c>
-        <h>KeccakP-800-12/Reference/SnP-interface.h</h>
+        <c>SnP/KeccakF-800/Reference/KeccakF-800-reference.c</c>
+        <c>SnP/KeccakP-800-12/Reference/KeccakP-800-12-reference.c</c>
+        <h>SnP/KeccakP-800-12/Reference/SnP-interface.h</h>
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/SnP-FBWL-default.h</h>
         <gcc>-DKeyakReference</gcc>
@@ -289,8 +289,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </target>
 
     <fragment name="width1600rounds12">
-        <h>KeccakP-1600-12/KeccakP-1600-12-interface.h</h>
-        <h>KeccakF-1600/KeccakF-1600-interface.h</h>
+        <h>SnP/KeccakP-1600-12/KeccakP-1600-12-interface.h</h>
+        <h>SnP/KeccakF-1600/KeccakF-1600-interface.h</h>
     </fragment>
 
     <!-- Lake Keyak -->
@@ -298,9 +298,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="width1600rounds12_reference" inherits="common width1600rounds12">
         <c>Tests/displayIntermediateValues.c</c>
         <h>Tests/displayIntermediateValues.h</h>
-        <c>KeccakF-1600/Reference/KeccakF-1600-reference.c</c>
-        <c>KeccakP-1600-12/Reference/KeccakP-1600-12-reference.c</c>
-        <h>KeccakP-1600-12/Reference/SnP-interface.h</h>
+        <c>SnP/KeccakF-1600/Reference/KeccakF-1600-reference.c</c>
+        <c>SnP/KeccakP-1600-12/Reference/KeccakP-1600-12-reference.c</c>
+        <h>SnP/KeccakP-1600-12/Reference/SnP-interface.h</h>
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/SnP-FBWL-default.h</h>
         <gcc>-DKeyakReference</gcc>
@@ -320,46 +320,46 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </target>
 
     <fragment name="width1600rounds12_optimized64" inherits="common width1600rounds12 optimized">
-        <c>KeccakF-1600/Optimized64/KeccakF-1600-opt64.c</c>
-        <h>KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
-        <h>KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
-        <c>KeccakP-1600-12/Optimized64/KeccakP-1600-12-opt64.c</c>
-        <h>KeccakP-1600-12/Optimized64/KeccakP-1600-12-unrolling.macros</h>
-        <h>KeccakP-1600-12/Optimized64/SnP-interface.h</h>
+        <c>SnP/KeccakF-1600/Optimized64/KeccakF-1600-opt64.c</c>
+        <h>SnP/KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
+        <h>SnP/KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
+        <c>SnP/KeccakP-1600-12/Optimized64/KeccakP-1600-12-opt64.c</c>
+        <h>SnP/KeccakP-1600-12/Optimized64/KeccakP-1600-12-unrolling.macros</h>
+        <h>SnP/KeccakP-1600-12/Optimized64/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>SnP/SnP-Relaned.h</h>
         <gcc>-m64</gcc>
     </fragment>
 
     <target name="LakeKeyakOpt64u6" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>KeccakF-1600/Optimized64/u6/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/u6/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="LakeKeyakOpt64ufull" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="LakeKeyakOpt64LCu6" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="LakeKeyakOpt64LCufull" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
     </target>
     <target name="LakeKeyakOpt64LCufullshld" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
+        <h>SnP/KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
     </target>
 
     <fragment name="width1600rounds12_asmx86-64-common" inherits="width1600rounds12 optimized">
         <c>SnP/SnP-FBWL-default.c</c>
-        <h>KeccakP-1600-12/OptimizedAsmX86-64/SnP-interface.h</h>
+        <h>SnP/KeccakP-1600-12/OptimizedAsmX86-64/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <gcc>-m64</gcc>
     </fragment>
 
     <fragment name="width1600rounds12_asmx86-64" inherits="width1600rounds12_asmx86-64-common">
-        <c>KeccakP-1600-12/OptimizedAsmX86-64/KeccakP-1600-12-x86-64-gas.s</c>
+        <c>SnP/KeccakP-1600-12/OptimizedAsmX86-64/KeccakP-1600-12-x86-64-gas.s</c>
     </fragment>
 
     <fragment name="width1600rounds12_asmx86-64-shld" inherits="width1600rounds12_asmx86-64-common">
-        <c>KeccakP-1600-12/OptimizedAsmX86-64/KeccakP-1600-12-x86-64-shld-gas.s</c>
+        <c>SnP/KeccakP-1600-12/OptimizedAsmX86-64/KeccakP-1600-12-x86-64-shld-gas.s</c>
     </fragment>
 
     <target name="LakeKeyakAsmx86-64" inherits="keyak_tests width1600rounds12_asmx86-64 P1"/>
@@ -437,11 +437,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- KetjeJr -->
 
     <fragment name="keccakP200reference" inherits="common">
-        <h>KeccakP-200/KeccakP-200-interface.h</h>
-        <c>KeccakP-200/Reference/KeccakP-200-reference.c</c>
-        <h>KeccakP-200/Reference/SnP-interface.h</h>
-        <h>KeccakF-200/KeccakF-200-interface.h</h>
-        <c>KeccakF-200/Reference/KeccakF-200-reference.c</c>
+        <h>SnP/KeccakP-200/KeccakP-200-interface.h</h>
+        <c>SnP/KeccakP-200/Reference/KeccakP-200-reference.c</c>
+        <h>SnP/KeccakP-200/Reference/SnP-interface.h</h>
+        <h>SnP/KeccakF-200/KeccakF-200-interface.h</h>
+        <c>SnP/KeccakF-200/Reference/KeccakF-200-reference.c</c>
         <c>Tests/displayIntermediateValues.c</c>
         <h>Tests/displayIntermediateValues.h</h>
     </fragment>
@@ -462,11 +462,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- KetjeSr -->
 
     <fragment name="keccakP400reference" inherits="common">
-        <h>KeccakP-400/KeccakP-400-interface.h</h>
-        <c>KeccakP-400/Reference/KeccakP-400-reference.c</c>
-        <h>KeccakP-400/Reference/SnP-interface.h</h>
-        <h>KeccakF-400/KeccakF-400-interface.h</h>
-        <c>KeccakF-400/Reference/KeccakF-400-reference.c</c>
+        <h>SnP/KeccakP-400/KeccakP-400-interface.h</h>
+        <c>SnP/KeccakP-400/Reference/KeccakP-400-reference.c</c>
+        <h>SnP/KeccakP-400/Reference/SnP-interface.h</h>
+        <h>SnP/KeccakF-400/KeccakF-400-interface.h</h>
+        <c>SnP/KeccakF-400/Reference/KeccakF-400-reference.c</c>
         <c>Tests/displayIntermediateValues.c</c>
         <h>Tests/displayIntermediateValues.h</h>
     </fragment>
