@@ -8,7 +8,7 @@ note ["A software interface for Keccak"][keccakinterface].
 
 We gave an updated presentation on the motivation, structure and status of the Keccak Code Package at the [SHA-3 Workshop in Santa Barbara in August 2014][SHA3workshop2014] ([slides][KCPslides]).
 
-[keccakrefoptc]: http://keccak.noekeon.org/Keccak-reference-3.0-files.zip
+[keccakrefoptc]: http://keccak.noekeon.org/KeccakReferenceAndOptimized-3.2.zip
 [keccakinterface]: http://keccak.noekeon.org/NoteSoftwareInterface.pdf
 [SHA3workshop2014]: http://csrc.nist.gov/groups/ST/hash/sha-3/Aug2014/index.html
 [KCPslides]: http://csrc.nist.gov/groups/ST/hash/sha-3/Aug2014/documents/vanassche_keccak_code.pdf
@@ -22,8 +22,8 @@ This version supports:
 * the CAESAR entries [Ketje][caesar_ketje] and [Keyak][caesar_keyak].
 
 [fips202_draft]: http://csrc.nist.gov/groups/ST/hash/sha-3/sha-3_standard_fips202.html "FIPS-202 draft"
-[caesar_ketje]: http://competitions.cr.yp.to/round1/ketjev1.pdf
-[caesar_keyak]: http://competitions.cr.yp.to/round1/keyakv1.pdf
+[caesar_ketje]: http://ketje.noekeon.org/
+[caesar_keyak]: http://keyak.noekeon.org/
 
 Since the previous version (July 2014), the structure of the Keccak Code Package
 has gone through some significant changes. These include:
@@ -74,7 +74,7 @@ If you need to implement the draft FIPS 202 functions, the macros in
 
 ### Differences between and the draft FIPS 202 functions
 
-Compared to the (plain) Keccak sponge function, the [FIPS 202 draft][[fips202_draft] adds suffixes to ensure that the hash functions (SHA-3) and the XOFs (SHAKE) are domain separated (i.e., so that their outputs are unrelated), as well as to make the SHAKE functions compatible with the [Sakura][sakura] tree hashing coding.
+Compared to the (plain) Keccak sponge function, the [FIPS 202 draft][fips202_draft] adds suffixes to ensure that the hash functions (SHA-3) and the XOFs (SHAKE) are domain separated (i.e., so that their outputs are unrelated), as well as to make the SHAKE functions compatible with the [Sakura][sakura] tree hashing coding.
 
 [sakura]: http://keccak.noekeon.org/Sakura.pdf "Sakura: a flexible coding for tree hashing"
 
@@ -83,4 +83,4 @@ A brief summary:
     applying the pad10*1 rule.
   - For the SHAKE functions, append the bits "1111" to the message prior to
     applying the pad10*1 rule.
-When they refer to the functions in the [FIPS 202 draft][[fips202_draft], the test cases in [TestVectors](TestVectors) include these suffixes.
+When they refer to the functions in the [FIPS 202 draft][fips202_draft], the test cases in [TestVectors](TestVectors) include these suffixes.
