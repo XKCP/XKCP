@@ -150,7 +150,7 @@ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned 
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     const UINT32 * pI = (const UINT32 *)data;
-    UINT32 * pS = state;
+    UINT32 * pS = (UINT32*)state;
     UINT32 t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
@@ -198,7 +198,7 @@ void KeccakF1600_StateOverwriteLanes(void *state, const unsigned char *data, uns
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     const UINT32 * pI = (const UINT32 *)data;
-    UINT32 * pS = state;
+    UINT32 * pS = (UINT32 *)state;
     UINT32 t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
@@ -314,7 +314,7 @@ void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsig
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     UINT32 * pI = (UINT32 *)data;
-    const UINT32 * pS = state;
+    const UINT32 * pS = ( const UINT32 *)state;
     UINT32 t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
@@ -381,7 +381,7 @@ void KeccakF1600_StateExtractAndXORLanes(const void *state, unsigned char *data,
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     UINT32 * pI = (UINT32 *)data;
-    const UINT32 * pS = state;
+    const UINT32 * pS = (const UINT32 *)state;
     UINT32 t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
