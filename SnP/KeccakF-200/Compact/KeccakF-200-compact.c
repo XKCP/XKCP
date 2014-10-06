@@ -114,7 +114,7 @@ void KeccakF200_StatePermute(void *argState)
     tKeccakLane *state;
 	const tKeccakLane *rc;
 
-    state = argState;
+    state = (tKeccakLane*)argState;
     rc = KeccakF200_RoundConstants;
     do
     {
