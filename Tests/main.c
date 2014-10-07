@@ -27,7 +27,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testDuplex.h"
 #include "testSponge.h"
 #ifndef KeccakReference
-#include "timing.h"
+#ifdef PlSnP_P
+#include "timingPlSnP.h"
+#else
+#include "timingSnP.h"
+#endif
 #endif
 #endif
 
@@ -287,12 +291,17 @@ void displayDuplexIntermediateValues(void)
 #ifdef Keyak
 int main()
 {
-    testSnP();
 #ifdef PlSnP_P
     testPlSnP();
+#else
+    testSnP();
 #endif
 #ifndef KeyakReference
-    doTiming();
+#ifdef PlSnP_P
+    doTimingPlSnP();
+#else
+    doTimingSnP();
+#endif
 #endif
     testKeyak();
     return 0;
@@ -306,9 +315,10 @@ int main()
 #else
 int main()
 {
-    testSnP();
 #ifdef PlSnP_P
     testPlSnP();
+#else
+    testSnP();
 #endif
     testSponge();
     testDuplex();
@@ -319,7 +329,11 @@ int main()
     displayDuplexIntermediateValues();
 #endif
 #else
-    doTiming();
+#ifdef PlSnP_P
+    doTimingPlSnP();
+#else
+    doTimingSnP();
+#endif
 #endif
     return genKAT_main();
 }

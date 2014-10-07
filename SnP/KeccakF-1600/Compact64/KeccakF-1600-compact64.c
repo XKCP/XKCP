@@ -237,17 +237,17 @@ void KeccakF1600_StateComplementBit(void *state, unsigned int position)
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF1600_StatePermute(void *argState)
+void KeccakP1600_StatePermute(void *argState, UINT8 rounds, UINT8 LFSRinitialState)
 {
     tSmallUInt x, y, round;
     tKeccakLane        temp;
     tKeccakLane        BC[5];
     tKeccakLane     *state;
-    UINT8             LFSRstate;
+    UINT8           LFSRstate;
 
     state = argState;
-    LFSRstate = 0x01;
-    round = cKeccakNumberOfRounds;
+    LFSRstate = LFSRinitialState;
+    round = rounds;
     do
     {
         // Theta
@@ -298,6 +298,11 @@ void KeccakF1600_StatePermute(void *argState)
         state[0] ^= KeccakF1600_GetNextRoundConstant(&LFSRstate);
     }
     while( --round != 0 );
+}
+
+void KeccakF1600_StatePermute(void *argState)
+{
+    KeccakP1600_StatePermute(argState, cKeccakNumberOfRounds, 0x01);
 }
 
 /* ---------------------------------------------------------------- */

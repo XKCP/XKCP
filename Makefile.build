@@ -37,14 +37,17 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <fragment name="optimized">
-        <c>Tests/timing.c</c>
         <h>Common/brg_endian.h</h>
-        <h>Tests/timing.h</h>
         <gcc>-fomit-frame-pointer</gcc>
         <gcc>-O3</gcc>
         <gcc>-g0</gcc>
         <gcc>-march=native</gcc>
         <gcc>-mtune=native</gcc>
+    </fragment>
+
+    <fragment name="timingSnP">
+        <c>Tests/timingSnP.c</c>
+        <h>Tests/timingSnP.h</h>
     </fragment>
 
     <!-- Keccak[r+c=1600] -->
@@ -61,7 +64,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/KeccakF-1600/Reference/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
-        <gcc>-DKeccakReference</gcc>
+        <define>KeccakReference</define>
         <gcc>-O</gcc>
     </fragment>
 
@@ -74,11 +77,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
         <gcc>-O</gcc>
-        <gcc>-DKeccakReference</gcc>
-        <gcc>-DKeccakReference32BI</gcc>
+        <define>KeccakReference</define>
+        <define>KeccakReference32BI</define>
     </fragment>
 
-    <fragment name="optimized64" inherits="width1600 optimized">
+    <fragment name="optimized64" inherits="width1600 optimized timingSnP">
         <c>SnP/KeccakF-1600/Optimized64/KeccakF-1600-opt64.c</c>
         <h>SnP/KeccakF-1600/Optimized/KeccakF-1600-unrolling.macros</h>
         <h>SnP/KeccakF-1600/Optimized/KeccakF-1600-64.macros</h>
@@ -88,7 +91,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <gcc>-m64</gcc>
     </fragment>
 
-    <fragment name="inplace32BI" inherits="width1600 optimized">
+    <fragment name="inplace32BI" inherits="width1600 optimized timingSnP">
         <c>SnP/KeccakF-1600/Inplace32BI/KeccakF-1600-inplace32BI.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/KeccakF-1600/Inplace32BI/SnP-interface.h</h>
@@ -96,8 +99,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/SnP-Relaned.h</h>
     </fragment>
 
-    <fragment name="compact64" inherits="width1600 optimized">
-        <c>SnP/KeccakF-1600/Compact64/Keccak-compact64.c</c>
+    <fragment name="compact64" inherits="width1600 optimized timingSnP">
+        <c>SnP/KeccakF-1600/Compact64/KeccakF-1600-compact64.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/KeccakF-1600/Compact64/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
@@ -105,7 +108,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <gcc>-m64</gcc>
     </fragment>
 
-    <fragment name="asmx86-64-common" inherits="width1600 optimized">
+    <fragment name="asmx86-64-common" inherits="width1600 optimized timingSnP">
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/KeccakF-1600/OptimizedAsmX86-64/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
@@ -156,11 +159,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/KeccakF-800/Reference/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
-        <gcc>-DKeccakReference</gcc>
+        <define>KeccakReference</define>
         <gcc>-O</gcc>
     </fragment>
 
-    <fragment name="compact800" inherits="width800 optimized">
+    <fragment name="compact800" inherits="width800 optimized timingSnP">
         <c>SnP/KeccakF-800/Compact/KeccakF-800-compact.c</c>
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/KeccakF-800/Compact/SnP-interface.h</h>
@@ -185,7 +188,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/KeccakF-400/Reference/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
-        <gcc>-DKeccakReference</gcc>
+        <define>KeccakReference</define>
         <gcc>-O</gcc>
     </fragment>
 
@@ -205,7 +208,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/KeccakF-200/Reference/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>Tests/displayIntermediateValues.h</h>
-        <gcc>-DKeccakReference</gcc>
+        <define>KeccakReference</define>
         <gcc>-O</gcc>
     </fragment>
 
@@ -227,22 +230,43 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>CAESAR/test_crypto_aead.c</c>
     </fragment>
 
-    <fragment name="keyak" inherits="common">
-        <h>Constructions/KeccakDuplex.h</h>
-        <c>Constructions/KeccakDuplex.c</c>
-        <h>Constructions/KeccakSponge.h</h>
-        <c>Constructions/KeccakSponge.c</c>
+    <fragment name="keyak">
         <h>Modes/Keyak.h</h>
         <c>Modes/Keyak.c</c>
-        <gcc>-DKeyak</gcc>
     </fragment>
 
-    <fragment name="keyak_tests" inherits="keyak">
+    <fragment name="serial_keyak" inherits="common keyak P1">
+        <h>Constructions/KeccakDuplex.h</h>
+        <c>Constructions/KeccakDuplex.c</c>
+    </fragment>
+
+    <fragment name="parallel_keyak" inherits="common keyak">
+        <h>Constructions/KeccakParallelDuplex.h</h>
+        <c>Constructions/KeccakParallelDuplex.c</c>
+    </fragment>
+
+    <fragment name="serial_keyak_tests" inherits="serial_keyak">
+        <define>Keyak</define>
         <c>Tests/main.c</c>
         <h>Tests/testKeyak.h</h>
         <c>Tests/testKeyak.c</c>
         <h>Tests/testSnP.h</h>
         <c>Tests/testSnP.c</c>
+        <c>Tests/timingSnP.c</c>
+        <h>Tests/timingSnP.h</h>
+        <h>Constructions/KeccakSponge.h</h>
+        <c>Constructions/KeccakSponge.c</c>
+    </fragment>
+
+    <fragment name="parallel_keyak_tests" inherits="parallel_keyak">
+        <define>Keyak</define>
+        <c>Tests/main.c</c>
+        <h>Tests/testKeyak.h</h>
+        <c>Tests/testKeyak.c</c>
+        <h>Tests/testPlSnP.h</h>
+        <c>Tests/testPlSnP.c</c>
+        <c>Tests/timingPlSnP.c</c>
+        <h>Tests/timingPlSnP.h</h>
     </fragment>
 
     <fragment name="width800rounds12">
@@ -272,15 +296,17 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/KeccakP-800-12/Reference/SnP-interface.h</h>
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/SnP-FBWL-default.h</h>
-        <gcc>-DKeyakReference</gcc>
+        <define>KeyakReference</define>
     </fragment>
 
-    <target name="RiverKeyakReference" inherits="keyak_tests width800rounds12_reference P1"/>
-
-    <fragment name="RiverKeyakReferenceCAESAR" inherits="keyak width800rounds12_reference P1">
+    <fragment name="caesar_river_keyak">
         <c>CAESAR/RiverKeyak/encrypt.c</c>
         <h>CAESAR/RiverKeyak/api.h</h>
     </fragment>
+
+    <target name="RiverKeyakReference" inherits="serial_keyak_tests width800rounds12_reference"/>
+
+    <fragment name="RiverKeyakReferenceCAESAR" inherits="caesar_river_keyak serial_keyak width800rounds12_reference"/>
 
     <target name="crypto_aead/riverkeyakv1/ref" inherits="RiverKeyakReferenceCAESAR"/>
 
@@ -303,21 +329,25 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/KeccakP-1600-12/Reference/SnP-interface.h</h>
         <c>SnP/SnP-FBWL-default.c</c>
         <h>SnP/SnP-FBWL-default.h</h>
-        <gcc>-DKeyakReference</gcc>
+        <define>KeyakReference</define>
     </fragment>
 
-    <target name="LakeKeyakReference" inherits="keyak_tests width1600rounds12_reference P1"/>
-
-    <fragment name="LakeKeyakReferenceCAESAR" inherits="keyak width1600rounds12_reference P1">
+    <fragment name="caesar_lake_keyak">
         <c>CAESAR/LakeKeyak/encrypt.c</c>
         <h>CAESAR/LakeKeyak/api.h</h>
     </fragment>
 
-    <target name="crypto_aead/lakekeyakv1/ref" inherits="LakeKeyakReferenceCAESAR"/>
-
-    <target name="LakeKeyakReferenceCAESARTest" inherits="LakeKeyakReferenceCAESAR crypto_aead_test">
+    <fragment name="caesar_lake_keyak_test" inherits="caesar_lake_keyak crypto_aead_test">
         <c>CAESAR/LakeKeyak/selftest.c</c>
-    </target>
+    </fragment>
+
+    <target name="LakeKeyakReference" inherits="serial_keyak_tests width1600rounds12_reference"/>
+
+    <fragment name="LakeKeyakReferenceCAESAR" inherits="caesar_lake_keyak serial_keyak width1600rounds12_reference"/>
+    <target name="crypto_aead/lakekeyakv1/ref" inherits="LakeKeyakReferenceCAESAR"/>
+    <target name="LakeKeyakReferenceCAESARTest" inherits="LakeKeyakReferenceCAESAR caesar_lake_keyak_test"/>
+
+    <!-- Lake Keyak optimized in C (64 bits) -->
 
     <fragment name="width1600rounds12_optimized64" inherits="common width1600rounds12 optimized">
         <c>SnP/KeccakF-1600/Optimized64/KeccakF-1600-opt64.c</c>
@@ -326,26 +356,68 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>SnP/KeccakP-1600-12/Optimized64/KeccakP-1600-12-opt64.c</c>
         <h>SnP/KeccakP-1600-12/Optimized64/KeccakP-1600-12-unrolling.macros</h>
         <h>SnP/KeccakP-1600-12/Optimized64/SnP-interface.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+        <gcc>-m64</gcc>
+    </fragment>
+
+    <fragment name="LakeKeyakOpt64u6" inherits="serial_keyak width1600rounds12_optimized64">
+        <h>SnP/KeccakF-1600/Optimized64/u6/KeccakF-1600-opt64-settings.h</h>
+    </fragment>
+    <fragment name="LakeKeyakOpt64ufull" inherits="serial_keyak width1600rounds12_optimized64">
+        <h>SnP/KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
+    </fragment>
+    <fragment name="LakeKeyakOpt64LCu6" inherits="serial_keyak width1600rounds12_optimized64">
+        <h>SnP/KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
+    </fragment>
+    <fragment name="LakeKeyakOpt64LCufull" inherits="serial_keyak width1600rounds12_optimized64">
+        <h>SnP/KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
+    </fragment>
+    <fragment name="LakeKeyakOpt64LCufullshld" inherits="serial_keyak width1600rounds12_optimized64">
+        <h>SnP/KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
+    </fragment>
+
+    <fragment name="LakeKeyakCompact64" inherits="serial_keyak common width1600rounds12 optimized">
+        <c>SnP/KeccakF-1600/Compact64/KeccakF-1600-compact64.c</c>
+        <c>SnP/KeccakP-1600-12/Compact64/KeccakP-1600-12-compact64.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>SnP/KeccakP-1600-12/Compact64/SnP-interface.h</h>
         <h>SnP/SnP-FBWL-default.h</h>
         <h>SnP/SnP-Relaned.h</h>
         <gcc>-m64</gcc>
     </fragment>
 
-    <target name="LakeKeyakOpt64u6" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>SnP/KeccakF-1600/Optimized64/u6/KeccakF-1600-opt64-settings.h</h>
-    </target>
-    <target name="LakeKeyakOpt64ufull" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>SnP/KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
-    </target>
-    <target name="LakeKeyakOpt64LCu6" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>SnP/KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
-    </target>
-    <target name="LakeKeyakOpt64LCufull" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>SnP/KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
-    </target>
-    <target name="LakeKeyakOpt64LCufullshld" inherits="keyak_tests width1600rounds12_optimized64 P1">
-        <h>SnP/KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
-    </target>
+    <target name="LakeKeyakOpt64u6Test" inherits="LakeKeyakOpt64u6 serial_keyak_tests"/>
+    <target name="LakeKeyakOpt64ufullTest" inherits="LakeKeyakOpt64ufull serial_keyak_tests"/>
+    <target name="LakeKeyakOpt64LCu6Test" inherits="LakeKeyakOpt64LCu6 serial_keyak_tests"/>
+    <target name="LakeKeyakOpt64LCufullTest" inherits="LakeKeyakOpt64LCufull serial_keyak_tests"/>
+    <target name="LakeKeyakOpt64LCufullshldTest" inherits="LakeKeyakOpt64LCufullshld serial_keyak_tests"/>
+    <target name="LakeKeyakCompact64Test" inherits="LakeKeyakCompact64 serial_keyak_tests"/>
+
+    <target name="crypto_aead/lakekeyakv1/opt64u6" inherits="LakeKeyakOpt64u6 caesar_lake_keyak"/>
+    <target name="LakeKeyakOpt64u6CAESARTest" inherits="crypto_aead/lakekeyakv1/opt64u6 caesar_lake_keyak_test"/>
+    <target name="crypto_aead/lakekeyakv1/opt64ufull" inherits="LakeKeyakOpt64ufull caesar_lake_keyak"/>
+    <target name="crypto_aead/lakekeyakv1/opt64lcu6" inherits="LakeKeyakOpt64LCu6 caesar_lake_keyak"/>
+    <target name="crypto_aead/lakekeyakv1/opt64lcufull" inherits="LakeKeyakOpt64LCufull caesar_lake_keyak"/>
+    <target name="crypto_aead/lakekeyakv1/opt64lcufullshld" inherits="LakeKeyakOpt64LCufullshld caesar_lake_keyak"/>
+    <target name="crypto_aead/lakekeyakv1/compact64" inherits="LakeKeyakCompact64 caesar_lake_keyak"/>
+    <target name="LakeKeyakCompact64CAESARTest" inherits="crypto_aead/lakekeyakv1/compact64 caesar_lake_keyak_test"/>
+
+    <!-- Lake Keyak optimized in C (32 bits) -->
+
+    <fragment name="LakeKeyakInplace32BI" inherits="serial_keyak common width1600rounds12 optimized">
+        <c>SnP/KeccakF-1600/Inplace32BI/KeccakF-1600-inplace32BI.c</c>
+        <c>SnP/KeccakP-1600-12/Inplace32BI/KeccakP-1600-12-inplace32BI.c</c>
+        <c>SnP/SnP-FBWL-default.c</c>
+        <h>SnP/KeccakP-1600-12/Inplace32BI/SnP-interface.h</h>
+        <h>SnP/SnP-FBWL-default.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+
+    <target name="LakeKeyakInplace32BITest" inherits="LakeKeyakInplace32BI serial_keyak_tests"/>
+    <target name="crypto_aead/lakekeyakv1/inplace32bi" inherits="LakeKeyakInplace32BI caesar_lake_keyak"/>
+    <target name="LakeKeyakInplace32BICAESARTest" inherits="crypto_aead/lakekeyakv1/inplace32bi caesar_lake_keyak_test"/>
+
+    <!-- Lake Keyak optimized in x86_64 assembly -->
 
     <fragment name="width1600rounds12_asmx86-64-common" inherits="width1600rounds12 optimized">
         <c>SnP/SnP-FBWL-default.c</c>
@@ -353,45 +425,72 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/SnP-FBWL-default.h</h>
         <gcc>-m64</gcc>
     </fragment>
-
-    <fragment name="width1600rounds12_asmx86-64" inherits="width1600rounds12_asmx86-64-common">
+    <fragment name="LakeKeyakAsmx86-64" inherits="serial_keyak width1600rounds12_asmx86-64-common">
         <c>SnP/KeccakP-1600-12/OptimizedAsmX86-64/KeccakP-1600-12-x86-64-gas.s</c>
     </fragment>
-
-    <fragment name="width1600rounds12_asmx86-64-shld" inherits="width1600rounds12_asmx86-64-common">
+    <fragment name="LakeKeyakAsmx86-64-shld" inherits="serial_keyak width1600rounds12_asmx86-64-common">
         <c>SnP/KeccakP-1600-12/OptimizedAsmX86-64/KeccakP-1600-12-x86-64-shld-gas.s</c>
     </fragment>
 
-    <target name="LakeKeyakAsmx86-64" inherits="keyak_tests width1600rounds12_asmx86-64 P1"/>
-    <target name="LakeKeyakAsmx86-64-shld" inherits="keyak_tests width1600rounds12_asmx86-64-shld P1"/>
+    <target name="LakeKeyakAsmx86-64Test" inherits="LakeKeyakAsmx86-64 serial_keyak_tests"/>
+    <target name="LakeKeyakAsmx86-64-shldTest" inherits="LakeKeyakAsmx86-64-shld serial_keyak_tests"/>
+
+    <target name="crypto_aead/lakekeyakv1/asmx86-64" inherits="LakeKeyakAsmx86-64 caesar_lake_keyak"/>
+    <target name="LakeKeyakAsmx86-64CAESARTest" inherits="crypto_aead/lakekeyakv1/asmx86-64 caesar_lake_keyak_test"/>
+    <target name="crypto_aead/lakekeyakv1/asmx86-64-shld" inherits="LakeKeyakAsmx86-64-shld caesar_lake_keyak"/>
+
+    <!-- Lake Keyak optimized in ARM assembly -->
+
+    <fragment name="width1600rounds12_inplace32bi_ARM-common" inherits="width1600rounds12 optimized">
+        <h>SnP/KeccakP-1600-12/Optimized32biAsmARM/SnP-interface.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+    <fragment name="LakeKeyakAsmARMv6M" inherits="serial_keyak width1600rounds12_inplace32bi_ARM-common">
+        <c>SnP/KeccakP-1600-12/Optimized32biAsmARM/KeccakP-1600-12-inplace-32bi-armv6m-le-gcc.s</c>
+    </fragment>
+    <fragment name="LakeKeyakAsmARMv7M" inherits="serial_keyak width1600rounds12_inplace32bi_ARM-common">
+        <c>SnP/KeccakP-1600-12/Optimized32biAsmARM/KeccakP-1600-12-inplace-32bi-armv7m-le-gcc.s</c>
+    </fragment>
+    <fragment name="LakeKeyakAsmARMv7A" inherits="serial_keyak width1600rounds12_inplace32bi_ARM-common">
+        <c>SnP/KeccakP-1600-12/Optimized32biAsmARM/KeccakP-1600-12-inplace-32bi-armv7a-le-gcc.s</c>
+    </fragment>
+    <fragment name="LakeKeyakAsmARMv7A-NEON" inherits="serial_keyak width1600rounds12 optimized">
+        <c>SnP/KeccakP-1600-12/OptimizedAsmARM/KeccakP-1600-12-armv7a-le-neon-gcc.s</c>
+        <h>SnP/KeccakP-1600-12/OptimizedAsmARM/SnP-interface.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+
+    <target name="LakeKeyakAsmARMv6MTest" inherits="LakeKeyakAsmARMv6M serial_keyak_tests"/>
+    <target name="LakeKeyakAsmARMv7MTest" inherits="LakeKeyakAsmARMv7M serial_keyak_tests"/>
+    <target name="LakeKeyakAsmARMv7ATest" inherits="LakeKeyakAsmARMv7A serial_keyak_tests"/>
+    <target name="LakeKeyakAsmARMv7A-NEONTest" inherits="LakeKeyakAsmARMv7A-NEON serial_keyak_tests"/>
+
+    <target name="crypto_aead/lakekeyakv1/asmarmv6m" inherits="LakeKeyakAsmARMv6M caesar_lake_keyak"/>
+    <target name="crypto_aead/lakekeyakv1/asmarmv7m" inherits="LakeKeyakAsmARMv7M caesar_lake_keyak"/>
+    <target name="crypto_aead/lakekeyakv1/asmarmv7a" inherits="LakeKeyakAsmARMv7A caesar_lake_keyak"/>
+    <target name="crypto_aead/lakekeyakv1/asmarmv7aneon" inherits="LakeKeyakAsmARMv7A-NEON caesar_lake_keyak"/>
+    <target name="LakeKeyakAsmARMv7ACAESARTest" inherits="crypto_aead/lakekeyakv1/asmarmv7a caesar_lake_keyak_test"/>
+    <target name="LakeKeyakAsmARMv7A-NEONCAESARTest" inherits="crypto_aead/lakekeyakv1/asmarmv7aneon caesar_lake_keyak_test"/>
 
     <!-- Sea Keyak -->
 
-    <fragment name="parallel">
-        <h>Constructions/KeccakParallelDuplex.h</h>
-        <c>Constructions/KeccakParallelDuplex.c</c>
-    </fragment>
-
-    <fragment name="serial_fallback" inherits="parallel">
+    <fragment name="serial_fallback">
         <c>PlSnP/SerialFallback/SerialFallback.c</c>
-	<h>PlSnP/SerialFallback/PlSnP-interface.h</h>
+        <h>PlSnP/SerialFallback/PlSnP-interface.h</h>
         <c>PlSnP/PlSnP-FBWL-default.c</c>
         <h>PlSnP/PlSnP-FBWL-default.h</h>
     </fragment>
 
-    <fragment name="parallel_tests" inherits="parallel">
-        <c>Tests/testPlSnP.c</c>
-        <h>Tests/testPlSnP.h</h>
-    </fragment>
-
-    <fragment name="reference_sea" inherits="width1600rounds12_reference serial_fallback parallel_tests P2"/>
-
-    <target name="SeaKeyakReference" inherits="keyak_tests reference_sea"/>
-
-    <fragment name="SeaKeyakReferenceCAESAR" inherits="keyak reference_sea">
+    <fragment name="caesar_sea_keyak">
         <c>CAESAR/SeaKeyak/encrypt.c</c>
         <h>CAESAR/SeaKeyak/api.h</h>
     </fragment>
+
+    <fragment name="reference_sea" inherits="width1600rounds12_reference serial_fallback P2"/>
+
+    <target name="SeaKeyakReference" inherits="parallel_keyak_tests reference_sea"/>
+
+    <fragment name="SeaKeyakReferenceCAESAR" inherits="caesar_sea_keyak parallel_keyak reference_sea"/>
 
     <target name="crypto_aead/seakeyakv1/ref" inherits="SeaKeyakReferenceCAESAR"/>
 
@@ -399,16 +498,28 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>CAESAR/SeaKeyak/selftest.c</c>
     </target>
 
+    <fragment name="width1600rounds12p2_SIMD128">
+        <c>PlSnP/KeccakF1600/SIMD128/DoubleKeccakF1600.c</c>
+        <h>PlSnP/KeccakF1600/SIMD128/PlSnP-interface.h</h>
+        <h>PlSnP/KeccakF1600/SIMD128/SnP-interface.h</h>
+        <c>PlSnP/PlSnP-FBWL-default.c</c>
+        <h>PlSnP/PlSnP-FBWL-default.h</h>
+    </fragment>
+
+    <target name="SeaKeyakSIMD128" inherits="width1600rounds12p2_SIMD128 P2 parallel_keyak_tests"/>
+
     <!-- Ocean Keyak -->
 
-    <fragment name="reference_ocean" inherits="width1600rounds12_reference serial_fallback parallel_tests P4" />
-
-    <target name="OceanKeyakReference" inherits="keyak_tests reference_ocean"/>
-
-    <fragment name="OceanKeyakReferenceCAESAR" inherits="keyak reference_ocean">
+    <fragment name="caesar_ocean_keyak">
         <c>CAESAR/OceanKeyak/encrypt.c</c>
         <h>CAESAR/OceanKeyak/api.h</h>
     </fragment>
+
+    <fragment name="reference_ocean" inherits="width1600rounds12_reference serial_fallback P4" />
+
+    <target name="OceanKeyakReference" inherits="parallel_keyak_tests reference_ocean"/>
+
+    <fragment name="OceanKeyakReferenceCAESAR" inherits="caesar_ocean_keyak parallel_keyak reference_ocean"/>
 
     <target name="crypto_aead/oceankeyakv1/ref" inherits="OceanKeyakReferenceCAESAR"/>
 
@@ -436,6 +547,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <!-- KetjeJr -->
 
+    <fragment name="caesar_ketjejr">
+        <c>CAESAR/KetjeJr/encrypt.c</c>
+        <h>CAESAR/KetjeJr/api.h</h>
+    </fragment>
+
     <fragment name="keccakP200reference" inherits="common">
         <h>SnP/KeccakP-200/KeccakP-200-interface.h</h>
         <c>SnP/KeccakP-200/Reference/KeccakP-200-reference.c</c>
@@ -448,10 +564,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <target name="KetjeJrReference" inherits="ketje_tests keccakP200reference"/>
 
-    <fragment name="KetjeJrReferenceCAESAR" inherits="ketje keccakP200reference">
-        <c>CAESAR/KetjeJr/encrypt.c</c>
-        <h>CAESAR/KetjeJr/api.h</h>
-    </fragment>
+    <fragment name="KetjeJrReferenceCAESAR" inherits="caesar_ketjejr ketje keccakP200reference"/>
 
     <target name="crypto_aead/ketjejrv1/ref" inherits="KetjeJrReferenceCAESAR"/>
 
@@ -460,6 +573,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </target>
 
     <!-- KetjeSr -->
+
+    <fragment name="caesar_ketjesr">
+        <c>CAESAR/KetjeSr/encrypt.c</c>
+        <h>CAESAR/KetjeSr/api.h</h>
+    </fragment>
 
     <fragment name="keccakP400reference" inherits="common">
         <h>SnP/KeccakP-400/KeccakP-400-interface.h</h>
@@ -473,10 +591,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <target name="KetjeSrReference" inherits="ketje_tests keccakP400reference"/>
 
-    <fragment name="KetjeSrReferenceCAESAR" inherits="ketje keccakP400reference">
-        <c>CAESAR/KetjeSr/encrypt.c</c>
-        <h>CAESAR/KetjeSr/api.h</h>
-    </fragment>
+    <fragment name="KetjeSrReferenceCAESAR" inherits="caesar_ketjesr ketje keccakP400reference"/>
 
     <target name="crypto_aead/ketjesrv1/ref" inherits="KetjeSrReferenceCAESAR"/>
 

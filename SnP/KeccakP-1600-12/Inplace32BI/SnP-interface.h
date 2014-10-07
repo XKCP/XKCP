@@ -16,7 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _SnP_Interface_h_
 #define _SnP_Interface_h_
 
-#include "KeccakF-1600-interface.h"
+#include "KeccakP-1600-12-interface.h"
 #include "SnP-FBWL-default.h"
 
 #define SnP_width                           KeccakF_width
@@ -32,7 +32,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define SnP_OverwriteLanes                  KeccakF1600_StateOverwriteLanes
 #define SnP_OverwriteWithZeroes             KeccakF1600_StateOverwriteWithZeroes
 #define SnP_ComplementBit                   KeccakF1600_StateComplementBit
-#define SnP_Permute                         KeccakF1600_StatePermute
+#define SnP_Permute                         KeccakP1600_12_StatePermute
 #define SnP_ExtractBytesInLane              KeccakF1600_StateExtractBytesInLane
 #define SnP_ExtractLanes                    KeccakF1600_StateExtractLanes
 #define SnP_ExtractAndXORBytesInLane        KeccakF1600_StateExtractAndXORBytesInLane

@@ -342,7 +342,7 @@ void displayMeasurements1101001000(uint_32t *measurements)
     printf("\n");
 }
 
-void doTiming(void)
+void doTimingSnP(void)
 {
     uint_32t calibration;
     uint_32t measurement;
