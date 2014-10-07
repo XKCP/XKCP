@@ -83,7 +83,7 @@ void KeccakF800_StateInitialize(void *argState)
     tSmallUInt i;
     tKeccakLane *state;
 
-    state = argState;
+    state = (tKeccakLane*)argState;
     i = 25;
     do
     {

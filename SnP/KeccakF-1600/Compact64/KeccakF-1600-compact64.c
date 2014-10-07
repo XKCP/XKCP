@@ -245,7 +245,7 @@ void KeccakP1600_StatePermute(void *argState, UINT8 rounds, UINT8 LFSRinitialSta
     tKeccakLane     *state;
     UINT8           LFSRstate;
 
-    state = argState;
+    state = (tKeccakLane*)argState;
     LFSRstate = LFSRinitialState;
     round = rounds;
     do
