@@ -97,8 +97,8 @@ int Keccak_ParallelDuplexingFeedPartialInterleavedInput(Keccak_ParallelDuplexIns
     if (totalInputIndex+inByteLen > rho_maxInBytes*PlSnP_P)
         return 1;
 
-    if ((totalInputIndex == 0) && ((rho_maxInBytes % KeccakF_laneInBytes) == 0) && (inByteLen == rho_maxInBytes*PlSnP_P)) {
-        PlSnP_XORLanesAll(instances->states, in, rho_maxInBytes/KeccakF_laneInBytes, rho_maxInBytes/KeccakF_laneInBytes);
+    if ((totalInputIndex == 0) && ((rho_maxInBytes % SnP_laneLengthInBytes) == 0) && (inByteLen == rho_maxInBytes*PlSnP_P)) {
+        PlSnP_XORLanesAll(instances->states, in, rho_maxInBytes/SnP_laneLengthInBytes, rho_maxInBytes/SnP_laneLengthInBytes);
         for(i=0; i<PlSnP_P; i++)
             instances->byteInputIndex[i] = rho_maxInBytes;
         return 0;
@@ -164,8 +164,8 @@ int Keccak_ParallelDuplexingOverwritePartialInterleavedInput(Keccak_ParallelDupl
     if (totalInputIndex+inByteLen > rho_maxInBytes*PlSnP_P)
         return 1;
 
-    if ((totalInputIndex == 0) && ((rho_maxInBytes % KeccakF_laneInBytes) == 0) && (inByteLen == rho_maxInBytes*PlSnP_P)) {
-        PlSnP_OverwriteLanesAll(instances->states, in, rho_maxInBytes/KeccakF_laneInBytes, rho_maxInBytes/KeccakF_laneInBytes);
+    if ((totalInputIndex == 0) && ((rho_maxInBytes % SnP_laneLengthInBytes) == 0) && (inByteLen == rho_maxInBytes*PlSnP_P)) {
+        PlSnP_OverwriteLanesAll(instances->states, in, rho_maxInBytes/SnP_laneLengthInBytes, rho_maxInBytes/SnP_laneLengthInBytes);
         for(i=0; i<PlSnP_P; i++)
             instances->byteInputIndex[i] = rho_maxInBytes;
         return 0;
@@ -236,8 +236,8 @@ int Keccak_ParallelDuplexingGetFurtherInterleavedOutput(Keccak_ParallelDuplexIns
     if (totalOutputIndex+outByteLen > rho_maxInBytes*PlSnP_P)
         return 1;
 
-    if ((totalOutputIndex == 0) && ((rho_maxInBytes % KeccakF_laneInBytes) == 0) && (outByteLen == rho_maxInBytes*PlSnP_P)) {
-        PlSnP_ExtractLanesAll(instances->states, out, rho_maxInBytes/KeccakF_laneInBytes);
+    if ((totalOutputIndex == 0) && ((rho_maxInBytes % SnP_laneLengthInBytes) == 0) && (outByteLen == rho_maxInBytes*PlSnP_P)) {
+        PlSnP_ExtractLanesAll(instances->states, out, rho_maxInBytes/SnP_laneLengthInBytes);
         for(i=0; i<PlSnP_P; i++)
             instances->byteOutputIndex[i] = rho_maxInBytes;
         return 0;
@@ -290,8 +290,8 @@ int Keccak_ParallelDuplexingGetFurtherInterleavedOutputAndXOR(Keccak_ParallelDup
     if (totalOutputIndex+outByteLen > rho_maxInBytes*PlSnP_P)
         return 1;
 
-    if ((totalOutputIndex == 0) && ((rho_maxInBytes % KeccakF_laneInBytes) == 0) && (outByteLen == rho_maxInBytes*PlSnP_P)) {
-        PlSnP_ExtractAndXORLanesAll(instances->states, out, rho_maxInBytes/KeccakF_laneInBytes, rho_maxInBytes/KeccakF_laneInBytes);
+    if ((totalOutputIndex == 0) && ((rho_maxInBytes % SnP_laneLengthInBytes) == 0) && (outByteLen == rho_maxInBytes*PlSnP_P)) {
+        PlSnP_ExtractAndXORLanesAll(instances->states, out, rho_maxInBytes/SnP_laneLengthInBytes, rho_maxInBytes/SnP_laneLengthInBytes);
         for(i=0; i<PlSnP_P; i++)
             instances->byteOutputIndex[i] = rho_maxInBytes;
         return 0;
