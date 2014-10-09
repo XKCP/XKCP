@@ -151,7 +151,7 @@ KeccakF200_StateComplementBit   PROC
 ;//----------------------------------------------------------------------------
 ;//
 ;// void KeccakF200_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-;// 
+;//
 	ALIGN
 	EXPORT  KeccakF200_StateXORLanes
 KeccakF200_StateXORLanes   PROC
@@ -207,7 +207,7 @@ KeccakF200_StateXORBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF200_StateOverwriteLanes
-KeccakF200_StateOverwriteLanes	PROC 
+KeccakF200_StateOverwriteLanes	PROC
 	cbz		r2, KeccakF200_StateOverwriteLanes_Exit
 	subs	r3, r2, #4
 	bcc		KeccakF200_StateOverwriteLanes_Loop8
@@ -254,7 +254,7 @@ KeccakF200_StateOverwriteBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF200_StateOverwriteWithZeroes
-KeccakF200_StateOverwriteWithZeroes	PROC 
+KeccakF200_StateOverwriteWithZeroes	PROC
 	movs	r3, #0
 	lsrs	r2, r1, #2
 	beq		KeccakF200_StateOverwriteWithZeroes_Bytes
@@ -457,7 +457,7 @@ KeccakF200_StatePermute_RoundLoop
 	RhoPi	4, r9, _a, r8, _o		; _ga, _bo	 5 <  3
 	RhoPi	5, r8, _o, r11, _o		; _bo, _mo	 3 < 18
 	RhoPi	7, r11, _o, r11, _i		; _mo, _mi	18 < 17
-	RhoPi	2, r11, _i, r10, _e		; _mi, _ke	17 < 11	
+	RhoPi	2, r11, _i, r10, _e		; _mi, _ke	17 < 11
 	RhoPi	6, r10, _e, r9, _i		; _ke, _gi	11 <  7
 	RhoPi	3, r9, _i, r10, _a		; _gi, _ka	 7 < 10
 	RhoPi	1, r10, _a, r3,      0		; _ka, _be  10 < 1

@@ -125,7 +125,7 @@ void testPlSnP(void)
     // Testing PlSnP_OverwriteWithZeroes()
     {
         unsigned byteCount, instanceIndex;
-        
+
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++)
         for(byteCount=0; byteCount<=SnP_width/8; byteCount++) {
             PlSnP_PermuteAll(stateTest);
@@ -355,7 +355,7 @@ void testPlSnP(void)
         unsigned int i;
         FILE *f;
         char fileName[100];
-    
+
         PlSnP_ExtractLanesAll(stateAccumulated, buffer, SnP_laneCount, SnP_laneCount);
 #ifdef Keyak
         sprintf(fileName, "PlSnP/Parallel%dKeccakP-%d-12.txt", PlSnP_P, SnP_width);

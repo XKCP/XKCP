@@ -53,10 +53,10 @@ _su		equ 24*2
 	ldrh		r6, [$ptr, #$g]
 	eor			$result, $result, $rs
 	ldrh		$rs, [$ptr, #$k]
-	eor			$result, $result, r6				
+	eor			$result, $result, r6
 	ldrh		r6, [$ptr, #$m]
 	eor			$result, $result, $rs
-	eor			$result, $result, r6				
+	eor			$result, $result, r6
 	MEND
 
 	MACRO
@@ -66,10 +66,10 @@ _su		equ 24*2
 	ldr			r6, [$ptr, #$g]
 	eor			$resultL, $resultL, $rsL
 	ldr			$rsL, [$ptr, #$k]
-	eor			$resultL, $resultL, r6				
+	eor			$resultL, $resultL, r6
 	ldr			r6, [$ptr, #$m]
 	eor			$resultL, $resultL, $rsL
-	eor			$resultL, $resultL, r6				
+	eor			$resultL, $resultL, r6
 	lsr			$resultH, $resultL, #16
 	uxth 		$resultL, $resultL
 	MEND
@@ -256,7 +256,7 @@ KeccakF400_StateComplementBit   PROC
 ;//----------------------------------------------------------------------------
 ;//
 ;// void KeccakF400_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-;// 
+;//
 	ALIGN
 	EXPORT  KeccakF400_StateXORLanes
 KeccakF400_StateXORLanes   PROC
@@ -310,7 +310,7 @@ KeccakF400_StateXORBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF400_StateOverwriteLanes
-KeccakF400_StateOverwriteLanes	PROC 
+KeccakF400_StateOverwriteLanes	PROC
 	cbz		r2, KeccakF400_StateOverwriteLanes_Exit
 KeccakF400_StateOverwriteLanes_Loop
 	ldrh	r3, [r1], #2
@@ -347,7 +347,7 @@ KeccakF400_StateOverwriteBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF400_StateOverwriteWithZeroes
-KeccakF400_StateOverwriteWithZeroes	PROC 
+KeccakF400_StateOverwriteWithZeroes	PROC
 	movs	r3, #0
 	lsrs	r2, r1, #2
 	beq		KeccakF400_StateOverwriteWithZeroes_Bytes
@@ -464,11 +464,11 @@ KeccakF400_StatePermute   PROC
 	sub			sp, sp, #2*25+6
 	adr			r8, KeccakF400_StatePermute_RoundConstants
 KeccakF400_StatePermuteIntern
-    ldrh		r9, [r0, #_sa] 
-    ldrh		r10, [r0, #_se] 
-    ldrh		r11, [r0, #_si] 
-    ldrh		lr, [r0, #_su] 
-    ldrh		r12, [r0, #_so] 
+    ldrh		r9, [r0, #_sa]
+    ldrh		r10, [r0, #_se]
+    ldrh		r11, [r0, #_si]
+    ldrh		lr, [r0, #_su]
+    ldrh		r12, [r0, #_so]
 	mov			r5, lr
     xor5		r7, r0, _bu, _gu, _ku, _mu, lr
 KeccakF400_StatePermute_RoundLoop

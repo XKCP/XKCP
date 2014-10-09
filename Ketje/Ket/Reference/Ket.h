@@ -62,13 +62,13 @@ void Ket_StateOverwrite( void *state, unsigned int offset, const unsigned char *
 void Ket_StateXORByte( void *state, unsigned int offset, unsigned char data );
 
 /**
-  * Function that performs a step, after XORing a framing byte into the state at requested offset. 
+  * Function that performs a step, after XORing a framing byte into the state at requested offset.
   *
   * @param  state    		    Pointer to the permutation state.
   * @param  size                Offset in bytes where to XOR the framing value in the state.
   * @param  frameAndPaddingBits Framing value to pad after data.
   */
-void Ket_Step( void *state, unsigned int size, unsigned char frameAndPaddingBits ); 
+void Ket_Step( void *state, unsigned int size, unsigned char frameAndPaddingBits );
 
 /**
   * Function that feeds (partial) associated data that consists of a sequence of complete Ketje blocks.
@@ -81,7 +81,7 @@ void Ket_FeedAssociatedDataBlocks( void *state, const unsigned char *data, unsig
 
 /**
   * Function that presents a (partial) plaintext body that consists of a
-  * sequence of blocks for wrapping. 
+  * sequence of blocks for wrapping.
   *
   * @param  state    		    Pointer to the permutation state.
   * @param  plaintext           The (partial) plaintext body.
@@ -92,7 +92,7 @@ void Ket_UnwrapBlocks( void *state, const unsigned char *ciphertext, unsigned ch
 
 /**
   * Function that presents a (partial) ciphertext body that consists of a
-  * sequence of blocks for unwrapping. 
+  * sequence of blocks for unwrapping.
   *
   * @param  state    		    Pointer to the permutation state.
   * @param  ciphertext          The (partial) ciphertext body.

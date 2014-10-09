@@ -109,7 +109,7 @@
 @//
 .align 8
 .global   KeccakF200_Initialize
-KeccakF200_Initialize:  
+KeccakF200_Initialize:
 	bx		lr
 
 
@@ -119,7 +119,7 @@ KeccakF200_Initialize:
 @//
 .align 8
 .global   KeccakF200_StateInitialize
-KeccakF200_StateInitialize:  
+KeccakF200_StateInitialize:
 	movs	r1, #0
 	movs	r2, #0
 	movs	r3, #0
@@ -135,7 +135,7 @@ KeccakF200_StateInitialize:
 @//
 .align 8
 .global   KeccakF200_StateComplementBit
-KeccakF200_StateComplementBit:  
+KeccakF200_StateComplementBit:
 	add		r0, r1, LSR #3
 	ldrb	r2, [r0]
 	and		r1, r1, #7
@@ -149,10 +149,10 @@ KeccakF200_StateComplementBit:
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF200_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-@// 
+@//
 .align 8
 .global   KeccakF200_StateXORLanes
-KeccakF200_StateXORLanes:  
+KeccakF200_StateXORLanes:
 	cbz		r2, KeccakF200_StateXORLanes_Exit
 	subs	r3, r2, #4
 	bcc		KeccakF200_StateXORLanes_Loop8
@@ -182,7 +182,7 @@ KeccakF200_StateXORLanes_Exit:
 @//
 .align 8
 .global   KeccakF200_StateXORBytesInLane
-KeccakF200_StateXORBytesInLane:  
+KeccakF200_StateXORBytesInLane:
 	ldr		r12, [sp]
 	cmp		r12, #0
 	beq		KeccakF200_StateXORBytesInLane_Exit
@@ -205,7 +205,7 @@ KeccakF200_StateXORBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakF200_StateOverwriteLanes
-KeccakF200_StateOverwriteLanes: 
+KeccakF200_StateOverwriteLanes:
 	cbz		r2, KeccakF200_StateOverwriteLanes_Exit
 	subs	r3, r2, #4
 	bcc		KeccakF200_StateOverwriteLanes_Loop8
@@ -252,7 +252,7 @@ KeccakF200_StateOverwriteBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakF200_StateOverwriteWithZeroes
-KeccakF200_StateOverwriteWithZeroes: 
+KeccakF200_StateOverwriteWithZeroes:
 	movs	r3, #0
 	lsrs	r2, r1, #2
 	beq		KeccakF200_StateOverwriteWithZeroes_Bytes
@@ -277,7 +277,7 @@ KeccakF200_StateOverwriteWithZeroes_Exit:
 @//
 .align 8
 .global   KeccakF200_StateExtractLanes
-KeccakF200_StateExtractLanes:  
+KeccakF200_StateExtractLanes:
 	cbz		r2, KeccakF200_StateExtractLanes_Exit
 	subs	r3, r2, #4
 	bcc		KeccakF200_StateExtractLanes_Loop8
@@ -303,7 +303,7 @@ KeccakF200_StateExtractLanes_Exit:
 @//
 .align 8
 .global   KeccakF200_StateExtractBytesInLane
-KeccakF200_StateExtractBytesInLane:  
+KeccakF200_StateExtractBytesInLane:
 	ldr		r12, [sp]
 	cmp		r12, #0
 	beq		KeccakF200_StateExtractBytesInLane_Exit
@@ -377,7 +377,7 @@ KeccakF200_StateExtractAndXORBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakP200_StatePermute
-KeccakP200_StatePermute:  
+KeccakP200_StatePermute:
 	push		{r4-r12,lr}
 	adr			lr, KeccakP200_StatePermute_RoundConstants+18
 	sub			lr, lr, r1
@@ -456,7 +456,7 @@ KeccakP200_StatePermute_RoundLoop:
 	RhoPi	4, r9, _a, r8, _o		@ _ga, _bo	 5 <  3
 	RhoPi	5, r8, _o, r11, _o		@ _bo, _mo	 3 < 18
 	RhoPi	7, r11, _o, r11, _i		@ _mo, _mi	18 < 17
-	RhoPi	2, r11, _i, r10, _e		@ _mi, _ke	17 < 11	
+	RhoPi	2, r11, _i, r10, _e		@ _mi, _ke	17 < 11
 	RhoPi	6, r10, _e, r9, _i		@ _ke, _gi	11 <  7
 	RhoPi	3, r9, _i, r10, _a		@ _gi, _ka	 7 < 10
 	RhoPi	1, r10, _a, r3,      0		@ _ka, _be  10 < 1

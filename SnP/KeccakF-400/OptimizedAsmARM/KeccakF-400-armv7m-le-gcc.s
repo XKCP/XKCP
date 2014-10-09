@@ -52,10 +52,10 @@
 	ldrh		r6, [\ptr, #\g]
 	eor			\result, \result, \rs
 	ldrh		\rs, [\ptr, #\k]
-	eor			\result, \result, r6				
+	eor			\result, \result, r6
 	ldrh		r6, [\ptr, #\m]
 	eor			\result, \result, \rs
-	eor			\result, \result, r6				
+	eor			\result, \result, r6
 	.endm
 
 .macro	xor5D		resultL,resultH,ptr,b,g,k,m,rsL,rsH
@@ -64,10 +64,10 @@
 	ldr			r6, [\ptr, #\g]
 	eor			\resultL, \resultL, \rsL
 	ldr			\rsL, [\ptr, #\k]
-	eor			\resultL, \resultL, r6				
+	eor			\resultL, \resultL, r6
 	ldr			r6, [\ptr, #\m]
 	eor			\resultL, \resultL, \rsL
-	eor			\resultL, \resultL, r6				
+	eor			\resultL, \resultL, r6
 	lsr			\resultH, \resultL, #16
 	uxth 		\resultL, \resultL
 	.endm
@@ -207,7 +207,7 @@
 @//
 .align 8
 .global   KeccakF400_Initialize
-KeccakF400_Initialize:  
+KeccakF400_Initialize:
 	bx		lr
 
 
@@ -217,7 +217,7 @@ KeccakF400_Initialize:
 @//
 .align 8
 .global   KeccakF400_StateInitialize
-KeccakF400_StateInitialize:  
+KeccakF400_StateInitialize:
 	movs	r1, #0
 	movs	r2, #0
 	movs	r3, #0
@@ -235,7 +235,7 @@ KeccakF400_StateInitialize:
 @//
 .align 8
 .global   KeccakF400_StateComplementBit
-KeccakF400_StateComplementBit:  
+KeccakF400_StateComplementBit:
 	add		r0, r1, LSR #3
 	ldrb	r2, [r0]
 	and		r1, r1, #7
@@ -249,10 +249,10 @@ KeccakF400_StateComplementBit:
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF400_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-@// 
+@//
 .align 8
 .global   KeccakF400_StateXORLanes
-KeccakF400_StateXORLanes:  
+KeccakF400_StateXORLanes:
 	cbz		r2, KeccakF400_StateXORLanes_Exit
 	subs	r3, r2, #2
 	bcc		KeccakF400_StateXORLanes_1Lane
@@ -280,7 +280,7 @@ KeccakF400_StateXORLanes_Exit:
 @//
 .align 8
 .global   KeccakF400_StateXORBytesInLane
-KeccakF400_StateXORBytesInLane:  
+KeccakF400_StateXORBytesInLane:
 	ldr		r12, [sp]
 	cmp		r12, #0
 	beq		KeccakF400_StateXORBytesInLane_Exit
@@ -303,7 +303,7 @@ KeccakF400_StateXORBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakF400_StateOverwriteLanes
-KeccakF400_StateOverwriteLanes: 
+KeccakF400_StateOverwriteLanes:
 	cbz		r2, KeccakF400_StateOverwriteLanes_Exit
 KeccakF400_StateOverwriteLanes_Loop:
 	ldrh	r3, [r1], #2
@@ -340,7 +340,7 @@ KeccakF400_StateOverwriteBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakF400_StateOverwriteWithZeroes
-KeccakF400_StateOverwriteWithZeroes: 
+KeccakF400_StateOverwriteWithZeroes:
 	movs	r3, #0
 	lsrs	r2, r1, #2
 	beq		KeccakF400_StateOverwriteWithZeroes_Bytes
@@ -365,7 +365,7 @@ KeccakF400_StateOverwriteWithZeroes_Exit:
 @//
 .align 8
 .global   KeccakF400_StateExtractLanes
-KeccakF400_StateExtractLanes:  
+KeccakF400_StateExtractLanes:
 	cbz		r2, KeccakF400_StateExtractLanes_Exit
 	subs	r3, r2, #2
 	bcc		KeccakF400_StateExtractLanes_1Lane
@@ -389,7 +389,7 @@ KeccakF400_StateExtractLanes_Exit:
 @//
 .align 8
 .global   KeccakF400_StateExtractBytesInLane
-KeccakF400_StateExtractBytesInLane:  
+KeccakF400_StateExtractBytesInLane:
 	ldr		r12, [sp]
 	cmp		r12, #0
 	beq		KeccakF400_StateExtractBytesInLane_Exit
@@ -452,16 +452,16 @@ KeccakF400_StateExtractAndXORBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakF400_StatePermute
-KeccakF400_StatePermute:  
+KeccakF400_StatePermute:
 	push		{r4-r12,lr}
 	sub			sp, sp, #2*25+6
 	adr			r8, KeccakF400_StatePermute_RoundConstants
 KeccakF400_StatePermuteIntern:
-    ldrh		r9, [r0, #_sa] 
-    ldrh		r10, [r0, #_se] 
-    ldrh		r11, [r0, #_si] 
-    ldrh		lr, [r0, #_su] 
-    ldrh		r12, [r0, #_so] 
+    ldrh		r9, [r0, #_sa]
+    ldrh		r10, [r0, #_se]
+    ldrh		r11, [r0, #_si]
+    ldrh		lr, [r0, #_su]
+    ldrh		r12, [r0, #_so]
 	mov			r5, lr
     xor5		r7, r0, _bu, _gu, _ku, _mu, lr
 KeccakF400_StatePermute_RoundLoop:

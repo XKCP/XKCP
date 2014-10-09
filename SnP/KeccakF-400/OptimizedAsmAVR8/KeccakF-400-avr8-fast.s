@@ -680,7 +680,7 @@ rotate16_1bit_right:
     #undef  pRound
 
     #undef  rpState
-    #undef  zero    
+    #undef  zero
     #undef  rX
     #undef  rY
     #undef  rZ

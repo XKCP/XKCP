@@ -79,7 +79,7 @@
 .equ rDo,		%r8
 .equ rDu,		%r9
 
-.equ rBa,		%r10 
+.equ rBa,		%r10
 .equ rBe,		%r11
 .equ rBi,		%r12
 .equ rBo,		%r13
@@ -125,7 +125,7 @@
     xorq    rCi, rDo
     shld    $1, rDu, rDu
 
-    # Theta Rho Pi Chi Iota, result b 
+    # Theta Rho Pi Chi Iota, result b
     movq    _ba(\iState), rBa
     movq    _ge(\iState), rBe
     xorq    rCo, rDu
@@ -170,7 +170,7 @@
     movq    rBi, rCe
     .endif
 
-    # Theta Rho Pi Chi, result g 
+    # Theta Rho Pi Chi, result g
     movq    _gu(\iState), rBe
     xorq    rDu, rBe
     movq    _ka(\iState), rBi
@@ -375,27 +375,27 @@
 
     subq    $8*25, %rsp
 
-    movq    _ba(rpState), rCa             
+    movq    _ba(rpState), rCa
     movq    _be(rpState), rCe
     movq    _bu(rpState), rCu
 
-    xorq    _ga(rpState), rCa             
+    xorq    _ga(rpState), rCa
     xorq    _ge(rpState), rCe
-    xorq    _gu(rpState), rCu             
+    xorq    _gu(rpState), rCu
 
-    xorq    _ka(rpState), rCa             
+    xorq    _ka(rpState), rCa
     xorq    _ke(rpState), rCe
-    xorq    _ku(rpState), rCu             
+    xorq    _ku(rpState), rCu
 
-    xorq    _ma(rpState), rCa             
+    xorq    _ma(rpState), rCa
     xorq    _me(rpState), rCe
-    xorq    _mu(rpState), rCu             
+    xorq    _mu(rpState), rCu
 
     xorq    _sa(rpState), rCa
     xorq    _se(rpState), rCe
     movq    _si(rpState), rDi
     movq    _so(rpState), rDo
-    xorq    _su(rpState), rCu             
+    xorq    _su(rpState), rCu
 
     mKeccakRound    rpState, rpStack, 0x000000008000808b, 0
     mKeccakRound    rpStack, rpState, 0x800000000000008b, 0
@@ -566,7 +566,7 @@ KeccakF1600_StateInitialize:
 
 KeccakPowerOf2:
     .byte   1, 2, 4, 8, 16, 32, 64, 128
-   
+
 #----------------------------------------------------------------------------
 #
 #    void KeccakF1600_StateComplementBit(void *state, unsigned int position)
@@ -587,7 +587,7 @@ KeccakF1600_StateComplementBit:
 #----------------------------------------------------------------------------
 #
 # void KeccakF1600_StateXORBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-# 
+#
     .size   KeccakF1600_StateXORBytes, .-KeccakF1600_StateXORBytes
     .align  8
     .global KeccakF1600_StateXORBytes
@@ -844,7 +844,7 @@ KeccakP1600_12_StatePermute:
 
 #----------------------------------------------------------------------------
 #
-# size_t KeccakP1600_12_SnP_FBWL_Absorb( void *state, unsigned int laneCount, unsigned char *data, 
+# size_t KeccakP1600_12_SnP_FBWL_Absorb( void *state, unsigned int laneCount, unsigned char *data,
 #                                     size_t dataByteLen, unsigned char trailingBits )
 #
     .size   KeccakP1600_12_SnP_FBWL_Absorb, .-KeccakP1600_12_SnP_FBWL_Absorb
@@ -925,7 +925,7 @@ KeccakP1600_12_SnP_FBWL_Absorb_VariableLaneCountLoop:
     pushq   arg2
     pushq   arg1
     movq    arg2, arg4                  # prepare xor call: length (in bytes)
-    shlq    $3, arg4                    
+    shlq    $3, arg4
     movq    arg3, arg2                  # data pointer
     xorq    arg3, arg3                  # offset = 0
     callq   KeccakF1600_StateXORBytes   #  (void *state, const unsigned char *data, unsigned int offset, unsigned int length)
@@ -936,7 +936,7 @@ KeccakP1600_12_SnP_FBWL_Absorb_VariableLaneCountLoop:
     pushq   arg3
     callq   KeccakP1600_12_StatePermute
     popq    arg3
-    popq    arg2    
+    popq    arg2
     popq    arg4
     subq    arg2, arg4                  # while (nbrLanes >= 21)
     jnc     KeccakP1600_12_SnP_FBWL_Absorb_VariableLaneCountLoop
@@ -963,12 +963,12 @@ KeccakP1600_12_SnP_FBWL_Squeeze_Loop21:    # Fixed laneCount = 21 (rate = 1344, 
     pushq   arg3
     mKeccakPermutationInlinable
     popq    arg3
-    
+
     movq    _ba(arg1), rT1a
     movq    _be(arg1), rT1e
     movq    _bi(arg1), rT1i
     movq    _bo(arg1), rT1o
-    notq    rT1e                # be 
+    notq    rT1e                # be
     notq    rT1i                # bi
     movq    _bu(arg1), rT1u
     movq    rT1a, _ba(arg3)
@@ -1048,7 +1048,7 @@ KeccakP1600_12_SnP_FBWL_Squeeze_VariableLaneCountLoop:
 
 #----------------------------------------------------------------------------
 #
-# size_t KeccakP1600_12_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+# size_t KeccakP1600_12_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 #                                   unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits )
 #
     .size   KeccakP1600_12_SnP_FBWL_Wrap, .-KeccakP1600_12_SnP_FBWL_Wrap
@@ -1080,7 +1080,7 @@ KeccakP1600_12_SnP_FBWL_Wrap_Loop21:       # Fixed laneCount = 21 (rate = 1344, 
     movq    rT1i, _bi(arg1)
     movq    rT1o, _bo(arg1)
     movq    rT1u, _bu(arg1)
-    notq    rT1e                # be 
+    notq    rT1e                # be
     notq    rT1i                # bi
     movq    rT1a, _ba(arg4)
     movq    rT1e, _be(arg4)
@@ -1213,7 +1213,7 @@ KeccakP1600_12_SnP_FBWL_Wrap_VariableLaneCountLoop:
     popq    arg4
     popq    arg3
 
-    popq    arg2    
+    popq    arg2
     popq    arg5
     subq    arg2, arg5                  # while (nbrLanes >= 21)
     jnc     KeccakP1600_12_SnP_FBWL_Wrap_VariableLaneCountLoop
@@ -1221,7 +1221,7 @@ KeccakP1600_12_SnP_FBWL_Wrap_VariableLaneCountLoop:
 
 #----------------------------------------------------------------------------
 #
-# size_t KeccakP1600_12_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+# size_t KeccakP1600_12_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 #                                     unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
 #
     .size   KeccakP1600_12_SnP_FBWL_Unwrap, .-KeccakP1600_12_SnP_FBWL_Unwrap
@@ -1245,7 +1245,7 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop21:     # Fixed laneCount = 21 (rate = 1344, 
     movq    _bi(arg3), rT1i
     movq    _bo(arg3), rT1o
     movq    _bu(arg3), rT1u
-    notq    rT1e                # be 
+    notq    rT1e                # be
     notq    rT1i                # bi
     movq    _ba(arg1), rT2a
     movq    _be(arg1), rT2e
@@ -1402,7 +1402,7 @@ KeccakP1600_12_SnP_FBWL_Unwrap_VariableLaneCount_LaneLoop:
     callq   KeccakP1600_12_StatePermute
     popq    arg4
     popq    arg3
-    popq    arg2    
+    popq    arg2
     popq    arg5
     subq    arg2, arg5                  # while (nbrLanes >= 21)
     jnc     KeccakP1600_12_SnP_FBWL_Unwrap_VariableLaneCountLoop

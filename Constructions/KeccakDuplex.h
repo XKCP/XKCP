@@ -59,19 +59,19 @@ ALIGN typedef struct Keccak_DuplexInstanceStruct {
 int Keccak_DuplexInitialize(Keccak_DuplexInstance *duplexInstance, unsigned int rate, unsigned int capacity);
 
 /**
-  * Function to make a duplexing call to the duplex object initialized 
+  * Function to make a duplexing call to the duplex object initialized
   * with Keccak_DuplexInitialize().
-  * @param  duplexInstance  Pointer to the duplex instance initialized 
+  * @param  duplexInstance  Pointer to the duplex instance initialized
   *                     by Keccak_DuplexInitialize().
   * @param  sigmaBegin  Pointer to the first part of the input σ given as bytes.
   *                     Trailing bits are given in @a delimitedSigmaEnd.
   * @param  sigmaBeginByteLen   The number of input bytes provided in @a sigmaBegin.
   * @param  Z           Pointer to the buffer where to store the output data Z.
   * @param  ZByteLen    The number of output bytes desired for Z.
-  *                     If @a ZByteLen*8 is greater than the rate r, 
+  *                     If @a ZByteLen*8 is greater than the rate r,
   *                     the last byte contains only r modulo 8 bits,
   *                     in the least significant bits.
-  * @param  delimitedSigmaEnd   Byte containing from 0 to 7 trailing bits that must be 
+  * @param  delimitedSigmaEnd   Byte containing from 0 to 7 trailing bits that must be
   *                     appended to the input data in @a sigmaBegin.
   *                     These <i>n</i>=|σ| mod 8 bits must be in the least significant bit positions.
   *                     These bits must be delimited with a bit 1 at position <i>n</i>

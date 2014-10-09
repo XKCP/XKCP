@@ -1077,7 +1077,7 @@ rotate64_7byte_left:
     #undef  pRound
 
     #undef  rpState
-    #undef  zero    
+    #undef  zero
     #undef  rX
     #undef  rY
     #undef  rZ

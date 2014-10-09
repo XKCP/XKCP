@@ -202,7 +202,7 @@
 @//
 .align 8
 .global   KeccakF800_Initialize
-KeccakF800_Initialize:  
+KeccakF800_Initialize:
 	bx		lr
 
 
@@ -212,7 +212,7 @@ KeccakF800_Initialize:
 @//
 .align 8
 .global   KeccakF800_StateInitialize
-KeccakF800_StateInitialize:  
+KeccakF800_StateInitialize:
 	push	{r4 - r5}
 	movs	r1, #0
 	movs	r2, #0
@@ -234,7 +234,7 @@ KeccakF800_StateInitialize:
 @//
 .align 8
 .global   KeccakF800_StateComplementBit
-KeccakF800_StateComplementBit:  
+KeccakF800_StateComplementBit:
 	lsrs	r2, r1, #5
 	add		r0, r2, LSL #2
 	ldr		r2, [r0]
@@ -249,10 +249,10 @@ KeccakF800_StateComplementBit:
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF800_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-@// 
+@//
 .align 8
 .global   KeccakF800_StateXORLanes
-KeccakF800_StateXORLanes:  
+KeccakF800_StateXORLanes:
 	subs	r2, r2, #4
 	bcc		KeccakF800_StateXORLanes_LessThan4Lanes
 	push	{ r4 - r5 }
@@ -292,7 +292,7 @@ KeccakF800_StateXORLanes_Exit:
 @//
 .align 8
 .global   KeccakF800_StateXORBytesInLane
-KeccakF800_StateXORBytesInLane:  
+KeccakF800_StateXORBytesInLane:
 	adds	r0, r0, r3
 	ldr		r3, [sp]
 	cmp		r3, #0
@@ -315,7 +315,7 @@ KeccakF800_StateXORBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakF800_StateOverwriteLanes
-KeccakF800_StateOverwriteLanes: 
+KeccakF800_StateOverwriteLanes:
 	subs	r2, r2, #8
 	bcc		KeccakF800_StateOverwriteLanes_LessThan8Lanes
 	push	{ r4 - r5 }
@@ -379,7 +379,7 @@ KeccakF800_StateOverwriteBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakF800_StateOverwriteWithZeroes
-KeccakF800_StateOverwriteWithZeroes: 
+KeccakF800_StateOverwriteWithZeroes:
 	movs	r3, #0
 	lsrs	r2, r1, #2
 	beq		KeccakF800_StateOverwriteWithZeroes_Bytes
@@ -404,7 +404,7 @@ KeccakF800_StateOverwriteWithZeroes_Exit:
 @//
 .align 8
 .global   KeccakF800_StateExtractLanes
-KeccakF800_StateExtractLanes:  
+KeccakF800_StateExtractLanes:
 	subs	r2, r2, #8
 	bcc		KeccakF800_StateExtractLanes_LessThan8Lanes
 	push	{ r4 - r5 }
@@ -447,7 +447,7 @@ KeccakF800_StateExtractLanes_Exit:
 @//
 .align 8
 .global   KeccakF800_StateExtractBytesInLane
-KeccakF800_StateExtractBytesInLane:  
+KeccakF800_StateExtractBytesInLane:
 	ldr		r12, [sp]
 	cmp		r12, #0
 	beq		KeccakF800_StateExtractBytesInLane_Exit
@@ -550,7 +550,7 @@ KeccakF800_StatePermute_RoundConstantsWithTerminator:
 		.long 			0x0000800a
 		.long 			0x8000000a
 		.long 			0x80008081
-		.long 			0x00008080 
+		.long 			0x00008080
 		.long 			0			@//terminator
 
 @//----------------------------------------------------------------------------
@@ -559,7 +559,7 @@ KeccakF800_StatePermute_RoundConstantsWithTerminator:
 @//
 .align 8
 .global   KeccakF800_StatePermute
-KeccakF800_StatePermute:  
+KeccakF800_StatePermute:
 	push		{r4-r12,lr}
 	adr			lr, KeccakF800_StatePermute_RoundConstantsWithTerminator
 	add			r2, r0, #_sa
@@ -570,10 +570,10 @@ KeccakF800_StatePermute:
 	mov			r6, r12
 	eor			r7, r7, r12
 	ldr			r12, [r0, #_ku]
-	eor			r7, r7, r1				
+	eor			r7, r7, r1
 	ldr			r1, [r0, #_mu]
 	eor			r7, r7, r12
-	eor			r7, r7, r1				
+	eor			r7, r7, r1
 KeccakF800_StatePermute_RoundLoop:
 	KeccakRound	sp, r0
 	KeccakRound	r0, sp
@@ -586,7 +586,7 @@ KeccakF800_StatePermute_RoundLoop:
 
 @----------------------------------------------------------------------------
 @
-@ size_t KeccakF800_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data, 
+@ size_t KeccakF800_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data,
 @										size_t dataByteLen, unsigned char trailingBits )
 @
 .align 8
@@ -690,7 +690,7 @@ KeccakF800_SnP_FBWL_Squeeze_Exit:
 
 @----------------------------------------------------------------------------
 @
-@ size_t KeccakF800_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+@ size_t KeccakF800_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 @										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits )
 @
 .align 8
@@ -754,7 +754,7 @@ KeccakF800_SnP_FBWL_Wrap_Exit:
 
 @----------------------------------------------------------------------------
 @
-@ size_t KeccakF800_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+@ size_t KeccakF800_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 @										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
 @
 .align 8

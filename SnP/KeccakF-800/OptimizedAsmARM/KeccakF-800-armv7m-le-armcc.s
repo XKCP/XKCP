@@ -160,10 +160,10 @@ _su		equ 24*4
 		ldr			r6, [$ptr, #$g]
 		eor			$result, $result, $rs
 		ldr			$rs, [$ptr, #$k]
-		eor			$result, $result, r6				
+		eor			$result, $result, r6
 		ldr			r6, [$ptr, #$m]
 		eor			$result, $result, $rs
-		eor			$result, $result, r6				
+		eor			$result, $result, r6
 		MEND
 
 		MACRO
@@ -246,7 +246,7 @@ KeccakF800_StateComplementBit   PROC
 ;//----------------------------------------------------------------------------
 ;//
 ;// void KeccakF800_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-;// 
+;//
 		ALIGN
 		EXPORT  KeccakF800_StateXORLanes
 KeccakF800_StateXORLanes   PROC
@@ -311,7 +311,7 @@ KeccakF800_StateXORBytesInLane_Exit
 ;//
 		ALIGN
 		EXPORT  KeccakF800_StateOverwriteLanes
-KeccakF800_StateOverwriteLanes	PROC 
+KeccakF800_StateOverwriteLanes	PROC
 		subs	r2, r2, #8
 		bcc		KeccakF800_StateOverwriteLanes_LessThan8Lanes
 		push	{ r4 - r5 }
@@ -375,7 +375,7 @@ KeccakF800_StateOverwriteBytesInLane_Exit
 ;//
 		ALIGN
 		EXPORT  KeccakF800_StateOverwriteWithZeroes
-KeccakF800_StateOverwriteWithZeroes	PROC 
+KeccakF800_StateOverwriteWithZeroes	PROC
 		movs	r3, #0
 		lsrs	r2, r1, #2
 		beq		KeccakF800_StateOverwriteWithZeroes_Bytes
@@ -546,7 +546,7 @@ KeccakF800_StatePermute_RoundConstantsWithTerminator
 		dcd			0x0000800a
 		dcd			0x8000000a
 		dcd			0x80008081
-		dcd			0x00008080 
+		dcd			0x00008080
 		dcd			0			;//terminator
 
 ;//----------------------------------------------------------------------------
@@ -559,11 +559,11 @@ KeccakF800_StatePermute   PROC
 		push		{r4-r12,lr}
 		sub			sp, sp, #4*25
 		adr			r8, KeccakF800_StatePermute_RoundConstantsWithTerminator
-	    ldr			r9, [r0, #_sa] 
-	    ldr			r10, [r0, #_se] 
-	    ldr			r11, [r0, #_si] 
-	    ldr			lr, [r0, #_su] 
-	    ldr			r12, [r0, #_so] 
+	    ldr			r9, [r0, #_sa]
+	    ldr			r10, [r0, #_se]
+	    ldr			r11, [r0, #_si]
+	    ldr			lr, [r0, #_su]
+	    ldr			r12, [r0, #_so]
 		mov			r5, lr
 	    xor5		r7, r0, _bu, _gu, _ku, _mu, lr
 KeccakP800_StatePermute_RoundLoop
@@ -577,7 +577,7 @@ KeccakP800_StatePermute_RoundLoop
 
 ;----------------------------------------------------------------------------
 ;
-; size_t KeccakF800_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data, 
+; size_t KeccakF800_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data,
 ;										size_t dataByteLen, unsigned char trailingBits )
 ;
 	ALIGN
@@ -681,7 +681,7 @@ KeccakF800_SnP_FBWL_Squeeze_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; size_t KeccakF800_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+; size_t KeccakF800_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 ;										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits )
 ;
 	ALIGN
@@ -745,7 +745,7 @@ KeccakF800_SnP_FBWL_Wrap_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; size_t KeccakF800_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+; size_t KeccakF800_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 ;										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
 ;
 	ALIGN

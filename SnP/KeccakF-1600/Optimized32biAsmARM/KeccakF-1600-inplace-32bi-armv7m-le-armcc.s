@@ -190,11 +190,11 @@ mSize	equ 6*4
 
 	ldr			$result, [r0, #$b]
 	ldr			r1, [r0, #$g]
-	eors		$result, $result, r1				
+	eors		$result, $result, r1
 	ldr			r1, [r0, #$k]
 	eors		$result, $result, r1
 	ldr			r1, [r0, #$m]
-	eors		$result, $result, r1				
+	eors		$result, $result, r1
 	ldr			r1, [r0, #$s]
 	eors		$result, $result, r1
 	MEND
@@ -537,7 +537,7 @@ KeccakF1600_StateComplementBit   PROC
 ;//----------------------------------------------------------------------------
 ;//
 ;// void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-;// 
+;//
 	ALIGN
 	EXPORT  KeccakF1600_StateXORLanes
 KeccakF1600_StateXORLanes   PROC
@@ -593,7 +593,7 @@ KeccakF1600_StateXORBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF1600_StateOverwriteLanes
-KeccakF1600_StateOverwriteLanes	PROC 
+KeccakF1600_StateOverwriteLanes	PROC
 	cmp		r2, #0
 	beq		KeccakF1600_StateOverwriteLanes_Exit
 	push	{r4 - r7}
@@ -655,7 +655,7 @@ KeccakF1600_StateOverwriteBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF1600_StateOverwriteWithZeroes
-KeccakF1600_StateOverwriteWithZeroes	PROC 
+KeccakF1600_StateOverwriteWithZeroes	PROC
 	push	{r4 - r5}
 	lsrs	r2, r1, #3
 	beq		KeccakF1600_StateOverwriteWithZeroes_Bytes
@@ -847,7 +847,7 @@ KeccakF1600_StatePermute_RoundLoop
 
 ;----------------------------------------------------------------------------
 ;
-; size_t KeccakF1600_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data, 
+; size_t KeccakF1600_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data,
 ;										size_t dataByteLen, unsigned char trailingBits )
 ;
 	ALIGN
@@ -861,7 +861,7 @@ KeccakF1600_SnP_FBWL_Absorb	PROC
 	mov		r4, r0
 	mov		r5, r1
 	mov		r6, r2
-	ldr		r1, [sp, #(8+0)*4]				; Bit Interleave trailingBits 
+	ldr		r1, [sp, #(8+0)*4]				; Bit Interleave trailingBits
 	and		r2, r1, #0x55
 	orr		r2, r2, r2, LSR #1
 	and		r2, r2, #0x33
@@ -925,7 +925,7 @@ KeccakF1600_SnP_FBWL_Squeeze_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; size_t KeccakF1600_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+; size_t KeccakF1600_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 ;										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits )
 ;
 	ALIGN
@@ -933,7 +933,7 @@ KeccakF1600_SnP_FBWL_Squeeze_Exit
 KeccakF1600_SnP_FBWL_Wrap	PROC
 	push	{r4-r12,lr}
 	mov		r8, #0
-	ldr		r4, [sp, #(10+0)*4]				;  
+	ldr		r4, [sp, #(10+0)*4]				;
 	lsr		r4, r4, #3						; r4: nbrLanes = dataByteLen / SnP_laneLengthInBytes
 	subs	r4, r4, r1						; if (nbrLanes >= laneCount)
 	bcs		KeccakF1600_SnP_FBWL_Wrap_Go
@@ -942,7 +942,7 @@ KeccakF1600_SnP_FBWL_Wrap_Go
 	mov		r5, r1							; r5: laneCount
 	mov		r6, r2							; r6: dataIn
 	mov		r7, r3							; r7: dataOut
-	ldr		r1, [sp, #(10+1)*4]				; r9,r10 Bit Interleave trailingBits 
+	ldr		r1, [sp, #(10+1)*4]				; r9,r10 Bit Interleave trailingBits
 	and		r2, r1, #0x55
 	orr		r2, r2, r2, LSR #1
 	and		r2, r2, #0x33
@@ -975,7 +975,7 @@ KeccakF1600_SnP_FBWL_WrapLane_Loop
 	str		r1, [r0, #4]
 	sub		r0, r5, LSL #3					; state pointer back to initial position
 	bl		KeccakF1600_StatePermute
-	subs	r4, r4, r5						; dec nbrLanes 
+	subs	r4, r4, r5						; dec nbrLanes
 	bcs		KeccakF1600_SnP_FBWL_Wrap_Loop
 KeccakF1600_SnP_FBWL_Wrap_Exit
 	mov		r0, r8
@@ -984,7 +984,7 @@ KeccakF1600_SnP_FBWL_Wrap_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; size_t KeccakF1600_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+; size_t KeccakF1600_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 ;										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
 ;
 	ALIGN
@@ -992,7 +992,7 @@ KeccakF1600_SnP_FBWL_Wrap_Exit
 KeccakF1600_SnP_FBWL_Unwrap	PROC
 	push	{r4-r12,lr}
 	mov		r8, #0
-	ldr		r4, [sp, #(10+0)*4]				;  
+	ldr		r4, [sp, #(10+0)*4]				;
 	lsr		r4, r4, #3						; r4: nbrLanes = dataByteLen / SnP_laneLengthInBytes
 	subs	r4, r4, r1						; if (nbrLanes >= laneCount)
 	bcs		KeccakF1600_SnP_FBWL_Unwrap_Go
@@ -1001,7 +1001,7 @@ KeccakF1600_SnP_FBWL_Unwrap_Go
 	mov		r5, r1							; r5: laneCount
 	mov		r6, r2							; r6: dataIn
 	mov		r7, r3							; r7: dataOut
-	ldr		r1, [sp, #(10+1)*4]				; r9,r10 Bit Interleave trailingBits 
+	ldr		r1, [sp, #(10+1)*4]				; r9,r10 Bit Interleave trailingBits
 	and		r2, r1, #0x55
 	orr		r2, r2, r2, LSR #1
 	and		r2, r2, #0x33
@@ -1038,7 +1038,7 @@ KeccakF1600_SnP_FBWL_UnwrapLane_Loop
 	str		r1, [r0, #4]
 	sub		r0, r5, LSL #3					; state pointer back to initial position
 	bl		KeccakF1600_StatePermute
-	subs	r4, r4, r5						; dec nbrLanes 
+	subs	r4, r4, r5						; dec nbrLanes
 	bcs		KeccakF1600_SnP_FBWL_Unwrap_Loop
 KeccakF1600_SnP_FBWL_Unwrap_Exit
 	mov		r0, r8

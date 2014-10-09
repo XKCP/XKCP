@@ -34,11 +34,11 @@ typedef struct {
   * @param  hashInstance    Pointer to the hash instance to be initialized.
   * @param  rate        The value of the rate r.
   * @param  capacity    The value of the capacity c.
-  * @param  hashbitlen  The desired number of output bits, 
+  * @param  hashbitlen  The desired number of output bits,
   *                     or 0 for an arbitrarily-long output.
   * @param  delimitedSuffix Bits that will be automatically appended to the end
   *                         of the input message, as in domain separation.
-  *                         This is a byte containing from 0 to 7 bits 
+  *                         This is a byte containing from 0 to 7 bits
   *                         formatted like the @a delimitedData parameter of
   *                         the Keccak_SpongeAbsorbLastFewBits() function.
   * @pre    One must have r+c=1600 and the rate a multiple of 8 bits in this implementation.
@@ -73,7 +73,7 @@ HashReturn Keccak_HashInitialize(Keccak_HashInstance *hashInstance, unsigned int
 /**
   * Function to give input data to be absorbed.
   * @param  hashInstance    Pointer to the hash instance initialized by Keccak_HashInitialize().
-  * @param  data        Pointer to the input data. 
+  * @param  data        Pointer to the input data.
   *                     When @a databitLen is not a multiple of 8, the last bits of data must be
   *                     in the least significant bits of the last byte (little-endian convention).
   * @param  databitLen  The number of input bits provided in the input data.
@@ -86,7 +86,7 @@ HashReturn Keccak_HashUpdate(Keccak_HashInstance *hashInstance, const BitSequenc
   * Function to call after all input blocks have been input and to get
   * output bits if the length was specified when calling Keccak_HashInitialize().
   * @param  hashInstance    Pointer to the hash instance initialized by Keccak_HashInitialize().
-  * If @a hashbitlen was not 0 in the call to Keccak_HashInitialize(), the number of 
+  * If @a hashbitlen was not 0 in the call to Keccak_HashInitialize(), the number of
   *     output bits is equal to @a hashbitlen.
   * If @a hashbitlen was 0 in the call to Keccak_HashInitialize(), the output bits
   *     must be extracted using the Keccak_HashSqueeze() function.

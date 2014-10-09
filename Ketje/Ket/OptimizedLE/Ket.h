@@ -70,7 +70,7 @@ void Ket_StateOverwrite( void *state, unsigned int offset, const unsigned char *
   * @param  size                Size of data input in state.
   * @param  framing	            Framing value to pad after data.
   */
-void Ket_Step( void *state, unsigned int size, unsigned char framing ); 
+void Ket_Step( void *state, unsigned int size, unsigned char framing );
 
 /**
   * Function that feeds (partial) associated data that consists of a sequence of complete Ketje blocks.
@@ -83,7 +83,7 @@ void Ket_FeedAssociatedDataBlocks( void *state, const unsigned char *data, unsig
 
 /**
   * Function that presents a (partial) plaintext body that consists of a
-  * sequence of blocks for wrapping. 
+  * sequence of blocks for wrapping.
   *
   * @param  state    		    Pointer to the permutation state.
   * @param  plaintext           The (partial) plaintext body.
@@ -94,7 +94,7 @@ void Ket_UnwrapBlocks( void *state, const unsigned char *ciphertext, unsigned ch
 
 /**
   * Function that presents a (partial) ciphertext body that consists of a
-  * sequence of blocks for unwrapping. 
+  * sequence of blocks for unwrapping.
   *
   * @param  state    		    Pointer to the permutation state.
   * @param  ciphertext          The (partial) ciphertext body.

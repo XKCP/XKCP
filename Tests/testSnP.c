@@ -89,7 +89,7 @@ void testSnP(void)
     // Testing SnP_OverwriteWithZeroes()
     {
         unsigned byteCount;
-        
+
         for(byteCount=0; byteCount<=SnP_width/8; byteCount++) {
             SnP_Permute(stateTest);
             SnP_OverwriteWithZeroes(stateTest, byteCount);
@@ -101,7 +101,7 @@ void testSnP(void)
     // Testing SnP_ComplementBit()
     {
         unsigned bitPosition;
-        
+
         for(bitPosition=0; bitPosition<SnP_width; bitPosition += (bitPosition < 128) ? 1 : 19) {
             SnP_ComplementBit(stateTest, bitPosition);
             accumulateState(stateAccumulated, stateTest);
@@ -300,7 +300,7 @@ void testSnP(void)
         unsigned int i;
         FILE *f;
         char fileName[100];
-    
+
         SnP_ExtractBytes(stateAccumulated, buffer, 0, SnP_width/8);
 #ifdef Keyak
         sprintf(fileName, "SnP/KeccakP-%d-12.txt", SnP_width);

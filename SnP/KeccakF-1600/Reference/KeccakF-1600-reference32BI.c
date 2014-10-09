@@ -151,12 +151,12 @@ void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, con
 
         memset(laneAsBytes, 0, 8);
         memcpy(laneAsBytes+offset, data, length);
-        low = laneAsBytes[0] 
-            | ((UINT32)(laneAsBytes[1]) << 8) 
+        low = laneAsBytes[0]
+            | ((UINT32)(laneAsBytes[1]) << 8)
             | ((UINT32)(laneAsBytes[2]) << 16)
             | ((UINT32)(laneAsBytes[3]) << 24);
-        high = laneAsBytes[4] 
-            | ((UINT32)(laneAsBytes[5]) << 8) 
+        high = laneAsBytes[4]
+            | ((UINT32)(laneAsBytes[5]) << 8)
             | ((UINT32)(laneAsBytes[6]) << 16)
             | ((UINT32)(laneAsBytes[7]) << 24);
         toBitInterleaving(low, high, lane, lane+1);
@@ -343,7 +343,7 @@ void theta(UINT32 *A)
 
     for(x=0; x<5; x++) {
         for(z=0; z<2; z++) {
-            C[x][z] = 0; 
+            C[x][z] = 0;
             for(y=0; y<5; y++)
                 C[x][z] ^= A[index(x, y, z)];
         }
@@ -383,7 +383,7 @@ void chi(UINT32 *A)
     unsigned int x, y, z;
     UINT32 C[5][2];
 
-    for(y=0; y<5; y++) { 
+    for(y=0; y<5; y++) {
         for(x=0; x<5; x++)
             for(z=0; z<2; z++)
                 C[x][z] = A[index(x, y, z)] ^ ((~A[index(x+1, y, z)]) & A[index(x+2, y, z)]);

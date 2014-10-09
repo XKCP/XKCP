@@ -126,7 +126,7 @@ void KeccakF1600_StateComplementBit(void *state, unsigned int position)
     if (position < 1600) {
         unsigned int bytePosition = position/8;
         unsigned int bitPosition = position%8;
-        
+
         ((unsigned char *)state)[bytePosition] ^= (UINT8)1 << bitPosition;
     }
 }
@@ -218,8 +218,8 @@ void theta(tKeccakLane *A)
     tKeccakLane C[5], D[5];
 
     for(x=0; x<5; x++) {
-        C[x] = 0; 
-        for(y=0; y<5; y++) 
+        C[x] = 0;
+        for(y=0; y<5; y++)
             C[x] ^= A[index(x, y)];
     }
     for(x=0; x<5; x++)
@@ -253,7 +253,7 @@ void chi(tKeccakLane *A)
     unsigned int x, y;
     tKeccakLane C[5];
 
-    for(y=0; y<5; y++) { 
+    for(y=0; y<5; y++) {
         for(x=0; x<5; x++)
             C[x] = A[index(x, y)] ^ ((~A[index(x+1, y)]) & A[index(x+2, y)]);
         for(x=0; x<5; x++)

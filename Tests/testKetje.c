@@ -40,7 +40,7 @@ void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigne
     unsigned int i;
 
     for( i=0; i<length; i++) {
-        unsigned int iRolled = i*seed1; 
+        unsigned int iRolled = i*seed1;
         unsigned char byte = (iRolled+length+seed2)%0xFF;
         data[i] = byte;
     }
@@ -48,7 +48,7 @@ void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigne
 
 void errorIfNotZero( unsigned int result )
 {
-	if ( result != 0 ) 
+	if ( result != 0 )
 	{
 		printf( "\n\nError\n" );
 		exit( result );
@@ -82,7 +82,7 @@ void testKetje()
 #ifdef OUTPUT
     assert(f != NULL);
 #endif
-	
+
 	Ketje_Initialize(&checksum, 0, 0, 0, 0);
 
     for( keySizeInBits=keyMaxSizeInBits; keySizeInBits >=96; keySizeInBits -= (keySizeInBits > 200) ? 100 : ((keySizeInBits > 128) ? 27 : 16))
@@ -143,7 +143,7 @@ void testKetje()
 					//printf("ADlen %u, Mlen %u\n", ADlen, Mlen);
                     generateSimpleRawMaterial(associatedData, ADlen, 0x34+Mlen, 3);
                     generateSimpleRawMaterial(plaintext, Mlen, 0x45+ADlen, 4);
-                            
+
                     {
                         unsigned int split = myMin(ADlen/4, (unsigned int)200);
 						unsigned int i;
@@ -155,14 +155,14 @@ void testKetje()
                             errorIfNotZero( Ketje_FeedAssociatedData( &ketje1, associatedData+split, ADlen-split) );
                     }
                     errorIfNotZero( Ketje_FeedAssociatedData( &ketje2, associatedData, ADlen) );
-                            
+
                     {
                         unsigned int split = Mlen/3;
                         memcpy(ciphertext, plaintext, split);
                         errorIfNotZero( Ketje_WrapPlaintext( &ketje1, ciphertext, ciphertext, split) ); // in place
                         errorIfNotZero( Ketje_WrapPlaintext( &ketje1, plaintext+split, ciphertext+split, Mlen-split) );
                     }
-                            
+
                     {
                         unsigned int split = Mlen/3*2;
                         memcpy(plaintextPrime, ciphertext, split);

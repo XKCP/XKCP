@@ -15,7 +15,7 @@
 
 @ WARNING: These functions work only on little endian CPU with@ ARMv7m architecture (Cortex-M3, ...).
 
-	
+
 		.thumb
 .text
 
@@ -158,10 +158,10 @@
 		ldr			r6, [\ptr, #\g]
 		eor			\result, \result, \rs
 		ldr			\rs, [\ptr, #\k]
-		eor			\result, \result, r6				
+		eor			\result, \result, r6
 		ldr			r6, [\ptr, #\m]
 		eor			\result, \result, \rs
-		eor			\result, \result, r6				
+		eor			\result, \result, r6
 		.endm
 
 .macro		xorrol 		b, yy, rr
@@ -194,9 +194,9 @@
 @//
 	.align 8
 .global   KeccakF800_Initialize
-KeccakF800_Initialize:  
+KeccakF800_Initialize:
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
@@ -204,7 +204,7 @@ KeccakF800_Initialize:
 @//
 	.align 8
 .global   KeccakF800_StateInitialize
-KeccakF800_StateInitialize:  
+KeccakF800_StateInitialize:
 		push	{r4 - r5}
 		movs	r1, #0
 		movs	r2, #0
@@ -218,7 +218,7 @@ KeccakF800_StateInitialize:
 		stmia	r0!, { r1 - r5 }
 		pop		{r4 - r5}
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
@@ -226,7 +226,7 @@ KeccakF800_StateInitialize:
 @//
 	.align 8
 .global   KeccakF800_StateComplementBit
-KeccakF800_StateComplementBit:  
+KeccakF800_StateComplementBit:
 		lsrs	r2, r1, #5
 		add		r0, r2, LSL #2
 		ldr		r2, [r0]
@@ -236,15 +236,15 @@ KeccakF800_StateComplementBit:
 		eors	r3, r3, r2
 		str		r3, [r0]
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF800_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-@// 
+@//
 	.align 8
 .global   KeccakF800_StateXORLanes
-KeccakF800_StateXORLanes:  
+KeccakF800_StateXORLanes:
 		subs	r2, r2, #4
 		bcc		KeccakF800_StateXORLanes_LessThan4Lanes
 		push	{ r4 - r5 }
@@ -276,7 +276,7 @@ KeccakF800_StateXORLanes_LoopLane:
 		bne		KeccakF800_StateXORLanes_LoopLane
 KeccakF800_StateXORLanes_Exit:
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
@@ -284,7 +284,7 @@ KeccakF800_StateXORLanes_Exit:
 @//
 	.align 8
 .global   KeccakF800_StateXORBytesInLane
-KeccakF800_StateXORBytesInLane:  
+KeccakF800_StateXORBytesInLane:
 		adds	r0, r0, r3
 		ldr		r3, [sp]
 		cbz		r3, KeccakF800_StateXORBytesInLane_Exit
@@ -298,7 +298,7 @@ KeccakF800_StateXORBytesInLane_Loop:
 		bne		KeccakF800_StateXORBytesInLane_Loop
 KeccakF800_StateXORBytesInLane_Exit:
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
@@ -306,7 +306,7 @@ KeccakF800_StateXORBytesInLane_Exit:
 @//
 	.align 8
 .global   KeccakF800_StateOverwriteLanes
-KeccakF800_StateOverwriteLanes: 
+KeccakF800_StateOverwriteLanes:
 		subs	r2, r2, #8
 		bcc		KeccakF800_StateOverwriteLanes_LessThan8Lanes
 		push	{ r4 - r5 }
@@ -341,7 +341,7 @@ KeccakF800_StateOverwriteLanes_LessThan2Lanes:
 		str		r3, [r0]
 KeccakF800_StateOverwriteLanes_Exit:
 		bx		lr
-	
+
 
 
 @//----------------------------------------------------------------------------
@@ -362,7 +362,7 @@ KeccakF800_StateOverwriteBytesInLane_Loop:
 		bne		KeccakF800_StateOverwriteBytesInLane_Loop
 KeccakF800_StateOverwriteBytesInLane_Exit:
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
@@ -370,7 +370,7 @@ KeccakF800_StateOverwriteBytesInLane_Exit:
 @//
 	.align 8
 .global   KeccakF800_StateOverwriteWithZeroes
-KeccakF800_StateOverwriteWithZeroes: 
+KeccakF800_StateOverwriteWithZeroes:
 		movs	r3, #0
 		lsrs	r2, r1, #2
 		beq		KeccakF800_StateOverwriteWithZeroes_Bytes
@@ -387,7 +387,7 @@ KeccakF800_StateOverwriteWithZeroes_LoopBytes:
 		bne		KeccakF800_StateOverwriteWithZeroes_LoopBytes
 KeccakF800_StateOverwriteWithZeroes_Exit:
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
@@ -395,7 +395,7 @@ KeccakF800_StateOverwriteWithZeroes_Exit:
 @//
 	.align 8
 .global   KeccakF800_StateExtractLanes
-KeccakF800_StateExtractLanes:  
+KeccakF800_StateExtractLanes:
 		subs	r2, r2, #8
 		bcc		KeccakF800_StateExtractLanes_LessThan8Lanes
 		push	{ r4 - r5 }
@@ -430,7 +430,7 @@ KeccakF800_StateExtractLanes_LessThan2Lanes:
 		str		r3, [r1], #4
 KeccakF800_StateExtractLanes_Exit:
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
@@ -438,7 +438,7 @@ KeccakF800_StateExtractLanes_Exit:
 @//
 	.align 8
 .global   KeccakF800_StateExtractBytesInLane
-KeccakF800_StateExtractBytesInLane:  
+KeccakF800_StateExtractBytesInLane:
 		ldr		r12, [sp]
 		cmp		r12, #0
 		beq		KeccakF800_StateExtractBytesInLane_Exit
@@ -451,7 +451,7 @@ KeccakF800_StateExtractBytesInLane_Loop:
 		bne		KeccakF800_StateExtractBytesInLane_Loop
 KeccakF800_StateExtractBytesInLane_Exit:
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
@@ -493,7 +493,7 @@ KeccakF800_StateExtractAndXORLanes_LoopLane:
 		bne		KeccakF800_StateExtractAndXORLanes_LoopLane
 KeccakF800_StateExtractAndXORLanes_Exit:
 		bx		lr
-	
+
 
 @//----------------------------------------------------------------------------
 @//
@@ -516,7 +516,7 @@ KeccakF800_StateExtractAndXORBytesInLane_Loop:
 		bne		KeccakF800_StateExtractAndXORBytesInLane_Loop
 KeccakF800_StateExtractAndXORBytesInLane_Exit:
 		bx		lr
-	
+
 
 	.align 8
 KeccakF800_StatePermute_RoundConstantsWithTerminator:
@@ -541,7 +541,7 @@ KeccakF800_StatePermute_RoundConstantsWithTerminator:
 		.long 			0x0000800a
 		.long 			0x8000000a
 		.long 			0x80008081
-		.long 			0x00008080 
+		.long 			0x00008080
 		.long 			0			@//terminator
 
 @//----------------------------------------------------------------------------
@@ -550,15 +550,15 @@ KeccakF800_StatePermute_RoundConstantsWithTerminator:
 @//
 	.align 8
 .global   KeccakF800_StatePermute
-KeccakF800_StatePermute:  
+KeccakF800_StatePermute:
 		push		{r4-r12,lr}
 		sub			sp, sp, #4*25
 		adr			r8, KeccakF800_StatePermute_RoundConstantsWithTerminator
-	    ldr			r9, [r0, #_sa] 
-	    ldr			r10, [r0, #_se] 
-	    ldr			r11, [r0, #_si] 
-	    ldr			lr, [r0, #_su] 
-	    ldr			r12, [r0, #_so] 
+	    ldr			r9, [r0, #_sa]
+	    ldr			r10, [r0, #_se]
+	    ldr			r11, [r0, #_si]
+	    ldr			lr, [r0, #_su]
+	    ldr			r12, [r0, #_so]
 		mov			r5, lr
 	    xor5		r7, r0, _bu, _gu, _ku, _mu, lr
 KeccakP800_StatePermute_RoundLoop:
@@ -568,11 +568,11 @@ KeccakP800_StatePermute_RoundLoop:
 		bne			KeccakP800_StatePermute_RoundLoop
 		add			sp,sp,#4*25
 		pop			{r4-r12,pc}
-	
+
 
 @----------------------------------------------------------------------------
 @
-@ size_t KeccakF800_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data, 
+@ size_t KeccakF800_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data,
 @										size_t dataByteLen, unsigned char trailingBits )
 @
 .align 8
@@ -676,7 +676,7 @@ KeccakF800_SnP_FBWL_Squeeze_Exit:
 
 @----------------------------------------------------------------------------
 @
-@ size_t KeccakF800_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+@ size_t KeccakF800_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 @										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits )
 @
 .align 8
@@ -740,7 +740,7 @@ KeccakF800_SnP_FBWL_Wrap_Exit:
 
 @----------------------------------------------------------------------------
 @
-@ size_t KeccakF800_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+@ size_t KeccakF800_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 @										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
 @
 .align 8

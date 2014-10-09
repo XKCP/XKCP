@@ -53,11 +53,11 @@ _su		equ 24*4
 	ldr			r6, [$ptr, #$g]
 	eors		$result, $result, r6
 	ldr			r6, [$ptr, #$k]
-	eors		$result, $result, r6				
+	eors		$result, $result, r6
 	ldr			r6, [$ptr, #$m]
-	eors		$result, $result, r6				
+	eors		$result, $result, r6
 	ldr			r6, [$ptr, #$s]
-	eors		$result, $result, r6				
+	eors		$result, $result, r6
 	MEND
 
 	MACRO
@@ -249,7 +249,7 @@ KeccakF800_StateComplementBit   PROC
 ;//----------------------------------------------------------------------------
 ;//
 ;// void KeccakF800_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-;// 
+;//
 	ALIGN
 	EXPORT  KeccakF800_StateXORLanes
 KeccakF800_StateXORLanes   PROC
@@ -325,7 +325,7 @@ KeccakF800_StateXORBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF800_StateOverwriteLanes
-KeccakF800_StateOverwriteLanes	PROC 
+KeccakF800_StateOverwriteLanes	PROC
 	subs	r2, r2, #1
 	bcc		KeccakF800_StateOverwriteLanes_Exit
 	lsls	r2, r2, #2
@@ -376,7 +376,7 @@ KeccakF800_StateOverwriteBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF800_StateOverwriteWithZeroes
-KeccakF800_StateOverwriteWithZeroes	PROC 
+KeccakF800_StateOverwriteWithZeroes	PROC
 	movs	r3, #0
 	lsrs	r2, r1, #2
 	beq		KeccakF800_StateOverwriteWithZeroes_Bytes
@@ -567,7 +567,7 @@ KeccakF800_StatePermute_RoundConstants
 	dcd			0x0000800a
 	dcd			0x8000000a
 	dcd			0x80008081
-	dcd			0x00008080 
+	dcd			0x00008080
 	dcd			0xFF			;//terminator
 
 ;//----------------------------------------------------------------------------
@@ -605,7 +605,7 @@ KeccakP800_StatePermute_Done
 
 ;----------------------------------------------------------------------------
 ;
-; size_t KeccakF800_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data, 
+; size_t KeccakF800_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data,
 ;										size_t dataByteLen, unsigned char trailingBits )
 ;
 	ALIGN
@@ -680,7 +680,7 @@ KeccakF800_SnP_FBWL_Absorb_TrailingBits
 KeccakF800_SnP_FBWL_Absorb_Exit
 	mov		r0, r4						; return processed
 	pop		{ r4 - r5 }
-	mov		r11, r4 
+	mov		r11, r4
 	mov		r12, r5
 	pop		{ r4 - r7 }
 	mov		r8, r4
@@ -742,7 +742,7 @@ KeccakF800_SnP_FBWL_Squeeze_CheckLoop
 KeccakF800_SnP_FBWL_Squeeze_Exit
 	mov		r0, r4
 	pop		{ r4 - r5 }
-	mov		r11, r4 
+	mov		r11, r4
 	mov		r12, r5
 	pop		{ r4 - r7 }
 	mov		r8, r4
@@ -766,7 +766,7 @@ KeccakF800_SnP_FBWL_Squeeze_Unaligned_LoopLane
 
 ;----------------------------------------------------------------------------
 ;
-; size_t KeccakF800_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+; size_t KeccakF800_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 ;										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits )
 ;
 	ALIGN
@@ -857,7 +857,7 @@ KeccakF800_SnP_FBWL_Wrap_TrailingBits
 KeccakF800_SnP_FBWL_Wrap_Exit
 	mov		r0, r4
 	pop		{ r4 - r5 }
-	mov		r11, r4 
+	mov		r11, r4
 	mov		r12, r5
 	pop		{ r4 - r7 }
 	mov		r8, r4
@@ -868,7 +868,7 @@ KeccakF800_SnP_FBWL_Wrap_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; size_t KeccakF800_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+; size_t KeccakF800_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 ;										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
 ;
 	ALIGN
@@ -959,7 +959,7 @@ KeccakF800_SnP_FBWL_Unwrap_TrailingBits
 KeccakF800_SnP_FBWL_Unwrap_Exit
 	mov		r0, r4
 	pop		{ r4 - r5 }
-	mov		r11, r4 
+	mov		r11, r4
 	mov		r12, r5
 	pop		{ r4 - r7 }
 	mov		r8, r4

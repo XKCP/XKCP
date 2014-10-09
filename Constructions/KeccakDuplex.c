@@ -38,7 +38,7 @@ int Keccak_Duplexing(Keccak_DuplexInstance *instance, const unsigned char *sigma
 {
     unsigned char delimitedSigmaEnd1[1];
     const unsigned int rho_max = instance->rate - 2;
-    
+
     if (delimitedSigmaEnd == 0)
         return 1;
     if ((instance->byteInputIndex+sigmaBeginByteLen)*8 > rho_max)

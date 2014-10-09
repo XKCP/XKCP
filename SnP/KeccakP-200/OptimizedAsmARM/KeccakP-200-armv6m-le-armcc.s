@@ -51,11 +51,11 @@ _su	equ 24
 	ldrb		r7, [$ptr, #$g]
 	eors		$result, $result, r7
 	ldrb		r7, [$ptr, #$k]
-	eors		$result, $result, r7				
+	eors		$result, $result, r7
 	ldrb		r7, [$ptr, #$m]
-	eors		$result, $result, r7				
+	eors		$result, $result, r7
 	ldrb		r7, [$ptr, #$s]
-	eors		$result, $result, r7				
+	eors		$result, $result, r7
 	MEND
 
 	MACRO
@@ -239,7 +239,7 @@ KeccakF200_StateComplementBit   PROC
 ;//----------------------------------------------------------------------------
 ;//
 ;// void KeccakF200_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-;// 
+;//
 	ALIGN
 	EXPORT  KeccakF200_StateXORLanes
 KeccakF200_StateXORLanes   PROC
@@ -288,7 +288,7 @@ KeccakF200_StateXORBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF200_StateOverwriteLanes
-KeccakF200_StateOverwriteLanes	PROC 
+KeccakF200_StateOverwriteLanes	PROC
 	subs	r2, r2, #1
 	bcc		KeccakF200_StateOverwriteLanes_Exit
 KeccakF200_StateOverwriteLanes_Loop
@@ -327,7 +327,7 @@ KeccakF200_StateOverwriteBytesInLane_Exit
 ;//
 	ALIGN
 	EXPORT  KeccakF200_StateOverwriteWithZeroes
-KeccakF200_StateOverwriteWithZeroes	PROC 
+KeccakF200_StateOverwriteWithZeroes	PROC
 	movs	r3, #0
 	cmp		r1, #0
 	beq		KeccakF200_StateOverwriteWithZeroes_Exit

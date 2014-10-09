@@ -138,7 +138,7 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
     BitSequence Squeezed[SqueezingOutputLength/8];
     Keccak_HashInstance   hash;
     FILE        *fp_in, *fp_out;
-    
+
     if ((squeezedOutputLength > SqueezingOutputLength) || (hashbitlen > SqueezingOutputLength)) {
         printf("Requested output length too long.\n");
         return KAT_HASH_ERROR;
@@ -148,13 +148,13 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
         printf("Couldn't open <ShortMsgKAT.txt> for read\n");
         return KAT_FILE_OPEN_ERROR;
     }
-    
+
     if ( (fp_out = fopen(fileName, "w")) == NULL ) {
         printf("Couldn't open <%s> for write\n", fileName);
         return KAT_FILE_OPEN_ERROR;
     }
     fprintf(fp_out, "# %s\n", description);
-    
+
     do {
         if ( FindMarker(fp_in, "Len = ") )
             fscanf(fp_in, "%d", &msglen);
@@ -181,10 +181,10 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
         }
     } while ( 1 );
     printf("finished ShortMsgKAT for <%s>\n", fileName);
-    
+
     fclose(fp_in);
     fclose(fp_out);
-    
+
     return KAT_SUCCESS;
 }
 
@@ -255,7 +255,7 @@ ReadHex(FILE *infile, BitSequence *A, int Length, char *str)
                 ich = ch - 'A' + 10;
             else if ( (ch >= 'a') && (ch <= 'f') )
                 ich = ch - 'a' + 10;
-            
+
             for ( i=0; i<Length-1; i++ )
                 A[i] = (A[i] << 4) | (A[i+1] >> 4);
             A[Length-1] = (A[Length-1] << 4) | ich;

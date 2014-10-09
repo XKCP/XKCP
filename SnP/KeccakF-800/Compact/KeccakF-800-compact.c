@@ -47,20 +47,20 @@ typedef UINT32 tKeccakLane;
 
 #define    cKeccakNumberOfRounds    22
 
-const UINT8 KeccakF_RotationConstants[25] = 
+const UINT8 KeccakF_RotationConstants[25] =
 {
      1,  3,  6, 10, 15, 21, 28, 36, 45, 55,  2, 14, 27, 41, 56,  8, 25, 43, 62, 18, 39, 61, 20, 44
 };
 
-const UINT8 KeccakF_PiLane[25] = 
+const UINT8 KeccakF_PiLane[25] =
 {
-    10,  7, 11, 17, 18,  3,  5, 16,  8, 21, 24,  4, 15, 23, 19, 13, 12,  2, 20, 14, 22,  9,  6,  1 
+    10,  7, 11, 17, 18,  3,  5, 16,  8, 21, 24,  4, 15, 23, 19, 13, 12,  2, 20, 14, 22,  9,  6,  1
 };
 
 #if    defined(DIVISION_INSTRUCTION)
 #define MOD5(argValue)    ((argValue) % 5)
 #else
-const UINT8 KeccakF_Mod5[10] = 
+const UINT8 KeccakF_Mod5[10] =
 {
     0, 1, 2, 3, 4, 0, 1, 2, 3, 4
 };
@@ -198,7 +198,7 @@ void KeccakF800_StatePermute(void *argState)
 	nr = 22;
 	for ( y = (tSmallUInt)(cKeccakNumberOfRounds - 22); y != 0; --y )
 	{
-        for( x = 1; x < 128; x <<= 1 ) 
+        for( x = 1; x < 128; x <<= 1 )
         {
             if ((LFSRstate & 0x80) != 0)
                 // Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1
@@ -256,7 +256,7 @@ void KeccakF800_StatePermute(void *argState)
 
         //    Iota
         temp = 0;
-        for( x = 1; x < 128; x <<= 1 ) 
+        for( x = 1; x < 128; x <<= 1 )
         {
             if ( x <= (sizeof(tKeccakLane)*8) )
                 temp ^= (tKeccakLane)(LFSRstate & 1) << (x - 1);

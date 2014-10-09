@@ -58,10 +58,10 @@ _AllocSize	equ 32*2
 		ldrh		r6, [$ptr, #$g]
 		eor			$result, $result, $rs
 		ldrh		$rs, [$ptr, #$k]
-		eor			$result, $result, r6				
+		eor			$result, $result, r6
 		ldrh		r6, [$ptr, #$m]
 		eor			$result, $result, $rs
-		eor			$result, $result, r6				
+		eor			$result, $result, r6
 		MEND
 
 		MACRO
@@ -71,10 +71,10 @@ _AllocSize	equ 32*2
 		ldr			r6, [$ptr, #$g]
 		eor			$resultL, $resultL, $rsL
 		ldr			$rsL, [$ptr, #$k]
-		eor			$resultL, $resultL, r6				
+		eor			$resultL, $resultL, r6
 		ldr			r6, [$ptr, #$m]
 		eor			$resultL, $resultL, $rsL
-		eor			$resultL, $resultL, r6				
+		eor			$resultL, $resultL, r6
 		lsr			$resultH, $resultL, #16
 		uxth 		$resultL, $resultL
 		MEND
@@ -259,11 +259,11 @@ Ket_Step   PROC
 	ldrh	r12, [r0, #_su]
 	strh	r12, [sp, #_su]
 
-    ldrh	r8, [sp, #_sa] 
-    ldrh	r9, [sp, #_se] 
-    ldrh	r10, [sp, #_si] 
-    ldrh	r12, [sp, #_su] 
-    ldrh	r11, [sp, #_so] 
+    ldrh	r8, [sp, #_sa]
+    ldrh	r9, [sp, #_se]
+    ldrh	r10, [sp, #_si]
+    ldrh	r12, [sp, #_su]
+    ldrh	r11, [sp, #_so]
 	mov		r5, r12
     xor5	r7, sp, _bu, _gu, _ku, _mu, r12
 
@@ -282,7 +282,7 @@ Ket_Step   PROC
 Ket_FeedAssociatedDataBlocks   PROC
 	push	{r4-r12,lr}
 	sub		sp, sp, #_AllocSize
-	
+
 	lsrs	r3, r2, #1
 	bcc		Ket_FeedAssociatedDataBlocks_Even
 	adds	r2, r2, #1
@@ -298,21 +298,21 @@ Ket_FeedAssociatedDataBlocks   PROC
 	ldrh	r12, [r0, #_su]
 	strh	r12, [sp, #_su]
 
-    ldrh	r8, [sp, #_sa] 
-    ldrh	r9, [sp, #_se] 
-    ldrh	r10, [sp, #_si] 
-    ldrh	r12, [sp, #_su] 
-    ldrh	r11, [sp, #_so] 
+    ldrh	r8, [sp, #_sa]
+    ldrh	r9, [sp, #_se]
+    ldrh	r10, [sp, #_si]
+    ldrh	r12, [sp, #_su]
+    ldrh	r11, [sp, #_so]
 	mov		r5, r12
     xor5	r7, sp, _bu, _gu, _ku, _mu, r12
 	b		Ket_FeedAssociatedDataBlocks_Odd
 
 Ket_FeedAssociatedDataBlocks_Even		; Even number of blocks
-    ldrh	r8, [r0, #_sa] 
-    ldrh	r9, [r0, #_se] 
-    ldrh	r10, [r0, #_si] 
-    ldrh	r12, [r0, #_su] 
-    ldrh	r11, [r0, #_so] 
+    ldrh	r8, [r0, #_sa]
+    ldrh	r9, [r0, #_se]
+    ldrh	r10, [r0, #_si]
+    ldrh	r12, [r0, #_su]
+    ldrh	r11, [r0, #_so]
 	mov		r5, r12
     xor5	r7, r0, _bu, _gu, _ku, _mu, r12
 
@@ -357,7 +357,7 @@ Ket_FeedAssociatedDataBlocks_Odd
 Ket_UnwrapBlocks   PROC
 	push	{r4-r12,lr}
 	sub		sp, sp, #_AllocSize
-	
+
 	lsrs	r4, r3, #1
 	bcc		Ket_UnwrapBlocks_Even
 	adds	r3, r3, #1
@@ -373,21 +373,21 @@ Ket_UnwrapBlocks   PROC
 	ldrh	r12, [r0, #_su]
 	strh	r12, [sp, #_su]
 
-    ldrh	r8, [sp, #_sa] 
-    ldrh	r9, [sp, #_se] 
-    ldrh	r10, [sp, #_si] 
-    ldrh	r12, [sp, #_su] 
-    ldrh	r11, [sp, #_so] 
+    ldrh	r8, [sp, #_sa]
+    ldrh	r9, [sp, #_se]
+    ldrh	r10, [sp, #_si]
+    ldrh	r12, [sp, #_su]
+    ldrh	r11, [sp, #_so]
 	mov		r5, r12
     xor5	r7, sp, _bu, _gu, _ku, _mu, r12
 	b		Ket_UnwrapBlocks_Odd
 
 Ket_UnwrapBlocks_Even		; Even number of blocks
-    ldrh	r8, [r0, #_sa] 
-    ldrh	r9, [r0, #_se] 
-    ldrh	r10, [r0, #_si] 
-    ldrh	r12, [r0, #_su] 
-    ldrh	r11, [r0, #_so] 
+    ldrh	r8, [r0, #_sa]
+    ldrh	r9, [r0, #_se]
+    ldrh	r10, [r0, #_si]
+    ldrh	r12, [r0, #_su]
+    ldrh	r11, [r0, #_so]
 	mov		r5, r12
     xor5	r7, r0, _bu, _gu, _ku, _mu, r12
 
@@ -438,7 +438,7 @@ Ket_UnwrapBlocks_Odd
 Ket_WrapBlocks   PROC
 	push	{r4-r12,lr}
 	sub		sp, sp, #_AllocSize
-	
+
 	lsrs	r4, r3, #1
 	bcc		Ket_WrapBlocks_Even
 	adds	r3, r3, #1
@@ -454,21 +454,21 @@ Ket_WrapBlocks   PROC
 	ldrh	r12, [r0, #_su]
 	strh	r12, [sp, #_su]
 
-    ldrh	r8, [sp, #_sa] 
-    ldrh	r9, [sp, #_se] 
-    ldrh	r10, [sp, #_si] 
-    ldrh	r12, [sp, #_su] 
-    ldrh	r11, [sp, #_so] 
+    ldrh	r8, [sp, #_sa]
+    ldrh	r9, [sp, #_se]
+    ldrh	r10, [sp, #_si]
+    ldrh	r12, [sp, #_su]
+    ldrh	r11, [sp, #_so]
 	mov		r5, r12
     xor5	r7, sp, _bu, _gu, _ku, _mu, r12
 	b		Ket_WrapBlocks_Odd
 
 Ket_WrapBlocks_Even		; Even number of blocks
-    ldrh	r8, [r0, #_sa] 
-    ldrh	r9, [r0, #_se] 
-    ldrh	r10, [r0, #_si] 
-    ldrh	r12, [r0, #_su] 
-    ldrh	r11, [r0, #_so] 
+    ldrh	r8, [r0, #_sa]
+    ldrh	r9, [r0, #_se]
+    ldrh	r10, [r0, #_si]
+    ldrh	r12, [r0, #_su]
+    ldrh	r11, [r0, #_so]
 	mov		r5, r12
     xor5	r7, r0, _bu, _gu, _ku, _mu, r12
 

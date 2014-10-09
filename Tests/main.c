@@ -234,7 +234,7 @@ void displayDuplexIntermediateValuesOne(FILE *f, unsigned int rate, unsigned int
 
     Keccak_DuplexInitialize(&duplex, rate, capacity);
     displayStateAsBytes(1, "Initial state", duplex.state);
-    
+
     for(i=0; i<=rate+120; i+=123) {
         inBitLen = i;
         if (inBitLen > (rate-2)) inBitLen = rate-2;

@@ -57,10 +57,10 @@
 		ldrh		r6, [\ptr, #\g]
 		eor			\result, \result, \rs
 		ldrh		\rs, [\ptr, #\k]
-		eor			\result, \result, r6				
+		eor			\result, \result, r6
 		ldrh		r6, [\ptr, #\m]
 		eor			\result, \result, \rs
-		eor			\result, \result, r6				
+		eor			\result, \result, r6
 		.endm
 
 .macro		xor5D		resultL,resultH,ptr,b,g,k,m,rsL,rsH
@@ -69,10 +69,10 @@
 		ldr			r6, [\ptr, #\g]
 		eor			\resultL, \resultL, \rsL
 		ldr			\rsL, [\ptr, #\k]
-		eor			\resultL, \resultL, r6				
+		eor			\resultL, \resultL, r6
 		ldr			r6, [\ptr, #\m]
 		eor			\resultL, \resultL, \rsL
-		eor			\resultL, \resultL, r6				
+		eor			\resultL, \resultL, r6
 		lsr			\resultH, \resultL, #16
 		uxth 		\resultL, \resultL
 		.endm
@@ -212,7 +212,7 @@
 @//
 .align 8
 .global   Ket_StateOverwrite
-Ket_StateOverwrite:  
+Ket_StateOverwrite:
 	cmp		r3, #0
 	beq		Ket_StateOverwrite_Exit
 	adds	r0, r0, r1
@@ -231,7 +231,7 @@ Ket_StateOverwrite_Exit:
 @//
 .align 8
 .global   Ket_Step
-Ket_Step:  
+Ket_Step:
 	push	{r4-r12,lr}
 	sub		sp, sp, #_AllocSize
 
@@ -252,11 +252,11 @@ Ket_Step:
 	ldrh	r12, [r0, #_su]
 	strh	r12, [sp, #_su]
 
-    ldrh	r8, [sp, #_sa] 
-    ldrh	r9, [sp, #_se] 
-    ldrh	r10, [sp, #_si] 
-    ldrh	r12, [sp, #_su] 
-    ldrh	r11, [sp, #_so] 
+    ldrh	r8, [sp, #_sa]
+    ldrh	r9, [sp, #_se]
+    ldrh	r10, [sp, #_si]
+    ldrh	r12, [sp, #_su]
+    ldrh	r11, [sp, #_so]
 	mov		r5, r12
     xor5	r7, sp, _bu, _gu, _ku, _mu, r12
 
@@ -272,10 +272,10 @@ Ket_Step:
 @//
 .align 8
 .global   Ket_FeedAssociatedDataBlocks
-Ket_FeedAssociatedDataBlocks:  
+Ket_FeedAssociatedDataBlocks:
 	push	{r4-r12,lr}
 	sub		sp, sp, #_AllocSize
-	
+
 	lsrs	r3, r2, #1
 	bcc		Ket_FeedAssociatedDataBlocks_Even
 	adds	r2, r2, #1
@@ -291,21 +291,21 @@ Ket_FeedAssociatedDataBlocks:
 	ldrh	r12, [r0, #_su]
 	strh	r12, [sp, #_su]
 
-    ldrh	r8, [sp, #_sa] 
-    ldrh	r9, [sp, #_se] 
-    ldrh	r10, [sp, #_si] 
-    ldrh	r12, [sp, #_su] 
-    ldrh	r11, [sp, #_so] 
+    ldrh	r8, [sp, #_sa]
+    ldrh	r9, [sp, #_se]
+    ldrh	r10, [sp, #_si]
+    ldrh	r12, [sp, #_su]
+    ldrh	r11, [sp, #_so]
 	mov		r5, r12
     xor5	r7, sp, _bu, _gu, _ku, _mu, r12
 	b		Ket_FeedAssociatedDataBlocks_Odd
 
 Ket_FeedAssociatedDataBlocks_Even:		@ Even number of blocks
-    ldrh	r8, [r0, #_sa] 
-    ldrh	r9, [r0, #_se] 
-    ldrh	r10, [r0, #_si] 
-    ldrh	r12, [r0, #_su] 
-    ldrh	r11, [r0, #_so] 
+    ldrh	r8, [r0, #_sa]
+    ldrh	r9, [r0, #_se]
+    ldrh	r10, [r0, #_si]
+    ldrh	r12, [r0, #_su]
+    ldrh	r11, [r0, #_so]
 	mov		r5, r12
     xor5	r7, r0, _bu, _gu, _ku, _mu, r12
 
@@ -347,10 +347,10 @@ Ket_FeedAssociatedDataBlocks_Odd:
 @//
 .align 8
 .global   Ket_UnwrapBlocks
-Ket_UnwrapBlocks:  
+Ket_UnwrapBlocks:
 	push	{r4-r12,lr}
 	sub		sp, sp, #_AllocSize
-	
+
 	lsrs	r4, r3, #1
 	bcc		Ket_UnwrapBlocks_Even
 	adds	r3, r3, #1
@@ -366,21 +366,21 @@ Ket_UnwrapBlocks:
 	ldrh	r12, [r0, #_su]
 	strh	r12, [sp, #_su]
 
-    ldrh	r8, [sp, #_sa] 
-    ldrh	r9, [sp, #_se] 
-    ldrh	r10, [sp, #_si] 
-    ldrh	r12, [sp, #_su] 
-    ldrh	r11, [sp, #_so] 
+    ldrh	r8, [sp, #_sa]
+    ldrh	r9, [sp, #_se]
+    ldrh	r10, [sp, #_si]
+    ldrh	r12, [sp, #_su]
+    ldrh	r11, [sp, #_so]
 	mov		r5, r12
     xor5	r7, sp, _bu, _gu, _ku, _mu, r12
 	b		Ket_UnwrapBlocks_Odd
 
 Ket_UnwrapBlocks_Even:		@ Even number of blocks
-    ldrh	r8, [r0, #_sa] 
-    ldrh	r9, [r0, #_se] 
-    ldrh	r10, [r0, #_si] 
-    ldrh	r12, [r0, #_su] 
-    ldrh	r11, [r0, #_so] 
+    ldrh	r8, [r0, #_sa]
+    ldrh	r9, [r0, #_se]
+    ldrh	r10, [r0, #_si]
+    ldrh	r12, [r0, #_su]
+    ldrh	r11, [r0, #_so]
 	mov		r5, r12
     xor5	r7, r0, _bu, _gu, _ku, _mu, r12
 
@@ -428,10 +428,10 @@ Ket_UnwrapBlocks_Odd:
 @//
 .align 8
 .global   Ket_WrapBlocks
-Ket_WrapBlocks:  
+Ket_WrapBlocks:
 	push	{r4-r12,lr}
 	sub		sp, sp, #_AllocSize
-	
+
 	lsrs	r4, r3, #1
 	bcc		Ket_WrapBlocks_Even
 	adds	r3, r3, #1
@@ -447,21 +447,21 @@ Ket_WrapBlocks:
 	ldrh	r12, [r0, #_su]
 	strh	r12, [sp, #_su]
 
-    ldrh	r8, [sp, #_sa] 
-    ldrh	r9, [sp, #_se] 
-    ldrh	r10, [sp, #_si] 
-    ldrh	r12, [sp, #_su] 
-    ldrh	r11, [sp, #_so] 
+    ldrh	r8, [sp, #_sa]
+    ldrh	r9, [sp, #_se]
+    ldrh	r10, [sp, #_si]
+    ldrh	r12, [sp, #_su]
+    ldrh	r11, [sp, #_so]
 	mov		r5, r12
     xor5	r7, sp, _bu, _gu, _ku, _mu, r12
 	b		Ket_WrapBlocks_Odd
 
 Ket_WrapBlocks_Even:		@ Even number of blocks
-    ldrh	r8, [r0, #_sa] 
-    ldrh	r9, [r0, #_se] 
-    ldrh	r10, [r0, #_si] 
-    ldrh	r12, [r0, #_su] 
-    ldrh	r11, [r0, #_so] 
+    ldrh	r8, [r0, #_sa]
+    ldrh	r9, [r0, #_se]
+    ldrh	r10, [r0, #_si]
+    ldrh	r12, [r0, #_su]
+    ldrh	r11, [r0, #_so]
 	mov		r5, r12
     xor5	r7, r0, _bu, _gu, _ku, _mu, r12
 
@@ -507,7 +507,7 @@ Ket_WrapBlocks_Odd:
 @//
 @// Keccak-P[400, 1] usable from asm only, from r0 to sp
 @//
-KeccakP400_1_StatePermuteToStack:  
+KeccakP400_1_StatePermuteToStack:
 	KeccakRound	sp, r0
 	bx			lr
 
@@ -516,7 +516,7 @@ KeccakP400_1_StatePermuteToStack:
 @//
 @// Keccak-P[400, 1] usable from asm only, from sp to r0
 @//
-KeccakP400_1_StatePermuteFromStack:  
+KeccakP400_1_StatePermuteFromStack:
 	KeccakRound	r0, sp
 	bx			lr
 

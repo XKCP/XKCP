@@ -132,12 +132,12 @@ void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, con
     low = *((UINT32*)(laneAsBytes+0));
     high = *((UINT32*)(laneAsBytes+4));
 #else
-    low = laneAsBytes[0] 
-        | ((UINT32)(laneAsBytes[1]) << 8) 
+    low = laneAsBytes[0]
+        | ((UINT32)(laneAsBytes[1]) << 8)
         | ((UINT32)(laneAsBytes[2]) << 16)
         | ((UINT32)(laneAsBytes[3]) << 24);
-    high = laneAsBytes[4] 
-        | ((UINT32)(laneAsBytes[5]) << 8) 
+    high = laneAsBytes[4]
+        | ((UINT32)(laneAsBytes[5]) << 8)
         | ((UINT32)(laneAsBytes[6]) << 16)
         | ((UINT32)(laneAsBytes[7]) << 24);
 #endif
@@ -169,12 +169,12 @@ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned 
     for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
         UINT8 laneAsBytes[8];
         memcpy(laneAsBytes, data+lanePosition*8, 8);
-        UINT32 low = laneAsBytes[0] 
-            | ((UINT32)(laneAsBytes[1]) << 8) 
+        UINT32 low = laneAsBytes[0]
+            | ((UINT32)(laneAsBytes[1]) << 8)
             | ((UINT32)(laneAsBytes[2]) << 16)
             | ((UINT32)(laneAsBytes[3]) << 24);
-        UINT32 high = laneAsBytes[4] 
-            | ((UINT32)(laneAsBytes[5]) << 8) 
+        UINT32 high = laneAsBytes[4]
+            | ((UINT32)(laneAsBytes[5]) << 8)
             | ((UINT32)(laneAsBytes[6]) << 16)
             | ((UINT32)(laneAsBytes[7]) << 24);
         UINT32 even, odd, temp, temp0, temp1;

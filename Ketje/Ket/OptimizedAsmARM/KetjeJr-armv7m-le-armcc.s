@@ -419,7 +419,7 @@ KeccakP200_1_StatePermuteAsm   PROC
 	RhoPi	4, r9, _a, r8, _o		; _ga, _bo	 5 <  3
 	RhoPi	5, r8, _o, r11, _o		; _bo, _mo	 3 < 18
 	RhoPi	7, r11, _o, r11, _i		; _mo, _mi	18 < 17
-	RhoPi	2, r11, _i, r10, _e		; _mi, _ke	17 < 11	
+	RhoPi	2, r11, _i, r10, _e		; _mi, _ke	17 < 11
 	RhoPi	6, r10, _e, r9, _i		; _ke, _gi	11 <  7
 	RhoPi	3, r9, _i, r10, _a		; _gi, _ka	 7 < 10
 	RhoPi	1, r10, _a, r3,      0		; _ka, _be  10 < 1

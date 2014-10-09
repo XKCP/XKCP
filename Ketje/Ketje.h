@@ -31,7 +31,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 
 /** The phase is a data element that expresses what Ketje is doing
- * - virgin: the only operation supported is initialization, loading the key and nonce. This will switch 
+ * - virgin: the only operation supported is initialization, loading the key and nonce. This will switch
  *   the phase to feedingAssociatedData
  * - feedingAssociatedData: Ketje is ready for feeding associated data, has started feeding associated data
  *   or has finished feeding associated data. It allows feeding some more associated data in which case the phase does not
@@ -60,7 +60,7 @@ ALIGN typedef struct {
     /** The phase. */
     unsigned int phase;
 
-	/** The amount of associated or plaintext data that has been 
+	/** The amount of associated or plaintext data that has been
       * XORed into the state after the last call to step or stride */
     unsigned int dataRemainderSize;
 } Ketje_Instance;

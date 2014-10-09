@@ -13,14 +13,14 @@
 @ http://creativecommons.org/publicdomain/zero/1.0/
 @
 
-@ WARNING: These functions work only on little endian CPU with@ ARMv7A + NEON architecture 
+@ WARNING: These functions work only on little endian CPU with@ ARMv7A + NEON architecture
 @ WARNING: State must be 256 bit (32 bytes) aligned, best is 64-byte (cache alignment).
 
 @ INFO: Tested on Cortex-A8 (BeagleBone Black), using gcc.
 @ INFO: Parallel execution of Keccak-F permutation on 2 lane interleaved states.
 
 
-    
+
 .text
 
 @----------------------------------------------------------------------------
@@ -105,7 +105,7 @@
     @ argA2 =   Be ^((~Bi)& Bo )
     @ argA3 =   Bi ^((~Bo)& Bu )
     @ argA4 =   Bo ^((~Bu)& Ba )
-    @ argA5 =   Bu ^((~Ba)& Be ) 
+    @ argA5 =   Bu ^((~Ba)& Be )
     @ argA1 =   Ba ^((~Be)& Bi )
     @ argA1 ^= KeccakF1600RoundConstants[i+round]
     vsri.64     d1,    \argA2,   #64-44
@@ -129,7 +129,7 @@
     vbic.64     \argA4, d0,      d4
     veor.64     \argA2, d1
     vstr.64     d5,    [r0, #\argA1]
-    veor.64     \argA3, d2    
+    veor.64     \argA3, d2
     veor.64     \argA4, d3
     veor.64     \argA5, d4
     .endm
@@ -319,7 +319,7 @@
     vld1.64		{ \qreg }, [r3:128], r4
     .endif
     .endm
-    
+
 .macro    m_st		qreg, next
     .if \next == 16
     vst1.64		{ \qreg }, [r3:128]!
@@ -355,7 +355,7 @@
     .endif
     veor.64		q9,	q9,  q3
     veor.64		q5,	q5,  q4
-    
+
     @ Ba = argA1^Da
     @ Be = ROL64(argA2^De, 44)
     @ Bi = ROL64(argA3^Di, 43)
@@ -394,7 +394,7 @@
     @ argA2 = Be ^(~Bi & Bo)
     @ argA3 = Bi ^(~Bo & Bu)
     @ argA4 = Bo ^(~Bu & Ba)
-    @ argA5 = Bu ^(~Ba & Be) 
+    @ argA5 = Bu ^(~Ba & Be)
     vld1.64		{ d30 },	[r1:64]
     vbic.64		q0,	q12,	q11
     vbic.64		q1,	q13,	q12
@@ -409,7 +409,7 @@
     veor.64	q1,	q11
     m_st	q0, \next
     m_pls	\ofs2
-    veor.64	q2,	q12    
+    veor.64	q2,	q12
     m_st	q1, \next
     m_pls	\ofs3
     veor.64	q3,	q13
@@ -486,7 +486,7 @@
     veor.64	q1,   q1,  q6
     vld1.64	{ q6 }, [r6:128]!
     veor.64	q8,   q8,   q13
-    
+
     m_st	q7, \next
     m_pls	\ofs4
     veor.64	q2,   q2,  q7
@@ -592,9 +592,9 @@
 @
    .align 8
 .global   KeccakF1600_Pl_Initialize
-KeccakF1600_Pl_Initialize:  
+KeccakF1600_Pl_Initialize:
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
@@ -602,7 +602,7 @@ KeccakF1600_Pl_Initialize:
 @
    .align 8
 .global   KeccakF1600_Pl2_InitializeAll
-KeccakF1600_Pl2_InitializeAll:  
+KeccakF1600_Pl2_InitializeAll:
     vmov.i64	q0, #0
     vmov.i64	q1, #0
     vmov.i64	q2, #0
@@ -615,7 +615,7 @@ KeccakF1600_Pl2_InitializeAll:
     vstm		r0!, { d0 - d7 }      @ 48
     vstm		r0!, { d0 - d1}	      @ 50
     bx			lr
-   
+
 
 @----------------------------------------------------------------------------
 @
@@ -623,7 +623,7 @@ KeccakF1600_Pl2_InitializeAll:
 @
    .align 8
 .global 	KeccakF1600_Pl2_ComplementBit
-KeccakF1600_Pl2_ComplementBit:  
+KeccakF1600_Pl2_ComplementBit:
     add		r0, r0, r1, LSL #3			@ states += 8 * instanceIndex
     lsr		r1, r2, #6					@ states += position / 64 * 2 * 8
     add		r0, r0, r1, LSL #4
@@ -636,7 +636,7 @@ KeccakF1600_Pl2_ComplementBit:
     eor		r2, r2, r3
     str		r2, [r0, r1, LSL #2]
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
@@ -644,14 +644,14 @@ KeccakF1600_Pl2_ComplementBit:
 @
    .align 8
 .global 	KeccakF1600_Pl2_ComplementBitAll
-KeccakF1600_Pl2_ComplementBitAll:  
+KeccakF1600_Pl2_ComplementBitAll:
     lsr		r2, r1, #6					@ states += position / 64 * 2 * 8
     add		r0, r0, r2, LSL #4
     lsr 	r2, r1, #5					@ r2 = (position / 32) & 1
     and		r2, r2, #1
     mov 	r3, #1						@ r3 = (1 << (position % 32))
     and		r1, r1, #31
-    add		r0, r0, r2, LSL #2			@ states += 4 * r2 
+    add		r0, r0, r2, LSL #2			@ states += 4 * r2
     lsl		r3, r3, r1
     ldr		r1, [r0]
     ldr		r2, [r0, #8]
@@ -660,16 +660,16 @@ KeccakF1600_Pl2_ComplementBitAll:
     str		r1, [r0]
     str		r2, [r0, #8]
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
-@ void KeccakF1600_Pl2_XORBytes( void *states, unsigned int instanceIndex, const unsigned char *data, 
+@ void KeccakF1600_Pl2_XORBytes( void *states, unsigned int instanceIndex, const unsigned char *data,
 @ 								    unsigned int offset, unsigned int length )
 @
    .align 8
 .global   KeccakF1600_Pl2_XORBytes
-KeccakF1600_Pl2_XORBytes:  
+KeccakF1600_Pl2_XORBytes:
     add		r0, r0, r1, LSL #3			@ states += 8 * instanceIndex
     ldr		r1, [sp, #0*4]				@ r1 = length
     cmp		r1, #0
@@ -719,7 +719,7 @@ KeccakF1600_Pl2_XORBytes_Done:
     pop		{ r4- r7 }
 KeccakF1600_Pl2_XORBytes_Exit:
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
@@ -727,7 +727,7 @@ KeccakF1600_Pl2_XORBytes_Exit:
 @
 .global   KeccakF1600_Pl2_XORLanesAll
    .align 8
-KeccakF1600_Pl2_XORLanesAll:  
+KeccakF1600_Pl2_XORLanesAll:
     cmp		r2, #0
     beq		KeccakF1600_Pl2_XORLanesAll_Exit
     add		r3, r1, r3, LSL #3		@ r3: data + 8 * laneOffset
@@ -750,16 +750,16 @@ KeccakF1600_Pl2_XORLanesAll_Loop:
     pop		{r4 - r7}
 KeccakF1600_Pl2_XORLanesAll_Exit:
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
-@ void KeccakF1600_Pl2_OverwriteBytes( void *states, unsigned int instanceIndex, const unsigned char *data, 
+@ void KeccakF1600_Pl2_OverwriteBytes( void *states, unsigned int instanceIndex, const unsigned char *data,
 @ 								    unsigned int offset, unsigned int length )
 @
    .align 8
 .global 	KeccakF1600_Pl2_OverwriteBytes
-KeccakF1600_Pl2_OverwriteBytes: 
+KeccakF1600_Pl2_OverwriteBytes:
     add		r0, r0, r1, LSL #3			@ states += 8 * instanceIndex
     ldr		r1, [sp, #0*4]				@ r1 = length
     cmp		r1, #0
@@ -801,7 +801,7 @@ KeccakF1600_Pl2_OverwriteBytes_Done:
     pop		{ r4- r5 }
 KeccakF1600_Pl2_OverwriteBytes_Exit:
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
@@ -809,7 +809,7 @@ KeccakF1600_Pl2_OverwriteBytes_Exit:
 @
    .align 8
 .global 	KeccakF1600_Pl2_OverwriteLanesAll
-KeccakF1600_Pl2_OverwriteLanesAll: 
+KeccakF1600_Pl2_OverwriteLanesAll:
     cmp		r2, #0
     beq		KeccakF1600_Pl2_OverwriteLanesAll_Exit
     lsls	r12, r1, #32-3
@@ -845,7 +845,7 @@ KeccakF1600_Pl2_OverwriteLanesAll_LoopUnaligned:
     pop		{ r4, r5 }
 KeccakF1600_Pl2_OverwriteLanesAll_Exit:
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
@@ -853,14 +853,14 @@ KeccakF1600_Pl2_OverwriteLanesAll_Exit:
 @
    .align 8
 .global 	KeccakF1600_Pl2_OverwriteWithZeroes
-KeccakF1600_Pl2_OverwriteWithZeroes: 
+KeccakF1600_Pl2_OverwriteWithZeroes:
     add		r0, r0, r1, LSL #3			@ states += 8 * instanceIndex
     lsrs	r1, r2, #3					@ r1: laneCount
     beq		KeccakF1600_Pl2_OverwriteWithZeroes_Bytes
     vmov.i64 d0, #0
 KeccakF1600_Pl2_OverwriteWithZeroes_LoopLanes:
     subs	r1, r1, #1
-    vstm    r0!, { d0 }    
+    vstm    r0!, { d0 }
     add		r0, r0, #8
     bne		KeccakF1600_Pl2_OverwriteWithZeroes_LoopLanes
 KeccakF1600_Pl2_OverwriteWithZeroes_Bytes:
@@ -873,16 +873,16 @@ KeccakF1600_Pl2_OverwriteWithZeroes_LoopBytes:
     bne		KeccakF1600_Pl2_OverwriteWithZeroes_LoopBytes
 KeccakF1600_Pl2_OverwriteWithZeroes_Exit:
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
-@ void KeccakF1600_Pl2_ExtractBytes( void *states, unsigned int instanceIndex, const unsigned char *data, 
+@ void KeccakF1600_Pl2_ExtractBytes( void *states, unsigned int instanceIndex, const unsigned char *data,
 @ 								    unsigned int offset, unsigned int length )
 @
    .align 8
 .global 	KeccakF1600_Pl2_ExtractBytes
-KeccakF1600_Pl2_ExtractBytes:  
+KeccakF1600_Pl2_ExtractBytes:
     add		r0, r0, r1, LSL #3			@ states += 8 * instanceIndex
     ldr		r1, [sp, #0*4]				@ r1 = length
     cmp		r1, #0
@@ -924,7 +924,7 @@ KeccakF1600_Pl2_ExtractBytes_Done:
     pop		{ r4-r5 }
 KeccakF1600_Pl2_ExtractBytes_Exit:
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
@@ -932,7 +932,7 @@ KeccakF1600_Pl2_ExtractBytes_Exit:
 @
    .align 8
 .global 	KeccakF1600_Pl2_ExtractLanesAll
-KeccakF1600_Pl2_ExtractLanesAll:  
+KeccakF1600_Pl2_ExtractLanesAll:
     cmp		r2, #0
     beq		KeccakF1600_Pl2_ExtractLanesAll_Exit
     lsls	r12, r1, #32-3
@@ -968,16 +968,16 @@ KeccakF1600_Pl2_ExtractLanesAll_LoopUnaligned:
     pop		{ r4, r5 }
 KeccakF1600_Pl2_ExtractLanesAll_Exit:
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
-@ void KeccakF1600_Pl2_ExtractAndXORBytes( void *states, unsigned int instanceIndex, const unsigned char *data, 
+@ void KeccakF1600_Pl2_ExtractAndXORBytes( void *states, unsigned int instanceIndex, const unsigned char *data,
 @ 								    unsigned int offset, unsigned int length )
 @
    .align 8
 .global 	KeccakF1600_Pl2_ExtractAndXORBytes
-KeccakF1600_Pl2_ExtractAndXORBytes:  
+KeccakF1600_Pl2_ExtractAndXORBytes:
     add		r0, r0, r1, LSL #3			@ states += 8 * instanceIndex
     ldr		r1, [sp, #0*4]				@ r1 = length
     cmp		r1, #0
@@ -1027,7 +1027,7 @@ KeccakF1600_Pl2_ExtractAndXORBytes_Done:
     pop		{ r4- r7 }
 KeccakF1600_Pl2_ExtractAndXORBytes_Exit:
     bx		lr
-   
+
 
 @----------------------------------------------------------------------------
 @
@@ -1091,7 +1091,7 @@ KeccakF1600_Pl2_ExtractAndXORLanesAll_LoopUnaligned:
     pop		{ r4 - r7 }
 KeccakF1600_Pl2_ExtractAndXORLanesAll_Exit:
     bx		lr
-   
+
 
    .align 8
 KeccakF1600_Pl2_Permute_RoundConstants:
@@ -1126,7 +1126,7 @@ KeccakF1600_Pl2_Permute_RoundConstants:
 @
    .align 8
 .global 	KeccakF1600_Pl2_Permute
-KeccakF1600_Pl2_Permute:  
+KeccakF1600_Pl2_Permute:
     add		r0, r0, r1, LSL #3			@ states += 8 * instanceIndex
     adr		r1, KeccakF1600_Pl2_Permute_RoundConstants
     movs	r2, #24
@@ -1204,7 +1204,7 @@ KeccakF1600_ParallelPermute_RoundLoop:
     vstr.64 d31, [r0, #_su]
     vpop    {q4-q7}
     bx      lr
-   
+
 
    .align 8
 KeccakF1600_Pl2_PermuteAll_RoundConstants:
@@ -1239,7 +1239,7 @@ KeccakF1600_Pl2_PermuteAll_RoundConstants:
 @
    .align 8
 .global 	KeccakF1600_Pl2_PermuteAll
-KeccakF1600_Pl2_PermuteAll:  
+KeccakF1600_Pl2_PermuteAll:
     adr		r1, KeccakF1600_Pl2_PermuteAll_RoundConstants
     movs	r2, #24
     vpush	{q4-q7}
@@ -1258,76 +1258,76 @@ KeccakF1600_Pl2_PermuteAll:
     bic		r5, #15
     vld1.64	{ d4, d5, d6, d7 }, [r3:256]!	@ _bi _bo
     vld1.64	{ d8, d9, d10, d11 }, [r3:256]!	@ _bu _ga
-    vld1.64	{ d12, d13 }, [r3:128]!	@ _ge 
+    vld1.64	{ d12, d13 }, [r3:128]!	@ _ge
     veor.64	q0, q0, q5
     vld1.64	{ d14, d15 }, [r3:128]!	@ _gi
     veor.64	q1, q1, q6
     vld1.64	{ d16, d17 }, [r3:128]!	@ _go
     veor.64	q2, q2, q7
-    vld1.64	{ d18, d19 }, [r3:128]!	@ _gu 
+    vld1.64	{ d18, d19 }, [r3:128]!	@ _gu
     veor.64	q3, q3, q8
     vld1.64	{ d10, d11 }, [r3:128]!	@ _ka
     veor.64	q4, q4, q9
-    vld1.64	{ d12, d13 }, [r3:128]!	@ _ke 
+    vld1.64	{ d12, d13 }, [r3:128]!	@ _ke
     veor.64	q0, q0, q5
     vld1.64	{ d14, d15 }, [r3:128]!	@ _ki
     veor.64	q1, q1, q6
     vld1.64	{ d16, d17 }, [r3:128]!	@ _ko
     veor.64	q2, q2, q7
-    vld1.64	{ d18, d19 }, [r3:128]!	@ _ku 
+    vld1.64	{ d18, d19 }, [r3:128]!	@ _ku
     veor.64	q3, q3, q8
     vld1.64	{ d10, d11 }, [r3:128]!	@ _ma
     veor.64	q4, q4, q9
-    vld1.64	{ d12, d13 }, [r3:128]!	@ _me 
+    vld1.64	{ d12, d13 }, [r3:128]!	@ _me
     veor.64	q0, q0, q5
     vld1.64	{ d14, d15 }, [r3:128]!	@ _mi
     veor.64	q1, q1, q6
     vld1.64	{ d16, d17 }, [r3:128]!	@ _mo
     veor.64	q2, q2, q7
-    vld1.64	{ d18, d19 }, [r3:128]!	@ _mu 
+    vld1.64	{ d18, d19 }, [r3:128]!	@ _mu
     veor.64	q3, q3, q8
     vld1.64	{ d10, d11 }, [r3:128]!	@ _sa
     veor.64	q4, q4, q9
-    vld1.64	{ d12, d13 }, [r3:128]!	@ _se 
+    vld1.64	{ d12, d13 }, [r3:128]!	@ _se
     veor.64	q0, q0, q5
     vld1.64	{ d14, d15 }, [r3:128]!	@ _si
     veor.64	q1, q1, q6
     vld1.64	{ d16, d17 }, [r3:128]!	@ _so
     veor.64	q2, q2, q7
-    vld1.64	{ d18, d19 }, [r3:128]!	@ _su 
+    vld1.64	{ d18, d19 }, [r3:128]!	@ _su
     mov		r3, r0
     veor.64	q3, q3, q8
     veor.64	q4, q4, q9
-    
+
 KeccakF1600_Pl2_PermuteAll_RoundLoop:
     KeccakP_ThetaRhoPiChiIota  _ba,  -1,  -1,  -1,  -1, _ge-_ba, _ka @ _ba, _ge, _ki, _mo, _su
     KeccakP_ThetaRhoPiChi1     _ka,  -1,  -1,  _bo, -1, _me-_ka, _sa @ _ka, _me, _si, _bo, _gu
     KeccakP_ThetaRhoPiChi2     _sa, _be,  -1,  -1,  -1, _gi-_be, _ga @ _sa, _be, _gi, _ko, _mu
     KeccakP_ThetaRhoPiChi3     _ga,  -1,  -1,  -1, _bu, _ke-_ga, _ma @ _ga, _ke, _mi, _so, _bu
     KeccakP_ThetaRhoPiChi4     _ma,  -1, _bi,  -1,  -1, _se-_ma, _ba @ _ma, _se, _bi, _go, _ku
-                                                                       
+
     KeccakP_ThetaRhoPiChiIota  _ba,  -1, _gi,  -1, _ku, _me-_ba, _sa @ _ba, _me, _gi, _so, _ku
     KeccakP_ThetaRhoPiChi1     _sa, _ke, _bi,  -1, _gu, _mo-_bi, _ma @ _sa, _ke, _bi, _mo, _gu
     KeccakP_ThetaRhoPiChi2     _ma, _ge,  -1, _ko, _bu, _si-_ge, _ka @ _ma, _ge, _si, _ko, _bu
-    KeccakP_ThetaRhoPiChi3     _ka, _be,  -1, _go,  -1, _mi-_be, _ga @ _ka, _be, _mi, _go, _su 
+    KeccakP_ThetaRhoPiChi3     _ka, _be,  -1, _go,  -1, _mi-_be, _ga @ _ka, _be, _mi, _go, _su
     KeccakP_ThetaRhoPiChi4     _ga,  -1, _ki, _bo,  -1, _se-_ga, _ba @ _ga, _se, _ki, _bo, _mu
-                                                                       
+
     KeccakP_ThetaRhoPiChiIota  _ba,  -1,  -1, _go,  -1, _ke-_ba, _ma @ _ba, _ke, _si, _go, _mu
     KeccakP_ThetaRhoPiChi1     _ma, _be,  -1,  -1, _gu, _ki-_be, _ga @ _ma, _be, _ki, _so, _gu
     KeccakP_ThetaRhoPiChi2     _ga,  -1, _bi,  -1,  -1, _me-_ga, _sa @ _ga, _me, _bi, _ko, _su
     KeccakP_ThetaRhoPiChi3     _sa, _ge,  -1, _bo,  -1, _mi-_ge, _ka @ _sa, _ge, _mi, _bo, _ku
     KeccakP_ThetaRhoPiChi4     _ka,  -1, _gi,  -1, _bu, _se-_ka, _ba @ _ka, _se, _gi, _mo, _bu
-                                                                       
+
     KeccakP_ThetaRhoPiChiIota  _ba,  -1,  -1,  -1,  -1, _be-_ba, _ga @ _ba, _be, _bi, _bo, _bu
     KeccakP_ThetaRhoPiChi1     _ga,  -1,  -1,  -1,  -1, _ge-_ga, _ka @ _ga, _ge, _gi, _go, _gu
     KeccakP_ThetaRhoPiChi2     _ka,  -1,  -1,  -1,  -1, _ke-_ka, _ma @ _ka, _ke, _ki, _ko, _ku
     KeccakP_ThetaRhoPiChi3     _ma,  -1,  -1,  -1,  -1, _me-_ma, _sa @ _ma, _me, _mi, _mo, _mu
-    subs	r2, #4                                            
+    subs	r2, #4
     KeccakP_ThetaRhoPiChi4     _sa,  -1,  -1,  -1,  -1, _se-_sa, _ba @ _sa, _se, _si, _so, _su
     bne		KeccakF1600_Pl2_PermuteAll_RoundLoop
     add 	sp, #4*2*8+8	@ free 4.5 D lanes
     pop		{r4-r7}
     vpop	{q4-q7}
     bx		lr
-   
+
 

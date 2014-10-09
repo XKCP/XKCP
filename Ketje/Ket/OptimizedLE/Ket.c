@@ -22,7 +22,7 @@ void Ket_StateOverwrite( void *stateArg, unsigned int offset, const unsigned cha
 {
 	unsigned char *state = (unsigned char*)stateArg + offset;
 
-	while ( length-- != 0 ) 
+	while ( length-- != 0 )
 	{
 		*(state++) = *(data++);
 	}

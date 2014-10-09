@@ -62,7 +62,7 @@ void Ket_FeedAssociatedDataBlocks( void *state, const unsigned char *data, unsig
 		Ket_StateXORByte( state, 2, *(data++) );
 		Ket_StateXORByte( state, 3, *(data++) );
 		#endif
-		Ket_Step( state, Ketje_BlockSize, FRAMEBITS00 ); 
+		Ket_Step( state, Ketje_BlockSize, FRAMEBITS00 );
 	}
 	while ( --nBlocks != 0 );
 }
@@ -72,8 +72,8 @@ void Ket_UnwrapBlocks( void *state, const unsigned char *ciphertext, unsigned ch
 	unsigned char tempBlock[Ketje_BlockSize];
     unsigned char frameAndPaddingBits[1];
     frameAndPaddingBits[0] = 0x08 | FRAMEBITS11;
-	
-	while ( nBlocks-- != 0 ) 
+
+	while ( nBlocks-- != 0 )
 	{
 		SnP_ExtractBytes(state, tempBlock, 0, Ketje_BlockSize);
 		tempBlock[0] = *(plaintext++) = *(ciphertext++) ^ tempBlock[0];
@@ -95,7 +95,7 @@ void Ket_WrapBlocks( void *state, const unsigned char *plaintext, unsigned char 
     unsigned char frameAndPaddingBits[1];
     frameAndPaddingBits[0] = 0x08 | FRAMEBITS11;
 
-	while ( nBlocks-- != 0 ) 
+	while ( nBlocks-- != 0 )
 	{
 		SnP_ExtractBytes(state, keystream, 0, Ketje_BlockSize);
 		plaintemp[0] = plaintext[0];

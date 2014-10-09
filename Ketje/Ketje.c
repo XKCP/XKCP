@@ -20,9 +20,9 @@ int Ketje_Initialize(Ketje_Instance *instance, const unsigned char *key, unsigne
 {
 	unsigned char smallData[2];
     unsigned int keyPackSizeInBits;
-	
+
     keyPackSizeInBits = 8*((keySizeInBits+16)/8);
-    if ( (keyPackSizeInBits + nonceSizeInBits + 2) > KeccakF_width) 
+    if ( (keyPackSizeInBits + nonceSizeInBits + 2) > KeccakF_width)
 		return 1;
 
 	instance->phase = Ketje_Phase_FeedingAssociatedData;
@@ -30,7 +30,7 @@ int Ketje_Initialize(Ketje_Instance *instance, const unsigned char *key, unsigne
 
     SnP_StaticInitialize();
     SnP_Initialize(instance->state);
- 
+
     // Key pack
     smallData[0] = keySizeInBits / 8 + 2;
 	Ket_StateOverwrite( instance->state, 0, smallData, 1 );
@@ -44,7 +44,7 @@ int Ketje_Initialize(Ketje_Instance *instance, const unsigned char *key, unsigne
     }
 	Ket_StateOverwrite( instance->state, 1+keySizeInBits/8, smallData, 1 );
 
-    // Nonce 
+    // Nonce
 	Ket_StateOverwrite( instance->state, 1+keySizeInBits/8+1, nonce, nonceSizeInBits / 8 );
     if ((nonceSizeInBits % 8) == 0)
         smallData[0] = 0x01;
@@ -64,25 +64,25 @@ int Ketje_Initialize(Ketje_Instance *instance, const unsigned char *key, unsigne
 int Ketje_FeedAssociatedData(Ketje_Instance *instance, const unsigned char *data, unsigned int dataSizeInBytes)
 {
 	unsigned int size;
-	
+
     if ((instance->phase & Ketje_Phase_FeedingAssociatedData) == 0)
         return 1;
 
-	if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize ) 
+	if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize )
 	{
-		if (instance->dataRemainderSize != 0) 
+		if (instance->dataRemainderSize != 0)
 		{
 			dataSizeInBytes -= Ketje_BlockSize - instance->dataRemainderSize;
 			while ( instance->dataRemainderSize != Ketje_BlockSize )
 				Ket_StateXORByte( instance->state, instance->dataRemainderSize++, *(data++) );
-			Ket_Step( instance->state, Ketje_BlockSize, FRAMEBITS00 ); 
+			Ket_Step( instance->state, Ketje_BlockSize, FRAMEBITS00 );
 			instance->dataRemainderSize = 0;
 		}
 
-		if ( dataSizeInBytes > Ketje_BlockSize ) 
+		if ( dataSizeInBytes > Ketje_BlockSize )
 		{
 			size = ((dataSizeInBytes + (Ketje_BlockSize - 1)) & ~(Ketje_BlockSize - 1)) - Ketje_BlockSize;
-			Ket_FeedAssociatedDataBlocks( instance->state, data, size / Ketje_BlockSize); 
+			Ket_FeedAssociatedDataBlocks( instance->state, data, size / Ketje_BlockSize);
 			dataSizeInBytes -= size;
 			data += size;
 		}
@@ -97,10 +97,10 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
 {
 	unsigned int size;
 	unsigned char temp;
-	
+
 	if ( (instance->phase & Ketje_Phase_FeedingAssociatedData) != 0)
 	{
-		Ket_Step( instance->state, instance->dataRemainderSize, FRAMEBITS01 ); 
+		Ket_Step( instance->state, instance->dataRemainderSize, FRAMEBITS01 );
 		instance->dataRemainderSize = 0;
 		instance->phase = Ketje_Phase_Wrapping;
 	}
@@ -108,10 +108,10 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
 	if ( (instance->phase & Ketje_Phase_Wrapping) == 0)
 		return 1;
 
-	if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize ) 
-	{	
+	if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize )
+	{
 		// More than a block
-		if (instance->dataRemainderSize != 0) 
+		if (instance->dataRemainderSize != 0)
 		{
 			// Process data remainder
 			while ( instance->dataRemainderSize < Ketje_BlockSize )
@@ -121,12 +121,12 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
 				Ket_StateXORByte( instance->state, instance->dataRemainderSize++, temp );
 				--dataSizeInBytes;
 			}
-			Ket_Step( instance->state, Ketje_BlockSize, FRAMEBITS11 ); 
+			Ket_Step( instance->state, Ketje_BlockSize, FRAMEBITS11 );
 			instance->dataRemainderSize = 0;
 		}
-		
+
 		//	Wrap multiple blocks except last.
-		if ( dataSizeInBytes > Ketje_BlockSize ) 
+		if ( dataSizeInBytes > Ketje_BlockSize )
 		{
 			size = ((dataSizeInBytes + (Ketje_BlockSize - 1)) & ~(Ketje_BlockSize - 1)) - Ketje_BlockSize;
 			Ket_WrapBlocks( instance->state, plaintext, ciphertext, size / Ketje_BlockSize );
@@ -137,7 +137,7 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
 	}
 
 	//	XOR and buffer remaining data
-	while ( dataSizeInBytes-- != 0 ) 
+	while ( dataSizeInBytes-- != 0 )
 	{
 		temp = *(plaintext++);
 		*(ciphertext++) = temp ^ Ket_StateExtractByte( instance->state, instance->dataRemainderSize );
@@ -154,7 +154,7 @@ int Ketje_UnwrapCiphertext(Ketje_Instance *instance, const unsigned char *cipher
 
 	if ( (instance->phase & Ketje_Phase_FeedingAssociatedData) != 0)
 	{
-		Ket_Step( instance->state, instance->dataRemainderSize, FRAMEBITS01 ); 
+		Ket_Step( instance->state, instance->dataRemainderSize, FRAMEBITS01 );
 		instance->dataRemainderSize = 0;
 		instance->phase = Ketje_Phase_Unwrapping;
 	}
@@ -162,25 +162,25 @@ int Ketje_UnwrapCiphertext(Ketje_Instance *instance, const unsigned char *cipher
 	if ( (instance->phase & Ketje_Phase_Unwrapping) == 0)
 		return 1;
 
-	if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize ) 
+	if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize )
 	{
 		// More than a block
-		if (instance->dataRemainderSize != 0) 
+		if (instance->dataRemainderSize != 0)
 		{
 			// Process data remainder
-			while ( instance->dataRemainderSize < Ketje_BlockSize ) 
+			while ( instance->dataRemainderSize < Ketje_BlockSize )
 			{
 				temp = *(ciphertext++) ^ Ket_StateExtractByte( instance->state, instance->dataRemainderSize );
 				*(plaintext++) = temp;
 				Ket_StateXORByte( instance->state, instance->dataRemainderSize++, temp );
 				--dataSizeInBytes;
 			}
-			Ket_Step( instance->state, Ketje_BlockSize, FRAMEBITS11 ); 
+			Ket_Step( instance->state, Ketje_BlockSize, FRAMEBITS11 );
 			instance->dataRemainderSize = 0;
 		}
-		
+
 		//	Unwrap multiple blocks except last.
-		if ( dataSizeInBytes > Ketje_BlockSize ) 
+		if ( dataSizeInBytes > Ketje_BlockSize )
 		{
 			size = ((dataSizeInBytes + (Ketje_BlockSize - 1)) & ~(Ketje_BlockSize - 1)) - Ketje_BlockSize;
 			Ket_UnwrapBlocks( instance->state, ciphertext, plaintext, size / Ketje_BlockSize );
@@ -191,7 +191,7 @@ int Ketje_UnwrapCiphertext(Ketje_Instance *instance, const unsigned char *cipher
 	}
 
 	//	XOR and buffer remaining data
-	while ( dataSizeInBytes-- != 0 ) 
+	while ( dataSizeInBytes-- != 0 )
 	{
 		temp = *(ciphertext++) ^ Ket_StateExtractByte( instance->state, instance->dataRemainderSize );
 		*(plaintext++) = temp;
@@ -220,9 +220,9 @@ int Ketje_GetTag(Ketje_Instance *instance, unsigned char *tag, unsigned int tagS
 		*(tag++) = Ket_StateExtractByte( instance->state, i );
 	tagSizeInBytes -= tagSizePart;
 
-    while(tagSizeInBytes > 0) 
+    while(tagSizeInBytes > 0)
 	{
-		Ket_Step( instance->state, 0, FRAMEBITS0 ); 
+		Ket_Step( instance->state, 0, FRAMEBITS0 );
 		tagSizePart = Ketje_BlockSize;
 		if ( tagSizeInBytes < Ketje_BlockSize )
 			tagSizePart = tagSizeInBytes;

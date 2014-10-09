@@ -679,7 +679,7 @@ Keccak_Done:
     ret
 
     #undef  rpState
-    #undef  zero    
+    #undef  zero
     #undef  rX
     #undef  rY
     #undef  rZ
