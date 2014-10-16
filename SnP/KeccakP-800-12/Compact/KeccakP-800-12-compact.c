@@ -193,7 +193,7 @@ void KeccakP800_12_StatePermute(void *argState)
     tKeccakLane *state;
     UINT8       LFSRstate;
 
-    state = argState;
+    state = (tKeccakLane*)argState;
     LFSRstate = 0x01;
 	nr = 12;
 	for ( y = (tSmallUInt)(cKeccakNumberOfRounds - 12); y != 0; --y )
