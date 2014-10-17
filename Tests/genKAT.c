@@ -177,7 +177,7 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
             fprintBstr(fp_out, "MD = ", Squeezed, hashbitlen/8);
         if (squeezedOutputLength > 0) {
             Keccak_HashSqueeze(&hash, Squeezed, squeezedOutputLength);
-            fprintBstr(fp_out, "Squeezed = ", Squeezed, SqueezingOutputLength/8);
+            fprintBstr(fp_out, "Squeezed = ", Squeezed, squeezedOutputLength/8);
         }
     } while ( 1 );
     printf("finished ShortMsgKAT for <%s>\n", fileName);
