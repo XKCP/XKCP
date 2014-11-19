@@ -14,12 +14,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include <string.h>
-#include "KeccakDuplex.h"
 #include "Keyak.h"
-
-#ifdef PlSnP_P
-#include "KeccakParallelDuplex.h"
-#endif
 
 #define Keyak_Phase_FeedingAssociatedData   0x01
 #define Keyak_Phase_Wrapping                0x02
