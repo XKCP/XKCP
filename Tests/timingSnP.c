@@ -1,99 +1,25 @@
 /*
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
+
 For more information, feedback or questions, please refer to our websites:
 http://keccak.noekeon.org/
 http://keyak.noekeon.org/
 http://ketje.noekeon.org/
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#include <assert.h>
+#include <math.h>
 #include <stdio.h>
-
-/************** Timing routine (for performance measurements) ***********/
-/* By Doug Whiting */
-/* unfortunately, this is generally assembly code and not very portable */
-#if defined(_M_IX86) || defined(__i386) || defined(_i386) || defined(__i386__) || defined(i386) || \
-    defined(_X86_)   || defined(__x86_64__) || defined(_M_X64) || defined(__x86_64)
-#define _Is_X86_    1
-#endif
-
-#if  defined(_Is_X86_) && (!defined(__STRICT_ANSI__)) && (defined(__GNUC__) || !defined(__STDC__)) && \
-    (defined(__BORLANDC__) || defined(_MSC_VER) || defined(__MINGW_H) || defined(__GNUC__))
-#define HI_RES_CLK_OK         1          /* it's ok to use RDTSC opcode */
-
-#if defined(_MSC_VER) // && defined(_M_X64)
-#include <intrin.h>
-#pragma intrinsic(__rdtsc)         /* use MSVC rdtsc call where defined */
-#endif
-
-#endif
-
-typedef unsigned int uint_32t;
-
-uint_32t HiResTime(void)           /* return the current value of time stamp counter */
-    {
-#if defined(HI_RES_CLK_OK)
-    uint_32t x[2];
-#if   defined(__BORLANDC__)
-#define COMPILER_ID "BCC"
-    __emit__(0x0F,0x31);           /* RDTSC instruction */
-    _asm { mov x[0],eax };
-#elif defined(_MSC_VER)
-#define COMPILER_ID "MSC"
-#if defined(_MSC_VER) // && defined(_M_X64)
-    x[0] = (uint_32t) __rdtsc();
-#else
-    _asm { _emit 0fh }; _asm { _emit 031h };
-    _asm { mov x[0],eax };
-#endif
-#elif defined(__MINGW_H) || defined(__GNUC__)
-#define COMPILER_ID "GCC"
-    asm volatile("rdtsc" : "=a"(x[0]), "=d"(x[1]));
-#else
-#error  "HI_RES_CLK_OK -- but no assembler code for this platform (?)"
-#endif
-    return x[0];
-#else
-    /* avoid annoying MSVC 9.0 compiler warning #4720 in ANSI mode! */
-#if (!defined(_MSC_VER)) || (!defined(__STDC__)) || (_MSC_VER < 1300)
-    FatalError("No support for RDTSC on this CPU platform\n");
-#endif
-    return 0;
-#endif /* defined(HI_RES_CLK_OK) */
-    }
-
-#define TIMER_SAMPLE_CNT (100)
-
-uint_32t calibrate()
-{
-    uint_32t dtMin = 0xFFFFFFFF;        /* big number to start */
-    uint_32t t0,t1,i;
-
-    for (i=0;i < TIMER_SAMPLE_CNT;i++)  /* calibrate the overhead for measuring time */
-        {
-        t0 = HiResTime();
-        t1 = HiResTime();
-        if (dtMin > t1-t0)              /* keep only the minimum time */
-            dtMin = t1-t0;
-        }
-    return dtMin;
-}
-
 #include "SnP-interface.h"
-#include "KeccakDuplex.h"
+#include "timing.h"
+#include "timingSnP.h"
 #include "KeccakSponge.h"
-
-#define measureTimingBegin \
-    uint_32t tMin = 0xFFFFFFFF; \
-    uint_32t t0,t1,i; \
-    for (i=0;i < TIMER_SAMPLE_CNT;i++) \
-        { \
-        t0 = HiResTime();
-
-#define measureTimingEnd \
-        t1 = HiResTime(); \
-        if (tMin > t1-t0 - dtMin) \
-            tMin = t1-t0 - dtMin; \
-        } \
-    return tMin;
 
 uint_32t measureSnP_Permute(uint_32t dtMin)
 {
@@ -104,241 +30,225 @@ uint_32t measureSnP_Permute(uint_32t dtMin)
     measureTimingEnd
 }
 
-uint_32t measureSnP_FBWL_Absorb_16lanes_1(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
+    ALIGN unsigned char data[1000*25*SnP_laneLengthInBytes];
+    unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
+    assert(dataSize <= sizeof(data));
 
     measureTimingBegin
-    SnP_FBWL_Absorb(&state, 16, data, 1*16*SnP_laneLengthInBytes, 0x12);
+    SnP_FBWL_Absorb(&state, laneCount, data, dataSize, 0x12);
     measureTimingEnd
 }
 
-uint_32t measureSnP_FBWL_Absorb_16lanes_10(uint_32t dtMin)
+void gatherSnP_FBWL_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
+{
+    measurements[ 0] = measureSnP_FBWL_Absorb(dtMin, 16, 1);
+    measurements[ 1] = measureSnP_FBWL_Absorb(dtMin, 16, 10);
+    measurements[ 2] = measureSnP_FBWL_Absorb(dtMin, 16, 100);
+    measurements[ 3] = measureSnP_FBWL_Absorb(dtMin, 16, 1000);
+    measurements[ 4] = measureSnP_FBWL_Absorb(dtMin, 17, 1);
+    measurements[ 5] = measureSnP_FBWL_Absorb(dtMin, 17, 10);
+    measurements[ 6] = measureSnP_FBWL_Absorb(dtMin, 17, 100);
+    measurements[ 7] = measureSnP_FBWL_Absorb(dtMin, 17, 1000);
+    measurements[ 8] = measureSnP_FBWL_Absorb(dtMin, 21, 1);
+    measurements[ 9] = measureSnP_FBWL_Absorb(dtMin, 21, 10);
+    measurements[10] = measureSnP_FBWL_Absorb(dtMin, 21, 100);
+    measurements[11] = measureSnP_FBWL_Absorb(dtMin, 21, 1000);
+    laneCounts[0] = 16;
+    laneCounts[1] = 17;
+    laneCounts[2] = 21;
+}
+
+uint_32t measureSnP_FBWL_Squeeze(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
+    ALIGN unsigned char data[1000*25*SnP_laneLengthInBytes];
+    unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
+    assert(dataSize <= sizeof(data));
 
     measureTimingBegin
-    SnP_FBWL_Absorb(&state, 16, data, 10*16*SnP_laneLengthInBytes, 0x12);
+    SnP_FBWL_Squeeze(&state, laneCount, data, dataSize);
     measureTimingEnd
 }
 
-uint_32t measureSnP_FBWL_Absorb_16lanes_100(uint_32t dtMin)
+void gatherSnP_FBWL_Squeeze(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
+{
+    measurements[ 0] = measureSnP_FBWL_Squeeze(dtMin, 16, 1);
+    measurements[ 1] = measureSnP_FBWL_Squeeze(dtMin, 16, 10);
+    measurements[ 2] = measureSnP_FBWL_Squeeze(dtMin, 16, 100);
+    measurements[ 3] = measureSnP_FBWL_Squeeze(dtMin, 16, 1000);
+    measurements[ 4] = measureSnP_FBWL_Squeeze(dtMin, 17, 1);
+    measurements[ 5] = measureSnP_FBWL_Squeeze(dtMin, 17, 10);
+    measurements[ 6] = measureSnP_FBWL_Squeeze(dtMin, 17, 100);
+    measurements[ 7] = measureSnP_FBWL_Squeeze(dtMin, 17, 1000);
+    measurements[ 8] = measureSnP_FBWL_Squeeze(dtMin, 21, 1);
+    measurements[ 9] = measureSnP_FBWL_Squeeze(dtMin, 21, 10);
+    measurements[10] = measureSnP_FBWL_Squeeze(dtMin, 21, 100);
+    measurements[11] = measureSnP_FBWL_Squeeze(dtMin, 21, 1000);
+    laneCounts[0] = 16;
+    laneCounts[1] = 17;
+    laneCounts[2] = 21;
+}
+
+uint_32t measureSnP_FBWL_Wrap_1buffer(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
+    ALIGN unsigned char data[1000*25*SnP_laneLengthInBytes];
+    unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
+    assert(dataSize <= sizeof(data));
 
     measureTimingBegin
-    SnP_FBWL_Absorb(&state, 16, data, 100*16*SnP_laneLengthInBytes, 0x12);
+    SnP_FBWL_Wrap(&state, laneCount, data, data, dataSize, 0x01);
     measureTimingEnd
 }
 
-uint_32t measureSnP_FBWL_Absorb_16lanes_1000(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Wrap_2buffers(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
+    ALIGN unsigned char data1[1000*25*SnP_laneLengthInBytes];
+    ALIGN unsigned char data2[1000*25*SnP_laneLengthInBytes];
+    unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
+    assert(dataSize <= sizeof(data1));
 
     measureTimingBegin
-    SnP_FBWL_Absorb(&state, 16, data, 1000*16*SnP_laneLengthInBytes, 0x12);
+    SnP_FBWL_Wrap(&state, laneCount, data1, data2, dataSize, 0x01);
     measureTimingEnd
 }
 
-void measureSnP_FBWL_Absorb_16lanes(uint_32t dtMin, uint_32t *measurements)
+void gatherSnP_FBWL_Wrap(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
 {
-    measurements[0] = measureSnP_FBWL_Absorb_16lanes_1(dtMin);
-    measurements[1] = measureSnP_FBWL_Absorb_16lanes_10(dtMin);
-    measurements[2] = measureSnP_FBWL_Absorb_16lanes_100(dtMin);
-    measurements[3] = measureSnP_FBWL_Absorb_16lanes_1000(dtMin);
+    measurements[ 0] = measureSnP_FBWL_Wrap_1buffer(dtMin, 17, 1);
+    measurements[ 1] = measureSnP_FBWL_Wrap_1buffer(dtMin, 17, 10);
+    measurements[ 2] = measureSnP_FBWL_Wrap_1buffer(dtMin, 17, 100);
+    measurements[ 3] = measureSnP_FBWL_Wrap_1buffer(dtMin, 17, 1000);
+    measurements[ 4] = measureSnP_FBWL_Wrap_2buffers(dtMin, 17, 1);
+    measurements[ 5] = measureSnP_FBWL_Wrap_2buffers(dtMin, 17, 10);
+    measurements[ 6] = measureSnP_FBWL_Wrap_2buffers(dtMin, 17, 100);
+    measurements[ 7] = measureSnP_FBWL_Wrap_2buffers(dtMin, 17, 1000);
+    measurements[ 8] = measureSnP_FBWL_Wrap_1buffer(dtMin, 21, 1);
+    measurements[ 9] = measureSnP_FBWL_Wrap_1buffer(dtMin, 21, 10);
+    measurements[10] = measureSnP_FBWL_Wrap_1buffer(dtMin, 21, 100);
+    measurements[11] = measureSnP_FBWL_Wrap_1buffer(dtMin, 21, 1000);
+    measurements[12] = measureSnP_FBWL_Wrap_2buffers(dtMin, 21, 1);
+    measurements[13] = measureSnP_FBWL_Wrap_2buffers(dtMin, 21, 10);
+    measurements[14] = measureSnP_FBWL_Wrap_2buffers(dtMin, 21, 100);
+    measurements[15] = measureSnP_FBWL_Wrap_2buffers(dtMin, 21, 1000);
+    laneCounts[0] = 17;
+    laneCounts[1] = 17;
+    laneCounts[2] = 21;
+    laneCounts[3] = 21;
 }
 
-uint_32t measureSnP_FBWL_Squeeze_16lanes_1(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Unwrap_1buffer(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
+    ALIGN unsigned char data[1000*25*SnP_laneLengthInBytes];
+    unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
+    assert(dataSize <= sizeof(data));
 
     measureTimingBegin
-    SnP_FBWL_Squeeze(&state, 16, data, 1*16*SnP_laneLengthInBytes);
+    SnP_FBWL_Unwrap(&state, laneCount, data, data, dataSize, 0x01);
     measureTimingEnd
 }
 
-uint_32t measureSnP_FBWL_Squeeze_16lanes_10(uint_32t dtMin)
+uint_32t measureSnP_FBWL_Unwrap_2buffers(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
+    ALIGN unsigned char data1[1000*25*SnP_laneLengthInBytes];
+    ALIGN unsigned char data2[1000*25*SnP_laneLengthInBytes];
+    unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
+    assert(dataSize <= sizeof(data1));
 
     measureTimingBegin
-    SnP_FBWL_Squeeze(&state, 16, data, 10*16*SnP_laneLengthInBytes);
+    SnP_FBWL_Unwrap(&state, laneCount, data1, data2, dataSize, 0x01);
     measureTimingEnd
 }
 
-uint_32t measureSnP_FBWL_Squeeze_16lanes_100(uint_32t dtMin)
+void gatherSnP_FBWL_Unwrap(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
 {
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
-
-    measureTimingBegin
-    SnP_FBWL_Squeeze(&state, 16, data, 100*16*SnP_laneLengthInBytes);
-    measureTimingEnd
+    measurements[ 0] = measureSnP_FBWL_Unwrap_1buffer(dtMin, 17, 1);
+    measurements[ 1] = measureSnP_FBWL_Unwrap_1buffer(dtMin, 17, 10);
+    measurements[ 2] = measureSnP_FBWL_Unwrap_1buffer(dtMin, 17, 100);
+    measurements[ 3] = measureSnP_FBWL_Unwrap_1buffer(dtMin, 17, 1000);
+    measurements[ 4] = measureSnP_FBWL_Unwrap_2buffers(dtMin, 17, 1);
+    measurements[ 5] = measureSnP_FBWL_Unwrap_2buffers(dtMin, 17, 10);
+    measurements[ 6] = measureSnP_FBWL_Unwrap_2buffers(dtMin, 17, 100);
+    measurements[ 7] = measureSnP_FBWL_Unwrap_2buffers(dtMin, 17, 1000);
+    measurements[ 8] = measureSnP_FBWL_Unwrap_1buffer(dtMin, 21, 1);
+    measurements[ 9] = measureSnP_FBWL_Unwrap_1buffer(dtMin, 21, 10);
+    measurements[10] = measureSnP_FBWL_Unwrap_1buffer(dtMin, 21, 100);
+    measurements[11] = measureSnP_FBWL_Unwrap_1buffer(dtMin, 21, 1000);
+    measurements[12] = measureSnP_FBWL_Unwrap_2buffers(dtMin, 21, 1);
+    measurements[13] = measureSnP_FBWL_Unwrap_2buffers(dtMin, 21, 10);
+    measurements[14] = measureSnP_FBWL_Unwrap_2buffers(dtMin, 21, 100);
+    measurements[15] = measureSnP_FBWL_Unwrap_2buffers(dtMin, 21, 1000);
+    laneCounts[0] = 17;
+    laneCounts[1] = 17;
+    laneCounts[2] = 21;
+    laneCounts[3] = 21;
 }
 
-uint_32t measureSnP_FBWL_Squeeze_16lanes_1000(uint_32t dtMin)
+void bubbleSort(double *list, unsigned int size)
 {
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
+    unsigned int n = size;
 
-    measureTimingBegin
-    SnP_FBWL_Squeeze(&state, 16, data, 1000*16*SnP_laneLengthInBytes);
-    measureTimingEnd
+    do {
+       unsigned int newn = 0;
+       unsigned int i;
+
+       for(i=1; i<n; i++) {
+          if (list[i-1] > list[i]) {
+              double temp = list[i-1];
+              list[i-1] = list[i];
+              list[i] = temp;
+              newn = i;
+          }
+       }
+       n = newn;
+    }
+    while(n > 0);
 }
 
-void measureSnP_FBWL_Squeeze_16lanes(uint_32t dtMin, uint_32t *measurements)
+double med4(double x0, double x1, double x2, double x3)
 {
-    measurements[0] = measureSnP_FBWL_Squeeze_16lanes_1(dtMin);
-    measurements[1] = measureSnP_FBWL_Squeeze_16lanes_10(dtMin);
-    measurements[2] = measureSnP_FBWL_Squeeze_16lanes_100(dtMin);
-    measurements[3] = measureSnP_FBWL_Squeeze_16lanes_1000(dtMin);
+    double list[4];
+    list[0] = x0;
+    list[1] = x1;
+    list[2] = x2;
+    list[3] = x3;
+    bubbleSort(list, 4);
+    if (fabs(list[2]-list[0]) < fabs(list[3]-list[1]))
+        return 0.25*list[0]+0.375*list[1]+0.25*list[2]+0.125*list[3];
+    else
+        return 0.125*list[0]+0.25*list[1]+0.375*list[2]+0.25*list[3];
 }
 
-uint_32t measureSnP_FBWL_Wrap_16lanes_1(uint_32t dtMin)
+void displayMeasurements1101001000(uint_32t *measurements, uint_32t *laneCounts, unsigned int numberOfColumns)
 {
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
+    double cpb[4];
+    unsigned int i;
 
-    measureTimingBegin
-    SnP_FBWL_Wrap(&state, 16, data, data, 1*16*SnP_laneLengthInBytes, 0x01);
-    measureTimingEnd
-}
-
-uint_32t measureSnP_FBWL_Wrap_16lanes_10(uint_32t dtMin)
-{
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
-
-    measureTimingBegin
-    SnP_FBWL_Wrap(&state, 16, data, data, 10*16*SnP_laneLengthInBytes, 0x01);
-    measureTimingEnd
-}
-
-uint_32t measureSnP_FBWL_Wrap_16lanes_100(uint_32t dtMin)
-{
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
-
-    measureTimingBegin
-    SnP_FBWL_Wrap(&state, 16, data, data, 100*16*SnP_laneLengthInBytes, 0x01);
-    measureTimingEnd
-}
-
-uint_32t measureSnP_FBWL_Wrap_16lanes_1000(uint_32t dtMin)
-{
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
-
-    measureTimingBegin
-    SnP_FBWL_Wrap(&state, 16, data, data, 1000*16*SnP_laneLengthInBytes, 0x01);
-    measureTimingEnd
-}
-
-void measureSnP_FBWL_Wrap_16lanes(uint_32t dtMin, uint_32t *measurements)
-{
-    measurements[0] = measureSnP_FBWL_Wrap_16lanes_1(dtMin);
-    measurements[1] = measureSnP_FBWL_Wrap_16lanes_10(dtMin);
-    measurements[2] = measureSnP_FBWL_Wrap_16lanes_100(dtMin);
-    measurements[3] = measureSnP_FBWL_Wrap_16lanes_1000(dtMin);
-}
-
-uint_32t measureSnP_FBWL_Unwrap_16lanes_1(uint_32t dtMin)
-{
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
-
-    measureTimingBegin
-    SnP_FBWL_Unwrap(&state, 16, data, data, 1*16*SnP_laneLengthInBytes, 0x01);
-    measureTimingEnd
-}
-
-uint_32t measureSnP_FBWL_Unwrap_16lanes_10(uint_32t dtMin)
-{
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
-
-    measureTimingBegin
-    SnP_FBWL_Unwrap(&state, 16, data, data, 10*16*SnP_laneLengthInBytes, 0x01);
-    measureTimingEnd
-}
-
-uint_32t measureSnP_FBWL_Unwrap_16lanes_100(uint_32t dtMin)
-{
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
-
-    measureTimingBegin
-    SnP_FBWL_Unwrap(&state, 16, data, data, 100*16*SnP_laneLengthInBytes, 0x01);
-    measureTimingEnd
-}
-
-uint_32t measureSnP_FBWL_Unwrap_16lanes_1000(uint_32t dtMin)
-{
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
-    ALIGN unsigned char data[1000*16*SnP_laneLengthInBytes];
-
-    measureTimingBegin
-    SnP_FBWL_Unwrap(&state, 16, data, data, 1000*16*SnP_laneLengthInBytes, 0x01);
-    measureTimingEnd
-}
-
-void measureSnP_FBWL_Unwrap_16lanes(uint_32t dtMin, uint_32t *measurements)
-{
-    measurements[0] = measureSnP_FBWL_Unwrap_16lanes_1(dtMin);
-    measurements[1] = measureSnP_FBWL_Unwrap_16lanes_10(dtMin);
-    measurements[2] = measureSnP_FBWL_Unwrap_16lanes_100(dtMin);
-    measurements[3] = measureSnP_FBWL_Unwrap_16lanes_1000(dtMin);
-}
-
-uint_32t measureKeccakAbsorb1000blocks(uint_32t dtMin)
-{
-    Keccak_SpongeInstance sponge;
-    ALIGN unsigned char data[1000*200];
-
-    measureTimingBegin
-    Keccak_SpongeInitialize(&sponge, SnP_width-256, 256);
-    Keccak_SpongeAbsorb(&sponge, data, 999*(SnP_width-256)/8+1);
-    Keccak_SpongeAbsorbLastFewBits(&sponge, 0x01);
-    measureTimingEnd
-}
-
-uint_32t measureKeccakSqueeze1000blocks(uint_32t dtMin)
-{
-    Keccak_SpongeInstance sponge;
-    ALIGN unsigned char data[1000*200];
-
-    measureTimingBegin
-    Keccak_SpongeInitialize(&sponge, SnP_width-256, 256);
-    Keccak_SpongeSqueeze(&sponge, data, 1000*(SnP_width-256)/8);
-    measureTimingEnd
-}
-
-uint_32t measureKeccakDuplexing1000blocks(uint_32t dtMin)
-{
-    Keccak_DuplexInstance duplex;
-    int j;
-    ALIGN unsigned char dataIn[200];
-    ALIGN unsigned char dataOut[200];
-
-    measureTimingBegin
-    Keccak_DuplexInitialize(&duplex, SnP_width-256+3, 256-3);
-    for(j=0; j<1000; j++)
-        Keccak_Duplexing(&duplex, dataIn, (SnP_width-256)/8, dataOut, (SnP_width-256)/8, 0x03);
-    measureTimingEnd
-}
-
-void displayMeasurements1101001000(uint_32t *measurements)
-{
-    printf("       1 block:  %d\n", measurements[0]);
-    printf("      10 blocks: %d\n", measurements[1]);
-    printf("     100 blocks: %d\n", measurements[2]);
-    printf("    1000 blocks: %d\n", measurements[3]);
+    for(i=0; i<numberOfColumns; i++) {
+        uint_32t bytes = laneCounts[i]*SnP_laneLengthInBytes;
+        double x = med4(measurements[i*4+0]*1.0, measurements[i*4+1]/10.0, measurements[i*4+2]/100.0, measurements[i*4+3]/1000.0);
+        cpb[i] = x/bytes;
+    }
+    if (numberOfColumns == 3) {
+        printf("       1 block:  %5d       %5d       %5d\n", measurements[0], measurements[4], measurements[8]);
+        printf("      10 blocks: %6d      %6d      %6d\n", measurements[1], measurements[5], measurements[9]);
+        printf("     100 blocks: %7d     %7d     %7d\n", measurements[2], measurements[6], measurements[10]);
+        printf("    1000 blocks: %8d    %8d    %8d\n", measurements[3], measurements[7], measurements[11]);
+        printf("    cycles/byte: %7.2f     %7.2f     %7.2f\n", cpb[0], cpb[1], cpb[2]);
+    }
+    else if (numberOfColumns == 4) {
+        printf("       1 block:  %5d       %5d       %5d       %5d\n", measurements[0], measurements[4], measurements[8], measurements[12]);
+        printf("      10 blocks: %6d      %6d      %6d      %6d\n", measurements[1], measurements[5], measurements[9], measurements[13]);
+        printf("     100 blocks: %7d     %7d     %7d     %7d\n", measurements[2], measurements[6], measurements[10], measurements[14]);
+        printf("    1000 blocks: %8d    %8d    %8d    %8d\n", measurements[3], measurements[7], measurements[11], measurements[15]);
+        printf("    cycles/byte: %7.2f     %7.2f     %7.2f     %7.2f\n", cpb[0], cpb[1], cpb[2], cpb[3]);
+    }
     printf("\n");
 }
 
@@ -346,36 +256,28 @@ void doTimingSnP(void)
 {
     uint_32t calibration;
     uint_32t measurement;
-    uint_32t measurements[4];
+    uint_32t measurements[16];
+    uint_32t laneCounts[4];
 
-    measureKeccakAbsorb1000blocks(0);
+    measureSnP_FBWL_Absorb(0, 16, 1000);
     calibration = calibrate();
 
     measurement = measureSnP_Permute(calibration);
-    printf("Cycles for KeccakF1600_StatePermute(state): %d\n\n", measurement);
+    printf("Cycles for SnP_Permute(state): %d\n\n", measurement);
 
-    measureSnP_FBWL_Absorb_16lanes(calibration, measurements);
-    printf("Cycles for SnP_FBWL_Absorb(state, 16 lanes): \n");
-    displayMeasurements1101001000(measurements);
+    gatherSnP_FBWL_Absorb(calibration, measurements, laneCounts);
+    printf("Cycles for SnP_FBWL_Absorb(state, 16, 17 and 21 lanes): \n");
+    displayMeasurements1101001000(measurements, laneCounts, 3);
 
-    measureSnP_FBWL_Squeeze_16lanes(calibration, measurements);
-    printf("Cycles for SnP_FBWL_Squeeze(state, 16 lanes): \n");
-    displayMeasurements1101001000(measurements);
+    gatherSnP_FBWL_Squeeze(calibration, measurements, laneCounts);
+    printf("Cycles for SnP_FBWL_Squeeze(state, 16, 17 and 21 lanes): \n");
+    displayMeasurements1101001000(measurements, laneCounts, 3);
 
-    measureSnP_FBWL_Wrap_16lanes(calibration, measurements);
-    printf("Cycles for SnP_FBWL_Wrap(state, 16 lanes): \n");
-    displayMeasurements1101001000(measurements);
+    gatherSnP_FBWL_Wrap(calibration, measurements, laneCounts);
+    printf("Cycles for SnP_FBWL_Wrap(state, 17 lanes 1 and 2 buffers, 21 lanes 1 and 2 buffers): \n");
+    displayMeasurements1101001000(measurements, laneCounts, 4);
 
-    measureSnP_FBWL_Unwrap_16lanes(calibration, measurements);
-    printf("Cycles for SnP_FBWL_Unwrap(state, 16 lanes): \n");
-    displayMeasurements1101001000(measurements);
-
-    measurement = measureKeccakAbsorb1000blocks(calibration);
-    printf("Cycles for Keccak_SpongeInitialize, Absorb (1000 blocks) and AbsorbLastFewBits: %d\n\n", measurement);
-
-    measurement = measureKeccakSqueeze1000blocks(calibration);
-    printf("Cycles for Keccak_SpongeInitialize and Squeeze (1000 blocks): %d\n\n", measurement);
-
-    measurement = measureKeccakDuplexing1000blocks(calibration);
-    printf("Cycles for Keccak_DuplexInitialize and Duplexing (1000 blocks): %d\n\n", measurement);
+    gatherSnP_FBWL_Unwrap(calibration, measurements, laneCounts);
+    printf("Cycles for SnP_FBWL_Unwrap(state, 17 lanes 1 and 2 buffers, 21 lanes 1 and 2 buffers): \n");
+    displayMeasurements1101001000(measurements, laneCounts, 4);
 }

@@ -47,6 +47,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <fragment name="timingSnP">
         <c>Tests/timingSnP.c</c>
+        <h>Tests/timing.h</h>
         <h>Tests/timingSnP.h</h>
     </fragment>
 
@@ -253,6 +254,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Tests/testSnP.h</h>
         <c>Tests/testSnP.c</c>
         <c>Tests/timingSnP.c</c>
+        <h>Tests/timing.h</h>
         <h>Tests/timingSnP.h</h>
         <h>Constructions/KeccakSponge.h</h>
         <c>Constructions/KeccakSponge.c</c>
@@ -266,6 +268,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Tests/testPlSnP.h</h>
         <c>Tests/testPlSnP.c</c>
         <c>Tests/timingPlSnP.c</c>
+        <h>Tests/timing.h</h>
         <h>Tests/timingPlSnP.h</h>
     </fragment>
 
