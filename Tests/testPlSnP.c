@@ -22,6 +22,18 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include "PlSnP-interface.h"
 
+#ifdef ALIGN
+#undef ALIGN
+#endif
+
+#if defined(__GNUC__)
+#define ALIGN __attribute__ ((aligned(32)))
+#elif defined(_MSC_VER)
+#define ALIGN __declspec(align(32))
+#else
+#define ALIGN
+#endif
+
 void accumulateBufferParallel(void *stateAccumulated, const unsigned char *buffer)
 {
     PlSnP_XORLanesAll(stateAccumulated, buffer, SnP_laneCount, SnP_laneCount);
@@ -37,8 +49,8 @@ void accumulateStateParallel(void *stateAccumulated, const void *stateTest)
 
 void testPlSnP(void)
 {
-    unsigned char stateAccumulated[PlSnP_statesSizeInBytes];
-    unsigned char stateTest[PlSnP_statesSizeInBytes];
+    ALIGN unsigned char stateAccumulated[PlSnP_statesSizeInBytes];
+    ALIGN unsigned char stateTest[PlSnP_statesSizeInBytes];
 
     PlSnP_StaticInitialize();
 

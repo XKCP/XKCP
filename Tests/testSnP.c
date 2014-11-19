@@ -22,6 +22,18 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include "SnP-interface.h"
 
+#ifdef ALIGN
+#undef ALIGN
+#endif
+
+#if defined(__GNUC__)
+#define ALIGN __attribute__ ((aligned(32)))
+#elif defined(_MSC_VER)
+#define ALIGN __declspec(align(32))
+#else
+#define ALIGN
+#endif
+
 void accumulateBuffer(void *stateAccumulated, const unsigned char *buffer)
 {
     SnP_XORBytes(stateAccumulated, buffer, 0, SnP_width/8);
@@ -37,8 +49,8 @@ void accumulateState(void *stateAccumulated, const void *stateTest)
 
 void testSnP(void)
 {
-    unsigned char stateAccumulated[SnP_stateSizeInBytes];
-    unsigned char stateTest[SnP_stateSizeInBytes];
+    ALIGN unsigned char stateAccumulated[SnP_stateSizeInBytes];
+    ALIGN unsigned char stateTest[SnP_stateSizeInBytes];
 
     SnP_StaticInitialize();
 
