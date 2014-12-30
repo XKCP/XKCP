@@ -261,6 +261,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/KeccakF-800/KeccakF-800-interface.h</h>
     </fragment>
 
+    <fragment name="width1600rounds12">
+        <h>SnP/KeccakP-1600-12/KeccakP-1600-12-interface.h</h>
+        <h>SnP/KeccakF-1600/KeccakF-1600-interface.h</h>
+    </fragment>
+
     <fragment name="P1">
         <h>PlSnP/None/NumberOfParallelInstances.h</h>
     </fragment>
@@ -303,10 +308,77 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>CAESAR/RiverKeyak/selftest.c</c>
     </target>
 
-    <fragment name="width1600rounds12">
-        <h>SnP/KeccakP-1600-12/KeccakP-1600-12-interface.h</h>
-        <h>SnP/KeccakF-1600/KeccakF-1600-interface.h</h>
+    <!-- River Keyak optimized in C -->
+
+    <fragment name="width800rounds12_optimized" inherits="common width800rounds12 optimized">
+        <h>SnP/KeccakP-800-12/Optimized32/KeccakP-800-12-32-bis.macros</h>
+        <h>SnP/KeccakP-800-12/Optimized32/KeccakP-800-12-32.macros</h>
+        <c>SnP/KeccakP-800-12/Optimized32/KeccakP-800-12-optimized32.c</c>
+        <h>SnP/KeccakP-800-12/Optimized32/KeccakP-800-12-unrolling-bis.macros</h>
+        <h>SnP/KeccakP-800-12/Optimized32/KeccakP-800-12-unrolling.macros</h>
+        <h>SnP/KeccakP-800-12/Optimized32/SnP-interface.h</h>
     </fragment>
+
+    <fragment name="RiverKeyakOpt32u2" inherits="serial_keyak width800rounds12_optimized">
+        <h>SnP/KeccakP-800-12/Optimized32/u2/KeccakP-800-12-optimized32-settings.h</h>
+    </fragment>
+    <fragment name="RiverKeyakOpt32ufull" inherits="serial_keyak width800rounds12_optimized">
+        <h>SnP/KeccakP-800-12/Optimized32/ufull/KeccakP-800-12-optimized32-settings.h</h>
+    </fragment>
+    <fragment name="RiverKeyakOpt32LCu2" inherits="serial_keyak width800rounds12_optimized">
+        <h>SnP/KeccakP-800-12/Optimized32/LCu2/KeccakP-800-12-optimized32-settings.h</h>
+    </fragment>
+    <fragment name="RiverKeyakOpt32LCufull" inherits="serial_keyak width800rounds12_optimized">
+        <h>SnP/KeccakP-800-12/Optimized32/LCufull/KeccakP-800-12-optimized32-settings.h</h>
+    </fragment>
+
+    <target name="RiverKeyakOpt32u2Test" inherits="RiverKeyakOpt32u2 serial_keyak_tests"/>
+    <target name="RiverKeyakOpt32ufullTest" inherits="RiverKeyakOpt32ufull serial_keyak_tests"/>
+    <target name="RiverKeyakOpt32LCu2Test" inherits="RiverKeyakOpt32LCu2 serial_keyak_tests"/>
+    <target name="RiverKeyakOpt32LCufullTest" inherits="RiverKeyakOpt32LCufull serial_keyak_tests"/>
+
+    <target name="crypto_aead/riverkeyakv1/opt32u2" inherits="RiverKeyakOpt32u2 caesar_river_keyak"/>
+    <target name="crypto_aead/riverkeyakv1/opt32ufull" inherits="RiverKeyakOpt32ufull caesar_river_keyak"/>
+    <target name="crypto_aead/riverkeyakv1/opt32LCu2" inherits="RiverKeyakOpt32LCu2 caesar_river_keyak"/>
+    <target name="crypto_aead/riverkeyakv1/opt32LCufull" inherits="RiverKeyakOpt32LCufull caesar_river_keyak"/>
+    <target name="RiverKeyakOpt32LCufullCAESARTest" inherits="crypto_aead/riverkeyakv1/opt32LCufull caesar_river_keyak_test"/>
+
+    <fragment name="RiverKeyakCompact" inherits="serial_keyak common width800rounds12 optimized FBWL-default">
+            <c>SnP/KeccakP-800-12/Compact/KeccakP-800-12-compact.c</c>
+            <h>SnP/KeccakP-800-12/Compact/SnP-interface.h</h>
+            <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+
+    <target name="RiverKeyakCompactTest" inherits="RiverKeyakCompact serial_keyak_tests"/>
+
+    <target name="crypto_aead/riverkeyakv1/compact" inherits="RiverKeyakCompact caesar_river_keyak"/>
+    <target name="RiverKeyakCompactCAESARTest" inherits="crypto_aead/riverkeyakv1/compact caesar_river_keyak_test"/>
+
+    <!-- River Keyak optimized in ARM assembly -->
+
+    <fragment name="width800rounds12_ARM-common" inherits="width800rounds12 optimized">
+        <h>SnP/KeccakP-800-12/OptimizedAsmARM/SnP-interface.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+
+   <fragment name="RiverKeyakAsmARMv6M" inherits="serial_keyak width800rounds12_ARM-common">
+        <c>SnP/KeccakP-800-12/OptimizedAsmARM/KeccakP-800-12-armv6m-le-gcc.s</c>
+    </fragment>
+    <fragment name="RiverKeyakAsmARMv7M" inherits="serial_keyak width800rounds12_ARM-common">
+        <c>SnP/KeccakP-800-12/OptimizedAsmARM/KeccakP-800-12-armv7m-le-gcc.s</c>
+    </fragment>
+    <fragment name="RiverKeyakAsmARMv7A" inherits="serial_keyak width800rounds12_ARM-common">
+        <c>SnP/KeccakP-800-12/OptimizedAsmARM/KeccakP-800-12-armv7a-le-gcc.s</c>
+    </fragment>
+
+    <target name="RiverKeyakAsmARMv6MTest" inherits="RiverKeyakAsmARMv6M serial_keyak_tests"/>
+    <target name="RiverKeyakAsmARMv7MTest" inherits="RiverKeyakAsmARMv7M serial_keyak_tests"/>
+    <target name="RiverKeyakAsmARMv7ATest" inherits="RiverKeyakAsmARMv7A serial_keyak_tests"/>
+
+    <target name="crypto_aead/riverkeyakv1/asmarmv6m" inherits="RiverKeyakAsmARMv6M caesar_river_keyak"/>
+    <target name="crypto_aead/riverkeyakv1/asmarmv7m" inherits="RiverKeyakAsmARMv7M caesar_river_keyak"/>
+    <target name="crypto_aead/riverkeyakv1/asmarmv7a" inherits="RiverKeyakAsmARMv7A caesar_river_keyak"/>
+    <target name="RiverKeyakAsmARMv7ATestCAESARTest" inherits="crypto_aead/riverkeyakv1/asmarmv7a caesar_river_keyak_test"/>
 
     <!-- Lake Keyak -->
 
