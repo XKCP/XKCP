@@ -206,7 +206,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <target name="KeccakWidth200Reference" inherits="keccak reference200"/>
-    <target name="KeccakWidth200Compact" inherits="keccak compact200"/>
+    <target name="KeccakWidth200Compact" inherits="keccak compact200 timingSnP"/>
 
     <!-- Keyak -->
 
