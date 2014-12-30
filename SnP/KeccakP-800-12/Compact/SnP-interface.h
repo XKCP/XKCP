@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _SnP_Interface_h_
 
 #include "KeccakP-800-12-interface.h"
-#include "SnP-FBWL-Default.h"
+#include "SnP-FBWL-default.h"
 
 #define SnP_width                           KeccakF_width
 #define SnP_stateSizeInBytes                KeccakF_stateSizeInBytes

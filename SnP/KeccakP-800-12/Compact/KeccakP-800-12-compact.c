@@ -37,7 +37,7 @@ typedef UINT32 tKeccakLane;
 #define ALIGN
 #endif
 
-#if defined (__arm__)
+#if defined (__arm__) && !defined(__GNUC__)
 #define ROL32(a, offset) __ror(a, 32-(offset))
 #elif defined(_MSC_VER)
 #define ROL32(a, offset) _rotl(a, offset)
