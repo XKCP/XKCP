@@ -37,7 +37,7 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int usingQueue,
     // Acumulated test vector
     memset(acc, 0x00, sizeof(acc));
 
-    for(inputBitLength = 0; inputBitLength <= (inputByteSize*8); inputBitLength += (inputBitLength < KeccakF_width) ? 1 : 8) {
+    for(inputBitLength = 0; inputBitLength <= (inputByteSize*8); inputBitLength += (inputBitLength < SnP_width) ? 1 : 8) {
         unsigned int i;
         unsigned int inputByteLengthCeiling = (inputBitLength + 7) / 8;
 
