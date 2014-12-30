@@ -140,6 +140,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <target name="KeccakWidth1600Asmx86-64" inherits="keccak asmx86-64"/>
     <target name="KeccakWidth1600Asmx86-64-shld" inherits="keccak asmx86-64-shld"/>
 
+    <target name="KeccakWidth1600Sedach-AVX2" inherits="keccak width1600 optimized timingSnP">
+        <c>SnP/KeccakF-1600/Sedach-AVX2/KeccakF-1600-AVX2.cpp</c>
+        <h>SnP/KeccakF-1600/Sedach-AVX2/SnP-interface.h</h>
+        <gcc>-O2</gcc>
+    </target>
+
     <!-- Keccak[r+c=800] -->
 
     <fragment name="width800">
