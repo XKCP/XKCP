@@ -545,6 +545,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>CAESAR/SeaKeyak/api.h</h>
     </fragment>
 
+    <fragment name="caesar_sea_keyak_test" inherits="caesar_sea_keyak crypto_aead_test">
+        <c>CAESAR/SeaKeyak/selftest.c</c>
+    </fragment>
+
     <fragment name="reference_sea" inherits="width1600rounds12_reference serial_fallback P2"/>
 
     <target name="SeaKeyakReference" inherits="parallel_keyak_tests reference_sea"/>
@@ -557,15 +561,41 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>CAESAR/SeaKeyak/selftest.c</c>
     </target>
 
-    <fragment name="width1600rounds12p2_SIMD128">
-        <c>PlSnP/KeccakF1600/SIMD128/DoubleKeccakF1600.c</c>
-        <h>PlSnP/KeccakF1600/SIMD128/PlSnP-interface.h</h>
-        <h>PlSnP/KeccakF1600/SIMD128/SnP-interface.h</h>
+    <!-- Sea Keyak using SIMD128 -->
+
+    <fragment name="width1600rounds12p2_SIMD128-common" inherits="optimized">
+        <c>PlSnP/KeccakP-1600-12/SIMD128/DoubleKeccakP-1600-12.c</c>
+        <h>PlSnP/KeccakP-1600-12/SIMD128/KeccakP-1600-12-unrolling.macros</h>
+        <h>PlSnP/KeccakP-1600-12/SIMD128/Lane-config.h</h>
+        <h>PlSnP/KeccakP-1600-12/SIMD128/PlSnP-interface.h</h>
+        <h>PlSnP/KeccakP-1600-12/SIMD128/SnP-interface.h</h>
         <c>PlSnP/PlSnP-FBWL-default.c</c>
         <h>PlSnP/PlSnP-FBWL-default.h</h>
     </fragment>
+    <fragment name="SeaKeyakSSE2u2" inherits="parallel_keyak P2 width1600rounds12p2_SIMD128-common">
+        <h>PlSnP/KeccakP-1600-12/SIMD128/SSE2u2/SIMD128-config.h</h>
+    </fragment>
+    <fragment name="SeaKeyakSSE2ufull" inherits="parallel_keyak P2 width1600rounds12p2_SIMD128-common">
+        <h>PlSnP/KeccakP-1600-12/SIMD128/SSE2ufull/SIMD128-config.h</h>
+    </fragment>
+    <fragment name="SeaKeyakXOPu2" inherits="parallel_keyak P2 width1600rounds12p2_SIMD128-common">
+        <h>PlSnP/KeccakP-1600-12/SIMD128/XOPu2/SIMD128-config.h</h>
+    </fragment>
+    <fragment name="SeaKeyakXOPufull" inherits="parallel_keyak P2 width1600rounds12p2_SIMD128-common">
+        <h>PlSnP/KeccakP-1600-12/SIMD128/XOPufull/SIMD128-config.h</h>
+    </fragment>
 
-    <target name="SeaKeyakSIMD128" inherits="width1600rounds12p2_SIMD128 P2 parallel_keyak_tests"/>
+    <target name="SeaKeyakSSE2u2Test" inherits="SeaKeyakSSE2u2 parallel_keyak_tests"/>
+    <target name="SeaKeyakSSE2ufullTest" inherits="SeaKeyakSSE2ufull parallel_keyak_tests"/>
+    <target name="SeaKeyakXOPu2Test" inherits="SeaKeyakXOPu2 parallel_keyak_tests"/>
+    <target name="SeaKeyakXOPufullTest" inherits="SeaKeyakXOPufull parallel_keyak_tests"/>
+
+    <target name="crypto_aead/seakeyakv1/sse2u2" inherits="SeaKeyakSSE2u2 caesar_sea_keyak"/>
+    <target name="crypto_aead/seakeyakv1/sse2ufull" inherits="SeaKeyakSSE2ufull caesar_sea_keyak"/>
+    <target name="SeaKeyakSSE2ufullCAESARTest" inherits="crypto_aead/seakeyakv1/sse2ufull caesar_sea_keyak_test"/>
+    <target name="crypto_aead/seakeyakv1/xopu2" inherits="SeaKeyakXOPu2 caesar_sea_keyak"/>
+    <target name="crypto_aead/seakeyakv1/xopufull" inherits="SeaKeyakXOPufull caesar_sea_keyak"/>
+
 
     <!-- Ocean Keyak -->
 
