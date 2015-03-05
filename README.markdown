@@ -38,14 +38,22 @@ has gone through some significant changes. These include:
   [multiple duplex objects running in parallel](Constructions/KeccakParallelDuplex.c)
   and taking advantage of PlSnP.
 
+## License
+
+Most of the source and header files in the Keccak Code Package are released to the public domain and associated to the [CC0](http://creativecommons.org/publicdomain/zero/1.0/) deed. The exceptions are the following:
+
+* [`Common/brg_endian.h`](Common/brg_endian.h) is copyrighted by Brian Gladman and comes with a BSD 3-clause license;
+* [`Tests/genKAT.c`](Tests/genKAT.c) is based on [SHA-3 contest's code by Larry Bassham, NIST](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/KAT1.zip), which he licensed under a BSD 3-clause license;
+* [`Tests/timing.h`](Tests/timing.h) is based on code by Doug Whiting, which he released to the public domain.
+
 ## More information
 
 More information can be found:
 
-* on Keccak in general at http://keccak.noekeon.org/
-* on Ketje at http://ketje.noekeon.org/
-* on Keyak at http://keyak.noekeon.org/
-* and on cryptographic sponge functions at http://sponge.noekeon.org/
+* on Keccak in general at [`keccak.noekeon.org`](http://keccak.noekeon.org/)
+* on Ketje at [`ketje.noekeon.org`](http://ketje.noekeon.org/)
+* on Keyak at [`keyak.noekeon.org`](http://keyak.noekeon.org/)
+* and on cryptographic sponge functions at [`sponge.noekeon.org`](http://sponge.noekeon.org/)
 
 ## Building and contributing
 
@@ -62,8 +70,10 @@ Michaël Peeters, Gilles Van Assche, and Ronny Van Keer.
 
 ## Acknowledgments
 
-- `genKAT.c` based on the SHA-3 contest's genKAT.c by NIST
+- `genKAT.c` based on the SHA-3 contest's genKAT.c by Larry Bassham, NIST
 - `brg_endian.h` by Brian Gladman
+- `timing.h` based on code by Doug Whiting
+- `SnP/KeccakF-1600/Sedach-AVX2/*` by Vladimir Sedach
 
 ## Notes for implementors of the draft FIPS 202 functions
 

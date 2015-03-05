@@ -1,3 +1,21 @@
+/*
+-------- Forwarded Message --------
+Subject:    RE: Time Trouble
+Date:   Mon, 28 Jul 2008 08:07:47 -0400
+From:   Doug Whiting <DWhiting at hifn.com>
+Reply-To:   hash-forum at nist.gov
+To:     Multiple recipients of list <hash-forum at nist.gov>
+
+Sorry for the earlier empty email. I pushed send by mistake while starting my message.
+
+Yes, it's a real shame that C doesn't have a standard way to do this. Below is some code that you are free to copy if you wish I have used variants of this function for years, all the way back to AES days, and the code is entirely mine, so I hereby release it to the public domain. If you keep reading below, I also give some concrete suggestions on how to use it.
+
+This code works on x86 family CPUs (32-big and 64-bit), under MSVC, gcc, and BorlandC, including older compiler versions where the __rdtsc() function is not defined. It also checks for ANSI compiles (i.e., -ansi using gcc, /Za using MSVC, and -A using Borland) and disables the call, to avoid compile-time warnings/errors. The function HiResTime() currently returns only 32 bits, mostly for historical reasons. However, that's enough to do most timing measurements, and you could easily enhance it to return 64 bits if desired. I normally compile with multiple compilers -- e.g., three versions of MSVC (v4.2, v6.0 and v9.0), at least two versions of gcc, plus Borland -- and take performance measurements on all of them.
+
+[…]
+
+*/
+
 /************** Timing routine (for performance measurements) ***********/
 /* By Doug Whiting */
 /* unfortunately, this is generally assembly code and not very portable */
