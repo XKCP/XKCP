@@ -69,30 +69,30 @@ STATUS_CODES
 genKAT_main(void)
 {
 #if (KeccakF_width == 1600)
-    // The following instances are from the FIPS 202 draft.
-    // http://csrc.nist.gov/publications/
+    // The following instances are from the FIPS 202 standard.
+    // http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
     //
     // Note: "SakuraSequential" translates into "input followed by 11",
     // see http://keccak.noekeon.org/Sakura.pdf for more details.
     //
     genShortMsgHash(1344, 256, 0x1F, 0, 4096,
         "ShortMsgKAT_SHAKE128.txt",
-        "Keccak(SakuraSequential|11)[r=1344, c=256], or SHAKE128 as in FIPS 202 draft");
+        "Keccak(SakuraSequential|11)[r=1344, c=256], or SHAKE128 as in FIPS 202 standard");
     genShortMsgHash(1088, 512, 0x1F, 0, 4096,
         "ShortMsgKAT_SHAKE256.txt",
-        "Keccak(SakuraSequential|11)[r=1088, c=512], or SHAKE256 as in FIPS 202 draft");
+        "Keccak(SakuraSequential|11)[r=1088, c=512], or SHAKE256 as in FIPS 202 standard");
     genShortMsgHash(1152, 448, 0x06, 224, 0,
         "ShortMsgKAT_SHA3-224.txt",
-        "Keccak(input|01)[r=1152, c=448] truncated to 224 bits, or SHA3-224 as in FIPS 202 draft");
+        "Keccak(input|01)[r=1152, c=448] truncated to 224 bits, or SHA3-224 as in FIPS 202 standard");
     genShortMsgHash(1088, 512, 0x06, 256, 0,
         "ShortMsgKAT_SHA3-256.txt",
-        "Keccak(input|01)[r=1088, c=512] truncated to 256 bits, or SHA3-256 as in FIPS 202 draft");
+        "Keccak(input|01)[r=1088, c=512] truncated to 256 bits, or SHA3-256 as in FIPS 202 standard");
     genShortMsgHash(832, 768, 0x06, 384, 0,
         "ShortMsgKAT_SHA3-384.txt",
-        "Keccak(input|01)[r=832, c=768] truncated to 384 bits, or SHA3-384 as in FIPS 202 draft");
+        "Keccak(input|01)[r=832, c=768] truncated to 384 bits, or SHA3-384 as in FIPS 202 standard");
     genShortMsgHash(576, 1024, 0x06, 512, 0,
         "ShortMsgKAT_SHA3-512.txt",
-        "Keccak(input|01)[r=576, c=1024] truncated to 512 bits, or SHA3-512 as in FIPS 202 draft");
+        "Keccak(input|01)[r=576, c=1024] truncated to 512 bits, or SHA3-512 as in FIPS 202 standard");
 #endif
 
 #if (KeccakF_width == 800)

@@ -1,4 +1,4 @@
-# Keccak(SakuraSequential|11)[r=1344, c=256], or SHAKE128 as in FIPS 202 draft
+# Keccak(SakuraSequential|11)[r=1344, c=256], or SHAKE128 as in FIPS 202 standard
 
 Len = 0
 Msg = 00

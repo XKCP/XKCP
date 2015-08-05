@@ -1,4 +1,4 @@
-# Keccak(input|01)[r=832, c=768] truncated to 384 bits, or SHA3-384 as in FIPS 202 draft
+# Keccak(input|01)[r=832, c=768] truncated to 384 bits, or SHA3-384 as in FIPS 202 standard
 
 Len = 0
 Msg = 00
