@@ -18,10 +18,10 @@ We gave an updated presentation on the motivation, structure and status of the K
 This version supports:
 
 * the [hash and extendable output functions (XOFs)][keccakhashh] defined in [the FIPS 202
-  draft][fips202_draft]
+  standard][fips202_standard]
 * the CAESAR entries [Ketje][caesar_ketje] and [Keyak][caesar_keyak].
 
-[fips202_draft]: http://csrc.nist.gov/groups/ST/hash/sha-3/sha-3_standard_fips202.html "FIPS-202 draft"
+[fips202_standard]: http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf "FIPS 202 standard"
 [caesar_ketje]: http://ketje.noekeon.org/
 [caesar_keyak]: http://keyak.noekeon.org/
 
@@ -51,6 +51,7 @@ Most of the source and header files in the Keccak Code Package are released to t
 More information can be found:
 
 * on Keccak in general at [`keccak.noekeon.org`](http://keccak.noekeon.org/)
+* on the FIPS 202 standard at [`csrc.nist.gov`](http://csrc.nist.gov/groups/ST/hash/sha-3/fips202_standard_2015.html)
 * on Ketje at [`ketje.noekeon.org`](http://ketje.noekeon.org/)
 * on Keyak at [`keyak.noekeon.org`](http://keyak.noekeon.org/)
 * and on cryptographic sponge functions at [`sponge.noekeon.org`](http://sponge.noekeon.org/)
@@ -75,16 +76,16 @@ Michaël Peeters, Gilles Van Assche, and Ronny Van Keer.
 - `timing.h` based on code by Doug Whiting
 - `SnP/KeccakF-1600/Sedach-AVX2/*` by Vladimir Sedach
 
-## Notes for implementors of the draft FIPS 202 functions
+## Notes for implementors of the standard FIPS 202 functions
 
-If you need to implement the draft FIPS 202 functions, the macros in
+If you need to implement the standard FIPS 202 functions, the macros in
 [KeccakHash.h][keccakhashh] provide an easy way to get started.
 
 [keccakhashh]: Modes/KeccakHash.h
 
-### Differences between and the draft FIPS 202 functions
+### Differences between Keccak and the standard FIPS 202 functions
 
-Compared to the (plain) Keccak sponge function, the [FIPS 202 draft][fips202_draft] adds suffixes to ensure that the hash functions (SHA-3) and the XOFs (SHAKE) are domain separated (i.e., so that their outputs are unrelated), as well as to make the SHAKE functions compatible with the [Sakura][sakura] tree hashing coding.
+Compared to the (plain) Keccak sponge function, the [FIPS 202 standard][fips202_standard] adds suffixes to ensure that the hash functions (SHA-3) and the XOFs (SHAKE) are domain separated (i.e., so that their outputs are unrelated), as well as to make the SHAKE functions compatible with the [Sakura][sakura] tree hashing coding.
 
 [sakura]: http://keccak.noekeon.org/Sakura.pdf "Sakura: a flexible coding for tree hashing"
 
@@ -93,4 +94,4 @@ A brief summary:
     applying the pad10*1 rule.
   - For the SHAKE functions, append the bits "1111" to the message prior to
     applying the pad10*1 rule.
-When they refer to the functions in the [FIPS 202 draft][fips202_draft], the test cases in [TestVectors](TestVectors) include these suffixes.
+When they refer to the functions in the [FIPS 202 standard][fips202_standard], the test cases in [TestVectors](TestVectors) include these suffixes.
