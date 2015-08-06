@@ -3,13 +3,13 @@ typedef unsigned char u8;
 typedef unsigned long long int u64;
 typedef unsigned int ui;
 
-void Keccak(ui r, ui c, const u8 *in, ui inLen, u8 sfx, u8 *out, ui outLen);
-void FIPS202_SHAKE128(const u8 *in, ui inLen, u8 *out, ui outLen) { Keccak(1344, 256, in, inLen, 0x1F, out, outLen); }
-void FIPS202_SHAKE256(const u8 *in, ui inLen, u8 *out, ui outLen) { Keccak(1088, 512, in, inLen, 0x1F, out, outLen); }
-void FIPS202_SHA3_224(const u8 *in, ui inLen, u8 *out) { Keccak(1152, 448, in, inLen, 0x06, out, 28); }
-void FIPS202_SHA3_256(const u8 *in, ui inLen, u8 *out) { Keccak(1088, 512, in, inLen, 0x06, out, 32); }
-void FIPS202_SHA3_384(const u8 *in, ui inLen, u8 *out) { Keccak(832, 768, in, inLen, 0x06, out, 48); }
-void FIPS202_SHA3_512(const u8 *in, ui inLen, u8 *out) { Keccak(576, 1024, in, inLen, 0x06, out, 64); }
+void Keccak(ui r, ui c, const u8 *in, u64 inLen, u8 sfx, u8 *out, u64 outLen);
+void FIPS202_SHAKE128(const u8 *in, u64 inLen, u8 *out, u64 outLen) { Keccak(1344, 256, in, inLen, 0x1F, out, outLen); }
+void FIPS202_SHAKE256(const u8 *in, u64 inLen, u8 *out, u64 outLen) { Keccak(1088, 512, in, inLen, 0x1F, out, outLen); }
+void FIPS202_SHA3_224(const u8 *in, u64 inLen, u8 *out) { Keccak(1152, 448, in, inLen, 0x06, out, 28); }
+void FIPS202_SHA3_256(const u8 *in, u64 inLen, u8 *out) { Keccak(1088, 512, in, inLen, 0x06, out, 32); }
+void FIPS202_SHA3_384(const u8 *in, u64 inLen, u8 *out) { Keccak(832, 768, in, inLen, 0x06, out, 48); }
+void FIPS202_SHA3_512(const u8 *in, u64 inLen, u8 *out) { Keccak(576, 1024, in, inLen, 0x06, out, 64); }
 
 int LFSR86540(u8 *R) { (*R)=((*R)<<1)^(((*R)&0x80)?0x71:0); return ((*R)&2)>>1; }
 #define ROL(a,o) ((((u64)a)<<o)^(((u64)a)>>(64-o)))
@@ -29,7 +29,7 @@ void KeccakF1600(void *s)
         /*ι*/ FOR(j,7) if (LFSR86540(&R)) XL(0,0,(u64)1<<((1<<j)-1));
     }
 }
-void Keccak(ui r, ui c, const u8 *in, ui inLen, u8 sfx, u8 *out, ui outLen)
+void Keccak(ui r, ui c, const u8 *in, u64 inLen, u8 sfx, u8 *out, u64 outLen)
 {
     /*initialize*/ u8 s[200]; ui R=r/8; ui i,b=0; FOR(i,200) s[i]=0;
     /*absorb*/ while(inLen>0) { b=(inLen<R)?inLen:R; FOR(i,b) s[i]^=in[i]; in+=b; inLen-=b; if (b==R) { KeccakF1600(s); b=0; } }

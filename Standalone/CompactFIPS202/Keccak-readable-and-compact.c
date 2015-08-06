@@ -71,7 +71,7 @@ This file uses UTF-8 encoding, as some comments use Greek letters.
   * @param  outputByteLen   The number of output bytes desired.
   * @pre    One must have r+c=1600 and the rate a multiple of 8 bits in this implementation.
   */
-void Keccak(unsigned int rate, unsigned int capacity, const unsigned char *input, unsigned int inputByteLen, unsigned char delimitedSuffix, unsigned char *output, int outputByteLen);
+void Keccak(unsigned int rate, unsigned int capacity, const unsigned char *input, unsigned long long int inputByteLen, unsigned char delimitedSuffix, unsigned char *output, unsigned long long int outputByteLen);
 
 /**
   *  Function to compute SHAKE128 on the input message with any output length.
@@ -282,7 +282,7 @@ that use the Keccak-f[1600] permutation.
 #include <string.h>
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-void Keccak(unsigned int rate, unsigned int capacity, const unsigned char *input, unsigned int inputByteLen, unsigned char delimitedSuffix, unsigned char *output, int outputByteLen)
+void Keccak(unsigned int rate, unsigned int capacity, const unsigned char *input, unsigned long long int inputByteLen, unsigned char delimitedSuffix, unsigned char *output, unsigned long long int outputByteLen)
 {
     UINT8 state[200];
     unsigned int rateInBytes = rate/8;

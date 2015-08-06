@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdlib.h>
 #include <string.h>
 
-void Keccak(int rate, int capacity, const unsigned char *input, int inputByteLen, unsigned char delimitedSuffix, unsigned char *output, int outputByteLen);
+void Keccak(int rate, int capacity, const unsigned char *input, unsigned long long int inputByteLen, unsigned char delimitedSuffix, unsigned char *output, unsigned long long int outputByteLen);
 
 void performTest(unsigned int rate, unsigned int capacity, unsigned char *checksum)
 {
