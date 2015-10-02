@@ -8,6 +8,8 @@ note ["A software interface for Keccak"][keccakinterface].
 
 We gave an updated presentation on the motivation, structure and status of the Keccak Code Package at the [SHA-3 Workshop in Santa Barbara in August 2014][SHA3workshop2014] ([slides][KCPslides]).
 
+Most of the code in this package is articulated around the SnP interface. In addition, we provide a number of standalone implementations, among which very [compact](http://keccak.noekeon.org/tweetfips202.html) implementations of the FIPS 202 (SHA-3) standard in the [CompactFIPS202 folder](Standalone/CompactFIPS202/).
+
 [keccakrefoptc]: http://keccak.noekeon.org/KeccakReferenceAndOptimized-3.2.zip
 [keccakinterface]: http://keccak.noekeon.org/NoteSoftwareInterface.pdf
 [SHA3workshop2014]: http://csrc.nist.gov/groups/ST/hash/sha-3/Aug2014/index.html
@@ -66,7 +68,7 @@ To build, the following tools are needed:
 * make
 * xsltproc
 
-The Keccak, Keyak and Ketje Teams, July 2014: Guido Bertoni, Joan Daemen,
+The Keccak, Keyak and Ketje Teams: Guido Bertoni, Joan Daemen,
 Michaël Peeters, Gilles Van Assche, and Ronny Van Keer.
 
 ## Acknowledgments
@@ -75,6 +77,7 @@ Michaël Peeters, Gilles Van Assche, and Ronny Van Keer.
 - `brg_endian.h` by Brian Gladman
 - `timing.h` based on code by Doug Whiting
 - `SnP/KeccakF-1600/Sedach-AVX2/*` by Vladimir Sedach
+- `TweetableFIPS202.c` by D. J. Bernstein, Peter Schwabe and Gilles Van Assche
 
 ## Notes for implementors of the standard FIPS 202 functions
 

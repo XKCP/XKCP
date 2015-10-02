@@ -14,14 +14,24 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 -->
 <build>
-    <target name="ReadableCompactFIPS202">
-        <c>Standalone/CompactFIPS202/Keccak-readable-and-compact.c</c>
+    <fragment name="CompactFIPS202">
         <c>Standalone/CompactFIPS202/Keccak-compact-test.c</c>
+        <c>Standalone/CompactFIPS202/genKAT.c</c>
+    </fragment>
+
+    <target name="ReadableCompactFIPS202" inherits="CompactFIPS202">
+        <c>Standalone/CompactFIPS202/Keccak-readable-and-compact.c</c>
+        <define>TestAtBitLevel</define>
     </target>
 
-    <target name="MoreCompactFIPS202">
+    <target name="MoreCompactFIPS202" inherits="CompactFIPS202">
         <c>Standalone/CompactFIPS202/Keccak-more-compact.c</c>
-        <c>Standalone/CompactFIPS202/Keccak-compact-test.c</c>
+        <define>TestAtBitLevel</define>
+    </target>
+
+    <target name="TweetableFIPS202" inherits="CompactFIPS202">
+        <c>Standalone/CompactFIPS202/TweetableFIPS202.c</c>
+        <c>Standalone/CompactFIPS202/TweetableFIPS202-stub.c</c>
     </target>
 
     <fragment name="common">
