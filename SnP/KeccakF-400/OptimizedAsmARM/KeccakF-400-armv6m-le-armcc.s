@@ -66,7 +66,7 @@ _su		equ 24*2
 	lsls		r7, $b, #$rr
 	lsrs		$b, $b, #16-$rr
 	orrs		$b, $b, r7
-	uxth		$b
+	uxth		$b, $b
 	endif
 	MEND
 
@@ -75,7 +75,7 @@ _su		equ 24*2
 	sxth		r7, $b
 	rors		r7, r7, $rot
 	eors		r7, r7, $a
-	uxth		r7
+	uxth		r7, r7
 	mov			$d, r7
 	MEND
 

@@ -13,12 +13,12 @@
 @ http://creativecommons.org/publicdomain/zero/1.0/
 @
 
-@ WARNING: These functions work only on little endian CPU with@ ARMv7A + NEON architecture 
+@ WARNING: These functions work only on little endian CPU with@ ARMv7A + NEON architecture
 @ WARNING: State must be 256 bit (32 bytes) aligned, best is 64-byte (cache alignment).
 @ INFO: Tested on Cortex-A8 (BeagleBone Black), using gcc.
 
 
-   
+
 .text
 
 @ conditional assembly settings
@@ -141,7 +141,7 @@
 	.endif
 	.endm
 
-.macro    KeccakRound	
+.macro    KeccakRound
 
     @Prepare Theta
     veor.64     q13, q0, q5
@@ -159,7 +159,7 @@
     veor.64     q4, q4, q9
     veor.64     d28,  d28,  d29
     veor.64     d30,  d30,  d31
-    veor.64     d25,  d8,  d9
+    veor.64     d25,  d8,  d9
     veor.64     d28,  d28,  d22
     veor.64     d29,  d30,  d23
     veor.64     d25,  d25,  d24
@@ -220,16 +220,16 @@
 
 	RhoPi4		d2, d3, 44, d4, d14, 43, d8, d24, 14, d6, d17, 21	@  1 <  6,  2 < 12,  4 < 24,  3 < 18
 	RhoPi4		d3, d9, 20, d14, d16, 25, d24, d21,  2, d17, d15, 15	@  6 <  9, 12 < 13, 24 < 21, 18 < 17
-	RhoPi4		d9, d22, 61, d16, d19,  8, d21, d7, 55, d15, d12, 10	@  9 < 22, 13 < 19, 21 <  8, 17 < 11	
+	RhoPi4		d9, d22, 61, d16, d19,  8, d21, d7, 55, d15, d12, 10	@  9 < 22, 13 < 19, 21 <  8, 17 < 11
 	RhoPi4		d22, d18, 39, d19, d23, 56, d7, d13, 45, d12, d5,  6	@ 22 < 14, 19 < 23,  8 < 16, 11 < 7
 	RhoPi4		d18, d20, 18, d23, d11, 41, d13, d1, 36, d5, d10,  3	@ 14 < 20, 23 < 15, 16 <  5,  7 < 10
 	RhoPi4		d20, d28, 62, d11, d25, 27, d1, d29, 28, d10, d27,  1	@ 20 <  2, 15 <  4,  5 <  3, 10 < 1
-	
+
 	@Chi	b+g
-	vmov.i64	q13, q0			
+	vmov.i64	q13, q0
     vbic.64     q15, q2, q1	@ ba ^= ~be & bi
 	veor.64		q0, q15
-	vmov.i64	q14, q1			
+	vmov.i64	q14, q1
     vbic.64     q15, q3, q2	@ be ^= ~bi & bo
 	veor.64		q1, q15
     vbic.64     q15, q4, q3	@ bi ^= ~bo & bu
@@ -240,10 +240,10 @@
  	veor.64		q4, q13
 
 	@Chi	k+m
-	vmov.i64	q13, q5			
+	vmov.i64	q13, q5
     vbic.64     q15, q7, q6	@ ba ^= ~be & bi
 	veor.64		q5, q15
-	vmov.i64	q14, q6			
+	vmov.i64	q14, q6
     vbic.64     q15, q8, q7	@ be ^= ~bi & bo
 	veor.64		q6, q15
     vbic.64     q15, q9, q8	@ bi ^= ~bo & bu
@@ -254,7 +254,7 @@
  	veor.64		q9, q13
 
 	@Chi	s
-	vmov.i64	q13, q10			
+	vmov.i64	q13, q10
     vbic.64     d30,  d22,  d21	@ ba ^= ~be & bi
     vbic.64     d31,  d23,  d22	@ be ^= ~bi & bo
 	veor.64		q10, q15
@@ -271,19 +271,19 @@
 @
 @ void KeccakF1600_Initialize( void )
 @
-   .align 8
+.align 8
 .global   KeccakF1600_Initialize
-KeccakF1600_Initialize:  
+KeccakF1600_Initialize:
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakF1600_StateInitialize(void *state)
 @
-   .align 8
+.align 8
 .global   KeccakF1600_StateInitialize
-KeccakF1600_StateInitialize:  
+KeccakF1600_StateInitialize:
     vmov.i64    q0, #0
     vmov.i64    q1, #0
     vmov.i64    q2, #0
@@ -291,17 +291,17 @@ KeccakF1600_StateInitialize:
     vstm        r0!, { d0 - d7 }            @ clear 8 lanes at a time
     vstm        r0!, { d0 - d7 }
     vstm        r0!, { d0 - d7 }
-    vstm        r0!, { d0 }    
+    vstm        r0!, { d0 }
     bx          lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @    void KeccakF1600_StateComplementBit(void *state, unsigned int position)
 @
-   .align 8
+.align 8
 .global   KeccakF1600_StateComplementBit
-KeccakF1600_StateComplementBit:  
+KeccakF1600_StateComplementBit:
     lsrs    r2, r1, #5
     movs    r3, #1
     and     r1, r1, #31
@@ -310,15 +310,15 @@ KeccakF1600_StateComplementBit:
     eors    r1, r1, r3
     str     r1, [r0, r2, LSL #2]
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-@ 
-   .align 8
+@
+.align 8
 .global   KeccakF1600_StateXORLanes
-KeccakF1600_StateXORLanes:  
+KeccakF1600_StateXORLanes:
     cmp     r2, #0
     beq     KeccakF1600_StateXORLanes_Exit
     push    {r4 - r7}
@@ -334,15 +334,15 @@ KeccakF1600_StateXORLanes_Loop:
     pop     {r4 - r7}
 KeccakF1600_StateXORLanes_Exit:
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-   .align 8
+.align 8
 .global   KeccakF1600_StateXORBytesInLane
-KeccakF1600_StateXORBytesInLane:  
+KeccakF1600_StateXORBytesInLane:
     add     r0, r0, r3
     ldr     r3, [sp]
     cmp     r3, #0
@@ -357,15 +357,15 @@ KeccakF1600_StateXORBytesInLane_Loop:
     bne     KeccakF1600_StateXORBytesInLane_Loop
 KeccakF1600_StateXORBytesInLane_Exit:
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakF1600_StateOverwriteLanes(void *state, const unsigned char *data, unsigned int laneCount)
 @
-   .align 8
+.align 8
 .global   KeccakF1600_StateOverwriteLanes
-KeccakF1600_StateOverwriteLanes: 
+KeccakF1600_StateOverwriteLanes:
     cmp     r2, #0
     beq     KeccakF1600_StateOverwriteLanes_Exit
     push    {r4 - r5}
@@ -378,13 +378,13 @@ KeccakF1600_StateOverwriteLanes_Loop:
     pop     {r4 - r5}
 KeccakF1600_StateOverwriteLanes_Exit:
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakF1600_StateOverwriteBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-   .align 8
+.align 8
 .global   KeccakF1600_StateOverwriteBytesInLane
 KeccakF1600_StateOverwriteBytesInLane:
     add     r0, r0, r3
@@ -399,21 +399,21 @@ KeccakF1600_StateOverwriteBytesInLane_Loop:
     bne     KeccakF1600_StateOverwriteBytesInLane_Loop
 KeccakF1600_StateOverwriteBytesInLane_Exit:
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakF1600_StateOverwriteWithZeroes(void *state, unsigned int byteCount)
 @
-   .align 8
+.align 8
 .global   KeccakF1600_StateOverwriteWithZeroes
-KeccakF1600_StateOverwriteWithZeroes: 
+KeccakF1600_StateOverwriteWithZeroes:
 	lsrs	r2, r1, #3
 	beq		KeccakF1600_StateOverwriteWithZeroes_Bytes
     vmov.i64 d0, #0
 KeccakF1600_StateOverwriteWithZeroes_LoopLanes:
 	subs	r2, r2, #1
-    vstm    r0!, { d0 }    
+    vstm    r0!, { d0 }
 	bne		KeccakF1600_StateOverwriteWithZeroes_LoopLanes
 KeccakF1600_StateOverwriteWithZeroes_Bytes:
 	ands	r1, #7
@@ -433,7 +433,7 @@ KeccakF1600_StateOverwriteWithZeroes_Exit:
 @
 .align 8
 .global   KeccakF1600_StateExtractLanes
-KeccakF1600_StateExtractLanes:  
+KeccakF1600_StateExtractLanes:
     cmp     r2, #0
     beq     KeccakF1600_StateExtractLanes_Exit
     lsls    r3, r1, #32-3
@@ -460,15 +460,15 @@ KeccakF1600_StateExtractLanes_LoopUnaligned:
     pop     { r4, r5 }
 KeccakF1600_StateExtractLanes_Exit:
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
 @
-   .align 8
+.align 8
 .global   KeccakF1600_StateExtractBytesInLane
-KeccakF1600_StateExtractBytesInLane:  
+KeccakF1600_StateExtractBytesInLane:
     add     r0, r0, r3
     ldr     r3, [sp]
     cmp     r3, #0
@@ -481,13 +481,13 @@ KeccakF1600_StateExtractBytesInLane_Loop:
     bne     KeccakF1600_StateExtractBytesInLane_Loop
 KeccakF1600_StateExtractBytesInLane_Exit:
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakF1600_StateExtractAndXORLanes(const void *state, unsigned char *data, unsigned int laneCount)
 @
-   .align 8
+.align 8
 .global   KeccakF1600_StateExtractAndXORLanes
 KeccakF1600_StateExtractAndXORLanes:
     cmp     r2, #0
@@ -505,13 +505,13 @@ KeccakF1600_StateExtractAndXORLanes_Loop:
     bne     KeccakF1600_StateExtractAndXORLanes_Loop
 KeccakF1600_StateExtractAndXORLanes_Exit:
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakF1600_StateExtractAndXORBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
 @
-   .align 8
+.align 8
 .global   KeccakF1600_StateExtractAndXORBytesInLane
 KeccakF1600_StateExtractAndXORBytesInLane:
     add     r0, r0, r3
@@ -520,7 +520,7 @@ KeccakF1600_StateExtractAndXORBytesInLane:
     beq     KeccakF1600_StateExtractAndXORBytesInLane_Exit
     add     r0, r0, r1, LSL #3
 KeccakF1600_StateExtractAndXORBytesInLane_Loop:
-    ldrb    r1, [r0], #1
+    ldrb    r1, [r0], #1
     ldrb    r12, [r2]
     subs    r3, r3, #1
 	eor		r1, r1, r12
@@ -528,9 +528,9 @@ KeccakF1600_StateExtractAndXORBytesInLane_Loop:
     bne     KeccakF1600_StateExtractAndXORBytesInLane_Loop
 KeccakF1600_StateExtractAndXORBytesInLane_Exit:
     bx      lr
-   
 
-   .align 8
+
+.align 8
 KeccakP1600_12_StatePermute_RoundConstants:
 		.quad      0x000000008000808b
 		.quad      0x800000000000008b
@@ -545,8 +545,8 @@ KeccakP1600_12_StatePermute_RoundConstants:
 		.quad      0x0000000080000001
 		.quad      0x8000000080008008
 
-   .align 8
-KeccakP1600_12_StateXORandPermuteAsmOnly:  
+.align 8
+KeccakP1600_12_StateXORandPermuteAsmOnly:
 
 	add		pc, pc, r5, LSL #3
 	mov		r1, #0								@ dummy instruction for PC alignment, not executed
@@ -555,7 +555,7 @@ KeccakP1600_12_StateXORandPermuteAsmOnly:
 	veor.64	d2, d2, d30
 	b		KeccakP1600_12_StatePermuteAsmOnly
 	veor.64	d4, d4, d30
-	b		KeccakP1600_12_StatePermuteAsmOnly
+	b		KeccakP1600_12_StatePermuteAsmOnly
 	veor.64	d6, d6, d30
 	b		KeccakP1600_12_StatePermuteAsmOnly
 	veor.64	d8, d8, d30
@@ -626,15 +626,15 @@ KeccakP1600_12_StatePermute_RoundLoop:
     KeccakRound
 	.endif
     bx      lr
-   
+
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakP1600_12_StatePermute( void *state )
 @
-   .align 8
+.align 8
 .global   KeccakP1600_12_StatePermute
-KeccakP1600_12_StatePermute:  
+KeccakP1600_12_StatePermute:
 	mov		r3, lr
     vpush   {q4-q7}
     LoadState
@@ -642,11 +642,11 @@ KeccakP1600_12_StatePermute:
     StoreState
     vpop    {q4-q7}
     bx      r3
-   
+
 
 @----------------------------------------------------------------------------
 @
-@ size_t KeccakP1600_12_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data, 
+@ size_t KeccakP1600_12_SnP_FBWL_Absorb(	void *state, unsigned int laneCount, unsigned char *data,
 @										size_t dataByteLen, unsigned char trailingBits )
 @
 .align 8
@@ -655,7 +655,7 @@ KeccakP1600_12_SnP_FBWL_Absorb:
 	push	{r4-r8,lr}							@ 6 CPU registers (24 bytes)
 	lsr		r3, r3, #3							@ r3 nbrLanes = dataByteLen / SnP_laneLengthInBytes
 	mov		r6, r2								@ r6 data pointer
-	subs	r3, r3, r1							@ .if (nbrLanes >== laneCount)
+	subs	r3, r3, r1							@ .if (nbrLanes >= laneCount)
 	mov		r4, r2								@ r4 initial data pointer
 	bcc		KeccakP1600_12_SnP_FBWL_Absorb_Exit
 	mov		r5, r1
@@ -825,7 +825,7 @@ KeccakP1600_12_SnP_FBWL_Squeeze:
 	push	{r4-r8,lr}
 	lsr		r3, r3, #3							@ r3 nbrLanes = dataByteLen / SnP_laneLengthInBytes
 	mov		r6, r2								@ r6 data pointer
-	subs	r3, r3, r1							@ .if (nbrLanes >== laneCount)
+	subs	r3, r3, r1							@ .if (nbrLanes >= laneCount)
 	mov		r4, r2								@ r4 initial data pointer
 	bcc		KeccakP1600_12_SnP_FBWL_Squeeze_Exit
 	mov		r5, r1
@@ -938,7 +938,7 @@ KeccakP1600_12_SnP_FBWL_Squeeze_LoopLessThan16Lanes:
 
 @----------------------------------------------------------------------------
 @
-@ size_t KeccakP1600_12_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+@ size_t KeccakP1600_12_SnP_FBWL_Wrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 @										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits )
 @
 .align 8
@@ -948,7 +948,7 @@ KeccakP1600_12_SnP_FBWL_Wrap:
 	ldr		r8, [sp, #8*4+0]					@ r8 dataByteLen
 	mov		r6, r2								@ r6 dataIn pointer
 	lsr		r8, r8, #3							@ r8 nbrLanes = dataByteLen / SnP_laneLengthInBytes
-	subs	r8, r8, r1							@ .if (nbrLanes >== laneCount)
+	subs	r8, r8, r1							@ .if (nbrLanes >= laneCount)
 	mov		r4, r2								@ r4 initial dataIn pointer
 	bcc		KeccakP1600_12_SnP_FBWL_Wrap_Exit
 	mov		r5, r1
@@ -969,54 +969,54 @@ KeccakP1600_12_SnP_FBWL_Wrap_Loop21Lanes:
 	veor.64	d2, d2, d27
 	veor.64	d4, d4, d28
 	veor.64	d6, d6, d29
-    vst1.64	{ d0 }, [r3]!	
-    vst1.64	{ d2 }, [r3]!	
-    vst1.64	{ d4 }, [r3]!	
-    vst1.64	{ d6 }, [r3]!	
+    vst1.64	{ d0 }, [r3]!
+    vst1.64	{ d2 }, [r3]!
+    vst1.64	{ d4 }, [r3]!
+    vst1.64	{ d6 }, [r3]!
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
 	veor.64	d8, d8, d26
 	veor.64	d1, d1, d27
 	veor.64	d3, d3, d28
 	veor.64	d5, d5, d29
-    vst1.64	{ d8 }, [r3]!	
-    vst1.64	{ d1 }, [r3]!	
-    vst1.64	{ d3 }, [r3]!	
-    vst1.64	{ d5 }, [r3]!	
+    vst1.64	{ d8 }, [r3]!
+    vst1.64	{ d1 }, [r3]!
+    vst1.64	{ d3 }, [r3]!
+    vst1.64	{ d5 }, [r3]!
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
 	veor.64	d7, d7, d26
 	veor.64	d9, d9, d27
 	veor.64	d10, d10, d28
 	veor.64	d12, d12, d29
-    vst1.64	{ d7 }, [r3]!	
-    vst1.64	{ d9 }, [r3]!	
-    vst1.64	{ d10 }, [r3]!	
-    vst1.64	{ d12 }, [r3]!	
+    vst1.64	{ d7 }, [r3]!
+    vst1.64	{ d9 }, [r3]!
+    vst1.64	{ d10 }, [r3]!
+    vst1.64	{ d12 }, [r3]!
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
 	veor.64	d14, d14, d26
 	veor.64	d16, d16, d27
 	veor.64	d18, d18, d28
 	veor.64	d11, d11, d29
-    vst1.64	{ d14 }, [r3]!	
-    vst1.64	{ d16 }, [r3]!	
-    vst1.64	{ d18 }, [r3]!	
-    vst1.64	{ d11 }, [r3]!	
+    vst1.64	{ d14 }, [r3]!
+    vst1.64	{ d16 }, [r3]!
+    vst1.64	{ d18 }, [r3]!
+    vst1.64	{ d11 }, [r3]!
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
 	veor.64	d13, d13, d26
 	veor.64	d15, d15, d27
 	veor.64	d17, d17, d28
 	veor.64	d19, d19, d29
-    vst1.64	{ d13 }, [r3]!	
-    vst1.64	{ d15 }, [r3]!	
-    vst1.64	{ d17 }, [r3]!	
-    vst1.64	{ d19 }, [r3]!	
+    vst1.64	{ d13 }, [r3]!
+    vst1.64	{ d15 }, [r3]!
+    vst1.64	{ d17 }, [r3]!
+    vst1.64	{ d19 }, [r3]!
 
     vld1.64	{ d26 }, [r6]!
 	veor.64	d20, d20, d26
-    vst1.64	{ d20 }, [r3]!	
+    vst1.64	{ d20 }, [r3]!
 
 	vld1.64	{d30}, [sp:64]					@ xor trailingBits
 	veor.64	d21, d21, d30
@@ -1040,40 +1040,40 @@ KeccakP1600_12_SnP_FBWL_Wrap_Loop16OrMoreLanes:
 	veor.64	d2, d2, d27
 	veor.64	d4, d4, d28
 	veor.64	d6, d6, d29
-    vst1.64	{ d0 }, [r3]!	
-    vst1.64	{ d2 }, [r3]!	
-    vst1.64	{ d4 }, [r3]!	
-    vst1.64	{ d6 }, [r3]!	
+    vst1.64	{ d0 }, [r3]!
+    vst1.64	{ d2 }, [r3]!
+    vst1.64	{ d4 }, [r3]!
+    vst1.64	{ d6 }, [r3]!
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
 	veor.64	d8, d8, d26
 	veor.64	d1, d1, d27
 	veor.64	d3, d3, d28
 	veor.64	d5, d5, d29
-    vst1.64	{ d8 }, [r3]!	
-    vst1.64	{ d1 }, [r3]!	
-    vst1.64	{ d3 }, [r3]!	
-    vst1.64	{ d5 }, [r3]!	
+    vst1.64	{ d8 }, [r3]!
+    vst1.64	{ d1 }, [r3]!
+    vst1.64	{ d3 }, [r3]!
+    vst1.64	{ d5 }, [r3]!
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
 	veor.64	d7, d7, d26
 	veor.64	d9, d9, d27
 	veor.64	d10, d10, d28
 	veor.64	d12, d12, d29
-    vst1.64	{ d7 }, [r3]!	
-    vst1.64	{ d9 }, [r3]!	
-    vst1.64	{ d10 }, [r3]!	
-    vst1.64	{ d12 }, [r3]!	
+    vst1.64	{ d7 }, [r3]!
+    vst1.64	{ d9 }, [r3]!
+    vst1.64	{ d10 }, [r3]!
+    vst1.64	{ d12 }, [r3]!
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
 	veor.64	d14, d14, d26
 	veor.64	d16, d16, d27
 	veor.64	d18, d18, d28
 	veor.64	d11, d11, d29
-    vst1.64	{ d14 }, [r3]!	
-    vst1.64	{ d16 }, [r3]!	
-    vst1.64	{ d18 }, [r3]!	
-    vst1.64	{ d11 }, [r3]!	
+    vst1.64	{ d14 }, [r3]!
+    vst1.64	{ d16 }, [r3]!
+    vst1.64	{ d18 }, [r3]!
+    vst1.64	{ d11 }, [r3]!
 
 	sub		r2, r5, #16							@ XOR last n lanes, maximum 9
 	rsb		r1, r2, #9
@@ -1095,7 +1095,7 @@ KeccakP1600_12_SnP_FBWL_Wrap_Loop16OrMoreLanes:
     vst1.64 d22, [r9], r7
     vld1.64 d30, [r2], r7
 	veor.64	d21, d21, d30
-    vst1.64 d21, [r9], r7
+    vst1.64 d21, [r9], r7
     vld1.64 d30, [r2], r7
 	veor.64	d20, d20, d30
     vst1.64 d20, [r9], r7
@@ -1185,7 +1185,7 @@ KeccakP1600_12_SnP_FBWL_Wrap_LoopLessThan16Lanes:
 
 @----------------------------------------------------------------------------
 @
-@ size_t KeccakP1600_12_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn, 
+@ size_t KeccakP1600_12_SnP_FBWL_Unwrap( void *state, unsigned int laneCount, const unsigned char *dataIn,
 @										unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits)
 @
 .align 8
@@ -1195,7 +1195,7 @@ KeccakP1600_12_SnP_FBWL_Unwrap:
 	ldr		r8, [sp, #8*4+0]					@ r8 dataByteLen
 	mov		r6, r2								@ r6 dataIn pointer
 	lsr		r8, r8, #3							@ r8 nbrLanes = dataByteLen / SnP_laneLengthInBytes
-	subs	r8, r8, r1							@ .if (nbrLanes >== laneCount)
+	subs	r8, r8, r1							@ .if (nbrLanes >= laneCount)
 	mov		r4, r2								@ r4 initial dataIn pointer
 	bcc		KeccakP1600_12_SnP_FBWL_Unwrap_Exit
 	mov		r5, r1
@@ -1216,13 +1216,13 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop21Lanes:
 	veor.64	d2, d2, d27
 	veor.64	d4, d4, d28
 	veor.64	d6, d6, d29
-    vst1.64	{ d0 }, [r3]!	
+    vst1.64	{ d0 }, [r3]!
 	vmov.64	d0, d26
-    vst1.64	{ d2 }, [r3]!	
+    vst1.64	{ d2 }, [r3]!
 	vmov.64	d2, d27
-    vst1.64	{ d4 }, [r3]!	
+    vst1.64	{ d4 }, [r3]!
 	vmov.64	d4, d28
-    vst1.64	{ d6 }, [r3]!	
+    vst1.64	{ d6 }, [r3]!
 	vmov.64	d6, d29
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
@@ -1230,13 +1230,13 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop21Lanes:
 	veor.64	d1, d1, d27
 	veor.64	d3, d3, d28
 	veor.64	d5, d5, d29
-    vst1.64	{ d8 }, [r3]!	
+    vst1.64	{ d8 }, [r3]!
 	vmov.64	d8, d26
-    vst1.64	{ d1 }, [r3]!	
+    vst1.64	{ d1 }, [r3]!
 	vmov.64	d1, d27
-    vst1.64	{ d3 }, [r3]!	
+    vst1.64	{ d3 }, [r3]!
 	vmov.64	d3, d28
-    vst1.64	{ d5 }, [r3]!	
+    vst1.64	{ d5 }, [r3]!
 	vmov.64	d5, d29
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
@@ -1244,13 +1244,13 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop21Lanes:
 	veor.64	d9, d9, d27
 	veor.64	d10, d10, d28
 	veor.64	d12, d12, d29
-    vst1.64	{ d7 }, [r3]!	
+    vst1.64	{ d7 }, [r3]!
 	vmov.64	d7, d26
-    vst1.64	{ d9 }, [r3]!	
+    vst1.64	{ d9 }, [r3]!
 	vmov.64	d9, d27
-    vst1.64	{ d10 }, [r3]!	
+    vst1.64	{ d10 }, [r3]!
 	vmov.64	d10, d28
-    vst1.64	{ d12 }, [r3]!	
+    vst1.64	{ d12 }, [r3]!
 	vmov.64	d12, d29
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
@@ -1258,13 +1258,13 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop21Lanes:
 	veor.64	d16, d16, d27
 	veor.64	d18, d18, d28
 	veor.64	d11, d11, d29
-    vst1.64	{ d14 }, [r3]!	
+    vst1.64	{ d14 }, [r3]!
 	vmov.64	d14, d26
-    vst1.64	{ d16 }, [r3]!	
+    vst1.64	{ d16 }, [r3]!
 	vmov.64	d16, d27
-    vst1.64	{ d18 }, [r3]!	
+    vst1.64	{ d18 }, [r3]!
 	vmov.64	d18, d28
-    vst1.64	{ d11 }, [r3]!	
+    vst1.64	{ d11 }, [r3]!
 	vmov.64	d11, d29
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
@@ -1272,18 +1272,18 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop21Lanes:
 	veor.64	d15, d15, d27
 	veor.64	d17, d17, d28
 	veor.64	d19, d19, d29
-    vst1.64	{ d13 }, [r3]!	
+    vst1.64	{ d13 }, [r3]!
 	vmov.64	d13, d26
-    vst1.64	{ d15 }, [r3]!	
+    vst1.64	{ d15 }, [r3]!
 	vmov.64	d15, d27
-    vst1.64	{ d17 }, [r3]!	
+    vst1.64	{ d17 }, [r3]!
 	vmov.64	d17, d28
-    vst1.64	{ d19 }, [r3]!	
+    vst1.64	{ d19 }, [r3]!
 	vmov.64	d19, d29
 
     vld1.64	{ d26 }, [r6]!
 	veor.64	d20, d20, d26
-    vst1.64	{ d20 }, [r3]!	
+    vst1.64	{ d20 }, [r3]!
 	vmov.64	d20, d26
 
 	vld1.64	{d30}, [sp:64]					@ xor trailingBits
@@ -1308,13 +1308,13 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop16OrMoreLanes:
 	veor.64	d2, d2, d27
 	veor.64	d4, d4, d28
 	veor.64	d6, d6, d29
-    vst1.64	{ d0 }, [r3]!	
-	vmov.64	d0, d26
-    vst1.64	{ d2 }, [r3]!	
+    vst1.64	{ d0 }, [r3]!
+	vmov.64	d0, d26
+    vst1.64	{ d2 }, [r3]!
 	vmov.64	d2, d27
-    vst1.64	{ d4 }, [r3]!	
+    vst1.64	{ d4 }, [r3]!
 	vmov.64	d4, d28
-    vst1.64	{ d6 }, [r3]!	
+    vst1.64	{ d6 }, [r3]!
 	vmov.64	d6, d29
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
@@ -1322,13 +1322,13 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop16OrMoreLanes:
 	veor.64	d1, d1, d27
 	veor.64	d3, d3, d28
 	veor.64	d5, d5, d29
-    vst1.64	{ d8 }, [r3]!	
+    vst1.64	{ d8 }, [r3]!
 	vmov.64	d8, d26
-    vst1.64	{ d1 }, [r3]!	
+    vst1.64	{ d1 }, [r3]!
 	vmov.64	d1, d27
-    vst1.64	{ d3 }, [r3]!	
+    vst1.64	{ d3 }, [r3]!
 	vmov.64	d3, d28
-    vst1.64	{ d5 }, [r3]!	
+    vst1.64	{ d5 }, [r3]!
 	vmov.64	d5, d29
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
@@ -1336,13 +1336,13 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop16OrMoreLanes:
 	veor.64	d9, d9, d27
 	veor.64	d10, d10, d28
 	veor.64	d12, d12, d29
-    vst1.64	{ d7 }, [r3]!	
+    vst1.64	{ d7 }, [r3]!
 	vmov.64	d7, d26
-    vst1.64	{ d9 }, [r3]!	
+    vst1.64	{ d9 }, [r3]!
 	vmov.64	d9, d27
-    vst1.64	{ d10 }, [r3]!	
+    vst1.64	{ d10 }, [r3]!
 	vmov.64	d10, d28
-    vst1.64	{ d12 }, [r3]!	
+    vst1.64	{ d12 }, [r3]!
 	vmov.64	d12, d29
 
     vld1.64	{ d26, d27, d28, d29 }, [r6]!
@@ -1350,13 +1350,13 @@ KeccakP1600_12_SnP_FBWL_Unwrap_Loop16OrMoreLanes:
 	veor.64	d16, d16, d27
 	veor.64	d18, d18, d28
 	veor.64	d11, d11, d29
-    vst1.64	{ d14 }, [r3]!	
+    vst1.64	{ d14 }, [r3]!
 	vmov.64	d14, d26
-    vst1.64	{ d16 }, [r3]!	
+    vst1.64	{ d16 }, [r3]!
 	vmov.64	d16, d27
-    vst1.64	{ d18 }, [r3]!	
+    vst1.64	{ d18 }, [r3]!
 	vmov.64	d18, d28
-    vst1.64	{ d11 }, [r3]!	
+    vst1.64	{ d11 }, [r3]!
 	vmov.64	d11, d29
 
 	sub		r2, r5, #16							@ XOR last n lanes, maximum 9

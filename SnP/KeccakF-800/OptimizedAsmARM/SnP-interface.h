@@ -27,20 +27,14 @@ typedef	unsigned int tKeccakLane;
 
 #define SnP_StaticInitialize()
 #define SnP_Initialize                      KeccakF800_StateInitialize
-#define SnP_XORBytesInLane                  KeccakF800_StateXORBytesInLane
-#define SnP_XORLanes                        KeccakF800_StateXORLanes
-#define SnP_OverwriteBytesInLane            KeccakF800_StateOverwriteBytesInLane
-#define SnP_OverwriteLanes                  KeccakF800_StateOverwriteLanes
+#define SnP_XORBytes		                KeccakF800_StateXORBytes
+#define SnP_OverwriteBytes                  KeccakF800_StateOverwriteBytes
 #define SnP_OverwriteWithZeroes             KeccakF800_StateOverwriteWithZeroes
 #define SnP_ComplementBit( argState, argPosition )	\
     ((tKeccakLane*)(argState))[(argPosition)/(sizeof(tKeccakLane)*8)] ^= ((tKeccakLane)1 << ((argPosition)%(sizeof(tKeccakLane)*8)));
 #define SnP_Permute                         KeccakF800_StatePermute
-#define SnP_ExtractBytesInLane              KeccakF800_StateExtractBytesInLane
-#define SnP_ExtractLanes                    KeccakF800_StateExtractLanes
-#define SnP_ExtractAndXORBytesInLane        KeccakF800_StateExtractAndXORBytesInLane
-#define SnP_ExtractAndXORLanes              KeccakF800_StateExtractAndXORLanes
-
-#include "SnP-Relaned.h"
+#define SnP_ExtractBytes                    KeccakF800_StateExtractBytes
+#define SnP_ExtractAndXORBytes              KeccakF800_StateExtractAndXORBytes
 
 #define SnP_FBWL_Absorb                     KeccakF800_SnP_FBWL_Absorb
 #define SnP_FBWL_Squeeze                    KeccakF800_SnP_FBWL_Squeeze

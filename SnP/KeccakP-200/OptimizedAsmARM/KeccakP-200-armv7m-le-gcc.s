@@ -17,6 +17,7 @@
 
 
 	.thumb
+	.syntax unified
 .text
 
 .equ _ba, 0

@@ -25,19 +25,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define SnP_StaticInitialize()
 #define SnP_Initialize                      KeccakF1600_StateInitialize
-#define SnP_XORBytesInLane                  KeccakF1600_StateXORBytesInLane
-#define SnP_XORLanes                        KeccakF1600_StateXORLanes
-#define SnP_OverwriteBytesInLane            KeccakF1600_StateOverwriteBytesInLane
-#define SnP_OverwriteLanes                  KeccakF1600_StateOverwriteLanes
+#define SnP_XORBytes                        KeccakF1600_StateXORBytes
+#define SnP_OverwriteBytes                  KeccakF1600_StateOverwriteBytes
 #define SnP_OverwriteWithZeroes             KeccakF1600_StateOverwriteWithZeroes
 #define SnP_ComplementBit					KeccakF1600_StateComplementBit
 #define SnP_Permute                         KeccakP1600_12_StatePermute
-#define SnP_ExtractBytesInLane              KeccakF1600_StateExtractBytesInLane
-#define SnP_ExtractLanes                    KeccakF1600_StateExtractLanes
-#define SnP_ExtractAndXORBytesInLane        KeccakF1600_StateExtractAndXORBytesInLane
-#define SnP_ExtractAndXORLanes              KeccakF1600_StateExtractAndXORLanes
-
-#include "SnP-Relaned.h"
+#define SnP_ExtractBytes                    KeccakF1600_StateExtractBytes
+#define SnP_ExtractAndXORBytes              KeccakF1600_StateExtractAndXORBytes
 
 #define SnP_FBWL_Absorb                     KeccakP1600_12_SnP_FBWL_Absorb
 #define SnP_FBWL_Squeeze                    KeccakP1600_12_SnP_FBWL_Squeeze

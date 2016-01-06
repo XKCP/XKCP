@@ -252,130 +252,63 @@ KeccakF800_StateComplementBit   PROC
 
 ;//----------------------------------------------------------------------------
 ;//
-;// void KeccakF800_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
+;// void KeccakF800_StateXORBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;//
 	ALIGN
-	EXPORT  KeccakF800_StateXORLanes
-KeccakF800_StateXORLanes   PROC
-	subs	r2, r2, #4
-	bcc		KeccakF800_StateXORLanes_LessThan4Lanes
-	push	{ r4 - r5 }
-KeccakF800_StateXORLanes_Loop4Lanes
-	ldrd	r4, r5, [r0]
-	ldr		r3, [r1], #4
-	ldr		r12, [r1], #4
-	eor		r4, r4, r3
-	eor		r5, r5, r12
-	strd	r4, r5, [r0], #8
-	ldrd	r4, r5, [r0]
-	ldr		r3, [r1], #4
-	ldr		r12, [r1], #4
-	eor		r4, r4, r3
-	eor		r5, r5, r12
-	strd	r4, r5, [r0], #8
-	subs	r2, r2, #4
-	bcs		KeccakF800_StateXORLanes_Loop4Lanes
-	pop		{ r4 - r5 }
-KeccakF800_StateXORLanes_LessThan4Lanes
-	adds	r2, r2, #4
-	beq		KeccakF800_StateXORLanes_Exit
-KeccakF800_StateXORLanes_LoopLane
-	ldr		r3, [r1], #4
-	ldr		r12, [r0]
-	eor		r3, r3, r12
-	str		r3, [r0], #4
-	subs	r2, r2, #1
-	bne		KeccakF800_StateXORLanes_LoopLane
-KeccakF800_StateXORLanes_Exit
-	bx		lr
-	ENDP
-
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF800_StateXORBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
-;//
-	ALIGN
-	EXPORT  KeccakF800_StateXORBytesInLane
-KeccakF800_StateXORBytesInLane   PROC
-	adds	r0, r0, r3
-	ldr		r3, [sp]
-	cmp		r3, #0
-	beq		KeccakF800_StateXORBytesInLane_Exit
-	adds	r0, r0, r1, LSL #2
-KeccakF800_StateXORBytesInLane_Loop
-	ldrb	r1, [r0]
-	ldrb	r12, [r2], #1
-	eors	r1, r1, r12
-	strb	r1, [r0], #1
-	subs	r3, r3, #1
-	bne		KeccakF800_StateXORBytesInLane_Loop
-KeccakF800_StateXORBytesInLane_Exit
-	bx		lr
-	ENDP
-
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF800_StateOverwriteLanes(void *state, const unsigned char *data, unsigned int laneCount)
-;//
-	ALIGN
-	EXPORT  KeccakF800_StateOverwriteLanes
-KeccakF800_StateOverwriteLanes	PROC
-	subs	r2, r2, #8
-	bcc		KeccakF800_StateOverwriteLanes_LessThan8Lanes
-	push	{ r4 - r5 }
-KeccakF800_StateOverwriteLanes_Loop8Lanes
-	ldr		r3, [r1], #4
+	EXPORT  KeccakF800_StateXORBytes
+KeccakF800_StateXORBytes   PROC
+	push	{r4,lr}
+	adds	r0, r0, r2								; state += offset
+	subs	r3, r3, #4								; if length >= 4
+	bcc		KeccakF800_StateXORBytes_Bytes
+KeccakF800_StateXORBytes_LanesLoop					; then, perform on words
+	ldr		r2, [r0]
 	ldr		r4, [r1], #4
-	ldr		r5, [r1], #4
-	ldr		r12, [r1], #4
-	stm		r0!, { r3 - r5, r12 }
-	ldr		r3, [r1], #4
-	ldr		r4, [r1], #4
-	ldr		r5, [r1], #4
-	ldr		r12, [r1], #4
-	stm		r0!, { r3 - r5, r12 }
-	subs	r2, r2, #8
-	bcs		KeccakF800_StateOverwriteLanes_Loop8Lanes
-	pop		{ r4 - r5 }
-KeccakF800_StateOverwriteLanes_LessThan8Lanes
-	add		r2, r2, #8
-	subs	r2, r2, #2
-	bcc		KeccakF800_StateOverwriteLanes_LessThan2Lanes
-KeccakF800_StateOverwriteLanes_Loop2Lanes
-	ldr		r3, [r1], #4
-	ldr		r12, [r1], #4
-	stm		r0!, { r3, r12 }
-	subs	r2, r2, #2
-	bcs		KeccakF800_StateOverwriteLanes_Loop2Lanes
-KeccakF800_StateOverwriteLanes_LessThan2Lanes
-	adds	r2, r2, #2
-	beq		KeccakF800_StateOverwriteLanes_Exit
-	ldr		r3, [r1]
-	str		r3, [r0]
-KeccakF800_StateOverwriteLanes_Exit
-	bx		lr
+	eors	r2, r2, r4
+	str		r2, [r0], #4
+	subs	r3, r3, #4
+	bcs		KeccakF800_StateXORBytes_LanesLoop
+KeccakF800_StateXORBytes_Bytes
+	adds	r3, r3, #3
+	bcc		KeccakF800_StateXORBytes_Exit
+KeccakF800_StateXORBytes_BytesLoop
+	ldrb	r2, [r0]
+	ldrb	r4, [r1], #1
+	eors	r2, r2, r4
+	strb	r2, [r0], #1
+	subs	r3, r3, #1
+	bcs		KeccakF800_StateXORBytes_BytesLoop
+KeccakF800_StateXORBytes_Exit
+	pop		{r4,pc}
 	ENDP
 
 ;//----------------------------------------------------------------------------
 ;//
-;// void KeccakF800_StateOverwriteBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
+;// void KeccakF800_StateOverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;//
 	ALIGN
-	EXPORT  KeccakF800_StateOverwriteBytesInLane
-KeccakF800_StateOverwriteBytesInLane	PROC
-	adds	r0, r0, r3
-	ldr		r3, [sp]
-	cmp		r3, #0
-	beq		KeccakF800_StateOverwriteBytesInLane_Exit
-	adds	r0, r0, r1, LSL #2
-KeccakF800_StateOverwriteBytesInLane_Loop
-	ldrb	r1, [r2], #1
-	strb	r1, [r0], #1
+	EXPORT  KeccakF800_StateOverwriteBytes
+KeccakF800_StateOverwriteBytes   PROC
+	adds	r0, r0, r2								; state += offset
+	subs	r3, r3, #4								; if length >= 4
+	bcc		KeccakF800_StateOverwriteBytes_Bytes
+KeccakF800_StateOverwriteBytes_LanesLoop			; then, perform on words
+	ldr		r2, [r1], #4
+	str		r2, [r0], #4
+	subs	r3, r3, #4
+	bcs		KeccakF800_StateOverwriteBytes_LanesLoop
+KeccakF800_StateOverwriteBytes_Bytes
+	adds	r3, r3, #3
+	bcc		KeccakF800_StateOverwriteBytes_Exit
+KeccakF800_StateOverwriteBytes_BytesLoop
+	ldrb	r2, [r1], #1
+	strb	r2, [r0], #1
 	subs	r3, r3, #1
-	bne		KeccakF800_StateOverwriteBytesInLane_Loop
-KeccakF800_StateOverwriteBytesInLane_Exit
+	bcs		KeccakF800_StateOverwriteBytes_BytesLoop
+KeccakF800_StateOverwriteBytes_Exit
 	bx		lr
 	ENDP
+
 
 ;//----------------------------------------------------------------------------
 ;//
@@ -404,131 +337,61 @@ KeccakF800_StateOverwriteWithZeroes_Exit
 
 ;//----------------------------------------------------------------------------
 ;//
-;// void KeccakF800_StateExtractLanes(const void *state, unsigned char *data, unsigned int laneCount)
+;// void KeccakF800_StateExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;//
 	ALIGN
-	EXPORT  KeccakF800_StateExtractLanes
-KeccakF800_StateExtractLanes   PROC
-	subs	r2, r2, #8
-	bcc		KeccakF800_StateExtractLanes_LessThan8Lanes
-	push	{ r4 - r5 }
-KeccakF800_StateExtractLanes_Loop8Lanes
-	ldm		r0!, { r3 - r5, r12 }
-	str		r3, [r1], #4
-	str		r4, [r1], #4
-	str		r5, [r1], #4
-	str		r12, [r1], #4
-	ldm		r0!, { r3 - r5, r12 }
-	str		r3, [r1], #4
-	str		r4, [r1], #4
-	str		r5, [r1], #4
-	str		r12, [r1], #4
-	subs	r2, r2, #8
-	bcs		KeccakF800_StateExtractLanes_Loop8Lanes
-	pop		{ r4 - r5 }
-KeccakF800_StateExtractLanes_LessThan8Lanes
-	add		r2, r2, #8
-	subs	r2, r2, #2
-	bcc		KeccakF800_StateExtractLanes_LessThan2Lanes
-KeccakF800_StateExtractLanes_Loop2Lanes
-	ldm		r0!, { r3, r12 }
-	str		r3, [r1], #4
-	str		r12, [r1], #4
-	subs	r2, r2, #2
-	bcs		KeccakF800_StateExtractLanes_Loop2Lanes
-KeccakF800_StateExtractLanes_LessThan2Lanes
-	adds	r2, r2, #2
-	beq		KeccakF800_StateExtractLanes_Exit
-	ldr		r3, [r0], #4
-	str		r3, [r1], #4
-KeccakF800_StateExtractLanes_Exit
+	EXPORT  KeccakF800_StateExtractBytes
+KeccakF800_StateExtractBytes   PROC
+	adds	r0, r0, r2								; state += offset
+	subs	r3, r3, #4								; if length >= 4
+	bcc		KeccakF800_StateExtractBytes_Bytes
+KeccakF800_StateExtractBytes_LanesLoop				; then, handle words
+	ldr		r2, [r0], #4
+	str		r2, [r1], #4
+	subs	r3, r3, #4
+	bcs		KeccakF800_StateExtractBytes_LanesLoop
+KeccakF800_StateExtractBytes_Bytes
+	adds	r3, r3, #3
+	bcc		KeccakF800_StateExtractBytes_Exit
+KeccakF800_StateExtractBytes_BytesLoop
+	ldrb	r2, [r0], #1
+	strb	r2, [r1], #1
+	subs	r3, r3, #1
+	bcs		KeccakF800_StateExtractBytes_BytesLoop
+KeccakF800_StateExtractBytes_Exit
 	bx		lr
 	ENDP
 
 ;//----------------------------------------------------------------------------
 ;//
-;// void KeccakF800_StateExtractBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
+;// void KeccakF800_StateExtractAndXORBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;//
 	ALIGN
-	EXPORT  KeccakF800_StateExtractBytesInLane
-KeccakF800_StateExtractBytesInLane   PROC
-	ldr		r12, [sp]
-	cmp		r12, #0
-	beq		KeccakF800_StateExtractBytesInLane_Exit
-	adds	r0, r0, r1, LSL #2
-	adds	r0, r0, r3
-KeccakF800_StateExtractBytesInLane_Loop
-	ldrb	r1, [r0], #1
-	strb	r1, [r2], #1
-	subs	r12, r12, #1
-	bne		KeccakF800_StateExtractBytesInLane_Loop
-KeccakF800_StateExtractBytesInLane_Exit
-	bx		lr
-	ENDP
-
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF800_StateExtractAndXORLanes(const void *state, unsigned char *data, unsigned int laneCount)
-;//
-	ALIGN
-	EXPORT  KeccakF800_StateExtractAndXORLanes
-KeccakF800_StateExtractAndXORLanes	PROC
-	subs	r2, r2, #4
-	bcc		KeccakF800_StateExtractAndXORLanes_LessThan4Lanes
-	push	{ r4 - r5 }
-KeccakF800_StateExtractAndXORLanes_Loop4Lanes
-	ldrd	r4, r5, [r0], #8
-	ldr		r3, [r1]
-	ldr		r12, [r1, #4]
-	eor		r4, r4, r3
-	eor		r5, r5, r12
-	str		r4, [r1], #4
-	str		r5, [r1], #4
-	ldrd	r4, r5, [r0], #8
-	ldr		r3, [r1]
-	ldr		r12, [r1, #4]
-	eor		r4, r4, r3
-	eor		r5, r5, r12
-	str		r4, [r1], #4
-	str		r5, [r1], #4
-	subs	r2, r2, #4
-	bcs		KeccakF800_StateExtractAndXORLanes_Loop4Lanes
-	pop		{ r4 - r5 }
-KeccakF800_StateExtractAndXORLanes_LessThan4Lanes
-	adds	r2, r2, #4
-	beq		KeccakF800_StateExtractAndXORLanes_Exit
-KeccakF800_StateExtractAndXORLanes_LoopLane
-	ldr		r3, [r1]
-	ldr		r12, [r0], #4
-	eor		r3, r3, r12
-	str		r3, [r1], #4
-	subs	r2, r2, #1
-	bne		KeccakF800_StateExtractAndXORLanes_LoopLane
-KeccakF800_StateExtractAndXORLanes_Exit
-	bx		lr
-	ENDP
-
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF800_StateExtractAndXORBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
-;//
-	ALIGN
-	EXPORT  KeccakF800_StateExtractAndXORBytesInLane
-KeccakF800_StateExtractAndXORBytesInLane	PROC
-	ldr		r12, [sp]
-	cmp		r12, #0
-	beq		KeccakF800_StateExtractAndXORBytesInLane_Exit
-	adds	r0, r0, r1, LSL #2
-	adds	r0, r0, r3
-KeccakF800_StateExtractAndXORBytesInLane_Loop
-	ldrb	r1, [r0], #1
-	ldrb	r3, [r2]
-	eors	r1, r1, r3
-	strb	r1, [r2], #1
-	subs	r12, r12, #1
-	bne		KeccakF800_StateExtractAndXORBytesInLane_Loop
-KeccakF800_StateExtractAndXORBytesInLane_Exit
-	bx		lr
+	EXPORT  KeccakF800_StateExtractAndXORBytes
+KeccakF800_StateExtractAndXORBytes   PROC
+	push	{r4,lr}
+	adds	r0, r0, r2									; state += offset
+	subs	r3, r3, #4									; if length >= 4
+	bcc		KeccakF800_StateExtractAndXORBytes_Bytes
+KeccakF800_StateExtractAndXORBytes_LanesLoop			; then, handle words
+	ldr		r2, [r0], #4
+	ldr		r4, [r1]
+	eors	r2, r2, r4
+	str		r2, [r1], #4
+	subs	r3, r3, #4
+	bcs		KeccakF800_StateExtractAndXORBytes_LanesLoop
+KeccakF800_StateExtractAndXORBytes_Bytes
+	adds	r3, r3, #3
+	bcc		KeccakF800_StateExtractAndXORBytes_Exit
+KeccakF800_StateExtractAndXORBytes_BytesLoop
+	ldrb	r2, [r0], #1
+	ldrb	r4, [r1]
+	eors	r2, r2, r4
+	strb	r2, [r1], #1
+	subs	r3, r3, #1
+	bcs		KeccakF800_StateExtractAndXORBytes_BytesLoop
+KeccakF800_StateExtractAndXORBytes_Exit
+	pop		{r4,pc}
 	ENDP
 
 	ALIGN

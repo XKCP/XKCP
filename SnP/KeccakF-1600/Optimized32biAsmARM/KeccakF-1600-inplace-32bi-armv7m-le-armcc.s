@@ -19,7 +19,7 @@
 	THUMB
 	AREA    |.text|, CODE, READONLY
 
-	;// Credit: Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002
+	; Credit: Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002
 	MACRO
 	toBitInterleaving	$x0,$x1,$s0,$s1,$t,$over
 
@@ -73,57 +73,57 @@
 	eors	$s1,$s1,$t
 	MEND
 
-	;// Credit: Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002
+	; Credit: Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002
 	MACRO
 	fromBitInterleaving		$x0, $x1, $t
 
-	movs	$t, $x0					;// t = x0;
-	bfi		$x0, $x1, #16, #16		;// x0 = (x0 & 0x0000FFFF) | (x1 << 16);
-	bfc		$x1, #0, #16			;//	x1 = (t >> 16) | (x1 & 0xFFFF0000);
+	movs	$t, $x0					; t = x0;
+	bfi		$x0, $x1, #16, #16		; x0 = (x0 & 0x0000FFFF) | (x1 << 16);
+	bfc		$x1, #0, #16			;	x1 = (t >> 16) | (x1 & 0xFFFF0000);
 	orr		$x1, $x1, $t, LSR #16
 
-    eor		$t, $x0, $x0, LSR #8    ;// t = (x0 ^ (x0 >>  8)) & 0x0000FF00UL;  x0 = x0 ^ t ^ (t <<  8);
+    eor		$t, $x0, $x0, LSR #8    ; t = (x0 ^ (x0 >>  8)) & 0x0000FF00UL;  x0 = x0 ^ t ^ (t <<  8);
 	and		$t, #0x0000FF00
     eors	$x0, $x0, $t
     eor		$x0, $x0, $t, LSL #8
 
-    eor		$t, $x0, $x0, LSR #4	;// t = (x0 ^ (x0 >>  4)) & 0x00F000F0UL;  x0 = x0 ^ t ^ (t <<  4);
+    eor		$t, $x0, $x0, LSR #4	; t = (x0 ^ (x0 >>  4)) & 0x00F000F0UL;  x0 = x0 ^ t ^ (t <<  4);
 	and		$t, #0x00F000F0
     eors	$x0, $x0, $t
     eor		$x0, $x0, $t, LSL #4
 
-    eor		$t, $x0, $x0, LSR #2	;// t = (x0 ^ (x0 >>  2)) & 0x0C0C0C0CUL;  x0 = x0 ^ t ^ (t <<  2);
+    eor		$t, $x0, $x0, LSR #2	; t = (x0 ^ (x0 >>  2)) & 0x0C0C0C0CUL;  x0 = x0 ^ t ^ (t <<  2);
 	and		$t, #0x0C0C0C0C
     eors	$x0, $x0, $t
     eor		$x0, $x0, $t, LSL #2
 
-    eor		$t, $x0, $x0, LSR #1	;// t = (x0 ^ (x0 >>  1)) & 0x22222222UL;  x0 = x0 ^ t ^ (t <<  1);
+    eor		$t, $x0, $x0, LSR #1	; t = (x0 ^ (x0 >>  1)) & 0x22222222UL;  x0 = x0 ^ t ^ (t <<  1);
 	and		$t, #0x22222222
     eors	$x0, $x0, $t
     eor		$x0, $x0, $t, LSL #1
 
-    eor		$t, $x1, $x1, LSR #8    ;// t = (x1 ^ (x1 >>  8)) & 0x0000FF00UL;  x1 = x1 ^ t ^ (t <<  8);
+    eor		$t, $x1, $x1, LSR #8    ; t = (x1 ^ (x1 >>  8)) & 0x0000FF00UL;  x1 = x1 ^ t ^ (t <<  8);
 	and		$t, #0x0000FF00
     eors	$x1, $x1, $t
     eor		$x1, $x1, $t, LSL #8
 
-    eor		$t, $x1, $x1, LSR #4	;// t = (x1 ^ (x1 >>  4)) & 0x00F000F0UL;  x1 = x1 ^ t ^ (t <<  4);
+    eor		$t, $x1, $x1, LSR #4	; t = (x1 ^ (x1 >>  4)) & 0x00F000F0UL;  x1 = x1 ^ t ^ (t <<  4);
 	and		$t, #0x00F000F0
     eors	$x1, $x1, $t
     eor		$x1, $x1, $t, LSL #4
 
-    eor		$t, $x1, $x1, LSR #2	;// t = (x1 ^ (x1 >>  2)) & 0x0C0C0C0CUL;  x1 = x1 ^ t ^ (t <<  2);
+    eor		$t, $x1, $x1, LSR #2	; t = (x1 ^ (x1 >>  2)) & 0x0C0C0C0CUL;  x1 = x1 ^ t ^ (t <<  2);
 	and		$t, #0x0C0C0C0C
     eors	$x1, $x1, $t
     eor		$x1, $x1, $t, LSL #2
 
-    eor		$t, $x1, $x1, LSR #1	;// t = (x1 ^ (x1 >>  1)) & 0x22222222UL;  x1 = x1 ^ t ^ (t <<  1);
+    eor		$t, $x1, $x1, LSR #1	; t = (x1 ^ (x1 >>  1)) & 0x22222222UL;  x1 = x1 ^ t ^ (t <<  1);
 	and		$t, #0x22222222
     eors	$x1, $x1, $t
     eor		$x1, $x1, $t, LSL #1
 	MEND
 
-;//	--- offsets in state
+;	--- offsets in state
 Aba0	equ  0*4
 Aba1	equ  1*4
 Abe0	equ  2*4
@@ -175,7 +175,7 @@ Aso1	equ 47*4
 Asu0	equ 48*4
 Asu1	equ 49*4
 
-;//	--- offsets on stack
+;	--- offsets on stack
 mDa0	equ 0*4
 mDa1	equ 1*4
 mDo0	equ 2*4
@@ -477,20 +477,20 @@ mSize	equ 6*4
 	MEND
 
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_Initialize( void )
-;//
+;----------------------------------------------------------------------------
+;
+; void KeccakF1600_Initialize( void )
+;
 	ALIGN
 	EXPORT  KeccakF1600_Initialize
 KeccakF1600_Initialize   PROC
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateInitialize(void *state)
-;//
+;----------------------------------------------------------------------------
+;
+; void KeccakF1600_StateInitialize(void *state)
+;
 	ALIGN
 	EXPORT  KeccakF1600_StateInitialize
 KeccakF1600_StateInitialize   PROC
@@ -514,10 +514,10 @@ KeccakF1600_StateInitialize   PROC
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;//	void KeccakF1600_StateComplementBit(void *state, unsigned int position)
-;//
+;----------------------------------------------------------------------------
+;
+;	void KeccakF1600_StateComplementBit(void *state, unsigned int position)
+;
 	ALIGN
 	EXPORT  KeccakF1600_StateComplementBit
 KeccakF1600_StateComplementBit   PROC
@@ -534,125 +534,222 @@ KeccakF1600_StateComplementBit   PROC
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-;//
+;----------------------------------------------------------------------------
+;
+; void KeccakF1600_StateXORBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+;
 	ALIGN
-	EXPORT  KeccakF1600_StateXORLanes
-KeccakF1600_StateXORLanes   PROC
-	cmp		r2, #0
-	beq		KeccakF1600_StateXORLanes_Exit
-	push	{r4 - r7}
-KeccakF1600_StateXORLanes_LoopAligned
+	EXPORT  KeccakF1600_StateXORBytes
+KeccakF1600_StateXORBytes   PROC
+	cbz		r3, KeccakF1600_StateXORBytes_Exit1
+	push	{r4 - r8, lr}							; then
+	bic		r4, r2, #7								; offset &= ~7
+	adds	r0, r0, r4								; add whole lane offset to state pointer
+	ands	r2, r2, #7								; offset &= 7 (part not lane aligned)
+	beq		KeccakF1600_StateXORBytes_CheckLanes	; if offset != 0
+	movs	r4, r3									; then, do remaining bytes in first lane
+	rsb		r5, r2, #8								; max size in lane = 8 - offset
+	cmp		r4, r5
+	ble		KeccakF1600_StateXORBytes_BytesAlign
+	movs	r4, r5
+KeccakF1600_StateXORBytes_BytesAlign
+	sub		r8, r3, r4								; size left
+	movs	r3, r4
+	bl		__KeccakF1600_StateXORBytesInLane
+	mov		r3, r8
+KeccakF1600_StateXORBytes_CheckLanes
+	lsrs	r2, r3, #3								; if length >= 8
+	beq		KeccakF1600_StateXORBytes_Bytes
+	mov		r8, r3
+	bl		__KeccakF1600_StateXORLanes
+	and		r3, r8, #7
+KeccakF1600_StateXORBytes_Bytes
+	cbz		r3, KeccakF1600_StateXORBytes_Exit
+	movs	r2, #0
+	bl		__KeccakF1600_StateXORBytesInLane
+KeccakF1600_StateXORBytes_Exit
+	pop		{r4 - r8, pc}
+KeccakF1600_StateXORBytes_Exit1
+	bx		lr
+	ENDP
+
+;----------------------------------------------------------------------------
+;
+; __KeccakF1600_StateXORLanes
+;
+; Input:
+;  r0 state pointer
+;  r1 data pointer
+;  r2 laneCount
+;
+; Output:
+;  r0 state pointer next lane
+;  r1 data pointer next byte to input
+;
+; Changed: r2-r7
+;
+	ALIGN
+__KeccakF1600_StateXORLanes   PROC
+__KeccakF1600_StateXORLanes_LoopAligned
 	ldr		r4, [r1], #4
 	ldr		r5, [r1], #4
 	ldrd    r6, r7, [r0]
 	toBitInterleaving	r4, r5, r6, r7, r3, 0
 	strd	r6, r7, [r0], #8
 	subs	r2, r2, #1
-	bne		KeccakF1600_StateXORLanes_LoopAligned
-	pop		{r4 - r7}
-KeccakF1600_StateXORLanes_Exit
+	bne		__KeccakF1600_StateXORLanes_LoopAligned
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
-;//
+;----------------------------------------------------------------------------
+;
+; __KeccakF1600_StateXORBytesInLane
+;
+; Input:
+;  r0 state pointer
+;  r1 data pointer
+;  r2 offset in lane
+;  r3 length
+;
+; Output:
+;  r0 state pointer next lane
+;  r1 data pointer next byte to input
+;
+;  Changed: r2-r7
+;
 	ALIGN
-	EXPORT  KeccakF1600_StateXORBytesInLane
-KeccakF1600_StateXORBytesInLane   PROC
-	push	{r4 - r7}
-	ldr		r7, [sp, #4*4]
-	cmp		r7, #0
-	beq		KeccakF1600_StateXORBytesInLane_Exit
+__KeccakF1600_StateXORBytesInLane   PROC
 	movs	r4, #0
 	movs	r5, #0
 	push	{ r4 - r5 }
-	add		r3, r3, sp
-KeccakF1600_StateXORBytesInLane_Loop
-	ldrb	r5, [r2], #1
-	strb	r5, [r3], #1
-	subs	r7, r7, #1
-	bne		KeccakF1600_StateXORBytesInLane_Loop
+	add		r2, r2, sp
+__KeccakF1600_StateXORBytesInLane_Loop
+	ldrb	r5, [r1], #1
+	strb	r5, [r2], #1
+	subs	r3, r3, #1
+	bne		__KeccakF1600_StateXORBytesInLane_Loop
 	pop		{ r4 - r5 }
-	add		r0, r0, r1, LSL #3
 	ldrd    r6, r7, [r0]
 	toBitInterleaving	r4, r5, r6, r7, r3, 0
-	strd	r6, r7, [r0]
-KeccakF1600_StateXORBytesInLane_Exit
-	pop		{r4 - r7}
+	strd	r6, r7, [r0], #8
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateOverwriteLanes(void *state, const unsigned char *data, unsigned int laneCount)
-;//
+;----------------------------------------------------------------------------
+;
+; void KeccakF1600_StateOverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+;
 	ALIGN
-	EXPORT  KeccakF1600_StateOverwriteLanes
-KeccakF1600_StateOverwriteLanes	PROC
-	cmp		r2, #0
-	beq		KeccakF1600_StateOverwriteLanes_Exit
-	push	{r4 - r7}
-KeccakF1600_StateOverwriteLanes_LoopAligned
+	EXPORT  KeccakF1600_StateOverwriteBytes
+KeccakF1600_StateOverwriteBytes   PROC
+	cbz		r3, KeccakF1600_StateOverwriteBytes_Exit1	; if length != 0
+	push	{r4 - r8, lr}							; then
+	bic		r4, r2, #7								; offset &= ~7
+	adds	r0, r0, r4								; add whole lane offset to state pointer
+	ands	r2, r2, #7								; offset &= 7 (part not lane aligned)
+	beq		KeccakF1600_StateOverwriteBytes_CheckLanes	; if offset != 0
+	movs	r4, r3									; then, do remaining bytes in first lane
+	rsb		r5, r2, #8								; max size in lane = 8 - offset
+	cmp		r4, r5
+	ble		KeccakF1600_StateOverwriteBytes_BytesAlign
+	movs	r4, r5
+KeccakF1600_StateOverwriteBytes_BytesAlign
+	sub		r8, r3, r4								; size left
+	movs	r3, r4
+	bl		__KeccakF1600_StateOverwriteBytesInLane
+	mov		r3, r8
+KeccakF1600_StateOverwriteBytes_CheckLanes
+	lsrs	r2, r3, #3								; if length >= 8
+	beq		KeccakF1600_StateOverwriteBytes_Bytes
+	mov		r8, r3
+	bl		__KeccakF1600_StateOverwriteLanes
+	and		r3, r8, #7
+KeccakF1600_StateOverwriteBytes_Bytes
+	cbz		r3, KeccakF1600_StateOverwriteBytes_Exit
+	movs	r2, #0
+	bl		__KeccakF1600_StateOverwriteBytesInLane
+KeccakF1600_StateOverwriteBytes_Exit
+	pop		{r4 - r8, pc}
+KeccakF1600_StateOverwriteBytes_Exit1
+	bx		lr
+	ENDP
+
+;----------------------------------------------------------------------------
+;
+; __KeccakF1600_StateOverwriteLanes
+;
+; Input:
+;  r0 state pointer
+;  r1 data pointer
+;  r2 laneCount
+;
+; Output:
+;  r0 state pointer next lane
+;  r1 data pointer next byte to input
+;
+; Changed: r2-r7
+;
+	ALIGN
+__KeccakF1600_StateOverwriteLanes   PROC
+__KeccakF1600_StateOverwriteLanes_LoopAligned
 	ldr		r4, [r1], #4
 	ldr		r5, [r1], #4
+	ldrd    r6, r7, [r0]
 	toBitInterleaving	r4, r5, r6, r7, r3, 1
 	strd	r6, r7, [r0], #8
 	subs	r2, r2, #1
-	bne		KeccakF1600_StateOverwriteLanes_LoopAligned
-	pop		{r4 - r7}
-KeccakF1600_StateOverwriteLanes_Exit
+	bne		__KeccakF1600_StateOverwriteLanes_LoopAligned
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateOverwriteBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
-;//
+;----------------------------------------------------------------------------
+;
+; __KeccakF1600_StateOverwriteBytesInLane
+;
+; Input:
+;  r0 state pointer
+;  r1 data pointer
+;  r2 offset in lane
+;  r3 length
+;
+; Output:
+;  r0 state pointer next lane
+;  r1 data pointer next byte to input
+;
+;  Changed: r2-r7
+;
 	ALIGN
-	EXPORT  KeccakF1600_StateOverwriteBytesInLane
-KeccakF1600_StateOverwriteBytesInLane	PROC
-	ldr		r12, [sp]
-	cmp		r12, #0
-	beq		KeccakF1600_StateOverwriteBytesInLane_Exit
-	push	{r4 - r7}
-	add		r0, r0, r1, LSL #3				;state += lanePosition * 8
+__KeccakF1600_StateOverwriteBytesInLane   PROC
     movs    r4, #0
    	movs    r5, #0
 	push	{ r4 - r5 }
-	lsl		r7, r3, #2
-	add		r3, r3, sp
-	movs	r1, #0x0F						;r1 mask to wipe nibbles(bit interleaved bytes) in state
-	lsls	r1, r1, r7
-	movs	r7, r1
+	lsl		r7, r2, #2
+	add		r2, r2, sp
+	movs	r6, #0x0F						;r6 mask to wipe nibbles(bit interleaved bytes) in state
+	lsls	r6, r6, r7
+	movs	r7, r6
 KeccakF1600_StateOverwriteBytesInLane_Loop
-	orrs	r1, r1, r7
+	orrs	r6, r6, r7
 	lsls	r7, r7, #4
-	ldrb	r5, [r2], #1
-	strb	r5, [r3], #1
-	subs	r12, r12, #1
+	ldrb	r5, [r1], #1
+	subs	r3, r3, #1
+	strb	r5, [r2], #1
 	bne		KeccakF1600_StateOverwriteBytesInLane_Loop
 	pop		{ r4 - r5 }
-	toBitInterleaving	r4, r5, r6, r7, r3, 1
+	toBitInterleaving	r4, r5, r2, r3, r7, 1
 	ldrd	r4, r5, [r0]
-	bics	r4, r4, r1
-	bics	r5, r5, r1
-	orrs	r6, r6, r4
-	orrs	r7, r7, r5
-	strd	r6, r7, [r0]
-	pop		{r4 - r7}
-KeccakF1600_StateOverwriteBytesInLane_Exit
+	bics	r4, r4, r6
+	bics	r5, r5, r6
+	orrs	r2, r2, r4
+	orrs	r3, r3, r5
+	strd	r2, r3, [r0], #8
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateOverwriteWithZeroes(void *state, unsigned int byteCount)
-;//
+;----------------------------------------------------------------------------
+;
+; void KeccakF1600_StateOverwriteWithZeroes(void *state, unsigned int byteCount)
+;
 	ALIGN
 	EXPORT  KeccakF1600_StateOverwriteWithZeroes
 KeccakF1600_StateOverwriteWithZeroes	PROC
@@ -683,67 +780,160 @@ KeccakF1600_StateOverwriteWithZeroes_Exit
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsigned int laneCount)
-;//
+;----------------------------------------------------------------------------
+;
+; void KeccakF1600_StateExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+;
 	ALIGN
-	EXPORT  KeccakF1600_StateExtractLanes
-KeccakF1600_StateExtractLanes   PROC
-	cmp		r2, #0
-	beq		KeccakF1600_StateExtractLanes_Exit
-	push	{r4 - r5}
-KeccakF1600_StateExtractLanes_LoopAligned
+	EXPORT  KeccakF1600_StateExtractBytes
+KeccakF1600_StateExtractBytes   PROC
+	cbz		r3, KeccakF1600_StateExtractBytes_Exit1	; if length != 0
+	push	{r4 - r8, lr}							; then
+	bic		r4, r2, #7								; offset &= ~7
+	adds	r0, r0, r4								; add whole lane offset to state pointer
+	ands	r2, r2, #7								; offset &= 7 (part not lane aligned)
+	beq		KeccakF1600_StateExtractBytes_CheckLanes	; if offset != 0
+	movs	r4, r3									; then, do remaining bytes in first lane
+	rsb		r5, r2, #8								; max size in lane = 8 - offset
+	cmp		r4, r5
+	ble		KeccakF1600_StateExtractBytes_BytesAlign
+	movs	r4, r5
+KeccakF1600_StateExtractBytes_BytesAlign
+	sub		r8, r3, r4								; size left
+	movs	r3, r4
+	bl		__KeccakF1600_StateExtractBytesInLane
+	mov		r3, r8
+KeccakF1600_StateExtractBytes_CheckLanes
+	lsrs	r2, r3, #3								; if length >= 8
+	beq		KeccakF1600_StateExtractBytes_Bytes
+	mov		r8, r3
+	bl		__KeccakF1600_StateExtractLanes
+	and		r3, r8, #7
+KeccakF1600_StateExtractBytes_Bytes
+	cbz		r3, KeccakF1600_StateExtractBytes_Exit
+	movs	r2, #0
+	bl		__KeccakF1600_StateExtractBytesInLane
+KeccakF1600_StateExtractBytes_Exit
+	pop		{r4 - r8, pc}
+KeccakF1600_StateExtractBytes_Exit1
+	bx		lr
+	ENDP
+
+;----------------------------------------------------------------------------
+;
+; __KeccakF1600_StateExtractLanes
+;
+; Input:
+;  r0 state pointer
+;  r1 data pointer
+;  r2 laneCount
+;
+; Output:
+;  r0 state pointer next lane
+;  r1 data pointer next byte to input
+;
+; Changed: r2-r5
+;
+	ALIGN
+__KeccakF1600_StateExtractLanes   PROC
+__KeccakF1600_StateExtractLanes_LoopAligned
 	ldrd	r4, r5, [r0], #8
 	fromBitInterleaving	r4, r5, r3
 	str		r4, [r1], #4
 	subs	r2, r2, #1
 	str		r5, [r1], #4
-	bne		KeccakF1600_StateExtractLanes_LoopAligned
-	pop		{r4 - r5}
-KeccakF1600_StateExtractLanes_Exit
+	bne		__KeccakF1600_StateExtractLanes_LoopAligned
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
-;//
+;----------------------------------------------------------------------------
+;
+; __KeccakF1600_StateExtractBytesInLane
+;
+; Input:
+;  r0 state pointer
+;  r1 data pointer
+;  r2 offset in lane
+;  r3 length
+;
+; Output:
+;  r0 state pointer next lane
+;  r1 data pointer next byte to input
+;
+;  Changed: r2-r6
+;
 	ALIGN
-	EXPORT  KeccakF1600_StateExtractBytesInLane
-KeccakF1600_StateExtractBytesInLane   PROC
-	push	{r4 - r5}
-	ldr		r5, [sp, #2*4]
-	cmp		r5, #0
-	beq		KeccakF1600_StateExtractBytesInLane_Exit
-	add		r0, r0, r1, LSL #3
-	ldr		r1, [r0, #4]
-	ldr		r0, [r0]
-	fromBitInterleaving	r0, r1, r4
-	push	{r0, r1 }
-	add		r0, sp, r3
-KeccakF1600_StateExtractBytesInLane_Loop
-	ldrb	r1, [r0], #1
-	subs	r5, r5, #1
-	strb	r1, [r2], #1
-	bne		KeccakF1600_StateExtractBytesInLane_Loop
+__KeccakF1600_StateExtractBytesInLane   PROC
+	ldrd	r4, r5, [r0], #8
+	fromBitInterleaving	r4, r5, r6
+	push	{r4, r5}
+	add		r2, sp, r2
+__KeccakF1600_StateExtractBytesInLane_Loop
+	ldrb	r4, [r2], #1
+	subs	r3, r3, #1
+	strb	r4, [r1], #1
+	bne		__KeccakF1600_StateExtractBytesInLane_Loop
 	add		sp, #8
-KeccakF1600_StateExtractBytesInLane_Exit
-	pop		{r4 - r5}
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateExtractAndXORLanes(const void *state, unsigned char *data, unsigned int laneCount)
-;//
+;----------------------------------------------------------------------------
+;
+; void KeccakF1600_StateExtractAndXORBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+;
 	ALIGN
-	EXPORT  KeccakF1600_StateExtractAndXORLanes
-KeccakF1600_StateExtractAndXORLanes	PROC
-	cmp		r2, #0
-	beq		KeccakF1600_StateExtractAndXORLanes_Exit
-	push	{r4 - r5}
-KeccakF1600_StateExtractAndXORLanes_LoopAligned
+	EXPORT  KeccakF1600_StateExtractAndXORBytes
+KeccakF1600_StateExtractAndXORBytes   PROC
+	cbz		r3, KeccakF1600_StateExtractAndXORBytes_Exit1	; if length != 0
+	push	{r4 - r8, lr}							; then
+	bic		r4, r2, #7								; offset &= ~7
+	adds	r0, r0, r4								; add whole lane offset to state pointer
+	ands	r2, r2, #7								; offset &= 7 (part not lane aligned)
+	beq		KeccakF1600_StateExtractAndXORBytes_CheckLanes	; if offset != 0
+	movs	r4, r3									; then, do remaining bytes in first lane
+	rsb		r5, r2, #8								; max size in lane = 8 - offset
+	cmp		r4, r5
+	ble		KeccakF1600_StateExtractAndXORBytes_BytesAlign
+	movs	r4, r5
+KeccakF1600_StateExtractAndXORBytes_BytesAlign
+	sub		r8, r3, r4								; size left
+	movs	r3, r4
+	bl		__KeccakF1600_StateExtractAndXORBytesInLane
+	mov		r3, r8
+KeccakF1600_StateExtractAndXORBytes_CheckLanes
+	lsrs	r2, r3, #3								; if length >= 8
+	beq		KeccakF1600_StateExtractAndXORBytes_Bytes
+	mov		r8, r3
+	bl		__KeccakF1600_StateExtractAndXORLanes
+	and		r3, r8, #7
+KeccakF1600_StateExtractAndXORBytes_Bytes
+	cbz		r3, KeccakF1600_StateExtractAndXORBytes_Exit
+	movs	r2, #0
+	bl		__KeccakF1600_StateExtractAndXORBytesInLane
+KeccakF1600_StateExtractAndXORBytes_Exit
+	pop		{r4 - r8, pc}
+KeccakF1600_StateExtractAndXORBytes_Exit1
+	bx		lr
+	ENDP
+
+;----------------------------------------------------------------------------
+;
+; __KeccakF1600_StateExtractAndXORLanes
+;
+; Input:
+;  r0 state pointer
+;  r1 data pointer
+;  r2 laneCount
+;
+; Output:
+;  r0 state pointer next lane
+;  r1 data pointer next byte to input
+;
+; Changed: r2-r5
+;
+	ALIGN
+__KeccakF1600_StateExtractAndXORLanes   PROC
+__KeccakF1600_StateExtractAndXORLanes_LoopAligned
 	ldrd	r4, r5, [r0], #8
 	fromBitInterleaving	r4, r5, r3
 	ldr		r3, [r1]
@@ -753,45 +943,46 @@ KeccakF1600_StateExtractAndXORLanes_LoopAligned
 	eors	r5, r5, r3
 	subs	r2, r2, #1
 	str		r5, [r1], #4
-	bne		KeccakF1600_StateExtractAndXORLanes_LoopAligned
-	pop		{r4 - r5}
-KeccakF1600_StateExtractAndXORLanes_Exit
+	bne		__KeccakF1600_StateExtractAndXORLanes_LoopAligned
 	bx		lr
 	ENDP
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StateExtractAndXORBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
-;//
+;----------------------------------------------------------------------------
+;
+; __KeccakF1600_StateExtractAndXORBytesInLane
+;
+; Input:
+;  r0 state pointer
+;  r1 data pointer
+;  r2 offset in lane
+;  r3 length
+;
+; Output:
+;  r0 state pointer next lane
+;  r1 data pointer next byte to input
+;
+;  Changed: r2-r6
+;
 	ALIGN
-	EXPORT  KeccakF1600_StateExtractAndXORBytesInLane
-KeccakF1600_StateExtractAndXORBytesInLane	PROC
-	push	{r4 - r5}
-	ldr		r5, [sp, #2*4]
-	cmp		r5, #0
-	beq		KeccakF1600_StateExtractAndXORBytesInLane_Exit
-	add		r0, r0, r1, LSL #3
-	ldr		r1, [r0, #4]
-	ldr		r0, [r0]
-	fromBitInterleaving	r0, r1, r4
-	push	{r0, r1 }
-	add		r0, sp, r3
-KeccakF1600_StateExtractAndXORBytesInLane_Loop
-	ldrb	r1, [r0], #1
-	ldrb	r3, [r2]
-	eors	r1, r1, r3
-	subs	r5, r5, #1
-	strb	r1, [r2], #1
-	bne		KeccakF1600_StateExtractAndXORBytesInLane_Loop
+__KeccakF1600_StateExtractAndXORBytesInLane   PROC
+	ldrd	r4, r5, [r0], #8
+	fromBitInterleaving	r4, r5, r6
+	push	{r4, r5}
+	add		r2, sp, r2
+__KeccakF1600_StateExtractAndXORBytesInLane_Loop
+	ldrb	r4, [r2], #1
+	ldrb	r5, [r1]
+	eors	r4, r4, r5
+	subs	r3, r3, #1
+	strb	r4, [r1], #1
+	bne		__KeccakF1600_StateExtractAndXORBytesInLane_Loop
 	add		sp, #8
-KeccakF1600_StateExtractAndXORBytesInLane_Exit
-	pop		{r4 - r5}
 	bx		lr
 	ENDP
 
 	ALIGN
 KeccakF1600_StatePermute_RoundConstantsWithTerminator
-	;//		0			1
+	;		0			1
 	dcd		0x00000001,	0x00000000
 	dcd		0x00000000,	0x00000089
 	dcd		0x00000000,	0x8000008b
@@ -822,12 +1013,12 @@ KeccakF1600_StatePermute_RoundConstantsWithTerminator
 	dcd		0x00000001,	0x00008000
 	dcd		0x00000000,	0x80008082
 
-	dcd		0x000000FF	;//terminator
+	dcd		0x000000FF	;terminator
 
-;//----------------------------------------------------------------------------
-;//
-;// void KeccakF1600_StatePermute( void *state )
-;//
+;----------------------------------------------------------------------------
+;
+; void KeccakF1600_StatePermute( void *state )
+;
 	ALIGN
 	EXPORT  KeccakF1600_StatePermute
 KeccakF1600_StatePermute   PROC
@@ -876,7 +1067,9 @@ KeccakF1600_SnP_FBWL_Absorb_Loop
 	add		r8, r8, r5, LSL #3				; processed += laneCount*SnP_laneLengthInBytes;
 	mov		r1, r6
 	mov		r2, r5
-	bl		KeccakF1600_StateXORLanes		; (void *state, const unsigned char *data, unsigned int laneCount)
+	push	{r4,r5,r6,r7}
+	bl		__KeccakF1600_StateXORLanes		; (void *state, const unsigned char *data, unsigned int laneCount)
+	pop		{r4,r5,r6,r7}
 	mov		r6, r1							; save updated data pointer
 	ldr		r1, [r0, #0]					; xor bit interleaved trailing bits
 	eor		r1, r1, r9
@@ -913,7 +1106,9 @@ KeccakF1600_SnP_FBWL_Squeeze_Loop
 	bl		KeccakF1600_StatePermute
 	mov		r1, r6
 	mov		r2, r5
-	bl		KeccakF1600_StateExtractLanes	; (const void *state, unsigned char *data, unsigned int laneCount)
+	push	{r4,r5}
+	bl		__KeccakF1600_StateExtractLanes	; (const void *state, unsigned char *data, unsigned int laneCount)
+	pop		{r4,r5}
 	mov		r6, r1							; save updated data pointer
 	mov		r0, r4
 	subs	r7, r7, r5						; nbrLanes -= laneCount

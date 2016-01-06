@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _SnP_Interface_h_
 
 #include "KeccakF-400-interface.h"
-#include "SnP-FBWL-Default.h"
+#include "SnP-FBWL-default.h"
 
 typedef	unsigned short tKeccakLane;
 

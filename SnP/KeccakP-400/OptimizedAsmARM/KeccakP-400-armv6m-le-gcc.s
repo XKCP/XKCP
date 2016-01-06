@@ -17,6 +17,7 @@
 
 
 	.thumb
+	.syntax unified
 .text
 
 .equ _ba	, 0*2
@@ -50,11 +51,11 @@
 	ldrh		r7, [\ptr, #\g]
 	eors		\result, \result, r7
 	ldrh		r7, [\ptr, #\k]
-	eors		\result, \result, r7				
+	eors		\result, \result, r7
 	ldrh		r7, [\ptr, #\m]
-	eors		\result, \result, r7				
+	eors		\result, \result, r7
 	ldrh		r7, [\ptr, #\s]
-	eors		\result, \result, r7				
+	eors		\result, \result, r7
 	.endm
 
 .macro	xorrol 		b, yy, rr
@@ -64,7 +65,7 @@
 	lsls		r7, \b, #\rr
 	lsrs		\b, \b, #16-\rr
 	orrs		\b, \b, r7
-	uxth		\b
+	uxth		\b, \b
 	.endif
 	.endm
 
@@ -72,7 +73,7 @@
 	sxth		r7, \b
 	rors		r7, r7, \rot
 	eors		r7, r7, \a
-	uxth		r7
+	uxth		r7, r7
 	mov			\d, r7
 	.endm
 
@@ -197,7 +198,7 @@
 @//
 .align 8
 .global   KeccakF400_Initialize
-KeccakF400_Initialize:  
+KeccakF400_Initialize:
 	bx		lr
 
 
@@ -207,7 +208,7 @@ KeccakF400_Initialize:
 @//
 .align 8
 .global   KeccakF400_StateInitialize
-KeccakF400_StateInitialize:  
+KeccakF400_StateInitialize:
 	movs	r1, #0
 	movs	r2, #0
 	movs	r3, #0
@@ -225,7 +226,7 @@ KeccakF400_StateInitialize:
 @//
 .align 8
 .global   KeccakF400_StateComplementBit
-KeccakF400_StateComplementBit:  
+KeccakF400_StateComplementBit:
 	lsrs	r2, r1, #3
 	add		r0, r2
 	ldrb	r2, [r0]
@@ -241,10 +242,10 @@ KeccakF400_StateComplementBit:
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF400_StateXORLanes(void *state, const unsigned char *data, unsigned int laneCount)
-@// 
+@//
 .align 8
 .global   KeccakF400_StateXORLanes
-KeccakF400_StateXORLanes:  
+KeccakF400_StateXORLanes:
 	subs	r2, r2, #1
 	bcc		KeccakF400_StateXORLanes_Exit
 	lsls	r2, r2, #1
@@ -279,13 +280,13 @@ KeccakF400_StateXORLanes_Exit:
 @//
 .align 8
 .global   KeccakF400_StateXORBytesInLane
-KeccakF400_StateXORBytesInLane:  
+KeccakF400_StateXORBytesInLane:
 	push	{r4,lr}
 	ldr		r4, [sp, #8]
 	subs	r4, r4, #1
 	bcc		KeccakF400_StateXORBytesInLane_Exit
 	lsls	r1, r1, #1
-	adds	r0, r0, r1
+	adds	r0, r0, r1
 	adds	r0, r0, r3
 KeccakF400_StateXORBytesInLane_Loop:
 	ldrb	r1, [r0, r4]
@@ -304,7 +305,7 @@ KeccakF400_StateXORBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakF400_StateOverwriteLanes
-KeccakF400_StateOverwriteLanes: 
+KeccakF400_StateOverwriteLanes:
 	subs	r2, r2, #1
 	bcc		KeccakF400_StateOverwriteLanes_Exit
 	lsls	r2, r2, #1
@@ -355,7 +356,7 @@ KeccakF400_StateOverwriteBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakF400_StateOverwriteWithZeroes
-KeccakF400_StateOverwriteWithZeroes: 
+KeccakF400_StateOverwriteWithZeroes:
 	movs	r3, #0
 	cmp		r1, #0
 	beq		KeccakF400_StateOverwriteWithZeroes_Exit
@@ -373,7 +374,7 @@ KeccakF400_StateOverwriteWithZeroes_Exit:
 @//
 .align 8
 .global   KeccakF400_StateExtractLanes
-KeccakF400_StateExtractLanes:  
+KeccakF400_StateExtractLanes:
 	subs	r2, r2, #1
 	bcc		KeccakF400_StateExtractLanes_Exit
 	lsls	r2, r2, #1
@@ -402,7 +403,7 @@ KeccakF400_StateExtractLanes_Exit:
 @//
 .align 8
 .global   KeccakF400_StateExtractBytesInLane
-KeccakF400_StateExtractBytesInLane:  
+KeccakF400_StateExtractBytesInLane:
 	push	{r4,lr}
 	ldr		r4, [sp, #8]
 	subs	r4, r4, #1
@@ -484,7 +485,7 @@ KeccakF400_StateExtractAndXORBytesInLane_Exit:
 @//
 .align 8
 .global   KeccakP400_StatePermute
-KeccakP400_StatePermute:  
+KeccakP400_StatePermute:
 	push	{ r4 - r6, lr }
 	mov		r2, r8
 	mov		r3, r9
@@ -512,28 +513,28 @@ KeccakP400_StatePermute:
 	b		KeccakF400_StatePermute_RoundOdd
 	nop
 KeccakF400_StatePermute_RoundConstants:
-	dcw			0x0001
-	dcw			0x8082
-	dcw			0x808a
-	dcw			0x8000
-	dcw			0x808b
-	dcw			0x0001
-	dcw			0x8081
-	dcw			0x8009
-	dcw			0x008a
-	dcw			0x0088
-	dcw			0x8009
-	dcw			0x000a
-	dcw			0x808b
-	dcw			0x008b
-	dcw			0x8089
-	dcw			0x8003
-	dcw			0x8002
-	dcw			0x0080
-	dcw			0x800a
-	dcw			0x000a
+		.short 			0x0001
+		.short 			0x8082
+		.short 			0x808a
+		.short 			0x8000
+		.short 			0x808b
+		.short 			0x0001
+		.short 			0x8081
+		.short 			0x8009
+		.short 			0x008a
+		.short 			0x0088
+		.short 			0x8009
+		.short 			0x000a
+		.short 			0x808b
+		.short 			0x008b
+		.short 			0x8089
+		.short 			0x8003
+		.short 			0x8002
+		.short 			0x0080
+		.short 			0x800a
+		.short 			0x000a
 KeccakP400_StatePermute_RoundConstants:
-	dcw			0xFF			@//terminator
+		.short 			0xFF			@//terminator
 
 KeccakF400_StatePermute_RoundLoop:
 	mov			r8, r7

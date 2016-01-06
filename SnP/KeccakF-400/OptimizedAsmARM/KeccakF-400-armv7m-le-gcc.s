@@ -17,6 +17,7 @@
 
 
 	.thumb
+	.syntax unified
 .text
 
 @//----------------------------------------------------------------------------
@@ -476,27 +477,27 @@ KeccakF400_StatePermute_RoundOdd:
 
 .align 8
 KeccakF400_StatePermute_RoundConstants:
-	dcw			0x0001
-	dcw			0x8082
-	dcw			0x808a
-	dcw			0x8000
-	dcw			0x808b
-	dcw			0x0001
-	dcw			0x8081
-	dcw			0x8009
-	dcw			0x008a
-	dcw			0x0088
-	dcw			0x8009
-	dcw			0x000a
-	dcw			0x808b
-	dcw			0x008b
-	dcw			0x8089
-	dcw			0x8003
-	dcw			0x8002
-	dcw			0x0080
-	dcw			0x800a
-	dcw			0x000a
+		.short 			0x0001
+		.short 			0x8082
+		.short 			0x808a
+		.short 			0x8000
+		.short 			0x808b
+		.short 			0x0001
+		.short 			0x8081
+		.short 			0x8009
+		.short 			0x008a
+		.short 			0x0088
+		.short 			0x8009
+		.short 			0x000a
+		.short 			0x808b
+		.short 			0x008b
+		.short 			0x8089
+		.short 			0x8003
+		.short 			0x8002
+		.short 			0x0080
+		.short 			0x800a
+		.short 			0x000a
 KeccakP400_StatePermute_RoundConstants:
-	dcw			0		@ terminator
+		.short 			0		@ terminator
 
 

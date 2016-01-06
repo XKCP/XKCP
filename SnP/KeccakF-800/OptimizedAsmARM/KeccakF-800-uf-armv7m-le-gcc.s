@@ -13,188 +13,182 @@
 @ http://creativecommons.org/publicdomain/zero/1.0/
 @
 
-@ WARNING: These functions work only on little endian CPU with@ ARMv7a architecture.
+@ WARNING: These functions work only on little endian CPU with@ ARMv7m architecture (Cortex-M3, ...).
 
 
+		.thumb
+	.syntax unified
 .text
 
-.equ _ba, 0*4
-.equ _be, 1*4
-.equ _bi, 2*4
-.equ _bo, 3*4
-.equ _bu, 4*4
-.equ _ga, 5*4
-.equ _ge, 6*4
-.equ _gi, 7*4
-.equ _go, 8*4
-.equ _gu, 9*4
-.equ _ka, 10*4
-.equ _ke, 11*4
-.equ _ki, 12*4
-.equ _ko, 13*4
-.equ _ku, 14*4
-.equ _ma, 15*4
-.equ _me, 16*4
-.equ _mi, 17*4
-.equ _mo, 18*4
-.equ _mu, 19*4
-.equ _sa, 20*4
-.equ _se, 21*4
-.equ _si, 22*4
-.equ _so, 23*4
-.equ _su, 24*4
+@//----------------------------------------------------------------------------
 
-.macro	ThetaRhoPiChiIota	stateOut, stateIn, ofsOut, ofs1, ofs2, ofs3, ofs4, dd1, dd2, dd3, dd4, dd5, rr2, rr3, rr4, rr5
-	ldr			r2, [\stateIn, #\ofs1]
-	ldr			r3, [\stateIn, #\ofs2]
-	ldr			r4, [\stateIn, #\ofs3]
-	eor			r2, r2, \dd1
-	ldr			r5, [\stateIn, #\ofs4]
-	eor			r3, r3, \dd2
-	eor			r4, r4, \dd3
-	eor			r5, r5, \dd4
-	eor			r6, r6, \dd5
-	ror			r3, r3, #32-\rr2
-	ror			r4, r4, #32-\rr3
-	ror			r5, r5, #32-\rr4
-	ror			r6, r6, #32-\rr5
+.equ _ba	, 0*4
+.equ _be	, 1*4
+.equ _bi	, 2*4
+.equ _bo	, 3*4
+.equ _bu	, 4*4
+.equ _ga	, 5*4
+.equ _ge	, 6*4
+.equ _gi	, 7*4
+.equ _go	, 8*4
+.equ _gu	, 9*4
+.equ _ka	, 10*4
+.equ _ke	, 11*4
+.equ _ki	, 12*4
+.equ _ko	, 13*4
+.equ _ku	, 14*4
+.equ _ma	, 15*4
+.equ _me	, 16*4
+.equ _mi	, 17*4
+.equ _mo	, 18*4
+.equ _mu	, 19*4
+.equ _sa	, 20*4
+.equ _se	, 21*4
+.equ _si	, 22*4
+.equ _so	, 23*4
+.equ _su	, 24*4
+.equ _RFU, 25*4
+.equ _SAS, 26*4
 
-	bic			r1, r5, r4
-	eor			r1, r1, r3
-	str			r1, [\stateOut, #\ofsOut+4]
-	bic			r1, r6, r5
-	eor			r1, r1, r4
-	str			r1, [\stateOut, #\ofsOut+8]
-	bic			r1, r2, r6
-	eor			r1, r1, r5
-	str			r1, [\stateOut, #\ofsOut+12]
-	bic			r7, r3, r2
-	eor			r7, r7, r6
-	str			r7, [\stateOut, #\ofsOut+16]
-	ldr			r1, [lr], #4
-	bic			r4, r4, r3
-	eor			r4, r4, r1
-	eor			r4, r4, r2
-	str			r4, [\stateOut, #\ofsOut+0]
+@//----------------------------------------------------------------------------
+
+.macro	xor5	result,ptr,rb,g,k,m,s
+	ldr		\result, [\ptr, #\g]
+	eors	\result, \result, \rb
+	ldr		\rb, [\ptr, #\k]
+	eors	\result, \result, \rb
+	ldr		\rb, [\ptr, #\m]
+	eors	\result, \result, \rb
+	ldr		\rb, [\ptr, #\s]
+	eors	\result, \result, \rb
 	.endm
 
-.macro	ThetaRhoPiChi		stateOut, stateIn, ofsOut, ofs1, ofs2, ofs3, ofs4, ofs5, dd1, dd2, dd3, dd4, dd5, rr1, rr2, rr3, rr4, rr5
-	ldr			r2, [\stateIn, #\ofs1]
-	ldr			r3, [\stateIn, #\ofs2]
-	ldr			r4, [\stateIn, #\ofs3]
-	eor			r2, r2, \dd1
-	ldr			r5, [\stateIn, #\ofs4]
-	eor			r3, r3, \dd2
-	ldr			r6, [\stateIn, #\ofs5]
-	eor			r4, r4, \dd3
-	eor			r5, r5, \dd4
-	ror			r2, r2, #32-\rr1
-	eor			r6, r6, \dd5
-	ror			r3, r3, #32-\rr2
-	ror			r4, r4, #32-\rr3
-	ror			r5, r5, #32-\rr4
-	ror			r6, r6, #32-\rr5
-
-	bic			r1, r4, r3
-	eor			r1, r1, r2
-	str			r1, [\stateOut, #\ofsOut+0]
-	bic			r1, r5, r4
-	eor			r1, r1, r3
-	str			r1, [\stateOut, #\ofsOut+4]
-	bic			r1, r6, r5
-	eor			r1, r1, r4
-	str			r1, [\stateOut, #\ofsOut+8]
-	bic			r1, r2, r6
-	bic			r2, r3, r2
-	eor			r1, r1, r5
-	eor			r2, r2, r6
-	str			r1, [\stateOut, #\ofsOut+12]
-	eor			r7, r7, r2
-	str			r2, [\stateOut, #\ofsOut+16]
+.macro	mTe		b, yy, rr
+	eors	\b, \b, \yy
+	.if		\rr != 0
+	ror		\b, \b, #32-\rr
+	.endif
 	.endm
 
-.macro	ThetaRhoPiChiLast	stateOut, stateIn, ofsOut, ofs1, ofs2, ofs3, ofs4, ofs5, dd1, dd2, dd3, dd4, dd5, rr1, rr2, rr3, rr4, rr5
-	ldr			r2, [\stateIn, #\ofs1]
-	ldr			r3, [\stateIn, #\ofs2]
-	ldr			r4, [\stateIn, #\ofs3]
-	eor			r2, r2, \dd1
-	ldr			r5, [\stateIn, #\ofs4]
-	eor			r3, r3, \dd2
-	ldr			r6, [\stateIn, #\ofs5]
-	eor			r4, r4, \dd3
-	eor			r5, r5, \dd4
-	ror			r2, r2, #32-\rr1
-	eor			r6, r6, \dd5
-	ror			r3, r3, #32-\rr2
-	ror			r4, r4, #32-\rr3
-	ror			r5, r5, #32-\rr4
-	ror			r6, r6, #32-\rr5
-
-	bic			r8, r4, r3
-	bic			r9, r5, r4
-	bic			r10, r6, r5
-	bic			r11, r2, r6
-	bic			r1, r3, r2
-	eor			r8, r8, r2
-	eor			r9, r9, r3
-	eor			r10, r10, r4
-	str			r8, [\stateOut, #\ofsOut+0]
-	eor			r11, r11, r5
-	str			r9, [\stateOut, #\ofsOut+4]
-	eor			r6, r6, r1
-	str			r10, [\stateOut, #\ofsOut+8]
-	str			r11, [\stateOut, #\ofsOut+12]
-	eor			r7, r7, r6
-	str			r6, [\stateOut, #\ofsOut+16]
+.macro	mCI 	resptr, resofs, ax0, ax1, ax2, temp, iota
+	bics	\temp, \ax2, \ax1
+	eors	\temp, \temp, \ax0
+	.if 		\iota < 0x100
+	eors	\temp, \temp, #\iota
+	.else
+	mov		\ax1, #\iota & 0xFFFF
+	.if		\iota >= 0x10000
+	movt	\ax1, #\iota >> 16
+	.endif
+	eors	\temp, \temp, \ax1
+	.endif
+	str		\temp, [\resptr, #\resofs]
 	.endm
 
-.macro	KeccakRound	stateOut, stateIn
-	@// prepare Theta
-	ldr			r2, [\stateIn, #_ba]
-	ldr			r3, [\stateIn, #_be]
-	ldr			r4, [\stateIn, #_bi]
-	ldr			r5, [\stateIn, #_bo]
-	eor			r2, r2, r8
-	eor			r3, r3, r9
-	eor			r4, r4, r10
-	eor			r5, r5, r11
-	ldr			r8, [\stateIn, #_ga]
-	ldr			r9, [\stateIn, #_ge]
-	ldr			r10, [\stateIn, #_gi]
-	ldr			r11, [\stateIn, #_go]
-	eor			r2, r2, r8
-	eor			r3, r3, r9
-	eor			r4, r4, r10
-	eor			r5, r5, r11
-	ldr			r8, [\stateIn, #_ka]
-	ldr			r9, [\stateIn, #_ke]
-	ldr			r10, [\stateIn, #_ki]
-	ldr			r11, [\stateIn, #_ko]
-	eor			r2, r2, r8
-	eor			r3, r3, r9
-	eor			r4, r4, r10
-	eor			r5, r5, r11
-	ldr			r8, [\stateIn, #_ma]
-	ldr			r9, [\stateIn, #_me]
-	ldr			r10, [\stateIn, #_mi]
-	ldr			r11, [\stateIn, #_mo]
-	eor			r2, r2, r8
-	eor			r3, r3, r9
-	eor			r4, r4, r10
-	eor			r5, r5, r11
-	eor			r8, r7, r3, ROR #31
-    eor			r9, r2, r4, ROR #31
-    eor			r10, r3, r5, ROR #31
-    eor			r11, r4, r7, ROR #31
-    eor			r12, r5, r2, ROR #31
-
-	ThetaRhoPiChiIota	\stateOut, \stateIn, _ba, _ba, _ge, _ki, _mo,      r8, r9, r10, r11, r12,     12, 11, 21, 14
-	ThetaRhoPiChi		\stateOut, \stateIn, _ga, _bo, _gu, _ka, _me, _si, r11, r12, r8, r9, r10, 28, 20,  3, 13, 29
-	ThetaRhoPiChi		\stateOut, \stateIn, _ka, _be, _gi, _ko, _mu, _sa, r9, r10, r11, r12, r8,  1,  6, 25,  8, 18
-	ThetaRhoPiChi		\stateOut, \stateIn, _ma, _bu, _ga, _ke, _mi, _so, r12, r8, r9, r10, r11, 27,  4, 10, 15, 24
-	ThetaRhoPiChiLast	\stateOut, \stateIn, _sa, _bi, _go, _ku, _ma, _se, r10, r11, r12, r8, r9, 30, 23,  7,  9,  2
+.macro	mC	 	resptr, resofs, ax0, ax1, ax2, temp, pTxor, pTreg, save
+	bics	\temp, \ax2, \ax1
+	eors	\temp, \temp, \ax0
+	.if		\save != 0
+	str		\temp, [\resptr, #\resofs]
+	.endif
+	.if 		\pTxor != 0
+	eors	\pTreg, \pTreg, \temp
+	.endif
 	.endm
 
+.macro	mKR		stateOut,stateIn,iota
+
+	@ prepare Theta
+    xor5	r1, \stateIn, r9, _ga, _ka, _ma, _sa
+    xor5	r2, \stateIn, r10, _ge, _ke, _me, _se
+	eor		r9, r7, r2, ROR #31
+    eor		r10, r1, r6, ROR #31
+    eor		r11, r2, r8, ROR #31
+    eor		r12, r6, r7, ROR #31
+    eor		lr, r8, r1, ROR #31
+
+	@ Theta Rho Pi Chi Iota
+	eors	r1, r3, r11
+	rors	r1, r1, #32-30
+	ldr		r2, [\stateIn, #_go]
+	ldr		r3, [\stateIn, #_ku]
+	ldr		r4, [\stateIn, #_ma]
+	ldr		r5, [\stateIn, #_se]
+    mTe		r2, r12, 23
+    mTe		r3, lr,  7
+    mTe		r4, r9,  9
+    mTe		r5, r10,  2
+	mC		\stateOut, _su, r5, r1, r2, r7, 0, 0,   1
+	mC		\stateOut, _so, r4, r5, r1, r8, 0, 0,   1
+	mC		\stateOut, _si, r3, r4, r5, r6, 0, 0,   1
+	mC		\stateOut, _se, r2, r3, r4, r4, 0, 0,   1
+	mC		\stateOut, _sa, r1, r2, r3, r3, 0, 0,   1
+
+	ldr		r1, [\stateIn, #_bu]
+	ldr		r2, [\stateIn, #_ga]
+	ldr		r4, [\stateIn, #_mi]
+	ldr		r5, [\stateIn, #_so]
+    mTe		r1, lr, 27
+    mTe		r2, r9,  4
+    mTe		r4, r11, 15
+    mTe		r5, r12, 24
+	mC		\stateOut, _mu, r5, r1, r2, r3, 1, r7, 1
+	mC		\stateOut, _mo, r4, r5, r1, r3, 1, r8, 1
+	ldr		r3, [\stateIn, #_ke]
+    mTe		r3, r10, 10
+	mC		\stateOut, _mi, r3, r4, r5, r5, 1, r6, 1
+	mC		\stateOut, _me, r2, r3, r4, r4, 0, 0,   1
+	mC		\stateOut, _ma, r1, r2, r3, r3, 0, 0,   1
+
+	ldr		r1, [\stateIn, #_be]
+	ldr		r2, [\stateIn, #_gi]
+	ldr		r4, [\stateIn, #_mu]
+	ldr		r5, [\stateIn, #_sa]
+    mTe		r1, r10,  1
+    mTe		r2, r11,  6
+    mTe		r4, lr,  8
+    mTe		r5, r9, 18
+	mC		\stateOut, _ku, r5, r1, r2, r3, 1, r7, 1
+	mC		\stateOut, _ko, r4, r5, r1, r3, 1, r8, 1
+	ldr		r3, [\stateIn, #_ko]
+    mTe		r3, r12, 25
+	mC		\stateOut, _ki, r3, r4, r5, r5, 1, r6, 1
+	mC		\stateOut, _ke, r2, r3, r4, r4, 0, 0,   1
+	mC		\stateOut, _ka, r1, r2, r3, r3, 0, 0,   1
+
+	ldr		r1, [\stateIn, #_bo]
+	ldr		r2, [\stateIn, #_gu]
+	ldr		r4, [\stateIn, #_me]
+	ldr		r5, [\stateIn, #_si]
+    mTe		r1, r12, 28
+    mTe		r2, lr, 20
+    mTe		r4, r10, 13
+    mTe		r5, r11, 29
+	mC		\stateOut, _gu, r5, r1, r2, r3, 1, r7, 1
+	mC		\stateOut, _go, r4, r5, r1, r3, 1, r8, 1
+	ldr		r3, [\stateIn, #_ka]
+    mTe		r3, r9,  3
+	mC		\stateOut, _gi, r3, r4, r5, r5, 1, r6, 1
+	mC		\stateOut, _ge, r2, r3, r4, r4, 0, 0,   1
+	mC		\stateOut, _ga, r1, r2, r3, r3, 0, 0,   1
+
+	ldr		r1, [\stateIn, #_ba]
+	ldr		r2, [\stateIn, #_ge]
+	ldr		r3, [\stateIn, #_ki]
+	ldr		r4, [\stateIn, #_mo]
+	ldr		r5, [\stateIn, #_su]
+	mTe		r1, r9,  0
+	mTe		r2, r10, 12
+	mTe		r3, r11, 11
+	mTe		r4, r12, 21
+	mTe		r5, lr, 14
+	mC		\stateOut, _bu, r5, r1, r2, lr, 1, r7, 1
+	mC		\stateOut, _bo, r4, r5, r1, r12, 1, r8, 1
+	mC		\stateOut, _bi, r3, r4, r5, r11, 1, r6, 0
+	mC		\stateOut, _be, r2, r3, r4, r10, 0, 0,   1
+	mCI		\stateOut, _ba, r1, r2, r3, r9, \iota
+	mov		r3, r11
+	.endm
 
 @//----------------------------------------------------------------------------
 @//
@@ -305,7 +299,6 @@ KeccakF800_StateOverwriteBytes_Exit:
 	bx		lr
 
 
-
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF800_StateOverwriteWithZeroes(void *state, unsigned int byteCount)
@@ -390,32 +383,6 @@ KeccakF800_StateExtractAndXORBytes_Exit:
 	pop		{r4,pc}
 
 
-.align 8
-KeccakF800_StatePermute_RoundConstantsWithTerminator:
-		.long 			0x00000001
-		.long 			0x00008082
-		.long 			0x0000808a
-		.long 			0x80008000
-		.long 			0x0000808b
-		.long 			0x80000001
-		.long 			0x80008081
-		.long 			0x00008009
-		.long 			0x0000008a
-		.long 			0x00000088
-		.long 			0x80008009
-		.long 			0x8000000a
-		.long 			0x8000808b
-		.long 			0x0000008b
-		.long 			0x00008089
-		.long 			0x00008003
-		.long 			0x00008002
-		.long 			0x00000080
-		.long 			0x0000800a
-		.long 			0x8000000a
-		.long 			0x80008081
-		.long 			0x00008080
-		.long 			0			@//terminator
-
 @//----------------------------------------------------------------------------
 @//
 @// void KeccakF800_StatePermute( void *state )
@@ -423,28 +390,38 @@ KeccakF800_StatePermute_RoundConstantsWithTerminator:
 .align 8
 .global   KeccakF800_StatePermute
 KeccakF800_StatePermute:
-	push		{r4-r12,lr}
-	adr			lr, KeccakF800_StatePermute_RoundConstantsWithTerminator
-	add			r2, r0, #_sa
-	sub			sp, sp, #4*25+4
-    ldmia		r2, { r8 - r12 }
-	ldr			r7, [r0, #_bu]
-	ldr			r1, [r0, #_gu]
-	mov			r6, r12
-	eor			r7, r7, r12
-	ldr			r12, [r0, #_ku]
-	eor			r7, r7, r1
-	ldr			r1, [r0, #_mu]
-	eor			r7, r7, r12
-	eor			r7, r7, r1
-KeccakF800_StatePermute_RoundLoop:
-	KeccakRound	sp, r0
-	KeccakRound	r0, sp
-	ldr			r4, [lr]
-	cmp			r4, #0
-	bne			KeccakF800_StatePermute_RoundLoop
-	add			sp,sp,#4*25+4
-	pop			{r4-r12,pc}
+	push	{r4-r12,lr}
+	sub		sp, sp, #_SAS
+	ldm		r0, {r9,r10,r11,r12,lr}
+	mov		r3, r11
+    xor5	r7, r0, lr, _gu, _ku, _mu, _su
+    xor5	r8, r0, r12, _go, _ko, _mo, _so
+    xor5	r6, r0, r11, _gi, _ki, _mi, _si
+	mKR		sp, r0, 0x00000001
+	mKR		r0, sp, 0x00008082
+	mKR		sp, r0, 0x0000808a
+	mKR		r0, sp, 0x80008000
+	mKR		sp, r0, 0x0000808b
+	mKR		r0, sp, 0x80000001
+	mKR		sp, r0, 0x80008081
+	mKR		r0, sp, 0x00008009
+	mKR		sp, r0, 0x0000008a
+	mKR		r0, sp, 0x00000088
+	mKR		sp, r0, 0x80008009
+	mKR		r0, sp, 0x8000000a
+	mKR		sp, r0, 0x8000808b
+	mKR		r0, sp, 0x0000008b
+	mKR		sp, r0, 0x00008089
+	mKR		r0, sp, 0x00008003
+	mKR		sp, r0, 0x00008002
+	mKR		r0, sp, 0x00000080
+	mKR		sp, r0, 0x0000800a
+	mKR		r0, sp, 0x8000000a
+	mKR		sp, r0, 0x80008081
+	mKR		r0, sp, 0x00008080
+	str		r11, [r0, #_bi]
+	add		sp,sp,#_SAS
+	pop		{r4-r12,pc}
 
 
 @----------------------------------------------------------------------------
