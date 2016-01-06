@@ -22,22 +22,21 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define PlSnP_statesSizeInBytes             (PlSnP_P*SnP_stateSizeInBytes)
 
 #define PlSnP_StaticInitialize()
-#define PlSnP_InitializeAll                 KeccakF1600_Pl2_InitializeAll
-#define PlSnP_XORBytes                      KeccakF1600_Pl2_XORBytes
-#define PlSnP_XORLanesAll                   KeccakF1600_Pl2_XORLanesAll
-#define PlSnP_OverwriteBytes                KeccakF1600_Pl2_OverwriteBytes
-#define PlSnP_OverwriteLanesAll             KeccakF1600_Pl2_OverwriteLanesAll
-#define PlSnP_OverwriteWithZeroes           KeccakF1600_Pl2_OverwriteWithZeroes
-#define PlSnP_ComplementBit                 KeccakF1600_Pl2_ComplementBit
-#define PlSnP_ComplementBitAll              KeccakF1600_Pl2_ComplementBitAll
-#define PlSnP_Permute                       KeccakF1600_Pl2_Permute
-#define PlSnP_PermuteAll                    KeccakF1600_Pl2_PermuteAll
-#define PlSnP_ExtractBytes                  KeccakF1600_Pl2_ExtractBytes
-#define PlSnP_ExtractLanesAll               KeccakF1600_Pl2_ExtractLanesAll
-#define PlSnP_ExtractAndXORBytes            KeccakF1600_Pl2_ExtractAndXORBytes
-#define PlSnP_ExtractAndXORLanesAll         KeccakF1600_Pl2_ExtractAndXORLanesAll
+#define PlSnP_InitializeAll                 KeccakF1600_Pl8_InitializeAll
+#define PlSnP_XORBytes                      KeccakF1600_Pl8_XORBytes
+#define PlSnP_XORLanesAll                   KeccakF1600_Pl8_XORLanesAll
+#define PlSnP_OverwriteBytes                KeccakF1600_Pl8_OverwriteBytes
+#define PlSnP_OverwriteLanesAll             KeccakF1600_Pl8_OverwriteLanesAll
+#define PlSnP_OverwriteWithZeroes           KeccakF1600_Pl8_OverwriteWithZeroes
+#define PlSnP_ComplementBit                 KeccakF1600_Pl8_ComplementBit
+#define PlSnP_ComplementBitAll              KeccakF1600_Pl8_ComplementBitAll
+#define PlSnP_Permute                       KeccakP1600_12_Pl8_Permute
+#define PlSnP_PermuteAll                    KeccakP1600_12_Pl8_PermuteAll
+#define PlSnP_ExtractBytes                  KeccakF1600_Pl8_ExtractBytes
+#define PlSnP_ExtractLanesAll               KeccakF1600_Pl8_ExtractLanesAll
+#define PlSnP_ExtractAndXORBytes            KeccakF1600_Pl8_ExtractAndXORBytes
+#define PlSnP_ExtractAndXORLanesAll         KeccakF1600_Pl8_ExtractAndXORLanesAll
 
-//TODO: improve this
 #include "PlSnP-FBWL-default.h"
 #define PlSnP_FBWL_Absorb                   PlSnP_FBWL_Absorb_Default
 #define PlSnP_FBWL_Squeeze                  PlSnP_FBWL_Squeeze_Default
