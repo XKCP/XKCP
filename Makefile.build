@@ -56,6 +56,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Tests/testSponge.h</h>
     </fragment>
 
+    <fragment name="KeccakSum" inherits="keccak">
+        <c>Tests/base64.c</c>
+        <c>Tests/KeccakSum.c</c>
+        <h>Tests/base64.h</h>
+    </fragment>
+
     <fragment name="optimized">
         <h>Common/brg_endian.h</h>
         <gcc>-fomit-frame-pointer</gcc>
