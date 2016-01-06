@@ -14,9 +14,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 //#define OUTPUT
+//#define VERBOSE
 
 #include <assert.h>
-#ifdef OUTPUT
+#if (defined(OUTPUT) || defined(VERBOSE))
 #include <stdio.h>
 #endif
 #include <stdlib.h>
@@ -104,10 +105,32 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int usingQueue,
             assert(result == 0);
         }
 
+#ifdef VERBOSE
+        printf("Keccak[r=%d, c=%d]\n", rate, capacity);
+        printf("Input of %d bits:", inputBitLength);
+        for(i=0; i<inputByteLengthCeiling; i++)
+            printf(" %02x", (int)input[i]);
+        printf("\n");
+        printf("Output of %d bits:", outputByteSize*8);
+        for(i=0; i<outputByteSize; i++)
+            printf(" %02x", (int)output[i]);
+        printf("\n\n");
+#endif
+
         for (i = 0; i < outputByteSize; i++)
             acc[i] ^= output[i];
     }
     memcpy(checksum, acc, outputByteSize);
+#ifdef VERBOSE
+    {
+        unsigned int i;
+        printf("Keccak[r=%d, c=%d]\n", rate, capacity);
+        printf("Checksum: ", outputByteSize);
+        for(i=0; i<outputByteSize; i++)
+            printf("\\x%02x", (int)checksum[i]);
+        printf("\n\n");
+    }
+#endif
 }
 
 void selfTestSponge(unsigned int rate, unsigned int capacity, int usingQueue, const unsigned char *expected)
