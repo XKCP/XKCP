@@ -52,7 +52,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         </xsl:call-template>
     </xsl:variable>
     <target name="{$nameTarget}">
-        <xsl:apply-templates select="*[contains($listFragments, concat('|',@name,'|'))]"/>
+        <xsl:apply-templates select="//*[contains($listFragments, concat('|',@name,'|'))]"/>
     </target>
 </xsl:template>
 

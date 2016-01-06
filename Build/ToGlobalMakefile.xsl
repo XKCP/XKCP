@@ -24,6 +24,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:variable name="makefile" select="concat('bin/build/', @name, '.make')"/>
     <xsl:variable name="object" select="concat('bin/', @name)"/>
     <xsl:variable name="pack" select="concat(@name, '.pack')"/>
+    <xsl:variable name="all" select="../@all"/>
+
+    <xsl:if test="$all!=''">
+        <xsl:value-of select="$all"/>
+        <xsl:text>: </xsl:text>
+        <xsl:value-of select="@name"/>
+        <xsl:text>
+</xsl:text>
+    </xsl:if>
 
     <xsl:text>.PHONY: </xsl:text>
     <xsl:value-of select="@name"/>
@@ -70,16 +79,41 @@ http://creativecommons.org/publicdomain/zero/1.0/
 </xsl:text>
 
     <xsl:value-of select="$targetfile"/>
-    <xsl:text>: Build/ToOneTarget.xsl Makefile.build
+    <xsl:text>: Build/ToOneTarget.xsl bin/build/Makefile.expanded
 &#9;xsltproc -o $@ -param nameTarget "'</xsl:text>
     <xsl:value-of select="@name"/>
-    <xsl:text>'" Build/ToOneTarget.xsl Makefile.build
+    <xsl:text>'" Build/ToOneTarget.xsl bin/build/Makefile.expanded
 
 </xsl:text>
 </xsl:template>
 
+<xsl:template match="group">
+    <xsl:if test="@all!=''">
+        <xsl:text>.PHONY: </xsl:text>
+        <xsl:value-of select="@all"/>
+        <xsl:text>
+</xsl:text>
+        <xsl:if test="../@all!=''">
+            <xsl:value-of select="../@all"/>
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="@all"/>
+            <xsl:text>
+</xsl:text>
+        </xsl:if>
+    </xsl:if>
+
+    <xsl:apply-templates select="target|group"/>
+</xsl:template>
+
 <xsl:template match="build">
-    <xsl:apply-templates select="target"/>
+    <xsl:if test="@all!=''">
+        <xsl:text>.PHONY: </xsl:text>
+        <xsl:value-of select="@all"/>
+        <xsl:text>
+</xsl:text>
+    </xsl:if>
+
+    <xsl:apply-templates select="target|group"/>
 </xsl:template>
 
 </xsl:stylesheet>

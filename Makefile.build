@@ -13,7 +13,7 @@ To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 -->
-<build>
+<build all="all">
     <fragment name="CompactFIPS202">
         <c>Standalone/CompactFIPS202/Keccak-compact-test.c</c>
         <c>Standalone/CompactFIPS202/genKAT.c</c>
@@ -42,14 +42,17 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Constructions/KeccakDuplex.c</c>
         <c>Constructions/KeccakSponge.c</c>
         <c>Modes/KeccakHash.c</c>
+        <h>Constructions/KeccakDuplex.h</h>
+        <h>Constructions/KeccakSponge.h</h>
+        <h>Modes/KeccakHash.h</h>
+    </fragment>
+
+    <fragment name="KeccakTests" inherits="keccak timingSnP">
         <c>Tests/genKAT.c</c>
         <c>Tests/main.c</c>
         <c>Tests/testDuplex.c</c>
         <c>Tests/testSnP.c</c>
         <c>Tests/testSponge.c</c>
-        <h>Constructions/KeccakDuplex.h</h>
-        <h>Constructions/KeccakSponge.h</h>
-        <h>Modes/KeccakHash.h</h>
         <h>Tests/genKAT.h</h>
         <h>Tests/testDuplex.h</h>
         <h>Tests/testSnP.h</h>
@@ -75,6 +78,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Tests/timingSnP.c</c>
         <h>Tests/timing.h</h>
         <h>Tests/timingSnP.h</h>
+        <h>Constructions/KeccakSponge.h</h>
     </fragment>
 
     <fragment name="FBWL-default">
@@ -144,33 +148,38 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>SnP/KeccakF-1600/OptimizedAsmX86-64/KeccakF-1600-x86-64-shld-gas.s</c>
     </fragment>
 
-    <target name="KeccakWidth1600Reference" inherits="keccak reference1600"/>
-    <target name="KeccakWidth1600Reference32BI" inherits="keccak reference32BI"/>
-    <target name="KeccakWidth1600Opt64u6" inherits="keccak optimized64">
+    <fragment name="opt64u6" inherits="optimized64">
         <h>SnP/KeccakF-1600/Optimized64/u6/KeccakF-1600-opt64-settings.h</h>
-    </target>
-    <target name="KeccakWidth1600Opt64ufull" inherits="keccak optimized64">
-        <h>SnP/KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
-    </target>
-    <target name="KeccakWidth1600Opt64LCu6" inherits="keccak optimized64">
-        <h>SnP/KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
-    </target>
-    <target name="KeccakWidth1600Opt64LCufull" inherits="keccak optimized64">
-        <h>SnP/KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
-    </target>
-    <target name="KeccakWidth1600Opt64LCufullshld" inherits="keccak optimized64">
-        <h>SnP/KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
-    </target>
-    <target name="KeccakWidth1600Inplace32BI" inherits="keccak inplace32BI"/>
-    <target name="KeccakWidth1600Compact64" inherits="keccak compact64"/>
-    <target name="KeccakWidth1600Asmx86-64" inherits="keccak asmx86-64"/>
-    <target name="KeccakWidth1600Asmx86-64-shld" inherits="keccak asmx86-64-shld"/>
+    </fragment>
 
-    <target name="KeccakWidth1600Sedach-AVX2" inherits="keccak width1600 optimized timingSnP">
+    <fragment name="opt64ufull" inherits="optimized64">
+        <h>SnP/KeccakF-1600/Optimized64/ufull/KeccakF-1600-opt64-settings.h</h>
+    </fragment>
+
+    <fragment name="opt64lcu6" inherits="optimized64">
+        <h>SnP/KeccakF-1600/Optimized64/LCu6/KeccakF-1600-opt64-settings.h</h>
+    </fragment>
+
+    <fragment name="opt64lcufull" inherits="optimized64">
+        <h>SnP/KeccakF-1600/Optimized64/LCufull/KeccakF-1600-opt64-settings.h</h>
+    </fragment>
+
+    <fragment name="opt64lcufullshld" inherits="optimized64">
+        <h>SnP/KeccakF-1600/Optimized64/LCufullshld/KeccakF-1600-opt64-settings.h</h>
+    </fragment>
+
+    <target name="sedachavx2" inherits="width1600 optimized">
         <c>SnP/KeccakF-1600/Sedach-AVX2/KeccakF-1600-AVX2.cpp</c>
         <h>SnP/KeccakF-1600/Sedach-AVX2/SnP-interface.h</h>
         <gcc>-O2</gcc>
     </target>
+
+    <group all="KeccakWidth1600">
+        <product delimiter="/">
+            <factor set="KeccakTests KeccakSum"/>
+            <factor set="reference1600 reference32BI inplace32BI compact64 asmx86-64 asmx86-64-shld opt64u6 opt64ufull opt64lcu6 opt64lcufull opt64lcufullshld"/> <!--  sedachavx2 -->
+        </product>
+    </group>
 
     <!-- Keccak[r+c=800] -->
 
@@ -213,7 +222,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <gcc>-O</gcc>
     </fragment>
 
-    <target name="KeccakWidth400Reference" inherits="keccak reference400"/>
+    <group all="KeccakTestsWidth400">
+        <product delimiter="/">
+            <factor set="KeccakTests"/>
+            <factor set="reference400"/>
+        </product>
+    </group>
 
     <!-- Keccak[r+c=200] -->
 
@@ -237,8 +251,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/SnP-Relaned.h</h>
     </fragment>
 
-    <target name="KeccakWidth200Reference" inherits="keccak reference200"/>
-    <target name="KeccakWidth200Compact" inherits="keccak compact200 timingSnP"/>
+    <group all="KeccakTestsWidth200">
+        <product delimiter="/">
+            <factor set="KeccakTests"/>
+            <factor set="reference200 compact200"/>
+        </product>
+    </group>
 
     <!-- Keyak -->
 

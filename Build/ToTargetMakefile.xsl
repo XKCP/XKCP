@@ -159,6 +159,7 @@ CC = gcc
     <xsl:text>bin/</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>: $(BINDIR) $(OBJECTS)
+&#9;mkdir -p $(dir $@)
 &#9;$(CC) $(CFLAGS) -o $@ $(OBJECTS)
 
 </xsl:text>
