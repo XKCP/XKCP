@@ -177,7 +177,7 @@ void fromWordsToBytes(unsigned char *state, const tKeccakLane *stateAsWords)
 
     for(i=0; i<nrLanes; i++)
         for(j=0; j<(64/8); j++)
-            state[i*(64/8)+j] = (stateAsWords[i] >> (8*j)) & 0xFF;
+            state[i*(64/8)+j] = (unsigned char)((stateAsWords[i] >> (8*j)) & 0xFF);
 }
 
 void KeccakF1600OnWords(tKeccakLane *state)
