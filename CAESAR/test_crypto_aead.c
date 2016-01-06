@@ -57,7 +57,7 @@ int do_test_crypto_aead(
         printf("!!! clen does not have the expected value.\n");
         return 1;
     }
-    if (memcmp(temp1, ciphertext, clen) != 0) {
+    if (memcmp(temp1, ciphertext, (size_t)clen) != 0) {
         printf("!!! The output of crypto_aead_encrypt() is not as expected.\n");
         return 1;
     }
@@ -70,12 +70,12 @@ int do_test_crypto_aead(
         printf("!!! mlen does not have the expected value.\n");
         return 1;
     }
-    if (memcmp(temp1, plaintext, mlen) != 0) {
+    if (memcmp(temp1, plaintext, (size_t)mlen) != 0) {
         printf("!!! The output of crypto_aead_decrypt() is not as expected.\n");
         return 1;
     }
 
-    memcpy(temp2, ciphertext, plaintextLen+tagLen);
+    memcpy(temp2, ciphertext, (size_t)(plaintextLen+tagLen));
     temp2[0] ^= 0x01;
     if (crypto_aead_decrypt(temp1, &mlen, 0, temp2, plaintextLen+tagLen, AD, ADlen, nonce, key) == 0) {
         printf("!!! Forgery found :-)\n");
@@ -98,8 +98,8 @@ int test_crypto_aead(
     const unsigned char *ciphertext,
     unsigned int tagLen)
 {
-    unsigned char *temp1 = malloc(plaintextLen + tagLen);
-    unsigned char *temp2 = malloc(plaintextLen + tagLen);
+    unsigned char *temp1 = malloc((size_t)plaintextLen + tagLen);
+    unsigned char *temp2 = malloc((size_t)plaintextLen + tagLen);
     int retcode = do_test_crypto_aead(key, keyLen, nonce, nonceLen, AD, ADlen, plaintext, plaintextLen, ciphertext, tagLen, temp1, temp2);
     free(temp1);
     free(temp2);

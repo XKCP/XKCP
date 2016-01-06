@@ -21,7 +21,7 @@ This version supports:
 
 * the [hash and extendable output functions (XOFs)][keccakhashh] defined in [the FIPS 202
   standard][fips202_standard]
-* the CAESAR entries [Ketje][caesar_ketje] and [Keyak][caesar_keyak].
+* the CAESAR entries [Ketje][caesar_ketje] and [Keyak v2][caesar_keyak].
 
 [fips202_standard]: http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf "FIPS 202 standard"
 [caesar_ketje]: http://ketje.noekeon.org/

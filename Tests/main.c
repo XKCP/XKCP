@@ -37,7 +37,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #ifdef Keyak
 #include "NumberOfParallelInstances.h"
-#include "testKeyak.h"
+#include "testMotorist.h"
+#include "testKeyakv2.h"
 #endif
 #ifdef Ketje
 #include "testKetje.h"
@@ -344,6 +345,8 @@ void displayDuplexIntermediateValues(void)
 #ifdef Keyak
 int main()
 {
+	unsigned int mode;
+
 #ifdef PlSnP_P
     testPlSnP();
 #else
@@ -356,7 +359,10 @@ int main()
     doTimingSnP();
 #endif
 #endif
-    testKeyak();
+	for ( mode = 0; mode <= 2; ++mode )
+	    testMotorist( mode );
+	for ( mode = 0; mode <= 2; ++mode )
+	    testKeyak( mode );
     return 0;
 }
 #elif defined(Ketje)

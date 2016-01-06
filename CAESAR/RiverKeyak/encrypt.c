@@ -14,9 +14,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include "crypto_aead.h"
-
-#include <string.h>
-#include "Keyak.h"
+#include "Keyakv2.h"
 
 int crypto_aead_encrypt(
     unsigned char *c,unsigned long long *clen,
@@ -29,13 +27,9 @@ int crypto_aead_encrypt(
 {
     Keyak_Instance instance;
 
-    RiverKeyak_Initialize(&instance, k, 128, npub);
-    Keyak_FeedAssociatedData(&instance, ad, adlen);
-    Keyak_WrapPlaintext(&instance, m, c, mlen);
-    *clen = mlen;
-    Keyak_GetTag(&instance, c+mlen, 16);
-    *clen += 16;
-
+	Keyak_Initialize( &instance, k, 16, npub, 58, 0, 0, 0, 0 );
+	Keyak_Wrap( &instance, m, c, (size_t)mlen, ad, (size_t)adlen, c+mlen, 0, 0 );
+    *clen = mlen + 16;
     return 0;
 }
 
@@ -49,20 +43,14 @@ int crypto_aead_decrypt(
     )
 {
     Keyak_Instance instance;
-    unsigned char tag[16];
+	unsigned long long mlen_;
 
     if (clen < 16)
         return -1;
-
-    RiverKeyak_Initialize(&instance, k, 128, npub);
-    Keyak_FeedAssociatedData(&instance, ad, adlen);
-    *mlen = clen-16;
-    Keyak_UnwrapCiphertext(&instance, c, m, *mlen);
-    Keyak_GetTag(&instance, tag, 16);
-    if (memcmp(tag, c+(*mlen), 16) != 0) {
-        memset(m, 0, *mlen);
-        return -1;
-    }
-    else
-        return 0;
+	Keyak_Initialize( &instance, k, 16, npub, 58, 0, 0, 1, 0 );
+	mlen_ = clen - 16;
+    *mlen = mlen_;
+	if ( Keyak_Wrap( &instance, c, m, (size_t)mlen_, ad, (size_t)adlen, (unsigned char *)c+mlen_, 1, 0 ) == 1 )
+		return 0;
+    return -1;
 }
