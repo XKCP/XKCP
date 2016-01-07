@@ -73,7 +73,7 @@ typedef struct {
   *
   * @post   (phase == motorist.riding) or (phase == motorist.failed)
   *
-  * @return 0 if successful, -1 otherwise.
+  * @return 1 if successful, 0 if tag mismatch, -1 other error.
   */
 int Keyak_Initialize(Keyak_Instance *instance, 
 	const unsigned char *key, unsigned int keySizeInBytes, 
