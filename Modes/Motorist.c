@@ -384,7 +384,7 @@ static int Engine_InjectCollectiveStreamer(Engine_Instance *instance, unsigned c
 	offset = *pOffset;
 	partSize = Ra - offset;
 	if ( partSize > sizeX )
-		partSize = sizeX;
+		partSize = (unsigned char)sizeX;
 	*pOffset += partSize;
 
 	ForEveryPiston(0)
@@ -570,7 +570,7 @@ int Motorist_Wrap(Motorist_Instance *instance, const unsigned char * I, size_t I
 		return ( Atom_Error );
 	if ( ((instance->lastFlag & Motorist_Wrap_LastMetaData) != 0) && ((lastFlag & Motorist_Wrap_LastMetaData) == 0) )
 		return ( Atom_Error );
-	instance->lastFlag  = lastFlag;
+	instance->lastFlag  = (unsigned char)lastFlag;
 
 	if ( instance->engine.phase == Engine_Phase_Fresh )
 	{

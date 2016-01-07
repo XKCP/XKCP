@@ -493,7 +493,9 @@ int testKeyak( int mode )
 	    assert(!memcmp( expected, tag, TagLength ), "The global tag is incorrect.");
     }
 
+	#ifdef OUTPUT
 	printf( "Keyak v2 testmode %u ok\n", mode );
+	#endif
 	
     return (0);
 }
