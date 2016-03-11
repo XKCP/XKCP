@@ -1,46 +1,49 @@
-; Implementation by the Zephyr Pellerin hereby denoted as "the implementer".
-;
-; For more information, feedback or questions, please refer to our websites:
-; http://keccak.noekeon.org/
-; http://keyak.noekeon.org/
-; http://ketje.noekeon.org/
-;
-; To the extent possible under law, the implementer has waived all copyright
-; and related or neighboring rights to the source code in this file.
-; http://creativecommons.org/publicdomain/zero/1.0/
+/* -*- mode: asm; fill-column: 75; comment-column: 50 -*- */
 
-; INFO: Tested on unrar 4.35, later versions do not include the RAR virtual machine.
+;;  Implementation of the contemporary FIPS 202 Standard by the Zephyr Pellerin
+;;  hereby denoted as "the implementer".
+
+;; For more information, feedback or questions, please refer to our websites:
+;; http://keccak.noekeon.org/
+;; http://keyak.noekeon.org/
+;; http://ketje.noekeon.org/
+
+;; To the extent possible under law, the implementer has waived all copyright
+;; and related or neighboring rights to the source code in this file.
+;; http://creativecommons.org/publicdomain/zero/1.0/
+
+;; INFO: Tested on unrar 4.35, later versions do not include the RAR virtual machine.
 
 #include <constants.rh>
 #include <crctools.rh>
 #include <math.rh>
 #include <util.rh>
 
-; Magic memory pointers to store important
-; keccak specification constants
+;; Magic memory pointers to store important
+;; keccak specification constants
 #define RC_BASE         #0x00004096
 #define ROT_OFFSETS     #0x00002800
 #define TRIANGLR_NUMS   #0x00002048
 #define INT_BC          #0x00003000 ; used internally
 
-; Implementation constants
+;; Implementation constants
 #define TEST_VECTOR     #0x00004000
 #define TEST_VECTOR_LEN #28
 #define ROW_STATE       #0x00005000
 
-; This number is not magic
-; it is derived from 200 - (2 * Message Digest Length)
-; where mdlen = 32, the mdlen of SHA-256
-#define RSIZ #72 
-#define RSIZW #9 ; RSIZ / 8 
+;; This number is not magic
+;; it is derived from 200 - (2 * Message Digest Length)
+;; where mdlen = 32, the mdlen of SHA-256
+#define RSIZ #72
+#define RSIZW #9 ; RSIZ / 8
 
-; Keccak permutations are designated by keccak-f[b] where b defines the width of the
-; permutation, the number of rounds depends on the width (in our case 1600, the highest)
-; and is given by nr = 12 + 2l where 2^l = b / 25. This gives 24 rounds
+;; Keccak permutations are designated by keccak-f[b] where b defines the width of the
+;; permutation, the number of rounds depends on the width (in our case 1600, the highest)
+;; and is given by nr = 12 + 2l where 2^l = b / 25. This gives 24 rounds
 #define KECCAK_ROUNDS #24
 
 _start:
-  ; set our Keccak spec defined rotation offsets 
+  ; set our Keccak spec defined rotation offsets
   mov r0, ROT_OFFSETS
   mov [r0+#4], #1
   mov [r0+#8], #3
@@ -67,7 +70,7 @@ _start:
   mov [r0+#92], #20
   mov [r0+#96], #44
 
-  ; define some triangular numbers 
+  ; define some triangular numbers
   mov r0, TRIANGLR_NUMS
   mov [r0+#4], #10
   mov [r0+#8], #7
@@ -92,9 +95,9 @@ _start:
   mov [r0+#84], #22
   mov [r0+#88], #9
   mov [r0+#92], #6
-  mov [r0+#96], #1 
+  mov [r0+#96], #1
 
-  ; define our round constants (64 w/ 32 bit words, hence the doubling) 
+  ; define our round constants (64 w/ 32 bit words, hence the doubling)
   mov r0, RC_BASE
   mov [r0+#4], #0x00000001
   mov [r0+#8], #0x00000001
@@ -154,8 +157,8 @@ _start:
 
 
   call $keccak
-  mov     [VMADDR_NEWBLOCKPOS], TEST_VECTOR 
-  mov     [VMADDR_NEWBLOCKSIZE], #100 
+  mov     [VMADDR_NEWBLOCKPOS], TEST_VECTOR
+  mov     [VMADDR_NEWBLOCKSIZE], #100
 
   ; Compensate to required CRC
   push    RAR_FILECRC
@@ -170,10 +173,10 @@ finished:
     call    $_success
 
 
-; this function does bitwise rotation on a 64 bit value 
-; with 32 bits of precision
-; adapted from similar HACKMEM algorithm!
-; ( mad respect from the youth of today! )
+;; this function does bitwise rotation on a 64 bit value
+;; with 32 bits of precision
+;; adapted from similar HACKMEM algorithm!
+;; ( mad respect from the youth of today! )
 rotate:
   push r6     ; save frame pointer
   mov r6, r7  ; create new frame
@@ -183,10 +186,10 @@ rotate:
   and r0, #0x3F
   cmp r0, #0x1F
   jbe $inf32
-  ; swap our values 
-  mov r3, r1 
-  mov r1, r2 
-  mov r2, r3 
+  ; swap our values
+  mov r3, r1
+  mov r1, r2
+  mov r2, r3
   and  r0, #0x1F
 inf32:
   ; hakmem magic ahead
@@ -201,10 +204,10 @@ inf32:
   shl r2, r0
   shr r1, r5
   or r2, r1
-  mov r1, r4 
-  mov r0, r2 ; our return value, the beginning of the 64 bit int 
+  mov r1, r4
+  mov r0, r2 ; our return value, the beginning of the 64 bit int
   mov     r7, r6                      ; clear frame
-  pop     r6 
+  pop     r6
   ret
 
 keccak:
@@ -215,32 +218,32 @@ keccak:
   ;   S = Keccak-f[r+c](S)
   mov r0, RSIZ
   mov r1, TEST_VECTOR_LEN
-  mov r3, INT_BC 
+  mov r3, INT_BC
   mov r4, TEST_VECTOR
   call $keccak_round
   ret
 
-keccak_round: 
+keccak_round:
   mov r2, #0
   call $xor_slice
-  call $_keccak_round 
+  call $_keccak_round
 
   ; you can rewrite this logic if you'd like to test
   ; messages with a size greater than that of a single
   ; 5x5 (25 byte) slice
-  sub r1, RSIZ 
+  sub r1, RSIZ
   add r1, RSIZ
   cmp TEST_VECTOR_LEN, r0; rounds
   push r0
-  jmp $keccak_round 
+  jmp $keccak_round
   ret
-  
+
 
 xor_slice:
   ; xor twice because weve only got 32 bits of precision here
-  ; and we are operating on 64 bit values, keep this in mind 
-  xor [r3+r2], [r4+r2] 
-  xor [r3+r2+#4], [r4+r2+#4] 
+  ; and we are operating on 64 bit values, keep this in mind
+  xor [r3+r2], [r4+r2]
+  xor [r3+r2+#4], [r4+r2+#4]
   cmp r2, RSIZW
   add r2, #1
   jbe $xor_slice
@@ -262,33 +265,33 @@ theta:
   call $theta_assignment
   ret
 
-; heres a haiku that describes this function 
-; 32 bit word here
-; standard calls for 64 bit
-; xor them seperately
+;; heres a haiku that describes this function
+;; 32 bit word here
+;; standard calls for 64 bit
+;; xor them seperately
 parity:
   mov r0, #0
   ; xor the lower 32 bits
-  mov r1, r0 
-  add r1, ROW_STATE 
-  mov r2, INT_BC 
+  mov r1, r0
+  add r1, ROW_STATE
+  mov r2, INT_BC
 
-  mov [r2+r0], [r1]      
-  xor [r2+r0], [r1+#8]  
+  mov [r2+r0], [r1]
+  xor [r2+r0], [r1+#8]
   xor [r2+r0], [r1+#16]
-  xor [r2+r0], [r1+#24]  
-  xor [r2+r0], [r1+#32]  
+  xor [r2+r0], [r1+#24]
+  xor [r2+r0], [r1+#32]
 
   ; now xor the higher 32 bits
-  mov [r2+r0+#4], [r1+#4]  
-  xor [r2+r0+#4], [r1+#12]  
+  mov [r2+r0+#4], [r1+#4]
+  xor [r2+r0+#4], [r1+#12]
   xor [r2+r0+#4], [r1+#20]
-  xor [r2+r0+#4], [r1+#28]  
-  
+  xor [r2+r0+#4], [r1+#28]
+
   ; loop
   add r0, #1
   cmp r0, #4
-  ja $parity 
+  ja $parity
   ret
 
 theta_assignment:
@@ -298,13 +301,13 @@ theta_assignment:
   mov r1, ROW_STATE
   mov r2, INT_BC
   mov r5, #0 ; j
-  ; here we produce 
+  ; here we produce
   ; D[x] = C[x - 1] ⊕ ROT(C[x + 1], 1),  ∀ x in 0...4
-  push [r1+#4] 
+  push [r1+#4]
   push #5
   call $_mod
   mov r3, r0 ; store our first INT_BC index in r3
-  push [r1+#1] 
+  push [r1+#1]
   push #5
   call $_mod ; r0 now contains C[x + 1]
   push [r0+#4]
@@ -314,7 +317,7 @@ theta_assignment:
   ; r0 is now D[x]
   call $inner_theta_loop
   add r1, #1
-  cmp r1, #4 
+  cmp r1, #4
   ja $theta_assignment
   mov     r7, r6  ; clear frame
   pop     r6
@@ -325,8 +328,8 @@ inner_theta_loop:
   mov r2, r4 ; INT_BC is no longer needed
   add r2, r5 ; i + j or x + y in keccak spec nomenclature
   mov r2, [r1+r2]
-  xor [r2], [r0] 
-  xor [r2+#4], [r0+#4] ; the final value to write back into the ROW_STATE 
+  xor [r2], [r0]
+  xor [r2+#4], [r0+#4] ; the final value to write back into the ROW_STATE
   mov [r1], [r2]
   mov [r1+4], [r2]
   add r5, #1
@@ -334,18 +337,18 @@ inner_theta_loop:
   jbe $inner_theta_loop
   ret
 
-; INT_BC[y; 2x + 3y] = ROT(ROW_STATE[x; y]; r[x; y]), 8(x; y) in (0 : : : 4; 0 : : : 4)
+;; INT_BC[y; 2x + 3y] = ROT(ROW_STATE[x; y]; r[x; y]), 8(x; y) in (0 : : : 4; 0 : : : 4)
 rho_pi:
   push r6     ; save frame pointer
   mov r6, r7  ; create new frame
   sub  r7, #4; allocation some variable space
 
-  mov r1, #0 
-  mov r5, INT_BC 
+  mov r1, #0
+  mov r5, INT_BC
   mov r4, [r5+#8] ; 2nd item (dbl word precision)
   call $inner_pi
-  mov     r7, r6 
-  pop     r6 
+  mov     r7, r6
+  pop     r6
   ret
 
 inner_pi:
@@ -355,15 +358,15 @@ inner_pi:
 
   mov r0, INT_BC
   mov [r0], #0x00000000
-  ; iterate over the triangular numbers 0..24 by the 
-  ; specification defined rotational constants 
+  ; iterate over the triangular numbers 0..24 by the
+  ; specification defined rotational constants
   mov r0, TRIANGLR_NUMS ; address of beginning of our list of triangular numbers
-  mov r2, [r0+r1] 
-  mov r0, INT_BC 
-  mov [r0], [r5]  
-  mov [r0+#4], [r5+r2]  
+  mov r2, [r0+r1]
+  mov r0, INT_BC
+  mov [r0], [r5]
+  mov [r0+#4], [r5+r2]
   mov r4, [r5+r2]
-  
+
   ; now begin to rotate our row state
   push #0x00000000
   push r4
@@ -372,61 +375,58 @@ inner_pi:
   push r3
   push r0
   call $rotate
-  mov [r5+r2], r3 
+  mov [r5+r2], r3
   add r2, #4
-  mov [r5+r2], r0 
+  mov [r5+r2], r0
   pop r0
   mov r0, INT_BC
-  mov r4, [r0] 
+  mov r4, [r0]
   mov [r4+#4], [r0+#4]
   add r1, #1
-  cmp r1, #24 
+  cmp r1, #24
   jz $inner_pi
-  mov     r7, r6 
-  pop     r6 
+  mov     r7, r6
+  pop     r6
   ret
- 
-; a[i][j][k] ⊕ = ¬a[i][j+1][k] & a[i][j+2][k].
+
+;; a[i][j][k] ⊕ = ¬a[i][j+1][k] & a[i][j+2][k].
 chi:
-  pop r0 ; address of row state 
-  pop r1 ; bitwise combination pointer 
-  ; iterate over all our rows 
+  pop r0 ; address of row state
+  pop r1 ; bitwise combination pointer
+  ; iterate over all our rows
   mov r2, #0
   mov r4, ROW_STATE
   mov r5, INT_BC
 outer_chi_loop:
-  mov r3, #0 
+  mov r3, #0
 row_assignment:
-  mov [r5+r3], [r4+ r3 + r2] 
+  mov [r5+r3], [r4+ r3 + r2]
   add r3, #1
   cmp r3, #5
-  ja $row_assignment 
+  ja $row_assignment
 
-  mov r3, #0 
+  mov r3, #0
 bitwise_combine_along_rows:
   ; st[j + i] ^= (~bc[(i + 1) % 5]) & bc[(i + 2) % 5];
   cmp r3, #5
-  ja $bitwise_combine_along_rows 
+  ja $bitwise_combine_along_rows
 
   add r2, #5
   cmp r2, #25
   ja $outer_chi_loop
   ret
 
-;  a[0,0] = a[0,0] xor RC
+;;  a[0,0] = a[0,0] xor RC
 iota:
   push r6     ; save frame pointer
   mov r6, r7  ; create new frame
-  sub r7, #8 
+  sub r7, #8
   pop r0 ; contains a pointer to the first value of our state
   pop r1 ; containts our round
-  mov r2, #4 
+  mov r2, #4
   mul r2, r1
   xor [r0], r2
-  xor [r0+#4], [r2+#4] ; unlimited references, wuw. 
+  xor [r0+#4], [r2+#4] ; unlimited references, wuw.
   mov r6, r7
   pop r6
   ret
-
-     
-
