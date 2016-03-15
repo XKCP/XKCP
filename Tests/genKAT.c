@@ -68,7 +68,7 @@ void convertShortMsgToPureLSB(void);
 STATUS_CODES
 genKAT_main(void)
 {
-#if (KeccakF_width == 1600)
+#ifndef KeccakP1600_excluded
     // The following instances are from the FIPS 202 standard.
     // http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
     //
@@ -93,33 +93,6 @@ genKAT_main(void)
     genShortMsgHash(576, 1024, 0x06, 512, 0,
         "ShortMsgKAT_SHA3-512.txt",
         "Keccak(input|01)[r=576, c=1024] truncated to 512 bits, or SHA3-512 as in FIPS 202 standard");
-#endif
-
-#if (KeccakF_width == 800)
-    genShortMsgHash( 288,  512,  0x01, 0, 4096,
-        "ShortMsgKAT_Keccakr288c512.txt",
-        "Keccak[r=288, c=512]");
-    genShortMsgHash( 544,  256,  0x01, 0, 4096,
-        "ShortMsgKAT_Keccakr544c256.txt",
-        "Keccak[r=544, c=256]");
-    genShortMsgHash( 640,  160,  0x01, 0, 4096,
-        "ShortMsgKAT_Keccakr640c160.txt",
-        "Keccak[r=640, c=160]");
-#endif
-
-#if (KeccakF_width == 400)
-    genShortMsgHash( 144,  256,  0x01, 0, 4096,
-        "ShortMsgKAT_Keccakr144c256.txt",
-        "Keccak[r=144, c=256]");
-    genShortMsgHash( 240,  160,  0x01, 0, 4096,
-        "ShortMsgKAT_Keccakr240c160.txt",
-        "Keccak[r=240, c=160]");
-#endif
-
-#if (KeccakF_width == 200)
-    genShortMsgHash(  40,  160,  0x01, 0, 4096,
-        "ShortMsgKAT_Keccakr40c160.txt",
-        "Keccak[r=40, c=160]");
 #endif
     return KAT_SUCCESS;
 }
@@ -205,7 +178,10 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
         fprintf(fp_out, "\nLen = %d\n", msglen);
         fprintBstr(fp_out, "Msg = ", Msg, msgbytelen);
 
-        Keccak_HashInitialize(&hash, rate, capacity, hashbitlen, delimitedSuffix);
+        if (Keccak_HashInitialize(&hash, rate, capacity, hashbitlen, delimitedSuffix) != SUCCESS) {
+            printf("Keccak[r=%d, c=%d] is not supported.\n", rate, capacity);
+            return KAT_HASH_ERROR;
+        }
         Keccak_HashUpdate(&hash, Msg, msglen);
         Keccak_HashFinal(&hash, Squeezed);
         if (hashbitlen > 0)

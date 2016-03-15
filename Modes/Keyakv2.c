@@ -13,35 +13,59 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#ifdef KeccakReference
+    #include "displayIntermediateValues.h"
+#endif
+
 #include "Keyakv2.h"
 
-int Keyak_Initialize(Keyak_Instance *instance, 
-	const unsigned char *key, unsigned int keySizeInBytes, 
-	const unsigned char *nonce, unsigned int nonceSizeInBytes,
-	int tagFlag, unsigned char * tag, 
-	int unwrapFlag, int forgetFlag)
-{
-	unsigned char suv[Lk+MaxNoncelength];
+#ifndef KeccakP800_excluded
+    #include "KeccakP-800-SnP.h"
 
-	if ( (keySizeInBytes > (Lk-2)) || ((keySizeInBytes + nonceSizeInBytes) > (Lk-2+MaxNoncelength)) )
-		return ( -1 );
-    if ( Motorist_Initialize( &instance->motorist ) != 0 )
-		return ( -1 );
+    #define prefix                      River
+    #define prefixMotorist              KeyakWidth800
+        #include "Keyakv2.inc"
+    #undef prefix
+    #undef prefixMotorist
+#endif
 
-	/*	Compose SUV */
-	suv[0] = Lk;
-	memcpy( &suv[1], key, keySizeInBytes );
-	suv[1+keySizeInBytes] = 1;
-	memset( &suv[1+keySizeInBytes+1], 0, Lk - (1+keySizeInBytes+1) );
-	memcpy( &suv[Lk], nonce, nonceSizeInBytes );
+#ifndef KeccakP1600_excluded
+    #include "KeccakP-1600-SnP.h"
 
-	return ( Motorist_StartEngine( &instance->motorist, suv, Lk + nonceSizeInBytes, tagFlag, tag, unwrapFlag, forgetFlag) );
-}
+    #define prefix                      Lake
+    #define prefixMotorist              KeyakWidth1600
+        #include "Keyakv2.inc"
+    #undef prefix
+    #undef prefixMotorist
+#endif
 
-int Keyak_Wrap(Keyak_Instance *instance, const unsigned char *input, unsigned char *output, size_t dataSizeInBytes, 
-	const unsigned char * AD, size_t ADlen, unsigned char * tag, int unwrapFlag, int forgetFlag )
-{
-	size_t	processedI, processedMD;
+#ifndef KeccakP1600timesN_excluded
+    #include "KeccakP-1600-times2-SnP.h"
 
-    return ( Keyak_WrapPartial( instance, input, output, dataSizeInBytes, AD, ADlen, tag, unwrapFlag, forgetFlag, Motorist_Wrap_LastCryptAndMeta, &processedI, &processedMD ) );
-}
+    #define prefix                      Sea
+    #define prefixMotorist              KeyakWidth1600times2
+        #include "Keyakv2.inc"
+    #undef prefix
+    #undef prefixMotorist
+#endif
+
+#ifndef KeccakP1600timesN_excluded
+    #include "KeccakP-1600-times4-SnP.h"
+
+    #define prefix                      Ocean
+    #define prefixMotorist              KeyakWidth1600times4
+        #include "Keyakv2.inc"
+    #undef prefix
+    #undef prefixMotorist
+#endif
+
+#ifndef KeccakP1600timesN_excluded
+    #include "KeccakP-1600-times8-SnP.h"
+
+    #define prefix                      Lunar
+    #define prefixMotorist              KeyakWidth1600times8
+        #include "Keyakv2.inc"
+    #undef prefix
+    #undef prefixMotorist
+#endif
+

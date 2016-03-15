@@ -16,6 +16,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestMotorist_h_
 #define _TestMotorist_h_
 
-int testMotorist( int mode );
+int testMotorist( void );
 
 #endif

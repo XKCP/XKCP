@@ -26,193 +26,190 @@
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF200_Initialize( void )
+; void KeccakP200_StaticInitialize( void )
 ;
-.global KeccakF200_Initialize
+.global KeccakP200_StaticInitialize
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF200_StateInitialize(void *state)
+; void KeccakP200_Initialize(void *state)
 ;
 ; argument state   is passed in r24:r25
 ;
-.global KeccakF200_StateInitialize
-KeccakF200_StateInitialize:
+.global KeccakP200_Initialize
+KeccakP200_Initialize:
     movw    rZ, r24
     ldi     r23, 5          ; clear state (5 bytes/5 lanes per iteration)
-KeccakF200_StateInitialize_Loop:
+KeccakP200_Initialize_Loop:
     st      z+, r1
     st      z+, r1
     st      z+, r1
     st      z+, r1
     st      z+, r1
     dec     r23
-    brne    KeccakF200_StateInitialize_Loop
-KeccakF200_Initialize:
+    brne    KeccakP200_Initialize_Loop
+KeccakP200_StaticInitialize:
     ret
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF200_StateComplementBit(void *state, unsigned int position)
+; void KeccakP200_AddByte(void *state, unsigned char data, unsigned int offset)
 ;
-; argument state    is passed in r24:r25
-; argument position is passed in r22:r23, only LSB (r22) is used
+; argument state     is passed in r24:r25
+; argument data      is passed in r22:r23, only LSB (r22) is used
+; argument offset    is passed in r20:r21, only LSB (r20) is used
 ;
-.global KeccakF200_StateComplementBit
-KeccakF200_StateComplementBit:
+.global KeccakP200_AddByte
+KeccakP200_AddByte:
     movw    rZ, r24
-    ldi     r21, 1
-    mov     r20, r22        ; bitnumber = position & 7
-    andi    r20, 7
-    breq    KeccakF200_StateComplementBit_LoopEnd
-KeccakF200_StateComplementBit_Loop:
-    lsl     r21
-    dec     r20
-    brne    KeccakF200_StateComplementBit_Loop
-KeccakF200_StateComplementBit_LoopEnd:
-    lsr     r22             ; bytenumber = position >> 3
-    lsr     r22
-    lsr     r22
-    add     rZ, r22
+    add     rZ, r20
     adc     rZ+1, r1
-    ld      r20, Z
-    eor     r20, r21
-    st      Z, r20
+    ld      r0, Z
+    eor     r0, r22
+    st      Z, r0
     ret
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF200_StateXORBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void KeccakP200_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23
 ; argument offset    is passed in r20:r21, only LSB (r20) is used
 ; argument length    is passed in r18:r19, only LSB (r18) is used
 ;
-.global KeccakF200_StateXORBytes
-KeccakF200_StateXORBytes:
+.global KeccakP200_AddBytes
+KeccakP200_AddBytes:
     tst      r18
-    breq    KeccakF200_StateXORBytes_End
+    breq    KeccakP200_AddBytes_End
     movw    rZ, r24
     add     rZ, r20
     adc     rZ+1, r1
     movw    rX, r22
-KeccakF200_StateXORBytes_Loop:
+KeccakP200_AddBytes_Loop:
     ld      r21, X+
     ld      r0, Z
     eor     r0, r21
     st      Z+, r0
     dec     r18
-    brne    KeccakF200_StateXORBytes_Loop
-KeccakF200_StateXORBytes_End:
+    brne    KeccakP200_AddBytes_Loop
+KeccakP200_AddBytes_End:
     ret
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF200_StateOverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void KeccakP200_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23
 ; argument offset    is passed in r20:r21, only LSB (r20) is used
 ; argument length    is passed in r18:r19, only LSB (r18) is used
 ;
-.global KeccakF200_StateOverwriteBytes
-KeccakF200_StateOverwriteBytes:
+.global KeccakP200_OverwriteBytes
+KeccakP200_OverwriteBytes:
     tst      r18
-    breq    KeccakF200_StateOverwriteBytes_End
+    breq    KeccakP200_OverwriteBytes_End
     movw    rZ, r24
     add     rZ, r20
     adc     rZ+1, r1
     movw    rX, r22
-KeccakF200_StateOverwriteBytes_Loop:
+KeccakP200_OverwriteBytes_Loop:
     ld      r0, X+
     st      Z+, r0
     dec     r18
-    brne    KeccakF200_StateOverwriteBytes_Loop
-KeccakF200_StateOverwriteBytes_End:
+    brne    KeccakP200_OverwriteBytes_Loop
+KeccakP200_OverwriteBytes_End:
     ret
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF200_StateOverwriteWithZeroes(void *state, unsigned int byteCount)
+; void KeccakP200_OverwriteWithZeroes(void *state, unsigned int byteCount)
 ;
 ; argument state        is passed in r24:r25
 ; argument byteCount    is passed in r22:r23, only LSB (r22) is used
 ;
-.global KeccakF200_StateOverwriteWithZeroes
-KeccakF200_StateOverwriteWithZeroes:
+.global KeccakP200_OverwriteWithZeroes
+KeccakP200_OverwriteWithZeroes:
     movw    rZ, r24         ; rZ = state
     mov     r23, r22
     lsr     r23
     lsr     r23
-    breq    KeccakF200_StateOverwriteWithZeroes_Bytes
-KeccakF200_StateOverwriteWithZeroes_Loop4Lanes:
+    breq    KeccakP200_OverwriteWithZeroes_Bytes
+KeccakP200_OverwriteWithZeroes_Loop4Lanes:
     st      Z+, r1
     st      Z+, r1
     st      Z+, r1
     st      Z+, r1
     dec     r23
-    brne    KeccakF200_StateOverwriteWithZeroes_Loop4Lanes
-KeccakF200_StateOverwriteWithZeroes_Bytes:
+    brne    KeccakP200_OverwriteWithZeroes_Loop4Lanes
+KeccakP200_OverwriteWithZeroes_Bytes:
     andi    r22, 3
-    breq    KeccakF200_StateOverwriteWithZeroes_End
-KeccakF200_StateOverwriteWithZeroes_LoopBytes:
+    breq    KeccakP200_OverwriteWithZeroes_End
+KeccakP200_OverwriteWithZeroes_LoopBytes:
     st      Z+, r1
     dec     r22
-    brne    KeccakF200_StateOverwriteWithZeroes_LoopBytes
-KeccakF200_StateOverwriteWithZeroes_End:
+    brne    KeccakP200_OverwriteWithZeroes_LoopBytes
+KeccakP200_OverwriteWithZeroes_End:
     ret
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF200_StateExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void KeccakP200_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23
 ; argument offset    is passed in r20:r21, only LSB (r20) is used
 ; argument length    is passed in r18:r19, only LSB (r18) is used
 ;
-.global KeccakF200_StateExtractBytes
-KeccakF200_StateExtractBytes:
+.global KeccakP200_ExtractBytes
+KeccakP200_ExtractBytes:
     tst      r18
-    breq    KeccakF200_StateExtractBytes_End
+    breq    KeccakP200_ExtractBytes_End
     movw    rZ, r24
     add     rZ, r20
     adc     rZ+1, r1
     movw    rX, r22
-KeccakF200_StateExtractBytes_Loop:
+KeccakP200_ExtractBytes_Loop:
     ld      r0, Z+
     st      X+, r0
     dec     r18
-    brne    KeccakF200_StateExtractBytes_Loop
-KeccakF200_StateExtractBytes_End:
+    brne    KeccakP200_ExtractBytes_Loop
+KeccakP200_ExtractBytes_End:
     ret
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakF200_StateExtractAndXORBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void KeccakP200_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
-; argument data      is passed in r22:r23
-; argument offset    is passed in r20:r21, only LSB (r20) is used
-; argument length    is passed in r18:r19, only LSB (r18) is used
+; argument input     is passed in r22:r23
+; argument output    is passed in r20:r21
+; argument offset    is passed in r18:r19, only LSB (r18) is used
+; argument length    is passed in r16:r17, only LSB (r16) is used
 ;
-.global KeccakF200_StateExtractAndXORBytes
-KeccakF200_StateExtractAndXORBytes:
-    tst      r18
-    breq    KeccakF200_StateExtractAndXORBytes_End
+.global KeccakP200_ExtractAndAddBytes
+KeccakP200_ExtractAndAddBytes:
+    tst     r16
+    breq    KeccakP200_ExtractAndAddBytes_End
+    push    r16
+    push    r28
+    push    r29
     movw    rZ, r24
-    add     rZ, r20
+    add     rZ, r18
     adc     rZ+1, r1
     movw    rX, r22
-KeccakF200_StateExtractAndXORBytes_Loop:
-    ld      r0, X
+    movw    rY, r20
+KeccakP200_ExtractAndAddBytes_Loop:
     ld      r21, Z+
+    ld      r0, X+
     eor     r0, r21
-    st      X+, r0
-    dec     r18
-    brne    KeccakF200_StateExtractAndXORBytes_Loop
-KeccakF200_StateExtractAndXORBytes_End:
+    st      Y+, r0
+    dec     r16
+    brne    KeccakP200_ExtractAndAddBytes_Loop
+    pop     r29
+    pop     r28
+    pop     r16
+KeccakP200_ExtractAndAddBytes_End:
     ret
 
 
@@ -302,7 +299,7 @@ KeccakF200_StateExtractAndXORBytes_End:
     eor     \a0, \a1
 .ENDM
 
-KeccakF200_RoundConstants:
+KeccakP200_RoundConstants_18:
     .BYTE   0x01
     .BYTE   0x82
     .BYTE   0x8a
@@ -321,25 +318,38 @@ KeccakF200_RoundConstants:
     .BYTE   0x03
     .BYTE   0x02
     .BYTE   0x80
-KeccakP200_RoundConstants:
+KeccakP200_RoundConstants_N:
 
     .text
 
+#define pRound          22  //; 2 regs (22-23)
+#define pRound1         23
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP200_StatePermute( void *state, unsigned int nr )
+; void KeccakP200_Permute_18rounds( void *state )
+;
+.global KeccakP200_Permute_18rounds
+KeccakP200_Permute_18rounds:
+    ldi     pRound,   lo8(KeccakP200_RoundConstants_18)
+    ldi     pRound+1, hi8(KeccakP200_RoundConstants_18)
+    rjmp    KeccakP200_Permute
+
+;----------------------------------------------------------------------------
+;
+; void KeccakP200_Permute_Nrounds( void *state, unsigned int nr )
 ;
 ; argument state   is passed in r24:r25
 ; argument nr      is passed in r22:r23
 ;
-.global KeccakP200_StatePermute
-KeccakP200_StatePermute:
+.global KeccakP200_Permute_Nrounds
+KeccakP200_Permute_Nrounds:
     mov     r0, r22
-    ldi     r22, lo8(KeccakP200_RoundConstants)
-    ldi     r23, hi8(KeccakP200_RoundConstants)
-    sub     r22, r0
-    sbc     r23, r1
+    ldi     pRound,   lo8(KeccakP200_RoundConstants_N)
+    ldi     pRound+1, hi8(KeccakP200_RoundConstants_N)
+    sub     pRound,   r0
+    sbc     pRound+1, r1
+KeccakP200_Permute:
     push    r2
     push    r3
     push    r4
@@ -364,7 +374,7 @@ KeccakP200_StatePermute:
     push    rY
     push    rY1
 
-    movw    rZ, r22         ; RoundConstants
+    movw    rZ, pRound        ; RoundConstants
 
     ld      _ba, Y+
     ld      _be, Y+
@@ -393,7 +403,7 @@ KeccakP200_StatePermute:
     ld      _su, Y
 
     ldi     zero, 0
-KeccakP200_StatePermute_RoundLoop:
+KeccakP200_Permute_RoundLoop:
     push    rZ
     push    rZ1
 
@@ -567,9 +577,9 @@ KeccakP200_StatePermute_RoundLoop:
 
     ; Check for last round constant
     cpi     c0, 0x80
-    breq    KeccakP200_StatePermute_Done
-    rjmp    KeccakP200_StatePermute_RoundLoop
-KeccakP200_StatePermute_Done:
+    breq    KeccakP200_Permute_Done
+    rjmp    KeccakP200_Permute_RoundLoop
+KeccakP200_Permute_Done:
 
     ; store registers to RAM state
     pop     rY1

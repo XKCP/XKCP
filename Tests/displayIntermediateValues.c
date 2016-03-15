@@ -15,7 +15,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <stdio.h>
 #include "displayIntermediateValues.h"
-#include "SnP-interface.h"
 
 FILE *intermediateValueFile = 0;
 int displayLevel = 0;
@@ -62,19 +61,18 @@ void displayBits(int level, const char *text, const unsigned char *data, unsigne
     }
 }
 
-void displayStateAsBytes(int level, const char *text, const unsigned char *state)
+void displayStateAsBytes(int level, const char *text, const unsigned char *state, unsigned int width)
 {
-    displayBytes(level, text, state, SnP_width/8);
+    displayBytes(level, text, state, width/8);
 }
 
-#if (SnP_laneLengthInBytes == 8)
 void displayStateAs32bitWords(int level, const char *text, const unsigned int *state)
 {
     unsigned int i;
 
     if ((intermediateValueFile) && (level <= displayLevel)) {
         fprintf(intermediateValueFile, "%s:\n", text);
-        for(i=0; i<SnP_width/64; i++) {
+        for(i=0; i<25; i++) {
             fprintf(intermediateValueFile, "%08X:%08X", (unsigned int)state[2*i+0], (unsigned int)state[2*i+1]);
             if ((i%5) == 4)
                 fprintf(intermediateValueFile, "\n");
@@ -83,27 +81,14 @@ void displayStateAs32bitWords(int level, const char *text, const unsigned int *s
         }
     }
 }
-#endif
 
-void displayStateAsLanes(int level, const char *text, void *statePointer)
+void displayStateAs64bitLanes(int level, const char *text, void *statePointer)
 {
     unsigned int i;
-#if (SnP_laneLengthInBytes == 8)
     unsigned long long int *state = statePointer;
-#endif
-#if (SnP_laneLengthInBytes == 4)
-    unsigned int *state = statePointer;
-#endif
-#if (SnP_laneLengthInBytes == 2)
-    unsigned short *state = statePointer;
-#endif
-#if (SnP_laneLengthInBytes == 1)
-    unsigned char *state = statePointer;
-#endif
 
     if ((intermediateValueFile) && (level <= displayLevel)) {
         fprintf(intermediateValueFile, "%s:\n", text);
-#if (SnP_laneLengthInBytes == 8)
         for(i=0; i<25; i++) {
             fprintf(intermediateValueFile, "%08X", (unsigned int)(state[i] >> 32));
             fprintf(intermediateValueFile, "%08X", (unsigned int)(state[i] & 0xFFFFFFFFULL));
@@ -112,8 +97,16 @@ void displayStateAsLanes(int level, const char *text, void *statePointer)
             else
                 fprintf(intermediateValueFile, " ");
         }
-#endif
-#if (SnP_laneLengthInBytes == 4)
+    }
+}
+
+void displayStateAs32bitLanes(int level, const char *text, void *statePointer)
+{
+    unsigned int i;
+    unsigned int *state = statePointer;
+
+    if ((intermediateValueFile) && (level <= displayLevel)) {
+        fprintf(intermediateValueFile, "%s:\n", text);
         for(i=0; i<25; i++) {
             fprintf(intermediateValueFile, "%08X", state[i]);
             if ((i%5) == 4)
@@ -121,22 +114,49 @@ void displayStateAsLanes(int level, const char *text, void *statePointer)
             else
                 fprintf(intermediateValueFile, " ");
         }
-#endif
-#if (SnP_laneLengthInBytes == 2)
+    }
+}
+
+void displayStateAs16bitLanes(int level, const char *text, void *statePointer)
+{
+    unsigned int i;
+    unsigned short *state = statePointer;
+
+    if ((intermediateValueFile) && (level <= displayLevel)) {
+        fprintf(intermediateValueFile, "%s:\n", text);
         for(i=0; i<25; i++) {
             fprintf(intermediateValueFile, "%04X ", state[i]);
             if ((i%5) == 4)
                 fprintf(intermediateValueFile, "\n");
         }
-#endif
-#if (SnP_laneLengthInBytes == 1)
+    }
+}
+
+void displayStateAs8bitLanes(int level, const char *text, void *statePointer)
+{
+    unsigned int i;
+    unsigned char *state = statePointer;
+
+    if ((intermediateValueFile) && (level <= displayLevel)) {
+        fprintf(intermediateValueFile, "%s:\n", text);
         for(i=0; i<25; i++) {
             fprintf(intermediateValueFile, "%02X ", state[i]);
             if ((i%5) == 4)
                 fprintf(intermediateValueFile, "\n");
         }
-#endif
     }
+}
+
+void displayStateAsLanes(int level, const char *text, void *statePointer, unsigned int width)
+{
+    if (width == 1600)
+        displayStateAs64bitLanes(level, text, statePointer);
+    if (width == 800)
+        displayStateAs32bitLanes(level, text, statePointer);
+    if (width == 400)
+        displayStateAs16bitLanes(level, text, statePointer);
+    if (width == 200)
+        displayStateAs8bitLanes(level, text, statePointer);
 }
 
 void displayRoundNumber(int level, unsigned int i)

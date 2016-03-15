@@ -37,7 +37,7 @@ This code works on x86 family CPUs (32-big and 64-bit), under MSVC, gcc, and Bor
 
 typedef unsigned int uint_32t;
 
-uint_32t HiResTime(void)           /* return the current value of time stamp counter */
+static uint_32t HiResTime(void)           /* return the current value of time stamp counter */
     {
 #if defined(HI_RES_CLK_OK)
     uint_32t x[2];
@@ -71,7 +71,7 @@ uint_32t HiResTime(void)           /* return the current value of time stamp cou
 
 #define TIMER_SAMPLE_CNT (100)
 
-uint_32t calibrate()
+static uint_32t calibrate()
 {
     uint_32t dtMin = 0xFFFFFFFF;        /* big number to start */
     uint_32t t0,t1,i;

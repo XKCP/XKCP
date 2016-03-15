@@ -15,7 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <string.h>
 #include <stdlib.h>
-#include "KeccakF-200-interface.h"
+#include "KeccakP-200-SnP.h"
 
 //#define DIVISION_INSTRUCTION    //comment if no division instruction or more compact when not using division
 #define UNROLL_CHILOOP        //comment if more compact using for loop
@@ -24,22 +24,14 @@ typedef unsigned char UINT8;
 typedef unsigned int tSmallUInt; /*INFO It could be more optimized to use "unsigned char" on an 8-bit CPU    */
 typedef UINT8 tKeccakLane;
 
-#if defined(__GNUC__)
-#define ALIGN __attribute__ ((aligned(8)))
-#elif defined(_MSC_VER)
-#define ALIGN __declspec(align(8))
-#else
-#define ALIGN
-#endif
-
 #define ROL8(a, offset) (UINT8)((((UINT8)a) << (offset&7)) ^ (((UINT8)a) >> (8-(offset&7))))
 
-const UINT8 KeccakF_RotationConstants[25] =
+const UINT8 KeccakP200_RotationConstants[25] =
 {
      1,  3,  6, 10, 15, 21, 28, 36, 45, 55,  2, 14, 27, 41, 56,  8, 25, 43, 62, 18, 39, 61, 20, 44
 };
 
-const UINT8 KeccakF_PiLane[25] =
+const UINT8 KeccakP200_PiLane[25] =
 {
     10,  7, 11, 17, 18,  3,  5, 16,  8, 21, 24,  4, 15, 23, 19, 13, 12,  2, 20, 14, 22,  9,  6,  1
 };
@@ -47,34 +39,35 @@ const UINT8 KeccakF_PiLane[25] =
 #if    defined(DIVISION_INSTRUCTION)
 #define MOD5(argValue)    ((argValue) % 5)
 #else
-const UINT8 KeccakF_Mod5[10] =
+const UINT8 KeccakP200_Mod5[10] =
 {
     0, 1, 2, 3, 4, 0, 1, 2, 3, 4
 };
-#define MOD5(argValue)    KeccakF_Mod5[argValue]
+#define MOD5(argValue)    KeccakP200_Mod5[argValue]
 #endif
 
 const UINT8 KeccakF200_RoundConstants[] =
 {
-	0x01, 0x82, 0x8a, 0x00, 0x8b, 0x01, 0x81, 0x09, 0x8a, 0x88, 0x09, 0x0a, 0x8b, 0x8b, 0x89, 0x03, 0x02, 0x80
+    0x01, 0x82, 0x8a, 0x00, 0x8b, 0x01, 0x81, 0x09, 0x8a, 0x88, 0x09, 0x0a, 0x8b, 0x8b, 0x89, 0x03, 0x02, 0x80
 };
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF200_Initialize( void )
-{
-}
-
-/* ---------------------------------------------------------------- */
-
-void KeccakF200_StateInitialize(void *argState)
+void KeccakP200_Initialize(void *argState)
 {
     memset( argState, 0, 25 * sizeof(tKeccakLane) );
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF200_StateXORBytes(void *argState, const unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP200_AddByte(void *argState, unsigned char byte, unsigned int offset)
+{
+    ((tKeccakLane*)argState)[offset] ^= byte;
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakP200_AddBytes(void *argState, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     tSmallUInt i;
     tKeccakLane * state = (tKeccakLane*)argState + offset;
@@ -84,35 +77,27 @@ void KeccakF200_StateXORBytes(void *argState, const unsigned char *data, unsigne
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF200_StateOverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP200_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     memcpy((unsigned char*)state+offset, data, length);
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF200_StateOverwriteWithZeroes(void *state, unsigned int byteCount)
+void KeccakP200_OverwriteWithZeroes(void *state, unsigned int byteCount)
 {
     memset(state, 0, byteCount);
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF200_StateComplementBit(void *state, unsigned int position)
-{
-    tKeccakLane lane = (tKeccakLane)1 << (position%8);
-    ((tKeccakLane*)state)[position/8] ^= lane;
-}
-
-/* ---------------------------------------------------------------- */
-
-void KeccakP200_StatePermute(void *argState, unsigned int nr)
+void KeccakP200_Permute_Nrounds(void *argState, unsigned int nr)
 {
     tSmallUInt x, y;
     tKeccakLane temp;
     tKeccakLane BC[5];
     tKeccakLane *state;
-	const tKeccakLane *rc;
+    const tKeccakLane *rc;
 
     state = (tKeccakLane*)argState;
     rc = KeccakF200_RoundConstants + 18 - nr;
@@ -136,8 +121,8 @@ void KeccakP200_StatePermute(void *argState, unsigned int nr)
         temp = state[1];
         for ( x = 0; x < 24; ++x )
         {
-            BC[0] = state[KeccakF_PiLane[x]];
-            state[KeccakF_PiLane[x]] = ROL8( temp, KeccakF_RotationConstants[x] );
+            BC[0] = state[KeccakP200_PiLane[x]];
+            state[KeccakP200_PiLane[x]] = ROL8( temp, KeccakP200_RotationConstants[x] );
             temp = BC[0];
         }
 
@@ -171,19 +156,26 @@ void KeccakP200_StatePermute(void *argState, unsigned int nr)
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF200_StateExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP200_Permute_18rounds(void *argState)
+{
+    KeccakP200_Permute_Nrounds(argState, 18);
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakP200_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
     memcpy(data, (UINT8*)state+offset, length);
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakF200_StateExtractAndXORBytes(const void *argState, unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP200_ExtractAndAddBytes(const void *argState, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
     unsigned int i;
     tKeccakLane * state = (tKeccakLane*)argState + offset;
     for(i=0; i<length; i++)
-        data[i] ^= state[i];
+        output[i] = input[i] ^ state[i];
 }
 
 /* ---------------------------------------------------------------- */

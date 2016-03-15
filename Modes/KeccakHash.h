@@ -16,6 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _KeccakHashInterface_h_
 #define _KeccakHashInterface_h_
 
+#ifndef KeccakP1600_excluded
+
 #include "KeccakSponge.h"
 #include <string.h>
 
@@ -24,7 +26,7 @@ typedef size_t DataLength;
 typedef enum { SUCCESS = 0, FAIL = 1, BAD_HASHLEN = 2 } HashReturn;
 
 typedef struct {
-    Keccak_SpongeInstance sponge;
+    KeccakWidth1600_SpongeInstance sponge;
     unsigned int fixedOutputLength;
     unsigned char delimitedSuffix;
 } Keccak_HashInstance;
@@ -106,5 +108,7 @@ HashReturn Keccak_HashFinal(Keccak_HashInstance *hashInstance, BitSequence *hash
   * @return SUCCESS if successful, FAIL otherwise.
   */
 HashReturn Keccak_HashSqueeze(Keccak_HashInstance *hashInstance, BitSequence *data, DataLength databitlen);
+
+#endif
 
 #endif

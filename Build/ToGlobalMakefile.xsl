@@ -20,8 +20,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 <xsl:output method="text" indent="no" encoding="UTF-8"/>
 
 <xsl:template match="target">
-    <xsl:variable name="targetfile" select="concat('bin/build/', @name, '.target')"/>
-    <xsl:variable name="makefile" select="concat('bin/build/', @name, '.make')"/>
+    <xsl:variable name="targetfile" select="concat('bin/.build/', @name, '.target')"/>
+    <xsl:variable name="makefile" select="concat('bin/.build/', @name, '.make')"/>
     <xsl:variable name="object" select="concat('bin/', @name)"/>
     <xsl:variable name="pack" select="concat(@name, '.pack')"/>
     <xsl:variable name="all" select="../@all"/>
@@ -79,10 +79,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 </xsl:text>
 
     <xsl:value-of select="$targetfile"/>
-    <xsl:text>: Build/ToOneTarget.xsl bin/build/Makefile.expanded
+    <xsl:text>: Build/ToOneTarget.xsl bin/.build/Makefile.expanded Makefile.build
 &#9;xsltproc -o $@ -param nameTarget "'</xsl:text>
     <xsl:value-of select="@name"/>
-    <xsl:text>'" Build/ToOneTarget.xsl bin/build/Makefile.expanded
+    <xsl:text>'" Build/ToOneTarget.xsl bin/.build/Makefile.expanded
 
 </xsl:text>
 </xsl:template>
@@ -105,7 +105,38 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:apply-templates select="target|group"/>
 </xsl:template>
 
+<xsl:template match="group" mode="list">
+    <xsl:if test="@all!=''">
+        <xsl:text>&#9;@echo "+ </xsl:text>
+        <xsl:value-of select="@all"/>
+        <xsl:text>"
+</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="target|group" mode="list"/>
+</xsl:template>
+
+<xsl:template match="target" mode="list">
+    <xsl:text>&#9;@echo "- </xsl:text>
+    <xsl:value-of select="@name"/>
+    <xsl:text>[.pack]"
+</xsl:text>
+</xsl:template>
+
 <xsl:template match="build">
+<xsl:text>.PHONY: _list
+_list:
+&#9;@echo "The defined targets (-) and groups of targets (+) are:"
+</xsl:text>
+    <xsl:if test="@all!=''">
+        <xsl:text>&#9;@echo "+ </xsl:text>
+        <xsl:value-of select="@all"/>
+        <xsl:text>"
+</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="target|group" mode="list"/>
+        <xsl:text>
+</xsl:text>
+
     <xsl:if test="@all!=''">
         <xsl:text>.PHONY: </xsl:text>
         <xsl:value-of select="@all"/>

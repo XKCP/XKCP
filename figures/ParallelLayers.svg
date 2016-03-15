@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="320"
+   height="90"
+   viewBox="20 30 320 90"
+   id="svg2"
+   version="1.1"
+>
+  <defs
+     id="defs3">
+    <marker
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mend"
+       style="overflow:visible;">
+      <path
+         id="path10600"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.4) rotate(180) translate(10,0)" />
+    </marker>
+    <style
+       type="text/css"
+       id="style5">
+rect.box {
+    fill-rule:evenodd;
+    stroke:black;
+    stroke-width:0.5px;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-opacity:1;
+    fill: #e0e0e0;
+}
+.arrow {
+    fill:none;
+    stroke:#000000;
+    stroke-width:0.5px;
+    stroke-linecap:butt;
+    stroke-linejoin:miter;
+    stroke-opacity:1;
+    marker-end:url(#Arrow1Mend)
+}
+.dashed {
+    fill:none;
+    stroke:#000000;
+    stroke-width:0.5px;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-opacity:1;
+    stroke-dasharray: 2,3;
+}
+text {
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    font-stretch:normal;
+    text-align:start;
+    text-anchor:start;
+    fill:#000000;
+    fill-opacity:1;
+    stroke:none;
+}
+text.box {
+    font-size:7px;
+    font-family: Fontin Sans;
+}
+text.level {
+    font-size:10px;
+    font-family: Fontin Sans;
+    font-style: italic;
+}
+text.interface {
+    font-size:15px;
+    font-family: Fontin Sans;
+    font-weight: bold;
+    fill: white;
+}
+rect.interface {
+    fill:black;
+    stroke: none;
+}
+rect.upper {
+    fill: #ccffcc;
+    fill-opacity: 0.3;
+    stroke: #80c080;
+    stroke-width:1px;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-opacity:1;
+}
+rect.lower {
+    fill: #66ccff;
+    fill-opacity: 0.3;
+    stroke: #4080c0;
+    stroke-width:1px;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-opacity:1;
+}
+</style>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(150,0)">
+    <g transform="translate(-75,100)">
+        <rect x="-35" y="0" width="70" height="10" rx="2" ry="2" class="box"/>
+        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle"><tspan style="font-weight: bold">2×</tspan> <tspan style="font-variant: small-caps;">Keccak</tspan>-<tspan style="font-style: italic">f</tspan>[1600]</text>
+    </g>
+    <g transform="translate(0,100)">
+        <rect x="-35" y="0" width="70" height="10" rx="2" ry="2" class="box"/>
+        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle"><tspan style="font-weight: bold">4×</tspan> <tspan style="font-variant: small-caps;">Keccak</tspan>-<tspan style="font-style: italic">p</tspan>[1600, 12]</text>
+    </g>
+    <g transform="translate(75,100)">
+        <rect x="-35" y="0" width="70" height="10" rx="2" ry="2" class="box"/>
+        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle"><tspan style="font-weight: bold">8×</tspan> <tspan style="font-variant: small-caps;">Keccak</tspan>-<tspan style="font-style: italic">f</tspan>[1600]</text>
+    </g>
+    <path class="dashed" d="M -120,90 180,90"/>
+    <g transform="translate(120,100)">
+        <text class="level" xml:space="preserve" x="0" y="8.5" style="text-anchor: start">Primitive</text>
+    </g>
+    <path class="arrow" d="M -42,80 -80,98"/>
+    <path class="arrow" d="M -40,80 -5,98"/>
+    <path class="arrow" d="M -38,80 70,98"/>
+    <g transform="translate(-40,70)">
+        <rect x="-30" y="0" width="60" height="10" rx="2" ry="2" class="box"/>
+        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle"><tspan style="font-weight: bold">Parallel</tspan> Sponge</text>
+    </g>
+    <g transform="translate(120,70)">
+        <text class="level" xml:space="preserve" x="0" y="8.5" style="text-anchor: start">Construction</text>
+    </g>
+    <path class="arrow" d="M -60,50 -45,68"/>
+    <g transform="translate(-60,40)">
+        <rect x="-30" y="0" width="60" height="10" rx="2" ry="2" class="box"/>
+        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle">Tree Hashing</text>
+    </g>
+    <path class="arrow" d="M 60,50 10,98"/>
+    <g transform="translate(60,40)">
+        <rect x="-50" y="0" width="100" height="10" rx="2" ry="2" class="box"/>
+        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle">Authenticated Encryption</text>
+    </g>
+    <g transform="translate(120,40)">
+        <text class="level" xml:space="preserve" x="0" y="8.5" style="text-anchor: start">Mode</text>
+    </g>
+    <rect class="upper" x="-125" y="35" rx="10" ry="10" width="310" height="50"/>
+    <rect class="lower" x="-125" y="95" rx="10" ry="10" width="310" height="20"/>
+    <g transform="translate(110, 85)">
+        <rect class="interface" x="-25" y="-3" width="50" height="16"/>
+        <text class="interface" xml:space="preserve" x="0" y="10" style="text-anchor: middle">PlSnP</text>
+    </g>
+  </g>
+</svg>

@@ -16,36 +16,43 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _KeccakDuplex_h_
 #define _KeccakDuplex_h_
 
-#include "SnP-interface.h"
+/** General information
+  *
+  * The following type and functions are not actually implemented. Their
+  * documentation is generic, with the prefix Prefix replaced by
+  * - KeccakWidth200 for a duplex object based on Keccak-f[200]
+  * - KeccakWidth400 for a duplex object based on Keccak-f[400]
+  * - KeccakWidth800 for a duplex object based on Keccak-f[800]
+  * - KeccakWidth1600 for a duplex object based on Keccak-f[1600]
+  *
+  * In all these functions, the rate and capacity must sum to the width of the
+  * chosen permutation. For instance, to use the duplex object
+  * Keccak[r=1346, c=254], one must use the KeccakWidth1600_Duplex* functions.
+  *
+  * The Prefix_DuplexInstance contains the duplex instance attributes for use
+  * with the Prefix_Duplex* functions.
+  * It gathers the state processed by the permutation as well as the rate,
+  * the position of input/output bytes in the state in case of partial
+  * input or output.
+  */
 
-#ifdef ALIGN
-#undef ALIGN
-#endif
-
-#if defined(__GNUC__)
-#define ALIGN __attribute__ ((aligned(32)))
-#elif defined(_MSC_VER)
-#define ALIGN __declspec(align(32))
-#else
-#define ALIGN
-#endif
-
+#ifdef DontReallyInclude_DocumentationOnly
 /**
   * Structure that contains the duplex instance for use with the
-  * Keccak_Duplex* functions.
+  * Prefix_Duplex* functions.
   * It gathers the state processed by the permutation as well as
   * the rate.
   */
-ALIGN typedef struct Keccak_DuplexInstanceStruct {
+typedef struct Prefix_DuplexInstanceStruct {
     /** The state processed by the permutation. */
-    ALIGN unsigned char state[SnP_stateSizeInBytes];
+    unsigned char state[SnP_stateSizeInBytes];
     /** The value of the rate in bits.*/
     unsigned int rate;
     /** The position in the state of the next byte to be input. */
     unsigned int byteInputIndex;
     /** The position in the state of the next byte to be output. */
     unsigned int byteOutputIndex;
-} Keccak_DuplexInstance;
+} Prefix_DuplexInstance;
 
 /**
   * Function to initialize a duplex object Duplex[Keccak-f[r+c], pad10*1, r].
@@ -56,13 +63,13 @@ ALIGN typedef struct Keccak_DuplexInstanceStruct {
   * @pre    3 ≤ @a rate ≤ width, and otherwise the value of the rate is unrestricted.
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_DuplexInitialize(Keccak_DuplexInstance *duplexInstance, unsigned int rate, unsigned int capacity);
+int Prefix_DuplexInitialize(Prefix_DuplexInstance *duplexInstance, unsigned int rate, unsigned int capacity);
 
 /**
   * Function to make a duplexing call to the duplex object initialized
-  * with Keccak_DuplexInitialize().
+  * with Prefix_DuplexInitialize().
   * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
+  *                     by Prefix_DuplexInitialize().
   * @param  sigmaBegin  Pointer to the first part of the input σ given as bytes.
   *                     Trailing bits are given in @a delimitedSigmaEnd.
   * @param  sigmaBeginByteLen   The number of input bytes provided in @a sigmaBegin.
@@ -84,8 +91,8 @@ int Keccak_DuplexInitialize(Keccak_DuplexInstance *duplexInstance, unsigned int 
   *                         - If |σ| mod 8 is 6 and the last 6 bits are 1,1,1,0,0,1 then @a delimitedSigmaEnd must be 0x67.
   *                     .
   * @note   The input bits σ are the result of the concatenation of
-  *                     the bytes given in Keccak_DuplexingFeedPartialInput()
-  *                     calls since the last call to Keccak_Duplexing(),
+  *                     the bytes given in Prefix_DuplexingFeedPartialInput()
+  *                     calls since the last call to Prefix_Duplexing(),
   *                     the bytes in @a sigmaBegin
   *                     and the bits in @a delimitedSigmaEnd before the delimiter.
   * @pre    @a delimitedSigmaEnd ≠ 0x00
@@ -93,177 +100,138 @@ int Keccak_DuplexInitialize(Keccak_DuplexInstance *duplexInstance, unsigned int 
   * @pre    @a ZByteLen ≤ ceil(r/8)
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_Duplexing(Keccak_DuplexInstance *duplexInstance, const unsigned char *sigmaBegin, unsigned int sigmaBeginByteLen, unsigned char *Z, unsigned int ZByteLen, unsigned char delimitedSigmaEnd);
+int Prefix_Duplexing(Prefix_DuplexInstance *duplexInstance, const unsigned char *sigmaBegin, unsigned int sigmaBeginByteLen, unsigned char *Z, unsigned int ZByteLen, unsigned char delimitedSigmaEnd);
 
 /**
   * Function to queue input data that will subsequently used in the next
-  * call to Keccak_Duplexing().
+  * call to Prefix_Duplexing().
   * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @param  in  Pointer to the bytes to queue.
-  * @param  inByteLen   The number of input bytes provided in @a in.
-  * @pre    The total number of input bytes since the last Keccak_Duplexing()
+  *                     by Prefix_DuplexInitialize().
+  * @param  input           Pointer to the bytes to queue.
+  * @param  inputByteLen    The number of input bytes provided in @a input.
+  * @pre    The total number of input bytes since the last Prefix_Duplexing()
   *         call must not be higher than floor((r-2)/8).
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_DuplexingFeedPartialInput(Keccak_DuplexInstance *duplexInstance, const unsigned char *in, unsigned int inByteLen);
+int Prefix_DuplexingFeedPartialInput(Prefix_DuplexInstance *duplexInstance, const unsigned char *input, unsigned int inputByteLen);
 
 /**
   * Function to queue input data that will subsequently used in the next
-  * call to Keccak_Duplexing(), where the data here consist of all-zero bytes.
+  * call to Prefix_Duplexing(), where the data here consist of all-zero bytes.
   * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @param  inByteLen   The number of input bytes 0x00 to feed.
-  * @pre    The total number of input bytes since the last Keccak_Duplexing()
+  *                     by Prefix_DuplexInitialize().
+  * @param  inputByteLen    The number of input bytes 0x00 to feed.
+  * @pre    The total number of input bytes since the last Prefix_Duplexing()
   *         call must not be higher than floor((r-2)/8).
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_DuplexingFeedZeroes(Keccak_DuplexInstance *duplexInstance, unsigned int inByteLen);
+int Prefix_DuplexingFeedZeroes(Prefix_DuplexInstance *duplexInstance, unsigned int inputByteLen);
 
 /**
   * Function to queue input data that will subsequently used in the next
-  * call to Keccak_Duplexing(), with the additional pre-processing that
-  * the input data is first XORed with the output data of the previous duplexing
+  * call to Prefix_Duplexing(), with the additional pre-processing that
+  * the input data is first bitwise added with the output data of the previous duplexing
   * call at the same offset.
   * In practice, this comes down to overwriting the input data in the state
   * of the duplex object.
   * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @param  in  Pointer to the bytes to queue, before they are XORed.
-  * @param  inByteLen   The number of input bytes provided in @a in.
-  * @pre    The total number of input bytes since the last Keccak_Duplexing()
+  *                     by Prefix_DuplexInitialize().
+  * @param  input           Pointer to the bytes to queue, before they are XORed.
+  * @param  inputByteLen    The number of input bytes provided in @a input.
+  * @pre    The total number of input bytes since the last Prefix_Duplexing()
   *         call must not be higher than floor((r-2)/8).
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_DuplexingOverwritePartialInput(Keccak_DuplexInstance *duplexInstance, const unsigned char *in, unsigned int inByteLen);
+int Prefix_DuplexingOverwritePartialInput(Prefix_DuplexInstance *duplexInstance, const unsigned char *input, unsigned int inputByteLen);
 
 /**
-  * Function to queue input data for the next call to Keccak_Duplexing() that
+  * Function to queue input data for the next call to Prefix_Duplexing() that
   * is equal to the output data of the previous duplexing call at the same offset.
   * In practice, this comes down to overwriting with zeroes the state
   * of the duplex object.
   * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @param  inByteLen   The number of bytes to overwrite with zeroes.
+  *                     by Prefix_DuplexInitialize().
+  * @param  inputByteLen    The number of bytes to overwrite with zeroes.
   * @pre    No input data may have been queued since the last call
-  *         to Keccak_Duplexing().
-  * @pre    The total number of input bytes since the last Keccak_Duplexing()
+  *         to Prefix_Duplexing().
+  * @pre    The total number of input bytes since the last Prefix_Duplexing()
   *         call must not be higher than floor((r-2)/8).
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_DuplexingOverwriteWithZeroes(Keccak_DuplexInstance *duplexInstance, unsigned int inByteLen);
+int Prefix_DuplexingOverwriteWithZeroes(Prefix_DuplexInstance *duplexInstance, unsigned int inputByteLen);
 
 /**
   * Function to fetch output data beyond those that were already output since
-  * the last call to Keccak_Duplexing().
+  * the last call to Prefix_Duplexing().
   * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @param  out             Pointer to the buffer where to store the output data.
-  * @param  outByteLen      The number of output bytes desired.
+  *                     by Prefix_DuplexInitialize().
+  * @param  output          Pointer to the buffer where to store the output data.
+  * @param  outputByteLen   The number of output bytes desired.
   * @pre    The total number of output bytes, taken since (and including in)
-  *         the last call to Keccak_Duplexing() cannot be higher than ceil(r/8).
+  *         the last call to Prefix_Duplexing() cannot be higher than ceil(r/8).
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_DuplexingGetFurtherOutput(Keccak_DuplexInstance *duplexInstance, unsigned char *out, unsigned int outByteLen);
+int Prefix_DuplexingGetFurtherOutput(Prefix_DuplexInstance *duplexInstance, unsigned char *out, unsigned int outByteLen);
 
 /**
   * Function to fetch output data beyond those that were already output since
-  * the last call to Keccak_Duplexing(), with the additional post-processing
-  * that this data is XORed into the given buffer.
+  * the last call to Prefix_Duplexing(), with the additional post-processing
+  * that this data is bitwise added with the given input buffer
+  * before it is stored into the given output buffer.
   * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @param  out             Pointer to the buffer where to XOR the output data.
-  * @param  outByteLen      The number of output bytes desired.
+  *                     by Prefix_DuplexInitialize().
+  * @param  input           Pointer to the input buffer.
+  * @param  output          Pointer to the output buffer, which may be equal to @a input.
+  * @param  outputByteLen   The number of output bytes desired.
   * @pre    The total number of output bytes, taken since (and including in)
-  *         the last call to Keccak_Duplexing() cannot be higher than ceil(r/8).
+  *         the last call to Prefix_Duplexing() cannot be higher than ceil(r/8).
   * @return Zero if successful, 1 otherwise.
   */
-int Keccak_DuplexingGetFurtherOutputAndXOR(Keccak_DuplexInstance *duplexInstance, unsigned char *out, unsigned int outByteLen);
+int Prefix_DuplexingGetFurtherOutputAndAdd(Prefix_DuplexInstance *duplexInstance, const unsigned char *input, unsigned char *output, unsigned int outputByteLen);
+#endif
 
-/** Function that has the same behavior as repeatedly calling
-  *  - Keccak_Duplexing() with an input block of @a laneCount lanes from @a dataIn,
-  *         @a delimitedSigmaEnd equal to @a trailingBits, and no output;
-  *  - and advancing @a dataIn by @a laneCount lane sizes, until not enough data are available,
-  * where @a laneCount is the (rounded down) rate in lanes.
-  * The function returns the number of bytes processed from @a dataIn.
-  * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @param  dataIn  Pointer to the data to use as input.
-  * @param  dataByteLen The length of the input data in bytes.
-  * @param  trailingBits    The delimited trailing bits.
-  * @returns    The number of bytes processed.
-  * @pre    0 < @a laneCount < 25
-  * @pre    The rate modulo the lane size must be between 2 and 8 bits.
-  * @pre    The input and output indexes must be zero,
-  *         i.e., Keccak_DuplexGetInputIndex() and Keccak_DuplexGetOuputIndex()
-  *         shall return zero.
-  */
-size_t Keccak_DuplexingFBWLAbsorb(Keccak_DuplexInstance *duplexInstance, const unsigned char *dataIn, size_t dataByteLen, unsigned char trailingBits);
+#include "align.h"
 
-/** Function that has the same behavior as repeatedly calling
-  *  - memcpy() with a block of @a laneCount lanes from @a dataIn to @a dataOut;
-  *  - Keccak_DuplexingGetFurtherOutputAndXOR() with a block of @a laneCount lanes onto @a dataOut;
-  *  - Keccak_DuplexingOverwritePartialInput() with an input block of @a laneCount lanes from @a dataOut;
-  *  - Keccak_Duplexing() with no input, @a delimitedSigmaEnd equal to @a trailingBits, and no output;
-  *  - and advancing @a dataIn and @a dataOut by @a laneCount lane sizes, until not enough data are available,
-  * where @a laneCount is the (rounded down) rate in lanes.
-  * The function returns the number of bytes processed from @a dataIn and @a dataOut.
-  * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @param  dataIn  Pointer to the data to use as input.
-  * @param  dataOut  Pointer to the data to use as input.
-  * @param  dataByteLen The length of the input data in bytes.
-  * @param  trailingBits    The delimited trailing bits.
-  * @returns    The number of bytes processed.
-  * @pre    0 < @a laneCount < 25
-  * @pre    The rate modulo the lane size must be between 2 and 8 bits.
-  * @pre    The input and output indexes must be zero,
-  *         i.e., Keccak_DuplexGetInputIndex() and Keccak_DuplexGetOuputIndex()
-  *         shall return zero.
-  */
-size_t Keccak_DuplexingFBWLWrap(Keccak_DuplexInstance *duplexInstance, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
+#define KCP_DeclareDuplexStructure(prefix, size, alignment) \
+    ALIGN(alignment) typedef struct prefix##_DuplexInstanceStruct { \
+        unsigned char state[size]; \
+        unsigned int rate; \
+        unsigned int byteInputIndex; \
+        unsigned int byteOutputIndex; \
+    } prefix##_DuplexInstance;
 
-/** Function that has the same behavior as repeatedly calling
-  *  - memcpy() with a block of @a laneCount lanes from @a dataIn to @a dataOut;
-  *  - Keccak_DuplexingGetFurtherOutputAndXOR() with a block of @a laneCount lanes onto @a dataOut;
-  *  - Keccak_DuplexingFeedPartialInput() with an input block of @a laneCount lanes from @a dataOut;
-  *  - Keccak_Duplexing() with no input, @a delimitedSigmaEnd equal to @a trailingBits, and no output;
-  *  - and advancing @a dataIn and @a dataOut by @a laneCount lane sizes, until not enough data are available,
-  * where @a laneCount is the (rounded down) rate in lanes.
-  * The function returns the number of bytes processed from @a dataIn and @a dataOut.
-  * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @param  dataIn  Pointer to the data to use as input.
-  * @param  dataOut  Pointer to the data to use as input.
-  * @param  dataByteLen The length of the input data in bytes.
-  * @param  trailingBits    The delimited trailing bits.
-  * @returns    The number of bytes processed.
-  * @pre    0 < @a laneCount < 25
-  * @pre    The rate modulo the lane size must be between 2 and 8 bits.
-  * @pre    The input and output indexes must be zero,
-  *         i.e., Keccak_DuplexGetInputIndex() and Keccak_DuplexGetOuputIndex()
-  *         shall return zero.
-  */
-size_t Keccak_DuplexingFBWLUnwrap(Keccak_DuplexInstance *duplexInstance, const unsigned char *dataIn, unsigned char *dataOut, size_t dataByteLen, unsigned char trailingBits);
+#define KCP_DeclareDuplexFunctions(prefix) \
+    int prefix##_DuplexInitialize(prefix##_DuplexInstance *duplexInstance, unsigned int rate, unsigned int capacity); \
+    int prefix##_Duplexing(prefix##_DuplexInstance *duplexInstance, const unsigned char *sigmaBegin, unsigned int sigmaBeginByteLen, unsigned char *Z, unsigned int ZByteLen, unsigned char delimitedSigmaEnd); \
+    int prefix##_DuplexingFeedPartialInput(prefix##_DuplexInstance *duplexInstance, const unsigned char *input, unsigned int inputByteLen); \
+    int prefix##_DuplexingFeedZeroes(prefix##_DuplexInstance *duplexInstance, unsigned int inputByteLen); \
+    int prefix##_DuplexingOverwritePartialInput(prefix##_DuplexInstance *duplexInstance, const unsigned char *input, unsigned int inputByteLen); \
+    int prefix##_DuplexingOverwriteWithZeroes(prefix##_DuplexInstance *duplexInstance, unsigned int inputByteLen); \
+    int prefix##_DuplexingGetFurtherOutput(prefix##_DuplexInstance *duplexInstance, unsigned char *out, unsigned int outByteLen); \
+    int prefix##_DuplexingGetFurtherOutputAndAdd(prefix##_DuplexInstance *duplexInstance, const unsigned char *input, unsigned char *output, unsigned int outputByteLen);
 
-/**
-  * Function that returns the number of bytes queued for the next call
-  * to Keccak_Duplexing().
-  * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @return The number of bytes queued.
-  */
-unsigned int Keccak_DuplexGetInputIndex(Keccak_DuplexInstance *duplexInstance);
+#ifndef KeccakP200_excluded
+    #include "KeccakP-200-SnP.h"
+    KCP_DeclareDuplexStructure(KeccakWidth200, KeccakP200_stateSizeInBytes, KeccakP200_stateAlignment)
+    KCP_DeclareDuplexFunctions(KeccakWidth200)
+#endif
 
-/**
-  * Function that returns the number of bytes already returned by the previous
-  * call to Keccak_Duplexing() or by subsequent calls to
-  * Keccak_DuplexingGetFurtherOutput() or to
-  * Keccak_DuplexingGetFurtherOutputAndXOR().
-  * @param  duplexInstance  Pointer to the duplex instance initialized
-  *                     by Keccak_DuplexInitialize().
-  * @return The number of bytes already returned.
-  */
-unsigned int Keccak_DuplexGetOutputIndex(Keccak_DuplexInstance *duplexInstance);
+#ifndef KeccakP400_excluded
+    #include "KeccakP-400-SnP.h"
+    KCP_DeclareDuplexStructure(KeccakWidth400, KeccakP400_stateSizeInBytes, KeccakP400_stateAlignment)
+    KCP_DeclareDuplexFunctions(KeccakWidth400)
+#endif
+
+#ifndef KeccakP800_excluded
+    #include "KeccakP-800-SnP.h"
+    KCP_DeclareDuplexStructure(KeccakWidth800, KeccakP800_stateSizeInBytes, KeccakP800_stateAlignment)
+    KCP_DeclareDuplexFunctions(KeccakWidth800)
+#endif
+
+#ifndef KeccakP1600_excluded
+    #include "KeccakP-1600-SnP.h"
+    KCP_DeclareDuplexStructure(KeccakWidth1600, KeccakP1600_stateSizeInBytes, KeccakP1600_stateAlignment)
+    KCP_DeclareDuplexFunctions(KeccakWidth1600)
+#endif
 
 #endif

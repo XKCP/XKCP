@@ -1,2 +1,0 @@
-#define FullUnrolling
-#define UseLaneComplementing

@@ -143,13 +143,14 @@ OBJECTS := $(OBJECTS) </xsl:text>
     <xsl:text>
 
 </xsl:text>
-    <xsl:text>BINDIR = bin/build/</xsl:text>
+    <xsl:text>BINDIR = bin/.build/</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>
 $(BINDIR):
 &#9;mkdir -p $(BINDIR)
 
 CC = gcc
+AR = ar
 
 </xsl:text>
     <xsl:apply-templates select="gcc|define"/>
@@ -160,21 +161,31 @@ CC = gcc
     <xsl:value-of select="@name"/>
     <xsl:text>: $(BINDIR) $(OBJECTS)
 &#9;mkdir -p $(dir $@)
-&#9;$(CC) $(CFLAGS) -o $@ $(OBJECTS)
-
 </xsl:text>
+
+    <xsl:choose>
+        <xsl:when test="substring(@name, string-length(@name)-1, 2)='.a'">
+            <xsl:text>&#9;$(AR) rcsv $@ $(OBJECTS)
+</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>&#9;$(CC) $(CFLAGS) -o $@ $(OBJECTS)
+</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+
     <xsl:value-of select="$pack"/>
     <xsl:text>: $(SOURCES)
-&#9;mkdir -p bin/pack/</xsl:text>
+&#9;mkdir -p bin/.pack/</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>
-&#9;rm -rf bin/pack/</xsl:text>
+&#9;rm -rf bin/.pack/</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>/*
-&#9;cp $(SOURCES) bin/pack/</xsl:text>
+&#9;cp $(SOURCES) bin/.pack/</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>/
-&#9;cd bin/pack/ ; tar -czf </xsl:text>
+&#9;cd bin/.pack/ ; tar -czf </xsl:text>
     <xsl:value-of select="concat('../../', $pack)"/>
     <xsl:text> </xsl:text>
     <xsl:value-of select="@name"/>

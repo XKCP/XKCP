@@ -1,0 +1,74 @@
+/*
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
+
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
+*/
+
+#if (defined(KeccakP800_fullUnrolling))
+#define rounds22 \
+    prepareTheta \
+    thetaRhoPiChiIotaPrepareTheta( 0, A, E) \
+    thetaRhoPiChiIotaPrepareTheta( 1, E, A) \
+    thetaRhoPiChiIotaPrepareTheta( 2, A, E) \
+    thetaRhoPiChiIotaPrepareTheta( 3, E, A) \
+    thetaRhoPiChiIotaPrepareTheta( 4, A, E) \
+    thetaRhoPiChiIotaPrepareTheta( 5, E, A) \
+    thetaRhoPiChiIotaPrepareTheta( 6, A, E) \
+    thetaRhoPiChiIotaPrepareTheta( 7, E, A) \
+    thetaRhoPiChiIotaPrepareTheta( 8, A, E) \
+    thetaRhoPiChiIotaPrepareTheta( 9, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(10, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(11, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(12, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(13, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(14, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(15, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(16, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(17, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(18, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(19, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(20, A, E) \
+    thetaRhoPiChiIota(21, E, A) \
+
+#define rounds12 \
+    prepareTheta \
+    thetaRhoPiChiIotaPrepareTheta(10, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(11, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(12, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(13, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(14, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(15, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(16, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(17, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(18, A, E) \
+    thetaRhoPiChiIotaPrepareTheta(19, E, A) \
+    thetaRhoPiChiIotaPrepareTheta(20, A, E) \
+    thetaRhoPiChiIota(21, E, A) \
+
+#elif (KeccakP800_unrolling == 2)
+#define rounds22 \
+    prepareTheta \
+    for(i=0; i<22; i+=2) { \
+        thetaRhoPiChiIotaPrepareTheta(i  , A, E) \
+        thetaRhoPiChiIotaPrepareTheta(i+1, E, A) \
+    } \
+
+#define rounds12 \
+    prepareTheta \
+    for(i=10; i<22; i+=2) { \
+        thetaRhoPiChiIotaPrepareTheta(i  , A, E) \
+        thetaRhoPiChiIotaPrepareTheta(i+1, E, A) \
+    } \
+
+#else
+#error "KeccakP800_unrolling is not correctly specified!"
+#endif

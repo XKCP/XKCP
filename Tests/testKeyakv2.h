@@ -16,6 +16,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestKeyak_h_
 #define _TestKeyak_h_
 
-int testKeyak( int mode );
+int testKeyak( void );
 
 #endif

@@ -17,17 +17,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _displayIntermediateValues_h_
 
 #include <stdio.h>
-#include "SnP-interface.h"
 
 void displaySetIntermediateValueFile(FILE *f);
 void displaySetLevel(int level);
 void displayBytes(int level, const char *text, const unsigned char *bytes, unsigned int size);
 void displayBits(int level, const char *text, const unsigned char *data, unsigned int size, int MSBfirst);
-void displayStateAsBytes(int level, const char *text, const unsigned char *state);
-#if (SnP_laneLengthInBytes == 8)
+void displayStateAsBytes(int level, const char *text, const unsigned char *state, unsigned int width);
 void displayStateAs32bitWords(int level, const char *text, const unsigned int *state);
-#endif
-void displayStateAsLanes(int level, const char *text, void *statePointer);
+void displayStateAsLanes(int level, const char *text, void *statePointer, unsigned int width);
 void displayRoundNumber(int level, unsigned int i);
 void displayText(int level, const char *text);
 

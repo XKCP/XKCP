@@ -1,0 +1,70 @@
+/*
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
+
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
+*/
+
+#if (defined(KeccakP800_fullUnrolling))
+#define rounds22 \
+    thetaRhoPiChiIota( 0, A, E) \
+    thetaRhoPiChiIota( 1, E, A) \
+    thetaRhoPiChiIota( 2, A, E) \
+    thetaRhoPiChiIota( 3, E, A) \
+    thetaRhoPiChiIota( 4, A, E) \
+    thetaRhoPiChiIota( 5, E, A) \
+    thetaRhoPiChiIota( 6, A, E) \
+    thetaRhoPiChiIota( 7, E, A) \
+    thetaRhoPiChiIota( 8, A, E) \
+    thetaRhoPiChiIota( 9, E, A) \
+    thetaRhoPiChiIota(10, A, E) \
+    thetaRhoPiChiIota(11, E, A) \
+    thetaRhoPiChiIota(12, A, E) \
+    thetaRhoPiChiIota(13, E, A) \
+    thetaRhoPiChiIota(14, A, E) \
+    thetaRhoPiChiIota(15, E, A) \
+    thetaRhoPiChiIota(16, A, E) \
+    thetaRhoPiChiIota(17, E, A) \
+    thetaRhoPiChiIota(18, A, E) \
+    thetaRhoPiChiIota(19, E, A) \
+    thetaRhoPiChiIota(20, A, E) \
+    thetaRhoPiChiIota(21, E, A) \
+
+#define rounds12 \
+    thetaRhoPiChiIota(10, A, E) \
+    thetaRhoPiChiIota(11, E, A) \
+    thetaRhoPiChiIota(12, A, E) \
+    thetaRhoPiChiIota(13, E, A) \
+    thetaRhoPiChiIota(14, A, E) \
+    thetaRhoPiChiIota(15, E, A) \
+    thetaRhoPiChiIota(16, A, E) \
+    thetaRhoPiChiIota(17, E, A) \
+    thetaRhoPiChiIota(18, A, E) \
+    thetaRhoPiChiIota(19, E, A) \
+    thetaRhoPiChiIota(20, A, E) \
+    thetaRhoPiChiIota(21, E, A) \
+
+#elif (KeccakP800_unrolling == 2)
+#define rounds22 \
+    for(i=0; i<22; i+=2) { \
+        thetaRhoPiChiIota(i  , A, E) \
+        thetaRhoPiChiIota(i+1, E, A) \
+    } \
+
+#define rounds12 \
+    for(i=10; i<22; i+=2) { \
+        thetaRhoPiChiIota(i  , A, E) \
+        thetaRhoPiChiIota(i+1, E, A) \
+    } \
+
+#else
+#error "KeccakP800_unrolling is not correctly specified!"
+#endif

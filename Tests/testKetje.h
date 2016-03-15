@@ -16,6 +16,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestKetje_h_
 #define _TestKetje_h_
 
-void testKetje();
+int testKetje( void );
 
 #endif

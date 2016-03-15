@@ -13,4 +13,9 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#ifndef _TestPlSnP_h_
+#define _TestPlSnP_h_
+
 void testPlSnP(void);
+
+#endif
