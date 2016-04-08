@@ -25,6 +25,7 @@ When used as a library or directly from the sources, the KCP offers the high-lev
 * [`KeccakHash.h`](Modes/KeccakHash.h), the six approved FIPS 202 instances, as well as any Keccak instance based on Keccak-_f_[1600]. This more advanced interface proposes a message queue (init-update-final) and supports bit-level inputs if needed.
 * [`KeccakSponge.h`](Constructions/KeccakSponge.h), all Keccak sponge functions, with or without a message queue.
 * [`KeccakDuplex.h`](Constructions/KeccakDuplex.h), all Keccak duplex objects.
+* [`KeccakPRG.h`](Modes/KeccakPRG.h), a pseudo-random number generator based on Keccak duplex objects.
 * [`Keyakv2.h`](Modes/Keyakv2.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
 * [`Ketje.h`](Ketje/Ketje.h), the lightweight authenticated encryption schemes Ketje Jr and Ketje Sr.
 
