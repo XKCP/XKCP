@@ -61,8 +61,8 @@ void test( const char *file, const unsigned char *expected )
             generateSimpleRawMaterial(key, 50, 0x12+nonceSizeInBits, SnP_width);
             generateSimpleRawMaterial(nonce, 50, 0x23+keySizeInBits, SnP_width);
 
-            errorIfNotZero( Ketje_Initialize( &ketje1, key, keySizeInBits, nonce, nonceSizeInBits) );
-            errorIfNotZero( Ketje_Initialize( &ketje2, key, keySizeInBits, nonce, nonceSizeInBits) );
+            assert( Ketje_Initialize( &ketje1, key, keySizeInBits, nonce, nonceSizeInBits) == 0, "Ketje_Initialize 1 did not return zero" );
+            assert( Ketje_Initialize( &ketje2, key, keySizeInBits, nonce, nonceSizeInBits) == 0, "Ketje_Initialize 2 did not return zero" );
 
             if ( (keySizeInBits % 8) != 0)
             {
@@ -99,27 +99,27 @@ void test( const char *file, const unsigned char *expected )
                         unsigned int split = myMin(ADlen/4, (unsigned int)200);
                         unsigned int i;
 
-//                      errorIfNotZero( Ketje_FeedAssociatedData( &ketje1, associatedData,0 ) );
                         for(i=0; i<split; i++)
-                            errorIfNotZero( Ketje_FeedAssociatedData( &ketje1, associatedData+i, 1) );
+                            assert( Ketje_FeedAssociatedData( &ketje1, associatedData+i, 1) == 0, "Ketje_FeedAssociatedData 1a did not return zero" );
                         if (split < ADlen)
-                            errorIfNotZero( Ketje_FeedAssociatedData( &ketje1, associatedData+split, ADlen-split) );
+                            assert( Ketje_FeedAssociatedData( &ketje1, associatedData+split, ADlen-split) == 0, "Ketje_FeedAssociatedData 1b did not return zero" );
                     }
-                    errorIfNotZero( Ketje_FeedAssociatedData( &ketje2, associatedData, ADlen) );
+                    assert( Ketje_FeedAssociatedData( &ketje2, associatedData, ADlen) == 0, "Ketje_FeedAssociatedData 2 did not return zero" );
 
                     {
                         unsigned int split = Mlen/3;
                         memcpy(ciphertext, plaintext, split);
-                        errorIfNotZero( Ketje_WrapPlaintext( &ketje1, ciphertext, ciphertext, split) ); // in place
-                        errorIfNotZero( Ketje_WrapPlaintext( &ketje1, plaintext+split, ciphertext+split, Mlen-split) );
+                        assert( Ketje_WrapPlaintext( &ketje1, ciphertext, ciphertext, split) == 0, "Ketje_WrapPlaintext 1a did not return zero" ); // in place
+                        assert( Ketje_WrapPlaintext( &ketje1, plaintext+split, ciphertext+split, Mlen-split) == 0, "Ketje_WrapPlaintext 1b did not return zero" );
                     }
 
                     {
                         unsigned int split = Mlen/3*2;
                         memcpy(plaintextPrime, ciphertext, split);
-                        errorIfNotZero( Ketje_UnwrapCiphertext(&ketje2, plaintextPrime, plaintextPrime, split) ); // in place
-                        errorIfNotZero( Ketje_UnwrapCiphertext(&ketje2, ciphertext+split, plaintextPrime+split, Mlen-split) );
+                        assert( Ketje_UnwrapCiphertext(&ketje2, plaintextPrime, plaintextPrime, split) == 0, "Ketje_UnwrapCiphertext 2a did not return zero" ); // in place
+                        assert( Ketje_UnwrapCiphertext(&ketje2, ciphertext+split, plaintextPrime+split, Mlen-split) == 0, "Ketje_UnwrapCiphertext 2b did not return zero" );
                     }
+#ifdef OUTPUT
                     if (memcmp(plaintext, plaintextPrime, Mlen) != 0) { // !!!
                         printf("keySizeInBits: %d\n", keySizeInBits);
                         printf("nonceSizeInBits: %d\n", nonceSizeInBits);
@@ -128,10 +128,11 @@ void test( const char *file, const unsigned char *expected )
                         displayByteString(stdout, "plaintext     ", plaintext, Mlen);
                         displayByteString(stdout, "plaintextPrime", plaintextPrime, Mlen);
                     }
-                    errorIfNotZero( memcmp(plaintext, plaintextPrime, Mlen) );
-
-                    errorIfNotZero( Ketje_GetTag( &ketje1, tag1, 16) );
-                    errorIfNotZero( Ketje_GetTag( &ketje2, tag2, 16) );
+#endif
+                    assert( !memcmp(plaintext, plaintextPrime, Mlen), "Unwrapped plaintext does not match" );
+                    assert( Ketje_GetTag( &ketje1, tag1, 16) == 0, "Ketje_GetTag 1 did not return zero" );
+                    assert( Ketje_GetTag( &ketje2, tag2, 16) == 0, "Ketje_GetTag 2 did not return zero" );
+#ifdef OUTPUT
                     if (memcmp(tag1, tag2, 16) != 0) { // !!!
                         printf("keySizeInBits: %d\n", keySizeInBits);
                         printf("nonceSizeInBits: %d\n", nonceSizeInBits);
@@ -140,7 +141,8 @@ void test( const char *file, const unsigned char *expected )
                         displayByteString(stdout, "tag1", tag1, 16);
                         displayByteString(stdout, "tag2", tag2, 16);
                     }
-                    errorIfNotZero( memcmp(tag1, tag2, 16) );
+#endif
+                    assert( !memcmp(tag1, tag2, 16), "Tags do not match" );
 
                     Ketje_FeedAssociatedData(&checksum, ciphertext, Mlen);
                     Ketje_FeedAssociatedData(&checksum, tag1, 16);

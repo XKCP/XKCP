@@ -92,7 +92,7 @@ to build KeccakTests generically optimized for 64-bit platforms. The name before
 
 Instead of building an executable with *GCC*, one can choose to select the files needed and make a package. For this, simply append `.pack` to the target name, e.g.,
 
-> `make generic64/KeccakTests`**`.pack`**
+> `make generic64/KeccakTests.pack`
 
 This creates a `.tar.gz` archive with all the necessary files to build the given target.
 

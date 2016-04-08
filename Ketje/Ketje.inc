@@ -39,7 +39,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 int Ketje_Initialize(Ketje_Instance *instance, const unsigned char *key, unsigned int keySizeInBits, const unsigned char *nonce, unsigned int nonceSizeInBits)
 {
-    unsigned char smallData[2];
+    unsigned char smallData[1];
     unsigned int keyPackSizeInBits;
 
     keyPackSizeInBits = 8*((keySizeInBits+16)/8);

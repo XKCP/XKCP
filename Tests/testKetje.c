@@ -13,8 +13,6 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include "Ketje.h"
-
 #if !defined(EMBEDDED)
 #define OUTPUT
 #define VERBOSE
@@ -24,19 +22,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
 #include <stdio.h>
 #include <stdlib.h>
-//#include <assert.h>
 #endif
 #include <string.h>
 
-
-//#include <assert.h>
 #ifndef OUTPUT
 #define FILE    void
 #endif
 #include "Ketje.h"
 #include "testKetje.h"
-
-#define myMax(a, b) ((a) > (b)) ? (a) : (b)
 
 #ifdef OUTPUT
 static void displayByteString(FILE *f, const char* synopsis, const unsigned char *data, unsigned int length)
@@ -58,19 +51,6 @@ static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, 
         unsigned int iRolled = i*seed1;
         unsigned char byte = (iRolled+length+seed2)%0xFF;
         data[i] = byte;
-    }
-}
-
-static void errorIfNotZero( unsigned int result )
-{
-    if ( result != 0 )
-    {
-        #ifdef EMBEDDED
-        for ( ; ; ) ;
-        #else
-        printf( "\n\nError\n" );
-        exit( result );
-        #endif
     }
 }
 

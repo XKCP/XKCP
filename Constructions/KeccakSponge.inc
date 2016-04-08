@@ -34,7 +34,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 int Sponge(unsigned int rate, unsigned int capacity, const unsigned char *input, size_t inputByteLen, unsigned char suffix, unsigned char *output, size_t outputByteLen)
 {
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
-    size_t j;
     unsigned int partialBlock;
     const unsigned char *curInput = input;
     unsigned char *curOutput = output;
@@ -55,6 +54,7 @@ int Sponge(unsigned int rate, unsigned int capacity, const unsigned char *input,
 #ifdef SnP_FastLoop_Absorb
     if (((rateInBytes % (SnP_width/200)) == 0) && (inputByteLen >= rateInBytes)) {
         // fast lane: whole lane rate
+        size_t j;
         j = SnP_FastLoop_Absorb(state, rateInBytes/(SnP_width/200), curInput, inputByteLen);
         curInput += j;
         inputByteLen -= j;

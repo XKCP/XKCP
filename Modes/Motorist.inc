@@ -157,7 +157,9 @@ static int Engine_Spark(Engine_Instance *instance, int EOMFlag, unsigned char le
             if ( length == 0 )
                 length = 0xFF;
             State_AddByte(instance->pistons.state, length, OffsetEOM );
+            #if PlSnP_parallelism > 1
             length = lengthNext;
+            #endif
         }
     }
     #ifdef OUTPUT
