@@ -240,6 +240,16 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/KeccakP-1600/Optimized64/LCufullshld/KeccakP-1600-opt64-config.h</h>
     </fragment>
 
+    <fragment name="optimized1600AsmX86-64" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-gas.s</c>
+        <h>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600AsmX86-64shld" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-shld-gas.s</c>
+        <h>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-SnP.h</h>
+    </fragment>
+
     <fragment name="optimized1600Haswell" inherits="width1600 optimized">
         <c>SnP/KeccakP-1600/Optimized64/CompiledByGCC474forHaswell/KeccakP-1600-opt64.s</c>
         <h>SnP/KeccakP-1600/Optimized64/CompiledByGCC474forHaswell/KeccakP-1600-SnP.h</h>
