@@ -27,17 +27,21 @@ typedef unsigned long long UINT64;
 typedef UINT64 tKeccakLane;
 
 #define maxNrRounds 24
-tKeccakLane KeccakRoundConstants[maxNrRounds];
 #define nrLanes 25
-unsigned int KeccakRhoOffsets[nrLanes];
+#define index(x, y) (((x)%5)+5*((y)%5))
+
+#ifdef KeccakReference
+
+static tKeccakLane KeccakRoundConstants[maxNrRounds];
+static unsigned int KeccakRhoOffsets[nrLanes];
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_InitializeRoundConstants();
-void KeccakP1600_InitializeRhoOffsets();
+void KeccakP1600_InitializeRoundConstants(void);
+void KeccakP1600_InitializeRhoOffsets(void);
 static int LFSR86540(UINT8 *LFSR);
 
-void KeccakP1600_StaticInitialize()
+void KeccakP1600_StaticInitialize(void)
 {
     if (sizeof(tKeccakLane) != 8) {
         printf("tKeccakLane should be 64-bit wide\n");
@@ -47,7 +51,7 @@ void KeccakP1600_StaticInitialize()
     KeccakP1600_InitializeRhoOffsets();
 }
 
-void KeccakP1600_InitializeRoundConstants()
+void KeccakP1600_InitializeRoundConstants(void)
 {
     UINT8 LFSRstate = 0x01;
     unsigned int i, j, bitPosition;
@@ -62,9 +66,7 @@ void KeccakP1600_InitializeRoundConstants()
     }
 }
 
-#define index(x, y) (((x)%5)+5*((y)%5))
-
-void KeccakP1600_InitializeRhoOffsets()
+void KeccakP1600_InitializeRhoOffsets(void)
 {
     unsigned int x, y, t, newX, newY;
 
@@ -91,6 +93,43 @@ static int LFSR86540(UINT8 *LFSR)
     return result;
 }
 
+#else
+
+static const tKeccakLane KeccakRoundConstants[maxNrRounds] =
+{
+    0x0000000000000001,
+    0x0000000000008082,
+    0x800000000000808a,
+    0x8000000080008000,
+    0x000000000000808b,
+    0x0000000080000001,
+    0x8000000080008081,
+    0x8000000000008009,
+    0x000000000000008a,
+    0x0000000000000088,
+    0x0000000080008009,
+    0x000000008000000a,
+    0x000000008000808b,
+    0x800000000000008b,
+    0x8000000000008089,
+    0x8000000000008003,
+    0x8000000000008002,
+    0x8000000000000080,
+    0x000000000000800a,
+    0x800000008000000a,
+    0x8000000080008081,
+    0x8000000000008080,
+    0x0000000080000001,
+    0x8000000080008008,
+};
+
+static const unsigned int KeccakRhoOffsets[nrLanes] =
+{
+     0,  1, 62, 28, 27, 36, 44,  6, 55, 20,  3, 10, 43, 25, 39, 41, 45, 15, 21,  8, 18,  2, 61, 56, 14
+};
+
+#endif
+
 /* ---------------------------------------------------------------- */
 
 void KeccakP1600_Initialize(void *state)
@@ -102,7 +141,7 @@ void KeccakP1600_Initialize(void *state)
 
 void KeccakP1600_AddByte(void *state, unsigned char byte, unsigned int offset)
 {
-    assert(offset <= 200);
+    assert(offset < 200);
     ((unsigned char *)state)[offset] ^= byte;
 }
 

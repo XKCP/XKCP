@@ -23,7 +23,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define KeccakP400_stateSizeInBytes    50
 #define KeccakP400_stateAlignment      2
 
+#ifdef KeccakReference
 void KeccakP400_StaticInitialize( void );
+#else
+#define KeccakP400_StaticInitialize()
+#endif
 void KeccakP400_Initialize(void *state);
 void KeccakP400_AddByte(void *state, unsigned char data, unsigned int offset);
 void KeccakP400_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);

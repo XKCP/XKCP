@@ -27,17 +27,21 @@ typedef unsigned int UINT32;
 typedef UINT32 tKeccakLane;
 
 #define maxNrRounds 22
-tKeccakLane KeccakRoundConstants[maxNrRounds];
 #define nrLanes 25
-unsigned int KeccakRhoOffsets[nrLanes];
+#define index(x, y) (((x)%5)+5*((y)%5))
+
+#ifdef KeccakReference
+
+static tKeccakLane KeccakRoundConstants[maxNrRounds];
+static unsigned int KeccakRhoOffsets[nrLanes];
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP800_InitializeRoundConstants();
-void KeccakP800_InitializeRhoOffsets();
+void KeccakP800_InitializeRoundConstants(void);
+void KeccakP800_InitializeRhoOffsets(void);
 static int LFSR86540(UINT8 *LFSR);
 
-void KeccakP800_StaticInitialize()
+void KeccakP800_StaticInitialize(void)
 {
     if (sizeof(tKeccakLane) != 4) {
         printf("tKeccakLane should be 32-bit wide\n");
@@ -47,7 +51,7 @@ void KeccakP800_StaticInitialize()
     KeccakP800_InitializeRhoOffsets();
 }
 
-void KeccakP800_InitializeRoundConstants()
+void KeccakP800_InitializeRoundConstants(void)
 {
     UINT8 LFSRstate = 0x01;
     unsigned int i, j, bitPosition;
@@ -62,9 +66,7 @@ void KeccakP800_InitializeRoundConstants()
     }
 }
 
-#define index(x, y) (((x)%5)+5*((y)%5))
-
-void KeccakP800_InitializeRhoOffsets()
+void KeccakP800_InitializeRhoOffsets(void)
 {
     unsigned int x, y, t, newX, newY;
 
@@ -90,6 +92,41 @@ static int LFSR86540(UINT8 *LFSR)
         (*LFSR) <<= 1;
     return result;
 }
+
+#else
+
+static const tKeccakLane KeccakRoundConstants[maxNrRounds] =
+{
+    0x00000001,
+    0x00008082,
+    0x0000808a,
+    0x80008000,
+    0x0000808b,
+    0x80000001,
+    0x80008081,
+    0x00008009,
+    0x0000008a,
+    0x00000088,
+    0x80008009,
+    0x8000000a,
+    0x8000808b,
+    0x0000008b,
+    0x00008089,
+    0x00008003,
+    0x00008002,
+    0x00000080,
+    0x0000800a,
+    0x8000000a,
+    0x80008081,
+    0x00008080,
+};
+
+static const unsigned int KeccakRhoOffsets[nrLanes] =
+{
+     0,  1, 30, 28, 27,  4, 12,  6, 23, 20,  3, 10, 11, 25,  7,  9, 13, 15, 21,  8, 18,  2, 29, 24, 14
+};
+
+#endif
 
 /* ---------------------------------------------------------------- */
 

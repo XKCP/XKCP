@@ -27,17 +27,21 @@ typedef unsigned short UINT16;
 typedef UINT16 tKeccakLane;
 
 #define maxNrRounds 20
-tKeccakLane KeccakRoundConstants[maxNrRounds];
 #define nrLanes 25
-unsigned int KeccakRhoOffsets[nrLanes];
+#define index(x, y) (((x)%5)+5*((y)%5))
+
+#ifdef KeccakReference
+
+static tKeccakLane KeccakRoundConstants[maxNrRounds];
+static unsigned int KeccakRhoOffsets[nrLanes];
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP400_InitializeRoundConstants();
-void KeccakP400_InitializeRhoOffsets();
+void KeccakP400_InitializeRoundConstants(void);
+void KeccakP400_InitializeRhoOffsets(void);
 static int LFSR86540(UINT8 *LFSR);
 
-void KeccakP400_StaticInitialize()
+void KeccakP400_StaticInitialize(void)
 {
     if (sizeof(tKeccakLane) != 2) {
         printf("tKeccakLane should be 16-bit wide\n");
@@ -47,7 +51,7 @@ void KeccakP400_StaticInitialize()
     KeccakP400_InitializeRhoOffsets();
 }
 
-void KeccakP400_InitializeRoundConstants()
+void KeccakP400_InitializeRoundConstants(void)
 {
     UINT8 LFSRstate = 0x01;
     unsigned int i, j, bitPosition;
@@ -62,9 +66,7 @@ void KeccakP400_InitializeRoundConstants()
     }
 }
 
-#define index(x, y) (((x)%5)+5*((y)%5))
-
-void KeccakP400_InitializeRhoOffsets()
+void KeccakP400_InitializeRhoOffsets(void)
 {
     unsigned int x, y, t, newX, newY;
 
@@ -90,6 +92,39 @@ static int LFSR86540(UINT8 *LFSR)
         (*LFSR) <<= 1;
     return result;
 }
+
+#else
+
+static const tKeccakLane KeccakRoundConstants[maxNrRounds] =
+{
+    0x0001,
+    0x8082,
+    0x808a,
+    0x8000,
+    0x808b,
+    0x0001,
+    0x8081,
+    0x8009,
+    0x008a,
+    0x0088,
+    0x8009,
+    0x000a,
+    0x808b,
+    0x008b,
+    0x8089,
+    0x8003,
+    0x8002,
+    0x0080,
+    0x800a,
+    0x000a,
+};
+
+static const unsigned int KeccakRhoOffsets[nrLanes] =
+{
+     0,  1, 14, 12, 11,  4, 12,  6,  7,  4,  3, 10, 11,  9,  7,  9, 13, 15,  5,  8,  2,  2, 13,  8, 14
+};
+
+#endif
 
 /* ---------------------------------------------------------------- */
 

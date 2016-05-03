@@ -27,17 +27,21 @@ typedef unsigned int UINT32;
 typedef UINT8 tKeccakLane;
 
 #define maxNrRounds 18
-tKeccakLane KeccakRoundConstants[maxNrRounds];
 #define nrLanes 25
-unsigned int KeccakRhoOffsets[nrLanes];
+#define index(x, y) (((x)%5)+5*((y)%5))
+
+#ifdef KeccakReference
+
+static tKeccakLane KeccakRoundConstants[maxNrRounds];
+static unsigned int KeccakRhoOffsets[nrLanes];
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP200_InitializeRoundConstants();
-void KeccakP200_InitializeRhoOffsets();
+void KeccakP200_InitializeRoundConstants(void);
+void KeccakP200_InitializeRhoOffsets(void);
 static int LFSR86540(UINT8 *LFSR);
 
-void KeccakP200_StaticInitialize()
+void KeccakP200_StaticInitialize(void)
 {
     if (sizeof(tKeccakLane) != 1) {
         printf("tKeccakLane should be 8-bit wide\n");
@@ -47,7 +51,7 @@ void KeccakP200_StaticInitialize()
     KeccakP200_InitializeRhoOffsets();
 }
 
-void KeccakP200_InitializeRoundConstants()
+void KeccakP200_InitializeRoundConstants(void)
 {
     UINT8 LFSRstate = 0x01;
     unsigned int i, j, bitPosition;
@@ -62,9 +66,7 @@ void KeccakP200_InitializeRoundConstants()
     }
 }
 
-#define index(x, y) (((x)%5)+5*((y)%5))
-
-void KeccakP200_InitializeRhoOffsets()
+void KeccakP200_InitializeRhoOffsets(void)
 {
     unsigned int x, y, t, newX, newY;
 
@@ -90,6 +92,37 @@ static int LFSR86540(UINT8 *LFSR)
         (*LFSR) <<= 1;
     return result;
 }
+
+#else
+
+static const tKeccakLane KeccakRoundConstants[maxNrRounds] =
+{
+    0x01,
+    0x82,
+    0x8a,
+    0x00,
+    0x8b,
+    0x01,
+    0x81,
+    0x09,
+    0x8a,
+    0x88,
+    0x09,
+    0x0a,
+    0x8b,
+    0x8b,
+    0x89,
+    0x03,
+    0x02,
+    0x80,
+};
+
+static const unsigned int KeccakRhoOffsets[nrLanes] =
+{
+     0, 1, 6, 4, 3, 4, 4, 6, 7, 4, 3, 2, 3, 1, 7, 1, 5, 7, 5, 0, 2, 2, 5, 0, 6
+};
+
+#endif
 
 /* ---------------------------------------------------------------- */
 
