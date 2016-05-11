@@ -821,7 +821,7 @@ void KeccakP1600times2_PermuteAll_12rounds(void *states)
 #endif
 }
 
-size_t KeccakF1600times2_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, unsigned char *data, size_t dataByteLen)
+size_t KeccakF1600times2_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen)
 {
     if (laneCount == 21) {
 #if 1

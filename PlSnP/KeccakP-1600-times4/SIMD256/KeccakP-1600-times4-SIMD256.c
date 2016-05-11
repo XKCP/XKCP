@@ -825,7 +825,7 @@ void KeccakP1600times4_PermuteAll_12rounds(void *states)
     copyToState(statesAsLanes, A)
 }
 
-size_t KeccakF1600times4_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, unsigned char *data, size_t dataByteLen)
+size_t KeccakF1600times4_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen)
 {
     if (laneCount == 21) {
 #if 0
