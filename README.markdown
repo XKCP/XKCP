@@ -26,6 +26,7 @@ When used as a library or directly from the sources, the KCP offers the high-lev
 * [`KeccakSponge.h`](Constructions/KeccakSponge.h), all Keccak sponge functions, with or without a message queue.
 * [`KeccakDuplex.h`](Constructions/KeccakDuplex.h), all Keccak duplex objects.
 * [`KeccakPRG.h`](Modes/KeccakPRG.h), a pseudo-random number generator based on Keccak duplex objects.
+* [`KeccakFPH.h`](Modes/KeccakFPH.h), NIST's fast parallel hash (FPH) proposal. **Warning**: this is based on a draft specification, which is subject to changes.
 * [`Keyakv2.h`](Modes/Keyakv2.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
 * [`Ketje.h`](Ketje/Ketje.h), the lightweight authenticated encryption schemes Ketje Jr and Ketje Sr.
 

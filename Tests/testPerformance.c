@@ -17,6 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
+#include "KeccakFPH.h"
 #include "timing.h"
 #include "testPerformance.h"
 
@@ -457,6 +458,81 @@ void KeccakWidth1600_timing()
     #undef P
 #endif
 
+#ifndef KeccakP1600_excluded
+uint_32t measureKeccakFPH(uint_32t dtMin, unsigned int securityStrength, unsigned int blockByteLen, unsigned int inputLen)
+{
+    ALIGN(32) unsigned char input[1024*1024];
+    ALIGN(32) unsigned char output[32];
+
+    assert(inputLen <= 1024*1024);
+
+    memset(input, 0xA5, 16);
+
+    if(securityStrength == 128) {
+        measureTimingBegin
+        Keccak_FPH128(input, inputLen, blockByteLen, output, 32, "", 0);
+        measureTimingEnd
+    }
+    else if(securityStrength == 256) {
+        measureTimingBegin
+        Keccak_FPH256(input, inputLen, blockByteLen, output, 32, "", 0);
+        measureTimingEnd
+    }
+}
+
+void printKeccakFPHPerformanceHeader(unsigned int securityStrength)
+{
+    printf("*** Keccak-FPH%d ***\n", securityStrength);
+    printf("Using Keccak-f[1600] implementations:\n");
+    printf("- \303\2271: " KeccakP1600_implementation "\n");
+#ifndef KeccakP1600timesN_excluded
+    printf("- \303\2272: " KeccakP1600times2_implementation "\n");
+    printf("- \303\2274: " KeccakP1600times4_implementation "\n");
+    printf("- \303\2278: " KeccakP1600times8_implementation "\n");
+#endif
+    printf("\n");
+}
+
+void testKeccakFPHPerformanceOne(unsigned int securityStrength, unsigned int blockByteLen)
+{
+    unsigned halfTones;
+    uint_32t calibration = calibrate();
+    unsigned int blockByteLenLog = (unsigned int)floor(log(blockByteLen)/log(2.0)+0.5);
+    int displaySlope = 1;
+
+    printf("Block size: %d bytes\n", blockByteLen);
+    for(halfTones=blockByteLenLog*12-28; halfTones<=19*12; halfTones+=4) {
+        double I = pow(2.0, halfTones/12.0);
+        unsigned int i  = (unsigned int)floor(I+0.5);
+        uint_32t time, timePlus1Block, timePlus2Blocks, timePlus4Blocks, timePlus8Blocks;
+        time = measureKeccakFPH(calibration, securityStrength, blockByteLen, i);
+        if (displaySlope) {
+            timePlus1Block = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+1*blockByteLen);
+            timePlus2Blocks = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+2*blockByteLen);
+            timePlus4Blocks = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+4*blockByteLen);
+            timePlus8Blocks = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+8*blockByteLen);
+        }
+        printf("%8d bytes: %9d cycles, %5.2f cycles/byte\n", i, time, time*1.0/i);
+        if (displaySlope) {
+            printf("     +1 block:  %9d cycles, %5.2f cycles/byte (slope)\n", timePlus1Block, (timePlus1Block-(double)(time))*1.0/blockByteLen/1.0);
+            printf("     +2 blocks: %9d cycles, %5.2f cycles/byte (slope)\n", timePlus2Blocks, (timePlus2Blocks-(double)(time))*1.0/blockByteLen/2.0);
+            printf("     +4 blocks: %9d cycles, %5.2f cycles/byte (slope)\n", timePlus4Blocks, (timePlus4Blocks-(double)(time))*1.0/blockByteLen/4.0);
+            printf("     +8 blocks: %9d cycles, %5.2f cycles/byte (slope)\n", timePlus8Blocks, (timePlus8Blocks-(double)(time))*1.0/blockByteLen/8.0);
+        }
+        displaySlope = 0;
+    }
+    printf("\n\n");
+}
+
+void testKeccakFPHPerformance()
+{
+    printKeccakFPHPerformanceHeader(128);
+    testKeccakFPHPerformanceOne(128, 8192);
+    printKeccakFPHPerformanceHeader(256);
+    testKeccakFPHPerformanceOne(256, 8192);
+}
+#endif
+
 void testPerformance()
 {
 #ifndef KeccakP200_excluded
@@ -502,6 +578,10 @@ void testPerformance()
     SeaKeyak_timing("Sea Keyak", KeccakP1600times2_implementation);
     OceanKeyak_timing("Ocean Keyak", KeccakP1600times4_implementation);
     LunarKeyak_timing("Lunar Keyak", KeccakP1600times8_implementation);
+#endif
+
+#ifndef KeccakP1600_excluded
+    testKeccakFPHPerformance();
 #endif
 }
 
