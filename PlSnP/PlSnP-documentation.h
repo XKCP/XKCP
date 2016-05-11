@@ -239,7 +239,7 @@ void PlSnP_ExtractAndAddLanesAll(const void *states, const unsigned char *input,
 /** Function that has the same behavior as repeatedly calling
   *  - PlSnP_AddLanesAll() with P blocks of @a laneCount lanes from @a data and with offset @a laneOffsetParallel;
   *  - PlSnP_PermuteAll() on the states @a states;
-  *  - and advancing @a data by P times @a laneOffsetSerial lane sizes, until not enough data are available.
+  *  - and advancing @a data by @a laneOffsetSerial lane sizes, until not enough data are available.
   * The function returns the total offset of the @a data pointer or, equivalently,
   * the number of iterations times @a laneOffsetSerial lane sizes in bytes.
   * @param  states  Pointer to the states.
