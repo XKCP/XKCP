@@ -83,14 +83,14 @@ Most of the source and header files in the KCP are released to the **public doma
 To build, the following tools are needed:
 
 * *GCC*
-* *make*
+* *GNU make*
 * *xsltproc*
 
 The different targets are defined in [`Makefile.build`](Makefile.build). This file is expanded into a regular makefile using *xsltproc*. To use it, simply type, e.g.,
 
 > `make generic64/KeccakTests`
 
-to build KeccakTests generically optimized for 64-bit platforms. The name before the slash indicates the platform, while the part after the slash is the executable to build. As another example, the static library is built by typing `make generic64/libkeccak.a` or similarly with `generic64` replaced with the appropriate platform name.
+to build KeccakTests generically optimized for 64-bit platforms. The name before the slash indicates the platform, while the part after the slash is the executable to build. As another example, the static library is built by typing `make generic64/libkeccak.a` or similarly with `generic64` replaced with the appropriate platform name.  An alternate C compiler can be specified via the `CC` environment variable.
 
 Instead of building an executable with *GCC*, one can choose to select the files needed and make a package. For this, simply append `.pack` to the target name, e.g.,
 
