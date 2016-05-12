@@ -53,7 +53,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:text>: </xsl:text>
     <xsl:value-of select="$makefile"/>
     <xsl:text>
-&#9;make -f </xsl:text>
+&#9;$(MAKE) -f </xsl:text>
     <xsl:value-of select="$makefile"/>
     <xsl:text> </xsl:text>
     <xsl:value-of select="@name"/>
@@ -64,7 +64,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:text>: </xsl:text>
     <xsl:value-of select="$makefile"/>
     <xsl:text>
-&#9;make -f </xsl:text>
+&#9;$(MAKE) -f </xsl:text>
     <xsl:value-of select="$makefile"/>
     <xsl:text> </xsl:text>
     <xsl:value-of select="$pack"/>

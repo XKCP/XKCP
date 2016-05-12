@@ -149,7 +149,8 @@ OBJECTS := $(OBJECTS) </xsl:text>
 $(BINDIR):
 &#9;mkdir -p $(BINDIR)
 
-CC = gcc
+MAKE ?= gmake
+CC ?= gcc
 AR = ar
 
 </xsl:text>
