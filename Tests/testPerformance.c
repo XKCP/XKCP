@@ -478,6 +478,8 @@ uint_32t measureKeccakFPH(uint_32t dtMin, unsigned int securityStrength, unsigne
         Keccak_FPH256(input, inputLen, blockByteLen, output, 32, "", 0);
         measureTimingEnd
     }
+    else
+        return 0;
 }
 
 void printKeccakFPHPerformanceHeader(unsigned int securityStrength)
