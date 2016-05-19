@@ -161,7 +161,7 @@ void elementarySnPtest()
     memset(paddedState, 0x5A, sizeof(paddedState));
     memset(paddedBuffer, 0x96, sizeof(paddedBuffer));
 
-    // Testing SnP_Initialize()
+    /* Testing SnP_Initialize() */
     {
         SnP_Initialize(state);
         SnP_ExtractBytes(state, buffer, 0, SnP_width/8);
@@ -171,7 +171,7 @@ void elementarySnPtest()
             assert(buffer[i] == 0);
     }
 
-    // Testing SnP_AddByte()
+    /* Testing SnP_AddByte() */
     {
         for(i=0; i<SnP_width/8; i++)
             SnP_AddByte(state, i, i);
@@ -182,7 +182,7 @@ void elementarySnPtest()
             assert(buffer[i] == i);
     }
 
-    // Testing SnP_ExtractBytes()
+    /* Testing SnP_ExtractBytes() */
     {
         for(i=0; i<7; i++) {
             memset(buffer, 0x3C, SnP_width/8);
@@ -196,7 +196,7 @@ void elementarySnPtest()
         checkBufferPadding(paddedBuffer);
     }
 
-    // Testing SnP_ExtractAndAddBytes() (input = output)
+    /* Testing SnP_ExtractAndAddBytes() (input = output) */
     {
         for(i=0; i<7; i++) {
             memset(buffer, 0xC3, SnP_width/8);
@@ -210,7 +210,7 @@ void elementarySnPtest()
         checkBufferPadding(paddedBuffer);
     }
 
-    // Testing SnP_AddBytes()
+    /* Testing SnP_AddBytes() */
     {
         for(i=0; i<8; i++) {
             memset(buffer, 1 << i, SnP_width/8);
@@ -227,7 +227,7 @@ void elementarySnPtest()
             assert(buffer[i] == (i ^ ((1 << (SnP_width/8-i))-1)));
     }
 
-    // Testing SnP_OverwriteBytes()
+    /* Testing SnP_OverwriteBytes() */
     {
         for(i=0; i<8; i++) {
             memset(buffer, i+1, SnP_width/8);
@@ -244,7 +244,7 @@ void elementarySnPtest()
             assert(buffer[i] == (SnP_width/8-i-1)/2+1);
     }
 
-    // Testing SnP_OverwriteWithZeroes()
+    /* Testing SnP_OverwriteWithZeroes() */
     {
         for(i=0; i<SnP_width/8; i+=7) {
             SnP_OverwriteWithZeroes(state, i);
@@ -276,7 +276,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
 
     memset(stateTest, 0xAA, sizeof(stateTest));
 
-    // Testing SnP_Initialize()
+    /* Testing SnP_Initialize() */
     {
         SnP_Initialize(stateTest);
         accumulateState(stateAccumulated, stateTest);
@@ -285,7 +285,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateTest, "stateTest after testing SnP_Initialize()");
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_Initialize()");
 
-    // Testing SnP_AddByte()
+    /* Testing SnP_AddByte() */
     {
         unsigned offset;
 
@@ -299,7 +299,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateTest, "stateTest after testing SnP_AddByte()");
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_AddByte()");
 
-    // Testing SnP_AddBytes()
+    /* Testing SnP_AddBytes() */
     {
         unsigned char buffer[SnP_width/8+8];
         unsigned i, offset, length, alignment;
@@ -318,7 +318,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateTest, "stateTest after testing SnP_AddBytes()");
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_AddBytes()");
 
-    // Testing SnP_OverwriteBytes()
+    /* Testing SnP_OverwriteBytes() */
     {
         unsigned char buffer[SnP_width/8+8];
         unsigned i, offset, length, alignment;
@@ -336,7 +336,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateTest, "stateTest after testing SnP_OverwriteBytes()");
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_OverwriteBytes()");
 
-    // Testing SnP_OverwriteWithZeroes()
+    /* Testing SnP_OverwriteWithZeroes() */
     {
         unsigned byteCount;
 
@@ -350,7 +350,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateTest, "stateTest after testing SnP_OverwriteWithZeroes()");
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_OverwriteWithZeroes()");
 
-    // Testing SnP_ExtractBytes()
+    /* Testing SnP_ExtractBytes() */
     {
         unsigned char buffer[SnP_width/8+8];
         unsigned offset, length, alignment;
@@ -367,7 +367,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateTest, "stateTest after testing SnP_ExtractBytes()");
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_ExtractBytes()");
 
-    // Testing SnP_ExtractAndAddBytes() (input = output)
+    /* Testing SnP_ExtractAndAddBytes() (input = output) */
     {
         unsigned char buffer[SnP_width/8+8];
         unsigned offset, length, alignment;
@@ -384,7 +384,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateTest, "stateTest after testing SnP_ExtractAndAddBytes() (input = output)");
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_ExtractAndAddBytes() (input = output)");
 
-    // Testing SnP_ExtractAndAddBytes() (input ≠ output)
+    /* Testing SnP_ExtractAndAddBytes() (input ≠ output) */
     {
         unsigned char buffer1[SnP_width/8+8];
         unsigned char buffer2[SnP_width/8+8];
@@ -405,7 +405,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_ExtractAndAddBytes() (input != output)");
 
 #ifdef SnP_Permute_12rounds
-    // Testing SnP_Permute_12rounds()
+    /* Testing SnP_Permute_12rounds() */
     {
         unsigned int i;
 
@@ -420,7 +420,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
 #endif
 
 #ifdef SnP_Permute_Nrounds
-    // Testing SnP_Permute_Nrounds()
+    /* Testing SnP_Permute_Nrounds() */
     {
         unsigned int nr;
 
@@ -434,7 +434,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_Permute_Nrounds()");
 #endif
 
-    // Testing SnP_FastLoop_Absorb()
+    /* Testing SnP_FastLoop_Absorb() */
     {
         unsigned char buffer[SnP_laneLengthInBytes*100+10+8];
         unsigned i, blocks, extra, laneCount, alignment;
@@ -465,7 +465,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_FastLoop_Absorb()");
 
 #ifdef OUTPUT
-    // Outputting the result
+    /* Outputting the result */
     {
         unsigned char buffer[SnP_width/8];
         unsigned int i;

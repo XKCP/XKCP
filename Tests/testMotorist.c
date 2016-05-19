@@ -18,7 +18,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if !defined(EMBEDDED)
 #define OUTPUT
 #define VERBOSE
-//#define GENERATE
+/* #define GENERATE */
 #endif
 
 #if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))

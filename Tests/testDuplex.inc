@@ -42,13 +42,13 @@ void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, uns
     unsigned int sigmaBitLength, ZByteLen, i, offset, size;
     DuplexInstance duplex;
 
-    // Acumulated test vector
+    /* Acumulated test vector */
     SpongeInstance spongeChecksum;
     SpongeInitialize(&spongeChecksum, SnP_width, 0);
 
     DuplexInitialize(&duplex, rate, capacity);
 
-    // Varying input size, maximum output size
+    /* Varying input size, maximum output size */
     for(sigmaBitLength=0; sigmaBitLength<=rate-2; sigmaBitLength++) {
         unsigned int sigmaByteLenCeiling = (sigmaBitLength + 7)/8;
         unsigned char delimitedSigmaEnd;
@@ -70,10 +70,10 @@ void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, uns
         else if (flavor == flavor_PartialIO) {
             for(offset = 0; offset < sigmaBitLength/8; offset += size) {
                 unsigned int p = sigmaBitLength%11;
-                // vary sizes
-                if (p < 3) size = 1; // byte per byte
-                else if (p < 9) size = (rand() % 20); // small random
-                else size = ((rand() % (sigmaBitLength/8 - offset)) + 1); // converging random
+                /* vary sizes */
+                if (p < 3) size = 1; /* byte per byte */
+                else if (p < 9) size = (rand() % 20); /* small random */
+                else size = ((rand() % (sigmaBitLength/8 - offset)) + 1); /* converging random */
 
                 if (size > (sigmaBitLength/8 - offset))
                     size = sigmaBitLength/8 - offset;
@@ -89,10 +89,10 @@ void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, uns
             Duplexing(&duplex, 0, 0, 0, 0, delimitedSigmaEnd);
             for(offset = 0; offset < ZByteLen; offset += size) {
                 unsigned int p = sigmaBitLength%7;
-                // vary sizes
-                if (p < 2) size = 1; // byte per byte
-                else if (p < 5) size = (rand() % 20); // small random
-                else size = ((rand() % (ZByteLen - offset)) + 1); // converging random
+                /* vary sizes */
+                if (p < 2) size = 1; /* byte per byte */
+                else if (p < 5) size = (rand() % 20); /* small random */
+                else size = ((rand() % (ZByteLen - offset)) + 1); /* converging random */
 
                 if (size > (ZByteLen - offset))
                     size = ZByteLen - offset;
@@ -123,7 +123,7 @@ void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, uns
             }
     }
 
-    // Testing overwriting with zeroes
+    /* Testing overwriting with zeroes */
     for(sigmaBitLength=0; sigmaBitLength<=rate-2; sigmaBitLength+=8) {
         unsigned int ZByteLen = (rate + 7)/8;
         for(i=0; i<sigmaBitLength/8; i++)
@@ -144,7 +144,7 @@ void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, uns
         SpongeAbsorb(&spongeChecksum, Z, ZByteLen);
     }
 
-    // No input, varying output size
+    /* No input, varying output size */
     for(ZByteLen=0; ZByteLen<=(rate+7)/8; ZByteLen++) {
         unsigned char filler = 0x33 + sigmaBitLength;
 
@@ -181,7 +181,7 @@ void writeTestDuplex(FILE *f, unsigned int rate, unsigned int capacity, int flav
     fprintf(f, "    selfTestDuplex(%d, %d, flavor, \"", rate, capacity);
     for(offset=0; offset<checksumByteSize; offset++)
         fprintf(f, "\\x%02x", checksum[offset]);
-    fprintf(f, "\"); // Keccak[r=%d, c=%d]\n", rate, capacity);
+    fprintf(f, "\"); /* Keccak[r=%d, c=%d] */\n" , rate, capacity);
 }
 #endif
 

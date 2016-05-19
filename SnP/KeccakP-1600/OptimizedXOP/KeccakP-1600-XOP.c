@@ -194,8 +194,8 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
     Doi = GET64LOLO(Dou, Die); \
     Duo = SWAP64(Dou);
 
-// --- Theta Rho Pi Chi Iota Prepare-theta
-// --- 64-bit lanes mapped to 64-bit and 128-bit words
+/* --- Theta Rho Pi Chi Iota Prepare-theta */
+/* --- 64-bit lanes mapped to 64-bit and 128-bit words */
 #define thetaRhoPiChiIotaPrepareTheta(i, A, E) \
     computeD \
     \
@@ -265,8 +265,8 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
     XOReq128(Cio, GET64LOLO(Zero, Cou)); \
     XOReq128(Cua, GET64HIHI(Cou, Zero)); \
 
-// --- Theta Rho Pi Chi Iota
-// --- 64-bit lanes mapped to 64-bit and 128-bit words
+/* --- Theta Rho Pi Chi Iota */
+/* --- 64-bit lanes mapped to 64-bit and 128-bit words */
 #define thetaRhoPiChiIota(i, A, E) thetaRhoPiChiIotaPrepareTheta(i, A, E)
 
 const UINT64 KeccakF1600RoundConstants[24] = {

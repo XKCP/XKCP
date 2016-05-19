@@ -34,4 +34,4 @@ size_t KeccakF1600_FastLoop_Absorb      (void *state, size_t laneCount, const UI
 }
 #endif
 
-#endif //_KeccakP_1600_AVX2_h_
+#endif /* _KeccakP_1600_AVX2_h_ */

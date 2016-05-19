@@ -40,8 +40,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     Cu = Abu^Agu^Aku^Amu^Asu; \
 
 #ifdef UseBebigokimisa
-// --- Code for round, with prepare-theta (lane complementing pattern 'bebigokimisa')
-// --- 64-bit lanes mapped to 64-bit words
+/* --- Code for round, with prepare-theta (lane complementing pattern 'bebigokimisa') */
+/* --- 64-bit lanes mapped to 64-bit words */
 #define thetaRhoPiChiIotaPrepareTheta(i, A, E) \
     Da = Cu^ROL64(Ce, 1); \
     De = Ca^ROL64(Ci, 1); \
@@ -156,8 +156,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     Cu ^= E##su; \
 \
 
-// --- Code for round (lane complementing pattern 'bebigokimisa')
-// --- 64-bit lanes mapped to 64-bit words
+/* --- Code for round (lane complementing pattern 'bebigokimisa') */
+/* --- 64-bit lanes mapped to 64-bit words */
 #define thetaRhoPiChiIota(i, A, E) \
     Da = Cu^ROL64(Ce, 1); \
     De = Ca^ROL64(Ci, 1); \
@@ -247,9 +247,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     E##su =   Bsu ^(  Bsa &  Bse ); \
 \
 
-#else // UseBebigokimisa
-// --- Code for round, with prepare-theta
-// --- 64-bit lanes mapped to 64-bit words
+#else /* UseBebigokimisa */
+/* --- Code for round, with prepare-theta */
+/* --- 64-bit lanes mapped to 64-bit words */
 #define thetaRhoPiChiIotaPrepareTheta(i, A, E) \
     Da = Cu^ROL64(Ce, 1); \
     De = Ca^ROL64(Ci, 1); \
@@ -364,8 +364,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     Cu ^= E##su; \
 \
 
-// --- Code for round
-// --- 64-bit lanes mapped to 64-bit words
+/* --- Code for round */
+/* --- 64-bit lanes mapped to 64-bit words */
 #define thetaRhoPiChiIota(i, A, E) \
     Da = Cu^ROL64(Ce, 1); \
     De = Ca^ROL64(Ci, 1); \
@@ -455,7 +455,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     E##su =   Bsu ^((~Bsa)&  Bse ); \
 \
 
-#endif // UseBebigokimisa
+#endif /* UseBebigokimisa */
 
 #define copyFromState(X, state) \
     X##ba = state[ 0]; \
@@ -1381,7 +1381,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     output[index] = ~(input[index] ^ X##name); \
     X##name ^= output[index]; \
 
-#else // UseBebigokimisa
+#else /* UseBebigokimisa */
 
 #define copyToStateAndOutput(X, state, output, laneCount) \
     if (laneCount < 16) { \

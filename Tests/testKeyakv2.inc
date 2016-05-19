@@ -161,7 +161,7 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
         case 4:
         case 5:
             {
-                // Pass all input and AD, but don't set lastflags in first call
+                /* Pass all input and AD, but don't set lastflags in first call */
                 size_t partialPlen, partialADlen;
                 size_t totalPlen, totalADlen;
                 size_t processedI, processedMD;
@@ -339,7 +339,7 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
         case 4:
         case 5:
             {
-                // Pass all input and AD, but don't set lastflags in first call
+                /* Pass all input and AD, but don't set lastflags in first call */
                 size_t partialPlen, partialADlen;
                 size_t totalPlen, totalADlen;
                 size_t processedI, processedMD;

@@ -24,8 +24,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 
 #define USE_MEMSET
-//#define DIVISION_INSTRUCTION    //comment if no division instruction or more compact when not using division
-#define UNROLL_CHILOOP        //comment more compact using for loop
+/* #define DIVISION_INSTRUCTION    /* comment if no division instruction or more compact when not using division */ */
+#define UNROLL_CHILOOP        /* comment more compact using for loop */
 
 typedef unsigned char UINT8;
 typedef uint32_t UINT32;
@@ -131,7 +131,7 @@ void KeccakP800_Permute_Nrounds(void *argState, tSmallUInt nr)
         for( x = 1; x < 128; x <<= 1 )
         {
             if ((LFSRstate & 0x80) != 0)
-                // Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1
+                /* Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1 */
                 LFSRstate = (LFSRstate << 1) ^ 0x71;
             else
                 LFSRstate <<= 1;
@@ -140,7 +140,7 @@ void KeccakP800_Permute_Nrounds(void *argState, tSmallUInt nr)
 
     do
     {
-        // Theta
+        /* Theta */
         for ( x = 0; x < 5; ++x )
         {
             BC[x] = state[x] ^ state[5 + x] ^ state[10 + x] ^ state[15 + x] ^ state[20 + x];
@@ -154,7 +154,7 @@ void KeccakP800_Permute_Nrounds(void *argState, tSmallUInt nr)
             }
         }
 
-        // Rho Pi
+        /* Rho Pi */
         temp = state[1];
         for ( x = 0; x < 24; ++x )
         {
@@ -163,7 +163,7 @@ void KeccakP800_Permute_Nrounds(void *argState, tSmallUInt nr)
             temp = BC[0];
         }
 
-        //    Chi
+        /*    Chi */
         for ( y = 0; y < 25; y += 5 )
         {
 #if defined(UNROLL_CHILOOP)
@@ -184,7 +184,7 @@ void KeccakP800_Permute_Nrounds(void *argState, tSmallUInt nr)
             }
         }
 
-        //    Iota
+        /*    Iota */
         temp = 0;
         for( x = 1; x < 128; x <<= 1 )
         {
@@ -192,7 +192,7 @@ void KeccakP800_Permute_Nrounds(void *argState, tSmallUInt nr)
                 temp ^= (tKeccakLane)(LFSRstate & 1) << (x - 1);
 
             if ((LFSRstate & 0x80) != 0)
-                // Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1
+                /* Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1 */
                 LFSRstate = (LFSRstate << 1) ^ 0x71;
             else
                 LFSRstate <<= 1;

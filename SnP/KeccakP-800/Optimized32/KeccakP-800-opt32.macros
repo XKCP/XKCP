@@ -39,8 +39,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     Cu = Astate[_b+_u]^Astate[_g+_u]^Astate[_k+_u]^Astate[_m+_u]^Astate[_s+_u]; \
 
 #ifdef UseBebigokimisa
-// --- Code for round, with prepare-theta (lane complementing pattern 'bebigokimisa')
-// --- 32-bit lanes mapped to 32-bit words
+/* --- Code for round, with prepare-theta (lane complementing pattern 'bebigokimisa') */
+/* --- 32-bit lanes mapped to 32-bit words */
 #define thetaRhoPiChiIotaPrepareTheta(i, A, E) \
     Da = Cu^ROL32(Ce, 1); \
     De = Ca^ROL32(Ci, 1); \
@@ -155,8 +155,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     Cu ^= E##state[_s+_u]; \
 \
 
-// --- Code for round (lane complementing pattern 'bebigokimisa')
-// --- 32-bit lanes mapped to 32-bit words
+/* --- Code for round (lane complementing pattern 'bebigokimisa') */
+/* --- 32-bit lanes mapped to 32-bit words */
 #define thetaRhoPiChiIota(i, A, E) \
     Da = Cu^ROL32(Ce, 1); \
     De = Ca^ROL32(Ci, 1); \
@@ -246,9 +246,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     E##state[_s+_u] =   Bu ^(  Ba &  Be ); \
 \
 
-#else // UseBebigokimisa
-// --- Code for round, with prepare-theta
-// --- 32-bit lanes mapped to 32-bit words
+#else /* UseBebigokimisa */
+/* --- Code for round, with prepare-theta */
+/* --- 32-bit lanes mapped to 32-bit words */
 #define thetaRhoPiChiIotaPrepareTheta(i, A, E) \
     Da = Cu^ROL32(Ce, 1); \
     De = Ca^ROL32(Ci, 1); \
@@ -363,8 +363,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     Cu ^= E##state[_s+_u]; \
 \
 
-// --- Code for round
-// --- 32-bit lanes mapped to 32-bit words
+/* --- Code for round */
+/* --- 32-bit lanes mapped to 32-bit words */
 #define thetaRhoPiChiIota(i, A, E) \
     Da = Cu^ROL32(Ce, 1); \
     De = Ca^ROL32(Ci, 1); \
@@ -454,5 +454,5 @@ http://creativecommons.org/publicdomain/zero/1.0/
     E##state[_s+_u] =   Bu ^((~Ba)&  Be ); \
 \
 
-#endif // UseBebigokimisa
+#endif /* UseBebigokimisa */
 

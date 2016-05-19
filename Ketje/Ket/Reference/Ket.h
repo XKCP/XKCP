@@ -97,7 +97,7 @@ void Prefix_WrapBlocks( void *state, const unsigned char *plaintext, unsigned ch
 #define FRAMEBITS01     0x06
 #define FRAMEBITS11     0x07
 
-//  Ketje rounds
+/*  Ketje rounds */
 #define Ket_StartRounds     12
 #define Ket_StepRounds      1
 #define Ket_StrideRounds    6

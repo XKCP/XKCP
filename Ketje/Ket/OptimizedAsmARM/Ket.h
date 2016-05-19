@@ -16,7 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _Ket_h_
 #define _Ket_h_
 
-//  Info:   Designed for Little Endian CPU with pure state layout.
+/*  Info:   Designed for Little Endian CPU with pure state layout. */
 
 /** General information
   *
@@ -80,7 +80,7 @@ void Prefix_WrapBlocks( void *state, const unsigned char *plaintext, unsigned ch
 
 #endif
 
-//  Ketje frame bits
+/*  Ketje frame bits */
 #define FRAMEBITSEMPTY  0x01
 #define FRAMEBITS0      0x02
 #define FRAMEBITS00     0x04
@@ -88,7 +88,7 @@ void Prefix_WrapBlocks( void *state, const unsigned char *plaintext, unsigned ch
 #define FRAMEBITS01     0x06
 #define FRAMEBITS11     0x07
 
-//  Ketje rounds
+/*  Ketje rounds */
 #define Ket_StartRounds     12
 #define Ket_StepRounds      1
 #define Ket_StrideRounds    6

@@ -240,8 +240,8 @@ void displaySpongeIntermediateValuesOne(const unsigned char *message, unsigned i
 void displaySpongeIntermediateValuesFew(const char *fileName, unsigned char delimitedSuffix, unsigned int rate, unsigned int capacity, unsigned int desiredOutputLengthInBits)
 {
     const unsigned char *message0 = (unsigned char *) "";
-    const unsigned char *message5 = (unsigned char *) "\x13"; // 11001
-    const unsigned char *message30 = (unsigned char *) "\x53\x58\x7B\x19"; // 110010100001101011011110100110
+    const unsigned char *message5 = (unsigned char *) "\x13"; /* 11001 */
+    const unsigned char *message30 = (unsigned char *) "\x53\x58\x7B\x19"; /* 110010100001101011011110100110 */
     const unsigned char *message1600 = (unsigned char *)
         "\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3"
         "\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3\xA3"

@@ -65,7 +65,7 @@ int Duplexing(DuplexInstance *instance, const unsigned char *sigmaBegin, unsigne
             return 1;
     }
     if (ZByteLen > (instance->rate+7)/8)
-        return 1; // The output length must not be greater than the rate (rounded up to a byte)
+        return 1; /* The output length must not be greater than the rate (rounded up to a byte) */
 
     SnP_AddBytes(instance->state, sigmaBegin, instance->byteInputIndex, sigmaBeginByteLen);
     #ifdef KeccakReference
@@ -79,9 +79,9 @@ int Duplexing(DuplexInstance *instance, const unsigned char *sigmaBegin, unsigne
     }
     #endif
 
-    // Last few bits, whose delimiter coincides with first bit of padding
+    /* Last few bits, whose delimiter coincides with first bit of padding */
     SnP_AddByte(instance->state, delimitedSigmaEnd, instance->byteInputIndex+sigmaBeginByteLen);
-    // Second bit of padding
+    /* Second bit of padding */
     SnP_AddByte(instance->state, (unsigned char)1 << ((instance->rate - 1)%8), (instance->rate - 1)/8);
     SnP_Permute(instance->state);
     SnP_ExtractBytes(instance->state, Z, 0, ZByteLen);
@@ -148,7 +148,7 @@ int DuplexingOverwriteWithZeroes(DuplexInstance *instance, unsigned int inputByt
 int DuplexingGetFurtherOutput(DuplexInstance *instance, unsigned char *output, unsigned int outputByteLen)
 {
     if ((outputByteLen+instance->byteOutputIndex) > (instance->rate+7)/8)
-        return 1; // The output length must not be greater than the rate (rounded up to a byte)
+        return 1; /* The output length must not be greater than the rate (rounded up to a byte) */
 
     SnP_ExtractBytes(instance->state, output, instance->byteOutputIndex, outputByteLen);
     instance->byteOutputIndex += outputByteLen;
@@ -162,7 +162,7 @@ int DuplexingGetFurtherOutput(DuplexInstance *instance, unsigned char *output, u
 int DuplexingGetFurtherOutputAndAdd(DuplexInstance *instance, const unsigned char *input, unsigned char *output, unsigned int outputByteLen)
 {
     if ((outputByteLen+instance->byteOutputIndex) > (instance->rate+7)/8)
-        return 1; // The output length must not be greater than the rate (rounded up to a byte)
+        return 1; /* The output length must not be greater than the rate (rounded up to a byte) */
 
     SnP_ExtractAndAddBytes(instance->state, input, output, instance->byteOutputIndex, outputByteLen);
     instance->byteOutputIndex += outputByteLen;

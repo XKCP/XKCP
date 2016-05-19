@@ -20,8 +20,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "SnP-Relaned.h"
 
 #define USE_MEMSET
-//#define DIVISION_INSTRUCTION    //comment if no division instruction or more compact when not using division
-#define UNROLL_CHILOOP        //comment more compact using for loop
+/* #define DIVISION_INSTRUCTION */ /* comment if no division instruction or more compact when not using division */
+#define UNROLL_CHILOOP        /* comment more compact using for loop */
 
 typedef unsigned char UINT8;
 typedef unsigned long long int UINT64;
@@ -79,7 +79,7 @@ static tKeccakLane KeccakF1600_GetNextRoundConstant( UINT8 *LFSR )
     {
         doXOR = tempLSFR & 1;
         if ((tempLSFR & 0x80) != 0)
-            // Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1
+            /* Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1 */
             tempLSFR = (tempLSFR << 1) ^ 0x71;
         else
             tempLSFR <<= 1;
@@ -250,7 +250,7 @@ void KeccakP1600_Permute_Nrounds(void *argState, UINT8 rounds, UINT8 LFSRinitial
     round = rounds;
     do
     {
-        // Theta
+        /* Theta */
         for ( x = 0; x < 5; ++x )
         {
             BC[x] = state[x] ^ state[5 + x] ^ state[10 + x] ^ state[15 + x] ^ state[20 + x];
@@ -264,7 +264,7 @@ void KeccakP1600_Permute_Nrounds(void *argState, UINT8 rounds, UINT8 LFSRinitial
             }
         }
 
-        // Rho Pi
+        /* Rho Pi */
         temp = state[1];
         for ( x = 0; x < 24; ++x )
         {
@@ -273,7 +273,7 @@ void KeccakP1600_Permute_Nrounds(void *argState, UINT8 rounds, UINT8 LFSRinitial
             temp = BC[0];
         }
 
-        //    Chi
+        /*    Chi */
         for ( y = 0; y < 25; y += 5 )
         {
 #if defined(UNROLL_CHILOOP)
@@ -294,7 +294,7 @@ void KeccakP1600_Permute_Nrounds(void *argState, UINT8 rounds, UINT8 LFSRinitial
             }
         }
 
-        //    Iota
+        /*    Iota */
         state[0] ^= KeccakF1600_GetNextRoundConstant(&LFSRstate);
     }
     while( --round != 0 );

@@ -59,7 +59,7 @@ void KeccakP800_InitializeRoundConstants(void)
     for(i=0; i<maxNrRounds; i++) {
         KeccakRoundConstants[i] = 0;
         for(j=0; j<7; j++) {
-            bitPosition = (1<<j)-1; //2^j-1
+            bitPosition = (1<<j)-1; /* 2^j-1 */
             if (LFSR86540(&LFSRstate) && (bitPosition < (sizeof(tKeccakLane)*8)))
                 KeccakRoundConstants[i] ^= (tKeccakLane)(1<<bitPosition);
         }
@@ -86,7 +86,7 @@ static int LFSR86540(UINT8 *LFSR)
 {
     int result = ((*LFSR) & 0x01) != 0;
     if (((*LFSR) & 0x80) != 0)
-        // Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1
+        /* Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1 */
         (*LFSR) = ((*LFSR) << 1) ^ 0x71;
     else
         (*LFSR) <<= 1;

@@ -37,8 +37,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     UINT32 Estate[25]; \
 
 #ifdef UseBebigokimisa
-// --- Code for round (lane complementing pattern 'bebigokimisa')
-// --- 32-bit lanes mapped to 32-bit words
+/* --- Code for round (lane complementing pattern 'bebigokimisa') */
+/* --- 32-bit lanes mapped to 32-bit words */
 #define thetaRhoPiChiIota(i, A, E) \
     Ca = A##state[_b+_a]^A##state[_g+_a]^A##state[_k+_a]^A##state[_m+_a]^A##state[_s+_a]; \
     Ce = A##state[_b+_e]^A##state[_g+_e]^A##state[_k+_e]^A##state[_m+_e]^A##state[_s+_e]; \
@@ -107,10 +107,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
     E##state[_s+_u] =   Bu ^(  Ba &  Be ); \
 \
 
-#else // UseBebigokimisa
+#else /* UseBebigokimisa */
 
-// --- Code for round
-// --- 32-bit lanes mapped to 32-bit words
+/* --- Code for round */
+/* --- 32-bit lanes mapped to 32-bit words */
 #define thetaRhoPiChiIota(i, A, E) \
     Ca = A##state[_b+_a]^A##state[_g+_a]^A##state[_k+_a]^A##state[_m+_a]^A##state[_s+_a]; \
     Ce = A##state[_b+_e]^A##state[_g+_e]^A##state[_k+_e]^A##state[_m+_e]^A##state[_s+_e]; \
@@ -179,5 +179,5 @@ http://creativecommons.org/publicdomain/zero/1.0/
     E##state[_s+_u] =   Bu ^((~Ba)&  Be ); \
 \
 
-#endif // UseBebigokimisa
+#endif /* UseBebigokimisa */
 

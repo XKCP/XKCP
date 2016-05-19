@@ -145,7 +145,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
 
     memset(stateTest, 0xAA, sizeof(stateTest));
 
-    // Testing PlSnP_InitializeAll()
+    /* Testing PlSnP_InitializeAll() */
     {
         PlSnP_InitializeAll(stateTest);
         accumulateStateParallel(stateAccumulated, stateTest);
@@ -154,7 +154,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_InitializeAll()" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_InitializeAll()" );
 
-    // Testing PlSnP_AddByte()
+    /* Testing PlSnP_AddByte() */
     {
         unsigned i, offset, length, alignment, instanceIndex;
 
@@ -170,7 +170,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_AddByte()" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_AddByte()" );
 
-    // Testing PlSnP_AddBytes()
+    /* Testing PlSnP_AddBytes() */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8)+8];
         unsigned i, offset, length, alignment, instanceIndex;
@@ -191,7 +191,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_AddBytes()" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_AddBytes()" );
 
-    // Testing PlSnP_AddLanesAll()
+    /* Testing PlSnP_AddLanesAll() */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8+4*SnP_laneLengthInBytes)+8];
         unsigned i, laneCount, laneOffset, alignment;
@@ -209,7 +209,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_AddLanesAll()" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_AddLanesAll()" );
 
-    // Testing PlSnP_OverwriteBytes()
+    /* Testing PlSnP_OverwriteBytes() */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8)+8];
         unsigned i, offset, length, alignment, instanceIndex;
@@ -229,7 +229,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_OverwriteBytes()" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_OverwriteBytes()" );
 
-    // Testing PlSnP_OverwriteLanesAll()
+    /* Testing PlSnP_OverwriteLanesAll() */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8+4*SnP_laneLengthInBytes)+8];
         unsigned i, laneCount, laneOffset, alignment;
@@ -247,7 +247,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_OverwriteLanesAll()" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_OverwriteLanesAll()" );
 
-    // Testing PlSnP_OverwriteWithZeroes()
+    /* Testing PlSnP_OverwriteWithZeroes() */
     {
         unsigned byteCount, instanceIndex;
 
@@ -263,7 +263,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_OverwriteWithZeroes()" );
 
 #ifdef PlSnP_PermuteAll_12rounds
-    // Testing PlSnP_PermuteAll_12rounds()
+    /* Testing PlSnP_PermuteAll_12rounds() */
     {
         unsigned int i;
 
@@ -277,7 +277,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_12rounds()" );
 #endif
 
-    // Testing PlSnP_ExtractBytes()
+    /* Testing PlSnP_ExtractBytes() */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8)+8];
         unsigned i, offset, length, alignment, instanceIndex;
@@ -296,7 +296,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_ExtractBytes()" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractBytes()" );
 
-    // Testing PlSnP_ExtractLanesAll()
+    /* Testing PlSnP_ExtractLanesAll() */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8+4*SnP_laneLengthInBytes)+8];
         unsigned laneCount, laneOffset, alignment;
@@ -314,7 +314,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_ExtractLanesAll()" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractLanesAll()" );
 
-    // Testing PlSnP_ExtractAndAddBytes() (input = output)
+    /* Testing PlSnP_ExtractAndAddBytes() (input = output) */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8)+8];
         unsigned i, offset, length, alignment, instanceIndex;
@@ -333,7 +333,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_ExtractAndAddBytes() (input = output)" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddBytes() (input = output)" );
 
-    // Testing PlSnP_ExtractAndAddBytes() (input ≠ output)
+    /* Testing PlSnP_ExtractAndAddBytes() (input ≠ output) */
     {
         unsigned char buffer1[PlSnP_P*(SnP_width/8)+8];
         unsigned char buffer2[PlSnP_P*(SnP_width/8)+8];
@@ -354,7 +354,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_ExtractAndAddBytes() (input != output)" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddBytes() (input != output)" );
 
-    // Testing PlSnP_ExtractAndAddLanesAll() (input = output)
+    /* Testing PlSnP_ExtractAndAddLanesAll() (input = output) */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8+4*SnP_laneLengthInBytes)+8];
         unsigned laneCount, laneOffset, alignment;
@@ -372,7 +372,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_ExtractAndAddLanesAll() (input = output)" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddLanesAll() (input = output)" );
 
-    // Testing PlSnP_ExtractAndAddLanesAll() (input ≠ output)
+    /* Testing PlSnP_ExtractAndAddLanesAll() (input ≠ output) */
     {
         unsigned char buffer1[PlSnP_P*(SnP_width/8+4*SnP_laneLengthInBytes)+8];
         unsigned char buffer2[PlSnP_P*(SnP_width/8+4*SnP_laneLengthInBytes)+8];
@@ -393,7 +393,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateTest, "stateTest after testing PlSnP_ExtractAndAddLanesAll() (input != output)" );
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddLanesAll() (input != output)" );
 
-    // Testing PlSnP_FastLoop_Absorb()
+    /* Testing PlSnP_FastLoop_Absorb() */
     {
         unsigned char buffer[PlSnP_P*SnP_laneLengthInBytes*100+SnP_laneCount*SnP_laneLengthInBytes+8];
         unsigned i, blocks, extra, laneCount, alignment;
@@ -427,7 +427,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             PlSnP_PermuteAll(stateAccumulated);
         }
 #ifdef OUTPUT
-        // Outputting the result
+        /* Outputting the result */
         {
             FILE *f;
 

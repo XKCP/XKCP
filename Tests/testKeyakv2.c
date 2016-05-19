@@ -18,8 +18,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if !defined(EMBEDDED)
 #define OUTPUT
 #define VERBOSE
-//#define GENERATE
-//#define NONCE_200
+/* #define GENERATE */
+/* #define NONCE_200 */
 #endif
 
 #if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))

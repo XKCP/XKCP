@@ -91,7 +91,7 @@ void test( const char *file, const unsigned char *expected )
                     unsigned char ciphertext[400];
                     unsigned char plaintextPrime[400];
                     unsigned char tag1[16], tag2[16];
-                    //printf("ADlen %u, Mlen %u\n", ADlen, Mlen);
+                    /* printf("ADlen %u, Mlen %u\n", ADlen, Mlen); */
                     generateSimpleRawMaterial(associatedData, ADlen, 0x34+Mlen, 3);
                     generateSimpleRawMaterial(plaintext, Mlen, 0x45+ADlen, 4);
 
@@ -109,18 +109,18 @@ void test( const char *file, const unsigned char *expected )
                     {
                         unsigned int split = Mlen/3;
                         memcpy(ciphertext, plaintext, split);
-                        assert( Ketje_WrapPlaintext( &ketje1, ciphertext, ciphertext, split) == 0, "Ketje_WrapPlaintext 1a did not return zero" ); // in place
+                        assert( Ketje_WrapPlaintext( &ketje1, ciphertext, ciphertext, split) == 0, "Ketje_WrapPlaintext 1a did not return zero" ); /* in place */
                         assert( Ketje_WrapPlaintext( &ketje1, plaintext+split, ciphertext+split, Mlen-split) == 0, "Ketje_WrapPlaintext 1b did not return zero" );
                     }
 
                     {
                         unsigned int split = Mlen/3*2;
                         memcpy(plaintextPrime, ciphertext, split);
-                        assert( Ketje_UnwrapCiphertext(&ketje2, plaintextPrime, plaintextPrime, split) == 0, "Ketje_UnwrapCiphertext 2a did not return zero" ); // in place
+                        assert( Ketje_UnwrapCiphertext(&ketje2, plaintextPrime, plaintextPrime, split) == 0, "Ketje_UnwrapCiphertext 2a did not return zero" ); /* in place */
                         assert( Ketje_UnwrapCiphertext(&ketje2, ciphertext+split, plaintextPrime+split, Mlen-split) == 0, "Ketje_UnwrapCiphertext 2b did not return zero" );
                     }
 #ifdef OUTPUT
-                    if (memcmp(plaintext, plaintextPrime, Mlen) != 0) { // !!!
+                    if (memcmp(plaintext, plaintextPrime, Mlen) != 0) { /* !!! */
                         printf("keySizeInBits: %d\n", keySizeInBits);
                         printf("nonceSizeInBits: %d\n", nonceSizeInBits);
                         printf("ADlen: %d\n", ADlen);
@@ -133,7 +133,7 @@ void test( const char *file, const unsigned char *expected )
                     assert( Ketje_GetTag( &ketje1, tag1, 16) == 0, "Ketje_GetTag 1 did not return zero" );
                     assert( Ketje_GetTag( &ketje2, tag2, 16) == 0, "Ketje_GetTag 2 did not return zero" );
 #ifdef OUTPUT
-                    if (memcmp(tag1, tag2, 16) != 0) { // !!!
+                    if (memcmp(tag1, tag2, 16) != 0) { /* !!! */
                         printf("keySizeInBits: %d\n", keySizeInBits);
                         printf("nonceSizeInBits: %d\n", nonceSizeInBits);
                         printf("ADlen: %d\n", ADlen);

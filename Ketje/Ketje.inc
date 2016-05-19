@@ -52,7 +52,7 @@ int Ketje_Initialize(Ketje_Instance *instance, const unsigned char *key, unsigne
     SnP_StaticInitialize();
     SnP_Initialize(instance->state);
 
-    // Key pack
+    /* Key pack */
     smallData[0] = keySizeInBits / 8 + 2;
     Ket_StateOverwrite( instance->state, 0, smallData, 1 );
     Ket_StateOverwrite( instance->state, 1, key, keySizeInBits/8 );
@@ -65,7 +65,7 @@ int Ketje_Initialize(Ketje_Instance *instance, const unsigned char *key, unsigne
     }
     Ket_StateOverwrite( instance->state, 1+keySizeInBits/8, smallData, 1 );
 
-    // Nonce
+    /* Nonce */
     Ket_StateOverwrite( instance->state, 1+keySizeInBits/8+1, nonce, nonceSizeInBits / 8 );
     if ((nonceSizeInBits % 8) == 0)
         smallData[0] = 0x01;
@@ -131,10 +131,10 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
 
     if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize )
     {
-        // More than a block
+        /* More than a block */
         if (instance->dataRemainderSize != 0)
         {
-            // Process data remainder
+            /* Process data remainder */
             while ( instance->dataRemainderSize < Ketje_BlockSize )
             {
                 temp = *(plaintext++);
@@ -146,7 +146,7 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
             instance->dataRemainderSize = 0;
         }
 
-        //  Wrap multiple blocks except last.
+        /*  Wrap multiple blocks except last. */
         if ( dataSizeInBytes > Ketje_BlockSize )
         {
             size = ((dataSizeInBytes + (Ketje_BlockSize - 1)) & ~(Ketje_BlockSize - 1)) - Ketje_BlockSize;
@@ -157,7 +157,7 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
         }
     }
 
-    //  Add remaining data
+    /*  Add remaining data */
     while ( dataSizeInBytes-- != 0 )
     {
         temp = *(plaintext++);
@@ -185,10 +185,10 @@ int Ketje_UnwrapCiphertext(Ketje_Instance *instance, const unsigned char *cipher
 
     if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize )
     {
-        // More than a block
+        /* More than a block */
         if (instance->dataRemainderSize != 0)
         {
-            // Process data remainder
+            /* Process data remainder */
             while ( instance->dataRemainderSize < Ketje_BlockSize )
             {
                 temp = *(ciphertext++) ^ Ket_StateExtractByte( instance->state, instance->dataRemainderSize );
@@ -200,7 +200,7 @@ int Ketje_UnwrapCiphertext(Ketje_Instance *instance, const unsigned char *cipher
             instance->dataRemainderSize = 0;
         }
 
-        //  Unwrap multiple blocks except last.
+        /*  Unwrap multiple blocks except last. */
         if ( dataSizeInBytes > Ketje_BlockSize )
         {
             size = ((dataSizeInBytes + (Ketje_BlockSize - 1)) & ~(Ketje_BlockSize - 1)) - Ketje_BlockSize;
@@ -211,7 +211,7 @@ int Ketje_UnwrapCiphertext(Ketje_Instance *instance, const unsigned char *cipher
         }
     }
 
-    //  Add remaining data
+    /*  Add remaining data */
     while ( dataSizeInBytes-- != 0 )
     {
         temp = *(ciphertext++) ^ Ket_StateExtractByte( instance->state, instance->dataRemainderSize );
@@ -231,7 +231,7 @@ int Ketje_GetTag(Ketje_Instance *instance, unsigned char *tag, unsigned int tagS
         return 1;
 
     SnP_AddByte(instance->state, FRAMEBITS10, instance->dataRemainderSize);
-    SnP_AddByte(instance->state, 0x08, Ketje_BlockSize);    //padding
+    SnP_AddByte(instance->state, 0x08, Ketje_BlockSize);    /* padding */
     SnP_PermuteRounds(instance->state, Ket_StrideRounds );
     instance->dataRemainderSize = 0;
     tagSizePart = Ketje_BlockSize;

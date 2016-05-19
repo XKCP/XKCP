@@ -14,8 +14,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #if !defined(EMBEDDED)
-//#define OUTPUT
-//#define VERBOSE
+/* #define OUTPUT */
+/* #define VERBOSE */
 #endif
 
 #include <assert.h>

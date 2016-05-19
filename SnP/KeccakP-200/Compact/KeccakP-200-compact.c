@@ -17,8 +17,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdlib.h>
 #include "KeccakP-200-SnP.h"
 
-//#define DIVISION_INSTRUCTION    //comment if no division instruction or more compact when not using division
-#define UNROLL_CHILOOP        //comment if more compact using for loop
+/* #define DIVISION_INSTRUCTION    /* comment if no division instruction or more compact when not using division */ */
+#define UNROLL_CHILOOP        /* comment if more compact using for loop */
 
 typedef unsigned char UINT8;
 typedef unsigned int tSmallUInt; /*INFO It could be more optimized to use "unsigned char" on an 8-bit CPU    */
@@ -103,7 +103,7 @@ void KeccakP200_Permute_Nrounds(void *argState, unsigned int nr)
     rc = KeccakF200_RoundConstants + 18 - nr;
     do
     {
-        // Theta
+        /* Theta */
         for ( x = 0; x < 5; ++x )
         {
             BC[x] = state[x] ^ state[5 + x] ^ state[10 + x] ^ state[15 + x] ^ state[20 + x];
@@ -117,7 +117,7 @@ void KeccakP200_Permute_Nrounds(void *argState, unsigned int nr)
             }
         }
 
-        // Rho Pi
+        /* Rho Pi */
         temp = state[1];
         for ( x = 0; x < 24; ++x )
         {
@@ -126,7 +126,7 @@ void KeccakP200_Permute_Nrounds(void *argState, unsigned int nr)
             temp = BC[0];
         }
 
-        //    Chi
+        /*    Chi */
         for ( y = 0; y < 25; y += 5 )
         {
 #if defined(UNROLL_CHILOOP)
@@ -147,7 +147,7 @@ void KeccakP200_Permute_Nrounds(void *argState, unsigned int nr)
             }
         }
 
-        //    Iota
+        /*    Iota */
         temp = *(rc++);
         state[0] ^= temp;
     }

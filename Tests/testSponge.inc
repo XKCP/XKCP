@@ -37,7 +37,7 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
     unsigned int inputBitLength, offset, size;
     int result;
 
-    // Acumulated test vector
+    /* Acumulated test vector */
     SpongeInstance spongeChecksum;
     SpongeInitialize(&spongeChecksum, SnP_width, 0);
 
@@ -58,11 +58,11 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
             if (flavor == flavor_IUF_Pieces) {
                 for(offset = 0; offset < inputBitLength/8; offset += size) {
                     unsigned int p = (inputBitLength/8)%11;
-                    // vary sizes
-                    if (p < 1) size = 1; // byte per byte
-                    else if (p < 5) size = (rand() % 20); // small random
-                    else if (p < 9) size = (rand() % 200); // big random
-                    else size = ((rand() % (inputBitLength/8 - offset)) + 1); // converging random
+                    /* vary sizes */
+                    if (p < 1) size = 1; /* byte per byte */
+                    else if (p < 5) size = (rand() % 20); /* small random */
+                    else if (p < 9) size = (rand() % 200); /* big random */
+                    else size = ((rand() % (inputBitLength/8 - offset)) + 1); /* converging random */
 
                     if (size > (inputBitLength/8 - offset))
                         size = inputBitLength/8 - offset;
@@ -85,11 +85,11 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
                 memset(output, filler, sizeof(output));
                 for(offset = 0; offset < outputByteSize; offset += size) {
                     unsigned int p = (inputBitLength/8)%11;
-                    // vary sizes
-                    if (p < 1) size = 1; // byte per byte
-                    else if (p < 5) size = (rand() % 20); // small random
-                    else if (p < 9) size = (rand() % 200); // big random
-                    else size = ((rand() % (outputByteSize - offset)) + 1); // converging random
+                    /* vary sizes */
+                    if (p < 1) size = 1; /* byte per byte */
+                    else if (p < 5) size = (rand() % 20); /* small random */
+                    else if (p < 9) size = (rand() % 200); /* big random */
+                    else size = ((rand() % (outputByteSize - offset)) + 1); /* converging random */
 
                     if (size > (outputByteSize - offset))
                         size = outputByteSize - offset;
@@ -162,7 +162,7 @@ void writeTestSponge(FILE *f, unsigned int rate, unsigned int capacity)
     fprintf(f, "    selfTestSponge(%d, %d, flavor, \"", rate, capacity);
     for(offset=0; offset<checksumByteSize; offset++)
         fprintf(f, "\\x%02x", checksum[offset]);
-    fprintf(f, "\"); // Keccak[r=%d, c=%d]\n", rate, capacity);
+    fprintf(f, "\"); /* Keccak[r=%d, c=%d] */\n", rate, capacity);
 }
 #endif
 

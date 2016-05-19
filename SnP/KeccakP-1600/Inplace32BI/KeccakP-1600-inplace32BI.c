@@ -20,12 +20,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 typedef unsigned char UINT8;
 typedef unsigned int UINT32;
-// WARNING: on 8-bit and 16-bit platforms, this should be replaced by:
-//typedef unsigned long       UINT32;
+/* WARNING: on 8-bit and 16-bit platforms, this should be replaced by: */
+/* typedef unsigned long       UINT32; */
 
 #define ROL32(a, offset) ((((UINT32)a) << (offset)) ^ (((UINT32)a) >> (32-(offset))))
 
-// Credit to Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002
+/* Credit to Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002 */
 #define prepareToBitInterleaving(low, high, temp, temp0, temp1) \
         temp0 = (low); \
         temp = (temp0 ^ (temp0 >>  1)) & 0x22222222UL;  temp0 = temp0 ^ temp ^ (temp <<  1); \
@@ -53,7 +53,7 @@ typedef unsigned int UINT32;
         even = (temp0 & 0x0000FFFF) | (temp1 << 16); \
         odd = (temp0 >> 16) | (temp1 & 0xFFFF0000);
 
-// Credit to Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002
+/* Credit to Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002 */
 #define prepareFromBitInterleaving(even, odd, temp, temp0, temp1) \
         temp0 = (even); \
         temp1 = (odd); \
@@ -626,8 +626,8 @@ void KeccakP1600_Permute_Nrounds(void *state, unsigned int nRounds)
 
         do
         {
-            // --- Code for 4 rounds
-            // --- using factor 2 interleaving, 64-bit lanes mapped to 32-bit words
+            /* --- Code for 4 rounds */
+            /* --- using factor 2 interleaving, 64-bit lanes mapped to 32-bit words */
             KeccakAtoD_round0();
 
             Ba = (Aba0^Da0);

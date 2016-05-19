@@ -468,8 +468,8 @@ void KeccakP1600times2_ExtractAndAddLanesAll(const void *states, const unsigned 
     Co = XOR128(Abo, XOR128(Ago, XOR128(Ako, XOR128(Amo, Aso)))); \
     Cu = XOR128(Abu, XOR128(Agu, XOR128(Aku, XOR128(Amu, Asu)))); \
 
-// --- Theta Rho Pi Chi Iota Prepare-theta
-// --- 64-bit lanes mapped to 64-bit words
+/* --- Theta Rho Pi Chi Iota Prepare-theta */
+/* --- 64-bit lanes mapped to 64-bit words */
 #define thetaRhoPiChiIotaPrepareTheta(i, A, E) \
     Da = XOR128(Cu, ROL64in128(Ce, 1)); \
     De = XOR128(Ca, ROL64in128(Ci, 1)); \
@@ -584,8 +584,8 @@ void KeccakP1600times2_ExtractAndAddLanesAll(const void *states, const unsigned 
     XOReq128(Cu, E##su); \
 \
 
-// --- Theta Rho Pi Chi Iota
-// --- 64-bit lanes mapped to 64-bit words
+/* --- Theta Rho Pi Chi Iota */
+/* --- 64-bit lanes mapped to 64-bit words */
 #define thetaRhoPiChiIota(i, A, E) \
     Da = XOR128(Cu, ROL64in128(Ce, 1)); \
     De = XOR128(Ca, ROL64in128(Ci, 1)); \

@@ -23,10 +23,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define KeccakP1600_stateSizeInBytes    200
 #define KeccakP1600_stateAlignment      64
 
-//void KeccakP1600_StaticInitialize( void );
+/* void KeccakP1600_StaticInitialize( void ); */
 #define KeccakP1600_StaticInitialize()
 void KeccakP1600_Initialize(void *state);
-//void KeccakP1600_AddByte(void *state, unsigned char data, unsigned int offset);
+/* void KeccakP1600_AddByte(void *state, unsigned char data, unsigned int offset); */
 #define KeccakP1600_AddByte(argS, argData, argOffset)   ((unsigned char*)argS)[argOffset] ^= (argData)
 void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
 void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);

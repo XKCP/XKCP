@@ -28,7 +28,7 @@ This code works on x86 family CPUs (32-big and 64-bit), under MSVC, gcc, and Bor
     (defined(__BORLANDC__) || defined(_MSC_VER) || defined(__MINGW_H) || defined(__GNUC__))
 #define HI_RES_CLK_OK         1          /* it's ok to use RDTSC opcode */
 
-#if defined(_MSC_VER) // && defined(_M_X64)
+#if defined(_MSC_VER) /* && defined(_M_X64) */
 #include <intrin.h>
 #pragma intrinsic(__rdtsc)         /* use MSVC rdtsc call where defined */
 #endif
@@ -47,7 +47,7 @@ static uint_32t HiResTime(void)           /* return the current value of time st
     _asm { mov x[0],eax };
 #elif defined(_MSC_VER)
 #define COMPILER_ID "MSC"
-#if defined(_MSC_VER) // && defined(_M_X64)
+#if defined(_MSC_VER) /* && defined(_M_X64) */
     x[0] = (uint_32t) __rdtsc();
 #else
     _asm { _emit 0fh }; _asm { _emit 031h };

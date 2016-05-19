@@ -20,10 +20,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "KeccakP-800-SnP.h"
 
 typedef unsigned char UINT8;
-typedef unsigned int UINT32;    // Uncomment if 32-bit and 64-bit oriented compiler
-//typedef unsigned long UINT32; // Uncomment if  8-bit and 16-bit oriented compiler
+typedef unsigned int UINT32;    /* Uncomment if 32-bit and 64-bit oriented compiler */
+/* typedef unsigned long UINT32; */ /* Uncomment if  8-bit and 16-bit oriented compiler */
 
-// Change READ32/WRITE macros if your target does not support unaligned 32-bit accesses.
+/* Change READ32/WRITE macros if your target does not support unaligned 32-bit accesses. */
 #if defined (__arm__) && !defined(__GNUC__)
     #define ROL32(a, offset) __ror(a, 32-(offset))
     #define READ32_UNALIGNED(argAddress)            (*((const __packed UINT32*)(argAddress)))

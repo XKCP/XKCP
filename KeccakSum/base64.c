@@ -24,10 +24,10 @@ int base64encode(const void* data_buf, size_t dataLength, char* result, size_t r
    for (x = 0; x < dataLength; x += 3)
    {
       /* these three 8-bit (ASCII) characters become one 24-bit number */
-      n = ((uint32_t)data[x]) << 16; //parenthesis needed, compiler depending on flags can do the shifting before conversion to uint32_t, resulting to 0
+      n = ((uint32_t)data[x]) << 16; /* parenthesis needed, compiler depending on flags can do the shifting before conversion to uint32_t, resulting to 0 */
 
       if((x+1) < dataLength)
-         n += ((uint32_t)data[x+1]) << 8;//parenthesis needed, compiler depending on flags can do the shifting before conversion to uint32_t, resulting to 0
+         n += ((uint32_t)data[x+1]) << 8; /* parenthesis needed, compiler depending on flags can do the shifting before conversion to uint32_t, resulting to 0 */
 
       if((x+2) < dataLength)
          n += data[x+2];

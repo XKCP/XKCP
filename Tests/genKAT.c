@@ -69,12 +69,12 @@ STATUS_CODES
 genKAT_main(void)
 {
 #ifndef KeccakP1600_excluded
-    // The following instances are from the FIPS 202 standard.
-    // http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
-    //
-    // Note: "SakuraSequential" translates into "input followed by 11",
-    // see http://keccak.noekeon.org/Sakura.pdf for more details.
-    //
+    /* The following instances are from the FIPS 202 standard. */
+    /* http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf */
+    /*  */
+    /* Note: "SakuraSequential" translates into "input followed by 11", */
+    /* see http://keccak.noekeon.org/Sakura.pdf for more details. */
+    /*  */
     genShortMsgHash(1344, 256, 0x1F, 0, 4096,
         "ShortMsgKAT_SHAKE128.txt",
         "Keccak(SakuraSequential|11)[r=1344, c=256], or SHAKE128 as in FIPS 202 standard");
@@ -125,7 +125,7 @@ void convertShortMsgToPureLSB(void)
             printf("ERROR: unable to read 'Msg' from <ShortMsgKAT.txt>\n");
             return;
         }
-        // Align the last byte on the least significant bit
+        /* Align the last byte on the least significant bit */
         if ((msglen % 8) != 0)
             Msg[msgbytelen-1] = Msg[msgbytelen-1] >> (8-(msglen%8));
 
@@ -199,9 +199,9 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
     return KAT_SUCCESS;
 }
 
-//
-// ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
-//
+/*  */
+/* ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.) */
+/*  */
 int
 FindMarker(FILE *infile, const char *marker)
 {
@@ -228,13 +228,13 @@ FindMarker(FILE *infile, const char *marker)
         line[len] = '\0';
     }
 
-    // shouldn't get here
+    /* shouldn't get here */
     return 0;
 }
 
-//
-// ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
-//
+/*  */
+/* ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.) */
+/*  */
 int
 ReadHex(FILE *infile, BitSequence *A, int Length, char *str)
 {

@@ -23,8 +23,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 typedef unsigned char UINT8;
 typedef unsigned int UINT32;
-// WARNING: on 8-bit and 16-bit platforms, this should be replaced by:
-//typedef unsigned long       UINT32;
+/* WARNING: on 8-bit and 16-bit platforms, this should be replaced by: */
+/* typedef unsigned long       UINT32; */
 
 #define maxNrRounds 24
 #define nrLanes 25
@@ -102,7 +102,7 @@ void KeccakP1600_InitializeRoundConstants(void)
     for(i=0; i<maxNrRounds; i++) {
         low = high = 0;
         for(j=0; j<7; j++) {
-            bitPosition = (1<<j)-1; //2^j-1
+            bitPosition = (1<<j)-1; /* 2^j-1 */
             if (LFSR86540(&LFSRstate)) {
                 if (bitPosition < 32)
                     low ^= (UINT32)1 << bitPosition;
@@ -134,7 +134,7 @@ static int LFSR86540(UINT8 *LFSR)
 {
     int result = ((*LFSR) & 0x01) != 0;
     if (((*LFSR) & 0x80) != 0)
-        // Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1
+        /* Primitive polynomial over GF(2): x^8+x^6+x^5+x^4+1 */
         (*LFSR) = ((*LFSR) << 1) ^ 0x71;
     else
         (*LFSR) <<= 1;

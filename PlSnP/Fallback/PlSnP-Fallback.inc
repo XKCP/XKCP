@@ -13,10 +13,10 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-// expect PlSnP_baseParallelism, PlSnP_targetParallelism
-// expect SnP_stateSizeInBytes, SnP_stateAlignment
-// expect prefix
-// expect SnP_*
+/* expect PlSnP_baseParallelism, PlSnP_targetParallelism */
+/* expect SnP_stateSizeInBytes, SnP_stateAlignment */
+/* expect prefix */
+/* expect SnP_* */
 
 #define JOIN0(a, b)                     a ## b
 #define JOIN(a, b)                      JOIN0(a, b)

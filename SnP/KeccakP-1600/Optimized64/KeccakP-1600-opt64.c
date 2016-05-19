@@ -119,7 +119,7 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     unsigned int i = 0;
 #ifdef NO_MISALIGNED_ACCESSES
-    // If either pointer is misaligned, fall back to byte-wise xor.
+    /* If either pointer is misaligned, fall back to byte-wise xor. */
     if (((((uintptr_t)state) & 7) != 0) || ((((uintptr_t)data) & 7) != 0)) {
       for (i = 0; i < laneCount * 8; i++) {
         ((unsigned char*)state)[i] ^= data[i];
@@ -128,7 +128,7 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
     else
 #endif
     {
-      // Otherwise...
+      /* Otherwise... */
       for( ; (i+8)<=laneCount; i+=8) {
           ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
           ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
