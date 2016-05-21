@@ -166,8 +166,8 @@ AR = ar
 
     <xsl:choose>
         <xsl:when test="substring(@name, string-length(@name)-1, 2)='.a'">
-            <xsl:text>&#9;mkdir -p $(dir $@)/headers
-&#9;cp -f $(HEADERS) $(dir $@)/headers/
+            <xsl:text>&#9;mkdir -p $@.headers
+&#9;cp -f $(HEADERS) $@.headers/
 &#9;$(AR) rcsv $@ $(OBJECTS)
 </xsl:text>
         </xsl:when>
