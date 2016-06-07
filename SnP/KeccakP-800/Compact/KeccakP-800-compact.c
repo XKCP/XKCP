@@ -24,7 +24,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 
 #define USE_MEMSET
-/* #define DIVISION_INSTRUCTION    /* comment if no division instruction or more compact when not using division */ */
+/* #define DIVISION_INSTRUCTION    /* comment if no division instruction or more compact when not using division */
 #define UNROLL_CHILOOP        /* comment more compact using for loop */
 
 typedef unsigned char UINT8;

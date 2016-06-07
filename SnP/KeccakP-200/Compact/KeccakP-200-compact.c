@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdlib.h>
 #include "KeccakP-200-SnP.h"
 
-/* #define DIVISION_INSTRUCTION    /* comment if no division instruction or more compact when not using division */ */
+/* #define DIVISION_INSTRUCTION    /* comment if no division instruction or more compact when not using division */
 #define UNROLL_CHILOOP        /* comment if more compact using for loop */
 
 typedef unsigned char UINT8;
