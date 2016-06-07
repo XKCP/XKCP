@@ -563,6 +563,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Generically optimized 64-bit implementations, featuring lane complementing -->
     <fragment name="generic64lc" inherits="reference200 reference400 optimized800lcufull optimized1600lcufull serial-fallbacks ket_reference"/>
 
+    <!-- Assembler optimized 64-bit implementations -->
+    <fragment name="asmX86-64" inherits="reference200 reference400 reference800 optimized1600AsmX86-64 serial-fallbacks ket_reference"/>
+    <!-- Assembler optimized 64-bit implementations -->
+    <fragment name="asmX86-64shld" inherits="reference200 reference400 reference800 optimized1600AsmX86-64shld serial-fallbacks ket_reference"/>
+
     <!-- Implementations selected for the Nehalem microarchitecture -->
     <fragment name="Nehalem" inherits="reference200 reference400 optimized800lcufull optimized1600Nehalem 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 1600times4on2 1600times8on2 ket_optimizedLE"/>
     <!-- Implementations selected for the Sandy Bridge microarchitecture -->
@@ -585,7 +590,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Target names are of the form x/y where x is taken from the first set and y from the second set. -->
     <group all="Keccak">
         <product delimiter="/">
-            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc Nehalem SandyBridge Bulldozer Haswell ARMv6M ARMv7M ARMv7A AVR8"/>
+            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell ARMv6M ARMv7M ARMv7A AVR8"/>
             <factor set="KeccakTests KeccakSum libkeccak.a"/>
         </product>
     </group>

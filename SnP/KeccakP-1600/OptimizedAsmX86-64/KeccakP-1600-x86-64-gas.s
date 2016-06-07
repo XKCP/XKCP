@@ -18,7 +18,7 @@
     .text
 
 # conditional assembly settings
-.equ UseSIMD,    0    #UseSIMD == 1 not working yet
+.equ UseSIMD,    0
 .equ InlinePerm, 1
 
 # offsets in state
@@ -500,7 +500,8 @@
     xorq    rT1e, \offset+8(\output)
     .else
     movdqu  \offset(\input), %xmm0
-    pxor    \offset(\output), %xmm0
+    movdqu  \offset(\output), %xmm1
+    pxor    %xmm1, %xmm0
     movdqu  %xmm0, \offset(\output)
     .endif
     .endm
@@ -517,11 +518,13 @@
     xorq    rT1o, \offset+24(\output)
     .else
     movdqu  \offset(\input), %xmm0
-    pxor    \offset(\output), %xmm0
-    movdqu  \offset+16(\input), %xmm1
-    pxor    \offset+16(\output), %xmm1
+    movdqu  \offset(\output), %xmm1
+    pxor    %xmm1, %xmm0
     movdqu  %xmm0, \offset(\output)
-    movdqu  %xmm1, \offset+16(\output)
+    movdqu  \offset+16(\input), %xmm0
+    movdqu  \offset+16(\output), %xmm1
+    pxor    %xmm1, %xmm0
+    movdqu  %xmm0, \offset+16(\output)
     .endif
     .endm
 
@@ -531,17 +534,21 @@
     mXor256 \input, \output, \offset+32
     .else
     movdqu  \offset(\input), %xmm0
-    movdqu  \offset+16(\input), %xmm1
-    pxor    \offset(\output), %xmm0
-    movdqu  \offset+32(\input), %xmm2
-    pxor    \offset+16(\output), %xmm1
+    movdqu  \offset(\output), %xmm1
+    pxor    %xmm1, %xmm0
     movdqu  %xmm0, \offset(\output)
-    movdqu  \offset+48(\input), %xmm3
-    pxor    \offset+32(\output), %xmm2
-    movdqu  %xmm1, \offset+16(\output)
-    pxor    \offset+48(\output), %xmm3
-    movdqu  %xmm2, \offset+32(\output)
-    movdqu  %xmm3, \offset+48(\output)
+    movdqu  \offset+16(\input), %xmm0
+    movdqu  \offset+16(\output), %xmm1
+    pxor    %xmm1, %xmm0
+    movdqu  %xmm0, \offset+16(\output)
+    movdqu  \offset+32(\input), %xmm0
+    movdqu  \offset+32(\output), %xmm1
+    pxor    %xmm1, %xmm0
+    movdqu  %xmm0, \offset+32(\output)
+    movdqu  \offset+48(\input), %xmm0
+    movdqu  \offset+48(\output), %xmm1
+    pxor    %xmm1, %xmm0
+    movdqu  %xmm0, \offset+48(\output)
     .endif
     .endm
 

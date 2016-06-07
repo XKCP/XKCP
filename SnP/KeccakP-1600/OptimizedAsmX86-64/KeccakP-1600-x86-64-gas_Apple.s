@@ -16,11 +16,11 @@
 // WARNING: State must be 256 bit (32 bytes) aligned, better is 64-byte aligned (cache line)
 
 // Modification Stephane Leon 8.4.2016 Change syntax for apple syntax (old gas syntax)
+// Modification Stephane Leon 12.5.2016 Use the right register for pxor in macro for simd
 
     .text
 
 // conditional assembly settings
-#define UseSIMD    0    // UseSIMD == 1 not working yet
 #define InlinePerm 1
 
 // offsets in state
@@ -495,56 +495,40 @@
     .endm
 
 .macro      mXor128 input, output, offset
-    .if     UseSIMD == 0
-    movq    \offset(\input), rT1a
-    movq    \offset+8(\input), rT1e
-    xorq    rT1a, \offset(\output)
-    xorq    rT1e, \offset+8(\output)
-    .else
     movdqu  \offset(\input), %xmm0
-    pxor    \offset(\output), %xmm0
+    movdqu  \offset(\output), %xmm1
+    pxor    %xmm1, %xmm0
     movdqu  %xmm0, \offset(\output)
-    .endif
     .endm
 
 .macro      mXor256 input, output, offset
-    .if     UseSIMD == 0
-    movq    \offset(\input), rT1a
-    movq    \offset+8(\input), rT1e
-    movq    \offset+16(\input), rT1i
-    movq    \offset+24(\input), rT1o
-    xorq    rT1a, \offset(\output)
-    xorq    rT1e, \offset+8(\output)
-    xorq    rT1i, \offset+16(\output)
-    xorq    rT1o, \offset+24(\output)
-    .else
     movdqu  \offset(\input), %xmm0
-    pxor    \offset(\output), %xmm0
-    movdqu  \offset+16(\input), %xmm1
-    pxor    \offset+16(\output), %xmm1
+    movdqu  \offset(\output), %xmm1
+    pxor    %xmm1, %xmm0
     movdqu  %xmm0, \offset(\output)
-    movdqu  %xmm1, \offset+16(\output)
-    .endif
+    movdqu  \offset+16(\input), %xmm0
+    movdqu  \offset+16(\output), %xmm1
+    pxor    %xmm1, %xmm0
+    movdqu  %xmm0, \offset+16(\output)
     .endm
 
 .macro      mXor512 input, output, offset
-    .if     UseSIMD == 0
-    mXor256 \input, \output, \offset
-    mXor256 \input, \output, \offset+32
-    .else
     movdqu  \offset(\input), %xmm0
-    movdqu  \offset+16(\input), %xmm1
-    pxor    \offset(\output), %xmm0
-    movdqu  \offset+32(\input), %xmm2
-    pxor    \offset+16(\output), %xmm1
+    movdqu  \offset(\output), %xmm1
+    pxor    %xmm1, %xmm0
     movdqu  %xmm0, \offset(\output)
-    movdqu  \offset+48(\input), %xmm3
-    pxor    \offset+32(\output), %xmm2
-    movdqu  %xmm1, \offset+16(\output)
-    pxor    \offset+48(\output), %xmm3
-    movdqu  %xmm2, \offset+32(\output)
-    movdqu  %xmm3, \offset+48(\output)
-    .endif
+    movdqu  \offset+16(\input), %xmm0
+    movdqu  \offset+16(\output), %xmm1
+    pxor    %xmm1, %xmm0
+    movdqu  %xmm0, \offset+16(\output)
+    movdqu  \offset+32(\input), %xmm0
+    movdqu  \offset+32(\output), %xmm1
+    pxor    %xmm1, %xmm0
+    movdqu  %xmm0, \offset+32(\output)
+    movdqu  \offset+48(\input), %xmm0
+    movdqu  \offset+48(\output), %xmm1
+    pxor    %xmm1, %xmm0
+    movdqu  %xmm0, \offset+48(\output)
     .endm
 
 //----------------------------------------------------------------------------
@@ -566,33 +550,6 @@ _KeccakP1600_Initialize:
     xorq    %rax, %rax
     xorq    %rcx, %rcx
     notq    %rcx
-    .if     UseSIMD == 0
-    movq    %rax, _ba(arg1)
-    movq    %rcx, _be(arg1)
-    movq    %rcx, _bi(arg1)
-    movq    %rax, _bo(arg1)
-    movq    %rax, _bu(arg1)
-    movq    %rax, _ga(arg1)
-    movq    %rax, _ge(arg1)
-    movq    %rax, _gi(arg1)
-    movq    %rcx, _go(arg1)
-    movq    %rax, _gu(arg1)
-    movq    %rax, _ka(arg1)
-    movq    %rax, _ke(arg1)
-    movq    %rcx, _ki(arg1)
-    movq    %rax, _ko(arg1)
-    movq    %rax, _ku(arg1)
-    movq    %rax, _ma(arg1)
-    movq    %rax, _me(arg1)
-    movq    %rcx, _mi(arg1)
-    movq    %rax, _mo(arg1)
-    movq    %rax, _mu(arg1)
-    movq    %rcx, _sa(arg1)
-    movq    %rax, _se(arg1)
-    movq    %rax, _si(arg1)
-    movq    %rax, _so(arg1)
-    movq    %rax, _su(arg1)
-    .else
     pxor    %xmm0, %xmm0
     movq    %rax,  _ba(arg1)
     movq    %rcx,  _be(arg1)
@@ -613,7 +570,6 @@ _KeccakP1600_Initialize:
     movq    %rax,  _se(arg1)
     movdqu  %xmm0, _si(arg1)
     movq    %rax,  _su(arg1)
-    .endif
     retq
 
 //----------------------------------------------------------------------------
