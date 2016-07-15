@@ -172,7 +172,7 @@ AR = ar
 </xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>&#9;$(CC) $(CFLAGS) -o $@ $(OBJECTS)
+            <xsl:text>&#9;$(CC) -o $@ $(OBJECTS) $(CFLAGS)
 </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
