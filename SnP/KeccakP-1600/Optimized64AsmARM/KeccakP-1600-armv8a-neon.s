@@ -261,7 +261,7 @@ KeccakP1600_Initialize:
     st4     { v0.2d, v1.2d, v2.2d, v3.2d }, [x0], #64  // Clear 8lanes=64 bytes at a time
     st4     { v0.2d, v1.2d, v2.2d, v3.2d }, [x0], #64
     st4     { v0.2d, v1.2d, v2.2d, v3.2d }, [x0], #64
-    st1     { v0.2d }, [x0]
+    st1     { v0.d }[0], [x0], #8
     ret
 
 
