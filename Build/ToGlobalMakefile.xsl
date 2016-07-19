@@ -32,6 +32,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <xsl:value-of select="@name"/>
         <xsl:text>
 </xsl:text>
+        <xsl:value-of select="$all"/>
+        <xsl:text>.packs: </xsl:text>
+        <xsl:value-of select="$pack"/>
+        <xsl:text>
+</xsl:text>
     </xsl:if>
 
     <xsl:text>.PHONY: </xsl:text>
@@ -91,12 +96,19 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:if test="@all!=''">
         <xsl:text>.PHONY: </xsl:text>
         <xsl:value-of select="@all"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@all"/><xsl:text>.packs</xsl:text>
         <xsl:text>
 </xsl:text>
         <xsl:if test="../@all!=''">
             <xsl:value-of select="../@all"/>
             <xsl:text>: </xsl:text>
             <xsl:value-of select="@all"/>
+            <xsl:text>
+</xsl:text>
+            <xsl:value-of select="../@all"/><xsl:text>.packs</xsl:text>
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="@all"/><xsl:text>.packs</xsl:text>
             <xsl:text>
 </xsl:text>
         </xsl:if>
@@ -109,7 +121,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:if test="@all!=''">
         <xsl:text>&#9;@echo "+ </xsl:text>
         <xsl:value-of select="@all"/>
-        <xsl:text>"
+        <xsl:text>[.packs]"
 </xsl:text>
     </xsl:if>
     <xsl:apply-templates select="target|group" mode="list"/>
@@ -130,7 +142,7 @@ _list:
     <xsl:if test="@all!=''">
         <xsl:text>&#9;@echo "+ </xsl:text>
         <xsl:value-of select="@all"/>
-        <xsl:text>"
+        <xsl:text>[.packs]"
 </xsl:text>
     </xsl:if>
     <xsl:apply-templates select="target|group" mode="list"/>
@@ -140,6 +152,8 @@ _list:
     <xsl:if test="@all!=''">
         <xsl:text>.PHONY: </xsl:text>
         <xsl:value-of select="@all"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@all"/><xsl:text>.packs</xsl:text>
         <xsl:text>
 </xsl:text>
     </xsl:if>
