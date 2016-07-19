@@ -514,12 +514,12 @@ void testKeccakFPHPerformanceOne(unsigned int securityStrength, unsigned int blo
             timePlus4Blocks = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+4*blockByteLen);
             timePlus8Blocks = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+8*blockByteLen);
         }
-        printf("%8d bytes: %9d cycles, %5.2f cycles/byte\n", i, time, time*1.0/i);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
         if (displaySlope) {
-            printf("     +1 block:  %9d cycles, %5.2f cycles/byte (slope)\n", timePlus1Block, (timePlus1Block-(double)(time))*1.0/blockByteLen/1.0);
-            printf("     +2 blocks: %9d cycles, %5.2f cycles/byte (slope)\n", timePlus2Blocks, (timePlus2Blocks-(double)(time))*1.0/blockByteLen/2.0);
-            printf("     +4 blocks: %9d cycles, %5.2f cycles/byte (slope)\n", timePlus4Blocks, (timePlus4Blocks-(double)(time))*1.0/blockByteLen/4.0);
-            printf("     +8 blocks: %9d cycles, %5.2f cycles/byte (slope)\n", timePlus8Blocks, (timePlus8Blocks-(double)(time))*1.0/blockByteLen/8.0);
+            printf("     +1 block:  %9d cycles, %6.3f cycles/byte (slope)\n", timePlus1Block, (timePlus1Block-(double)(time))*1.0/blockByteLen/1.0);
+            printf("     +2 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus2Blocks, (timePlus2Blocks-(double)(time))*1.0/blockByteLen/2.0);
+            printf("     +4 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus4Blocks, (timePlus4Blocks-(double)(time))*1.0/blockByteLen/4.0);
+            printf("     +8 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus8Blocks, (timePlus8Blocks-(double)(time))*1.0/blockByteLen/8.0);
         }
         displaySlope = 0;
     }

@@ -483,6 +483,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Modes/KeccakPRG.c</c>
         <h>Modes/KeccakPRG.inc</h>
         <h>Modes/KeccakPRG.h</h>
+        <h>Modes/Phases.h</h>
     </fragment>
 
     <!-- *** Utilities *** -->

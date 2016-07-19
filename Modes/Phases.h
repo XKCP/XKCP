@@ -13,9 +13,14 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _TestKeccakFPH_h_
-#define _TestKeccakFPH_h_
+#ifndef _Phases_h_
+#define _Phases_h_
 
-void testKeccakFPH(void);
+typedef enum {
+    NOT_INITIALIZED,
+    ABSORBING,
+    FINAL,
+    SQUEEZING
+} KCP_Phases;
 
 #endif
