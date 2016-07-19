@@ -92,7 +92,6 @@ HashReturn Keccak_HashUpdate(Keccak_HashInstance *hashInstance, const BitSequenc
   *     output bits is equal to @a hashbitlen.
   * If @a hashbitlen was 0 in the call to Keccak_HashInitialize(), the output bits
   *     must be extracted using the Keccak_HashSqueeze() function.
-  * @param  state       Pointer to the state of the sponge function initialized by Init().
   * @param  hashval     Pointer to the buffer where to store the output data.
   * @return SUCCESS if successful, FAIL otherwise.
   */
