@@ -281,6 +281,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-SnP.h</h>
     </fragment>
 
+    <fragment name="optimized1600AVX512" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedAVX512/KeccakP-1600-AVX512.c</c>
+        <h>SnP/KeccakP-1600/OptimizedAVX512/AVX512u12/KeccakP-1600-AVX512-config.h</h>
+        <h>SnP/KeccakP-1600/OptimizedAVX512/KeccakP-1600-SnP.h</h>
+    </fragment>
+
     <fragment name="optimized1600XOP" inherits="width1600 optimized">
         <c>SnP/KeccakP-1600/OptimizedXOP/KeccakP-1600-XOP.c</c>
         <h>SnP/KeccakP-1600/OptimizedXOP/KeccakP-1600-SnP.h</h>
@@ -411,6 +417,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>PlSnP/KeccakP-1600-times4/SIMD256/AVX2u6/SIMD256-config.h</h>
     </fragment>
 
+    <fragment name="SIMD256-AVX2u12" inherits="SIMD256">
+        <h>PlSnP/KeccakP-1600-times4/SIMD256/AVX2u12/SIMD256-config.h</h>
+    </fragment>
+
     <fragment name="SIMD256-AVX2ufull" inherits="SIMD256">
         <h>PlSnP/KeccakP-1600-times4/SIMD256/AVX2ufull/SIMD256-config.h</h>
     </fragment>
@@ -433,6 +443,23 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>PlSnP/KeccakP-1600-times8/FallbackOn4/KeccakP-1600-times8-on4.c</c>
         <h>PlSnP/KeccakP-1600-times8/FallbackOn4/KeccakP-1600-times8-SnP.h</h>
         <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="SIMD512">
+        <c>PlSnP/KeccakP-1600-times8/SIMD512/KeccakP-1600-times8-SIMD512.c</c>
+        <h>PlSnP/KeccakP-1600-times8/SIMD512/KeccakP-1600-times8-SnP.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-AVX512u4" inherits="SIMD512">
+        <h>PlSnP/KeccakP-1600-times8/SIMD512/AVX512u4/SIMD512-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-AVX512u12" inherits="SIMD512">
+        <h>PlSnP/KeccakP-1600-times8/SIMD512/AVX512u12/SIMD512-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-AVX512ufull" inherits="SIMD512">
+        <h>PlSnP/KeccakP-1600-times8/SIMD512/AVX512ufull/SIMD512-config.h</h>
     </fragment>
 
     <!-- "Ket" -->
@@ -639,7 +666,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <group all="supercop">
         <product delimiter="/">
             <factor set="crypto_aead/riverkeyakv2 RiverKeyakSelfTest crypto_aead/lakekeyakv2 LakeKeyakSelfTest crypto_aead/seakeyakv2 SeaKeyakSelfTest crypto_aead/oceankeyakv2 OceanKeyakSelfTest crypto_aead/lunarkeyakv2 LunarKeyakSelfTest"/>
-            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
+            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell KnightsLanding ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
         </product>
     </group>
 
@@ -690,7 +717,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Implementations selected for the Bulldozer microarchitecture -->
     <fragment name="Bulldozer" inherits="reference200 reference400 optimized800lcufull optimized1600XOPufull 800times2on1 800times4on1 800times8on1 SIMD128-XOPufull 1600times4on2 1600times8on2 ket_optimizedLE"/>
     <!-- Implementations selected for the Haswell microarchitecture -->
-    <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 SIMD256-AVX2u6 1600times8on4 ket_optimizedLE"/>
+    <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 ket_optimizedLE"/>
+    <!-- Implementations selected for the Knights Landing microarchitecture -->
+    <fragment name="KnightsLanding" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 SIMD256-AVX2u12 SIMD512-AVX512u12 ket_optimizedLE"/>
 
     <!-- Implementations selected for ARMv6M -->
     <fragment name="ARMv6M" inherits="optimized200ARMv6M optimized400ARMv6M optimized800ARMv6Mu2 optimized1600ARMv6Mu2 serial-fallbacks ket_optimizedLE"/>
@@ -707,7 +736,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Target names are of the form x/y where x is taken from the first set and y from the second set. -->
     <group all="Keccak">
         <product delimiter="/">
-            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
+            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell KnightsLanding ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
             <factor set="KeccakTests KeccakSum libkeccak.a"/>
         </product>
     </group>
