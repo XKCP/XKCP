@@ -636,7 +636,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Target names are of the form x/y where x is taken from the first set and y from the second set. -->
     <product delimiter="/">
         <factor set="crypto_aead/riverkeyakv2 RiverKeyakSelfTest crypto_aead/lakekeyakv2 LakeKeyakSelfTest crypto_aead/seakeyakv2 SeaKeyakSelfTest crypto_aead/oceankeyakv2 OceanKeyakSelfTest crypto_aead/lunarkeyakv2 LunarKeyakSelfTest"/>
-        <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell ARMv6M ARMv7M ARMv7A AVR8"/>
+        <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
     </product>
 
     <!-- *** Targets *** -->
