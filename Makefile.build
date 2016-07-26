@@ -345,10 +345,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="800times4ARMv7A">
-        <c>PlSnP/KeccakP-800-times4/OptimizedAsmARM/KeccakP-800-pl4-armv7a-neon-le-gcc.s</c>
-        <h>PlSnP/KeccakP-800-times4/OptimizedAsmARM/KeccakP-800-times4-SnP.h</h>
-    </fragment>
+    <fragment name="800times4ARMv7A" inherits="800times4on1"/>
 
     <!-- Keccak-p[800]×8 -->
 
