@@ -182,7 +182,7 @@ _su     equ 24*8
     veor.64     d30,  d30,  d25
     veor.64     d24,  d24,  d26
     veor.64     d8,  d8,  d27
-    vadd.u64    d27,  d26,  d26 ;u
+    vadd.u64    d27,  d26,  d26   ;u
     veor.64     d18,  d18,  d28
 
     vmov.i64    d31,  d30
@@ -193,7 +193,7 @@ _su     equ 24*8
 
     veor.64     d20,  d20,  d30
     veor.64     d21,  d21,  d24
-    veor.64     d27,  d27,  d29 ;u
+    veor.64     d27,  d27,  d29   ;u
     veor.64     d22,  d22,  d8
     veor.64     d23,  d23,  d18
     vmov.i64    d26,  d27           ;u
@@ -210,10 +210,10 @@ _su     equ 24*8
     vld1.64     {q4}, [r0:128]!
     veor.64     q8, q8, q9
     vld1.64     {q9}, [r0:128]
-    veor.64     d24,  d24,  d26 ;u
+    veor.64     d24,  d24,  d26   ;u
     sub         r0, r0, #32
-    veor.64     q4, q4, q13 ;u
-    veor.64     q9, q9, q13 ;u
+    veor.64     q4, q4, q13  ;u
+    veor.64     q9, q9, q13  ;u
 
     ;Rho Pi
     vmov.i64    d27, d2
@@ -221,51 +221,51 @@ _su     equ 24*8
     vmov.i64    d29, d6
     vmov.i64    d25, d8
 
-    RhoPi4      d2, d3, 44, d4, d14, 43, d8, d24, 14, d6, d17, 21   ;  1 <  6,  2 < 12,  4 < 24,  3 < 18
-    RhoPi4      d3, d9, 20, d14, d16, 25, d24, d21,  2, d17, d15, 15    ;  6 <  9, 12 < 13, 24 < 21, 18 < 17
-    RhoPi4      d9, d22, 61, d16, d19,  8, d21, d7, 55, d15, d12, 10    ;  9 < 22, 13 < 19, 21 <  8, 17 < 11
-    RhoPi4      d22, d18, 39, d19, d23, 56, d7, d13, 45, d12, d5,  6    ; 22 < 14, 19 < 23,  8 < 16, 11 < 7
-    RhoPi4      d18, d20, 18, d23, d11, 41, d13, d1, 36, d5, d10,  3    ; 14 < 20, 23 < 15, 16 <  5,  7 < 10
-    RhoPi4      d20, d28, 62, d11, d25, 27, d1, d29, 28, d10, d27,  1   ; 20 <  2, 15 <  4,  5 <  3, 10 < 1
+    RhoPi4      d2, d3, 44, d4, d14, 43, d8, d24, 14, d6, d17, 21  ;  1 <  6,  2 < 12,  4 < 24,  3 < 18
+    RhoPi4      d3, d9, 20, d14, d16, 25, d24, d21,  2, d17, d15, 15  ;  6 <  9, 12 < 13, 24 < 21, 18 < 17
+    RhoPi4      d9, d22, 61, d16, d19,  8, d21, d7, 55, d15, d12, 10  ;  9 < 22, 13 < 19, 21 <  8, 17 < 11
+    RhoPi4      d22, d18, 39, d19, d23, 56, d7, d13, 45, d12, d5,  6  ; 22 < 14, 19 < 23,  8 < 16, 11 < 7
+    RhoPi4      d18, d20, 18, d23, d11, 41, d13, d1, 36, d5, d10,  3  ; 14 < 20, 23 < 15, 16 <  5,  7 < 10
+    RhoPi4      d20, d28, 62, d11, d25, 27, d1, d29, 28, d10, d27,  1  ; 20 <  2, 15 <  4,  5 <  3, 10 < 1
 
     ;Chi    b+g
     vmov.i64    q13, q0
-    vbic.64     q15, q2, q1 ; ba ^= ~be & bi
+    vbic.64     q15, q2, q1  ; ba ^= ~be & bi
     veor.64     q0, q15
     vmov.i64    q14, q1
-    vbic.64     q15, q3, q2 ; be ^= ~bi & bo
+    vbic.64     q15, q3, q2  ; be ^= ~bi & bo
     veor.64     q1, q15
-    vbic.64     q15, q4, q3 ; bi ^= ~bo & bu
+    vbic.64     q15, q4, q3  ; bi ^= ~bo & bu
     veor.64     q2, q15
-    vbic.64     q15, q13, q4    ; bo ^= ~bu & ba
-    vbic.64     q13, q14, q13   ; bu ^= ~ba & be
+    vbic.64     q15, q13, q4  ; bo ^= ~bu & ba
+    vbic.64     q13, q14, q13  ; bu ^= ~ba & be
     veor.64     q3, q15
     veor.64     q4, q13
 
     ;Chi    k+m
     vmov.i64    q13, q5
-    vbic.64     q15, q7, q6 ; ba ^= ~be & bi
+    vbic.64     q15, q7, q6  ; ba ^= ~be & bi
     veor.64     q5, q15
     vmov.i64    q14, q6
-    vbic.64     q15, q8, q7 ; be ^= ~bi & bo
+    vbic.64     q15, q8, q7  ; be ^= ~bi & bo
     veor.64     q6, q15
-    vbic.64     q15, q9, q8 ; bi ^= ~bo & bu
+    vbic.64     q15, q9, q8  ; bi ^= ~bo & bu
     veor.64     q7, q15
-    vbic.64     q15, q13, q9    ; bo ^= ~bu & ba
-    vbic.64     q13, q14, q13   ; bu ^= ~ba & be
+    vbic.64     q15, q13, q9  ; bo ^= ~bu & ba
+    vbic.64     q13, q14, q13  ; bu ^= ~ba & be
     veor.64     q8, q15
     veor.64     q9, q13
 
     ;Chi    s
     vmov.i64    q13, q10
-    vbic.64     d30,  d22,  d21 ; ba ^= ~be & bi
-    vbic.64     d31,  d23,  d22 ; be ^= ~bi & bo
+    vbic.64     d30,  d22,  d21   ; ba ^= ~be & bi
+    vbic.64     d31,  d23,  d22   ; be ^= ~bi & bo
     veor.64     q10, q15
-    vbic.64     d30,  d24,  d23 ; bi ^= ~bo & bu
-    vbic.64     d31,  d26,  d24 ; bo ^= ~bu & ba
-    vbic.64     d26,  d27,  d26 ; bu ^= ~ba & be
+    vbic.64     d30,  d24,  d23   ; bi ^= ~bo & bu
+    vbic.64     d31,  d26,  d24   ; bo ^= ~bu & ba
+    vbic.64     d26,  d27,  d26   ; bu ^= ~ba & be
     veor.64     q11, q15
-    vld1.64     d30,   [r1:64]! ; Iota
+    vld1.64     d30,   [r1:64]!  ; Iota
     veor.64     d24,  d26
     veor.64     d0, d0, d30     ; Iota
     MEND
@@ -478,7 +478,7 @@ KeccakP1600_ExtractAndAddBytes_Exit
 KeccakP1600_Permute_12rounds   PROC
     adr     r1, KeccakP1600_Permute_RoundConstants12
     movs    r2, #12
-    b       KeccakP1600_PermuteAsmOnly
+    b       KeccakP1600_Permute
     ENDP
 
 ; ----------------------------------------------------------------------------
@@ -490,7 +490,7 @@ KeccakP1600_Permute_12rounds   PROC
 KeccakP1600_Permute_24rounds   PROC
     adr     r1, KeccakP1600_Permute_RoundConstants24
     movs    r2, #24
-    b       KeccakP1600_PermuteAsmOnly
+    b       KeccakP1600_Permute
     ENDP
 
     ALIGN
@@ -608,7 +608,7 @@ KeccakP1600_Permute_RoundLoop
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_Permute( void *state )
+; void KeccakP1600_Permute( void *state, void *roundConstants, unsigned int numberOfRounds )
 ;
     ALIGN
     EXPORT  KeccakP1600_Permute
@@ -679,7 +679,7 @@ KeccakF1600_FastLoop_Absorb_Loop21Lanes
     vld1.64 { d26 }, [r6]!
     veor.64 d20, d20, d26
 
-    vld1.64 {d30}, [sp:64]                  ; xor trailingBits
+    vld1.64 {d30}, [sp:64]                    ; xor trailingBits
     veor.64 d21, d21, d30
     bl      KeccakP1600_PermuteAsmOnly
     subs    r3, r3, r5                          ; nbrLanes -= laneCount
