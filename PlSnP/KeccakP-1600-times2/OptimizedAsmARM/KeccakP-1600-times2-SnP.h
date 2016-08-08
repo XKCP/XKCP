@@ -20,8 +20,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
  */
 
 #define KeccakP1600times2_implementation        "64-bit optimized ARM NEON assembler implementation"
-#define KeccakP1600times2_stateSizeInBytes      (200*2)
-#define KeccakP1600times2_stateAlignment        64
+#define KeccakP1600times2_statesSizeInBytes     (200*2)
+#define KeccakP1600times2_statesAlignment       64
 
 void KeccakP1600times2_StaticInitialize( void );
 void KeccakP1600times2_InitializeAll(void *states);
