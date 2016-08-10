@@ -29,6 +29,7 @@ When used as a library or directly from the sources, the KCP offers the high-lev
 * [`KeccakFPH.h`](Modes/KeccakFPH.h), NIST's fast parallel hash (FPH) proposal. **Warning**: this is based on a draft specification, which is subject to changes.
 * [`Keyakv2.h`](Modes/Keyakv2.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
 * [`Ketje.h`](Ketje/Ketje.h), the lightweight authenticated encryption schemes Ketje Jr and Ketje Sr.
+* [`KangarooTwelve.h`](Modes/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
 
 
 ## Low-level services

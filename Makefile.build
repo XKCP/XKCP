@@ -507,6 +507,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Modes/KeccakPRG.c</c>
         <h>Modes/KeccakPRG.inc</h>
         <h>Modes/KeccakPRG.h</h>
+        <c>Modes/KangarooTwelve.c</c>
+        <h>Modes/KangarooTwelve.h</h>
         <h>Modes/Phases.h</h>
     </fragment>
 
@@ -550,6 +552,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Tests/testKeccakPRG.c</c>
         <h>Tests/testKeccakPRG.inc</h>
         <h>Tests/testKeccakPRG.h</h>
+        <c>Tests/testKangarooTwelve.c</c>
+        <h>Tests/testKangarooTwelve.h</h>
         <gcc>-lm</gcc>
     </fragment>
 

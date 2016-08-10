@@ -38,18 +38,73 @@ int hexencode(const void* data_buf, size_t dataLength, char* result, size_t resu
    return 0;   /* indicate success */
 }
 
-#define bufferSize 45696
+#define bufferSize 65536
+#define algorithm_Keccak    0
+#define algorithm_K12       1
 
-int processFile(const char *fileName, unsigned int rate, unsigned int capacity, unsigned int hashbitlen, unsigned char delimitedSuffix, int base64)
+typedef struct {
+    unsigned int algorithm;
+    unsigned int rate;
+    unsigned int capacity;
+    unsigned int hashbitlen;
+    unsigned char delimitedSuffix;
+} Specifications;
+
+typedef union {
+    Keccak_HashInstance keccak;
+    KangarooTwelve_Instance k12;
+} Instance;
+
+int hashInitialize(Instance *instance, const Specifications *specs)
+{
+    if (specs->algorithm == algorithm_Keccak) {
+        if (Keccak_HashInitialize(&instance->keccak, specs->rate, specs->capacity, specs->hashbitlen, specs->delimitedSuffix)) {
+            printf("Incorrect Keccak parameters (%d, %d, %d, 0x%02x).\n", specs->rate, specs->capacity, specs->hashbitlen, specs->delimitedSuffix);
+            return -1;
+        }
+        else
+            return 0;
+    }
+    else if (specs->algorithm == algorithm_K12) {
+        if (KangarooTwelve_Initialize(&instance->k12, specs->hashbitlen/8)) {
+            printf("Incorrect KangarooTwelve parameters.\n");
+            return -1;
+        }
+        else
+            return 0;
+    }
+    else
+        return -1;
+}
+
+int hashUpdate(Instance *instance, const Specifications *specs, unsigned char *buffer, size_t size)
+{
+    if (specs->algorithm == algorithm_Keccak)
+        Keccak_HashUpdate(&instance->keccak, buffer, size*8);
+    else if (specs->algorithm == algorithm_K12)
+        KangarooTwelve_Update(&instance->k12, buffer, size);
+    return 0;
+}
+
+int hashFinal(Instance *instance, const Specifications *specs, unsigned char *buffer)
+{
+    if (specs->algorithm == algorithm_Keccak)
+        Keccak_HashFinal(&instance->keccak, buffer);
+    else if (specs->algorithm == algorithm_K12)
+        KangarooTwelve_Final(&instance->k12, buffer, "", 0);
+    return 0;
+}
+
+int processFile(const char *fileName, const Specifications *specs, int base64)
 {
     FILE *fp;
-    Keccak_HashInstance keccak;
+    Instance instance;
     size_t read;
     unsigned char buffer[bufferSize];
     char display[bufferSize*2+1];
 
-    if (hashbitlen > (bufferSize*8)) {
-        printf("The requested digest length (%d bits) does not fit in the buffer.\n", hashbitlen);
+    if (specs->hashbitlen > (bufferSize*8)) {
+        printf("The requested digest length (%d bits) does not fit in the buffer.\n", specs->hashbitlen);
         return -1;
     }
     fp = fopen(fileName, "r");
@@ -57,26 +112,25 @@ int processFile(const char *fileName, unsigned int rate, unsigned int capacity, 
         printf("File '%s' could not be opened.\n", fileName);
         return -1;
     }
-    if (Keccak_HashInitialize(&keccak, rate, capacity, hashbitlen, delimitedSuffix)) {
-        printf("Incorrect Keccak parameters (%d, %d, %d, 0x%02x).\n", rate, capacity, hashbitlen, delimitedSuffix);
+    if (hashInitialize(&instance, specs)) {
         fclose(fp);
         return -1;
     }
     do {
         read = fread(buffer, 1, bufferSize, fp);
         if (read > 0)
-            Keccak_HashUpdate(&keccak, buffer, read*8);
+            hashUpdate(&instance, specs, buffer, read);
     } while(read>0);
     fclose(fp);
-    Keccak_HashFinal(&keccak, buffer);
+    hashFinal(&instance, specs, buffer);
     if (base64) {
-        if (base64encode(buffer, (hashbitlen+7)/8, display, bufferSize*2)) {
+        if (base64encode(buffer, (specs->hashbitlen+7)/8, display, bufferSize*2)) {
             printf("Error while converting to base64.\n");
             return -1;
         }
     }
     else {
-        if (hexencode(buffer, (hashbitlen+7)/8, display, bufferSize*2)) {
+        if (hexencode(buffer, (specs->hashbitlen+7)/8, display, bufferSize*2)) {
             printf("Error while converting to hex.\n");
             return -1;
         }
@@ -90,12 +144,14 @@ int processFile(const char *fileName, unsigned int rate, unsigned int capacity, 
 
 int process(int argc, char* argv[])
 {
-    unsigned int rate = 1344;
-    unsigned int capacity = 256;
-    unsigned int hashbitlen = 264;
-    unsigned char delimitedSuffix = 0x1F;
+    Specifications specs;
     int base64 = 1;
     int i, r;
+    specs.algorithm = algorithm_Keccak;
+    specs.rate = 1344;
+    specs.capacity = 256;
+    specs.hashbitlen = 264;
+    specs.delimitedSuffix = 0x1F;
 
     for(i=1; i<argc; i++) {
         if (strcmp("--base64", argv[i]) == 0)
@@ -103,46 +159,51 @@ int process(int argc, char* argv[])
         else if (strcmp("--hex", argv[i]) == 0)
             base64 = 0;
         else if (strcmp("--shake128", argv[i]) == 0) {
-            rate = 1344;
-            capacity = 256;
-            hashbitlen = 264;
-            delimitedSuffix = 0x1F;
+            specs.rate = 1344;
+            specs.capacity = 256;
+            specs.hashbitlen = 264;
+            specs.delimitedSuffix = 0x1F;
             base64 = 1;
         }
         else if (strcmp("--shake256", argv[i]) == 0) {
-            rate = 1088;
-            capacity = 512;
-            hashbitlen = 528;
-            delimitedSuffix = 0x1F;
+            specs.rate = 1088;
+            specs.capacity = 512;
+            specs.hashbitlen = 528;
+            specs.delimitedSuffix = 0x1F;
             base64 = 1;
         }
         else if (strcmp("--sha3-224", argv[i]) == 0) {
-            rate = 1152;
-            capacity = 448;
-            hashbitlen = 224;
-            delimitedSuffix = 0x06;
+            specs.rate = 1152;
+            specs.capacity = 448;
+            specs.hashbitlen = 224;
+            specs.delimitedSuffix = 0x06;
             base64 = 0;
         }
         else if (strcmp("--sha3-256", argv[i]) == 0) {
-            rate = 1088;
-            capacity = 512;
-            hashbitlen = 256;
-            delimitedSuffix = 0x06;
+            specs.rate = 1088;
+            specs.capacity = 512;
+            specs.hashbitlen = 256;
+            specs.delimitedSuffix = 0x06;
             base64 = 0;
         }
         else if (strcmp("--sha3-384", argv[i]) == 0) {
-            rate = 832;
-            capacity = 768;
-            hashbitlen = 384;
-            delimitedSuffix = 0x06;
+            specs.rate = 832;
+            specs.capacity = 768;
+            specs.hashbitlen = 384;
+            specs.delimitedSuffix = 0x06;
             base64 = 0;
         }
         else if (strcmp("--sha3-512", argv[i]) == 0) {
-            rate = 576;
-            capacity = 1024;
-            hashbitlen = 512;
-            delimitedSuffix = 0x06;
+            specs.rate = 576;
+            specs.capacity = 1024;
+            specs.hashbitlen = 512;
+            specs.delimitedSuffix = 0x06;
             base64 = 0;
+        }
+        else if ((strcmp("--kangarootwelve", argv[i]) == 0) || (strcmp("--k12", argv[i]) == 0)) {
+            specs.algorithm = algorithm_K12;
+            specs.hashbitlen = 264;
+            base64 = 1;
         }
         else {
             if (strlen(argv[i]) > 2) {
@@ -151,7 +212,7 @@ int process(int argc, char* argv[])
                     return -1;
                 }
             }
-            r = processFile(argv[i], rate, capacity, hashbitlen, delimitedSuffix, base64);
+            r = processFile(argv[i], &specs, base64);
             if (r)
                 return r;
         }

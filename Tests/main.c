@@ -20,6 +20,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "KeccakCodePackage.h"
 #include "SimpleFIPS202.h"
 #include "testDuplex.h"
+#include "testKangarooTwelve.h"
 #include "testKetje.h"
 #include "testKeyakv2.h"
 #include "testMotorist.h"
@@ -485,6 +486,7 @@ void printHelp()
         printf("    --FIPS202 or -f         Tests on FIPS202 and ShortMsgKAT generation\n");
         printf("    --Keyak or -y           Tests on the Keyak authentication encryption scheme\n");
         printf("    --Ketje or -t           Tests on the Ketje authentication encryption scheme\n");
+        printf("    --KangarooTwelve        Tests on KangarooTwelve\n");
 #ifdef KeccakReference
         printf("    --examples or -e        Generation of example files\n");
 #else
@@ -504,6 +506,7 @@ int process(int argc, char* argv[])
     int FIPS202 = 0;
     int Keyak = 0;
     int Ketje = 0;
+    int KangarooTwelve = 0;
     int examples = 0;
     int speed = 0;
 
@@ -514,7 +517,7 @@ int process(int argc, char* argv[])
         if ((strcmp("--help", argv[i]) == 0) || (strcmp("-h", argv[i]) == 0))
             help = 1;
         else if ((strcmp("--all", argv[i]) == 0) || (strcmp("-a", argv[i]) == 0))
-            SnP = KeccakSponge = KeccakDuplex = KeccakFPH = KeccakPRG = FIPS202 = Keyak = Ketje = examples = speed = 1;
+            SnP = KeccakSponge = KeccakDuplex = KeccakFPH = KeccakPRG = FIPS202 = Keyak = Ketje = KangarooTwelve = examples = speed = 1;
         else if ((strcmp("--SnP", argv[i]) == 0) || (strcmp("-p", argv[i]) == 0))
             SnP = 1;
         else if ((strcmp("--Keccak", argv[i]) == 0) || (strcmp("-c", argv[i]) == 0))
@@ -533,6 +536,8 @@ int process(int argc, char* argv[])
             Keyak = 1;
         else if ((strcmp("--Ketje", argv[i]) == 0) || (strcmp("-t", argv[i]) == 0))
             Ketje = 1;
+        else if (strcmp("--KangarooTwelve", argv[i]) == 0)
+            KangarooTwelve = 1;
 #ifdef KeccakReference
         else if ((strcmp("--examples", argv[i]) == 0) || (strcmp("-e", argv[i]) == 0))
             examples = 1;
@@ -561,6 +566,9 @@ int process(int argc, char* argv[])
     }
     if (KeccakFPH) {
         testKeccakFPH();
+    }
+    if (KangarooTwelve) {
+        testKangarooTwelve();
     }
     if (KeccakPRG) {
         testKeccakPRG();

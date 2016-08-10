@@ -17,6 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
+#include "KangarooTwelve.h"
 #include "KeccakFPH.h"
 #include "timing.h"
 #include "testPerformance.h"
@@ -535,6 +536,83 @@ void testKeccakFPHPerformance()
 }
 #endif
 
+#ifndef KeccakP1600_excluded
+uint_32t measureKangarooTwelve(uint_32t dtMin, unsigned int inputLen)
+{
+    ALIGN(32) unsigned char input[1024*1024];
+    ALIGN(32) unsigned char output[32];
+
+    assert(inputLen <= 1024*1024);
+
+    memset(input, 0xA5, 16);
+
+    measureTimingBegin
+    KangarooTwelve(input, inputLen, output, 32, "", 0);
+    measureTimingEnd
+}
+
+void printKangarooTwelvePerformanceHeader( void )
+{
+    printf("*** KangarooTwelve ***\n");
+    printf("Using Keccak-p[1600,12] implementations:\n");
+    printf("- \303\2271: " KeccakP1600_implementation "\n");
+#ifndef KeccakP1600timesN_excluded
+    printf("- \303\2272: " KeccakP1600times2_implementation "\n");
+    printf("- \303\2274: " KeccakP1600times4_implementation "\n");
+    printf("- \303\2278: " KeccakP1600times8_implementation "\n");
+#endif
+    printf("\n");
+}
+
+void testKangarooTwelvePerformanceOne( void )
+{
+    const unsigned int chunkSize = 8192;
+    unsigned halfTones;
+    uint_32t calibration = calibrate();
+    unsigned int chunkSizeLog = (unsigned int)floor(log(chunkSize)/log(2.0)+0.5);
+    int displaySlope = 0;
+
+    for(halfTones=chunkSizeLog*12-28; halfTones<=13*12; halfTones+=4) {
+        double I = pow(2.0, halfTones/12.0);
+        unsigned int i  = (unsigned int)floor(I+0.5);
+        uint_32t time, timePlus1Block, timePlus2Blocks, timePlus4Blocks, timePlus8Blocks;
+        uint_32t timePlus84Blocks;
+        time = measureKangarooTwelve(calibration, i);
+        if (i == chunkSize) {
+            displaySlope = 1;
+            timePlus1Block  = measureKangarooTwelve(calibration, i+1*chunkSize);
+            timePlus2Blocks = measureKangarooTwelve(calibration, i+2*chunkSize);
+            timePlus4Blocks = measureKangarooTwelve(calibration, i+4*chunkSize);
+            timePlus8Blocks = measureKangarooTwelve(calibration, i+8*chunkSize);
+            timePlus84Blocks = measureKangarooTwelve(calibration, i+84*chunkSize);
+        }
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
+        if (displaySlope) {
+            printf("     +1 block:  %9d cycles, %6.3f cycles/byte (slope)\n", timePlus1Block, (timePlus1Block-(double)(time))*1.0/chunkSize/1.0);
+            printf("     +2 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus2Blocks, (timePlus2Blocks-(double)(time))*1.0/chunkSize/2.0);
+            printf("     +4 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus4Blocks, (timePlus4Blocks-(double)(time))*1.0/chunkSize/4.0);
+            printf("     +8 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus8Blocks, (timePlus8Blocks-(double)(time))*1.0/chunkSize/8.0);
+            printf("    +84 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus84Blocks, (timePlus84Blocks-(double)(time))*1.0/chunkSize/84.0);
+            displaySlope = 0;
+        }
+    }
+    for(halfTones=12*12; halfTones<=19*12; halfTones+=4) {
+        double I = chunkSize + pow(2.0, halfTones/12.0);
+        unsigned int i  = (unsigned int)floor(I+0.5);
+        uint_32t time;
+        time = measureKangarooTwelve(calibration, i);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
+    }
+    printf("\n\n");
+}
+
+void testKangarooTwelvePerformance()
+{
+    printKangarooTwelvePerformanceHeader();
+    testKangarooTwelvePerformanceOne();
+}
+#endif
+
 void testPerformance()
 {
 #ifndef KeccakP200_excluded
@@ -584,6 +662,10 @@ void testPerformance()
 
 #ifndef KeccakP1600_excluded
     testKeccakFPHPerformance();
+#endif
+
+#ifndef KeccakP1600_excluded
+    testKangarooTwelvePerformance();
 #endif
 }
 

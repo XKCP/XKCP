@@ -13,10 +13,9 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include "KangarooTwelve.h"
-#include "KeccakDuplex.h"
-#include "KeccakHash.h"
-#include "KeccakSponge.h"
-#include "Ketje.h"
-#include "Keyakv2.h"
-#include "SimpleFIPS202.h"
+#ifndef _TestKangarooTwelve_h_
+#define _TestKangarooTwelve_h_
+
+void testKangarooTwelve(void);
+
+#endif
