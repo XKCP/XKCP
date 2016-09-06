@@ -158,6 +158,17 @@ int process(int argc, char* argv[])
             base64 = 1;
         else if (strcmp("--hex", argv[i]) == 0)
             base64 = 0;
+        else if (strcmp("--shakebits", argv[i]) == 0) {
+            int shakebits = 0;
+            if (sscanf(argv[i+1], "%d", &shakebits) && shakebits > 0) {
+                specs.hashbitlen = shakebits;
+                i++;
+            }
+            else {
+                printf("Error: argument for --shakebits option must be a positive integer\n");
+                return -1;
+            }
+        }
         else if (strcmp("--shake128", argv[i]) == 0) {
             specs.rate = 1344;
             specs.capacity = 256;
