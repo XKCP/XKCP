@@ -3,8 +3,9 @@
 The **Keccak Code Package** (abbreviated as **KCP**) gathers different free and open-source implementations of the [Keccak sponge function family](http://keccak.noekeon.org/)
 and closely related variants, such as
 
-* the SHAKE exendable-output functions and SHA-3 hash functions from [FIPS 202][fips202_standard],
-* the [Ketje][caesar_ketje] and [Keyak v2][caesar_keyak] authenticated encryption schemes.
+* the SHAKE extendable-output functions and SHA-3 hash functions from [FIPS 202][fips202_standard],
+* the [Ketje][caesar_ketje] and [Keyak v2][caesar_keyak] authenticated encryption schemes,
+* the fast [KangarooTwelve][k12] extendable-output function.
 
 
 
@@ -174,6 +175,9 @@ When they refer to the functions in the [FIPS 202 standard][fips202_standard], t
 - `timing.h` based on code by Doug Whiting
 - `SnP/KeccakP-1600/OptimizedAVX2/*` by Vladimir Sedach
 - `TweetableFIPS202.c` by D. J. Bernstein, Peter Schwabe and Gilles Van Assche
+- `SnP/KeccakP-800/Optimized64AsmARM/*` by Andre C. de Moraes
+
+And thanks to all contributors!
 
 ***
 
@@ -189,3 +193,4 @@ Michaël Peeters, Gilles Van Assche, and Ronny Van Keer.
 [fips202_standard]: http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf "FIPS 202 standard"
 [caesar_ketje]: http://ketje.noekeon.org/
 [caesar_keyak]: http://keyak.noekeon.org/
+[k12]: http://keccak.noekeon.org/KangarooTwelve.pdf
