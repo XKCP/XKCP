@@ -158,14 +158,18 @@ int process(int argc, char* argv[])
             base64 = 1;
         else if (strcmp("--hex", argv[i]) == 0)
             base64 = 0;
-        else if (strcmp("--shakebits", argv[i]) == 0) {
-            int shakebits = 0;
-            if (sscanf(argv[i+1], "%d", &shakebits) && shakebits > 0) {
-                specs.hashbitlen = shakebits;
+        else if ((strcmp("--outputbits", argv[i]) == 0) || (strcmp("-n", argv[i]) == 0)) {
+            if ((i+1) >= argc) {
+                printf("Error: missing argument for --outputbits\n");
+                return -1;
+            }
+            int outputbits = 0;
+            if (sscanf(argv[i+1], "%d", &outputbits) && (outputbits > 0) && ((outputbits % 8) == 0)) {
+                specs.hashbitlen = outputbits;
                 i++;
             }
             else {
-                printf("Error: argument for --shakebits option must be a positive integer\n");
+                printf("Error: argument for --outputbits option must be a positive integer multiple of 8\n");
                 return -1;
             }
         }
