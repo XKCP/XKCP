@@ -387,6 +387,23 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>PlSnP/KeccakP-1600-times2/SIMD128/XOPufull/SIMD128-config.h</h>
     </fragment>
 
+    <fragment name="SIMD512-2">
+        <c>PlSnP/KeccakP-1600-times2/SIMD512/KeccakP-1600-times2-SIMD512.c</c>
+        <h>PlSnP/KeccakP-1600-times2/SIMD512/KeccakP-1600-times2-SnP.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-2-AVX512u4" inherits="SIMD512-2">
+        <h>PlSnP/KeccakP-1600-times2/SIMD512/AVX512u4/SIMD512-2-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-2-AVX512u12" inherits="SIMD512-2">
+        <h>PlSnP/KeccakP-1600-times2/SIMD512/AVX512u12/SIMD512-2-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-2-AVX512ufull" inherits="SIMD512-2">
+        <h>PlSnP/KeccakP-1600-times2/SIMD512/AVX512ufull/SIMD512-2-config.h</h>
+    </fragment>
+
     <fragment name="1600times2ARMV7A">
         <c>PlSnP/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-inplace-pl2-armv7a-neon-le-gcc.s</c>
         <h>PlSnP/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-times2-SnP.h</h>
@@ -424,6 +441,24 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>PlSnP/KeccakP-1600-times4/SIMD256/AVX2ufull/SIMD256-config.h</h>
     </fragment>
 
+    <fragment name="SIMD512-4">
+        <c>PlSnP/KeccakP-1600-times4/SIMD512/KeccakP-1600-times4-SIMD512.c</c>
+        <h>PlSnP/KeccakP-1600-times4/SIMD512/KeccakP-1600-times4-SnP.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-4-AVX512u4" inherits="SIMD512-4">
+        <h>PlSnP/KeccakP-1600-times4/SIMD512/AVX512u4/SIMD512-4-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-4-AVX512u12" inherits="SIMD512-4">
+        <h>PlSnP/KeccakP-1600-times4/SIMD512/AVX512u12/SIMD512-4-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-4-AVX512ufull" inherits="SIMD512-4">
+        <h>PlSnP/KeccakP-1600-times4/SIMD512/AVX512ufull/SIMD512-4-config.h</h>
+    </fragment>
+
+
     <!-- Keccak-p[1600]×8 -->
 
     <fragment name="1600times8on1">
@@ -444,20 +479,20 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="SIMD512">
+    <fragment name="SIMD512-8">
         <c>PlSnP/KeccakP-1600-times8/SIMD512/KeccakP-1600-times8-SIMD512.c</c>
         <h>PlSnP/KeccakP-1600-times8/SIMD512/KeccakP-1600-times8-SnP.h</h>
     </fragment>
 
-    <fragment name="SIMD512-AVX512u4" inherits="SIMD512">
+    <fragment name="SIMD512-8-AVX512u4" inherits="SIMD512-8">
         <h>PlSnP/KeccakP-1600-times8/SIMD512/AVX512u4/SIMD512-config.h</h>
     </fragment>
 
-    <fragment name="SIMD512-AVX512u12" inherits="SIMD512">
+    <fragment name="SIMD512-8-AVX512u12" inherits="SIMD512-8">
         <h>PlSnP/KeccakP-1600-times8/SIMD512/AVX512u12/SIMD512-config.h</h>
     </fragment>
 
-    <fragment name="SIMD512-AVX512ufull" inherits="SIMD512">
+    <fragment name="SIMD512-8-AVX512ufull" inherits="SIMD512-8">
         <h>PlSnP/KeccakP-1600-times8/SIMD512/AVX512ufull/SIMD512-config.h</h>
     </fragment>
 
