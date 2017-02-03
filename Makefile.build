@@ -546,6 +546,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Modes/KeccakPRG.h</h>
         <c>Modes/KangarooTwelve.c</c>
         <h>Modes/KangarooTwelve.h</h>
+        <c>Modes/SP800-185.c</c>
+        <h>Modes/SP800-185.inc</h>
+        <h>Modes/SP800-185.h</h>
         <h>Modes/Phases.h</h>
     </fragment>
 
@@ -591,6 +594,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Tests/testKeccakPRG.h</h>
         <c>Tests/testKangarooTwelve.c</c>
         <h>Tests/testKangarooTwelve.h</h>
+        <c>Tests/testSP800-185.c</c>
+        <h>Tests/testSP800-185.h</h>
         <gcc>-lm</gcc>
     </fragment>
 

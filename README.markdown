@@ -24,6 +24,7 @@ When used as a library or directly from the sources, the KCP offers the high-lev
 
 * [`SimpleFIPS202.h`](Modes/SimpleFIPS202.h), the six approved FIPS 202 instances (SHAKE128, SHAKE256 and the SHA-3 hash functions) through simple functions.
 * [`KeccakHash.h`](Modes/KeccakHash.h), the six approved FIPS 202 instances, as well as any Keccak instance based on Keccak-_f_[1600]. This more advanced interface proposes a message queue (init-update-final) and supports bit-level inputs if needed.
+* [`SP800-185.h`](Modes/SP800-185.h), the cSHAKE functions according to the official SP 800-185 standard.
 * [`KeccakSponge.h`](Constructions/KeccakSponge.h), all Keccak sponge functions, with or without a message queue.
 * [`KeccakDuplex.h`](Constructions/KeccakDuplex.h), all Keccak duplex objects.
 * [`KeccakPRG.h`](Modes/KeccakPRG.h), a pseudo-random number generator based on Keccak duplex objects.
