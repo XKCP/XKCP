@@ -1069,6 +1069,103 @@ __KeccakP1600_ExtractAndAddBytesInLane_Loop:
     bx      lr
 
 
+.macro    SwapPI13 in0,in1,in2,in3,eo0,eo1,eo2,eo3
+    ldr     r3, [r0, #\in0+0]
+    ldr     r4, [r0, #\in0+4]
+    ldr     r2, [r0, #\in1+0]
+    ldr     r1, [r0, #\in1+4]
+    str     r2, [r0, #\in0+\eo0*4]
+    str     r1, [r0, #\in0+(\eo0^1)*4]
+    ldr     r2, [r0, #\in2+0]
+    ldr     r1, [r0, #\in2+4]
+    str     r2, [r0, #\in1+\eo1*4]
+    str     r1, [r0, #\in1+(\eo1^1)*4]
+    ldr     r2, [r0, #\in3+0]
+    ldr     r1, [r0, #\in3+4]
+    str     r2, [r0, #\in2+\eo2*4]
+    str     r1, [r0, #\in2+(\eo2^1)*4]
+    str     r3, [r0, #\in3+\eo3*4]
+    str     r4, [r0, #\in3+(\eo3^1)*4]
+    .endm
+
+.macro    SwapPI2 in0,in1,in2,in3
+    ldr     r3, [r0, #\in0+0]
+    ldr     r4, [r0, #\in0+4]
+    ldr     r2, [r0, #\in1+0]
+    ldr     r1, [r0, #\in1+4]
+    str     r2, [r0, #\in0+4]
+    str     r1, [r0, #\in0+0]
+    str     r3, [r0, #\in1+4]
+    str     r4, [r0, #\in1+0]
+    ldr     r3, [r0, #\in2+0]
+    ldr     r4, [r0, #\in2+4]
+    ldr     r2, [r0, #\in3+0]
+    ldr     r1, [r0, #\in3+4]
+    str     r2, [r0, #\in2+4]
+    str     r1, [r0, #\in2+0]
+    str     r3, [r0, #\in3+4]
+    str     r4, [r0, #\in3+0]
+    .endm
+
+.macro    SwapEO  even,odd
+    ldr     r3, [r0, #\even]
+    ldr     r4, [r0, #\odd]
+    str     r3, [r0, #\odd]
+    str     r4, [r0, #\even]
+    .endm
+
+@ ----------------------------------------------------------------------------
+@
+@  void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+@
+.align 8
+.global   KeccakP1600_Permute_Nrounds
+KeccakP1600_Permute_Nrounds:
+    lsls    r3, r1, #30
+    bne     KeccakP1600_Permute_NroundsNotMultiple4
+    lsls    r2, r1, #3
+    adr     r1, KeccakP1600_Permute_RoundConstants0Mod4
+    subs    r1, r1, r2
+    b       KeccakP1600_Permute
+KeccakP1600_Permute_NroundsNotMultiple4:     @ nrounds not multiple of 4
+    push    { r4 - r12, lr }
+    sub     sp, #mSize
+    lsrs    r2, r1, #2
+    lsls    r2, r2, #3+2
+    adr     r1, KeccakP1600_Permute_RoundConstants0
+    subs    r1, r1, r2
+    str     r1, [sp, #mRC]
+    lsls    r3, r3, #1
+    bcs     KeccakP1600_Permute_Nrounds23Mod4
+KeccakP1600_Permute_Nrounds1Mod4:
+    SwapPI13    Aga0, Aka0, Asa0, Ama0, 1, 0, 1, 0
+    SwapPI13    Abe0, Age0, Ame0, Ake0, 0, 1, 0, 1
+    SwapPI13    Abi0, Aki0, Agi0, Asi0, 1, 0, 1, 0
+    SwapEO      Ami0, Ami1
+    SwapPI13    Abo0, Amo0, Aso0, Ago0, 1, 0, 1, 0
+    SwapEO      Ako0, Ako1
+    SwapPI13    Abu0, Asu0, Aku0, Amu0, 0, 1, 0, 1
+    b.w         KeccakP1600_Permute_Round1Mod4
+KeccakP1600_Permute_Nrounds23Mod4:
+    bpl         KeccakP1600_Permute_Nrounds2Mod4
+KeccakP1600_Permute_Nrounds3Mod4:
+    SwapPI13    Aga0, Ama0, Asa0, Aka0, 0, 1, 0, 1
+    SwapPI13    Abe0, Ake0, Ame0, Age0, 1, 0, 1, 0
+    SwapPI13    Abi0, Asi0, Agi0, Aki0, 0, 1, 0, 1
+    SwapEO      Ami0, Ami1
+    SwapPI13    Abo0, Ago0, Aso0, Amo0, 0, 1, 0, 1
+    SwapEO      Ako0, Ako1
+    SwapPI13    Abu0, Amu0, Aku0, Asu0, 1, 0, 1, 0
+    b.w         KeccakP1600_Permute_Round3Mod4
+KeccakP1600_Permute_Nrounds2Mod4:
+    SwapPI2     Aga0, Asa0, Aka0, Ama0
+    SwapPI2     Abe0, Ame0, Age0, Ake0
+    SwapPI2     Abi0, Agi0, Aki0, Asi0
+    SwapPI2     Abo0, Aso0, Ago0, Amo0
+    SwapPI2     Abu0, Aku0, Amu0, Asu0
+    b.w         KeccakP1600_Permute_Round2Mod4
+
+
 @ ----------------------------------------------------------------------------
 @
 @  void KeccakP1600_Permute_12rounds( void *state )
@@ -1094,38 +1191,34 @@ KeccakP1600_Permute_24rounds:
 .align 8
 KeccakP1600_Permute_RoundConstants24:
     @       0           1
-        .long       0x00000001, 0x00000000
-        .long       0x00000000, 0x00000089
-        .long       0x00000000, 0x8000008b
-        .long       0x00000000, 0x80008080
-
-        .long       0x00000001, 0x0000008b
-        .long       0x00000001, 0x00008000
-        .long       0x00000001, 0x80008088
-        .long       0x00000001, 0x80000082
-
-        .long       0x00000000, 0x0000000b
-        .long       0x00000000, 0x0000000a
-        .long       0x00000001, 0x00008082
-        .long       0x00000000, 0x00008003
-
+		.long      0x00000001, 0x00000000
+		.long      0x00000000, 0x00000089
+		.long      0x00000000, 0x8000008b
+		.long      0x00000000, 0x80008080
+		.long      0x00000001, 0x0000008b
+		.long      0x00000001, 0x00008000
+		.long      0x00000001, 0x80008088
+		.long      0x00000001, 0x80000082
+		.long      0x00000000, 0x0000000b
+		.long      0x00000000, 0x0000000a
+		.long      0x00000001, 0x00008082
+		.long      0x00000000, 0x00008003
 KeccakP1600_Permute_RoundConstants12:
-        .long       0x00000001, 0x0000808b
-        .long       0x00000001, 0x8000000b
-        .long       0x00000001, 0x8000008a
-        .long       0x00000001, 0x80000081
-
-        .long       0x00000000, 0x80000081
-        .long       0x00000000, 0x80000008
-        .long       0x00000000, 0x00000083
-        .long       0x00000000, 0x80008003
-
-        .long       0x00000001, 0x80008088
-        .long       0x00000000, 0x80000088
-        .long       0x00000001, 0x00008000
-        .long       0x00000000, 0x80008082
-
-        .long       0x000000FF  @terminator
+		.long      0x00000001, 0x0000808b
+		.long      0x00000001, 0x8000000b
+		.long      0x00000001, 0x8000008a
+		.long      0x00000001, 0x80000081
+		.long      0x00000000, 0x80000081
+		.long      0x00000000, 0x80000008
+		.long      0x00000000, 0x00000083
+		.long      0x00000000, 0x80008003
+KeccakP1600_Permute_RoundConstants0:
+		.long      0x00000001, 0x80008088
+		.long      0x00000000, 0x80000088
+		.long      0x00000001, 0x00008000
+		.long      0x00000000, 0x80008082
+KeccakP1600_Permute_RoundConstants0Mod4:
+		.long      0x000000FF  @terminator
 
 @----------------------------------------------------------------------------
 @
@@ -1138,8 +1231,11 @@ KeccakP1600_Permute:
     str     r1, [sp, #mRC]
 KeccakP1600_Permute_RoundLoop:
     KeccakRound0
+KeccakP1600_Permute_Round3Mod4:
     KeccakRound1
+KeccakP1600_Permute_Round2Mod4:
     KeccakRound2
+KeccakP1600_Permute_Round1Mod4:
     KeccakRound3
     bne     KeccakP1600_Permute_RoundLoop
     add     sp, #mSize

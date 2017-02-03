@@ -489,6 +489,31 @@ const UINT64 KeccakP1600RoundConstants[24] = {
 #error "Unrolling is not correctly specified!"
 #endif
 
+void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+{
+    KeccakP_DeclareVars
+    unsigned int i;
+    UINT64 *stateAsLanes = (UINT64*)state;
+
+    copyFromState(stateAsLanes);
+    if ((nrounds & 1) != 0) {
+        KeccakP_Round( 24-nrounds );
+        --nrounds;
+    }
+    if ((nrounds & 2) != 0) {
+        KeccakP_Round( 24+0-nrounds );
+        KeccakP_Round( 24+1-nrounds );
+        nrounds -= 2;
+    }
+    for (i = 24-nrounds; i < 24; i+= 4) {
+        KeccakP_Round( i );
+        KeccakP_Round( i+1 );
+        KeccakP_Round( i+2 );
+        KeccakP_Round( i+3 );
+    }
+    copyToState(stateAsLanes);
+}
+
 /* ---------------------------------------------------------------- */
 
 void KeccakP1600_Permute_12rounds(void *state)

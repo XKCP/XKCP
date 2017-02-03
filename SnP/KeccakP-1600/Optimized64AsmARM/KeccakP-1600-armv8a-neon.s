@@ -246,6 +246,7 @@ KeccakP1600_Permute_RoundConstants12:
     .quad   0x8000000000008080
     .quad   0x0000000080000001
     .quad   0x8000000080008008
+KeccakP1600_Permute_RoundConstants0:
 
 //----------------------------------------------------------------------------
 //
@@ -475,6 +476,18 @@ KeccakP1600_ExtractAndAddBytes_BytesLoop:
 KeccakP1600_ExtractAndAddBytes_Exit:
     ret
 
+// ----------------------------------------------------------------------------
+//
+//  void KeccakP1600_Permute_Nrounds( void *state, unsigned int nrounds )
+//
+.align 8
+.global   KeccakP1600_Permute_Nrounds
+KeccakP1600_Permute_Nrounds:
+    mov     x2, x1
+    adr     x1, KeccakP1600_Permute_RoundConstants0
+	lsl		x3, x2, #3
+	sub		x1, x1, x3
+    b       KeccakP1600_Permute
 
 // ----------------------------------------------------------------------------
 //
@@ -501,7 +514,7 @@ KeccakP1600_Permute_24rounds:
 
 //----------------------------------------------------------------------------
 //
-// void KeccakP1600_Permute( void *state )
+// void KeccakP1600_Permute( void *state, uint64_t *rc, unsigned int nrounds )
 //
 .align 8
 .global   KeccakP1600_Permute

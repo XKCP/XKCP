@@ -43,8 +43,10 @@
 .equ _si, 22*4
 .equ _so, 23*4
 .equ _su, 24*4
+.equ _SAS, 4*25+4 @ keep stack aligned on 8 bytes
 
-.macro  ThetaRhoPiChiIota   stateOut, stateIn, ofsOut, ofs1, ofs2, ofs3, ofs4, dd1, dd2, dd3, dd4, dd5, rr2, rr3, rr4, rr5
+
+.macro    ThetaRhoPiChiIota   stateOut, stateIn, ofsOut, ofs1, ofs2, ofs3, ofs4, dd1, dd2, dd3, dd4, dd5, rr2, rr3, rr4, rr5
     ldr         r2, [\stateIn, #\ofs1]
     ldr         r3, [\stateIn, #\ofs2]
     ldr         r4, [\stateIn, #\ofs3]
@@ -78,7 +80,7 @@
     str         r4, [\stateOut, #\ofsOut+0]
     .endm
 
-.macro  ThetaRhoPiChi       stateOut, stateIn, ofsOut, ofs1, ofs2, ofs3, ofs4, ofs5, dd1, dd2, dd3, dd4, dd5, rr1, rr2, rr3, rr4, rr5
+.macro    ThetaRhoPiChi       stateOut, stateIn, ofsOut, ofs1, ofs2, ofs3, ofs4, ofs5, dd1, dd2, dd3, dd4, dd5, rr1, rr2, rr3, rr4, rr5
     ldr         r2, [\stateIn, #\ofs1]
     ldr         r3, [\stateIn, #\ofs2]
     ldr         r4, [\stateIn, #\ofs3]
@@ -113,7 +115,7 @@
     str         r2, [\stateOut, #\ofsOut+16]
     .endm
 
-.macro  ThetaRhoPiChiLast   stateOut, stateIn, ofsOut, ofs1, ofs2, ofs3, ofs4, ofs5, dd1, dd2, dd3, dd4, dd5, rr1, rr2, rr3, rr4, rr5
+.macro    ThetaRhoPiChiLast   stateOut, stateIn, ofsOut, ofs1, ofs2, ofs3, ofs4, ofs5, dd1, dd2, dd3, dd4, dd5, rr1, rr2, rr3, rr4, rr5
     ldr         r2, [\stateIn, #\ofs1]
     ldr         r3, [\stateIn, #\ofs2]
     ldr         r4, [\stateIn, #\ofs3]
@@ -148,7 +150,7 @@
     str         r6, [\stateOut, #\ofsOut+16]
     .endm
 
-.macro  KeccakRound stateOut, stateIn
+.macro    KeccakRound stateOut, stateIn
     @  prepare Theta
     ldr         r2, [\stateIn, #_ba]
     ldr         r3, [\stateIn, #_be]
@@ -252,7 +254,7 @@ KeccakP800_AddBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
     bcc     KeccakP800_AddBytes_Bytes
-KeccakP800_AddBytes_LanesLoop:                  @ then, perform on words
+KeccakP800_AddBytes_LanesLoop:                   @ then, perform on words
     ldr     r2, [r0]
     ldr     r4, [r1], #4
     eors    r2, r2, r4
@@ -283,7 +285,7 @@ KeccakP800_OverwriteBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
     bcc     KeccakP800_OverwriteBytes_Bytes
-KeccakP800_OverwriteBytes_LanesLoop:            @ then, perform on words
+KeccakP800_OverwriteBytes_LanesLoop:         @ then, perform on words
     ldr     r2, [r1], #4
     str     r2, [r0], #4
     subs    r3, r3, #4
@@ -336,7 +338,7 @@ KeccakP800_ExtractBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
     bcc     KeccakP800_ExtractBytes_Bytes
-KeccakP800_ExtractBytes_LanesLoop:              @ then, handle words
+KeccakP800_ExtractBytes_LanesLoop:               @ then, handle words
     ldr     r2, [r0], #4
     str     r2, [r1], #4
     subs    r3, r3, #4
@@ -365,7 +367,7 @@ KeccakP800_ExtractAndAddBytes:
     ldr     r3, [sp, #8]                                @ get length argument from stack
     subs    r3, r3, #4                                  @ .if length >= 4
     bcc     KeccakP800_ExtractAndAddBytes_Bytes
-KeccakP800_ExtractAndAddBytes_LanesLoop:            @ then, handle words
+KeccakP800_ExtractAndAddBytes_LanesLoop:         @ then, handle words
     ldr     r5, [r0], #4
     ldr     r4, [r1], #4
     eors    r5, r5, r4
@@ -385,6 +387,41 @@ KeccakP800_ExtractAndAddBytes_BytesLoop:
 KeccakP800_ExtractAndAddBytes_Exit:
     pop     {r4,r5}
     bx      lr
+
+
+@ ----------------------------------------------------------------------------
+@
+@  void KeccakP800_Permute_Nrounds(void *state, unsigned int nrounds)
+@
+.align 8
+.global   KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds:
+    mov     r2, r1
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    sub     r1, r1, r2, LSL #2
+    tst     r2, #1
+    beq     KeccakP800_Permute
+    push    {r4-r12,lr}                     @ odd number of rounds
+    sub     sp, sp, #_SAS
+    mov     lr, r1
+    mov     r1, sp
+    ldm     r0!, {r2,r3,r4,r5,r7} @ copy state to stack and prepare theta
+    stm     r1!, {r2,r3,r4,r5,r7}
+    ldm     r0!, {r2,r3,r4,r5,r6}
+    stm     r1!, {r2,r3,r4,r5,r6}
+    eor     r7, r7, r6
+    ldm     r0!, {r2,r3,r4,r5,r6}
+    stm     r1!, {r2,r3,r4,r5,r6}
+    eor     r7, r7, r6
+    ldm     r0!, {r2,r3,r4,r5,r6}
+    stm     r1!, {r2,r3,r4,r5,r6}
+    eor     r7, r7, r6
+    ldm     r0!, {r8,r9,r10,r11,r12}
+    stm     r1!, {r8,r9,r10,r11,r12}
+    eor     r7, r7, r12
+    mov     r6, r12
+    sub     r0, r0, #100
+    b       KeccakP800_Permute_OddRoundEntry
 
 
 @ ----------------------------------------------------------------------------
@@ -411,30 +448,31 @@ KeccakP800_Permute_22rounds:
 
 .align 8
 KeccakP800_Permute_RoundConstants22:
-        .long       0x00000001
-        .long       0x00008082
-        .long       0x0000808a
-        .long       0x80008000
-        .long       0x0000808b
-        .long       0x80000001
-        .long       0x80008081
-        .long       0x00008009
-        .long       0x0000008a
-        .long       0x00000088
+		.long      0x00000001
+		.long      0x00008082
+		.long      0x0000808a
+		.long      0x80008000
+		.long      0x0000808b
+		.long      0x80000001
+		.long      0x80008081
+		.long      0x00008009
+		.long      0x0000008a
+		.long      0x00000088
 KeccakP800_Permute_RoundConstants12:
-        .long       0x80008009
-        .long       0x8000000a
-        .long       0x8000808b
-        .long       0x0000008b
-        .long       0x00008089
-        .long       0x00008003
-        .long       0x00008002
-        .long       0x00000080
-        .long       0x0000800a
-        .long       0x8000000a
-        .long       0x80008081
-        .long       0x00008080
-        .long       0           @ terminator
+		.long      0x80008009
+		.long      0x8000000a
+		.long      0x8000808b
+		.long      0x0000008b
+		.long      0x00008089
+		.long      0x00008003
+		.long      0x00008002
+		.long      0x00000080
+		.long      0x0000800a
+		.long      0x8000000a
+		.long      0x80008081
+		.long      0x00008080
+KeccakP800_Permute_RoundConstants0:
+		.long      0           @ terminator
 
 @ ----------------------------------------------------------------------------
 @
@@ -445,7 +483,7 @@ KeccakP800_Permute:
     push        {r4-r12,lr}
     mov         lr, r1
     add         r2, r0, #_sa
-    sub         sp, sp, #4*25+4
+    sub         sp, sp, #_SAS
     ldmia       r2, { r8 - r12 }
     ldr         r7, [r0, #_bu]
     ldr         r1, [r0, #_gu]
@@ -458,11 +496,12 @@ KeccakP800_Permute:
     eor         r7, r7, r1
 KeccakP800_Permute_RoundLoop:
     KeccakRound sp, r0
+KeccakP800_Permute_OddRoundEntry:
     KeccakRound r0, sp
     ldr         r4, [lr]
     cmp         r4, #0
     bne         KeccakP800_Permute_RoundLoop
-    add         sp,sp,#4*25+4
+    add         sp,sp,#_SAS
     pop         {r4-r12,pc}
 
 

@@ -116,7 +116,7 @@ void KeccakP800_OverwriteWithZeroes(void *state, unsigned int byteCount)
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP800_Permute_Nrounds(void *argState, tSmallUInt nr)
+void KeccakP800_Permute_Nrounds(void *argState, unsigned int nr)
 {
     tSmallUInt x, y;
     tKeccakLane temp;

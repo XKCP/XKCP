@@ -184,6 +184,27 @@ static void pi(tKeccakLane *A);
 static void chi(tKeccakLane *A);
 static void iota(tKeccakLane *A, unsigned int indexRound);
 
+void KeccakP800_Permute_Nrounds(void *state, unsigned int nrounds)
+{
+#if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
+    tKeccakLane stateAsWords[800/32];
+#endif
+
+#ifdef KeccakReference
+    displayStateAsBytes(1, "Input of permutation", (const unsigned char *)state, 800);
+#endif
+#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+    KeccakP800OnWords((tKeccakLane*)state, nrounds);
+#else
+    fromBytesToWords(stateAsWords, (const unsigned char *)state);
+    KeccakP800OnWords(stateAsWords, nrounds);
+    fromWordsToBytes((unsigned char *)state, stateAsWords);
+#endif
+#ifdef KeccakReference
+    displayStateAsBytes(1, "State after permutation", (const unsigned char *)state, 800);
+#endif
+}
+
 void KeccakP800_Permute_12rounds(void *state)
 {
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)

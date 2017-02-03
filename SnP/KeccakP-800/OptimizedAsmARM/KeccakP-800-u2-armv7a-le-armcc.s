@@ -43,6 +43,8 @@ _se equ 21*4
 _si equ 22*4
 _so equ 23*4
 _su equ 24*4
+_SAS equ 4*25+4 ; keep stack aligned on 8 bytes
+
 
     MACRO
     ThetaRhoPiChiIota   $stateOut, $stateIn, $ofsOut, $ofs1, $ofs2, $ofs3, $ofs4, $dd1, $dd2, $dd3, $dd4, $dd5, $rr2, $rr3, $rr4, $rr5
@@ -201,9 +203,9 @@ _su equ 24*4
 
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_StaticInitialize( void )
-; 
+;
     ALIGN
     EXPORT  KeccakP800_StaticInitialize
 KeccakP800_StaticInitialize   PROC
@@ -211,9 +213,9 @@ KeccakP800_StaticInitialize   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_Initialize(void *state)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_Initialize
 KeccakP800_Initialize   PROC
@@ -233,9 +235,9 @@ KeccakP800_Initialize   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_AddByte(void *state, unsigned char byte, unsigned int offset)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_AddByte
 KeccakP800_AddByte   PROC
@@ -246,9 +248,9 @@ KeccakP800_AddByte   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_AddBytes
 KeccakP800_AddBytes   PROC
@@ -278,9 +280,9 @@ KeccakP800_AddBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_OverwriteBytes
 KeccakP800_OverwriteBytes   PROC
@@ -306,9 +308,9 @@ KeccakP800_OverwriteBytes_Exit
 
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_OverwriteWithZeroes(void *state, unsigned int byteCount)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_OverwriteWithZeroes
 KeccakP800_OverwriteWithZeroes  PROC
@@ -331,9 +333,9 @@ KeccakP800_OverwriteWithZeroes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_ExtractBytes
 KeccakP800_ExtractBytes   PROC
@@ -358,9 +360,9 @@ KeccakP800_ExtractBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_ExtractAndAddBytes
 KeccakP800_ExtractAndAddBytes   PROC
@@ -393,8 +395,43 @@ KeccakP800_ExtractAndAddBytes_Exit
 
 ; ----------------------------------------------------------------------------
 ; 
+;  void KeccakP800_Permute_Nrounds(void *state, unsigned int nrounds)
+;
+    ALIGN
+    EXPORT  KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds   PROC
+    mov     r2, r1
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    sub     r1, r1, r2, LSL #2
+    tst     r2, #1
+    beq     KeccakP800_Permute
+    push    {r4-r12,lr}                     ; odd number of rounds
+    sub     sp, sp, #_SAS
+    mov     lr, r1
+    mov     r1, sp
+    ldm     r0!, {r2,r3,r4,r5,r7} ; copy state to stack and prepare theta
+    stm     r1!, {r2,r3,r4,r5,r7}
+    ldm     r0!, {r2,r3,r4,r5,r6}
+    stm     r1!, {r2,r3,r4,r5,r6}
+    eor     r7, r7, r6
+    ldm     r0!, {r2,r3,r4,r5,r6}
+    stm     r1!, {r2,r3,r4,r5,r6}
+    eor     r7, r7, r6
+    ldm     r0!, {r2,r3,r4,r5,r6}
+    stm     r1!, {r2,r3,r4,r5,r6}
+    eor     r7, r7, r6
+    ldm     r0!, {r8,r9,r10,r11,r12}
+    stm     r1!, {r8,r9,r10,r11,r12}
+    eor     r7, r7, r12
+    mov     r6, r12
+    sub     r0, r0, #100
+    b       KeccakP800_Permute_OddRoundEntry
+    ENDP
+
+; ----------------------------------------------------------------------------
+;
 ;  void KeccakP800_Permute_12rounds( void *state )
-; 
+;
     ALIGN
     EXPORT  KeccakP800_Permute_12rounds
 KeccakP800_Permute_12rounds   PROC
@@ -403,9 +440,9 @@ KeccakP800_Permute_12rounds   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_Permute_22rounds( void *state )
-; 
+;
     ALIGN
     EXPORT  KeccakP800_Permute_22rounds
 KeccakP800_Permute_22rounds   PROC
@@ -438,18 +475,19 @@ KeccakP800_Permute_RoundConstants12
     dcd     0x8000000a
     dcd     0x80008081
     dcd     0x00008080
+KeccakP800_Permute_RoundConstants0
     dcd     0           ; terminator
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_Permute( void *state, void *rc )
-; 
+;
     ALIGN
 KeccakP800_Permute   PROC
     push        {r4-r12,lr}
     mov         lr, r1
     add         r2, r0, #_sa
-    sub         sp, sp, #4*25+4
+    sub         sp, sp, #_SAS
     ldmia       r2, { r8 - r12 }
     ldr         r7, [r0, #_bu]
     ldr         r1, [r0, #_gu]
@@ -462,11 +500,12 @@ KeccakP800_Permute   PROC
     eor         r7, r7, r1
 KeccakP800_Permute_RoundLoop
     KeccakRound sp, r0
+KeccakP800_Permute_OddRoundEntry
     KeccakRound r0, sp
     ldr         r4, [lr]
     cmp         r4, #0
     bne         KeccakP800_Permute_RoundLoop
-    add         sp,sp,#4*25+4
+    add         sp,sp,#_SAS
     pop         {r4-r12,pc}
     ENDP
 

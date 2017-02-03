@@ -387,6 +387,49 @@ KeccakP800_ExtractAndAddBytes_Exit
 
 ; ----------------------------------------------------------------------------
 ; 
+;  void KeccakP800_Permute_Nrounds(void *state, unsigned int nrounds)
+;
+    ALIGN
+    EXPORT  KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds   PROC
+    lsls    r2, r1, #2
+    lsls    r1, r1, #31
+    bne     KeccakP800_Permute_NroundsOdd
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    subs    r1, r1, r2
+    b       KeccakP800_Permute
+KeccakP800_Permute_NroundsOdd
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    subs    r1, r1, r2
+    push    { r4 - r6, lr }
+    mov     r2, r8
+    mov     r3, r9
+    mov     r4, r10
+    mov     r5, r11
+    mov     r6, r12
+    push    { r2 - r7 }
+    sub     sp, sp, #25*4+4
+    mov     r8, r1
+    ; copy state to stack and use stack state as input
+    mov     r7, r0
+    mov     r0, sp
+    ldmia   r7!, {r1-r5}
+    stmia   r0!, {r1-r5}
+    ldmia   r7!, {r1-r5}
+    stmia   r0!, {r1-r5}
+    ldmia   r7!, {r1-r5}
+    stmia   r0!, {r1-r5}
+    ldmia   r7!, {r1-r5}
+    stmia   r0!, {r1-r5}
+    ldmia   r7!, {r1-r5}
+    stmia   r0!, {r1-r5}
+    subs    r0, r0, #100
+    subs    r7, r7, #100
+    b       KeccakP800_Permute_RoundLoop
+    ENDP
+
+; ----------------------------------------------------------------------------
+; 
 ;  void KeccakP800_Permute_12rounds( void *state )
 ; 
     ALIGN
@@ -432,6 +475,7 @@ KeccakP800_Permute_RoundConstants12
     dcd         0x8000000a
     dcd         0x80008081
     dcd         0x00008080
+KeccakP800_Permute_RoundConstants0
     dcd         0xFF            ; terminator
 
 ; ----------------------------------------------------------------------------

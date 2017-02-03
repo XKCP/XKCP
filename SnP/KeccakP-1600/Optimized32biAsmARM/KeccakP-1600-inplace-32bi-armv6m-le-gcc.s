@@ -17,11 +17,11 @@
 
 
     .thumb
-    .syntax unified
+	.syntax unified
 .text
 
     @ Credit: Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002
-.macro  toBitInterleaving   in0,in1,out0,out1,t,tt,pMask
+.macro    toBitInterleaving   in0,in1,out0,out1,t,tt,pMask
 
     mov     \out0, \in0
     ldr     \t, [\pMask, #0]
@@ -107,7 +107,7 @@
     .endm
 
     @ Credit: Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002
-.macro  fromBitInterleavingStep x, t, tt, pMask, maskofs, shift
+.macro    fromBitInterleavingStep x, t, tt, pMask, maskofs, shift
 
     @ t = (x ^ (x >> shift)) & mask@  x = x ^ t ^ (t << shift)@
     lsrs    \t, \x, #\shift
@@ -119,7 +119,7 @@
     eors    \x, \x, \t
     .endm
 
-.macro  fromBitInterleaving     x0, x1, t, tt, pMask
+.macro    fromBitInterleaving     x0, x1, t, tt, pMask
     movs    \t, \x0                 @ t = x0
     lsls    \x0, \x0, #16           @ x0 = (x0 & 0x0000FFFF) | (x1 << 16)@
     lsrs    \x0, \x0, #16
@@ -140,69 +140,69 @@
     .endm
 
 @ --- offsets in state
-.equ Aba0, 0*4
-.equ Aba1, 1*4
-.equ Abe0, 2*4
-.equ Abe1, 3*4
-.equ Abi0, 4*4
-.equ Abi1, 5*4
-.equ Abo0, 6*4
-.equ Abo1, 7*4
-.equ Abu0, 8*4
-.equ Abu1, 9*4
-.equ Aga0, 10*4
-.equ Aga1, 11*4
-.equ Age0, 12*4
-.equ Age1, 13*4
-.equ Agi0, 14*4
-.equ Agi1, 15*4
-.equ Ago0, 16*4
-.equ Ago1, 17*4
-.equ Agu0, 18*4
-.equ Agu1, 19*4
-.equ Aka0, 20*4
-.equ Aka1, 21*4
-.equ Ake0, 22*4
-.equ Ake1, 23*4
-.equ Aki0, 24*4
-.equ Aki1, 25*4
-.equ Ako0, 26*4
-.equ Ako1, 27*4
-.equ Aku0, 28*4
-.equ Aku1, 29*4
-.equ Ama0, 30*4
-.equ Ama1, 31*4
-.equ Ame0, 32*4
-.equ Ame1, 33*4
-.equ Ami0, 34*4
-.equ Ami1, 35*4
-.equ Amo0, 36*4
-.equ Amo1, 37*4
-.equ Amu0, 38*4
-.equ Amu1, 39*4
-.equ Asa0, 40*4
-.equ Asa1, 41*4
-.equ Ase0, 42*4
-.equ Ase1, 43*4
-.equ Asi0, 44*4
-.equ Asi1, 45*4
-.equ Aso0, 46*4
-.equ Aso1, 47*4
-.equ Asu0, 48*4
-.equ Asu1, 49*4
+.equ Aba0   , 0*4
+.equ Aba1   , 1*4
+.equ Abe0   , 2*4
+.equ Abe1   , 3*4
+.equ Abi0   , 4*4
+.equ Abi1   , 5*4
+.equ Abo0   , 6*4
+.equ Abo1   , 7*4
+.equ Abu0   , 8*4
+.equ Abu1   , 9*4
+.equ Aga0   , 10*4
+.equ Aga1   , 11*4
+.equ Age0   , 12*4
+.equ Age1   , 13*4
+.equ Agi0   , 14*4
+.equ Agi1   , 15*4
+.equ Ago0   , 16*4
+.equ Ago1   , 17*4
+.equ Agu0   , 18*4
+.equ Agu1   , 19*4
+.equ Aka0   , 20*4
+.equ Aka1   , 21*4
+.equ Ake0   , 22*4
+.equ Ake1   , 23*4
+.equ Aki0   , 24*4
+.equ Aki1   , 25*4
+.equ Ako0   , 26*4
+.equ Ako1   , 27*4
+.equ Aku0   , 28*4
+.equ Aku1   , 29*4
+.equ Ama0   , 30*4
+.equ Ama1   , 31*4
+.equ Ame0   , 32*4
+.equ Ame1   , 33*4
+.equ Ami0   , 34*4
+.equ Ami1   , 35*4
+.equ Amo0   , 36*4
+.equ Amo1   , 37*4
+.equ Amu0   , 38*4
+.equ Amu1   , 39*4
+.equ Asa0   , 40*4
+.equ Asa1   , 41*4
+.equ Ase0   , 42*4
+.equ Ase1   , 43*4
+.equ Asi0   , 44*4
+.equ Asi1   , 45*4
+.equ Aso0   , 46*4
+.equ Aso1   , 47*4
+.equ Asu0   , 48*4
+.equ Asu1   , 49*4
 
 @ --- offsets on stack
-.equ mDa0, 0*4
-.equ mDa1, 1*4
-.equ mDo0, 2*4
-.equ mDo1, 3*4
-.equ mDi0, 4*4
+.equ mDa0   , 0*4
+.equ mDa1   , 1*4
+.equ mDo0   , 2*4
+.equ mDo1   , 3*4
+.equ mDi0   , 4*4
 .equ mRC    , 5*4
-.equ mSize, 6*4
+.equ mSize  , 6*4
 
 @ --- macros
 
-.macro  load        result,prev,curr,last
+.macro    load        result,prev,curr,last
 
     .if \prev >= (32*4)  &&  \curr < (32*4)
     subs        r0, #32*4
@@ -219,7 +219,7 @@
     .endif
     .endm
 
-.macro  store       result,prev,curr,last
+.macro    store       result,prev,curr,last
 
     .if \prev >= (32*4)  &&  \curr < (32*4)
     subs        r0, #32*4
@@ -236,51 +236,51 @@
     .endif
     .endm
 
-.macro  xor5        result,b,g,k,m,s, prev, last
+.macro    xor5        result,b,g,k,m,s, prev, last
 
     load        \result,  0,        \b, 0
-    load        r1,      \b,        \g, 0
+    load        r1,     \b,        \g, 0
     eors        \result, \result,   r1
-    load        r1,      \g,        \k, 0
+    load        r1,     \g,        \k, 0
     eors        \result, \result,   r1
-    load        r1,  \k,        \m, 0
+    load        r1,     \k,        \m, 0
     eors        \result, \result,   r1
-    load        r1,  \m,        \s, 1
+    load        r1,     \m,        \s, 1
     eors        \result, \result,   r1
     .endm
 
-.macro  xorrol      result, aa, bb
+.macro    xorrol      result, aa, bb
     movs        \result, \bb
     rors        \result, r2
     eors        \result, \result, \aa
     .endm
 
-.macro  xorrolR2    aa, bb
+.macro    xorrolR2    aa, bb
     rors        \bb, r2
     eors        \bb, \bb, \aa
     .endm
 
-.macro  xorh        result, aa, bb
+.macro    xorh        result, aa, bb
     mov         r1, \bb
     eors        r1, r1, \aa
     mov         \result, r1
     .endm
 
 
-.macro  xandnot     resofs, aa, bb, cc, prev, last
+.macro    xandnot     resofs, aa, bb, cc, prev, last
     movs        r1, \cc
     bics        r1, r1, \bb
     eors        r1, r1, \aa
     store       r1, \prev, \resofs, \last
     .endm
 
-.macro  xandnotR4   resofs, aa, bb, cc, prev, last
+.macro    xandnotR4   resofs, aa, bb, cc, prev, last
     bics        \cc, \cc, \bb
     eors        \cc, \cc, \aa
     store       \cc, \prev, \resofs, \last
     .endm
 
-.macro  KeccakThetaRhoPiChiIota aA1, aDax, aA2, aDex, rot2, aA3, aDix, rot3, aA4, aDox, rot4, aA5, aDux, rot5, offset, last
+.macro    KeccakThetaRhoPiChiIota aA1, aDax, aA2, aDex, rot2, aA3, aDix, rot3, aA4, aDox, rot4, aA5, aDux, rot5, offset, last
     load    r3,    0, \aA1, 0
     load    r4, \aA1, \aA2, 0
     load    r5, \aA2, \aA3, 0
@@ -313,7 +313,7 @@
     ldr     r4, [r1, #\offset]
     eors    r3, r3, r5
     eors    r3, r3, r4
-    .if \last == 1
+    .if  \last == 1
     adds    r1, #32
     ldr     r2, [r1]
     str     r1, [sp, #mRC]
@@ -322,7 +322,7 @@
     str     r3, [r0, #\aA1]
     .endm
 
-.macro  KeccakThetaRhoPiChi aB1, aA1, aDax, rot1, aB2, aA2, aDex, rot2, aB3, aA3, aDix, rot3, aB4, aA4, aDox, rot4, aB5, aA5, aDux, rot5
+.macro    KeccakThetaRhoPiChi aB1, aA1, aDax, rot1, aB2, aA2, aDex, rot2, aB3, aA3, aDix, rot3, aB4, aA4, aDox, rot4, aB5, aA5, aDux, rot5
     load    \aB1,    0, \aA1, 0
     load    \aB2, \aA1, \aA2, 0
     load    \aB3, \aA2, \aA3, 0
@@ -340,7 +340,7 @@
     eors    \aB5, \aB5, r1
     movs    r1, #32-\rot1
     rors    \aB1, r1
-    .if \rot2 > 0
+    .if  \rot2 > 0
     movs    r1, #32-\rot2
     rors    \aB2, r1
     .endif
@@ -357,7 +357,7 @@
     xandnotR4   \aA3, r5, r6, r7, \aA4, 1
     .endm
 
-.macro  KeccakRound0
+.macro    KeccakRound0
     movs        r2,  #31
     xor5        r3,  Abu0, Agu0, Aku0, Amu0, Asu0, 0,    0
     xor5        r7,  Abe1, Age1, Ake1, Ame1, Ase1, Asu0, 0
@@ -419,7 +419,7 @@
     KeccakThetaRhoPiChiIota  Aba1, r8,          Age1, r11, 22,      Aki0, r2, 21,      Amo0, r9, 10,      Asu1, lr,  7, 4, 0
     .endm
 
-.macro  KeccakRound1
+.macro    KeccakRound1
 
     movs        r2,  #31
     xor5        r3,  Asu0, Agu0, Amu0, Abu1, Aku1, 0, 0
@@ -482,7 +482,7 @@
     KeccakThetaRhoPiChiIota  Aba1, r8,          Ame0, r11, 22,      Agi0, r2, 21,      Aso0, r9, 10,      Aku0, lr,  7, 12, 0
     .endm
 
-.macro  KeccakRound2
+.macro    KeccakRound2
 
     movs        r2,  #31
     xor5        r3,  Aku1, Agu0, Abu1, Asu1, Amu1, 0, 0
@@ -545,7 +545,7 @@
     KeccakThetaRhoPiChiIota Aba1,  r8,          Ake0, r11, 22,      Asi1, r2, 21,      Ago1, r9, 10,      Amu0, lr,  7, 20, 0
     .endm
 
-.macro  KeccakRound3
+.macro    KeccakRound3
 
     movs        r2,  #31
     xor5        r3,  Amu1, Agu0, Asu1, Aku0, Abu0, 0, 0
@@ -741,14 +741,14 @@ KeccakP1600_AddBytes_Exit1:
     bx      lr
     nop
 KeccakP1600_AddBytes_ToBitInterleavingConstants:
-        .long       0x55555555
-        .long       0x33333333
-        .long       0x0F0F0F0F
-        .long       0x00FF00FF
-        .long       0xAAAAAAAA
-        .long       0xCCCCCCCC
-        .long       0xF0F0F0F0
-        .long       0xFF00FF00
+		.long      0x55555555
+		.long      0x33333333
+		.long      0x0F0F0F0F
+		.long      0x00FF00FF
+		.long      0xAAAAAAAA
+		.long      0xCCCCCCCC
+		.long      0xF0F0F0F0
+		.long      0xFF00FF00
 
 
 @----------------------------------------------------------------------------
@@ -919,14 +919,14 @@ KeccakP1600_OverwriteBytes_Exit1:
     bx      lr
     nop
 KeccakP1600_OverwriteBytes_ToBitInterleavingConstants:
-        .long       0x55555555
-        .long       0x33333333
-        .long       0x0F0F0F0F
-        .long       0x00FF00FF
-        .long       0xAAAAAAAA
-        .long       0xCCCCCCCC
-        .long       0xF0F0F0F0
-        .long       0xFF00FF00
+		.long      0x55555555
+		.long      0x33333333
+		.long      0x0F0F0F0F
+		.long      0x00FF00FF
+		.long      0xAAAAAAAA
+		.long      0xCCCCCCCC
+		.long      0xF0F0F0F0
+		.long      0xFF00FF00
 
 
 @----------------------------------------------------------------------------
@@ -1129,10 +1129,10 @@ KeccakP1600_ExtractBytes_Exit1:
     bx      lr
     nop
 KeccakP1600_ExtractBytes_FromBitInterleavingConstants:
-        .long       0x0000FF00
-        .long       0x00F000F0
-        .long       0x0C0C0C0C
-        .long       0x22222222
+		.long      0x0000FF00
+		.long      0x00F000F0
+		.long      0x0C0C0C0C
+		.long      0x22222222
 
 
 @----------------------------------------------------------------------------
@@ -1279,10 +1279,10 @@ KeccakP1600_ExtractAndAddBytes_Exit:
     pop     {r3 - r7, pc}
 .align 8
 KeccakP1600_ExtractAndAddBytes_FromBitInterleavingConstants:
-        .long       0x0000FF00
-        .long       0x00F000F0
-        .long       0x0C0C0C0C
-        .long       0x22222222
+		.long      0x0000FF00
+		.long      0x00F000F0
+		.long      0x0C0C0C0C
+		.long      0x22222222
 
 
 @----------------------------------------------------------------------------
@@ -1409,6 +1409,138 @@ __KeccakP1600_ExtractAndAddBytesInLane_Loop:
     bx      lr
 
 
+
+.macro    ldrf    result,offset
+    .if      \offset >= 128
+    ldr     \result, [r5, #\offset-128]
+    .else
+    ldr     \result, [r0, #\offset]
+    .endif
+    .endm
+
+.macro    strf    result,offset
+    .if      \offset >= 128
+    str     \result, [r5, #\offset-128]
+    .else
+    str     \result, [r0, #\offset]
+    .endif
+    .endm
+
+.macro    SwapPI13 in0,in1,in2,in3,eo0,eo1,eo2,eo3
+    ldrf    r3, \in0+0
+    ldrf    r4, \in0+4
+    ldrf    r2, \in1+0
+    ldrf    r1, \in1+4
+    strf    r2, \in0+\eo0*4
+    strf    r1, \in0+(\eo0^1)*4
+    ldrf    r2, \in2+0
+    ldrf    r1, \in2+4
+    strf    r2, \in1+\eo1*4
+    strf    r1, \in1+(\eo1^1)*4
+    ldrf    r2, \in3+0
+    ldrf    r1, \in3+4
+    strf    r2, \in2+\eo2*4
+    strf    r1, \in2+(\eo2^1)*4
+    strf    r3, \in3+\eo3*4
+    strf    r4, \in3+(\eo3^1)*4
+    .endm
+
+.macro    SwapPI2 in0,in1,in2,in3
+    ldrf    r3, \in0+0
+    ldrf    r4, \in0+4
+    ldrf    r2, \in1+0
+    ldrf    r1, \in1+4
+    strf    r2, \in0+4
+    strf    r1, \in0+0
+    strf    r3, \in1+4
+    strf    r4, \in1+0
+    ldrf    r3, \in2+0
+    ldrf    r4, \in2+4
+    ldrf    r2, \in3+0
+    ldrf    r1, \in3+4
+    strf    r2, \in2+4
+    strf    r1, \in2+0
+    strf    r3, \in3+4
+    strf    r4, \in3+0
+    .endm
+
+.macro    SwapEO  even,odd
+    ldrf    r3, \even
+    ldrf    r4, \odd
+    strf    r3, \odd
+    strf    r4, \even
+    .endm
+
+@ ----------------------------------------------------------------------------
+@
+@  void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+@
+.align 8
+.global   KeccakP1600_Permute_Nrounds
+KeccakP1600_Permute_Nrounds:
+    lsls    r2, r1, #30
+    bne     KeccakP1600_Permute_NroundsNotMultiple4
+    lsls    r2, r1, #3
+    adr     r1, KeccakP1600_Permute_RoundConstants0Mod4
+    subs    r1, r1, r2
+    b       KeccakP1600_Permute
+KeccakP1600_Permute_NroundsNotMultiple4:     @ nrounds not multiple of 4
+    push    { r4 - r6, lr }
+    mov     r2, r8
+    mov     r3, r9
+    mov     r4, r10
+    mov     r5, r11
+    mov     r6, r12
+    push    { r2 - r7 }
+    sub     sp, #mSize
+    mov     r3, r1
+    lsrs    r2, r1, #2
+    lsls    r2, r2, #3+2
+    adr     r1, KeccakP1600_Permute_RoundConstants0
+    subs    r1, r1, r2
+    str     r1, [sp, #mRC]
+    mov     r5, r0
+    adds    r5, r5, #128
+    lsls    r3, r3, #31
+    bcs     KeccakP1600_Permute_Nrounds23Mod4
+KeccakP1600_Permute_Nrounds1Mod4:
+    SwapPI13 Aga0, Aka0, Asa0, Ama0, 1, 0, 1, 0
+    SwapPI13 Abe0, Age0, Ame0, Ake0, 0, 1, 0, 1
+    SwapPI13 Abi0, Aki0, Agi0, Asi0, 1, 0, 1, 0
+    SwapEO   Ami0, Ami1
+    SwapPI13 Abo0, Amo0, Aso0, Ago0, 1, 0, 1, 0
+    SwapEO   Ako0, Ako1
+    SwapPI13 Abu0, Asu0, Aku0, Amu0, 0, 1, 0, 1
+    ldr     r1, =KeccakP1600_Permute_Round1Mod4+1
+    bx      r1
+.align 8
+    .ltorg
+KeccakP1600_Permute_Nrounds23Mod4:
+    bpl        KeccakP1600_Permute_Nrounds2Mod4
+KeccakP1600_Permute_Nrounds3Mod4:
+    SwapPI13 Aga0, Ama0, Asa0, Aka0, 0, 1, 0, 1
+    SwapPI13 Abe0, Ake0, Ame0, Age0, 1, 0, 1, 0
+    SwapPI13 Abi0, Asi0, Agi0, Aki0, 0, 1, 0, 1
+    SwapEO   Ami0, Ami1
+    SwapPI13 Abo0, Ago0, Aso0, Amo0, 0, 1, 0, 1
+    SwapEO   Ako0, Ako1
+    SwapPI13 Abu0, Amu0, Aku0, Asu0, 1, 0, 1, 0
+    ldr     r1, =KeccakP1600_Permute_Round3Mod4+1
+    bx      r1
+.align 8
+    .ltorg
+KeccakP1600_Permute_Nrounds2Mod4:
+    SwapPI2 Aga0, Asa0, Aka0, Ama0
+    SwapPI2 Abe0, Ame0, Age0, Ake0
+    SwapPI2 Abi0, Agi0, Aki0, Asi0
+    SwapPI2 Abo0, Aso0, Ago0, Amo0
+    SwapPI2 Abu0, Aku0, Amu0, Asu0
+    ldr     r1, =KeccakP1600_Permute_Round2Mod4+1
+    bx      r1
+.align 8
+    .ltorg
+
+
 @ ----------------------------------------------------------------------------
 @
 @  void KeccakP1600_Permute_12rounds( void *state )
@@ -1434,38 +1566,34 @@ KeccakP1600_Permute_24rounds:
 .align 8
 KeccakP1600_Permute_RoundConstants24:
     @       0           1
-        .long       0x00000001, 0x00000000
-        .long       0x00000000, 0x00000089
-        .long       0x00000000, 0x8000008b
-        .long       0x00000000, 0x80008080
-
-        .long       0x00000001, 0x0000008b
-        .long       0x00000001, 0x00008000
-        .long       0x00000001, 0x80008088
-        .long       0x00000001, 0x80000082
-
-        .long       0x00000000, 0x0000000b
-        .long       0x00000000, 0x0000000a
-        .long       0x00000001, 0x00008082
-        .long       0x00000000, 0x00008003
-
+		.long      0x00000001, 0x00000000
+		.long      0x00000000, 0x00000089
+		.long      0x00000000, 0x8000008b
+		.long      0x00000000, 0x80008080
+		.long      0x00000001, 0x0000008b
+		.long      0x00000001, 0x00008000
+		.long      0x00000001, 0x80008088
+		.long      0x00000001, 0x80000082
+		.long      0x00000000, 0x0000000b
+		.long      0x00000000, 0x0000000a
+		.long      0x00000001, 0x00008082
+		.long      0x00000000, 0x00008003
 KeccakP1600_Permute_RoundConstants12:
-        .long       0x00000001, 0x0000808b
-        .long       0x00000001, 0x8000000b
-        .long       0x00000001, 0x8000008a
-        .long       0x00000001, 0x80000081
-
-        .long       0x00000000, 0x80000081
-        .long       0x00000000, 0x80000008
-        .long       0x00000000, 0x00000083
-        .long       0x00000000, 0x80008003
-
-        .long       0x00000001, 0x80008088
-        .long       0x00000000, 0x80000088
-        .long       0x00000001, 0x00008000
-        .long       0x00000000, 0x80008082
-
-        .long       0x000000FF  @terminator
+		.long      0x00000001, 0x0000808b
+		.long      0x00000001, 0x8000000b
+		.long      0x00000001, 0x8000008a
+		.long      0x00000001, 0x80000081
+		.long      0x00000000, 0x80000081
+		.long      0x00000000, 0x80000008
+		.long      0x00000000, 0x00000083
+		.long      0x00000000, 0x80008003
+KeccakP1600_Permute_RoundConstants0:
+		.long      0x00000001, 0x80008088
+		.long      0x00000000, 0x80000088
+		.long      0x00000001, 0x00008000
+		.long      0x00000000, 0x80008082
+KeccakP1600_Permute_RoundConstants0Mod4:
+		.long      0x000000FF  @terminator
 
 @----------------------------------------------------------------------------
 @
@@ -1484,8 +1612,11 @@ KeccakP1600_Permute:
     str     r1, [sp, #mRC]
 KeccakP1600_Permute_RoundLoop:
     KeccakRound0
+KeccakP1600_Permute_Round3Mod4:
     KeccakRound1
+KeccakP1600_Permute_Round2Mod4:
     KeccakRound2
+KeccakP1600_Permute_Round1Mod4:
     KeccakRound3
     beq     KeccakP1600_Permute_Done
     ldr     r1, =KeccakP1600_Permute_RoundLoop+1

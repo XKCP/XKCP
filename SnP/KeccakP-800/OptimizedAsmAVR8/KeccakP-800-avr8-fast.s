@@ -381,11 +381,30 @@ KeccakP800_RoundConstants_12:
     .BYTE    0x0a, 0x00, 0x00, 0x80
     .BYTE    0x81, 0x80, 0x00, 0x80
     .BYTE    0x80, 0x80, 0x00, 0x00
+KeccakP800_RoundConstants_0:
     .BYTE    0xFF, 0        ; terminator
 
     .text
 
     #define pRound        22        // 2 regs (22-23)
+
+;----------------------------------------------------------------------------
+;
+; void KeccakP800_Permute_Nrounds( void *state, unsigned int nrounds )
+;
+; argument state     is passed in r24:r25
+; argument nrounds   is passed in r22:r23 (only LSB (r22) is used)
+;
+.global KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds:
+	mov		r26, r22
+    ldi     pRound,   lo8(KeccakP800_RoundConstants_0)
+    ldi     pRound+1, hi8(KeccakP800_RoundConstants_0)
+	lsl		r26
+	lsl		r26
+    sub     pRound, r26
+    sbc     pRound+1, zero
+    rjmp    KeccakP800_Permute
 
 ;----------------------------------------------------------------------------
 ;

@@ -146,7 +146,7 @@ _ROLV_CONST(_C4, 27, 20, 39,  8)
     STORE(&s.c4, c4); \
     STORE(&s.a44, a44);
 
-//#define KECCAK_NO_ASM // !!!
+#define KECCAK_NO_ASM // !!!
 #if defined(KECCAK_NO_ASM) || !(defined(__x86_64__) || defined(__X86_64__) || defined(__LP64__) || \
     defined(_M_X64) || defined(_M_AMD64) || defined(_WIN64)) || \
     !defined(__GNUC__)
@@ -406,6 +406,7 @@ __asm volatile \
         [SLLV_C4] "m"(SLLV_C4), [SRLV_C4] "m"(SRLV_C4) \
     : "rax", "xmm0", "xmm6", "xmm7", "xmm8", "xmm9", "xmm10" \
 );
+
 #define KECCAK_PERMUTE(const_pref) KECCAK_PERMUTE_LOOP(const_pref, 24)
 #define KECCAK_PERMUTE_12rounds(const_pref) KECCAK_PERMUTE_LOOP(const_pref, 12)
 #endif //__X64 && __GNUC__
@@ -628,6 +629,20 @@ void KeccakP1600_ExtractAndAddBytes(const void *state, const UINT8 *input, UINT8
     }
 } //KeccakP1600_ExtractAndAddBytes
 
+
+//***************************
+void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+//***************************
+{
+    KECCAK_PERMUTE_VARS
+
+    KECCAK_LOAD
+
+    KECCAK_PERMUTE_LOOP(, nrounds)
+
+    KECCAK_STORE
+}
+
 //***************************
 void KeccakP1600_Permute_24rounds(void *state)
 //***************************
@@ -637,7 +652,7 @@ void KeccakP1600_Permute_24rounds(void *state)
     KECCAK_LOAD
 
     KECCAK_PERMUTE()
-    
+
     KECCAK_STORE
 } //KeccakP1600_Permute_24rounds
 

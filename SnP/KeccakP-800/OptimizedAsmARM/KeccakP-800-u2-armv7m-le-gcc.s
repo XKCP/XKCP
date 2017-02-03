@@ -17,7 +17,7 @@
 
 
         .thumb
-    .syntax unified
+	.syntax unified
 .text
 
 @ ----------------------------------------------------------------------------
@@ -47,12 +47,12 @@
 .equ _si    , 22*4
 .equ _so    , 23*4
 .equ _su    , 24*4
-.equ _pRC, 25*4
-.equ _SAS, 26*4
+.equ _pRC   , 25*4
+.equ _SAS   , 26*4
 
 @ ----------------------------------------------------------------------------
 
-.macro  xor5    result,ptr,rb,g,k,m,s
+.macro    xor5    result,ptr,rb,g,k,m,s
     ldr     \result, [\ptr, #\g]
     eors    \result, \result, \rb
     ldr     \rb, [\ptr, #\k]
@@ -63,17 +63,17 @@
     eors    \result, \result, \rb
     .endm
 
-.macro  mTe     b, yy, rr
+.macro    mTe     b, yy, rr
     eors    \b, \b, \yy
-    .if     \rr != 0
+    .if      \rr != 0
     ror     \b, \b, #32-\rr
     .endif
     .endm
 
-.macro  mCI     resptr, resofs, ax0, ax1, ax2, temp, iota
+.macro    mCI     resptr, resofs, ax0, ax1, ax2, temp, iota
     bics    \temp, \ax2, \ax1
     ldr     \ax2, [sp, #_pRC]
-    .if         \iota == 0
+    .if      \iota == 0
     eors    \temp, \temp, \ax0
     ldr     \ax1, [\ax2], #8
     str     \ax2, [sp, #_pRC]
@@ -83,32 +83,32 @@
     .endif
     eors    \temp, \temp, \ax1
     str     \temp, [\resptr, #\resofs]
-    .if     \iota == 1
+    .if      \iota == 1
     orr     \ax1, \ax1, \ax1, LSL #16
     .endif
     .endm
 
-.macro  mC      resptr, resofs, ax0, ax1, ax2, temp, pTxor, pTreg, save
+.macro    mC      resptr, resofs, ax0, ax1, ax2, temp, pTxor, pTreg, save
     bics    \temp, \ax2, \ax1
     eors    \temp, \temp, \ax0
-    .if     \save != 0
+    .if      \save != 0
     str     \temp, [\resptr, #\resofs]
     .endif
-    .if         \pTxor != 0
+    .if      \pTxor != 0
     eors    \pTreg, \pTreg, \temp
     .endif
     .endm
 
-.macro  mKR     stateOut,stateIn,iota
+.macro    mKR     stateOut,stateIn,iota
 
     @ prepare Theta
     xor5    r1, \stateIn, r9, _ga, _ka, _ma, _sa
     xor5    r2, \stateIn, r10, _ge, _ke, _me, _se
-    eor     r9, r7, r2, ROR #31
+    eor     r9, r8, r2, ROR #31
     eor     r10, r1, r6, ROR #31
-    eor     r11, r2, r8, ROR #31
-    eor     r12, r6, r7, ROR #31
-    eor     lr, r8, r1, ROR #31
+    eor     r11, r2, r7, ROR #31
+    eor     r12, r6, r8, ROR #31
+    eor     lr, r7, r1, ROR #31
 
     @ Theta Rho Pi Chi Iota
     eors    r1, r3, r11
@@ -121,8 +121,8 @@
     mTe     r3, lr,  7
     mTe     r4, r9,  9
     mTe     r5, r10,  2
-    mC      \stateOut, _su, r5, r1, r2, r7, 0, 0,   1
-    mC      \stateOut, _so, r4, r5, r1, r8, 0, 0,   1
+    mC      \stateOut, _su, r5, r1, r2, r8, 0, 0,   1
+    mC      \stateOut, _so, r4, r5, r1, r7, 0, 0,   1
     mC      \stateOut, _si, r3, r4, r5, r6, 0, 0,   1
     mC      \stateOut, _se, r2, r3, r4, r4, 0, 0,   1
     mC      \stateOut, _sa, r1, r2, r3, r3, 0, 0,   1
@@ -135,8 +135,8 @@
     mTe     r2, r9,  4
     mTe     r4, r11, 15
     mTe     r5, r12, 24
-    mC      \stateOut, _mu, r5, r1, r2, r3, 1, r7, 1
-    mC      \stateOut, _mo, r4, r5, r1, r3, 1, r8, 1
+    mC      \stateOut, _mu, r5, r1, r2, r3, 1, r8, 1
+    mC      \stateOut, _mo, r4, r5, r1, r3, 1, r7, 1
     ldr     r3, [\stateIn, #_ke]
     mTe     r3, r10, 10
     mC      \stateOut, _mi, r3, r4, r5, r5, 1, r6, 1
@@ -151,8 +151,8 @@
     mTe     r2, r11,  6
     mTe     r4, lr,  8
     mTe     r5, r9, 18
-    mC      \stateOut, _ku, r5, r1, r2, r3, 1, r7, 1
-    mC      \stateOut, _ko, r4, r5, r1, r3, 1, r8, 1
+    mC      \stateOut, _ku, r5, r1, r2, r3, 1, r8, 1
+    mC      \stateOut, _ko, r4, r5, r1, r3, 1, r7, 1
     ldr     r3, [\stateIn, #_ko]
     mTe     r3, r12, 25
     mC      \stateOut, _ki, r3, r4, r5, r5, 1, r6, 1
@@ -167,8 +167,8 @@
     mTe     r2, lr, 20
     mTe     r4, r10, 13
     mTe     r5, r11, 29
-    mC      \stateOut, _gu, r5, r1, r2, r3, 1, r7, 1
-    mC      \stateOut, _go, r4, r5, r1, r3, 1, r8, 1
+    mC      \stateOut, _gu, r5, r1, r2, r3, 1, r8, 1
+    mC      \stateOut, _go, r4, r5, r1, r3, 1, r7, 1
     ldr     r3, [\stateIn, #_ka]
     mTe     r3, r9,  3
     mC      \stateOut, _gi, r3, r4, r5, r5, 1, r6, 1
@@ -185,8 +185,8 @@
     mTe     r3, r11, 11
     mTe     r4, r12, 21
     mTe     r5, lr, 14
-    mC      \stateOut, _bu, r5, r1, r2, lr, 1, r7, 1
-    mC      \stateOut, _bo, r4, r5, r1, r12, 1, r8, 1
+    mC      \stateOut, _bu, r5, r1, r2, lr, 1, r8, 1
+    mC      \stateOut, _bo, r4, r5, r1, r12, 1, r7, 1
     mC      \stateOut, _bi, r3, r4, r5, r11, 1, r6, 0
     mC      \stateOut, _be, r2, r3, r4, r10, 0, 0,   1
     mCI     \stateOut, _ba, r1, r2, r3, r9, \iota
@@ -249,7 +249,7 @@ KeccakP800_AddBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
     bcc     KeccakP800_AddBytes_Bytes
-KeccakP800_AddBytes_LanesLoop:                  @ then, perform on words
+KeccakP800_AddBytes_LanesLoop:                   @ then, perform on words
     ldr     r2, [r0]
     ldr     r4, [r1], #4
     eors    r2, r2, r4
@@ -280,7 +280,7 @@ KeccakP800_OverwriteBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
     bcc     KeccakP800_OverwriteBytes_Bytes
-KeccakP800_OverwriteBytes_LanesLoop:            @ then, perform on words
+KeccakP800_OverwriteBytes_LanesLoop:         @ then, perform on words
     ldr     r2, [r1], #4
     str     r2, [r0], #4
     subs    r3, r3, #4
@@ -332,7 +332,7 @@ KeccakP800_ExtractBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
     bcc     KeccakP800_ExtractBytes_Bytes
-KeccakP800_ExtractBytes_LanesLoop:              @ then, handle words
+KeccakP800_ExtractBytes_LanesLoop:               @ then, handle words
     ldr     r2, [r0], #4
     str     r2, [r1], #4
     subs    r3, r3, #4
@@ -361,7 +361,7 @@ KeccakP800_ExtractAndAddBytes:
     ldr     r3, [sp, #8]                                @ get length argument from stack
     subs    r3, r3, #4                                  @ .if length >= 4
     bcc     KeccakP800_ExtractAndAddBytes_Bytes
-KeccakP800_ExtractAndAddBytes_LanesLoop:            @ then, handle words
+KeccakP800_ExtractAndAddBytes_LanesLoop:         @ then, handle words
     ldr     r5, [r0], #4
     ldr     r4, [r1], #4
     eors    r5, r5, r4
@@ -381,6 +381,50 @@ KeccakP800_ExtractAndAddBytes_BytesLoop:
 KeccakP800_ExtractAndAddBytes_Exit:
     pop     {r4,r5}
     bx      lr
+
+
+@ ----------------------------------------------------------------------------
+@
+@  void KeccakP800_Permute_Nrounds(void *state, unsigned int nrounds)
+@
+.align 8
+.global   KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds:
+    mov     r2, r1
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    sub     r1, r1, r2, LSL #2
+    tst     r2, #1
+    beq     KeccakP800_Permute
+    push    {r4-r12,lr}                     @ odd number of rounds
+    sub     sp, sp, #_SAS
+    add     r1, r1, #4                      @ set RC pointer on next word, see in iota code
+    str     r1, [sp, #_pRC]
+    mov     r4, sp
+    ldm     r0!, {r9,r10,r11,r12,lr} @ copy state to stack and prepare theta
+    stm     r4!, {r9,r10,r11,r12,lr}
+    mov     r3, r11
+    ldm     r0!, {r1,r2,r6,r7,r8}
+    stm     r4!, {r1,r2,r6,r7,r8}
+    eor     r6, r6, r11
+    eor     r7, r7, r12
+    eor     r8, r8, lr
+    ldm     r0!, {r1,r2,r11,r12,lr}
+    stm     r4!, {r1,r2,r11,r12,lr}
+    eor     r6, r6, r11
+    eor     r7, r7, r12
+    eor     r8, r8, lr
+    ldm     r0!, {r1,r2,r11,r12,lr}
+    stm     r4!, {r1,r2,r11,r12,lr}
+    eor     r6, r6, r11
+    eor     r7, r7, r12
+    eor     r8, r8, lr
+    ldm     r0!, {r1,r2,r11,r12,lr}
+    stm     r4!, {r1,r2,r11,r12,lr}
+    eor     r6, r6, r11
+    eor     r7, r7, r12
+    eor     r8, r8, lr
+    sub     r0, r0, #100
+    b       KeccakP800_Permute_OddRoundEntry
 
 
 @ ----------------------------------------------------------------------------
@@ -407,29 +451,30 @@ KeccakP800_Permute_22rounds:
 
 .align 8
 KeccakP800_Permute_RoundConstants22:
-        .long       0x00000001
-        .long       0x00008082
-        .long       0x0000808a
-        .long       0x80008000
-        .long       0x0000808b
-        .long       0x80000001
-        .long       0x80008081
-        .long       0x00008009
-        .long       0x0000008a
-        .long       0x00000088
+		.long      0x00000001
+		.long      0x00008082
+		.long      0x0000808a
+		.long      0x80008000
+		.long      0x0000808b
+		.long      0x80000001
+		.long      0x80008081
+		.long      0x00008009
+		.long      0x0000008a
+		.long      0x00000088
 KeccakP800_Permute_RoundConstants12:
-        .long       0x80008009
-        .long       0x8000000a
-        .long       0x8000808b
-        .long       0x0000008b
-        .long       0x00008089
-        .long       0x00008003
-        .long       0x00008002
-        .long       0x00000080
-        .long       0x0000800a
-        .long       0x8000000a
-        .long       0x80008081
-        .long       0x00008080
+		.long      0x80008009
+		.long      0x8000000a
+		.long      0x8000808b
+		.long      0x0000008b
+		.long      0x00008089
+		.long      0x00008003
+		.long      0x00008002
+		.long      0x00000080
+		.long      0x0000800a
+		.long      0x8000000a
+		.long      0x80008081
+		.long      0x00008080
+KeccakP800_Permute_RoundConstants0:
 
 @ ----------------------------------------------------------------------------
 @
@@ -442,16 +487,17 @@ KeccakP800_Permute:
     str     r1, [sp, #_pRC]
     ldm     r0, {r9,r10,r11,r12,lr}
     mov     r3, r11
-    xor5    r7, r0, lr, _gu, _ku, _mu, _su
-    xor5    r8, r0, r12, _go, _ko, _mo, _so
+    xor5    r8, r0, lr, _gu, _ku, _mu, _su
+    xor5    r7, r0, r12, _go, _ko, _mo, _so
     xor5    r6, r0, r11, _gi, _ki, _mi, _si
 KeccakP800_Permute_RoundLoop:
     mKR     sp, r0, 0
+KeccakP800_Permute_OddRoundEntry:
     mKR     r0, sp, 1
     cmp     r2, #0x80808080
     bne     KeccakP800_Permute_RoundLoop
     str     r11, [r0, #_bi]
-    add     sp,sp,#_SAS
+    add     sp, sp, #_SAS
     pop     {r4-r12,pc}
 
 

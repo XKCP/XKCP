@@ -237,7 +237,7 @@ void KeccakP1600_OverwriteWithZeroes(void *argState, unsigned int byteCount)
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_Permute_Nrounds(void *argState, UINT8 rounds, UINT8 LFSRinitialState)
+static void KeccakP1600_Permute_NroundsLFSR(void *argState, UINT8 rounds, UINT8 LFSRinitialState)
 {
     tSmallUInt x, y, round;
     tKeccakLane        temp;
@@ -302,16 +302,29 @@ void KeccakP1600_Permute_Nrounds(void *argState, UINT8 rounds, UINT8 LFSRinitial
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_Permute_12rounds(void *argState)
+void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
 {
-    KeccakP1600_Permute_Nrounds(argState, 12, 0xD5);
+	UINT8 LFSRstate;
+	UINT8 nr;
+
+	LFSRstate = 0x01;
+	for ( nr = 24 - nrounds; nr != 0; --nr )
+        KeccakF1600_GetNextRoundConstant(&LFSRstate);
+    KeccakP1600_Permute_NroundsLFSR(state, nrounds, LFSRstate);
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_Permute_24rounds(void *argState)
+void KeccakP1600_Permute_12rounds(void *state)
 {
-    KeccakP1600_Permute_Nrounds(argState, 24, 0x01);
+    KeccakP1600_Permute_NroundsLFSR(state, 12, 0xD5);
+}
+
+/* ---------------------------------------------------------------- */
+
+void KeccakP1600_Permute_24rounds(void *state)
+{
+    KeccakP1600_Permute_NroundsLFSR(state, 24, 0x01);
 }
 
 /* ---------------------------------------------------------------- */

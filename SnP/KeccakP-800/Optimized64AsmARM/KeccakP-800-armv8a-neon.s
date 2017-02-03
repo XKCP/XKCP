@@ -192,6 +192,7 @@ KeccakP800_Permute_RoundConstants12:
     .word   0x8000000a
     .word   0x80008081
     .word   0x00008080
+KeccakP800_Permute_RoundConstants0:
 
 //----------------------------------------------------------------------------
 //
@@ -338,7 +339,7 @@ KeccakP800_ExtractBytes_Exit:
 
 // ----------------------------------------------------------------------------
 //
-//  void KeccakP800__ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+//  void KeccakP800_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 //
 .align 8
 .global   KeccakP800_ExtractAndAddBytes
@@ -367,6 +368,18 @@ KeccakP800_ExtractAndAddBytes_BytesLoop:
 KeccakP800_ExtractAndAddBytes_Exit:
     ret
 
+// ----------------------------------------------------------------------------
+//
+//  void KeccakP800_Permute_Nrounds( void *state, unsigned int nrounds )
+//
+.align 8
+.global   KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds:
+    mov     x2, x1
+    adr     x1, KeccakP800_Permute_RoundConstants0
+	lsl		x3, x2, #2
+	sub		x1, x1, x3
+    b       KeccakP800_Permute
 
 // ----------------------------------------------------------------------------
 //
@@ -378,7 +391,6 @@ KeccakP800_Permute_12rounds:
     adr     x1, KeccakP800_Permute_RoundConstants12
     mov     x2, #12
     b       KeccakP800_Permute
-
 
 // ----------------------------------------------------------------------------
 //
@@ -393,7 +405,7 @@ KeccakP800_Permute_22rounds:
 
 //----------------------------------------------------------------------------
 //
-// void KeccakP800_Permute( void *state )
+// void KeccakP800_Permute( void *state, uint32_t *rc, unsigned int nrounds )
 //
 .align 8
 .global   KeccakP800_Permute

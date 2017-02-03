@@ -388,9 +388,53 @@ KeccakP800_ExtractAndAddBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
+;  void KeccakP800_Permute_Nrounds(void *state, unsigned int nrounds)
+;
+    ALIGN
+    EXPORT  KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds   PROC
+    lsls    r2, r1, #2
+    lsls    r1, r1, #31
+    bne     KeccakP800_Permute_NroundsOdd
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    subs    r1, r1, r2
+    b       KeccakP800_Permute
+KeccakP800_Permute_NroundsOdd
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    subs    r1, r1, r2
+    push    { r4 - r6, lr }
+    mov     r2, r8
+    mov     r3, r9
+    mov     r4, r10
+    mov     r5, r11
+    mov     r6, r12
+    push    { r2 - r7 }
+    sub     sp, sp, #25*4+4
+    mov     r8, r1
+    mov     r6, sp                ; copy state to stack and use stack state as input
+    ldmia   r0!, {r1-r4,r7}
+    stmia   r6!, {r1-r4,r7}
+    ldmia   r0!, {r1-r5}
+    stmia   r6!, {r1-r5}
+    eors    r7, r7, r5
+    ldmia   r0!, {r1-r5}
+    stmia   r6!, {r1-r5}
+    eors    r7, r7, r5
+    ldmia   r0!, {r1-r5}
+    stmia   r6!, {r1-r5}
+    eors    r7, r7, r5
+    ldmia   r0!, {r1-r5}
+    stmia   r6!, {r1-r5}
+    eors    r7, r7, r5
+    subs    r0, r0, #100
+    b       KeccakP800_Permute_RoundOdd
+    ENDP
+
+; ----------------------------------------------------------------------------
+;
 ;  void KeccakP800_Permute_12rounds( void *state )
-; 
+;
     ALIGN
     EXPORT  KeccakP800_Permute_12rounds
 KeccakP800_Permute_12rounds   PROC
@@ -399,9 +443,9 @@ KeccakP800_Permute_12rounds   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_Permute_22rounds( void *state )
-; 
+;
     ALIGN
     EXPORT  KeccakP800_Permute_22rounds
 KeccakP800_Permute_22rounds   PROC
@@ -434,6 +478,7 @@ KeccakP800_Permute_RoundConstants12
     dcd         0x8000000a
     dcd         0x80008081
     dcd         0x00008080
+KeccakP800_Permute_RoundConstants0
     dcd         0xFF            ; terminator
 
 ; ----------------------------------------------------------------------------
@@ -454,6 +499,7 @@ KeccakP800_Permute   PROC
     xor5    r7, r0, _bu, _gu, _ku, _mu, _su
 KeccakP800_Permute_RoundLoop
     KeccakRound sp, r0
+KeccakP800_Permute_RoundOdd
     KeccakRound r0, sp
     ldr     r6, [r6]
     cmp     r6, #0xFF

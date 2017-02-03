@@ -105,11 +105,11 @@ _SAS    equ 26*4
     ; prepare Theta
     xor5    r1, $stateIn, r9, _ga, _ka, _ma, _sa
     xor5    r2, $stateIn, r10, _ge, _ke, _me, _se
-    eor     r9, r7, r2, ROR #31
+    eor     r9, r8, r2, ROR #31
     eor     r10, r1, r6, ROR #31
-    eor     r11, r2, r8, ROR #31
-    eor     r12, r6, r7, ROR #31
-    eor     lr, r8, r1, ROR #31
+    eor     r11, r2, r7, ROR #31
+    eor     r12, r6, r8, ROR #31
+    eor     lr, r7, r1, ROR #31
 
     ; Theta Rho Pi Chi Iota
     eors    r1, r3, r11
@@ -122,8 +122,8 @@ _SAS    equ 26*4
     mTe     r3, lr,  7
     mTe     r4, r9,  9
     mTe     r5, r10,  2
-    mC      $stateOut, _su, r5, r1, r2, r7, 0, 0,   1
-    mC      $stateOut, _so, r4, r5, r1, r8, 0, 0,   1
+    mC      $stateOut, _su, r5, r1, r2, r8, 0, 0,   1
+    mC      $stateOut, _so, r4, r5, r1, r7, 0, 0,   1
     mC      $stateOut, _si, r3, r4, r5, r6, 0, 0,   1
     mC      $stateOut, _se, r2, r3, r4, r4, 0, 0,   1
     mC      $stateOut, _sa, r1, r2, r3, r3, 0, 0,   1
@@ -136,8 +136,8 @@ _SAS    equ 26*4
     mTe     r2, r9,  4
     mTe     r4, r11, 15
     mTe     r5, r12, 24
-    mC      $stateOut, _mu, r5, r1, r2, r3, 1, r7, 1
-    mC      $stateOut, _mo, r4, r5, r1, r3, 1, r8, 1
+    mC      $stateOut, _mu, r5, r1, r2, r3, 1, r8, 1
+    mC      $stateOut, _mo, r4, r5, r1, r3, 1, r7, 1
     ldr     r3, [$stateIn, #_ke]
     mTe     r3, r10, 10
     mC      $stateOut, _mi, r3, r4, r5, r5, 1, r6, 1
@@ -152,8 +152,8 @@ _SAS    equ 26*4
     mTe     r2, r11,  6
     mTe     r4, lr,  8
     mTe     r5, r9, 18
-    mC      $stateOut, _ku, r5, r1, r2, r3, 1, r7, 1
-    mC      $stateOut, _ko, r4, r5, r1, r3, 1, r8, 1
+    mC      $stateOut, _ku, r5, r1, r2, r3, 1, r8, 1
+    mC      $stateOut, _ko, r4, r5, r1, r3, 1, r7, 1
     ldr     r3, [$stateIn, #_ko]
     mTe     r3, r12, 25
     mC      $stateOut, _ki, r3, r4, r5, r5, 1, r6, 1
@@ -168,8 +168,8 @@ _SAS    equ 26*4
     mTe     r2, lr, 20
     mTe     r4, r10, 13
     mTe     r5, r11, 29
-    mC      $stateOut, _gu, r5, r1, r2, r3, 1, r7, 1
-    mC      $stateOut, _go, r4, r5, r1, r3, 1, r8, 1
+    mC      $stateOut, _gu, r5, r1, r2, r3, 1, r8, 1
+    mC      $stateOut, _go, r4, r5, r1, r3, 1, r7, 1
     ldr     r3, [$stateIn, #_ka]
     mTe     r3, r9,  3
     mC      $stateOut, _gi, r3, r4, r5, r5, 1, r6, 1
@@ -186,8 +186,8 @@ _SAS    equ 26*4
     mTe     r3, r11, 11
     mTe     r4, r12, 21
     mTe     r5, lr, 14
-    mC      $stateOut, _bu, r5, r1, r2, lr, 1, r7, 1
-    mC      $stateOut, _bo, r4, r5, r1, r12, 1, r8, 1
+    mC      $stateOut, _bu, r5, r1, r2, lr, 1, r8, 1
+    mC      $stateOut, _bo, r4, r5, r1, r12, 1, r7, 1
     mC      $stateOut, _bi, r3, r4, r5, r11, 1, r6, 0
     mC      $stateOut, _be, r2, r3, r4, r10, 0, 0,   1
     mCI     $stateOut, _ba, r1, r2, r3, r9, $iota
@@ -195,9 +195,9 @@ _SAS    equ 26*4
     MEND
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_StaticInitialize( void )
-; 
+;
     ALIGN
     EXPORT  KeccakP800_StaticInitialize
 KeccakP800_StaticInitialize   PROC
@@ -205,9 +205,9 @@ KeccakP800_StaticInitialize   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_Initialize(void *state)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_Initialize
 KeccakP800_Initialize   PROC
@@ -227,9 +227,9 @@ KeccakP800_Initialize   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_AddByte(void *state, unsigned char byte, unsigned int offset)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_AddByte
 KeccakP800_AddByte   PROC
@@ -240,9 +240,9 @@ KeccakP800_AddByte   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_AddBytes
 KeccakP800_AddBytes   PROC
@@ -272,9 +272,9 @@ KeccakP800_AddBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_OverwriteBytes
 KeccakP800_OverwriteBytes   PROC
@@ -299,9 +299,9 @@ KeccakP800_OverwriteBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_OverwriteWithZeroes(void *state, unsigned int byteCount)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_OverwriteWithZeroes
 KeccakP800_OverwriteWithZeroes  PROC
@@ -324,9 +324,9 @@ KeccakP800_OverwriteWithZeroes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_ExtractBytes
 KeccakP800_ExtractBytes   PROC
@@ -351,9 +351,9 @@ KeccakP800_ExtractBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP800_ExtractAndAddBytes
 KeccakP800_ExtractAndAddBytes   PROC
@@ -385,9 +385,69 @@ KeccakP800_ExtractAndAddBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
+;  void KeccakP800_Permute_Nrounds(void *state, unsigned int nrounds)
+;
+    ALIGN
+    EXPORT  KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds   PROC
+    push    {r4-r12,lr}
+    sub     sp, sp, #_SAS
+    adr     r2, KeccakP800_Permute_RoundPointers-4 ; get round function pointer from table
+    ldr     r2, [r2, r1, LSL #2]
+    orr     r2, r2, #1                            ; set the thumb bit, not needed for Keil, gcc?
+    ldm     r0, {r9,r10,r11,r12,lr}
+    tst     r1, #1
+    beq     KeccakP800_Permute_Nrounds_PrepareTheta
+    add     r0, r0, #5*4                  ; odd number of rounds
+    mov     r1, sp                                  ; copy state to stack
+    stm     r1!, {r9,r10,r11,r12,lr}
+    ldm     r0!, {r3,r4,r5,r7,r8}
+    stm     r1!, {r3,r4,r5,r7,r8}
+    ldm     r0!, {r3,r4,r5,r7,r8}
+    stm     r1!, {r3,r4,r5,r7,r8}
+    ldm     r0!, {r3,r4,r5,r7,r8}
+    stm     r1!, {r3,r4,r5,r7,r8}
+    ldm     r0!, {r3,r4,r5,r7,r8}
+    stm     r1!, {r3,r4,r5,r7,r8}
+    sub     r0, r0, #25*4
+KeccakP800_Permute_Nrounds_PrepareTheta
+    mov     r3, r11
+    xor5    r8, r0, lr, _gu, _ku, _mu, _su
+    xor5    r7, r0, r12, _go, _ko, _mo, _so
+    xor5    r6, r0, r11, _gi, _ki, _mi, _si
+    bx      r2
+    ENDP
+
+    ALIGN
+KeccakP800_Permute_RoundPointers
+    dcd     KeccakP800_Permute_1
+    dcd     KeccakP800_Permute_2
+    dcd     KeccakP800_Permute_3
+    dcd     KeccakP800_Permute_4
+    dcd     KeccakP800_Permute_5
+    dcd     KeccakP800_Permute_6
+    dcd     KeccakP800_Permute_7
+    dcd     KeccakP800_Permute_8
+    dcd     KeccakP800_Permute_9
+    dcd     KeccakP800_Permute_10
+    dcd     KeccakP800_Permute_11
+    dcd     KeccakP800_Permute_12
+    dcd     KeccakP800_Permute_13
+    dcd     KeccakP800_Permute_14
+    dcd     KeccakP800_Permute_15
+    dcd     KeccakP800_Permute_16
+    dcd     KeccakP800_Permute_17
+    dcd     KeccakP800_Permute_18
+    dcd     KeccakP800_Permute_19
+    dcd     KeccakP800_Permute_20
+    dcd     KeccakP800_Permute_21
+    dcd     KeccakP800_Permute_22
+
+; ----------------------------------------------------------------------------
+;
 ;  void KeccakP800_Permute_12rounds( void *state )
-; 
+;
     ALIGN
     EXPORT  KeccakP800_Permute_12rounds
 KeccakP800_Permute_12rounds   PROC
@@ -395,8 +455,8 @@ KeccakP800_Permute_12rounds   PROC
     sub     sp, sp, #_SAS
     ldm     r0, {r9,r10,r11,r12,lr}
     mov     r3, r11
-    xor5    r7, r0, lr, _gu, _ku, _mu, _su
-    xor5    r8, r0, r12, _go, _ko, _mo, _so
+    xor5    r8, r0, lr, _gu, _ku, _mu, _su
+    xor5    r7, r0, r12, _go, _ko, _mo, _so
     xor5    r6, r0, r11, _gi, _ki, _mi, _si
     mKR     sp, r0, 0x80008009
     mKR     r0, sp, 0x8000000a
@@ -416,9 +476,9 @@ KeccakP800_Permute_12rounds   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_Permute_22rounds( void *state )
-; 
+;
     ALIGN
     EXPORT  KeccakP800_Permute_22rounds
 KeccakP800_Permute_22rounds   PROC
@@ -426,33 +486,55 @@ KeccakP800_Permute_22rounds   PROC
     sub     sp, sp, #_SAS
     ldm     r0, {r9,r10,r11,r12,lr}
     mov     r3, r11
-    xor5    r7, r0, lr, _gu, _ku, _mu, _su
-    xor5    r8, r0, r12, _go, _ko, _mo, _so
+    xor5    r8, r0, lr, _gu, _ku, _mu, _su
+    xor5    r7, r0, r12, _go, _ko, _mo, _so
     xor5    r6, r0, r11, _gi, _ki, _mi, _si
+KeccakP800_Permute_22
     mKR     sp, r0, 0x00000001
+KeccakP800_Permute_21
     mKR     r0, sp, 0x00008082
+KeccakP800_Permute_20
     mKR     sp, r0, 0x0000808a
+KeccakP800_Permute_19
     mKR     r0, sp, 0x80008000
+KeccakP800_Permute_18
     mKR     sp, r0, 0x0000808b
+KeccakP800_Permute_17
     mKR     r0, sp, 0x80000001
+KeccakP800_Permute_16
     mKR     sp, r0, 0x80008081
+KeccakP800_Permute_15
     mKR     r0, sp, 0x00008009
+KeccakP800_Permute_14
     mKR     sp, r0, 0x0000008a
+KeccakP800_Permute_13
     mKR     r0, sp, 0x00000088
+KeccakP800_Permute_12
     mKR     sp, r0, 0x80008009
+KeccakP800_Permute_11
     mKR     r0, sp, 0x8000000a
+KeccakP800_Permute_10
     mKR     sp, r0, 0x8000808b
+KeccakP800_Permute_9
     mKR     r0, sp, 0x0000008b
+KeccakP800_Permute_8
     mKR     sp, r0, 0x00008089
+KeccakP800_Permute_7
     mKR     r0, sp, 0x00008003
+KeccakP800_Permute_6
     mKR     sp, r0, 0x00008002
+KeccakP800_Permute_5
     mKR     r0, sp, 0x00000080
+KeccakP800_Permute_4
     mKR     sp, r0, 0x0000800a
+KeccakP800_Permute_3
     mKR     r0, sp, 0x8000000a
+KeccakP800_Permute_2
     mKR     sp, r0, 0x80008081
+KeccakP800_Permute_1
     mKR     r0, sp, 0x00008080
     str     r11, [r0, #_bi]
-    add     sp,sp,#_SAS
+    add     sp, sp, #_SAS
     pop     {r4-r12,pc}
     ENDP
 

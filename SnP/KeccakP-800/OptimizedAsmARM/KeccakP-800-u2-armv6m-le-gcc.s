@@ -17,7 +17,7 @@
 
 
     .thumb
-    .syntax unified
+	.syntax unified
 .text
 
 @ ----------------------------------------------------------------------------
@@ -48,7 +48,7 @@
 .equ _so    , 23*4
 .equ _su    , 24*4
 
-.macro  xor5        result,ptr,b,g,k,m,s
+.macro    xor5        result,ptr,b,g,k,m,s
     ldr         \result, [\ptr, #\b]
     ldr         r6, [\ptr, #\g]
     eors        \result, \result, r6
@@ -60,23 +60,23 @@
     eors        \result, \result, r6
     .endm
 
-.macro  te          d, a, b
+.macro    te          d, a, b
     rors        \b, \b, r4
     eors        \b, \b, \a
     mov         \d, \b
     .endm
 
-.macro  trp         rBx, sIn, oIn, rD, rot
+.macro    trp         rBx, sIn, oIn, rD, rot
     ldr         \rBx, [\sIn, #\oIn]
     mov         r6, \rD
     eors        \rBx, \rBx, r6
-    .if         \rot != 0
+    .if          \rot != 0
     movs        r6, #32-\rot
     rors        \rBx, \rBx, r6
     .endif
     .endm
 
-.macro  ci          sOut, oOut, ax0, ax1, ax2, iota, useax2, temp, earlyT
+.macro    ci          sOut, oOut, ax0, ax1, ax2, iota, useax2, temp, earlyT
     .if \useax2 != 0
     bics        \ax2, \ax2, \ax1
     eors        \ax2, \ax2, \ax0
@@ -98,7 +98,7 @@
     .endif
     .endm
 
-.macro  KeccakRound     sOut, sIn
+.macro    KeccakRound     sOut, sIn
 
     @  Prepare Theta effect (U column already done by earlyTheta
     movs    r4, #31
@@ -231,7 +231,7 @@ KeccakP800_AddBytes:
     orrs    r2, r2, r1
     lsls    r2, #30
     bne     KeccakP800_AddBytes_Bytes
-KeccakP800_AddBytes_LanesLoop:                  @ then, perform on words
+KeccakP800_AddBytes_LanesLoop:                   @ then, perform on words
     ldr     r2, [r0]
     ldmia   r1!, {r4}
     eors    r2, r2, r4
@@ -267,7 +267,7 @@ KeccakP800_OverwriteBytes:
     orrs    r2, r2, r1
     lsls    r2, #30
     bne     KeccakP800_OverwriteBytes_Bytes
-KeccakP800_OverwriteBytes_LanesLoop:            @ then, perform on words
+KeccakP800_OverwriteBytes_LanesLoop:         @ then, perform on words
     ldmia   r1!, {r2}
     stmia   r0!, {r2}
     subs    r3, r3, #4
@@ -325,7 +325,7 @@ KeccakP800_ExtractBytes:
     orrs    r2, r2, r1
     lsls    r2, #30
     bne     KeccakP800_ExtractBytes_Bytes
-KeccakP800_ExtractBytes_LanesLoop:              @ then, perform on words
+KeccakP800_ExtractBytes_LanesLoop:               @ then, perform on words
     ldmia   r0!, {r2}
     stmia   r1!, {r2}
     subs    r3, r3, #4
@@ -360,7 +360,7 @@ KeccakP800_ExtractAndAddBytes:
     orrs    r5, r5, r2
     lsls    r5, #30
     bne     KeccakP800_ExtractAndAddBytes_Bytes
-KeccakP800_ExtractAndAddBytes_LanesLoop:                    @ then, perform on words
+KeccakP800_ExtractAndAddBytes_LanesLoop:                 @ then, perform on words
     ldmia   r0!, {r5}
     ldmia   r1!, {r4}
     eors    r5, r5, r4
@@ -381,6 +381,50 @@ KeccakP800_ExtractAndAddBytes_BytesLoop:
 KeccakP800_ExtractAndAddBytes_Exit:
     pop     {r4,r5}
     bx      lr
+
+
+@ ----------------------------------------------------------------------------
+@
+@  void KeccakP800_Permute_Nrounds(void *state, unsigned int nrounds)
+@
+.align 8
+.global   KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds:
+    lsls    r2, r1, #2
+    lsls    r1, r1, #31
+    bne     KeccakP800_Permute_NroundsOdd
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    subs    r1, r1, r2
+    b       KeccakP800_Permute
+KeccakP800_Permute_NroundsOdd:
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    subs    r1, r1, r2
+    push    { r4 - r6, lr }
+    mov     r2, r8
+    mov     r3, r9
+    mov     r4, r10
+    mov     r5, r11
+    mov     r6, r12
+    push    { r2 - r7 }
+    sub     sp, sp, #25*4+4
+    mov     r8, r1
+    mov     r6, sp                @ copy state to stack and use stack state as input
+    ldmia   r0!, {r1-r4,r7}
+    stmia   r6!, {r1-r4,r7}
+    ldmia   r0!, {r1-r5}
+    stmia   r6!, {r1-r5}
+    eors    r7, r7, r5
+    ldmia   r0!, {r1-r5}
+    stmia   r6!, {r1-r5}
+    eors    r7, r7, r5
+    ldmia   r0!, {r1-r5}
+    stmia   r6!, {r1-r5}
+    eors    r7, r7, r5
+    ldmia   r0!, {r1-r5}
+    stmia   r6!, {r1-r5}
+    eors    r7, r7, r5
+    subs    r0, r0, #100
+    b       KeccakP800_Permute_RoundOdd
 
 
 @ ----------------------------------------------------------------------------
@@ -407,30 +451,31 @@ KeccakP800_Permute_22rounds:
 
 .align 8
 KeccakP800_Permute_RoundConstants22:
-        .long           0x00000001
-        .long           0x00008082
-        .long           0x0000808a
-        .long           0x80008000
-        .long           0x0000808b
-        .long           0x80000001
-        .long           0x80008081
-        .long           0x00008009
-        .long           0x0000008a
-        .long           0x00000088
+		.long          0x00000001
+		.long          0x00008082
+		.long          0x0000808a
+		.long          0x80008000
+		.long          0x0000808b
+		.long          0x80000001
+		.long          0x80008081
+		.long          0x00008009
+		.long          0x0000008a
+		.long          0x00000088
 KeccakP800_Permute_RoundConstants12:
-        .long           0x80008009
-        .long           0x8000000a
-        .long           0x8000808b
-        .long           0x0000008b
-        .long           0x00008089
-        .long           0x00008003
-        .long           0x00008002
-        .long           0x00000080
-        .long           0x0000800a
-        .long           0x8000000a
-        .long           0x80008081
-        .long           0x00008080
-        .long           0xFF            @ terminator
+		.long          0x80008009
+		.long          0x8000000a
+		.long          0x8000808b
+		.long          0x0000008b
+		.long          0x00008089
+		.long          0x00008003
+		.long          0x00008002
+		.long          0x00000080
+		.long          0x0000800a
+		.long          0x8000000a
+		.long          0x80008081
+		.long          0x00008080
+KeccakP800_Permute_RoundConstants0:
+		.long          0xFF            @ terminator
 
 @ ----------------------------------------------------------------------------
 @
@@ -450,6 +495,7 @@ KeccakP800_Permute:
     xor5    r7, r0, _bu, _gu, _ku, _mu, _su
 KeccakP800_Permute_RoundLoop:
     KeccakRound sp, r0
+KeccakP800_Permute_RoundOdd:
     KeccakRound r0, sp
     ldr     r6, [r6]
     cmp     r6, #0xFF

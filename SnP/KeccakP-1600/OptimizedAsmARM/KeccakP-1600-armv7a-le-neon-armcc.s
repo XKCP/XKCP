@@ -299,9 +299,9 @@ KeccakP1600_Initialize   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP1600_AddByte(void *state, unsigned char byte, unsigned int offset)
-; 
+;
     ALIGN
     EXPORT  KeccakP1600_AddByte
 KeccakP1600_AddByte   PROC
@@ -312,9 +312,9 @@ KeccakP1600_AddByte   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP1600_AddBytes
 KeccakP1600_AddBytes   PROC
@@ -348,9 +348,9 @@ KeccakP1600_AddBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP1600_OverwriteBytes
 KeccakP1600_OverwriteBytes   PROC
@@ -403,9 +403,9 @@ KeccakP1600_OverwriteWithZeroes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP1600_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP1600_ExtractBytes
 KeccakP1600_ExtractBytes   PROC
@@ -432,9 +432,9 @@ KeccakP1600_ExtractBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP800_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
-; 
+;
     ALIGN
     EXPORT  KeccakP1600_ExtractAndAddBytes
 KeccakP1600_ExtractAndAddBytes   PROC
@@ -470,9 +470,22 @@ KeccakP1600_ExtractAndAddBytes_Exit
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
+;  void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+;
+    ALIGN
+    EXPORT  KeccakP1600_Permute_Nrounds
+KeccakP1600_Permute_Nrounds   PROC
+    movs    r2, r1
+    adr     r1, KeccakP1600_Permute_RoundConstants0
+	sub		r1, r1, r2, LSL #3
+    b       KeccakP1600_Permute
+    ENDP
+
+; ----------------------------------------------------------------------------
+;
 ;  void KeccakP1600_Permute_12rounds( void *state )
-; 
+;
     ALIGN
     EXPORT  KeccakP1600_Permute_12rounds
 KeccakP1600_Permute_12rounds   PROC
@@ -482,9 +495,9 @@ KeccakP1600_Permute_12rounds   PROC
     ENDP
 
 ; ----------------------------------------------------------------------------
-; 
+;
 ;  void KeccakP1600_Permute_24rounds( void *state )
-; 
+;
     ALIGN
     EXPORT  KeccakP1600_Permute_24rounds
 KeccakP1600_Permute_24rounds   PROC
@@ -520,6 +533,7 @@ KeccakP1600_Permute_RoundConstants12
     dcq     0x8000000000008080
     dcq     0x0000000080000001
     dcq     0x8000000080008008
+KeccakP1600_Permute_RoundConstants0
 
     ALIGN
 KeccakP1600_XORandPermuteAsmOnly   PROC

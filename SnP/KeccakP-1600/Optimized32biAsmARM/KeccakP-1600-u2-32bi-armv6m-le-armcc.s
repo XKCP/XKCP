@@ -307,9 +307,9 @@ mSize   equ mD+6*4
     endif
     store   $ax2, $stkIn, $oOut
     else
-    mov     r6, $ax2                    ; T1 = A[x+2]
-    bics    r6, r6, $ax1                ; T1 = T1 & ~A[x+1]
-    eors    r6, r6, $ax0                ; T1 = T1 ^ A[x]
+    mov     r6, $ax2                   ; T1 = A[x+2]
+    bics    r6, r6, $ax1              ; T1 = T1 & ~A[x+1]
+    eors    r6, r6, $ax0              ; T1 = T1 ^ A[x]
     store   r6, $stkIn, $oOut
     endif
     MEND
@@ -1187,6 +1187,58 @@ __KeccakP1600_ExtractAndAddBytesInLane_Loop
     ENDP
 
 ; ----------------------------------------------------------------------------
+;
+;  void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+;
+    ALIGN
+    EXPORT  KeccakP1600_Permute_Nrounds
+KeccakP1600_Permute_Nrounds   PROC
+    movs    r2, r1
+    lsls    r3, r2, #3
+    adr     r1, KeccakP1600_Permute_RoundConstants0
+    subs    r1, r1, r3
+    lsls    r2, r2, #31
+    bne     KeccakP1600_Permute_NroundsOdd
+    b       KeccakP1600_Permute
+KeccakP1600_Permute_NroundsOdd
+    push    { r4 - r6, lr }
+    mov     r2, r8
+    mov     r3, r9
+    mov     r4, r10
+    mov     r5, r11
+    mov     r6, r12
+    push    { r2 - r7 }
+    sub     sp, #mSize
+    subs    r1, r1, #8
+    str     r1, [sp, #mRC]
+    mov     r7, sp
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    ldm     r0!, {r1-r5}
+    stm     r7!, {r1-r5}
+    subs    r0, r0, #25*2*4
+    movs    r7, #_ma0
+    adds    r7, r7, r0
+    b       KeccakP1600_Permute_RoundOdd
+    ENDP
+
+; ----------------------------------------------------------------------------
 ; 
 ;  void KeccakP1600_Permute_12rounds( void *state )
 ; 
@@ -1215,33 +1267,28 @@ KeccakP1600_Permute_RoundConstants24
     dcd     0x00000000, 0x00000089
     dcd     0x00000000, 0x8000008b
     dcd     0x00000000, 0x80008080
-
     dcd     0x00000001, 0x0000008b
     dcd     0x00000001, 0x00008000
     dcd     0x00000001, 0x80008088
     dcd     0x00000001, 0x80000082
-
     dcd     0x00000000, 0x0000000b
     dcd     0x00000000, 0x0000000a
     dcd     0x00000001, 0x00008082
     dcd     0x00000000, 0x00008003
-
 KeccakP1600_Permute_RoundConstants12
     dcd     0x00000001, 0x0000808b
     dcd     0x00000001, 0x8000000b
     dcd     0x00000001, 0x8000008a
     dcd     0x00000001, 0x80000081
-
     dcd     0x00000000, 0x80000081
     dcd     0x00000000, 0x80000008
     dcd     0x00000000, 0x00000083
     dcd     0x00000000, 0x80008003
-
     dcd     0x00000001, 0x80008088
     dcd     0x00000000, 0x80000088
     dcd     0x00000001, 0x00008000
     dcd     0x00000000, 0x80008082
-
+KeccakP1600_Permute_RoundConstants0
     dcd     0x000000FF  ;terminator
 
 ;----------------------------------------------------------------------------
@@ -1263,9 +1310,10 @@ KeccakP1600_Permute   PROC
 KeccakP1600_Permute_RoundLoop
     str     r1, [sp, #mRC]
     Kround  0, 0
+KeccakP1600_Permute_RoundOdd
     Kround  1, 8
-    adds    r1, r1, #2*8        ; Update pointer RC
-    ldr     r6, [r1]            ; Check terminator
+    adds    r1, r1, #2*8      ; Update pointer RC
+    ldr     r6, [r1]          ; Check terminator
     cmp     r6, #0xFF
     beq     KeccakP1600_Permute_Done
     ldr     r6, =KeccakP1600_Permute_RoundLoop+1

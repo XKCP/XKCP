@@ -467,6 +467,19 @@ KeccakP1600_ExtractAndAddBytes_Exit:
 
 @ ----------------------------------------------------------------------------
 @
+@  void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+@
+.align 8
+.global   KeccakP1600_Permute_Nrounds
+KeccakP1600_Permute_Nrounds:
+    movs    r2, r1
+    adr     r1, KeccakP1600_Permute_RoundConstants0
+	sub		r1, r1, r2, LSL #3
+    b       KeccakP1600_Permute
+
+
+@ ----------------------------------------------------------------------------
+@
 @  void KeccakP1600_Permute_12rounds( void *state )
 @
 .align 8
@@ -491,31 +504,32 @@ KeccakP1600_Permute_24rounds:
 
 .align 8
 KeccakP1600_Permute_RoundConstants24:
-        .quad      0x0000000000000001
-        .quad      0x0000000000008082
-        .quad      0x800000000000808a
-        .quad      0x8000000080008000
-        .quad      0x000000000000808b
-        .quad      0x0000000080000001
-        .quad      0x8000000080008081
-        .quad      0x8000000000008009
-        .quad      0x000000000000008a
-        .quad      0x0000000000000088
-        .quad      0x0000000080008009
-        .quad      0x000000008000000a
+		.quad      0x0000000000000001
+		.quad      0x0000000000008082
+		.quad      0x800000000000808a
+		.quad      0x8000000080008000
+		.quad      0x000000000000808b
+		.quad      0x0000000080000001
+		.quad      0x8000000080008081
+		.quad      0x8000000000008009
+		.quad      0x000000000000008a
+		.quad      0x0000000000000088
+		.quad      0x0000000080008009
+		.quad      0x000000008000000a
 KeccakP1600_Permute_RoundConstants12:
-        .quad      0x000000008000808b
-        .quad      0x800000000000008b
-        .quad      0x8000000000008089
-        .quad      0x8000000000008003
-        .quad      0x8000000000008002
-        .quad      0x8000000000000080
-        .quad      0x000000000000800a
-        .quad      0x800000008000000a
-        .quad      0x8000000080008081
-        .quad      0x8000000000008080
-        .quad      0x0000000080000001
-        .quad      0x8000000080008008
+		.quad      0x000000008000808b
+		.quad      0x800000000000008b
+		.quad      0x8000000000008089
+		.quad      0x8000000000008003
+		.quad      0x8000000000008002
+		.quad      0x8000000000000080
+		.quad      0x000000000000800a
+		.quad      0x800000008000000a
+		.quad      0x8000000080008081
+		.quad      0x8000000000008080
+		.quad      0x0000000080000001
+		.quad      0x8000000080008008
+KeccakP1600_Permute_RoundConstants0:
 
 .align 8
 KeccakP1600_XORandPermuteAsmOnly:

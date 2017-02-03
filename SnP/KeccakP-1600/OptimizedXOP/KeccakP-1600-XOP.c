@@ -390,6 +390,19 @@ const UINT64 KeccakF1600RoundConstants[24] = {
 
 /* ---------------------------------------------------------------- */
 
+void KeccakP1600_Permute_Nrounds(void *state, unsigned int nr)
+{
+    declareABCDE
+    unsigned int i;
+    UINT64 *stateAsLanes = (UINT64*)state;
+
+    copyFromState(A, stateAsLanes)
+    roundsN(nr)
+    copyToState(stateAsLanes, A)
+}
+
+/* ---------------------------------------------------------------- */
+
 void KeccakP1600_Permute_12rounds(void *state)
 {
     declareABCDE

@@ -244,13 +244,13 @@ mSize   equ 6*4
     xor5        $result,$b,$g,$k,$m,$s, $prev, $last
 
     load        $result,  0,        $b, 0
-    load        r1,      $b,        $g, 0
+    load        r1,     $b,        $g, 0
     eors        $result, $result,   r1
-    load        r1,      $g,        $k, 0
+    load        r1,     $g,        $k, 0
     eors        $result, $result,   r1
-    load        r1,  $k,        $m, 0
+    load        r1,     $k,        $m, 0
     eors        $result, $result,   r1
-    load        r1,  $m,        $s, 1
+    load        r1,     $m,        $s, 1
     eors        $result, $result,   r1
     MEND
 
@@ -1425,6 +1425,143 @@ __KeccakP1600_ExtractAndAddBytesInLane_Loop
     bx      lr
     ENDP
 
+
+    MACRO
+    ldrf    $result,$offset
+    if      $offset >= 128
+    ldr     $result, [r5, #$offset-128]
+    else
+    ldr     $result, [r0, #$offset]
+    endif
+    MEND
+
+    MACRO
+    strf    $result,$offset
+    if      $offset >= 128
+    str     $result, [r5, #$offset-128]
+    else
+    str     $result, [r0, #$offset]
+    endif
+    MEND
+
+    MACRO
+    SwapPI13 $in0,$in1,$in2,$in3,$eo0,$eo1,$eo2,$eo3
+    ldrf    r3, $in0+0
+    ldrf    r4, $in0+4
+    ldrf    r2, $in1+0
+    ldrf    r1, $in1+4
+    strf    r2, $in0+$eo0*4
+    strf    r1, $in0+($eo0^1)*4
+    ldrf    r2, $in2+0
+    ldrf    r1, $in2+4
+    strf    r2, $in1+$eo1*4
+    strf    r1, $in1+($eo1^1)*4
+    ldrf    r2, $in3+0
+    ldrf    r1, $in3+4
+    strf    r2, $in2+$eo2*4
+    strf    r1, $in2+($eo2^1)*4
+    strf    r3, $in3+$eo3*4
+    strf    r4, $in3+($eo3^1)*4
+    MEND
+
+    MACRO
+    SwapPI2 $in0,$in1,$in2,$in3
+    ldrf    r3, $in0+0
+    ldrf    r4, $in0+4
+    ldrf    r2, $in1+0
+    ldrf    r1, $in1+4
+    strf    r2, $in0+4
+    strf    r1, $in0+0
+    strf    r3, $in1+4
+    strf    r4, $in1+0
+    ldrf    r3, $in2+0
+    ldrf    r4, $in2+4
+    ldrf    r2, $in3+0
+    ldrf    r1, $in3+4
+    strf    r2, $in2+4
+    strf    r1, $in2+0
+    strf    r3, $in3+4
+    strf    r4, $in3+0
+    MEND
+
+    MACRO
+    SwapEO  $even,$odd
+    ldrf    r3, $even
+    ldrf    r4, $odd
+    strf    r3, $odd
+    strf    r4, $even
+    MEND
+
+; ----------------------------------------------------------------------------
+;
+;  void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+;
+    ALIGN
+    EXPORT  KeccakP1600_Permute_Nrounds
+KeccakP1600_Permute_Nrounds   PROC
+    lsls    r2, r1, #30
+    bne     KeccakP1600_Permute_NroundsNotMultiple4
+    lsls    r2, r1, #3
+    adr     r1, KeccakP1600_Permute_RoundConstants0Mod4
+    subs    r1, r1, r2
+    b       KeccakP1600_Permute
+KeccakP1600_Permute_NroundsNotMultiple4     ; nrounds not multiple of 4
+    push    { r4 - r6, lr }
+    mov     r2, r8
+    mov     r3, r9
+    mov     r4, r10
+    mov     r5, r11
+    mov     r6, r12
+    push    { r2 - r7 }
+    sub     sp, #mSize
+    mov     r3, r1
+    lsrs    r2, r1, #2
+    lsls    r2, r2, #3+2
+    adr     r1, KeccakP1600_Permute_RoundConstants0
+    subs    r1, r1, r2
+    str     r1, [sp, #mRC]
+    mov     r5, r0
+    adds    r5, r5, #128
+    lsls    r3, r3, #31
+    bcs     KeccakP1600_Permute_Nrounds23Mod4
+KeccakP1600_Permute_Nrounds1Mod4
+    SwapPI13 Aga0, Aka0, Asa0, Ama0, 1, 0, 1, 0
+    SwapPI13 Abe0, Age0, Ame0, Ake0, 0, 1, 0, 1
+    SwapPI13 Abi0, Aki0, Agi0, Asi0, 1, 0, 1, 0
+    SwapEO   Ami0, Ami1
+    SwapPI13 Abo0, Amo0, Aso0, Ago0, 1, 0, 1, 0
+    SwapEO   Ako0, Ako1
+    SwapPI13 Abu0, Asu0, Aku0, Amu0, 0, 1, 0, 1
+    ldr     r1, =KeccakP1600_Permute_Round1Mod4+1
+    bx      r1
+    ALIGN
+    LTORG
+KeccakP1600_Permute_Nrounds23Mod4
+    bpl        KeccakP1600_Permute_Nrounds2Mod4
+KeccakP1600_Permute_Nrounds3Mod4
+    SwapPI13 Aga0, Ama0, Asa0, Aka0, 0, 1, 0, 1
+    SwapPI13 Abe0, Ake0, Ame0, Age0, 1, 0, 1, 0
+    SwapPI13 Abi0, Asi0, Agi0, Aki0, 0, 1, 0, 1
+    SwapEO   Ami0, Ami1
+    SwapPI13 Abo0, Ago0, Aso0, Amo0, 0, 1, 0, 1
+    SwapEO   Ako0, Ako1
+    SwapPI13 Abu0, Amu0, Aku0, Asu0, 1, 0, 1, 0
+    ldr     r1, =KeccakP1600_Permute_Round3Mod4+1
+    bx      r1
+    ALIGN
+    LTORG
+KeccakP1600_Permute_Nrounds2Mod4
+    SwapPI2 Aga0, Asa0, Aka0, Ama0
+    SwapPI2 Abe0, Ame0, Age0, Ake0
+    SwapPI2 Abi0, Agi0, Aki0, Asi0
+    SwapPI2 Abo0, Aso0, Ago0, Amo0
+    SwapPI2 Abu0, Aku0, Amu0, Asu0
+    ldr     r1, =KeccakP1600_Permute_Round2Mod4+1
+    bx      r1
+    ALIGN
+    LTORG
+    ENDP
+
 ; ----------------------------------------------------------------------------
 ; 
 ;  void KeccakP1600_Permute_12rounds( void *state )
@@ -1454,33 +1591,29 @@ KeccakP1600_Permute_RoundConstants24
     dcd     0x00000000, 0x00000089
     dcd     0x00000000, 0x8000008b
     dcd     0x00000000, 0x80008080
-
     dcd     0x00000001, 0x0000008b
     dcd     0x00000001, 0x00008000
     dcd     0x00000001, 0x80008088
     dcd     0x00000001, 0x80000082
-
     dcd     0x00000000, 0x0000000b
     dcd     0x00000000, 0x0000000a
     dcd     0x00000001, 0x00008082
     dcd     0x00000000, 0x00008003
-
 KeccakP1600_Permute_RoundConstants12
     dcd     0x00000001, 0x0000808b
     dcd     0x00000001, 0x8000000b
     dcd     0x00000001, 0x8000008a
     dcd     0x00000001, 0x80000081
-
     dcd     0x00000000, 0x80000081
     dcd     0x00000000, 0x80000008
     dcd     0x00000000, 0x00000083
     dcd     0x00000000, 0x80008003
-
+KeccakP1600_Permute_RoundConstants0
     dcd     0x00000001, 0x80008088
     dcd     0x00000000, 0x80000088
     dcd     0x00000001, 0x00008000
     dcd     0x00000000, 0x80008082
-
+KeccakP1600_Permute_RoundConstants0Mod4
     dcd     0x000000FF  ;terminator
 
 ;----------------------------------------------------------------------------
@@ -1500,8 +1633,11 @@ KeccakP1600_Permute   PROC
     str     r1, [sp, #mRC]
 KeccakP1600_Permute_RoundLoop
     KeccakRound0
+KeccakP1600_Permute_Round3Mod4
     KeccakRound1
+KeccakP1600_Permute_Round2Mod4
     KeccakRound2
+KeccakP1600_Permute_Round1Mod4
     KeccakRound3
     beq     KeccakP1600_Permute_Done
     ldr     r1, =KeccakP1600_Permute_RoundLoop+1

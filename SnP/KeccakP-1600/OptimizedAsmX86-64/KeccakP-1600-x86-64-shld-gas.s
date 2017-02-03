@@ -889,6 +889,175 @@ KeccakP1600_ExtractAndAddBytes_Exit:
 
 #----------------------------------------------------------------------------
 #
+# void KeccakP1600_Permute_Nrounds( void *state, unsigned int nrounds )
+#
+    .size   KeccakP1600_Permute_Nrounds, .-KeccakP1600_Permute_Nrounds
+    .align  8
+    .global KeccakP1600_Permute_Nrounds
+    .type   KeccakP1600_Permute_Nrounds, %function
+KeccakP1600_Permute_Nrounds:
+    mPushRegs
+    subq    $8*25, %rsp
+    movq    arg2, rT1
+
+    movq    _ba(rpState), rCa
+    movq    _be(rpState), rCe
+    movq    _bu(rpState), rCu
+
+    xorq    _ga(rpState), rCa
+    xorq    _ge(rpState), rCe
+    xorq    _gu(rpState), rCu
+
+    xorq    _ka(rpState), rCa
+    xorq    _ke(rpState), rCe
+    xorq    _ku(rpState), rCu
+
+    xorq    _ma(rpState), rCa
+    xorq    _me(rpState), rCe
+    xorq    _mu(rpState), rCu
+
+    xorq    _sa(rpState), rCa
+    xorq    _se(rpState), rCe
+    movq    _si(rpState), rDi
+    movq    _so(rpState), rDo
+    xorq    _su(rpState), rCu
+
+    testq    $1, rT1
+    jz       KeccakP1600_Permute_Nrounds_Dispatch
+    movq    _ba(rpState), rT2a  # copy to stack
+    movq    rT2a, _ba(rpStack)
+    movq    _be(rpState), rT2a
+    movq    rT2a, _be(rpStack)
+    movq    _bi(rpState), rT2a
+    movq    rT2a, _bi(rpStack)
+    movq    _bo(rpState), rT2a
+    movq    rT2a, _bo(rpStack)
+    movq    _bu(rpState), rT2a
+    movq    rT2a, _bu(rpStack)
+    movq    _ga(rpState), rT2a
+    movq    rT2a, _ga(rpStack)
+    movq    _ge(rpState), rT2a
+    movq    rT2a, _ge(rpStack)
+    movq    _gi(rpState), rT2a
+    movq    rT2a, _gi(rpStack)
+    movq    _go(rpState), rT2a
+    movq    rT2a, _go(rpStack)
+    movq    _gu(rpState), rT2a
+    movq    rT2a, _gu(rpStack)
+    movq    _ka(rpState), rT2a
+    movq    rT2a, _ka(rpStack)
+    movq    _ke(rpState), rT2a
+    movq    rT2a, _ke(rpStack)
+    movq    _ki(rpState), rT2a
+    movq    rT2a, _ki(rpStack)
+    movq    _ko(rpState), rT2a
+    movq    rT2a, _ko(rpStack)
+    movq    _ku(rpState), rT2a
+    movq    rT2a, _ku(rpStack)
+    movq    _ma(rpState), rT2a
+    movq    rT2a, _ma(rpStack)
+    movq    _me(rpState), rT2a
+    movq    rT2a, _me(rpStack)
+    movq    _mi(rpState), rT2a
+    movq    rT2a, _mi(rpStack)
+    movq    _mo(rpState), rT2a
+    movq    rT2a, _mo(rpStack)
+    movq    _mu(rpState), rT2a
+    movq    rT2a, _mu(rpStack)
+    movq    _sa(rpState), rT2a
+    movq    rT2a, _sa(rpStack)
+    movq    _se(rpState), rT2a
+    movq    rT2a, _se(rpStack)
+    movq    _si(rpState), rT2a
+    movq    rT2a, _si(rpStack)
+    movq    _so(rpState), rT2a
+    movq    rT2a, _so(rpStack)
+    movq    _su(rpState), rT2a
+    movq    rT2a, _su(rpStack)
+KeccakP1600_Permute_Nrounds_Dispatch:
+    shlq    $3, rT1
+    jmp     *KeccakP1600_Permute_NroundsTable-8(rT1)
+
+KeccakP1600_Permute_Nrounds24:
+    mKeccakRound    rpState, rpStack, 0x0000000000000001, 0
+KeccakP1600_Permute_Nrounds23:
+    mKeccakRound    rpStack, rpState, 0x0000000000008082, 0
+KeccakP1600_Permute_Nrounds22:
+    mKeccakRound    rpState, rpStack, 0x800000000000808a, 0
+KeccakP1600_Permute_Nrounds21:
+    mKeccakRound    rpStack, rpState, 0x8000000080008000, 0
+KeccakP1600_Permute_Nrounds20:
+    mKeccakRound    rpState, rpStack, 0x000000000000808b, 0
+KeccakP1600_Permute_Nrounds19:
+    mKeccakRound    rpStack, rpState, 0x0000000080000001, 0
+KeccakP1600_Permute_Nrounds18:
+    mKeccakRound    rpState, rpStack, 0x8000000080008081, 0
+KeccakP1600_Permute_Nrounds17:
+    mKeccakRound    rpStack, rpState, 0x8000000000008009, 0
+KeccakP1600_Permute_Nrounds16:
+    mKeccakRound    rpState, rpStack, 0x000000000000008a, 0
+KeccakP1600_Permute_Nrounds15:
+    mKeccakRound    rpStack, rpState, 0x0000000000000088, 0
+KeccakP1600_Permute_Nrounds14:
+    mKeccakRound    rpState, rpStack, 0x0000000080008009, 0
+KeccakP1600_Permute_Nrounds13:
+    mKeccakRound    rpStack, rpState, 0x000000008000000a, 0
+KeccakP1600_Permute_Nrounds12:
+    mKeccakRound    rpState, rpStack, 0x000000008000808b, 0
+KeccakP1600_Permute_Nrounds11:
+    mKeccakRound    rpStack, rpState, 0x800000000000008b, 0
+KeccakP1600_Permute_Nrounds10:
+    mKeccakRound    rpState, rpStack, 0x8000000000008089, 0
+KeccakP1600_Permute_Nrounds9:
+    mKeccakRound    rpStack, rpState, 0x8000000000008003, 0
+KeccakP1600_Permute_Nrounds8:
+    mKeccakRound    rpState, rpStack, 0x8000000000008002, 0
+KeccakP1600_Permute_Nrounds7:
+    mKeccakRound    rpStack, rpState, 0x8000000000000080, 0
+KeccakP1600_Permute_Nrounds6:
+    mKeccakRound    rpState, rpStack, 0x000000000000800a, 0
+KeccakP1600_Permute_Nrounds5:
+    mKeccakRound    rpStack, rpState, 0x800000008000000a, 0
+KeccakP1600_Permute_Nrounds4:
+    mKeccakRound    rpState, rpStack, 0x8000000080008081, 0
+KeccakP1600_Permute_Nrounds3:
+    mKeccakRound    rpStack, rpState, 0x8000000000008080, 0
+KeccakP1600_Permute_Nrounds2:
+    mKeccakRound    rpState, rpStack, 0x0000000080000001, 0
+KeccakP1600_Permute_Nrounds1:
+    mKeccakRound    rpStack, rpState, 0x8000000080008008, 1
+    addq    $8*25, %rsp
+    mPopRegs
+    retq
+
+KeccakP1600_Permute_NroundsTable:
+    .quad   KeccakP1600_Permute_Nrounds1
+    .quad   KeccakP1600_Permute_Nrounds2
+    .quad   KeccakP1600_Permute_Nrounds3
+    .quad   KeccakP1600_Permute_Nrounds4
+    .quad   KeccakP1600_Permute_Nrounds5
+    .quad   KeccakP1600_Permute_Nrounds6
+    .quad   KeccakP1600_Permute_Nrounds7
+    .quad   KeccakP1600_Permute_Nrounds8
+    .quad   KeccakP1600_Permute_Nrounds9
+    .quad   KeccakP1600_Permute_Nrounds10
+    .quad   KeccakP1600_Permute_Nrounds11
+    .quad   KeccakP1600_Permute_Nrounds12
+    .quad   KeccakP1600_Permute_Nrounds13
+    .quad   KeccakP1600_Permute_Nrounds14
+    .quad   KeccakP1600_Permute_Nrounds15
+    .quad   KeccakP1600_Permute_Nrounds16
+    .quad   KeccakP1600_Permute_Nrounds17
+    .quad   KeccakP1600_Permute_Nrounds18
+    .quad   KeccakP1600_Permute_Nrounds19
+    .quad   KeccakP1600_Permute_Nrounds20
+    .quad   KeccakP1600_Permute_Nrounds21
+    .quad   KeccakP1600_Permute_Nrounds22
+    .quad   KeccakP1600_Permute_Nrounds23
+    .quad   KeccakP1600_Permute_Nrounds24
+
+#----------------------------------------------------------------------------
+#
 # void KeccakP1600_Permute_12rounds( void *state )
 #
     .size   KeccakP1600_Permute_12rounds, .-KeccakP1600_Permute_12rounds

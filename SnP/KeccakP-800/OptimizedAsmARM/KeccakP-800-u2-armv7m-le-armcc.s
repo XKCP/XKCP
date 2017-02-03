@@ -108,11 +108,11 @@ _SAS    equ 26*4
     ; prepare Theta
     xor5    r1, $stateIn, r9, _ga, _ka, _ma, _sa
     xor5    r2, $stateIn, r10, _ge, _ke, _me, _se
-    eor     r9, r7, r2, ROR #31
+    eor     r9, r8, r2, ROR #31
     eor     r10, r1, r6, ROR #31
-    eor     r11, r2, r8, ROR #31
-    eor     r12, r6, r7, ROR #31
-    eor     lr, r8, r1, ROR #31
+    eor     r11, r2, r7, ROR #31
+    eor     r12, r6, r8, ROR #31
+    eor     lr, r7, r1, ROR #31
 
     ; Theta Rho Pi Chi Iota
     eors    r1, r3, r11
@@ -125,8 +125,8 @@ _SAS    equ 26*4
     mTe     r3, lr,  7
     mTe     r4, r9,  9
     mTe     r5, r10,  2
-    mC      $stateOut, _su, r5, r1, r2, r7, 0, 0,   1
-    mC      $stateOut, _so, r4, r5, r1, r8, 0, 0,   1
+    mC      $stateOut, _su, r5, r1, r2, r8, 0, 0,   1
+    mC      $stateOut, _so, r4, r5, r1, r7, 0, 0,   1
     mC      $stateOut, _si, r3, r4, r5, r6, 0, 0,   1
     mC      $stateOut, _se, r2, r3, r4, r4, 0, 0,   1
     mC      $stateOut, _sa, r1, r2, r3, r3, 0, 0,   1
@@ -139,8 +139,8 @@ _SAS    equ 26*4
     mTe     r2, r9,  4
     mTe     r4, r11, 15
     mTe     r5, r12, 24
-    mC      $stateOut, _mu, r5, r1, r2, r3, 1, r7, 1
-    mC      $stateOut, _mo, r4, r5, r1, r3, 1, r8, 1
+    mC      $stateOut, _mu, r5, r1, r2, r3, 1, r8, 1
+    mC      $stateOut, _mo, r4, r5, r1, r3, 1, r7, 1
     ldr     r3, [$stateIn, #_ke]
     mTe     r3, r10, 10
     mC      $stateOut, _mi, r3, r4, r5, r5, 1, r6, 1
@@ -155,8 +155,8 @@ _SAS    equ 26*4
     mTe     r2, r11,  6
     mTe     r4, lr,  8
     mTe     r5, r9, 18
-    mC      $stateOut, _ku, r5, r1, r2, r3, 1, r7, 1
-    mC      $stateOut, _ko, r4, r5, r1, r3, 1, r8, 1
+    mC      $stateOut, _ku, r5, r1, r2, r3, 1, r8, 1
+    mC      $stateOut, _ko, r4, r5, r1, r3, 1, r7, 1
     ldr     r3, [$stateIn, #_ko]
     mTe     r3, r12, 25
     mC      $stateOut, _ki, r3, r4, r5, r5, 1, r6, 1
@@ -171,8 +171,8 @@ _SAS    equ 26*4
     mTe     r2, lr, 20
     mTe     r4, r10, 13
     mTe     r5, r11, 29
-    mC      $stateOut, _gu, r5, r1, r2, r3, 1, r7, 1
-    mC      $stateOut, _go, r4, r5, r1, r3, 1, r8, 1
+    mC      $stateOut, _gu, r5, r1, r2, r3, 1, r8, 1
+    mC      $stateOut, _go, r4, r5, r1, r3, 1, r7, 1
     ldr     r3, [$stateIn, #_ka]
     mTe     r3, r9,  3
     mC      $stateOut, _gi, r3, r4, r5, r5, 1, r6, 1
@@ -189,8 +189,8 @@ _SAS    equ 26*4
     mTe     r3, r11, 11
     mTe     r4, r12, 21
     mTe     r5, lr, 14
-    mC      $stateOut, _bu, r5, r1, r2, lr, 1, r7, 1
-    mC      $stateOut, _bo, r4, r5, r1, r12, 1, r8, 1
+    mC      $stateOut, _bu, r5, r1, r2, lr, 1, r8, 1
+    mC      $stateOut, _bo, r4, r5, r1, r12, 1, r7, 1
     mC      $stateOut, _bi, r3, r4, r5, r11, 1, r6, 0
     mC      $stateOut, _be, r2, r3, r4, r10, 0, 0,   1
     mCI     $stateOut, _ba, r1, r2, r3, r9, $iota
@@ -389,8 +389,52 @@ KeccakP800_ExtractAndAddBytes_Exit
 
 ; ----------------------------------------------------------------------------
 ; 
-;  void KeccakP800_Permute_12rounds( void *state )
+;  void KeccakP800_Permute_Nrounds(void *state, unsigned int nrounds)
+;
+    ALIGN
+    EXPORT  KeccakP800_Permute_Nrounds
+KeccakP800_Permute_Nrounds   PROC
+    mov     r2, r1
+    adr     r1, KeccakP800_Permute_RoundConstants0
+    sub     r1, r1, r2, LSL #2
+    tst     r2, #1
+    beq     KeccakP800_Permute
+    push    {r4-r12,lr}                     ; odd number of rounds
+    sub     sp, sp, #_SAS
+    add     r1, r1, #4                      ; set RC pointer on next word, see in iota code
+    str     r1, [sp, #_pRC]
+    mov     r4, sp
+    ldm     r0!, {r9,r10,r11,r12,lr} ; copy state to stack and prepare theta
+    stm     r4!, {r9,r10,r11,r12,lr}
+    mov     r3, r11
+    ldm     r0!, {r1,r2,r6,r7,r8}
+    stm     r4!, {r1,r2,r6,r7,r8}
+    eor     r6, r6, r11
+    eor     r7, r7, r12
+    eor     r8, r8, lr
+    ldm     r0!, {r1,r2,r11,r12,lr}
+    stm     r4!, {r1,r2,r11,r12,lr}
+    eor     r6, r6, r11
+    eor     r7, r7, r12
+    eor     r8, r8, lr
+    ldm     r0!, {r1,r2,r11,r12,lr}
+    stm     r4!, {r1,r2,r11,r12,lr}
+    eor     r6, r6, r11
+    eor     r7, r7, r12
+    eor     r8, r8, lr
+    ldm     r0!, {r1,r2,r11,r12,lr}
+    stm     r4!, {r1,r2,r11,r12,lr}
+    eor     r6, r6, r11
+    eor     r7, r7, r12
+    eor     r8, r8, lr
+    sub     r0, r0, #100
+    b       KeccakP800_Permute_OddRoundEntry
+    ENDP
+
+; ----------------------------------------------------------------------------
 ; 
+;  void KeccakP800_Permute_12rounds( void *state )
+;
     ALIGN
     EXPORT  KeccakP800_Permute_12rounds
 KeccakP800_Permute_12rounds   PROC
@@ -401,7 +445,7 @@ KeccakP800_Permute_12rounds   PROC
 ; ----------------------------------------------------------------------------
 ; 
 ;  void KeccakP800_Permute_22rounds( void *state )
-; 
+;
     ALIGN
     EXPORT  KeccakP800_Permute_22rounds
 KeccakP800_Permute_22rounds   PROC
@@ -434,6 +478,7 @@ KeccakP800_Permute_RoundConstants12
     dcd     0x8000000a
     dcd     0x80008081
     dcd     0x00008080
+KeccakP800_Permute_RoundConstants0
 
 ; ----------------------------------------------------------------------------
 ; 
@@ -446,16 +491,17 @@ KeccakP800_Permute   PROC
     str     r1, [sp, #_pRC]
     ldm     r0, {r9,r10,r11,r12,lr}
     mov     r3, r11
-    xor5    r7, r0, lr, _gu, _ku, _mu, _su
-    xor5    r8, r0, r12, _go, _ko, _mo, _so
+    xor5    r8, r0, lr, _gu, _ku, _mu, _su
+    xor5    r7, r0, r12, _go, _ko, _mo, _so
     xor5    r6, r0, r11, _gi, _ki, _mi, _si
 KeccakP800_Permute_RoundLoop
     mKR     sp, r0, 0
+KeccakP800_Permute_OddRoundEntry
     mKR     r0, sp, 1
     cmp     r2, #0x80808080
     bne     KeccakP800_Permute_RoundLoop
     str     r11, [r0, #_bi]
-    add     sp,sp,#_SAS
+    add     sp, sp, #_SAS
     pop     {r4-r12,pc}
     ENDP
 

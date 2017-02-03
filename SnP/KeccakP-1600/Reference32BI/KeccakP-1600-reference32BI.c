@@ -326,6 +326,27 @@ static void chi(UINT32 *A);
 static void iota(UINT32 *A, unsigned int indexRound);
 void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length);
 
+void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+{
+    UINT32 *stateAsHalfLanes = (UINT32*)state;
+    {
+        UINT8 stateAsBytes[1600/8];
+        KeccakP1600_ExtractBytes(state, stateAsBytes, 0, 1600/8);
+#ifdef KeccakReference
+        displayStateAsBytes(1, "Input of permutation", stateAsBytes, 1600);
+#endif
+    }
+    KeccakP1600_PermutationOnWords(stateAsHalfLanes, nrounds);
+    {
+        UINT8 stateAsBytes[1600/8];
+        KeccakP1600_ExtractBytes(state, stateAsBytes, 0, 1600/8);
+#ifdef KeccakReference
+        displayStateAsBytes(1, "State after permutation", stateAsBytes, 1600);
+#endif
+    }
+}
+
+
 void KeccakP1600_Permute_12rounds(void *state)
 {
     UINT32 *stateAsHalfLanes = (UINT32*)state;

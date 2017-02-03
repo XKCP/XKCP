@@ -238,6 +238,17 @@ void KeccakP800_OverwriteWithZeroes(void *state, unsigned int byteCount)
 
 /* ---------------------------------------------------------------- */
 
+void KeccakP800_Permute_Nrounds(void *state, unsigned int nr)
+{
+    declareBCDE
+    unsigned int i;
+    UINT32 *Astate = (UINT32*)state;
+
+    roundsN(A,E,nr)
+}
+
+/* ---------------------------------------------------------------- */
+
 void KeccakP800_Permute_12rounds(void *state)
 {
     declareBCDE
