@@ -7,7 +7,7 @@ Available under the Creative Commons Attribution-ShareAlike License:
 https://creativecommons.org/licenses/by-sa/3.0/
 */
 
-#include <inttypes.h>
+#include <stdint.h>
 #include <string.h>
 
 int base64encode(const void* data_buf, size_t dataLength, char* result, size_t resultSize)

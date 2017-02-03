@@ -13,7 +13,7 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include <inttypes.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -154,6 +154,7 @@ int process(int argc, char* argv[])
     specs.delimitedSuffix = 0x1F;
 
     for(i=1; i<argc; i++) {
+        int outputbits;
         if (strcmp("--base64", argv[i]) == 0)
             base64 = 1;
         else if (strcmp("--hex", argv[i]) == 0)
@@ -163,7 +164,7 @@ int process(int argc, char* argv[])
                 printf("Error: missing argument for --outputbits\n");
                 return -1;
             }
-            int outputbits = 0;
+            outputbits = 0;
             if (sscanf(argv[i+1], "%d", &outputbits) && (outputbits > 0) && ((outputbits % 8) == 0)) {
                 specs.hashbitlen = outputbits;
                 i++;
