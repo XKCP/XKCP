@@ -21,7 +21,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "SimpleFIPS202.h"
 #include "testDuplex.h"
 #include "testKangarooTwelve.h"
-#include "testKetje.h"
+#include "testKetjev2.h"
 #include "testKeyakv2.h"
 #include "testMotorist.h"
 #include "testPerformance.h"

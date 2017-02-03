@@ -18,10 +18,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define SnP_StaticInitialize                JOIN(SnP, _StaticInitialize)
 #define SnP_Initialize                      JOIN(SnP, _Initialize)
-#define SnP_AddBytes                        JOIN(SnP, _AddBytes)
-#define SnP_AddByte                         JOIN(SnP, _AddByte)
-#define SnP_OverwriteBytes                  JOIN(SnP, _OverwriteBytes)
-#define SnP_ExtractBytes                    JOIN(SnP, _ExtractBytes)
 
 #define Ketje_Instance                      JOIN(prefix, _Instance)
 #define Ketje_Initialize                    JOIN(prefix, _Initialize)
@@ -30,6 +26,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define Ketje_UnwrapCiphertext              JOIN(prefix, _UnwrapCiphertext)
 #define Ketje_GetTag                        JOIN(prefix, _GetTag)
 
+#define Ket_StateAddByte                    JOIN(prefixKet, _StateAddByte)
 #define Ket_StateExtractByte                JOIN(prefixKet, _StateExtractByte)
 #define Ket_StateOverwrite                  JOIN(prefixKet, _StateOverwrite)
 #define Ket_Step                            JOIN(prefixKet, _Step)
@@ -76,7 +73,7 @@ int Ketje_Initialize(Ketje_Instance *instance, const unsigned char *key, unsigne
     }
     Ket_StateOverwrite( instance->state, 1+keySizeInBits/8+1+nonceSizeInBits/8, smallData, 1 );
 
-    SnP_AddByte(instance->state, 0x80, SnP_width / 8 - 1 );
+    Ket_StateAddByte(instance->state, 0x80, SnP_width / 8 - 1 );
     SnP_PermuteRounds(instance->state, Ket_StartRounds );
 
     return 0;
@@ -95,7 +92,7 @@ int Ketje_FeedAssociatedData(Ketje_Instance *instance, const unsigned char *data
         {
             dataSizeInBytes -= Ketje_BlockSize - instance->dataRemainderSize;
             while ( instance->dataRemainderSize != Ketje_BlockSize )
-                SnP_AddByte( instance->state, *(data++), instance->dataRemainderSize++ );
+                Ket_StateAddByte( instance->state, *(data++), instance->dataRemainderSize++ );
             Ket_Step( instance->state, Ketje_BlockSize, FRAMEBITS00 );
             instance->dataRemainderSize = 0;
         }
@@ -110,7 +107,7 @@ int Ketje_FeedAssociatedData(Ketje_Instance *instance, const unsigned char *data
     }
 
     while ( dataSizeInBytes-- != 0 )
-        SnP_AddByte( instance->state, *(data++), instance->dataRemainderSize++ );
+        Ket_StateAddByte( instance->state, *(data++), instance->dataRemainderSize++ );
     return 0;
 }
 
@@ -139,7 +136,7 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
             {
                 temp = *(plaintext++);
                 *(ciphertext++) = temp ^ Ket_StateExtractByte( instance->state, instance->dataRemainderSize );
-                SnP_AddByte( instance->state, temp, instance->dataRemainderSize++ );
+                Ket_StateAddByte( instance->state, temp, instance->dataRemainderSize++ );
                 --dataSizeInBytes;
             }
             Ket_Step( instance->state, Ketje_BlockSize, FRAMEBITS11 );
@@ -162,7 +159,7 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
     {
         temp = *(plaintext++);
         *(ciphertext++) = temp ^ Ket_StateExtractByte( instance->state, instance->dataRemainderSize );
-        SnP_AddByte( instance->state, temp, instance->dataRemainderSize++ );
+        Ket_StateAddByte( instance->state, temp, instance->dataRemainderSize++ );
     }
 
     return 0;
@@ -193,7 +190,7 @@ int Ketje_UnwrapCiphertext(Ketje_Instance *instance, const unsigned char *cipher
             {
                 temp = *(ciphertext++) ^ Ket_StateExtractByte( instance->state, instance->dataRemainderSize );
                 *(plaintext++) = temp;
-                SnP_AddByte( instance->state, temp, instance->dataRemainderSize++ );
+                Ket_StateAddByte( instance->state, temp, instance->dataRemainderSize++ );
                 --dataSizeInBytes;
             }
             Ket_Step( instance->state, Ketje_BlockSize, FRAMEBITS11 );
@@ -216,7 +213,7 @@ int Ketje_UnwrapCiphertext(Ketje_Instance *instance, const unsigned char *cipher
     {
         temp = *(ciphertext++) ^ Ket_StateExtractByte( instance->state, instance->dataRemainderSize );
         *(plaintext++) = temp;
-        SnP_AddByte( instance->state, temp, instance->dataRemainderSize++ );
+        Ket_StateAddByte( instance->state, temp, instance->dataRemainderSize++ );
     }
 
     return 0;
@@ -230,8 +227,8 @@ int Ketje_GetTag(Ketje_Instance *instance, unsigned char *tag, unsigned int tagS
     if ((instance->phase & (Ketje_Phase_Wrapping | Ketje_Phase_Unwrapping)) == 0)
         return 1;
 
-    SnP_AddByte(instance->state, FRAMEBITS10, instance->dataRemainderSize);
-    SnP_AddByte(instance->state, 0x08, Ketje_BlockSize);    /* padding */
+    Ket_StateAddByte(instance->state, FRAMEBITS10, instance->dataRemainderSize);
+    Ket_StateAddByte(instance->state, 0x08, Ketje_BlockSize);    /* padding */
     SnP_PermuteRounds(instance->state, Ket_StrideRounds );
     instance->dataRemainderSize = 0;
     tagSizePart = Ketje_BlockSize;
@@ -259,10 +256,6 @@ int Ketje_GetTag(Ketje_Instance *instance, unsigned char *tag, unsigned int tagS
 
 #undef  SnP_StaticInitialize
 #undef  SnP_Initialize
-#undef  SnP_AddBytes
-#undef  SnP_AddByte
-#undef  SnP_OverwriteBytes
-#undef  SnP_ExtractBytes
 
 #undef Ketje_Instance
 #undef Ketje_Initialize
@@ -271,6 +264,7 @@ int Ketje_GetTag(Ketje_Instance *instance, unsigned char *tag, unsigned int tagS
 #undef Ketje_UnwrapCiphertext
 #undef Ketje_GetTag
 
+#undef Ket_StateAddByte
 #undef Ket_StateExtractByte
 #undef Ket_StateOverwrite
 #undef Ket_Step

@@ -49,3 +49,30 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_PermuteRounds
 #endif
 
+#ifndef KeccakP800_excluded
+    #include "KeccakP-800-SnP.h"
+
+    #define prefix                      KetMn
+    #define SnP                         KeccakP800
+    #define SnP_width                   800
+    #define SnP_PermuteRounds           KeccakP800_Permute_Nrounds
+        #include "Ket.inc"
+    #undef prefix
+    #undef SnP
+    #undef SnP_width
+    #undef SnP_PermuteRounds
+#endif
+
+#ifndef KeccakP1600_excluded
+    #include "KeccakP-1600-SnP.h"
+
+    #define prefix                      KetMj
+    #define SnP                         KeccakP1600
+    #define SnP_width                   1600
+    #define SnP_PermuteRounds           KeccakP1600_Permute_Nrounds
+        #include "Ket.inc"
+    #undef prefix
+    #undef SnP
+    #undef SnP_width
+    #undef SnP_PermuteRounds
+#endif

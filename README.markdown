@@ -4,7 +4,7 @@ The **Keccak Code Package** (abbreviated as **KCP**) gathers different free and 
 and closely related variants, such as
 
 * the SHAKE extendable-output functions and SHA-3 hash functions from [FIPS 202][fips202_standard],
-* the [Ketje][caesar_ketje] and [Keyak v2][caesar_keyak] authenticated encryption schemes,
+* the [Ketje v2][caesar_ketje] and [Keyak v2][caesar_keyak] authenticated encryption schemes,
 * the fast [KangarooTwelve][k12] extendable-output function.
 
 
@@ -29,7 +29,7 @@ When used as a library or directly from the sources, the KCP offers the high-lev
 * [`KeccakPRG.h`](Modes/KeccakPRG.h), a pseudo-random number generator based on Keccak duplex objects.
 * [`KeccakFPH.h`](Modes/KeccakFPH.h), NIST's fast parallel hash (FPH) proposal. **Warning**: this is based on a draft specification, which is subject to changes.
 * [`Keyakv2.h`](Modes/Keyakv2.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
-* [`Ketje.h`](Ketje/Ketje.h), the lightweight authenticated encryption schemes Ketje Jr and Ketje Sr.
+* [`Ketjev2.h`](Ketje/Ketjev2.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
 * [`KangarooTwelve.h`](Modes/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
 
 

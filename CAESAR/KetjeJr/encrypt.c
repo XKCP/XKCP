@@ -16,7 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "crypto_aead.h"
 
 #include <string.h>
-#include "Ketje.h"
+#include "Ketjev2.h"
 
 int crypto_aead_encrypt(
     unsigned char *c,unsigned long long *clen,

@@ -184,4 +184,16 @@ enum Phase {
     KCP_DeclareKetjeFunctions(KetjeSr)
 #endif
 
+#ifndef KeccakP800_excluded
+    #include "KeccakP-800-SnP.h"
+    KCP_DeclareKetjeStructure(KetjeMn, KeccakP800_stateSizeInBytes, KeccakP800_stateAlignment)
+    KCP_DeclareKetjeFunctions(KetjeMn)
+#endif
+
+#ifndef KeccakP1600_excluded
+    #include "KeccakP-1600-SnP.h"
+    KCP_DeclareKetjeStructure(KetjeMj, KeccakP1600_stateSizeInBytes, KeccakP1600_stateAlignment)
+    KCP_DeclareKetjeFunctions(KetjeMj)
+#endif
+
 #endif

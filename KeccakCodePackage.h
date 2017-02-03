@@ -17,6 +17,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "KeccakDuplex.h"
 #include "KeccakHash.h"
 #include "KeccakSponge.h"
-#include "Ketje.h"
+#include "Ketjev2.h"
 #include "Keyakv2.h"
 #include "SimpleFIPS202.h"

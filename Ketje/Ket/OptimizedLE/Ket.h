@@ -29,6 +29,27 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifdef DontReallyInclude_DocumentationOnly
 
 /**
+  * Function to add one byte to the permutation state.
+  *
+  * @param  state               Pointer to the permutation state.
+  * @param  value               The byte value to add to the permutation state.
+  * @param  offset              Offset in bytes where to extract from state.
+  *
+  * @return Value of byte at given offset in state
+  */
+void Prefix_StateAddByte( void *state, unsigned char value, unsigned int offset );
+
+/**
+  * Function to extract one byte from the permutation state.
+  *
+  * @param  state               Pointer to the permutation state.
+  * @param  offset              Offset in bytes where to extract from state.
+  *
+  * @return Value of byte at given offset in state
+  */
+unsigned char Prefix_StateExtractByte( void *state, unsigned int offset );
+
+/**
   * Function to overwrite data in the permutation state.
   *
   * @param  state               Pointer to the permutation state.
@@ -95,20 +116,12 @@ void Prefix_WrapBlocks( void *state, const unsigned char *plaintext, unsigned ch
 #define Ket_StepRounds      1
 #define Ket_StrideRounds    6
 
-#define Ketje_BlockSize (2*SnP_width/8/25)
-
-/**
-  * Macro to extract one byte from the permutation state.
-  *
-  * @param  argState            Pointer to the permutation state.
-  * @param  argOffset             Offset in bytes where to extract from state.
-  *
-  * @return Value of byte at given offset in state
-  */
-#define KetJr_StateExtractByte( argState, argOffset )               ((unsigned char*)(argState))[argOffset]
-#define KetSr_StateExtractByte  KetJr_StateExtractByte
+#define Ketje_LaneSize  (SnP_width/8/25)
+#define Ketje_BlockSize (((SnP_width <= 400)?2:4)*Ketje_LaneSize)
 
 #define KCP_DeclareKetFunctions(prefix) \
+void prefix##_StateAddByte( void *state, unsigned char value, unsigned int offset ); \
+unsigned char prefix##_StateExtractByte( void *state, unsigned int offset ); \
 void prefix##_StateOverwrite( void *state, unsigned int offset, const unsigned char *data, unsigned int length ); \
 void prefix##_Step( void *state, unsigned int size, unsigned char frameAndPaddingBits ); \
 void prefix##_FeedAssociatedDataBlocks( void *state, const unsigned char *data, unsigned int nBlocks ); \
@@ -123,6 +136,16 @@ void prefix##_WrapBlocks( void *state, const unsigned char *plaintext, unsigned 
 #ifndef KeccakP400_excluded
     #include "KeccakP-400-SnP.h"
     KCP_DeclareKetFunctions(KetSr)
+#endif
+
+#ifndef KeccakP800_excluded
+    #include "KeccakP-800-SnP.h"
+    KCP_DeclareKetFunctions(KetMn)
+#endif
+
+#ifndef KeccakP1600_excluded
+    #include "KeccakP-1600-SnP.h"
+    KCP_DeclareKetFunctions(KetMj)
 #endif
 
 #endif

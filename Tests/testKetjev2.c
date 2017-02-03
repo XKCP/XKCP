@@ -28,8 +28,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef OUTPUT
 #define FILE    void
 #endif
-#include "Ketje.h"
-#include "testKetje.h"
+#include "Ketjev2.h"
+#include "testKetjev2.h"
 
 #ifdef OUTPUT
 static void displayByteString(FILE *f, const char* synopsis, const unsigned char *data, unsigned int length)
@@ -47,9 +47,9 @@ static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, 
 {
     unsigned int i;
 
-    for( i=0; i<length; i++) {
-        unsigned int iRolled = i*seed1;
-        unsigned char byte = (iRolled+length+seed2)%0xFF;
+    for(i=0; i<length; i++) {
+        unsigned char iRolled = ((unsigned char)i << seed2) | ((unsigned char)i >> (8-seed2));
+        unsigned char byte = seed1 + 161 * (length - iRolled + i);
         data[i] = byte;
     }
 }
@@ -79,7 +79,7 @@ static void assert(int condition, char * synopsis)
 
     #define prefix                      KetjeJr
     #define SnP_width                   200
-        #include "testKetje.inc"
+        #include "testKetjev2.inc"
     #undef prefix
     #undef SnP_width
 #endif
@@ -89,7 +89,27 @@ static void assert(int condition, char * synopsis)
 
     #define prefix                      KetjeSr
     #define SnP_width                   400
-        #include "testKetje.inc"
+        #include "testKetjev2.inc"
+    #undef prefix
+    #undef SnP_width
+#endif
+
+#ifndef KeccakP800_excluded
+    #include "KeccakP-800-SnP.h"
+
+    #define prefix                      KetjeMn
+    #define SnP_width                   800
+        #include "testKetjev2.inc"
+    #undef prefix
+    #undef SnP_width
+#endif
+
+#ifndef KeccakP1600_excluded
+    #include "KeccakP-1600-SnP.h"
+
+    #define prefix                      KetjeMj
+    #define SnP_width                   1600
+        #include "testKetjev2.inc"
     #undef prefix
     #undef SnP_width
 #endif
@@ -101,14 +121,28 @@ int testKetje( void )
 #ifdef OUTPUT
     printf("KetjeJr (" KeccakP200_implementation ")\n");
 #endif
-    KetjeJr_test("KetjeJr.txt", "\x3b\x7d\xea\x9d\xf3\xe0\x58\x06\x98\x92\xc3\xc0\x05\x0f\x4b\xfd");
+    KetjeJr_test("KetjeJr.txt", "\x6b\x2d\xb5\xc5\x76\x51\x36\x6c\xf8\x3e\x42\xdc\xb3\x69\x0e\x51");
 #endif
 
 #ifndef KeccakP400_excluded
 #ifdef OUTPUT
     printf("KetjeSr (" KeccakP400_implementation ")\n");
 #endif
-    KetjeSr_test("KetjeSr.txt", "\x4a\x31\xc7\x51\x18\x7f\x03\x2c\x78\xc3\xcf\x36\x51\x0b\xe3\xb3");
+    KetjeSr_test("KetjeSr.txt", "\x92\xaf\x55\x88\x48\xdf\x0a\x4e\x9b\x94\xf6\x33\xee\x2f\xe9\x71");
+#endif
+
+#ifndef KeccakP800_excluded
+#ifdef OUTPUT
+    printf("KetjeMn (" KeccakP800_implementation ")\n");
+#endif
+    KetjeMn_test("KetjeMn.txt", "\xae\x36\xc9\xe0\xea\xbc\x11\x92\xf6\x7a\x9f\xb6\x93\x8a\xe3\x58");
+#endif
+
+#ifndef KeccakP1600_excluded
+#ifdef OUTPUT
+    printf("KetjeMj (" KeccakP1600_implementation ")\n");
+#endif
+    KetjeMj_test("KetjeMj.txt", "\x1e\x7c\x6c\x56\x42\x4f\x8c\x1f\xe0\xbd\x04\x2d\x03\xda\x3a\x1e");
 #endif
 
     return( 0 );

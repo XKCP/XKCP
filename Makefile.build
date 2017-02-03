@@ -464,9 +464,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- "Ket" -->
 
     <fragment name="ket_reference">
-        <c>Ketje/Ket/Reference/Ket.c</c>
-        <h>Ketje/Ket/Reference/Ket.inc</h>
-        <h>Ketje/Ket/Reference/Ket.h</h>
+        <c>Ketje/Ket/SnP-compliant/Ket.c</c>
+        <h>Ketje/Ket/SnP-compliant/Ket.inc</h>
+        <h>Ketje/Ket/SnP-compliant/Ket.h</h>
     </fragment>
 
     <fragment name="ket_optimizedLE">
@@ -500,9 +500,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Modes/Keyakv2.c</c>
         <h>Modes/Keyakv2.inc</h>
         <h>Modes/Keyakv2.h</h>
-        <c>Ketje/Ketje.c</c>
-        <h>Ketje/Ketje.inc</h>
-        <h>Ketje/Ketje.h</h>
+        <c>Ketje/Ketjev2.c</c>
+        <h>Ketje/Ketjev2.inc</h>
+        <h>Ketje/Ketjev2.h</h>
         <c>Modes/KeccakFPH.c</c>
         <h>Modes/KeccakFPH.inc</h>
         <h>Modes/KeccakFPH.h</h>
@@ -537,9 +537,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Tests/testKeyakv2.c</c>
         <h>Tests/testKeyakv2.inc</h>
         <h>Tests/testKeyakv2.h</h>
-        <c>Tests/testKetje.c</c>
-        <h>Tests/testKetje.h</h>
-        <h>Tests/testKetje.inc</h>
+        <c>Tests/testKetjev2.c</c>
+        <h>Tests/testKetjev2.h</h>
+        <h>Tests/testKetjev2.inc</h>
         <c>Tests/genKAT.c</c>
         <h>Tests/genKAT.h</h>
         <c>Tests/testPerformance.c</c>
@@ -579,9 +579,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Ketje with CAESAR API and SUPERCOP packages -->
 
     <fragment name="Ketje" inherits="common">
-        <c>Ketje/Ketje.c</c>
-        <h>Ketje/Ketje.inc</h>
-        <h>Ketje/Ketje.h</h>
+        <c>Ketje/Ketjev2.c</c>
+        <h>Ketje/Ketjev2.inc</h>
+        <h>Ketje/Ketjev2.h</h>
     </fragment>
 
     <fragment name="crypto_aead/ketjejrv1" inherits="Ketje">
@@ -714,15 +714,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="asmX86-64shld" inherits="reference200 reference400 reference800 optimized1600AsmX86-64shld serial-fallbacks ket_reference"/>
 
     <!-- Implementations selected for the Nehalem microarchitecture -->
-    <fragment name="Nehalem" inherits="reference200 reference400 optimized800lcufull optimized1600Nehalem 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 1600times4on2 1600times8on2 ket_optimizedLE"/>
+    <fragment name="Nehalem" inherits="reference200 reference400 optimized800lcufull optimized1600lcufull 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 1600times4on2 1600times8on2 ket_reference"/>
     <!-- Implementations selected for the Sandy Bridge microarchitecture -->
-    <fragment name="SandyBridge" inherits="reference200 reference400 optimized800lcufull optimized1600SandyBridge 800times2on1 800times4on1 800times8on1 SIMD128-SSE2ufull 1600times4on2 1600times8on2 ket_optimizedLE"/>
+    <fragment name="SandyBridge" inherits="reference200 reference400 optimized800lcufull optimized1600lcufullshld 800times2on1 800times4on1 800times8on1 SIMD128-SSE2ufull 1600times4on2 1600times8on2 ket_reference"/>
     <!-- Implementations selected for the Bulldozer microarchitecture -->
-    <fragment name="Bulldozer" inherits="reference200 reference400 optimized800lcufull optimized1600XOPufull 800times2on1 800times4on1 800times8on1 SIMD128-XOPufull 1600times4on2 1600times8on2 ket_optimizedLE"/>
+    <fragment name="Bulldozer" inherits="reference200 reference400 optimized800lcufull optimized1600XOPufull 800times2on1 800times4on1 800times8on1 SIMD128-XOPufull 1600times4on2 1600times8on2 ket_reference"/>
     <!-- Implementations selected for the Haswell microarchitecture -->
-    <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 ket_optimizedLE"/>
+    <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 ket_reference"/>
     <!-- Implementations selected for the Knights Landing microarchitecture -->
-    <fragment name="KnightsLanding" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 SIMD256-AVX2u12 SIMD512-AVX512u12 ket_optimizedLE"/>
+    <fragment name="KnightsLanding" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 800times2on1 800times4on1 800times8on1 SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12 ket_reference"/>
 
     <!-- Implementations selected for ARMv6M -->
     <fragment name="ARMv6M" inherits="optimized200ARMv6M optimized400ARMv6M optimized800ARMv6Mu2 optimized1600ARMv6Mu2 serial-fallbacks ket_optimizedLE"/>
