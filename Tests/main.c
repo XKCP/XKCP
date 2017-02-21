@@ -485,6 +485,7 @@ void printHelp()
         printf("    --KeccakFPH             Tests on KeccakFPH\n");
         printf("    --KeccakPRG             Tests on KeccakPRG\n");
         printf("    --FIPS202 or -f         Tests on FIPS202 and ShortMsgKAT generation\n");
+        printf("    --SP800-185             Tests on SP800-185 functions\n");
         printf("    --Keyak or -y           Tests on the Keyak authentication encryption scheme\n");
         printf("    --Ketje or -t           Tests on the Ketje authentication encryption scheme\n");
         printf("    --KangarooTwelve        Tests on KangarooTwelve\n");

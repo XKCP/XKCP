@@ -140,11 +140,83 @@ int cSHAKE( const BitSequence *input, BitLength inputBitLen, BitSequence *output
     return cSHAKE_Final(&csk, output);
 }
 
-#undef  cSHAKE_Initialize
-#undef  cSHAKE_Update
-#undef  cSHAKE_Final
-#undef  cSHAKE_Squeeze
-#undef  cSHAKE
+/* ------------------------------------------------------------------------- */
+
+#define KMAC              JOIN(KMAC,security)
+#define KMAC_Initialize   JOIN(KMAC,_Initialize)
+#define KMAC_Update       JOIN(KMAC,_Update)
+#define KMAC_Final        JOIN(KMAC,_Final)
+#define KMAC_Squeeze      JOIN(KMAC,_Squeeze)
+
+int KMAC_Initialize(KMAC_Instance *km, const BitSequence *key, BitLength keyBitLen, BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen)
+{
+    BitLength   bufferLen;
+    BitLength   keyByteLen;
+    BitSequence buffer[rateInBytes];
+
+    if (cSHAKE_Initialize(&km->csi, outputBitLen, "KMAC", 4*8, customization, customBitLen) != 0)
+        return 1;
+    km->outputBitLen = outputBitLen;
+
+    /* bytepad(encode_string(k)) */
+    bufferLen = left_encode(buffer, rateInBytes);
+    bufferLen += left_encode(buffer + bufferLen, keyBitLen);
+    if (cSHAKE_Update(&km->csi, buffer, bufferLen*8) != 0)
+        return 1;
+    keyByteLen = (keyBitLen + 7) / 8;
+    if (cSHAKE_Update(&km->csi, key, keyByteLen*8) != 0)
+        return 1;
+    bufferLen = (bufferLen + keyByteLen) % rateInBytes; /* zero padding */
+    if (bufferLen != 0) {
+        bufferLen = rateInBytes - bufferLen;
+        memset(buffer, 0, bufferLen);
+        if (cSHAKE_Update(&km->csi, buffer, bufferLen*8) != 0)
+            return 1;
+    }
+    return 0;
+}
+
+int KMAC_Update(KMAC_Instance *km, const BitSequence *input, BitLength inputBitLen)
+{
+    if ((inputBitLen & 7) != 0) /* Only full bytes are supported */
+        return 1;
+    return cSHAKE_Update(&km->csi, input, inputBitLen);
+}
+
+int KMAC_Final(KMAC_Instance *km, BitSequence *output)
+{
+    unsigned char encbuf[sizeof(BitLength)+1];
+
+    if (cSHAKE_Update(&km->csi, encbuf, right_encode(encbuf, km->outputBitLen)*8) != 0)
+        return 1;
+    return cSHAKE_Final(&km->csi, output);
+}
+
+int KMAC_Squeeze(KMAC_Instance *km, BitSequence *output, BitLength outputBitLen)
+{
+    return cSHAKE_Squeeze(&km->csi, output, outputBitLen);
+}
+
+int KMAC(const BitSequence *key, BitLength keyBitLen, const BitSequence *input, BitLength inputBitLen,
+        BitSequence *output, BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen)
+{
+    KMAC_Instance km;
+
+    if (outputBitLen == 0)
+        return 1;
+    if (KMAC_Initialize(&km, key, keyBitLen, outputBitLen, customization, customBitLen) != 0)
+        return 1;
+    if (KMAC_Update(&km, input, inputBitLen) != 0)
+        return 1;
+    return KMAC_Final(&km, output);
+}
+
+#undef  KMAC_Initialize
+#undef  KMAC_Update
+#undef  KMAC_Final
+#undef  KMAC_Squeeze
+#undef  KMAC
+
 
 /*
     todo Other algos
@@ -159,3 +231,9 @@ int cSHAKE( const BitSequence *input, BitLength inputBitLen, BitSequence *output
 #undef  rate
 #undef  rateInBytes
 #undef  rateInLanes
+
+#undef  cSHAKE_Initialize
+#undef  cSHAKE_Update
+#undef  cSHAKE_Final
+#undef  cSHAKE_Squeeze
+#undef  cSHAKE

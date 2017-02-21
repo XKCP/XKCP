@@ -20,9 +20,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 /* #define DEBUG_DUMP */
 
 #if defined(DEBUG_DUMP)
+
+#include <stdio.h>
+
 static void DUMP( const unsigned char * pText, const unsigned char * pData, unsigned int size )
 {
-    int i;
+    unsigned int i;
     printf("%s (%u bytes):", pText, size);
     for(i=0; i<size; i++)
         printf(" %02x", (int)pData[i]);
