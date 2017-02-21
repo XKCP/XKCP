@@ -17,6 +17,7 @@
 
 // Modification Stephane Leon 8.4.2016 Change syntax for apple syntax (old gas syntax)
 // Modification Stephane Leon 12.5.2016 Use the right register for pxor in macro for simd
+// Modification Stephane Leon 4.2.2017 Fix absolute addressing problem for 64 bit mode
 
     .text
 
@@ -828,7 +829,7 @@ KeccakP1600_ExtractAndAddBytes_Exit:
 //
     .align  8
     .globl _KeccakP1600_Permute_Nrounds
-KeccakP1600_Permute_Nrounds:
+_KeccakP1600_Permute_Nrounds:
     mPushRegs
     subq    $8*25, %rsp
     movq    arg2, rT1
@@ -909,7 +910,8 @@ KeccakP1600_Permute_Nrounds:
     movq    rT2a, _su(rpStack)
 KeccakP1600_Permute_Nrounds_Dispatch:
     shlq    $3, rT1
-    jmp     *KeccakP1600_Permute_NroundsTable-8(rT1)
+    lea KeccakP1600_Permute_NroundsTable(%rip), %rbx
+    jmp *-8(%rbx, %rax)
 
 KeccakP1600_Permute_Nrounds24:
     mKeccakRound    rpState, rpStack, 0x0000000000000001, 0
