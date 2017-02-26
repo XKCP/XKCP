@@ -135,10 +135,8 @@ int processFile(const char *fileName, const Specifications *specs, int base64)
             return -1;
         }
     }
-    printf(display);
-    printf("  ");
-    printf(fileName);
-    printf("\n");
+    printf("%s  ", display);
+    printf("%s\n", fileName);
     return 0;
 }
 
