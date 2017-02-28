@@ -538,9 +538,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Ketje/Ketjev2.c</c>
         <h>Ketje/Ketjev2.inc</h>
         <h>Ketje/Ketjev2.h</h>
-        <c>Modes/KeccakFPH.c</c>
-        <h>Modes/KeccakFPH.inc</h>
-        <h>Modes/KeccakFPH.h</h>
         <c>Modes/KeccakPRG.c</c>
         <h>Modes/KeccakPRG.inc</h>
         <h>Modes/KeccakPRG.h</h>
@@ -587,8 +584,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Tests/timingPlSnP.inc</h>
         <h>Tests/timingSponge.inc</h>
         <h>Tests/timingKeyak.inc</h>
-        <c>Tests/testKeccakFPH.c</c>
-        <h>Tests/testKeccakFPH.h</h>
         <c>Tests/testKeccakPRG.c</c>
         <h>Tests/testKeccakPRG.inc</h>
         <h>Tests/testKeccakPRG.h</h>

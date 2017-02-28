@@ -29,7 +29,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testSnP.h"
 #include "testSponge.h"
 #include "testKeccakPRG.h"
-#include "testKeccakFPH.h"
 #include "testSP800-185.h"
 
 #ifdef KeccakReference
@@ -482,7 +481,6 @@ void printHelp()
         printf("    --Keccak or -c          Tests on Keccak sponge and duplex\n");
         printf("    --KeccakSponge          Tests on Keccak sponge\n");
         printf("    --KeccakDuplex          Tests on Keccak duplex\n");
-        printf("    --KeccakFPH             Tests on KeccakFPH\n");
         printf("    --KeccakPRG             Tests on KeccakPRG\n");
         printf("    --FIPS202 or -f         Tests on FIPS202 and ShortMsgKAT generation\n");
         printf("    --SP800-185             Tests on SP800-185 functions\n");
@@ -503,7 +501,6 @@ int process(int argc, char* argv[])
     int SnP = 0;
     int KeccakSponge = 0;
     int KeccakDuplex = 0;
-    int KeccakFPH = 0;
     int KeccakPRG = 0;
     int FIPS202 = 0;
     int Keyak = 0;
@@ -520,7 +517,7 @@ int process(int argc, char* argv[])
         if ((strcmp("--help", argv[i]) == 0) || (strcmp("-h", argv[i]) == 0))
             help = 1;
         else if ((strcmp("--all", argv[i]) == 0) || (strcmp("-a", argv[i]) == 0))
-            SnP = KeccakSponge = KeccakDuplex = KeccakFPH = KeccakPRG = FIPS202 = Keyak = Ketje = KangarooTwelve = SP800_185 = examples = speed = 1;
+            SnP = KeccakSponge = KeccakDuplex = KeccakPRG = FIPS202 = Keyak = Ketje = KangarooTwelve = SP800_185 = examples = speed = 1;
         else if ((strcmp("--SnP", argv[i]) == 0) || (strcmp("-p", argv[i]) == 0))
             SnP = 1;
         else if ((strcmp("--Keccak", argv[i]) == 0) || (strcmp("-c", argv[i]) == 0))
@@ -529,8 +526,6 @@ int process(int argc, char* argv[])
             KeccakSponge = 1;
         else if (strcmp("--KeccakDuplex", argv[i]) == 0)
             KeccakDuplex = 1;
-        else if (strcmp("--KeccakFPH", argv[i]) == 0)
-            KeccakFPH = 1;
         else if (strcmp("--KeccakPRG", argv[i]) == 0)
             KeccakPRG = 1;
         else if ((strcmp("--FIPS202", argv[i]) == 0) || (strcmp("-f", argv[i]) == 0))
@@ -568,9 +563,6 @@ int process(int argc, char* argv[])
     }
     if (KeccakDuplex) {
         testDuplex();
-    }
-    if (KeccakFPH) {
-        testKeccakFPH();
     }
     if (KangarooTwelve) {
         testKangarooTwelve();

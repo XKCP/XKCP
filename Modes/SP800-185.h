@@ -305,9 +305,284 @@ int KMAC256_Squeeze(KMAC_Instance *kmkInstance, BitSequence *output, BitLength o
 
 /* ------------------------------------------------------------------------- */
 
-/*
-  todo Other algorithms defined in SP800-185
-*/
+typedef struct {
+    KeccakWidth1600_SpongeInstance queueNode;
+    KeccakWidth1600_SpongeInstance finalNode;
+    unsigned int fixedOutputLength;
+    unsigned int blockLen;
+    unsigned int queueAbsorbedLen;
+    size_t totalInputSize;
+    KCP_Phases phase;
+} ParallelHash_Instance;
+
+/** Parallel hash function ParallelHash128, as defined in NIST's Special Publication 800-185,
+  * published December 2016.
+  * @param  input           Pointer to the input message (X).
+  * @param  inputBitLen     The number of input bits provided in the input data.
+  *                         Only full bytes are supported, length must be a multiple of 8.
+  * @param  blockByteLen    Block size (B) in bytes, must be a power of 2.
+  *                         The minimum value is 8 in this implementation.
+  * @param  output          Pointer to the output buffer.
+  * @param  outputBitLen    The desired number of output bits (L).
+  * @param  customization   Pointer to the customization string (S).
+  * @param  customBitLen    The length of the customization string in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash128( const BitSequence *input, BitLength inputBitLen, unsigned int blockByteLen,
+        BitSequence *output, BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
+
+/**
+  * Function to initialize the parallel hash function ParallelHash128 instance used in sequential hashing mode.
+  * @param  ParallelHashInstance     Pointer to the hash instance to be initialized.
+  * @param  blockByteLen    Block size (B) in bytes, must be a power of 2.
+  *                         The minimum value is 8 in this implementation.
+  * @param  outputBitLen    The desired number of output bits (L).
+  *                         or 0 for an arbitrarily-long output (XOF).
+  * @param  customization   Pointer to the customization string (S).
+  * @param  customBitLen    The length of the customization string in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash128_Initialize(ParallelHash_Instance *ParallelHashInstance, unsigned int blockByteLen,
+        BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
+
+/**
+  * Function to give input data to be absorbed.
+  * @param  ParallelHashInstance     Pointer to the hash instance initialized by ParallelHash128_Initialize().
+  * @param  input           Pointer to the input data (X).
+  * @param  inputBitLen     The number of input bits provided in the input data.
+  *                         Only full bytes are supported, length must be a multiple of 8.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash128_Update(ParallelHash_Instance *ParallelHashInstance, const BitSequence *input, BitLength inputBitLen);
+
+/**
+  * Function to call after all input blocks have been input and to get
+  * output bits if the length was specified when calling ParallelHash128_Initialize().
+  * @param  ParallelHashInstance     Pointer to the hash instance initialized by ParallelHash128_Initialize().
+  * If @a outputBitLen was not 0 in the call to ParallelHash128_Initialize(), the number of
+  *     output bits is equal to @a outputBitLen.
+  * If @a outputBitLen was 0 in the call to ParallelHash128_Initialize(), the output bits
+  *     must be extracted using the ParallelHash128_Squeeze() function.
+  * @param  output          Pointer to the buffer where to store the output data.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash128_Final(ParallelHash_Instance *ParallelHashInstance, BitSequence * output);
+
+ /**
+  * Function to squeeze output data.
+  * @param  ParallelHashInstance    Pointer to the hash instance initialized by ParallelHash128_Initialize().
+  * @param  output          Pointer to the buffer where to store the output data.
+  * @param  outputBitLen    The number of output bits desired.
+  *                         Only the last squeeze call can output a partial byte,
+  *                         other calls must have a length multiple of 8.
+  * @pre    ParallelHash128_Final() must have been already called.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash128_Squeeze(ParallelHash_Instance *ParallelHashInstance, BitSequence *output, BitLength outputBitLen);
+
+/* ------------------------------------------------------------------------- */
+
+/** Parallel hash function ParallelHash256, as defined in NIST's Special Publication 800-185,
+  * published December 2016.
+  * @param  input           Pointer to the input message (X).
+  * @param  inputBitLen     The number of input bits provided in the input data.
+  *                         Only full bytes are supported, length must be a multiple of 8.
+  * @param  blockByteLen    Block size (B) in bytes, must be a power of 2.
+  *                         The minimum value is 8 in this implementation.
+  * @param  output          Pointer to the output buffer.
+  * @param  outputBitLen    The desired number of output bits (L).
+  * @param  customization   Pointer to the customization string (S).
+  * @param  customBitLen    The length of the customization string in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash256( const BitSequence *input, BitLength inputBitLen, unsigned int blockByteLen,
+        BitSequence *output, BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
+
+/**
+  * Function to initialize the parallel hash function ParallelHash256 instance used in sequential hashing mode.
+  * @param  ParallelHashInstance     Pointer to the hash instance to be initialized.
+  * @param  blockByteLen    Block size (B) in bytes, must be a power of 2.
+  *                         The minimum value is 8 in this implementation.
+  * @param  outputBitLen    The desired number of output bits (L).
+  *                         or 0 for an arbitrarily-long output (XOF).
+  * @param  customization   Pointer to the customization string (S).
+  * @param  customBitLen    The length of the customization string in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash256_Initialize(ParallelHash_Instance *ParallelHashInstance, unsigned int blockByteLen,
+        BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
+
+/**
+  * Function to give input data to be absorbed.
+  * @param  ParallelHashInstance     Pointer to the hash instance initialized by ParallelHash256_Initialize().
+  * @param  input           Pointer to the input data (X).
+  * @param  inputBitLen     The number of input bits provided in the input data.
+  *                         Only full bytes are supported, length must be a multiple of 8.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash256_Update(ParallelHash_Instance *ParallelHashInstance, const BitSequence *input, BitLength inputBitLen);
+
+/**
+  * Function to call after all input blocks have been input and to get
+  * output bits if the length was specified when calling ParallelHash256_Initialize().
+  * @param  ParallelHashInstance     Pointer to the hash instance initialized by ParallelHash256_Initialize().
+  * If @a outputBitLen was not 0 in the call to ParallelHash256_Initialize(), the number of
+  *     output bits is equal to @a outputBitLen.
+  * If @a outputBitLen was 0 in the call to ParallelHash256_Initialize(), the output bits
+  *     must be extracted using the ParallelHash256_Squeeze() function.
+  * @param  output          Pointer to the buffer where to store the output data.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash256_Final(ParallelHash_Instance *ParallelHashInstance, BitSequence * output);
+
+ /**
+  * Function to squeeze output data.
+  * @param  ParallelHashInstance    Pointer to the hash instance initialized by ParallelHash256_Initialize().
+  * @param  output          Pointer to the buffer where to store the output data.
+  * @param  outputBitLen    The number of output bits desired.
+  *                         Only the last squeeze call can output a partial byte,
+  *                         other calls must have a length multiple of 8.
+  * @pre    ParallelHash256_Final() must have been already called.
+  * @return 0 if successful, 1 otherwise.
+  */
+int ParallelHash256_Squeeze(ParallelHash_Instance *ParallelHashInstance, BitSequence *output, BitLength outputBitLen);
+
+/* ------------------------------------------------------------------------- */
+
+typedef struct {
+    cSHAKE_Instance csi;
+    BitLength outputBitLen;
+} TupleHash_Instance;
+
+typedef struct {
+    /** Pointer to the tuple element data (Xn). */
+    BitSequence *input;
+
+    /** The number of input bits provided in this tuple element.
+     *  Only full bytes are supported, length must be a multiple of 8.
+     */
+    BitLength inputBitLen;
+} TupleElement;
+
+/** Tuple hash function TupleHash128, as defined in NIST's Special Publication 800-185,
+  * published December 2016.
+  * @param  tuple            Pointer to an array of tuple elements (X).
+  * @param  numberOfElements The number of tuple elements provided in the input data.
+  * @param  output           Pointer to the output buffer.
+  * @param  outputBitLen     The desired number of output bits (L).
+  * @param  customization    Pointer to the customization string (S).
+  * @param  customBitLen     The length of the customization string in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash128( const TupleElement *tuple, size_t numberOfElements,
+        BitSequence *output, BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
+
+/**
+  * Function to initialize the Tuple hash function TupleHash128 instance used in sequential hashing mode.
+  * @param  TupleHashInstance     Pointer to the hash instance to be initialized.
+  * @param  outputBitLen    The desired number of output bits (L).
+  *                         or 0 for an arbitrarily-long output (XOF).
+  * @param  customization   Pointer to the customization string (S).
+  * @param  customBitLen    The length of the customization string in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash128_Initialize(TupleHash_Instance *TupleHashInstance, BitLength outputBitLen,
+        const BitSequence *customization, BitLength customBitLen);
+
+/**
+  * Function to give input data to be absorbed.
+  * @param  TupleHashInstance     Pointer to the hash instance initialized by TupleHash128_Initialize().
+  * @param  tuple            Pointer to an array of tuple elements (X).
+  * @param  numberOfElements The number of tuple elements provided in the input data.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash128_Update(TupleHash_Instance *TupleHashInstance, const TupleElement *tuple, size_t numberOfElements);
+
+/**
+  * Function to call after all input blocks have been input and to get
+  * output bits if the length was specified when calling TupleHash128_Initialize().
+  * @param  TupleHashInstance     Pointer to the hash instance initialized by TupleHash128_Initialize().
+  * If @a outputBitLen was not 0 in the call to TupleHash128_Initialize(), the number of
+  *     output bits is equal to @a outputBitLen.
+  * If @a outputBitLen was 0 in the call to TupleHash128_Initialize(), the output bits
+  *     must be extracted using the TupleHash128_Squeeze() function.
+  * @param  output          Pointer to the buffer where to store the output data.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash128_Final(TupleHash_Instance *TupleHashInstance, BitSequence * output);
+
+ /**
+  * Function to squeeze output data.
+  * @param  TupleHashInstance    Pointer to the hash instance initialized by TupleHash128_Initialize().
+  * @param  output          Pointer to the buffer where to store the output data.
+  * @param  outputBitLen    The number of output bits desired.
+  *                         Only the last squeeze call can output a partial byte,
+  *                         other calls must have a length multiple of 8.
+  * @pre    TupleHash128_Final() must have been already called.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash128_Squeeze(TupleHash_Instance *TupleHashInstance, BitSequence *output, BitLength outputBitLen);
+
+/* ------------------------------------------------------------------------- */
+
+/** Tuple hash function TupleHash256, as defined in NIST's Special Publication 800-185,
+  * published December 2016.
+  * @param  tuple            Pointer to an array of tuple elements (X).
+  * @param  numberOfElements The number of tuple elements provided in the input data.
+  * @param  output           Pointer to the output buffer.
+  * @param  outputBitLen     The desired number of output bits (L).
+  * @param  customization    Pointer to the customization string (S).
+  * @param  customBitLen     The length of the customization string in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash256( const TupleElement *tuple, size_t numberOfElements,
+        BitSequence *output, BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
+
+/**
+  * Function to initialize the Tuple hash function TupleHash256 instance used in sequential hashing mode.
+  * @param  TupleHashInstance     Pointer to the hash instance to be initialized.
+  * @param  outputBitLen    The desired number of output bits (L).
+  *                         or 0 for an arbitrarily-long output (XOF).
+  * @param  customization   Pointer to the customization string (S).
+  * @param  customBitLen    The length of the customization string in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash256_Initialize(TupleHash_Instance *TupleHashInstance, BitLength outputBitLen,
+        const BitSequence *customization, BitLength customBitLen);
+
+/**
+  * Function to give input data to be absorbed.
+  * @param  TupleHashInstance     Pointer to the hash instance initialized by TupleHash256_Initialize().
+  * @param  tuple            Pointer to an array of tuple elements (X).
+  * @param  numberOfElements The number of tuple elements provided in the input data.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash256_Update(TupleHash_Instance *TupleHashInstance, const TupleElement *tuple, size_t numberOfElements);
+
+/**
+  * Function to call after all input blocks have been input and to get
+  * output bits if the length was specified when calling TupleHash256_Initialize().
+  * @param  TupleHashInstance     Pointer to the hash instance initialized by TupleHash256_Initialize().
+  * If @a outputBitLen was not 0 in the call to TupleHash256_Initialize(), the number of
+  *     output bits is equal to @a outputBitLen.
+  * If @a outputBitLen was 0 in the call to TupleHash256_Initialize(), the output bits
+  *     must be extracted using the TupleHash256_Squeeze() function.
+  * @param  output          Pointer to the buffer where to store the output data.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash256_Final(TupleHash_Instance *TupleHashInstance, BitSequence * output);
+
+ /**
+  * Function to squeeze output data.
+  * @param  TupleHashInstance    Pointer to the hash instance initialized by TupleHash256_Initialize().
+  * @param  output          Pointer to the buffer where to store the output data.
+  * @param  outputBitLen    The number of output bits desired.
+  *                         Only the last squeeze call can output a partial byte,
+  *                         other calls must have a length multiple of 8.
+  * @pre    TupleHash256_Final() must have been already called.
+  * @return 0 if successful, 1 otherwise.
+  */
+int TupleHash256_Squeeze(TupleHash_Instance *TupleHashInstance, BitSequence *output, BitLength outputBitLen);
 
 #endif
 

@@ -18,7 +18,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <math.h>
 #include <stdio.h>
 #include "KangarooTwelve.h"
-#include "KeccakFPH.h"
+#include "SP800-185.h"
 #include "timing.h"
 #include "testPerformance.h"
 
@@ -460,7 +460,7 @@ void KeccakWidth1600_timing()
 #endif
 
 #ifndef KeccakP1600_excluded
-uint_32t measureKeccakFPH(uint_32t dtMin, unsigned int securityStrength, unsigned int blockByteLen, unsigned int inputLen)
+uint_32t measureParallelHash(uint_32t dtMin, unsigned int securityStrength, unsigned int blockByteLen, unsigned int inputLen)
 {
     ALIGN(32) unsigned char input[1024*1024];
     ALIGN(32) unsigned char output[32];
@@ -471,21 +471,21 @@ uint_32t measureKeccakFPH(uint_32t dtMin, unsigned int securityStrength, unsigne
 
     if(securityStrength == 128) {
         measureTimingBegin
-        Keccak_FPH128(input, inputLen, blockByteLen, output, 32, "", 0);
+        ParallelHash128(input, inputLen*8, blockByteLen, output, 256, "", 0);
         measureTimingEnd
     }
     else if(securityStrength == 256) {
         measureTimingBegin
-        Keccak_FPH256(input, inputLen, blockByteLen, output, 32, "", 0);
+        ParallelHash256(input, inputLen*8, blockByteLen, output, 256, "", 0);
         measureTimingEnd
     }
     else
         return 0;
 }
 
-void printKeccakFPHPerformanceHeader(unsigned int securityStrength)
+void printParallelHashPerformanceHeader(unsigned int securityStrength)
 {
-    printf("*** Keccak-FPH%d ***\n", securityStrength);
+    printf("*** ParallelHash%d ***\n", securityStrength);
     printf("Using Keccak-f[1600] implementations:\n");
     printf("- \303\2271: " KeccakP1600_implementation "\n");
 #ifndef KeccakP1600timesN_excluded
@@ -496,7 +496,7 @@ void printKeccakFPHPerformanceHeader(unsigned int securityStrength)
     printf("\n");
 }
 
-void testKeccakFPHPerformanceOne(unsigned int securityStrength, unsigned int blockByteLen)
+void testParallelHashPerformanceOne(unsigned int securityStrength, unsigned int blockByteLen)
 {
     unsigned halfTones;
     uint_32t calibration = calibrate();
@@ -508,12 +508,12 @@ void testKeccakFPHPerformanceOne(unsigned int securityStrength, unsigned int blo
         double I = pow(2.0, halfTones/12.0);
         unsigned int i  = (unsigned int)floor(I+0.5);
         uint_32t time, timePlus1Block, timePlus2Blocks, timePlus4Blocks, timePlus8Blocks;
-        time = measureKeccakFPH(calibration, securityStrength, blockByteLen, i);
+        time = measureParallelHash(calibration, securityStrength, blockByteLen, i);
         if (displaySlope) {
-            timePlus1Block = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+1*blockByteLen);
-            timePlus2Blocks = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+2*blockByteLen);
-            timePlus4Blocks = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+4*blockByteLen);
-            timePlus8Blocks = measureKeccakFPH(calibration, securityStrength, blockByteLen, i+8*blockByteLen);
+            timePlus1Block = measureParallelHash(calibration, securityStrength, blockByteLen, i+1*blockByteLen);
+            timePlus2Blocks = measureParallelHash(calibration, securityStrength, blockByteLen, i+2*blockByteLen);
+            timePlus4Blocks = measureParallelHash(calibration, securityStrength, blockByteLen, i+4*blockByteLen);
+            timePlus8Blocks = measureParallelHash(calibration, securityStrength, blockByteLen, i+8*blockByteLen);
         }
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
         if (displaySlope) {
@@ -527,12 +527,12 @@ void testKeccakFPHPerformanceOne(unsigned int securityStrength, unsigned int blo
     printf("\n\n");
 }
 
-void testKeccakFPHPerformance()
+void testParallelHashPerformance()
 {
-    printKeccakFPHPerformanceHeader(128);
-    testKeccakFPHPerformanceOne(128, 8192);
-    printKeccakFPHPerformanceHeader(256);
-    testKeccakFPHPerformanceOne(256, 8192);
+    printParallelHashPerformanceHeader(128);
+    testParallelHashPerformanceOne(128, 8192);
+    printParallelHashPerformanceHeader(256);
+    testParallelHashPerformanceOne(256, 8192);
 }
 #endif
 
@@ -661,7 +661,7 @@ void testPerformance()
 #endif
 
 #ifndef KeccakP1600_excluded
-    testKeccakFPHPerformance();
+    testParallelHashPerformance();
 #endif
 
 #ifndef KeccakP1600_excluded
