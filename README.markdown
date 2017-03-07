@@ -4,6 +4,7 @@ The **Keccak Code Package** (abbreviated as **KCP**) gathers different free and 
 and closely related variants, such as
 
 * the SHAKE extendable-output functions and SHA-3 hash functions from [FIPS 202][fips202_standard],
+* the cSHAKE, KMAC, ParallelHash and TupleHash functions from [NIST SP 800-185][sp800_185_standard],
 * the [Ketje v2][caesar_ketje] and [Keyak v2][caesar_keyak] authenticated encryption schemes,
 * the fast [KangarooTwelve][k12] extendable-output function.
 
@@ -24,7 +25,7 @@ When used as a library or directly from the sources, the KCP offers the high-lev
 
 * [`SimpleFIPS202.h`](Modes/SimpleFIPS202.h), the six approved FIPS 202 instances (SHAKE128, SHAKE256 and the SHA-3 hash functions) through simple functions.
 * [`KeccakHash.h`](Modes/KeccakHash.h), the six approved FIPS 202 instances, as well as any Keccak instance based on Keccak-_f_[1600]. This more advanced interface proposes a message queue (init-update-final) and supports bit-level inputs if needed.
-* [`SP800-185.h`](Modes/SP800-185.h), the functions (cSHAKE, KMAC, ParallelHash and TupleHash) in the official SP 800-185 standard.
+* [`SP800-185.h`](Modes/SP800-185.h), the functions (cSHAKE, KMAC, ParallelHash and TupleHash) in the official NIST SP 800-185 standard.
 * [`KeccakSponge.h`](Constructions/KeccakSponge.h), all Keccak sponge functions, with or without a message queue.
 * [`KeccakDuplex.h`](Constructions/KeccakDuplex.h), all Keccak duplex objects.
 * [`KeccakPRG.h`](Modes/KeccakPRG.h), a pseudo-random number generator based on Keccak duplex objects.
@@ -66,7 +67,8 @@ The package contains:
 The KCP also provides a number of standalone implementations, including:
 
 * a very [compact](http://keccak.noekeon.org/tweetfips202.html) C code of the FIPS 202 (SHA-3) standard in [`Standalone/CompactFIPS202/`](Standalone/CompactFIPS202/);
-* a compact implementation in Python in [`Standalone/CompactFIPS202-Python/`](Standalone/CompactFIPS202-Python/).
+* a compact implementation in Python in [`Standalone/CompactFIPS202-Python/`](Standalone/CompactFIPS202-Python/);
+* the reference code of KangarooTwelve in Python in [`Standalone/KangarooTwelve-reference/`](Standalone/KangarooTwelve-reference/K12.py).
 
 
 
@@ -126,10 +128,11 @@ The situation is similar for parallelized services, as illustrated on the follow
 
 # Where can I find more information?
 
-About the KCP, we gave a presentation on its motivation and structure
+About the KCP, we gave some presentations on its motivation and structure, e.g.,
 
-* at the [SHA-3 Workshop in Santa Barbara in August 2014][SHA3workshop2014] ([slides][KCPslides]) and
-* at [FOSDEM 2015][FOSDEM2015] ([slides][KCPslidesAtFOSDEM]).
+* at [FOSDEM in February 2017][FOSDEM2017] ([slides][slidesAtFOSDEM2017]),
+* at [SPEED-B in October 2016][SPEEDB] ([slides][slidesAtSPEEDB]) ([paper][paperAtSPEEDB]),
+* at the [SHA-3 Workshop in Santa Barbara in August 2014][SHA3workshop2014] ([slides][KCPslides]).
 
 The KCP follows an improved version of the structure proposed in the note ["A software interface for Keccak"][keccakinterface].
 
@@ -137,15 +140,17 @@ More information on the cryptographic aspects can be found:
 
 * on Keccak in general at [`keccak.noekeon.org`](http://keccak.noekeon.org/)
 * on the FIPS 202 standard at [`csrc.nist.gov`](http://csrc.nist.gov/groups/ST/hash/sha-3/fips202_standard_2015.html)
+* on the NIST SP 800-185 standard at [`keccak.noekeon.org`](http://keccak.noekeon.org/sp_800_185.html)
 * on Ketje at [`ketje.noekeon.org`](http://ketje.noekeon.org/)
 * on Keyak at [`keyak.noekeon.org`](http://keyak.noekeon.org/)
+* on KangarooTwelve at [`kangarootwelve.org`](http://kangarootwelve.org/)
 * and on cryptographic sponge functions at [`sponge.noekeon.org`](http://sponge.noekeon.org/)
 
 
 
 # How can I contribute?
 
-We welcome contributions in various forms, e.g., general feedback, bug reports, improvements and optimized implementations on your favorite platforms. The best is to do this through GitHub. Alternatively, you can send us a mail at `keyak` _-at-_ `noekeon` _-dot-_ `org`.
+We welcome contributions in various forms, e.g., general feedback, bug reports, improvements and optimized implementations on your favorite platforms. The best is to do this through GitHub. Alternatively, you can send us a mail at `keccak` _-at-_ `noekeon` _-dot-_ `org`.
 
 
 
@@ -184,13 +189,16 @@ And thanks to all contributors!
 The Keccak, Keyak and Ketje Teams: Guido Bertoni, Joan Daemen,
 Michaël Peeters, Gilles Van Assche, and Ronny Van Keer.
 
-[keccakrefoptc]: http://keccak.noekeon.org/KeccakReferenceAndOptimized-3.2.zip
 [keccakinterface]: http://keccak.noekeon.org/NoteSoftwareInterface.pdf
 [SHA3workshop2014]: http://csrc.nist.gov/groups/ST/hash/sha-3/Aug2014/index.html
 [KCPslides]: http://csrc.nist.gov/groups/ST/hash/sha-3/Aug2014/documents/vanassche_keccak_code.pdf
-[KCPslidesAtFOSDEM]: https://archive.fosdem.org/2015/schedule/event/keccak_and_sha3/attachments/slides/794/export/events/attachments/keccak_and_sha3/slides/794/KeccakFosdem2015.pdf
-[FOSDEM2015]: https://archive.fosdem.org/2015/
+[FOSDEM2017]: https://fosdem.org/2017/schedule/event/keccak/
+[slidesAtFOSDEM2017]: https://fosdem.org/2017/schedule/event/keccak/attachments/slides/1692/export/events/attachments/keccak/slides/1692/KeccakAtFOSDEM2017.pdf
 [fips202_standard]: http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf "FIPS 202 standard"
+[sp800_185_standard]: https://doi.org/10.6028/NIST.SP.800-185 "NIST SP 800-185 standard"
 [caesar_ketje]: http://ketje.noekeon.org/
 [caesar_keyak]: http://keyak.noekeon.org/
 [k12]: http://keccak.noekeon.org/KangarooTwelve.pdf
+[SPEEDB]: http://ccccspeed.win.tue.nl/
+[paperAtSPEEDB]: http://ccccspeed.win.tue.nl/papers/KeccakSoftware.pdf
+[slidesAtSPEEDB]: http://ccccspeed.win.tue.nl/presentations/KeccakSoftware-slides.pdf
