@@ -89,7 +89,7 @@ _su     equ 24*2
     rolxor      $d, $a, $b
     eor         $d, $a, $b, LSL #1
     eor         $d, $d, $b, LSR #15
-    uxth        $d
+    uxth        $d, $d
     MEND
 
     MACRO
