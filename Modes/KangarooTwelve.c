@@ -14,7 +14,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include <string.h>
-#include "KeccakCodePackage.h"
 #include "KangarooTwelve.h"
 
 #define chunkSize       8192

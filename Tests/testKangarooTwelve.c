@@ -228,11 +228,15 @@ void selfTestKangarooTwelve(const unsigned char *expected)
 
     for(useSqueeze = 0; useSqueeze <= 1; ++useSqueeze)
     for(mode = 0; mode <= 2; ++mode) {
+        #ifndef EMBEDDED
         printf("Testing KangarooTwelve %u %u...", useSqueeze, mode);
         fflush(stdout);
+        #endif
         performTestKangarooTwelve(checksum, mode, useSqueeze);
         assert(memcmp(expected, checksum, checksumByteSize) == 0);
+        #ifndef EMBEDDED
         printf(" - OK.\n");
+        #endif
     }
 }
 
@@ -260,10 +264,12 @@ void writeTestKangarooTwelve(const char *filename)
 
 static void outputHex(const unsigned char *data, unsigned char length)
 {
+    #ifndef EMBEDDED
     unsigned int i;
     for(i=0; i<length; i++)
         printf("%02x ", (int)data[i]);
     printf("\n\n");
+    #endif
 }
 
 void printKangarooTwelveTestVectors()
