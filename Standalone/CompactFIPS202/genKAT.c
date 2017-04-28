@@ -78,10 +78,10 @@ genKAT_main(void)
     /* Note: "SakuraSequential" translates into "input followed by 11", */
     /* see http://keccak.noekeon.org/Sakura.pdf for more details. */
     /*  */
-    genShortMsgHash(1344, 256, 0x1F, 0, 1344,
+    genShortMsgHash(1344, 256, 0x1F, 0, 4096,
         "ShortMsgKAT_SHAKE128.txt",
         "Keccak(SakuraSequential|11)[r=1344, c=256], or SHAKE128 as in FIPS 202 standard");
-    genShortMsgHash(1088, 512, 0x1F, 0, 1088,
+    genShortMsgHash(1088, 512, 0x1F, 0, 4096,
         "ShortMsgKAT_SHAKE256.txt",
         "Keccak(SakuraSequential|11)[r=1088, c=512], or SHAKE256 as in FIPS 202 standard");
     genShortMsgHash(1152, 448, 0x06, 224, 0,
