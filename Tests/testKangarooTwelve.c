@@ -16,8 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "KeccakCodePackage.h"
 #include "KangarooTwelve.h"
 
-/*#define OUTPUT */
-/*#define VERBOSE */
+/* #define OUTPUT */
+/* #define VERBOSE */
 
 #define SnP_width               1600
 #define inputByteSize           (80*1024)
@@ -253,7 +253,7 @@ void writeTestKangarooTwelve(const char *filename)
 {
     FILE *f = fopen(filename, "w");
     assert(f != NULL);
-    writeTestKangarooTwelveOne(f, 128);
+    writeTestKangarooTwelveOne(f);
     fclose(f);
 }
 #endif

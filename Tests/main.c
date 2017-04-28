@@ -475,22 +475,22 @@ void testFIPS202()
 void printHelp()
 {
         printf("Usage: KeccakTests command(s), where the commands can be\n");
-        printf("    --help or -h            To display this page\n");
-        printf("    --all or -a             All tests\n");
-        printf("    --SnP or -p             Tests on Keccak-p permutations\n");
-        printf("    --Keccak or -c          Tests on Keccak sponge and duplex\n");
-        printf("    --KeccakSponge          Tests on Keccak sponge\n");
-        printf("    --KeccakDuplex          Tests on Keccak duplex\n");
-        printf("    --KeccakPRG             Tests on KeccakPRG\n");
-        printf("    --FIPS202 or -f         Tests on FIPS202 and ShortMsgKAT generation\n");
-        printf("    --SP800-185             Tests on SP800-185 functions\n");
-        printf("    --Keyak or -y           Tests on the Keyak authentication encryption scheme\n");
-        printf("    --Ketje or -t           Tests on the Ketje authentication encryption scheme\n");
-        printf("    --KangarooTwelve        Tests on KangarooTwelve\n");
+        printf("  --help or -h              To display this page\n");
+        printf("  --all or -a               All tests\n");
+        printf("  --SnP or -p               Tests on Keccak-p permutations\n");
+        printf("  --Keccak or -c            Tests on Keccak sponge and duplex\n");
+        printf("  --KeccakSponge            Tests on Keccak sponge\n");
+        printf("  --KeccakDuplex            Tests on Keccak duplex\n");
+        printf("  --KeccakPRG               Tests on KeccakPRG\n");
+        printf("  --FIPS202 or -f           Tests on FIPS202 and ShortMsgKAT generation\n");
+        printf("  --SP800-185               Tests on SP800-185 functions\n");
+        printf("  --Keyak or -y             Tests on the Keyak authentication encryption scheme\n");
+        printf("  --Ketje or -t             Tests on the Ketje authentication encryption scheme\n");
+        printf("  --KangarooTwelve or -K12  Tests on KangarooTwelve\n");
 #ifdef KeccakReference
-        printf("    --examples or -e        Generation of example files\n");
+        printf("  --examples or -e          Generation of example files\n");
 #else
-        printf("    --speed or -s           Speed measuresments\n");
+        printf("  --speed or -s             Speed measuresments\n");
 #endif
 }
 
@@ -534,7 +534,7 @@ int process(int argc, char* argv[])
             Keyak = 1;
         else if ((strcmp("--Ketje", argv[i]) == 0) || (strcmp("-t", argv[i]) == 0))
             Ketje = 1;
-        else if (strcmp("--KangarooTwelve", argv[i]) == 0)
+        else if ((strcmp("--KangarooTwelve", argv[i]) == 0) || (strcmp("-K12", argv[i]) == 0))
             KangarooTwelve = 1;
         else if (strcmp("--SP800-185", argv[i]) == 0)
             SP800_185 = 1;
