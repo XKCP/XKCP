@@ -51,7 +51,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 void Keccak(int rate, int capacity, const unsigned char *input, unsigned long long int inputByteLen, unsigned char delimitedSuffix, unsigned char *output, unsigned long long int outputByteLen);
 
 typedef unsigned char BitSequence;
-typedef size_t DataLength;
+typedef size_t BitLength;
 typedef enum { SUCCESS = 0, FAIL = 1, BAD_HASHLEN = 2 } HashReturn;
 
 #define MAX_MARKER_LEN      50

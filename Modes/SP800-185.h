@@ -22,9 +22,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #ifndef KeccakP1600_excluded
 
+#ifndef _Keccak_BitTypes_
+#define _Keccak_BitTypes_
 typedef unsigned char BitSequence;
 
 typedef size_t BitLength;
+#endif
 
 typedef struct {
     KeccakWidth1600_SpongeInstance sponge;

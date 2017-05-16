@@ -34,7 +34,7 @@ HashReturn Keccak_HashInitialize(Keccak_HashInstance *instance, unsigned int rat
 
 /* ---------------------------------------------------------------- */
 
-HashReturn Keccak_HashUpdate(Keccak_HashInstance *instance, const BitSequence *data, DataLength databitlen)
+HashReturn Keccak_HashUpdate(Keccak_HashInstance *instance, const BitSequence *data, BitLength databitlen)
 {
     if ((databitlen % 8) == 0)
         return (HashReturn)KeccakWidth1600_SpongeAbsorb(&instance->sponge, data, databitlen/8);
@@ -72,7 +72,7 @@ HashReturn Keccak_HashFinal(Keccak_HashInstance *instance, BitSequence *hashval)
 
 /* ---------------------------------------------------------------- */
 
-HashReturn Keccak_HashSqueeze(Keccak_HashInstance *instance, BitSequence *data, DataLength databitlen)
+HashReturn Keccak_HashSqueeze(Keccak_HashInstance *instance, BitSequence *data, BitLength databitlen)
 {
     if ((databitlen % 8) != 0)
         return FAIL;
