@@ -48,16 +48,16 @@ def load64(b):
     return sum((b[i] << (8*i)) for i in range(8))
 
 def store64(a):
-    return bytes((a >> (8*i)) % 256 for i in range(8))
+    return bytearray((a >> (8*i)) % 256 for i in range(8))
 
 def KeccakP1600(state, nrRounds):
     lanes = [[load64(state[8*(x+5*y):8*(x+5*y)+8]) for y in range(5)] for x in range(5)]
     lanes = KeccakP1600onLanes(lanes, nrRounds)
-    state = b''.join([store64(lanes[x][y]) for y in range(5) for x in range(5)])
+    state = bytearray().join([store64(lanes[x][y]) for y in range(5) for x in range(5)])
     return bytearray(state)
 
 def F(inputBytes, delimitedSuffix, outputByteLen):
-    outputBytes = b''
+    outputBytes = bytearray()
     state = bytearray([0 for i in range(200)])
     rateInBytes = 1344//8
     blockSize = 0
@@ -87,26 +87,27 @@ def F(inputBytes, delimitedSuffix, outputByteLen):
     return outputBytes
 
 def right_encode(x):
-    S = b''
+    S = bytearray()
     while(x > 0):
-        S = bytes([x % 256]) + S
+        S = bytearray([x % 256]) + S
         x = x//256
-    S = S + bytes([len(S)])
+    S = S + bytearray([len(S)])
     return S
 
+# inputMessage and customizationString must be of type byte string or byte array
 def KangarooTwelve(inputMessage, customizationString, outputByteLen):
     B = 8192
     c = 256
-    S = inputMessage + customizationString + right_encode(len(customizationString))
+    S = bytearray(inputMessage) + bytearray(customizationString) + right_encode(len(customizationString))
     # === Cut the input string into chunks of B bytes ===
     n = (len(S)+B-1)//B
-    Si = [bytes(S[i*B:(i+1)*B]) for i in range(n)]
+    Si = [bytearray(S[i*B:(i+1)*B]) for i in range(n)]
     if (n == 1):
         # === Process the tree with only a final node ===
         return F(Si[0], 0x07, outputByteLen)
     else:
         # === Process the tree with kangaroo hopping ===
         CVi = [F(Si[i+1], 0x0B, c//8) for i in range(n-1)]
-        NodeStar = Si[0] + b'\x03\x00\x00\x00\x00\x00\x00\x00' + b''.join(CVi) \
+        NodeStar = Si[0] + bytearray([3,0,0,0,0,0,0,0]) + bytearray().join(CVi) \
             + right_encode(n-1) + b'\xFF\xFF'
         return F(NodeStar, 0x06, outputByteLen)

@@ -12,6 +12,7 @@
 # and related or neighboring rights to the source code in this file.
 # http://creativecommons.org/publicdomain/zero/1.0/
 
+from __future__ import print_function
 import K12
 
 def generateSimpleRawMaterial(length, seed1, seed2):
@@ -82,12 +83,12 @@ def printTestVectors():
     outputHex(K12.KangarooTwelve(b'', b'', 10032)[10000:])
     for i in range(7):
         C = b''
-        M = bytes([(j % 251) for j in range(17**i)])
+        M = bytearray([(j % 251) for j in range(17**i)])
         print("KangarooTwelve(M=pattern 0x00 to 0xFA for 17^{0:d} bytes, C=empty, 32 output bytes):".format(i))
         outputHex(K12.KangarooTwelve(M, C, 32))
     for i in range(4):
-        M = bytes([0xFF for j in range(2**i-1)])
-        C = bytes([(j % 251) for j in range(41**i)])
+        M = bytearray([0xFF for j in range(2**i-1)])
+        C = bytearray([(j % 251) for j in range(41**i)])
         print("KangarooTwelve(M={0:d} times byte 0xFF, C=pattern 0x00 to 0xFA for 41^{1:d} bytes, 32 output bytes):".format(2**i-1, i))
         outputHex(K12.KangarooTwelve(M, C, 32))
 
