@@ -77,7 +77,7 @@ int hashInitialize(Instance *instance, const Specifications *specs)
         return -1;
 }
 
-int hashUpdate(Instance *instance, const Specifications *specs, unsigned char *buffer, size_t size)
+int hashUpdate(Instance *instance, const Specifications *specs, const unsigned char *buffer, size_t size)
 {
     if (specs->algorithm == algorithm_Keccak)
         Keccak_HashUpdate(&instance->keccak, buffer, size*8);
@@ -137,6 +137,38 @@ int processFile(const char *fileName, const Specifications *specs, int base64)
     }
     printf("%s  ", display);
     printf("%s\n", fileName);
+    return 0;
+}
+
+int processString(const char *input, const Specifications *specs, int base64)
+{
+    Instance instance;
+    unsigned char buffer[bufferSize];
+    char display[bufferSize*2+1];
+
+    if (specs->hashbitlen > (bufferSize*8)) {
+        printf("The requested digest length (%d bits) does not fit in the buffer.\n", specs->hashbitlen);
+        return -1;
+    }
+    if (hashInitialize(&instance, specs)) {
+        return -1;
+    }
+    hashUpdate(&instance, specs, input, strlen(input));
+    hashFinal(&instance, specs, buffer);
+    if (base64) {
+        if (base64encode(buffer, (specs->hashbitlen+7)/8, display, bufferSize*2)) {
+            printf("Error while converting to base64.\n");
+            return -1;
+        }
+    }
+    else {
+        if (hexencode(buffer, (specs->hashbitlen+7)/8, display, bufferSize*2)) {
+            printf("Error while converting to hex.\n");
+            return -1;
+        }
+    }
+    printf("%s  ", display);
+    printf("\"%s\"\n", input);
     return 0;
 }
 
@@ -214,10 +246,28 @@ int process(int argc, char* argv[])
             specs.delimitedSuffix = 0x06;
             base64 = 0;
         }
+        else if (strcmp("--no-suffix", argv[i]) == 0) {
+            specs.delimitedSuffix = 0x01;
+        }
+        else if (strcmp("--ethereum", argv[i]) == 0) {
+            specs.rate = 1088;
+            specs.capacity = 512;
+            specs.hashbitlen = 256;
+            specs.delimitedSuffix = 0x01;
+            base64 = 0;
+        }
         else if ((strcmp("--kangarootwelve", argv[i]) == 0) || (strcmp("--k12", argv[i]) == 0)) {
             specs.algorithm = algorithm_K12;
             specs.hashbitlen = 264;
             base64 = 1;
+        }
+        else if (strcmp("--string", argv[i]) == 0) {
+            if ((i+1) >= argc) {
+                printf("Error: missing argument for --string\n");
+                return -1;
+            }
+            i++;
+            processString(argv[i], &specs, base64);
         }
         else {
             if (strlen(argv[i]) > 2) {
