@@ -172,6 +172,27 @@ int processString(const char *input, const Specifications *specs, int base64)
     return 0;
 }
 
+void printHelp()
+{
+    printf("Usage: KeccakSum [options] [file names] [options] [file names] ...\n\n");
+    printf("  --help or -h                To display this page\n");
+    printf("  --base64                    Print in base64\n");
+    printf("  --hex                       Print in hexadecimal\n");
+    printf("  --outputbits <numberOfBits> Number of bits as output\n");
+    printf("  --shake128                  Use SHAKE128\n");
+    printf("  --shake256                  Use SHAKE256\n");
+    printf("  --sha3-224                  Use SHA3-224\n");
+    printf("  --sha3-256                  Use SHA3-256\n");
+    printf("  --sha3-384                  Use SHA3-384\n");
+    printf("  --sha3-512                  Use SHA3-512\n");
+    printf("  --no-suffix                 Use 0x01 as delimited suffix (pure Keccak)\n");
+    printf("  --ethereum                  Equivalent to --sha3-256 --no-suffix\n");
+    printf("  --kangarootwelve or --k12   Use KangarooTwelve\n");
+    printf("  --string <string>           String to hash\n");
+    printf("  <file name>                 File to hash\n\n");
+    printf("The options are processed in order.\nBy default, it uses SHAKE128 and base64 display.\n");
+}
+
 int process(int argc, char* argv[])
 {
     Specifications specs;
@@ -268,6 +289,10 @@ int process(int argc, char* argv[])
             }
             i++;
             processString(argv[i], &specs, base64);
+        }
+        else if (strcmp("--help", argv[i]) == 0 || strcmp("-h", argv[i]) == 0) {
+            printHelp();
+            return 0;
         }
         else {
             if (strlen(argv[i]) > 2) {
