@@ -107,7 +107,7 @@ int processFile(const char *fileName, const Specifications *specs, int base64)
         printf("The requested digest length (%d bits) does not fit in the buffer.\n", specs->hashbitlen);
         return -1;
     }
-    fp = fopen(fileName, "r");
+    fp = fopen(fileName, "rb");
     if (fp == NULL) {
         printf("File '%s' could not be opened.\n", fileName);
         return -1;
