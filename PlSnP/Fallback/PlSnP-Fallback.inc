@@ -168,6 +168,36 @@ void PlSnP_PermuteAll_12rounds(void *states)
 }
 #endif
 
+#if (defined(SnP_Permute_Nrounds) || defined(SnP_PermuteAll_6rounds))
+void PlSnP_PermuteAll_6rounds(void *states)
+{
+    unsigned int i;
+
+    for(i=0; i<PlSnP_factor; i++) {
+        #if (PlSnP_baseParallelism == 1)
+            SnP_Permute_Nrounds(stateWithIndex(i), 6);
+        #else
+            SnP_PermuteAll_6rounds(stateWithIndex(i));
+        #endif
+    }
+}
+#endif
+
+#if (defined(SnP_Permute_Nrounds) || defined(SnP_PermuteAll_4rounds))
+void PlSnP_PermuteAll_4rounds(void *states)
+{
+    unsigned int i;
+
+    for(i=0; i<PlSnP_factor; i++) {
+        #if (PlSnP_baseParallelism == 1)
+            SnP_Permute_Nrounds(stateWithIndex(i), 4);
+        #else
+            SnP_PermuteAll_4rounds(stateWithIndex(i));
+        #endif
+    }
+}
+#endif
+
 void PlSnP_ExtractBytes(void *states, unsigned int instanceIndex, unsigned char *data, unsigned int offset, unsigned int length)
 {
     #if (PlSnP_baseParallelism == 1)

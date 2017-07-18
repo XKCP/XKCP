@@ -156,7 +156,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
 
     /* Testing PlSnP_AddByte() */
     {
-        unsigned i, offset, length, alignment, instanceIndex;
+        unsigned offset, instanceIndex;
 
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++) {
             for(offset=0; offset<(SnP_width/8); offset += (offset < 6) ? 1 : (9+2*instanceIndex)) {
@@ -277,10 +277,40 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_12rounds()" );
 #endif
 
+#ifdef PlSnP_PermuteAll_6rounds
+    /* Testing PlSnP_PermuteAll_6rounds() */
+    {
+        unsigned int i;
+
+        for(i=0; i<3; i++) {
+            PlSnP_PermuteAll_6rounds(stateTest);
+            accumulateStateParallel(stateAccumulated, stateTest);
+        }
+    }
+    PlSnP_PermuteAll(stateTest);
+    DUMP( stateTest, "stateTest after testing PlSnP_PermuteAll_6rounds()" );
+    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_6rounds()" );
+#endif
+
+#ifdef PlSnP_PermuteAll_4rounds
+    /* Testing PlSnP_PermuteAll_4rounds() */
+    {
+        unsigned int i;
+
+        for(i=0; i<3; i++) {
+            PlSnP_PermuteAll_4rounds(stateTest);
+            accumulateStateParallel(stateAccumulated, stateTest);
+        }
+    }
+    PlSnP_PermuteAll(stateTest);
+    DUMP( stateTest, "stateTest after testing PlSnP_PermuteAll_4rounds()" );
+    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_4rounds()" );
+#endif
+
     /* Testing PlSnP_ExtractBytes() */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8)+8];
-        unsigned i, offset, length, alignment, instanceIndex;
+        unsigned offset, length, alignment, instanceIndex;
 
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++) {
             for(offset=0; offset<(SnP_width/8); offset += (offset < 12) ? 1 : (7+2*instanceIndex))
@@ -317,7 +347,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     /* Testing PlSnP_ExtractAndAddBytes() (input = output) */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8)+8];
-        unsigned i, offset, length, alignment, instanceIndex;
+        unsigned offset, length, alignment, instanceIndex;
 
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++) {
             for(offset=0; offset<(SnP_width/8); offset += (offset < 13) ? 1 : (5+2*instanceIndex))
@@ -337,7 +367,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     {
         unsigned char buffer1[PlSnP_P*(SnP_width/8)+8];
         unsigned char buffer2[PlSnP_P*(SnP_width/8)+8];
-        unsigned i, offset, length, alignment, instanceIndex;
+        unsigned offset, length, alignment, instanceIndex;
 
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++) {
             for(offset=0; offset<(SnP_width/8); offset += (offset < 9) ? 1 : (6+3*instanceIndex))

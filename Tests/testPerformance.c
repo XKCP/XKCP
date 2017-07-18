@@ -613,6 +613,256 @@ void testKangarooTwelvePerformance()
 }
 #endif
 
+#ifndef KeccakP1600_excluded
+
+#define Kravatte_KeyLen 16
+#define Kravatte_rate   1600
+
+uint_32t measureKravatte_MaskDerivation(uint_32t dtMin)
+{
+    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    Kravatte_Instance kv;
+ 
+    memset(key, 0xA5, Kravatte_KeyLen);
+
+    measureTimingBegin
+    Kravatte_MaskDerivation(&kv, key, Kravatte_KeyLen*8);
+    measureTimingEnd
+}
+
+uint_32t measureKra(uint_32t dtMin, unsigned int inputLen)
+{
+    ALIGN(32) unsigned char input[1024*1024];
+    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    Kravatte_Instance kv;
+ 
+    assert(inputLen <= 1024*1024);
+
+    memset(key, 0xA5, Kravatte_KeyLen);
+    Kravatte_MaskDerivation(&kv, key, Kravatte_KeyLen*8);
+    memset(input, 0xA5, inputLen/8);
+
+    measureTimingBegin
+    Kra(&kv, input, inputLen, KRAVATTE_FLAG_LAST_PART);
+    measureTimingEnd
+}
+
+uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
+{
+    ALIGN(32) unsigned char output[1024*1024];
+    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    Kravatte_Instance kv;
+
+    assert(outputLen <= 1024*1024);
+
+    memset(key, 0xA5, Kravatte_KeyLen);
+    Kravatte_MaskDerivation(&kv, key, Kravatte_KeyLen*8);
+    output[0] = 0;
+    Kra(&kv, output, 0, KRAVATTE_FLAG_LAST_PART);
+
+    measureTimingBegin
+    kv.phase = COMPRESSING; /* avoid error when calling multiple times with last flag set */
+    Vatte(&kv, output, outputLen, KRAVATTE_FLAG_LAST_PART);
+    measureTimingEnd
+}
+
+uint_32t measureKravatte_SIV(uint_32t dtMin, unsigned int inputLen)
+{
+    ALIGN(32) unsigned char input[1024*1024];
+    ALIGN(32) unsigned char output[1024*1024];
+    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    ALIGN(32) unsigned char AD[16];
+    ALIGN(32) unsigned char tag[Kravatte_SIV_TagLength];
+    Kravatte_Instance kv;
+
+    assert(inputLen <= 1024*1024);
+
+    memset(key, 0xA5, Kravatte_KeyLen);
+    Kravatte_SIV_MaskDerivation(&kv, key, Kravatte_KeyLen*8);
+    memset(input, 0xA5, inputLen/8);
+    memset(AD, 0x5A, sizeof(AD));
+
+    measureTimingBegin
+    Kravatte_SIV_Wrap(&kv, input, output, inputLen, AD, sizeof(AD)*8, tag);
+    measureTimingEnd
+}
+
+uint_32t measureKravatte_SAE_Wrap(uint_32t dtMin, unsigned int inputLen)
+{
+    ALIGN(32) unsigned char input[1024*1024];
+    ALIGN(32) unsigned char output[1024*1024];
+    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    ALIGN(32) unsigned char nonce[16];
+    ALIGN(32) unsigned char AD[16];
+    ALIGN(32) unsigned char tag[Kravatte_SAE_TagLength];
+    Kravatte_Instance kv;
+
+    assert(inputLen <= 1024*1024);
+
+    memset(key, 0xA5, Kravatte_KeyLen);
+    memset(nonce, 0x55, sizeof(nonce));
+    Kravatte_SAE_Initialize(&kv, key, Kravatte_KeyLen*8, nonce, sizeof(nonce)*8, tag);
+    memset(input, 0xA5, inputLen/8);
+    memset(AD, 0x5A, sizeof(AD));
+
+    measureTimingBegin
+    Kravatte_SAE_Wrap(&kv, input, output, inputLen, AD, 0, tag);
+    measureTimingEnd
+}
+
+uint_32t measureKravatte_SAE_MAC(uint_32t dtMin, unsigned int ADLen)
+{
+    ALIGN(32) unsigned char input[1];
+    ALIGN(32) unsigned char output[1];
+    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    ALIGN(32) unsigned char nonce[16];
+    ALIGN(32) unsigned char AD[1024*1024];
+    ALIGN(32) unsigned char tag[Kravatte_SAE_TagLength];
+    Kravatte_Instance kv;
+
+    assert(ADLen <= 1024*1024);
+
+    memset(key, 0xA5, Kravatte_KeyLen);
+    memset(nonce, 0x55, sizeof(nonce));
+    Kravatte_SAE_Initialize(&kv, key, Kravatte_KeyLen*8, nonce, sizeof(nonce)*8, tag);
+    memset(input, 0xA5, sizeof(input));
+    memset(AD, 0x5A, ADLen/8);
+
+    measureTimingBegin
+    Kravatte_SAE_Wrap(&kv, input, output, 0, AD, ADLen, tag);
+    measureTimingEnd
+}
+
+uint_32t measureKravatte_WBC(uint_32t dtMin, unsigned int inputLen)
+{
+    ALIGN(32) unsigned char input[1024*1024];
+    ALIGN(32) unsigned char output[1024*1024];
+    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    ALIGN(32) unsigned char W[16];
+    Kravatte_Instance kvw;
+
+    assert(inputLen <= 1024*1024);
+
+    memset(key, 0xA5, Kravatte_KeyLen);
+    Kravatte_WBC_Initialize(&kvw, key, Kravatte_KeyLen*8);
+    memset(input, 0xA5, inputLen/8);
+    memset(W, 0x55, sizeof(W));
+
+    measureTimingBegin
+    Kravatte_WBC_Encipher(&kvw, input, output, inputLen, W, sizeof(W)*8);
+    measureTimingEnd
+}
+
+void printKravattePerformanceHeader( void )
+{
+    printf("*** Kravatte ***\n");
+    printf("Using Keccak-p[1600,6] implementations:\n");
+    printf("- \303\2271: " KeccakP1600_implementation "\n");
+#ifndef KeccakP1600timesN_excluded
+    printf("- \303\2272: " KeccakP1600times2_implementation "\n");
+    printf("- \303\2274: " KeccakP1600times4_implementation "\n");
+    printf("- \303\2278: " KeccakP1600times8_implementation "\n");
+#endif
+    printf("\n");
+}
+
+
+void testKravattePerformanceOne( void )
+{
+    uint_32t calibration = calibrate();
+    uint_32t len;
+    uint_32t time;
+
+    time = measureKravatte_MaskDerivation(calibration);
+    printf("Kravatte Mask Derivation %9d cycles\n\n", time);
+
+    printf("Kra\n");
+    for(len=8; len <= 256*Kravatte_rate; /* empty */ ) {
+        time = measureKra(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        if (len < Kravatte_rate) {
+            len <<= 1;
+            if (len > Kravatte_rate)
+                len = Kravatte_rate;
+        }
+        else
+            len <<= 1;
+    }
+
+    printf("\nVatte\n");
+    for(len=8; len <= 256*Kravatte_rate; /* empty */ ) {
+        time = measureVatte(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        if (len < Kravatte_rate) {
+            len <<= 1;
+            if (len > Kravatte_rate)
+                len = Kravatte_rate;
+        }
+        else
+            len <<= 1;
+    }
+
+    printf("\nKravatte_SIV\n");
+    for(len=8; len <= 256*Kravatte_rate; /* empty */ ) {
+        time = measureKravatte_SIV(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        if (len < Kravatte_rate) {
+            len <<= 1;
+            if (len > Kravatte_rate)
+                len = Kravatte_rate;
+        }
+        else
+            len <<= 1;
+    }
+
+    printf("\nKravatte_SAE Wrap (only plaintext input, no AD)\n");
+    for(len=8; len <= 256*Kravatte_rate; /* empty */ ) {
+        time = measureKravatte_SAE_Wrap(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        if (len < Kravatte_rate) {
+            len <<= 1;
+            if (len > Kravatte_rate)
+                len = Kravatte_rate;
+        }
+        else
+            len <<= 1;
+    }
+
+    printf("\nKravatte_SAE MAC (only AD input, no plaintext)\n");
+    for(len=8; len <= 256*Kravatte_rate; /* empty */ ) {
+        time = measureKravatte_SAE_MAC(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        if (len < Kravatte_rate) {
+            len <<= 1;
+            if (len > Kravatte_rate)
+                len = Kravatte_rate;
+        }
+        else
+            len <<= 1;
+    }
+
+    printf("\nKravatte_WBC (Tweak 128 bits)\n");
+    for(len=8; len <= 256*Kravatte_rate; /* empty */ ) {
+        time = measureKravatte_WBC(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        if (len < Kravatte_rate) {
+            len <<= 1;
+            if (len > Kravatte_rate)
+                len = Kravatte_rate;
+        }
+        else
+            len <<= 1;
+    }
+    printf("\n\n");
+}
+
+void testKravattePerformance(void)
+{
+    printKravattePerformanceHeader();
+    testKravattePerformanceOne();
+}
+#endif
+
 void testPerformance()
 {
 #ifndef KeccakP200_excluded
@@ -666,6 +916,10 @@ void testPerformance()
 
 #ifndef KeccakP1600_excluded
     testKangarooTwelvePerformance();
+#endif
+
+#ifndef KeccakP1600_excluded
+    testKravattePerformance();
 #endif
 }
 

@@ -37,6 +37,8 @@ void KeccakP1600times2_AddLanesAll(void *states, const unsigned char *data, unsi
 void KeccakP1600times2_OverwriteBytes(void *states, unsigned int instanceIndex, const unsigned char *data, unsigned int offset, unsigned int length);
 void KeccakP1600times2_OverwriteLanesAll(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset);
 void KeccakP1600times2_OverwriteWithZeroes(void *states, unsigned int instanceIndex, unsigned int byteCount);
+void KeccakP1600times2_PermuteAll_4rounds(void *states);
+void KeccakP1600times2_PermuteAll_6rounds(void *states);
 void KeccakP1600times2_PermuteAll_12rounds(void *states);
 void KeccakP1600times2_PermuteAll_24rounds(void *states);
 void KeccakP1600times2_ExtractBytes(const void *states, unsigned int instanceIndex, unsigned char *data, unsigned int offset, unsigned int length);

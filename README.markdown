@@ -32,6 +32,7 @@ When used as a library or directly from the sources, the KCP offers the high-lev
 * [`Keyakv2.h`](Modes/Keyakv2.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
 * [`Ketjev2.h`](Ketje/Ketjev2.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
 * [`KangarooTwelve.h`](Modes/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
+* [`Kravatte.h`](Constructions/Kravatte.h) and [`KravatteModes.h`](Modes/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SAE, SIV, WBC and WBC-AE).
 
 
 ## Low-level services
@@ -144,7 +145,8 @@ More information on the cryptographic aspects can be found:
 * on Ketje at [`ketje.noekeon.org`](http://ketje.noekeon.org/)
 * on Keyak at [`keyak.noekeon.org`](http://keyak.noekeon.org/)
 * on KangarooTwelve at [`kangarootwelve.org`](http://kangarootwelve.org/)
-* and on cryptographic sponge functions at [`sponge.noekeon.org`](http://sponge.noekeon.org/)
+* on cryptographic sponge functions at [`sponge.noekeon.org`](http://sponge.noekeon.org/)
+* on Kravatte at [`eprint.iacr.org`](https://eprint.iacr.org/2016/1188)
 
 
 

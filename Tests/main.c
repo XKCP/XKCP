@@ -29,6 +29,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testSnP.h"
 #include "testSponge.h"
 #include "testKeccakPRG.h"
+#include "testKravatte.h"
+#include "testKravatteModes.h"
 #include "testSP800-185.h"
 
 #ifdef KeccakReference
@@ -487,6 +489,7 @@ void printHelp()
         printf("  --Keyak or -y             Tests on the Keyak authentication encryption scheme\n");
         printf("  --Ketje or -t             Tests on the Ketje authentication encryption scheme\n");
         printf("  --KangarooTwelve or -K12  Tests on KangarooTwelve\n");
+        printf("  --Kravatte                Tests on Kravatte\n");
 #ifdef KeccakReference
         printf("  --examples or -e          Generation of example files\n");
 #else
@@ -506,7 +509,8 @@ int process(int argc, char* argv[])
     int Keyak = 0;
     int Ketje = 0;
     int KangarooTwelve = 0;
-	int SP800_185 = 0;
+    int Kravatte = 0;
+    int SP800_185 = 0;
     int examples = 0;
     int speed = 0;
 
@@ -517,7 +521,7 @@ int process(int argc, char* argv[])
         if ((strcmp("--help", argv[i]) == 0) || (strcmp("-h", argv[i]) == 0))
             help = 1;
         else if ((strcmp("--all", argv[i]) == 0) || (strcmp("-a", argv[i]) == 0))
-            SnP = KeccakSponge = KeccakDuplex = KeccakPRG = FIPS202 = Keyak = Ketje = KangarooTwelve = SP800_185 = examples = speed = 1;
+            SnP = KeccakSponge = KeccakDuplex = KeccakPRG = FIPS202 = Keyak = Ketje = KangarooTwelve = Kravatte = SP800_185 = examples = speed = 1;
         else if ((strcmp("--SnP", argv[i]) == 0) || (strcmp("-p", argv[i]) == 0))
             SnP = 1;
         else if ((strcmp("--Keccak", argv[i]) == 0) || (strcmp("-c", argv[i]) == 0))
@@ -536,6 +540,8 @@ int process(int argc, char* argv[])
             Ketje = 1;
         else if ((strcmp("--KangarooTwelve", argv[i]) == 0) || (strcmp("-K12", argv[i]) == 0))
             KangarooTwelve = 1;
+        else if (strcmp("--Kravatte", argv[i]) == 0)
+            Kravatte = 1;
         else if (strcmp("--SP800-185", argv[i]) == 0)
             SP800_185 = 1;
 #ifdef KeccakReference
@@ -583,6 +589,10 @@ int process(int argc, char* argv[])
     }
     if (Ketje) {
         testKetje();
+    }
+    if (Kravatte) {
+        testKravatte();
+        testKravatteModes();
     }
 #ifdef KeccakReference
     if (examples) {

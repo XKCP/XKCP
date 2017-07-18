@@ -22,7 +22,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define SnP                             KeccakP1600
 #define SnP_Permute                     KeccakP1600_Permute_24rounds
 #define SnP_Permute_12rounds            KeccakP1600_Permute_12rounds
+#define SnP_Permute_Nrounds             KeccakP1600_Permute_Nrounds
 #define PlSnP_PermuteAll                KeccakP1600times8_PermuteAll_24rounds
 #define PlSnP_PermuteAll_12rounds       KeccakP1600times8_PermuteAll_12rounds
+#define PlSnP_PermuteAll_6rounds        KeccakP1600times8_PermuteAll_6rounds
+#define PlSnP_PermuteAll_4rounds        KeccakP1600times8_PermuteAll_4rounds
 
 #include "PlSnP-Fallback.inc"

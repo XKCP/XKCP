@@ -37,7 +37,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
  *          API or functionality.
  */
 /* #define SIMULATE_AVX512 */
-#define SIMULATE_AVX512
 
 typedef uint8_t     UINT8;
 typedef uint32_t    UINT32;
@@ -570,6 +569,19 @@ static ALIGN(KeccakP1600times4_statesAlignment) const UINT64 KeccakP1600RoundCon
     KeccakP_ThetaRhoPiChi3(    _ma, _me, _mi, _mo, _mu ); \
     KeccakP_ThetaRhoPiChi4(    _sa, _se, _si, _so, _su )
 
+#define KeccakP_2rounds( i ) \
+    KeccakP_ThetaRhoPiChiIota0(_ba, _ke, _si, _go, _mu, CONST256_64(KeccakP1600RoundConstants[i]) ); \
+    KeccakP_ThetaRhoPiChi1(    _ma, _be, _ki, _so, _gu ); \
+    KeccakP_ThetaRhoPiChi2(    _ga, _me, _bi, _ko, _su ); \
+    KeccakP_ThetaRhoPiChi3(    _sa, _ge, _mi, _bo, _ku ); \
+    KeccakP_ThetaRhoPiChi4(    _ka, _se, _gi, _mo, _bu ); \
+\
+    KeccakP_ThetaRhoPiChiIota0(_ba, _be, _bi, _bo, _bu, CONST256_64(KeccakP1600RoundConstants[i+1]) ); \
+    KeccakP_ThetaRhoPiChi1(    _ga, _ge, _gi, _go, _gu ); \
+    KeccakP_ThetaRhoPiChi2(    _ka, _ke, _ki, _ko, _ku ); \
+    KeccakP_ThetaRhoPiChi3(    _ma, _me, _mi, _mo, _mu ); \
+    KeccakP_ThetaRhoPiChi4(    _sa, _se, _si, _so, _su )
+
 #ifdef KeccakP1600times4_fullUnrolling
 
 #define rounds12 \
@@ -617,6 +629,33 @@ static ALIGN(KeccakP1600times4_statesAlignment) const UINT64 KeccakP1600RoundCon
 #else
 #error "Unrolling is not correctly specified!"
 #endif
+
+#define copyFromState2rounds(pState) \
+    _ba = pState[ 0]; \
+    _be = pState[16]; /* me */ \
+    _bi = pState[ 7]; /* gi */ \
+    _bo = pState[23]; /* so */ \
+    _bu = pState[14]; /* ku */ \
+    _ga = pState[20]; /* sa */ \
+    _ge = pState[11]; /* ke */ \
+    _gi = pState[ 2]; /* bi */ \
+    _go = pState[18]; /* mo */ \
+    _gu = pState[ 9]; \
+    _ka = pState[15]; /* ma */ \
+    _ke = pState[ 6]; /* ge */ \
+    _ki = pState[22]; /* si */ \
+    _ko = pState[13]; \
+    _ku = pState[ 4]; /* bu */ \
+    _ma = pState[10]; /* ka */ \
+    _me = pState[ 1]; /* be */ \
+    _mi = pState[17]; \
+    _mo = pState[ 8]; /* go */ \
+    _mu = pState[24]; /* su */ \
+    _sa = pState[ 5]; /* ga */ \
+    _se = pState[21]; \
+    _si = pState[12]; /* ki */ \
+    _so = pState[ 3]; /* bo */ \
+    _su = pState[19]  /* mu */
 
 #define copyFromState(pState) \
     _ba = pState[ 0]; \
@@ -695,6 +734,27 @@ void KeccakP1600times4_PermuteAll_12rounds(void *states)
 
     copyFromState(statesAsLanes);
     rounds12;
+    copyToState(statesAsLanes);
+}
+
+void KeccakP1600times4_PermuteAll_6rounds(void *states)
+{
+    V256 *statesAsLanes = states;
+    KeccakP_DeclareVars;
+
+    copyFromState2rounds(statesAsLanes);
+    KeccakP_2rounds( 18 );
+    KeccakP_4rounds( 20 );
+    copyToState(statesAsLanes);
+}
+
+void KeccakP1600times4_PermuteAll_4rounds(void *states)
+{
+    V256 *statesAsLanes = states;
+    KeccakP_DeclareVars;
+
+    copyFromState(statesAsLanes);
+    KeccakP_4rounds( 20 );
     copyToState(statesAsLanes);
 }
 

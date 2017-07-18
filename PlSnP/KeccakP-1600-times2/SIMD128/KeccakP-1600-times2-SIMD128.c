@@ -821,6 +821,38 @@ void KeccakP1600times2_PermuteAll_12rounds(void *states)
 #endif
 }
 
+void KeccakP1600times2_PermuteAll_6rounds(void *states)
+{
+    V128 *statesAsLanes = (V128 *)states;
+    declareABCDE
+    #ifndef KeccakP1600times2_fullUnrolling
+    unsigned int i;
+    #endif
+
+    copyFromState(A, statesAsLanes)
+    rounds6
+    copyToState(statesAsLanes, A)
+#if defined(UseMMX)
+    _mm_empty();
+#endif
+}
+
+void KeccakP1600times2_PermuteAll_4rounds(void *states)
+{
+    V128 *statesAsLanes = (V128 *)states;
+    declareABCDE
+    #ifndef KeccakP1600times2_fullUnrolling
+    unsigned int i;
+    #endif
+
+    copyFromState(A, statesAsLanes)
+    rounds4
+    copyToState(statesAsLanes, A)
+#if defined(UseMMX)
+    _mm_empty();
+#endif
+}
+
 size_t KeccakF1600times2_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen)
 {
     if (laneCount == 21) {

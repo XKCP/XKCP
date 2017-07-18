@@ -507,6 +507,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>Constructions/KeccakDuplex.c</c>
         <h>Constructions/KeccakDuplex.inc</h>
         <h>Constructions/KeccakDuplex.h</h>
+        <c>Constructions/Kravatte.c</c>
+        <h>Constructions/Kravatte.h</h>
         <c>Modes/SimpleFIPS202.c</c>
         <h>Modes/SimpleFIPS202.h</h>
         <c>Modes/KeccakHash.c</c>
@@ -522,6 +524,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Modes/KeccakPRG.h</h>
         <c>Modes/KangarooTwelve.c</c>
         <h>Modes/KangarooTwelve.h</h>
+        <c>Modes/KravatteModes.c</c>
+        <h>Modes/KravatteModes.h</h>
         <c>Modes/SP800-185.c</c>
         <h>Modes/SP800-185.inc</h>
         <h>Modes/SP800-185.h</h>
@@ -568,6 +572,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>Tests/testKeccakPRG.h</h>
         <c>Tests/testKangarooTwelve.c</c>
         <h>Tests/testKangarooTwelve.h</h>
+        <c>Tests/testKravatte.c</c>
+        <h>Tests/testKravatte.h</h>
+        <c>Tests/testKravatteModes.c</c>
+        <h>Tests/testKravatteModes.h</h>
         <c>Tests/testSP800-185.c</c>
         <h>Tests/testSP800-185.h</h>
         <gcc>-lm</gcc>

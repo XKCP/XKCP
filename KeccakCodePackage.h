@@ -19,4 +19,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "KeccakSponge.h"
 #include "Ketjev2.h"
 #include "Keyakv2.h"
+#include "Kravatte.h"
+#include "KravatteModes.h"
 #include "SimpleFIPS202.h"
