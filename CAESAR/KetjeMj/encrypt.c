@@ -16,7 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "crypto_aead.h"
 
 #include <string.h>
-#include "KetjeSr.h"
+#include "KetjeMj.h"
 
 int crypto_aead_encrypt(
     unsigned char *c,unsigned long long *clen,
@@ -27,13 +27,13 @@ int crypto_aead_encrypt(
     const unsigned char *k
     )
 {
-    KetjeSr_Instance instance;
+    KetjeMj_Instance instance;
 
-    KetjeSr_Initialize(&instance, k, 128, npub, 31*8);
-    KetjeSr_FeedAssociatedData(&instance, ad, adlen);
-    KetjeSr_WrapPlaintext(&instance, m, c, mlen);
+    KetjeMj_Initialize(&instance, k, 128, npub, 181*8);
+    KetjeMj_FeedAssociatedData(&instance, ad, adlen);
+    KetjeMj_WrapPlaintext(&instance, m, c, mlen);
     *clen = mlen;
-    KetjeSr_GetTag(&instance, c+mlen, 16);
+    KetjeMj_GetTag(&instance, c+mlen, 16);
     *clen += 16;
 
     return 0;
@@ -48,17 +48,17 @@ int crypto_aead_decrypt(
     const unsigned char *k
     )
 {
-    KetjeSr_Instance instance;
+    KetjeMj_Instance instance;
     unsigned char tag[16];
 
     if (clen < 16)
         return -1;
 
-    KetjeSr_Initialize(&instance, k, 128, npub, 31*8);
-    KetjeSr_FeedAssociatedData(&instance, ad, adlen);
+    KetjeMj_Initialize(&instance, k, 128, npub, 181*8);
+    KetjeMj_FeedAssociatedData(&instance, ad, adlen);
     *mlen = clen-16;
-    KetjeSr_UnwrapCiphertext(&instance, c, m, *mlen);
-    KetjeSr_GetTag(&instance, tag, 16);
+    KetjeMj_UnwrapCiphertext(&instance, c, m, *mlen);
+    KetjeMj_GetTag(&instance, tag, 16);
     if (memcmp(tag, c+(*mlen), 16) != 0) {
         memset(m, 0, *mlen);
         return -1;

@@ -13,12 +13,25 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Ketje_h_
-#define _Ketje_h_
+#ifdef KeccakReference
+    #include "displayIntermediateValues.h"
+#endif
 
-#include "KetjeJr.h"
-#include "KetjeSr.h"
+#include "KetMn.h"
 #include "KetjeMn.h"
-#include "KetjeMj.h"
 
+#ifndef KeccakP800_excluded
+    #include "KeccakP-800-SnP.h"
+
+    #define prefix                      KetjeMn
+    #define prefixKet                   KetMn
+    #define SnP                         KeccakP800
+    #define SnP_width                   800
+    #define SnP_PermuteRounds           KeccakP800_Permute_Nrounds
+        #include "Ketjev2.inc"
+    #undef prefix
+    #undef prefixKet
+    #undef SnP
+    #undef SnP_width
+    #undef SnP_PermuteRounds
 #endif

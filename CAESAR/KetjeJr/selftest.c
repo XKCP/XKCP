@@ -26,6 +26,6 @@ int main()
     const unsigned char *plaintext = (const unsigned char *)
         "\x0e\x8b\x09\x86\x04\x81\xfe";
     const unsigned char *ciphertext = (const unsigned char *)
-        "\xab\x1b\xb0\x94\xf7\x80\x63\xc8\x90\xfc\x8e\xd2\x55\xb2\x4c\x24\xb3\xac\x7e";
+        "\x9d\x09\x58\x2b\xce\xff\xd6\x44\x7b\x5e\xeb\x2b\xa5\x5a\x85\x11\xbc\xd0\x06";
     return test_crypto_aead(key, 12, nonce, 10, AD, 6, plaintext, 7, ciphertext, 12);
 }

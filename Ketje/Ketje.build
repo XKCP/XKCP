@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<!--
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
+
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
+-->
+<group>
+
+    <!-- "Ket", the layer between SnP and Ketje services -->
+
+    <fragment name="Ket-SnP-common">
+        <h>Ketje/Ket/SnP-compliant/Ket.inc</h>
+        <h>Ketje/Ket/SnP-compliant/Ket-common.h</h>
+    </fragment>
+
+    <fragment name="KetJr-SnP" inherits="Ket-SnP-common">
+        <c>Ketje/Ket/SnP-compliant/KetJr.c</c>
+        <h>Ketje/Ket/SnP-compliant/KetJr.h</h>
+    </fragment>
+
+    <fragment name="KetSr-SnP" inherits="Ket-SnP-common">
+        <c>Ketje/Ket/SnP-compliant/KetSr.c</c>
+        <h>Ketje/Ket/SnP-compliant/KetSr.h</h>
+    </fragment>
+
+    <fragment name="KetMn-SnP" inherits="Ket-SnP-common">
+        <c>Ketje/Ket/SnP-compliant/KetMn.c</c>
+        <h>Ketje/Ket/SnP-compliant/KetMn.h</h>
+    </fragment>
+
+    <fragment name="KetMj-SnP" inherits="Ket-SnP-common">
+        <c>Ketje/Ket/SnP-compliant/KetMj.c</c>
+        <h>Ketje/Ket/SnP-compliant/KetMj.h</h>
+    </fragment>
+
+    <fragment name="Ket-SnP" inherits="KetJr-SnP KetSr-SnP KetMn-SnP KetMj-SnP"/>
+
+    <fragment name="Ket-optimizedLE-common">
+        <h>Ketje/Ket/OptimizedLE/Ket.inc</h>
+        <h>Ketje/Ket/OptimizedLE/Ket-common.h</h>
+    </fragment>
+
+    <fragment name="KetJr-optimizedLE" inherits="Ket-optimizedLE-common">
+        <c>Ketje/Ket/OptimizedLE/KetJr.c</c>
+        <h>Ketje/Ket/OptimizedLE/KetJr.h</h>
+    </fragment>
+
+    <fragment name="KetSr-optimizedLE" inherits="Ket-optimizedLE-common">
+        <c>Ketje/Ket/OptimizedLE/KetSr.c</c>
+        <h>Ketje/Ket/OptimizedLE/KetSr.h</h>
+    </fragment>
+
+    <fragment name="KetMn-optimizedLE" inherits="Ket-optimizedLE-common">
+        <c>Ketje/Ket/OptimizedLE/KetMn.c</c>
+        <h>Ketje/Ket/OptimizedLE/KetMn.h</h>
+    </fragment>
+
+    <fragment name="KetMj-optimizedLE" inherits="Ket-optimizedLE-common">
+        <c>Ketje/Ket/OptimizedLE/KetMj.c</c>
+        <h>Ketje/Ket/OptimizedLE/KetMj.h</h>
+    </fragment>
+
+    <fragment name="Ket-optimizedLE" inherits="KetJr-optimizedLE KetSr-optimizedLE KetMn-optimizedLE KetMj-optimizedLE"/>
+
+    <fragment name="Ket-ARMv7M-common">
+        <h>Ketje/Ket/OptimizedAsmARM/Ket-common.h</h>
+    </fragment>
+
+    <fragment name="KetJr-ARMv7M" inherits="Ket-ARMv7M-common">
+        <h>Ketje/Ket/OptimizedAsmARM/KetJr.h</h>
+        <c>Ketje/Ket/OptimizedAsmARM/KetjeJr-armv7m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="KetSr-ARMv7M" inherits="Ket-ARMv7M-common">
+        <h>Ketje/Ket/OptimizedAsmARM/KetSr.h</h>
+        <c>Ketje/Ket/OptimizedAsmARM/KetjeSr-armv7m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="Ket-ARMv7M" inherits="KetJr-ARMv7M KetSr-ARMv7M"/>
+
+    <!-- *** High-level services *** -->
+
+    <fragment name="Ketje-common" inherits="common">
+        <h>Ketje/Ketje-common.h</h>
+        <h>Ketje/Ketjev2.inc</h>
+    </fragment>
+
+    <fragment name="KetjeJr" inherits="Ketje-common">
+        <c>Ketje/KetjeJr.c</c>
+        <h>Ketje/KetjeJr.h</h>
+    </fragment>
+
+    <fragment name="KetjeSr" inherits="Ketje-common">
+        <c>Ketje/KetjeSr.c</c>
+        <h>Ketje/KetjeSr.h</h>
+    </fragment>
+
+    <fragment name="KetjeMn" inherits="Ketje-common">
+        <c>Ketje/KetjeMn.c</c>
+        <h>Ketje/KetjeMn.h</h>
+    </fragment>
+
+    <fragment name="KetjeMj" inherits="Ketje-common">
+        <c>Ketje/KetjeMj.c</c>
+        <h>Ketje/KetjeMj.h</h>
+    </fragment>
+
+    <fragment name="Ketje" inherits="KetjeJr KetjeSr KetjeMn KetjeMj">
+        <h>Ketje/Ketjev2.h</h>
+    </fragment>
+
+    <!-- Ketje with CAESAR API and SUPERCOP packages -->
+
+    <!-- Ketje Jr -->
+
+    <fragment name="crypto_aead/ketjejrv2" inherits="KetjeJr">
+        <c>CAESAR/KetjeJr/encrypt.c</c>
+        <h>CAESAR/KetjeJr/api.h</h>
+    </fragment>
+
+    <fragment name="KetjeJrSelfTest" inherits="crypto_aead/ketjejrv2 crypto_aead_test">
+        <c>CAESAR/KetjeJr/selftest.c</c>
+    </fragment>
+
+    <fragment name="KetjeJr-compact" inherits="KetjeJr KetJr-SnP compact200"/>
+    <fragment name="KetjeJr-AVR8" inherits="KetjeJr KetJr-SnP optimized200AVR8"/>
+    <fragment name="KetjeJr-ARMv6M" inherits="KetjeJr KetJr-optimizedLE optimized200ARMv6M"/>
+    <fragment name="KetjeJr-ARMv7M" inherits="KetjeJr KetJr-ARMv7M"/>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_aead/ketjejrv2 KetjeJrSelfTest"/>
+            <factor set="KetjeJr-compact KetjeJr-AVR8 KetjeJr-ARMv6M KetjeJr-ARMv7M"/>
+        </product>
+    </group>
+
+    <!-- Ketje Sr -->
+
+    <fragment name="crypto_aead/ketjesrv2" inherits="KetjeSr">
+        <c>CAESAR/KetjeSr/encrypt.c</c>
+        <h>CAESAR/KetjeSr/api.h</h>
+    </fragment>
+
+    <fragment name="KetjeSrSelfTest" inherits="crypto_aead/ketjesrv2 crypto_aead_test">
+        <c>CAESAR/KetjeSr/selftest.c</c>
+    </fragment>
+
+    <fragment name="KetjeSr-compact" inherits="KetjeSr KetSr-SnP reference400"/>
+    <fragment name="KetjeSr-AVR8" inherits="KetjeSr KetSr-SnP optimized400AVR8"/>
+    <fragment name="KetjeSr-ARMv6M" inherits="KetjeSr KetSr-optimizedLE  optimized400ARMv6M"/>
+    <fragment name="KetjeSr-ARMv7M" inherits="KetjeSr KetSr-ARMv7M"/>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_aead/ketjesrv2 KetjeSrSelfTest"/>
+            <factor set="KetjeSr-compact KetjeSr-AVR8 KetjeSr-ARMv6M KetjeSr-ARMv7M"/>
+        </product>
+    </group>
+
+    <!-- Ketje Minor -->
+
+    <fragment name="crypto_aead/ketjeminorv2" inherits="KetjeMn">
+        <c>CAESAR/KetjeMn/encrypt.c</c>
+        <h>CAESAR/KetjeMn/api.h</h>
+    </fragment>
+
+    <fragment name="KetjeMnSelfTest" inherits="crypto_aead/ketjeminorv2 crypto_aead_test">
+        <c>CAESAR/KetjeMn/selftest.c</c>
+    </fragment>
+
+    <fragment name="KetjeMn-compact" inherits="KetjeMn KetMn-SnP compact800"/>
+    <fragment name="KetjeMn-AVR8" inherits="KetjeMn KetMn-SnP optimized800AVR8"/>
+    <fragment name="KetjeMn-generic32" inherits="KetjeMn KetMn-SnP optimized800u2"/>
+    <fragment name="KetjeMn-generic32lc" inherits="KetjeMn KetMn-SnP optimized800lcu2"/>
+    <fragment name="KetjeMn-ARMv6M" inherits="KetjeMn KetMn-optimizedLE optimized800ARMv6Mu2"/>
+    <fragment name="KetjeMn-ARMv7M" inherits="KetjeMn KetMn-SnP optimized800ARMv7Mu2"/>
+    <fragment name="KetjeMn-ARMv7A" inherits="KetjeMn KetMn-optimizedLE optimized800ARMv7Au2"/>
+    <fragment name="KetjeMn-ARMv8A" inherits="KetjeMn KetMn-optimizedLE optimized800ARMv8A"/>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_aead/ketjeminorv2 KetjeMnSelfTest"/>
+            <factor set="KetjeMn-compact KetjeMn-AVR8 KetjeMn-generic32 KetjeMn-generic32lc KetjeMn-ARMv6M KetjeMn-ARMv7M KetjeMn-ARMv7A KetjeMn-ARMv8A"/>
+        </product>
+    </group>
+
+    <!-- Ketje Major -->
+
+    <fragment name="crypto_aead/ketjemajorv2" inherits="KetjeMj">
+        <c>CAESAR/KetjeMj/encrypt.c</c>
+        <h>CAESAR/KetjeMj/api.h</h>
+    </fragment>
+
+    <fragment name="KetjeMjSelfTest" inherits="crypto_aead/ketjemajorv2 crypto_aead_test">
+        <c>CAESAR/KetjeMj/selftest.c</c>
+    </fragment>
+
+    <fragment name="KetjeMj-compact" inherits="KetjeMj KetMj-SnP compact1600"/>
+    <fragment name="KetjeMj-AVR8" inherits="KetjeMj KetMj-SnP optimized1600AVR8"/>
+    <fragment name="KetjeMj-generic32" inherits="KetjeMj KetMj-SnP inplace1600bi"/>
+    <fragment name="KetjeMj-generic64" inherits="KetjeMj KetMj-SnP optimized1600ufull"/>
+    <fragment name="KetjeMj-generic64lc" inherits="KetjeMj KetMj-SnP optimized1600lcufull"/>
+    <fragment name="KetjeMj-ARMv6M" inherits="KetjeMj KetMj-optimizedLE optimized1600ARMv6Mu2"/>
+    <fragment name="KetjeMj-ARMv7M" inherits="KetjeMj KetMj-SnP inplace1600ARMv7M"/>
+    <fragment name="KetjeMj-ARMv7A" inherits="KetjeMj KetMj-optimizedLE optimized1600ARMv7A"/>
+    <fragment name="KetjeMj-ARMv8A" inherits="KetjeMj KetMj-optimizedLE optimized1600ARMv8A"/>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_aead/ketjemajorv2 KetjeMjSelfTest"/>
+            <factor set="KetjeMj-compact KetjeMj-AVR8 KetjeMj-generic32 KetjeMj-generic64 KetjeMj-generic64lc KetjeMj-ARMv6M KetjeMj-ARMv7M KetjeMj-ARMv7A KetjeMj-ARMv8A"/>
+        </product>
+    </group>
+
+</group>

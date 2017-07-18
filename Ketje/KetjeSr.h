@@ -13,12 +13,15 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Ketje_h_
-#define _Ketje_h_
+#ifndef _KetjeSr_h_
+#define _KetjeSr_h_
 
-#include "KetjeJr.h"
-#include "KetjeSr.h"
-#include "KetjeMn.h"
-#include "KetjeMj.h"
+#include "Ketje-common.h"
+
+#ifndef KeccakP400_excluded
+    #include "KeccakP-400-SnP.h"
+    KCP_DeclareKetjeStructure(KetjeSr, KeccakP400_stateSizeInBytes, KeccakP400_stateAlignment)
+    KCP_DeclareKetjeFunctions(KetjeSr)
+#endif
 
 #endif

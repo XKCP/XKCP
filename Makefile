@@ -1,10 +1,10 @@
 _list: Makefile.build Build/ToGlobalMakefile.xsl
 
 bin/.build/Makefile: bin/.build/Makefile.expanded
-	xsltproc -o $@ Build/ToGlobalMakefile.xsl $<
+	xsltproc --xinclude -o $@ Build/ToGlobalMakefile.xsl $<
 
 bin/.build/Makefile.expanded: Makefile.build
-	xsltproc -o $@ Build/ExpandProducts.xsl $<
+	xsltproc --xinclude -o $@ Build/ExpandProducts.xsl $<
 
 -include bin/.build/Makefile
 

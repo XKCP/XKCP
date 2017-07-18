@@ -27,9 +27,9 @@ int main()
     const unsigned char *plaintext = (const unsigned char *)
         "\xe4\x65\xe5\x66\xe6\x67\xe7";
     const unsigned char *ciphertext = (const unsigned char *)
-        "\xeb\xe3\xe3\xa5\xbd\x18\x62\x6e\xc7\xb6\xe1\xd1\x34\x35\x26\x2f\xaf\x84\x13\xf0\xb0\xd2\xab";
-    unsigned char nonce[31];
-    memset(nonce, 0, 31);
+        "\x6c\x89\x44\x7e\x80\x76\xb0\xb2\x86\xed\x2b\x02\x0b\xe0\xd4\xa8\x76\xfe\xa3\x6b\xfe\x3d\x2e";
+    unsigned char nonce[81];
+    memset(nonce, 0, 81);
     memcpy(nonce, nonce_, 16);
-    return test_crypto_aead(key, 16, nonce, 31, AD, 6, plaintext, 7, ciphertext, 16);
+    return test_crypto_aead(key, 16, nonce, 81, AD, 6, plaintext, 7, ciphertext, 16);
 }

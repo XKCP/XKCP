@@ -13,9 +13,6 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Ket_h_
-#define _Ket_h_
-
 /*  Info:   Designed for Little Endian CPU with pure state layout. */
 
 /** General information
@@ -98,54 +95,5 @@ void Prefix_UnwrapBlocks( void *state, const unsigned char *ciphertext, unsigned
   * @param  nBlocks             Number of blocks.
   */
 void Prefix_WrapBlocks( void *state, const unsigned char *plaintext, unsigned char *ciphertext, unsigned int nBlocks );
-
-#endif
-
-#include <string.h>
-
-/*  Ketje frame bits */
-#define FRAMEBITSEMPTY  0x01
-#define FRAMEBITS0      0x02
-#define FRAMEBITS00     0x04
-#define FRAMEBITS10     0x05
-#define FRAMEBITS01     0x06
-#define FRAMEBITS11     0x07
-
-/*  Ketje rounds */
-#define Ket_StartRounds     12
-#define Ket_StepRounds      1
-#define Ket_StrideRounds    6
-
-#define Ketje_LaneSize  (SnP_width/8/25)
-#define Ketje_BlockSize (((SnP_width <= 400)?2:4)*Ketje_LaneSize)
-
-#define KCP_DeclareKetFunctions(prefix) \
-void prefix##_StateAddByte( void *state, unsigned char value, unsigned int offset ); \
-unsigned char prefix##_StateExtractByte( void *state, unsigned int offset ); \
-void prefix##_StateOverwrite( void *state, unsigned int offset, const unsigned char *data, unsigned int length ); \
-void prefix##_Step( void *state, unsigned int size, unsigned char frameAndPaddingBits ); \
-void prefix##_FeedAssociatedDataBlocks( void *state, const unsigned char *data, unsigned int nBlocks ); \
-void prefix##_UnwrapBlocks( void *state, const unsigned char *ciphertext, unsigned char *plaintext, unsigned int nBlocks ); \
-void prefix##_WrapBlocks( void *state, const unsigned char *plaintext, unsigned char *ciphertext, unsigned int nBlocks ); \
-
-#ifndef KeccakP200_excluded
-    #include "KeccakP-200-SnP.h"
-    KCP_DeclareKetFunctions(KetJr)
-#endif
-
-#ifndef KeccakP400_excluded
-    #include "KeccakP-400-SnP.h"
-    KCP_DeclareKetFunctions(KetSr)
-#endif
-
-#ifndef KeccakP800_excluded
-    #include "KeccakP-800-SnP.h"
-    KCP_DeclareKetFunctions(KetMn)
-#endif
-
-#ifndef KeccakP1600_excluded
-    #include "KeccakP-1600-SnP.h"
-    KCP_DeclareKetFunctions(KetMj)
-#endif
 
 #endif

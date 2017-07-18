@@ -13,12 +13,14 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Ketje_h_
-#define _Ketje_h_
+#ifndef _KetMj_h_
+#define _KetMj_h_
 
-#include "KetjeJr.h"
-#include "KetjeSr.h"
-#include "KetjeMn.h"
-#include "KetjeMj.h"
+#include "Ket-common.h"
+
+#ifndef KeccakP1600_excluded
+    #include "KeccakP-1600-SnP.h"
+    KCP_DeclareKetFunctions(KetMj)
+#endif
 
 #endif
