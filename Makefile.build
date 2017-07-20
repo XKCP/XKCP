@@ -16,6 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 <build all="all" xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <xi:include href="Ketje/Ketje.build"/>
+    <xi:include href="Keyak/Keyak.build"/>
 
     <!-- For the name of the targets, please see the end of this file. -->
 
@@ -597,70 +598,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>CAESAR/test_crypto_aead.h</h>
         <c>CAESAR/test_crypto_aead.c</c>
     </fragment>
-
-    <!-- Keyak with CAESAR API and SUPERCOP packages -->
-
-    <fragment name="Keyak" inherits="common">
-        <c>Modes/Motorist.c</c>
-        <h>Modes/Motorist.inc</h>
-        <h>Modes/Motorist.h</h>
-        <c>Modes/Keyakv2.c</c>
-        <h>Modes/Keyakv2.inc</h>
-        <h>Modes/Keyakv2.h</h>
-    </fragment>
-
-    <fragment name="crypto_aead/riverkeyakv2" inherits="Keyak">
-        <c>CAESAR/RiverKeyak/encrypt.c</c>
-        <h>CAESAR/RiverKeyak/api.h</h>
-    </fragment>
-
-    <fragment name="RiverKeyakSelfTest" inherits="crypto_aead/riverkeyakv2 crypto_aead_test">
-        <c>CAESAR/RiverKeyak/selftest.c</c>
-    </fragment>
-
-    <fragment name="crypto_aead/lakekeyakv2" inherits="Keyak">
-        <c>CAESAR/LakeKeyak/encrypt.c</c>
-        <h>CAESAR/LakeKeyak/api.h</h>
-    </fragment>
-
-    <fragment name="LakeKeyakSelfTest" inherits="crypto_aead/lakekeyakv2 crypto_aead_test">
-        <c>CAESAR/LakeKeyak/selftest.c</c>
-    </fragment>
-
-    <fragment name="crypto_aead/seakeyakv2" inherits="Keyak">
-        <c>CAESAR/SeaKeyak/encrypt.c</c>
-        <h>CAESAR/SeaKeyak/api.h</h>
-    </fragment>
-
-    <fragment name="SeaKeyakSelfTest" inherits="crypto_aead/seakeyakv2 crypto_aead_test">
-        <c>CAESAR/SeaKeyak/selftest.c</c>
-    </fragment>
-
-    <fragment name="crypto_aead/oceankeyakv2" inherits="Keyak">
-        <c>CAESAR/OceanKeyak/encrypt.c</c>
-        <h>CAESAR/OceanKeyak/api.h</h>
-    </fragment>
-
-    <fragment name="OceanKeyakSelfTest" inherits="crypto_aead/oceankeyakv2 crypto_aead_test">
-        <c>CAESAR/OceanKeyak/selftest.c</c>
-    </fragment>
-
-    <fragment name="crypto_aead/lunarkeyakv2" inherits="Keyak">
-        <c>CAESAR/LunarKeyak/encrypt.c</c>
-        <h>CAESAR/LunarKeyak/api.h</h>
-    </fragment>
-
-    <fragment name="LunarKeyakSelfTest" inherits="crypto_aead/lunarkeyakv2 crypto_aead_test">
-        <c>CAESAR/LunarKeyak/selftest.c</c>
-    </fragment>
-
-    <!-- Target names are of the form x/y where x is taken from the first set and y from the second set. -->
-    <group all="supercop">
-        <product delimiter="/">
-            <factor set="crypto_aead/riverkeyakv2 RiverKeyakSelfTest crypto_aead/lakekeyakv2 LakeKeyakSelfTest crypto_aead/seakeyakv2 SeaKeyakSelfTest crypto_aead/oceankeyakv2 OceanKeyakSelfTest crypto_aead/lunarkeyakv2 LunarKeyakSelfTest"/>
-            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell KnightsLanding ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
-        </product>
-    </group>
 
     <!-- *** Targets *** -->
 

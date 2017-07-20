@@ -13,9 +13,6 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Keyak_h_
-#define _Keyak_h_
-
 /** General information
   *
   * The following type and functions are not actually implemented. Their
@@ -62,16 +59,16 @@ typedef struct {
   *
   * @return 1 if successful, 0 if tag mismatch, -1 other error.
   */
-int PrefixKeyak_Initialize(PrefixKeyak_Instance *instance, 
-    const unsigned char *key, unsigned int keySizeInBytes, 
+int PrefixKeyak_Initialize(PrefixKeyak_Instance *instance,
+    const unsigned char *key, unsigned int keySizeInBytes,
     const unsigned char *nonce, unsigned int nonceSizeInBytes,
-    int tagFlag, unsigned char * tag, 
+    int tagFlag, unsigned char * tag,
     int unwrapFlag, int forgetFlag);
 
 /**
   * Function that presents full input data that consists of a
-  * sequence of bytes for (un)wrapping and feeds full associated data 
-  * that consists of a sequence of bytes.  
+  * sequence of bytes for (un)wrapping and feeds full associated data
+  * that consists of a sequence of bytes.
   *
   * @param  instance            Pointer to the Keyak instance structure.
   * @param  input               Pointer to full input data to wrap or unwrap.
@@ -91,13 +88,13 @@ int PrefixKeyak_Initialize(PrefixKeyak_Instance *instance,
   *
   * @return -1 if error, 0 if tag check failed, 1 success.
   */
-int PrefixKeyak_Wrap(PrefixKeyak_Instance *instance, const unsigned char *input, unsigned char *output, size_t dataSizeInBytes, 
+int PrefixKeyak_Wrap(PrefixKeyak_Instance *instance, const unsigned char *input, unsigned char *output, size_t dataSizeInBytes,
     const unsigned char * AD, size_t ADlen, unsigned char * tag, int unwrapFlag, int forgetFlag );
 
 /**
   * Function that presents partial input data that consists of a
-  * sequence of bytes for (un)wrapping and feeds partial associated data 
-  * that consists of a sequence of bytes.  
+  * sequence of bytes for (un)wrapping and feeds partial associated data
+  * that consists of a sequence of bytes.
   *
   * @param  instance            Pointer to the Keyak instance structure.
   * @param  input               Pointer to partial input data to wrap or unwrap.
@@ -130,82 +127,5 @@ int PrefixKeyak_Wrap(PrefixKeyak_Instance *instance, const unsigned char *input,
 int PrefixKeyak_WrapPartial( PrefixKeyak_Instance *instance, const unsigned char *input, unsigned char *output, size_t dataSizeInBytes,
     const unsigned char * AD, size_t ADlen, unsigned char * tag, int unwrapFlag, int forgetFlag,
     int lastFlags, size_t *processedIlen, size_t *processedAlen);
-
-#endif
-
-#include <string.h>
-#include "align.h"
-#include "Motorist.h"
-
-/** Length of the River Keyak key pack. */
-#define RiverKeyak_Lk                  36
-
-/** Maximum nonce length for River Keyak. */
-#define RiverKeyak_MaxNoncelength      58
-
-/** Length of the Lake Keyak key pack. */
-#define LakeKeyak_Lk                   40
-
-/** Maximum nonce length for Lake Keyak. */
-#define LakeKeyak_MaxNoncelength       150
-
-/** Length of the Sea Keyak key pack. */
-#define SeaKeyak_Lk                    LakeKeyak_Lk
-
-/** Maximum nonce length for Sea Keyak. */
-#define SeaKeyak_MaxNoncelength        LakeKeyak_MaxNoncelength
-
-/** Length of the Ocean Keyak key pack. */
-#define OceanKeyak_Lk                  LakeKeyak_Lk
-
-/** Maximum nonce length for Ocean Keyak. */
-#define OceanKeyak_MaxNoncelength      LakeKeyak_MaxNoncelength
-
-/** Length of the Lunar Keyak key pack. */
-#define LunarKeyak_Lk                  LakeKeyak_Lk
-
-/** Maximum nonce length for Lunar Keyak. */
-#define LunarKeyak_MaxNoncelength      LakeKeyak_MaxNoncelength
-
-
-#define KCP_DeclareKeyakStructure(prefix, prefixMotorist, alignment) \
-    ALIGN(alignment) typedef struct prefix##KeyakInstanceStruct { \
-        prefixMotorist##_Motorist_Instance motorist; \
-    } prefix##Keyak_Instance;
-
-#define KCP_DeclareKeyakFunctions(prefix) \
-    int prefix##Keyak_Initialize(prefix##Keyak_Instance *instance, const unsigned char *key, unsigned int keySizeInBytes, const unsigned char *nonce, unsigned int nonceSizeInBytes, int tagFlag, unsigned char * tag, int unwrapFlag, int forgetFlag); \
-    int prefix##Keyak_Wrap(prefix##Keyak_Instance *instance, const unsigned char *input, unsigned char *output, size_t dataSizeInBytes, const unsigned char * AD, size_t ADlen, unsigned char * tag, int unwrapFlag, int forgetFlag ); \
-    int prefix##Keyak_WrapPartial(prefix##Keyak_Instance *instance, const unsigned char *input, unsigned char *output, size_t dataSizeInBytes, const unsigned char * AD, size_t ADlen, unsigned char * tag, int unwrapFlag, int forgetFlag, int lastFlags, size_t *processedIlen, size_t *processedAlen);
-
-#ifndef KeccakP800_excluded
-    #include "KeccakP-800-SnP.h"
-    KCP_DeclareKeyakStructure(River, KeyakWidth800, KeccakP800_stateAlignment)
-    KCP_DeclareKeyakFunctions(River)
-#endif
-
-#ifndef KeccakP1600_excluded
-    #include "KeccakP-1600-SnP.h"
-    KCP_DeclareKeyakStructure(Lake, KeyakWidth1600, KeccakP1600_stateAlignment)
-    KCP_DeclareKeyakFunctions(Lake)
-#endif
-
-#ifndef KeccakP1600timesN_excluded
-    #include "KeccakP-1600-times2-SnP.h"
-    KCP_DeclareKeyakStructure(Sea, KeyakWidth1600times2, KeccakP1600times2_statesAlignment)
-    KCP_DeclareKeyakFunctions(Sea)
-#endif
-
-#ifndef KeccakP1600timesN_excluded
-    #include "KeccakP-1600-times4-SnP.h"
-    KCP_DeclareKeyakStructure(Ocean, KeyakWidth1600times4, KeccakP1600times4_statesAlignment)
-    KCP_DeclareKeyakFunctions(Ocean)
-#endif
-
-#ifndef KeccakP1600timesN_excluded
-    #include "KeccakP-1600-times8-SnP.h"
-    KCP_DeclareKeyakStructure(Lunar, KeyakWidth1600times8, KeccakP1600times8_statesAlignment)
-    KCP_DeclareKeyakFunctions(Lunar)
-#endif
 
 #endif
