@@ -23,16 +23,16 @@ Finally, the project contains some standalone implementations.
 
 When used as a library or directly from the sources, the KCP offers the high-level services documented in the following header files:
 
-* [`SimpleFIPS202.h`](Modes/SimpleFIPS202.h), the six approved FIPS 202 instances (SHAKE128, SHAKE256 and the SHA-3 hash functions) through simple functions.
-* [`KeccakHash.h`](Modes/KeccakHash.h), the six approved FIPS 202 instances, as well as any Keccak instance based on Keccak-_f_[1600]. This more advanced interface proposes a message queue (init-update-final) and supports bit-level inputs if needed.
-* [`SP800-185.h`](Modes/SP800-185.h), the functions (cSHAKE, KMAC, ParallelHash and TupleHash) in the official NIST SP 800-185 standard.
-* [`KeccakSponge.h`](Constructions/KeccakSponge.h), all Keccak sponge functions, with or without a message queue.
-* [`KeccakDuplex.h`](Constructions/KeccakDuplex.h), all Keccak duplex objects.
-* [`KeccakPRG.h`](Modes/KeccakPRG.h), a pseudo-random number generator based on Keccak duplex objects.
-* [`Keyakv2.h`](Modes/Keyakv2.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
-* [`Ketjev2.h`](Ketje/Ketjev2.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
-* [`KangarooTwelve.h`](Modes/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
-* [`Kravatte.h`](Constructions/Kravatte.h) and [`KravatteModes.h`](Modes/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SAE, SIV, WBC and WBC-AE).
+* [`SimpleFIPS202`](Modes/SimpleFIPS202.h), the six approved FIPS 202 instances (SHAKE128, SHAKE256 and the SHA-3 hash functions) through simple functions.
+* [`KeccakHash`](Modes/KeccakHash.h), the six approved FIPS 202 instances, as well as any Keccak instance based on Keccak-_f_[1600]. This more advanced interface proposes a message queue (init-update-final) and supports bit-level inputs if needed.
+* [`SP800-185`](Modes/SP800-185.h), the functions (cSHAKE, KMAC, ParallelHash and TupleHash) in the official NIST SP 800-185 standard.
+* [`KeccakSponge`](Constructions/KeccakSponge-documentation.h), all Keccak sponge functions, with or without a message queue.
+* [`KeccakDuplex`](Constructions/KeccakDuplex-documentation.h), all Keccak duplex objects.
+* [`KeccakPRG`](Modes/KeccakPRG-documentation.h), a pseudo-random number generator based on Keccak duplex objects.
+* [`Keyakv2`](Keyak/Keyak-documentation.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
+* [`Ketjev2`](Ketje/Ketje-documentation.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
+* [`KangarooTwelve`](Modes/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
+* [`Kravatte`](Constructions/Kravatte.h) and [`KravatteModes`](Modes/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SAE, SIV, WBC and WBC-AE).
 
 
 ## Low-level services
