@@ -107,6 +107,12 @@ The list of targets can be found at the end of [`Makefile.build`](Makefile.build
 
 
 
+# How do I build/extract just the part I need?
+
+If you wish to make a custom target that integrates the cryptographic functions you need and nothing else, or if you just wish to get the source files to integrate them in another project, you can do this by following the steps described in [`HOWTO-customize.build`](HOWTO-customize.build). Some examples illustrate the process.
+
+
+
 # How is the code organized?
 
 The code is organized as illustrated in the following figure:

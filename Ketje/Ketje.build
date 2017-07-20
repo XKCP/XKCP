@@ -15,6 +15,22 @@ http://creativecommons.org/publicdomain/zero/1.0/
 -->
 <group>
 
+<!--
+The fragments below allow to select the desired Ketje instances.
+
+* KetjeJr: Ketje Jr
+* KetjeSr: Ketje Sr
+* KetjeMn: Ketje Minor
+* KetjeMj: Ketje Major
+* Ketje: all 4 instances
+
+In addition, one of the following fragments is required:
+* Ket{Jr, Sr, Mn, Mj}-SnP: to glue the Ketje implementation to an implementation of the permutation with SnP (default choice)
+* Ket{Jr, Sr, Mn, Mj}-ARMv7M: same as Ket{Jr, Sr, Mn, Mj}-SnP, but with specific optimizations for ARMv7M
+* Ket{Jr, Sr, Mn, Mj}-optimizedLE: same as Ket{Jr, Sr, Mn, Mj}-SnP, but with specific optimizations for other ARM plaforms (ARMv6M, ARMv7A, ARMv8A)
+
+-->
+
     <!-- "Ket", the layer between SnP and Ketje services -->
 
     <fragment name="Ket-SnP-common">

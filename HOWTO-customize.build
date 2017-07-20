@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<group>
+
+<!--
+# Introduction
+
+We here explain how to create a custom build target in the Keccak Code Package. Some examples, which can be found below, illustrate the process.
+
+Note that this file is included from Makefile.build, so the examples and anything tried here are accessible "for real" from make.
+
+
+# Step 1: create a new target
+
+First, choose a target name and add the corresponding XML tag. For the moment, we leave the inherits attribute empty:
+    <target name="chosenName" inherits=""/>
+
+The name can be anything. If it ends with .a, make will attempt to build a static library with that name. Otherwise, it will build a standalone executable. In both cases, however, one can add ".pack" when invoking make (but not in the target name) to get a tarball with the source files, instead of building it.
+
+
+# Step 2: select the high-level services
+
+In a second step, select the desired cryptographic functions and add the corresponding fragment keywords to the inherits attribute (separated by a space).
+
+Please refer to the following files for the list of supported cryptographic functions:
+* Ketje/Ketje.build for the Ketje instances;
+* Keyak/Keyak.build for the Keyak instances;
+* HighLevel.build for everything else.
+
+
+# Step 3: identify the required low-level services
+
+Then, identify the permutations that the chosen cryptographic functions need.
+
+Each cryptographic function implemented in the KCP depends on a given permutation. It interacts with the permutation through an interface called SnP. Some functions further can take advantage of a parallel implementation of the permutation, in which case the interface is called PlSnP. The choice of high-level services therefore determines what we need as low-level services:
+* Those that require Keccak-p[200]: KetjeJr, Keccak{Sponge, Duplex, PRG}Width200
+* Those that require Keccak-p[400]: KetjeSr, Keccak{Sponge, Duplex, PRG}Width400
+* Those that require Keccak-p[800]: KetjeMn, RiverKeyak, Keccak{Sponge, Duplex, PRG}Width800
+* Those that require Keccak-p[1600]: all others
+
+The following targets additionally require an implementation of parallel instances of Keccak-p[1600]: SeaKeyak, OceanKeyak, LunarKeyak, KangarooTwelve, SP800-185. Instead, for KangarooTwelve and SP800-185, one can add the fragment keyword no_parallel1600 to disable the use of parallel implementations.
+
+
+# Step 4: select the implementation of the low-level services
+
+Finally, select the implementation(s) of the required permutation(s) identified in the previous step and add the corresponding fragment keywords to the inherits attribute (separated by a space).
+
+Please refer to the file LowLevel.build for the list of supported implementations.
+
+If Ketje is used, we still need to add an additional fragment keyword, see Ketje/Ketje.build for more details.
+
+
+-->
+
+<!-- Examples -->
+
+    <!-- Type "make PRG-AVR8.pack" to get a tarball with the sources needed to compile a pseudo-random number generator on top of Keccak-f[200] for AVR8. -->
+    <target name="PRG-AVR8" inherits="KeccakPRGWidth200 optimized200AVR8"/>
+
+    <!-- Type "make KetjeJr-compact8.pack" to get a tarball with the sources needed to compile KetjeJr generically optimized for 8-bit platforms. -->
+    <target name="KetjeJr-compact8" inherits="KetjeJr KetJr-SnP compact200"/>
+
+    <!-- Type "make libKeccak-16bits.a" to compile a library with Keccak sponge, duplex and PRG on top of Keccak-f[400], using plain reference code. Add ".pack" when invoking make to get a tarball with the source files instead. -->
+    <target name="libKeccak-16bits.a" inherits="KeccakSpongeWidth400 KeccakDuplexWidth400 KeccakPRG400 reference400"/>
+
+    <!-- Type "make RiverKeyak-ARMv7M.pack" to get a tarball with the sources needed to compile River Keyak on ARMv7M. -->
+    <target name="RiverKeyak-ARMv7M" inherits="RiverKeyak optimized800ARMv7Mu2"/>
+
+    <!-- Type "make libRiverKeyak-generic32.a" to get a library with River Keyak generically optimized for 32-bit platforms. Add ".pack" when invoking make to get a tarball with the source files instead. -->
+    <target name="libRiverKeyak-generic32.a" inherits="RiverKeyak optimized800lcu2"/>
+
+    <!-- Same as above, but we add a PRG and we use a compact implementation instead. -->
+    <target name="libRiverKeyak-PRG-compact32.a" inherits="RiverKeyak KeccakPRGWidth800 compact800"/>
+
+    <!-- Type "make libK12-AVX2.a" to build a library with KangarooTwelve with AVX2 code. Add ".pack" when invoking make to get a tarball with the source files instead. -->
+    <target name="libK12-AVX2.a" inherits="KangarooTwelve optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4"/>
+
+    <!-- Same as above, but using a 32-bit implementation and not exploiting any parallelism. -->
+    <target name="libK12-32bits.a" inherits="KangarooTwelve inplace1600bi no_parallel1600"/>
+
+    <!-- Type "make FIPS202-opt64.pack" to get a tarball with the sources needed to compile the FIPS 202 functions generically optimized for 64-bit platforms. -->
+    <target name="FIPS202-opt64" inherits="FIPS202 optimized1600ufull"/>
+
+</group>
