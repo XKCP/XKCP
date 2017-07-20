@@ -13,15 +13,15 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Ketjev2_h_
-#define _Ketjev2_h_
+#ifndef _KeccakSpongeWidth800_h_
+#define _KeccakSpongeWidth800_h_
 
-/* For the documentation, please follow the link: */
-#include "Ketje-documentation.h"
+#include "KeccakSponge-common.h"
 
-#include "KetjeJr.h"
-#include "KetjeSr.h"
-#include "KetjeMn.h"
-#include "KetjeMj.h"
+#ifndef KeccakP800_excluded
+    #include "KeccakP-800-SnP.h"
+    KCP_DeclareSpongeStructure(KeccakWidth800, KeccakP800_stateSizeInBytes, KeccakP800_stateAlignment)
+    KCP_DeclareSpongeFunctions(KeccakWidth800)
+#endif
 
 #endif

@@ -18,7 +18,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdlib.h>
 #include <string.h>
 #include "base64.h"
-#include "KeccakCodePackage.h"
+#include "KeccakHash.h"
+#include "KangarooTwelve.h"
+#include "SP800-185.h"
 
 int hexencode(const void* data_buf, size_t dataLength, char* result, size_t resultSize)
 {

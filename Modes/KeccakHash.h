@@ -18,7 +18,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #ifndef KeccakP1600_excluded
 
-#include "KeccakSponge.h"
+#include "KeccakSpongeWidth1600.h"
 #include <string.h>
 
 #ifndef _Keccak_BitTypes_

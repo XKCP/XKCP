@@ -13,7 +13,7 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include "KeccakCodePackage.h"
+#include "KeccakSponge.h"
 #include "KravatteModes.h"
 
 #if !defined(EMBEDDED)

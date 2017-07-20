@@ -19,8 +19,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdlib.h>
 #include <assert.h>
 #include "brg_endian.h"
-#include "KeccakCodePackage.h"
 #include "Kravatte.h"
+#ifndef KeccakP1600timesN_excluded
+    #include "KeccakP-1600-times2-SnP.h"
+    #include "KeccakP-1600-times4-SnP.h"
+    #include "KeccakP-1600-times8-SnP.h"
+#endif
 
 /* 
 ** Uncomment this define if calls to KeccakP1600_Initialize() and 

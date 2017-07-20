@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdio.h>
 #include <stdlib.h>
 #include "genKAT.h"
-#include "KeccakCodePackage.h"
+#include "KeccakDuplex.h"
 #include "SimpleFIPS202.h"
 #include "testDuplex.h"
 #include "testKangarooTwelve.h"

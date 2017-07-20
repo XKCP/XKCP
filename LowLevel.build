@@ -1,0 +1,595 @@
+<?xml version="1.0"?>
+<!--
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
+
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
+-->
+<group>
+
+<!--
+The fragments below allow to select the desired implementation of the permutations (a.k.a. low-level services below the SnP or PlSnP interface).
+
+# For Keccak-p[200]:
+
+* reference200: the unoptimized reference implementation
+* compact200: an implementation aimed at minimizing code and memory sizes
+* optimized200ARMv6M: an assembly-optimized implementation for ARMv6M
+* optimized200ARMv7M: an assembly-optimized implementation for ARMv7M
+* optimized200AVR8: an assembly-optimized implementation for AVR8
+
+# For Keccak-p[400]:
+
+* reference400: the unoptimized reference implementation
+* optimized400ARMv6M: an assembly-optimized implementation for ARMv6M
+* optimized400ARMv7M: an assembly-optimized implementation for ARMv7M
+* optimized400AVR8: an assembly-optimized implementation for AVR8
+
+# For Keccak-p[800]:
+
+* reference800: the unoptimized reference implementation
+* compact800: an implementation aimed at minimizing code and memory sizes
+* optimized800u2: a generically optimized implementation for 32-bit platforms with 2 rounds unrolled
+* optimized800ufull: same as optimized800u2 but with all rounds unrolled
+* optimized800lcu2: same as optimized800u2 but using the lane complementing technique, which is useful for platforms that do not have a "and not" instruction
+* optimized800lcufull: same as optimized800lcu2 but with all rounds unrolled
+* optimized800ARMv6Mu1: an assembly-optimized implementation for ARMv6M (no round unrolling)
+* optimized800ARMv6Mu2: same as optimized800ARMv6Mu1 but with 2 rounds unrolled
+* optimized800ARMv7Mu2: an assembly-optimized implementation for ARMv7M with 2 rounds unrolled
+* optimized800ARMv7Mufull: same as optimized800ARMv7Mu2 but with all rounds unrolled
+* optimized800ARMv7Au2: an assembly-optimized implementation for ARMv7A with 2 rounds unrolled
+* optimized800ARMv8A: an assembly-optimized implementation for ARMv8A
+* optimized800AVR8: an assembly-optimized implementation for AVR8
+
+# For Keccak-p[1600]:
+
+* reference1600: the unoptimized reference implementation
+* reference1600-32bits: a reference implementation using only 32-bit operations with the bit interleaving technique
+* compact1600: an implementation aimed at minimizing code and memory sizes
+* compact1600AVR8: same as compact1600, but specifically for AVR8
+* inplace1600bi: a generically optimized implementation for 32-bit platforms aimed at minimizing the memory size by performing the permutation in-place
+* inplace1600ARMv6M: same as inplace1600bi, but specifically for ARMv6M
+* inplace1600ARMv7M: same as inplace1600bi, but specifically for ARMv7M
+* inplace1600ARMv7A: same as inplace1600bi, but specifically for ARMv7A
+* optimized1600u6: a generically optimized implementation for 64-bit platforms with 6 rounds unrolled
+* optimized1600ufull: same as optimized1600u6 but with all rounds unrolled
+* optimized1600lcu6: same as optimized1600u6 but using the lane complementing technique, which is useful for platforms that do not have a "and not" instruction
+* optimized1600lcufull: same as optimized1600lcu6 but with all rounds unrolled
+* optimized1600lcufullshld: same as optimized1600lcufull but with the rotation implementation with the 'shld' instruction, as it is faster on some platforms (e.g., SandyBridge)
+* optimized1600AsmX86-64: an assembly-optimized implementation for x86_64
+* optimized1600AsmX86-64shld: same as optimized1600AsmX86-64, but with the 'shld' instruction
+* optimized1600AsmX86-64Apple: same as optimized1600AsmX86-64, but with a syntax that works better on some Apple platforms
+* optimized1600AVX2: an optimized implementation taking advantage of the AVX2 instruction set
+* optimized1600AVX512: an optimized implementation taking advantage of the AVX512 instruction set
+* optimized1600XOPu6: an optimized implementation taking advantage of the XOP instruction set, with 6 rounds unrolled
+* optimized1600XOPufull: same as optimized1600XOPu6, but with all rounds unrolled
+* optimized1600ARMv6Mu1: an assembly-optimized implementation for ARMv6M (no round unrolling)
+* optimized1600ARMv6Mu2: same as optimized1600ARMv6Mu1 but with 2 rounds unrolled
+* optimized1600ARMv7A: an assembly-optimized implementation for ARMv7A
+* optimized1600ARMv8A: an assembly-optimized implementation for ARMv8A
+* optimized1600AVR8: an assembly-optimized implementation for AVR8
+
+# For Keccak-p[1600]×2:
+
+* 1600times2on1: a stub that calls Keccak-p[1600] twice (requires an implementation of Keccak-p[1600])
+* SIMD128-SSE2u2: an implementation taking advantage of the SSE2 instruction set, with two rounds unrolled
+* SIMD128-SSE2ufull: same SIMD128-SSE2u2, but with all rounds unrolled
+* SIMD128-XOPu2: an implementation taking advantage of the XOP instruction set, with two rounds unrolled
+* SIMD128-XOPufull: same SIMD128-XOPu2, but with all rounds unrolled
+* SIMD512-2-AVX512u4: an implementation taking advantage of the AVX512 instruction set, with 4 rounds unrolled
+* SIMD512-2-AVX512u12: same as SIMD512-2-AVX512u4, but with 12 rounds unrolled
+* SIMD512-2-AVX512ufull: same as SIMD512-2-AVX512u4, but with all rounds unrolled
+* 1600times2ARMV7A: an assembly-optimized implementation for ARMv7A using NEON
+
+# For Keccak-p[1600]×4:
+
+* 1600times4on1: a stub that calls Keccak-p[1600] four times (requires an implementation of Keccak-p[1600])
+* 1600times4on2: a stub that calls Keccak-p[1600]×2 twice (requires an implementation of Keccak-p[1600]×2)
+* SIMD256-AVX2u6: an implementation taking advantage of the AVX2 instruction set, with 6 rounds unrolled
+* SIMD256-AVXu12: same as SIMD256-AVX2u6, but with 12 rounds unrolled
+* SIMD256-AVXufull: same as SIMD256-AVX2u6, but with all rounds unrolled
+* SIMD512-4-AVX512u4: an implementation taking advantage of the AVX512 instruction set, with 4 rounds unrolled
+* SIMD512-4-AVX512u12: same as SIMD512-4-AVX512u4, but with 12 rounds unrolled
+* SIMD512-4-AVX512ufull: same as SIMD512-4-AVX512u4, but with all rounds unrolled
+
+# For Keccak-p[1600]×8:
+
+* 1600times8on1: a stub that calls Keccak-p[1600] eight times (requires an implementation of Keccak-p[1600])
+* 1600times8on2: a stub that calls Keccak-p[1600]×2 four times (requires an implementation of Keccak-p[1600]×2)
+* 1600times8on4: a stub that calls Keccak-p[1600]×4 twice (requires an implementation of Keccak-p[1600]×4)
+* SIMD512-8-AVX512u4: an implementation taking advantage of the AVX512 instruction set, with 4 rounds unrolled
+* SIMD512-8-AVX512u12: same as SIMD512-8-AVX512u4, but with 12 rounds unrolled
+* SIMD512-8-AVX512ufull: same as SIMD512-8-AVX512u4, but with all rounds unrolled
+
+-->
+
+
+    <!-- *** Low-level services *** -->
+
+    <fragment name="optimized">
+        <h>Common/brg_endian.h</h>
+        <gcc>-fomit-frame-pointer</gcc>
+        <gcc>-O2</gcc>
+        <gcc>-g0</gcc>
+        <gcc>-march=native</gcc>
+        <gcc>-mtune=native</gcc>
+    </fragment>
+
+    <!-- Keccak-p[200] -->
+
+    <fragment name="width200">
+    </fragment>
+
+    <fragment name="reference200" inherits="common width200">
+        <c>SnP/KeccakP-200/Reference/KeccakP-200-reference.c</c>
+        <h>SnP/KeccakP-200/Reference/KeccakP-200-reference.h</h>
+        <h>SnP/KeccakP-200/Reference/KeccakP-200-SnP.h</h>
+    </fragment>
+
+    <fragment name="compact200" inherits="common optimized width200">
+        <c>SnP/KeccakP-200/Compact/KeccakP-200-compact.c</c>
+        <h>SnP/KeccakP-200/Compact/KeccakP-200-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized200ARMv6M" inherits="common optimized width200">
+        <c>SnP/KeccakP-200/OptimizedAsmARM/KeccakP-200-armv6m-le-gcc.s</c>
+        <h>SnP/KeccakP-200/OptimizedAsmARM/KeccakP-200-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized200ARMv7M" inherits="common optimized width200">
+        <c>SnP/KeccakP-200/OptimizedAsmARM/KeccakP-200-armv7m-le-gcc.s</c>
+        <h>SnP/KeccakP-200/OptimizedAsmARM/KeccakP-200-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized200AVR8" inherits="common optimized width200">
+        <c>SnP/KeccakP-200/OptimizedAsmAVR8/KeccakP-200-avr8-fast.s</c>
+        <h>SnP/KeccakP-200/OptimizedAsmAVR8/KeccakP-200-SnP.h</h>
+    </fragment>
+
+    <!-- Keccak-p[400] -->
+
+    <fragment name="width400">
+    </fragment>
+
+    <fragment name="reference400" inherits="common width400">
+        <c>SnP/KeccakP-400/Reference/KeccakP-400-reference.c</c>
+        <h>SnP/KeccakP-400/Reference/KeccakP-400-reference.h</h>
+        <h>SnP/KeccakP-400/Reference/KeccakP-400-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized400ARMv6M" inherits="common optimized width400">
+        <c>SnP/KeccakP-400/OptimizedAsmARM/KeccakP-400-armv6m-le-gcc.s</c>
+        <h>SnP/KeccakP-400/OptimizedAsmARM/KeccakP-400-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized400ARMv7M" inherits="common optimized width400">
+        <c>SnP/KeccakP-400/OptimizedAsmARM/KeccakP-400-armv7m-le-gcc.s</c>
+        <h>SnP/KeccakP-400/OptimizedAsmARM/KeccakP-400-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized400AVR8" inherits="common optimized width400">
+        <c>SnP/KeccakP-400/OptimizedAsmAVR8/KeccakP-400-avr8-fast.s</c>
+        <h>SnP/KeccakP-400/OptimizedAsmAVR8/KeccakP-400-SnP.h</h>
+    </fragment>
+
+    <!-- Keccak-p[800] -->
+
+    <fragment name="width800">
+    </fragment>
+
+    <fragment name="reference800" inherits="common width800">
+        <c>SnP/KeccakP-800/Reference/KeccakP-800-reference.c</c>
+        <h>SnP/KeccakP-800/Reference/KeccakP-800-reference.h</h>
+        <h>SnP/KeccakP-800/Reference/KeccakP-800-SnP.h</h>
+    </fragment>
+
+    <fragment name="compact800" inherits="common optimized width800">
+        <c>SnP/KeccakP-800/Compact/KeccakP-800-compact.c</c>
+        <h>SnP/KeccakP-800/Compact/KeccakP-800-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized800" inherits="width800 optimized">
+        <h>SnP/KeccakP-800/Optimized32/KeccakP-800-SnP.h</h>
+        <h>SnP/KeccakP-800/Optimized32/KeccakP-800-opt32-bis.macros</h>
+        <c>SnP/KeccakP-800/Optimized32/KeccakP-800-opt32.c</c>
+        <h>SnP/KeccakP-800/Optimized32/KeccakP-800-opt32.macros</h>
+        <h>SnP/KeccakP-800/Optimized32/KeccakP-800-unrolling-bis.macros</h>
+        <h>SnP/KeccakP-800/Optimized32/KeccakP-800-unrolling.macros</h>
+    </fragment>
+
+    <fragment name="optimized800u2" inherits="optimized800">
+        <h>SnP/KeccakP-800/Optimized32/u2/KeccakP-800-opt32-config.h</h>
+    </fragment>
+
+    <fragment name="optimized800ufull" inherits="optimized800">
+        <h>SnP/KeccakP-800/Optimized32/ufull/KeccakP-800-opt32-config.h</h>
+    </fragment>
+
+    <fragment name="optimized800lcu2" inherits="optimized800">
+        <h>SnP/KeccakP-800/Optimized32/LCu2/KeccakP-800-opt32-config.h</h>
+    </fragment>
+
+    <fragment name="optimized800lcufull" inherits="optimized800">
+        <h>SnP/KeccakP-800/Optimized32/LCufull/KeccakP-800-opt32-config.h</h>
+    </fragment>
+
+    <fragment name="optimized800ARM" inherits="common optimized width800">
+        <h>SnP/KeccakP-800/OptimizedAsmARM/KeccakP-800-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized800ARMv6Mu1" inherits="optimized800ARM">
+        <c>SnP/KeccakP-800/OptimizedAsmARM/KeccakP-800-u1-armv6m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="optimized800ARMv6Mu2" inherits="optimized800ARM">
+        <c>SnP/KeccakP-800/OptimizedAsmARM/KeccakP-800-u2-armv6m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="optimized800ARMv7Mu2" inherits="optimized800ARM">
+        <c>SnP/KeccakP-800/OptimizedAsmARM/KeccakP-800-u2-armv7m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="optimized800ARMv7Mufull" inherits="optimized800ARM">
+        <c>SnP/KeccakP-800/OptimizedAsmARM/KeccakP-800-uf-armv7m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="optimized800ARMv7Au2" inherits="optimized800ARM">
+        <c>SnP/KeccakP-800/OptimizedAsmARM/KeccakP-800-u2-armv7a-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="optimized800ARMv8A" inherits="common optimized width800">
+      <c>SnP/KeccakP-800/Optimized64AsmARM/KeccakP-800-armv8a-neon.s</c>
+      <h>SnP/KeccakP-800/Optimized64AsmARM/KeccakP-800-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized800AVR8" inherits="common optimized width800">
+        <c>SnP/KeccakP-800/OptimizedAsmAVR8/KeccakP-800-avr8-fast.s</c>
+        <h>SnP/KeccakP-800/OptimizedAsmAVR8/KeccakP-800-SnP.h</h>
+    </fragment>
+
+    <!-- Keccak-p[1600] -->
+
+    <fragment name="width1600">
+    </fragment>
+
+    <fragment name="reference1600" inherits="common width1600">
+        <c>SnP/KeccakP-1600/Reference/KeccakP-1600-reference.c</c>
+        <h>SnP/KeccakP-1600/Reference/KeccakP-1600-reference.h</h>
+        <h>SnP/KeccakP-1600/Reference/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="reference1600-32bits" inherits="common width1600">
+        <c>SnP/KeccakP-1600/Reference32BI/KeccakP-1600-reference32BI.c</c>
+        <h>SnP/KeccakP-1600/Reference32BI/KeccakP-1600-reference.h</h>
+        <h>SnP/KeccakP-1600/Reference32BI/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="compact1600" inherits="common optimized width1600">
+        <c>SnP/KeccakP-1600/Compact64/KeccakP-1600-compact64.c</c>
+        <h>SnP/KeccakP-1600/Compact64/KeccakP-1600-SnP.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+
+    <fragment name="compact1600AVR8" inherits="common optimized width1600">
+        <c>SnP/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-avr8-compact.s</c>
+        <h>SnP/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="inplace1600bi" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/Inplace32BI/KeccakP-1600-inplace32BI.c</c>
+        <h>SnP/KeccakP-1600/Inplace32BI/KeccakP-1600-SnP.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+
+    <fragment name="inplace1600ARM" inherits="width1600 optimized">
+        <h>SnP/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="inplace1600ARMv6M" inherits="inplace1600ARM">
+        <c>SnP/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-inplace-32bi-armv6m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="inplace1600ARMv7M" inherits="inplace1600ARM">
+        <c>SnP/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-inplace-32bi-armv7m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="inplace1600ARMv7A" inherits="inplace1600ARM">
+        <c>SnP/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-inplace-32bi-armv7a-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="optimized1600" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/Optimized64/KeccakP-1600-opt64.c</c>
+        <h>SnP/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
+        <h>SnP/KeccakP-1600/Optimized/KeccakP-1600-64.macros</h>
+        <h>SnP/KeccakP-1600/Optimized64/KeccakP-1600-SnP.h</h>
+        <h>SnP/SnP-Relaned.h</h>
+        <gcc>-m64</gcc>
+    </fragment>
+
+    <fragment name="optimized1600u6" inherits="optimized1600">
+        <h>SnP/KeccakP-1600/Optimized64/u6/KeccakP-1600-opt64-config.h</h>
+    </fragment>
+
+    <fragment name="optimized1600ufull" inherits="optimized1600">
+        <h>SnP/KeccakP-1600/Optimized64/ufull/KeccakP-1600-opt64-config.h</h>
+    </fragment>
+
+    <fragment name="optimized1600lcu6" inherits="optimized1600">
+        <h>SnP/KeccakP-1600/Optimized64/LCu6/KeccakP-1600-opt64-config.h</h>
+    </fragment>
+
+    <fragment name="optimized1600lcufull" inherits="optimized1600">
+        <h>SnP/KeccakP-1600/Optimized64/LCufull/KeccakP-1600-opt64-config.h</h>
+    </fragment>
+
+    <fragment name="optimized1600lcufullshld" inherits="optimized1600">
+        <h>SnP/KeccakP-1600/Optimized64/LCufullshld/KeccakP-1600-opt64-config.h</h>
+    </fragment>
+
+    <fragment name="optimized1600AsmX86-64" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-gas.s</c>
+        <h>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600AsmX86-64shld" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-shld-gas.s</c>
+        <h>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600AsmX86-64Apple" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-gas_Apple.s</c>
+        <h>SnP/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+<!-- Not yet updated with Permute_Nrounds
+    <fragment name="optimized1600Haswell" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/Optimized64/CompiledByGCC474forHaswell/KeccakP-1600-opt64.s</c>
+        <h>SnP/KeccakP-1600/Optimized64/CompiledByGCC474forHaswell/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600SandyBridge" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/Optimized64/CompiledByGCC474forSandyBridge/KeccakP-1600-opt64.s</c>
+        <h>SnP/KeccakP-1600/Optimized64/CompiledByGCC474forSandyBridge/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600Nehalem" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/Optimized64/CompiledByGCC474forNehalem/KeccakP-1600-opt64.s</c>
+        <h>SnP/KeccakP-1600/Optimized64/CompiledByGCC474forNehalem/KeccakP-1600-SnP.h</h>
+    </fragment>
+-->
+
+    <fragment name="optimized1600AVX2" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.cpp</c>
+        <h>SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.h</h>
+        <h>SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600AVX512" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedAVX512/KeccakP-1600-AVX512.c</c>
+        <h>SnP/KeccakP-1600/OptimizedAVX512/AVX512u12/KeccakP-1600-AVX512-config.h</h>
+        <h>SnP/KeccakP-1600/OptimizedAVX512/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600XOP" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedXOP/KeccakP-1600-XOP.c</c>
+        <h>SnP/KeccakP-1600/OptimizedXOP/KeccakP-1600-SnP.h</h>
+        <h>SnP/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
+        <h>SnP/SnP-Relaned.h</h>
+    </fragment>
+
+    <fragment name="optimized1600XOPu6" inherits="optimized1600XOP">
+        <h>SnP/KeccakP-1600/OptimizedXOP/u6/KeccakP-1600-XOP-config.h</h>
+    </fragment>
+
+    <fragment name="optimized1600XOPufull" inherits="optimized1600XOP">
+        <h>SnP/KeccakP-1600/OptimizedXOP/ufull/KeccakP-1600-XOP-config.h</h>
+    </fragment>
+
+    <fragment name="optimized1600ARM" inherits="width1600 optimized">
+        <h>SnP/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600ARMv6Mu1" inherits="optimized1600ARM">
+        <c>SnP/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-u1-32bi-armv6m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="optimized1600ARMv6Mu2" inherits="optimized1600ARM">
+        <c>SnP/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-u2-32bi-armv6m-le-gcc.s</c>
+    </fragment>
+
+    <fragment name="optimized1600ARMv7A" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/OptimizedAsmARM/KeccakP-1600-armv7a-le-neon-gcc.s</c>
+        <h>SnP/KeccakP-1600/OptimizedAsmARM/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600ARMv8A" inherits="width1600 optimized">
+        <c>SnP/KeccakP-1600/Optimized64AsmARM/KeccakP-1600-armv8a-neon.s</c>
+        <h>SnP/KeccakP-1600/Optimized64AsmARM/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600AVR8" inherits="common optimized width1600">
+        <c>SnP/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-avr8-fast.s</c>
+        <h>SnP/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <!-- Keccak-p[800]×2 -->
+
+    <fragment name="800times2on1">
+        <c>PlSnP/KeccakP-800-times2/FallbackOn1/KeccakP-800-times2-on1.c</c>
+        <h>PlSnP/KeccakP-800-times2/FallbackOn1/KeccakP-800-times2-SnP.h</h>
+        <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <!-- Keccak-p[800]×4 -->
+
+    <fragment name="800times4on1">
+        <c>PlSnP/KeccakP-800-times4/FallbackOn1/KeccakP-800-times4-on1.c</c>
+        <h>PlSnP/KeccakP-800-times4/FallbackOn1/KeccakP-800-times4-SnP.h</h>
+        <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="800times4ARMv7A" inherits="800times4on1"/>
+
+    <!-- Keccak-p[800]×8 -->
+
+    <fragment name="800times8on1">
+        <c>PlSnP/KeccakP-800-times8/FallbackOn1/KeccakP-800-times8-on1.c</c>
+        <h>PlSnP/KeccakP-800-times8/FallbackOn1/KeccakP-800-times8-SnP.h</h>
+        <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="no_parallel800">
+        <define>KeccakP800timesN_excluded</define>
+    </fragment>
+
+    <!-- Keccak-p[1600]×2 -->
+
+    <fragment name="1600times2on1">
+        <c>PlSnP/KeccakP-1600-times2/FallbackOn1/KeccakP-1600-times2-on1.c</c>
+        <h>PlSnP/KeccakP-1600-times2/FallbackOn1/KeccakP-1600-times2-SnP.h</h>
+        <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="SIMD128">
+        <c>PlSnP/KeccakP-1600-times2/SIMD128/KeccakP-1600-times2-SIMD128.c</c>
+        <h>PlSnP/KeccakP-1600-times2/SIMD128/KeccakP-1600-times2-SnP.h</h>
+        <h>SnP/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
+    </fragment>
+
+    <fragment name="SIMD128-SSE2u2" inherits="SIMD128">
+        <h>PlSnP/KeccakP-1600-times2/SIMD128/SSE2u2/SIMD128-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD128-SSE2ufull" inherits="SIMD128">
+        <h>PlSnP/KeccakP-1600-times2/SIMD128/SSE2ufull/SIMD128-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD128-XOPu2" inherits="SIMD128">
+        <h>PlSnP/KeccakP-1600-times2/SIMD128/XOPu2/SIMD128-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD128-XOPufull" inherits="SIMD128">
+        <h>PlSnP/KeccakP-1600-times2/SIMD128/XOPufull/SIMD128-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-2">
+        <c>PlSnP/KeccakP-1600-times2/SIMD512/KeccakP-1600-times2-SIMD512.c</c>
+        <h>PlSnP/KeccakP-1600-times2/SIMD512/KeccakP-1600-times2-SnP.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-2-AVX512u4" inherits="SIMD512-2">
+        <h>PlSnP/KeccakP-1600-times2/SIMD512/AVX512u4/SIMD512-2-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-2-AVX512u12" inherits="SIMD512-2">
+        <h>PlSnP/KeccakP-1600-times2/SIMD512/AVX512u12/SIMD512-2-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-2-AVX512ufull" inherits="SIMD512-2">
+        <h>PlSnP/KeccakP-1600-times2/SIMD512/AVX512ufull/SIMD512-2-config.h</h>
+    </fragment>
+
+    <fragment name="1600times2ARMV7A">
+        <c>PlSnP/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-inplace-pl2-armv7a-neon-le-gcc.s</c>
+        <h>PlSnP/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-times2-SnP.h</h>
+    </fragment>
+
+    <!-- Keccak-p[1600]×4 -->
+
+    <fragment name="1600times4on1">
+        <c>PlSnP/KeccakP-1600-times4/FallbackOn1/KeccakP-1600-times4-on1.c</c>
+        <h>PlSnP/KeccakP-1600-times4/FallbackOn1/KeccakP-1600-times4-SnP.h</h>
+        <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="1600times4on2">
+        <c>PlSnP/KeccakP-1600-times4/FallbackOn2/KeccakP-1600-times4-on2.c</c>
+        <h>PlSnP/KeccakP-1600-times4/FallbackOn2/KeccakP-1600-times4-SnP.h</h>
+        <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="SIMD256">
+        <c>PlSnP/KeccakP-1600-times4/SIMD256/KeccakP-1600-times4-SIMD256.c</c>
+        <h>PlSnP/KeccakP-1600-times4/SIMD256/KeccakP-1600-times4-SnP.h</h>
+        <h>SnP/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
+    </fragment>
+
+    <fragment name="SIMD256-AVX2u6" inherits="SIMD256">
+        <h>PlSnP/KeccakP-1600-times4/SIMD256/AVX2u6/SIMD256-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD256-AVX2u12" inherits="SIMD256">
+        <h>PlSnP/KeccakP-1600-times4/SIMD256/AVX2u12/SIMD256-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD256-AVX2ufull" inherits="SIMD256">
+        <h>PlSnP/KeccakP-1600-times4/SIMD256/AVX2ufull/SIMD256-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-4">
+        <c>PlSnP/KeccakP-1600-times4/SIMD512/KeccakP-1600-times4-SIMD512.c</c>
+        <h>PlSnP/KeccakP-1600-times4/SIMD512/KeccakP-1600-times4-SnP.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-4-AVX512u4" inherits="SIMD512-4">
+        <h>PlSnP/KeccakP-1600-times4/SIMD512/AVX512u4/SIMD512-4-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-4-AVX512u12" inherits="SIMD512-4">
+        <h>PlSnP/KeccakP-1600-times4/SIMD512/AVX512u12/SIMD512-4-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-4-AVX512ufull" inherits="SIMD512-4">
+        <h>PlSnP/KeccakP-1600-times4/SIMD512/AVX512ufull/SIMD512-4-config.h</h>
+    </fragment>
+
+    <!-- Keccak-p[1600]×8 -->
+
+    <fragment name="1600times8on1">
+        <c>PlSnP/KeccakP-1600-times8/FallbackOn1/KeccakP-1600-times8-on1.c</c>
+        <h>PlSnP/KeccakP-1600-times8/FallbackOn1/KeccakP-1600-times8-SnP.h</h>
+        <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="1600times8on2">
+        <c>PlSnP/KeccakP-1600-times8/FallbackOn2/KeccakP-1600-times8-on2.c</c>
+        <h>PlSnP/KeccakP-1600-times8/FallbackOn2/KeccakP-1600-times8-SnP.h</h>
+        <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="1600times8on4">
+        <c>PlSnP/KeccakP-1600-times8/FallbackOn4/KeccakP-1600-times8-on4.c</c>
+        <h>PlSnP/KeccakP-1600-times8/FallbackOn4/KeccakP-1600-times8-SnP.h</h>
+        <h>PlSnP/Fallback/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="SIMD512-8">
+        <c>PlSnP/KeccakP-1600-times8/SIMD512/KeccakP-1600-times8-SIMD512.c</c>
+        <h>PlSnP/KeccakP-1600-times8/SIMD512/KeccakP-1600-times8-SnP.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-8-AVX512u4" inherits="SIMD512-8">
+        <h>PlSnP/KeccakP-1600-times8/SIMD512/AVX512u4/SIMD512-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-8-AVX512u12" inherits="SIMD512-8">
+        <h>PlSnP/KeccakP-1600-times8/SIMD512/AVX512u12/SIMD512-config.h</h>
+    </fragment>
+
+    <fragment name="SIMD512-8-AVX512ufull" inherits="SIMD512-8">
+        <h>PlSnP/KeccakP-1600-times8/SIMD512/AVX512ufull/SIMD512-config.h</h>
+    </fragment>
+
+    <fragment name="no_parallel1600">
+        <define>KeccakP1600timesN_excluded</define>
+    </fragment>
+
+</group>

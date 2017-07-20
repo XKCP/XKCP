@@ -13,15 +13,24 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Ketjev2_h_
-#define _Ketjev2_h_
+#include "KeccakDuplexWidth1600.h"
 
-/* For the documentation, please follow the link: */
-#include "Ketje-documentation.h"
+#ifdef KeccakReference
+    #include <string.h>
+    #include "displayIntermediateValues.h"
+#endif
 
-#include "KetjeJr.h"
-#include "KetjeSr.h"
-#include "KetjeMn.h"
-#include "KetjeMj.h"
+#ifndef KeccakP1600_excluded
+    #include "KeccakP-1600-SnP.h"
 
+    #define prefix KeccakWidth1600
+    #define SnP KeccakP1600
+    #define SnP_width 1600
+    #define SnP_Permute KeccakP1600_Permute_24rounds
+        #include "KeccakDuplex.inc"
+    #undef prefix
+    #undef SnP
+    #undef SnP_width
+    #undef SnP_Permute
+    #undef SnP_FastLoop_Absorb
 #endif

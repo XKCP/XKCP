@@ -14,8 +14,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include <string.h>
-#include "KeccakCodePackage.h"
 #include "SP800-185.h"
+#ifndef KeccakP1600timesN_excluded
+    #include "KeccakP-1600-times2-SnP.h"
+    #include "KeccakP-1600-times4-SnP.h"
+    #include "KeccakP-1600-times8-SnP.h"
+#endif
 
 /* #define DEBUG_DUMP */
 

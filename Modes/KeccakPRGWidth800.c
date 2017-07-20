@@ -13,15 +13,19 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Ketjev2_h_
-#define _Ketjev2_h_
+#include "KeccakPRGWidth800.h"
 
-/* For the documentation, please follow the link: */
-#include "Ketje-documentation.h"
+#ifdef KeccakReference
+    #include <string.h>
+    #include "displayIntermediateValues.h"
+#endif
 
-#include "KetjeJr.h"
-#include "KetjeSr.h"
-#include "KetjeMn.h"
-#include "KetjeMj.h"
+#ifndef KeccakP800_excluded
+    #include "KeccakP-800-SnP.h"
 
+    #define prefix KeccakWidth800
+    #define SnP_width 800
+        #include "KeccakPRG.inc"
+    #undef prefix
+    #undef SnP_width
 #endif

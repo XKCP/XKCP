@@ -18,6 +18,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <stddef.h>
 #include "align.h"
+#include "KeccakSpongeWidth1600.h"
 #include "Phases.h"
 
 #ifndef KeccakP1600_excluded

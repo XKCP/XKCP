@@ -20,7 +20,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <stddef.h>
 #include "align.h"
-#include "KeccakSponge.h"
+#include "KeccakSpongeWidth1600.h"
 #include "Phases.h"
 
 typedef KCP_Phases KangarooTwelve_Phases;

@@ -13,11 +13,13 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include "KeccakCodePackage.h"
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
 #include "KangarooTwelve.h"
+#include "Keyakv2.h"
+#include "Kravatte.h"
+#include "KravatteModes.h"
 #include "SP800-185.h"
 #include "timing.h"
 #include "testPerformance.h"

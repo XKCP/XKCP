@@ -13,15 +13,16 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Ketjev2_h_
-#define _Ketjev2_h_
+#ifndef _KeccakPRGWidth400_h_
+#define _KeccakPRGWidth400_h_
 
-/* For the documentation, please follow the link: */
-#include "Ketje-documentation.h"
+#include "KeccakDuplexWidth400.h"
+#include "KeccakPRG-common.h"
 
-#include "KetjeJr.h"
-#include "KetjeSr.h"
-#include "KetjeMn.h"
-#include "KetjeMj.h"
+#ifndef KeccakP400_excluded
+    #include "KeccakP-400-SnP.h"
+    KCP_DeclareSpongePRG_Structure(KeccakWidth400, KeccakP400_stateSizeInBytes, KeccakP400_stateAlignment)
+    KCP_DeclareSpongePRG_Functions(KeccakWidth400)
+#endif
 
 #endif

@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<!--
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
+
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
+-->
+<group>
+
+<!--
+The fragments below allow to select the desired cryptographic functions (a.k.a. high-level services above the SnP or PlSnP interface).
+
+* KeccakSpongeWidth{200, 400, 800, 1600}: the Keccak[r, c] sponge function, where r+c equals the given permutation width (200, 400, 800 or 1600).
+* KeccakSponge: the Keccak sponge functions for all widths.
+* FIPS202: all the functions approved in the FIPS 202 standard, i.e., the extendable output functions (SHAKE{128, 256}) and hash functions (SHA3-{224, 256, 384, 512}). This includes also the Keccak hash functions without suffix (e.g., such as Keccak[r=1088, c=512] as used in Ethereum).
+* SP800-185: all the functions defined in the NIST SP 800-185 standard, i.e., cSHAKE, TupleHash, KMAC and ParallelHash.
+* KeccakDuplexWidth{200, 400, 800, 1600}: the Keccak[r, c] duplex objects, where r+c equals the given permutation width (200, 400, 800 or 1600).
+* KeccakDupex: the Keccak duplex objects for all widths.
+* KeccakPRGWidth{200, 400, 800, 1600}: a pseudo-random bit generator based on Keccak with the given permutation width.
+* KeccakPRG: the pseudo-random bit generators for all widths.
+* KangarooTwelve: the KangarooTwelve extendable output function.
+* Kravatte: the Kravatte pseudo-random function and its modes (Kravatte-SAE, -SIV, -WBC and -WBC-AE).
+-->
+
+    <!-- *** High-level services *** -->
+
+    <!-- Keccak sponge functions -->
+
+    <fragment name="KeccakSponge-common" inherits="common">
+        <h>Constructions/KeccakSponge-common.h</h>
+        <h>Constructions/KeccakSponge.inc</h>
+    </fragment>
+
+    <fragment name="KeccakSpongeWidth200" inherits="KeccakSponge-common">
+        <c>Constructions/KeccakSpongeWidth200.c</c>
+        <h>Constructions/KeccakSpongeWidth200.h</h>
+    </fragment>
+
+    <fragment name="KeccakSpongeWidth400" inherits="KeccakSponge-common">
+        <c>Constructions/KeccakSpongeWidth400.c</c>
+        <h>Constructions/KeccakSpongeWidth400.h</h>
+    </fragment>
+
+    <fragment name="KeccakSpongeWidth800" inherits="KeccakSponge-common">
+        <c>Constructions/KeccakSpongeWidth800.c</c>
+        <h>Constructions/KeccakSpongeWidth800.h</h>
+    </fragment>
+
+    <fragment name="KeccakSpongeWidth1600" inherits="KeccakSponge-common">
+        <c>Constructions/KeccakSpongeWidth1600.c</c>
+        <h>Constructions/KeccakSpongeWidth1600.h</h>
+    </fragment>
+
+    <fragment name="KeccakSponge" inherits="KeccakSpongeWidth200 KeccakSpongeWidth400 KeccakSpongeWidth800 KeccakSpongeWidth1600"/>
+
+    <!-- NIST standards -->
+
+    <fragment name="FIPS202" inherits="KeccakSpongeWidth1600">
+        <c>Modes/SimpleFIPS202.c</c>
+        <h>Modes/SimpleFIPS202.h</h>
+        <c>Modes/KeccakHash.c</c>
+        <h>Modes/KeccakHash.h</h>
+    </fragment>
+
+    <fragment name="SP800-185" inherits="KeccakSpongeWidth1600">
+        <c>Modes/SP800-185.c</c>
+        <h>Modes/SP800-185.inc</h>
+        <h>Modes/SP800-185.h</h>
+        <h>Modes/Phases.h</h>
+    </fragment>
+
+    <!-- Keccak duplex objects -->
+
+    <fragment name="KeccakDuplex-common" inherits="common">
+        <h>Constructions/KeccakDuplex-common.h</h>
+        <h>Constructions/KeccakDuplex.inc</h>
+    </fragment>
+
+    <fragment name="KeccakDuplexWidth200" inherits="KeccakDuplex-common">
+        <c>Constructions/KeccakDuplexWidth200.c</c>
+        <h>Constructions/KeccakDuplexWidth200.h</h>
+    </fragment>
+
+    <fragment name="KeccakDuplexWidth400" inherits="KeccakDuplex-common">
+        <c>Constructions/KeccakDuplexWidth400.c</c>
+        <h>Constructions/KeccakDuplexWidth400.h</h>
+    </fragment>
+
+    <fragment name="KeccakDuplexWidth800" inherits="KeccakDuplex-common">
+        <c>Constructions/KeccakDuplexWidth800.c</c>
+        <h>Constructions/KeccakDuplexWidth800.h</h>
+    </fragment>
+
+    <fragment name="KeccakDuplexWidth1600" inherits="KeccakDuplex-common">
+        <c>Constructions/KeccakDuplexWidth1600.c</c>
+        <h>Constructions/KeccakDuplexWidth1600.h</h>
+    </fragment>
+
+    <fragment name="KeccakDuplex" inherits="KeccakDuplexWidth200 KeccakDuplexWidth400 KeccakDuplexWidth800 KeccakDuplexWidth1600"/>
+
+    <!-- Pseudo-random bit generation -->
+
+    <fragment name="KeccakPRG-common" inherits="common">
+        <h>Modes/KeccakPRG-common.h</h>
+        <h>Modes/KeccakPRG.inc</h>
+    </fragment>
+
+    <fragment name="KeccakPRGWidth200" inherits="KeccakPRG-common KeccakDuplexWidth200">
+        <c>Modes/KeccakPRGWidth200.c</c>
+        <h>Modes/KeccakPRGWidth200.h</h>
+    </fragment>
+
+    <fragment name="KeccakPRGWidth400" inherits="KeccakPRG-common KeccakDuplexWidth400">
+        <c>Modes/KeccakPRGWidth400.c</c>
+        <h>Modes/KeccakPRGWidth400.h</h>
+    </fragment>
+
+    <fragment name="KeccakPRGWidth800" inherits="KeccakPRG-common KeccakDuplexWidth800">
+        <c>Modes/KeccakPRGWidth800.c</c>
+        <h>Modes/KeccakPRGWidth800.h</h>
+    </fragment>
+
+    <fragment name="KeccakPRGWidth1600" inherits="KeccakPRG-common KeccakDuplexWidth1600">
+        <c>Modes/KeccakPRGWidth1600.c</c>
+        <h>Modes/KeccakPRGWidth1600.h</h>
+    </fragment>
+
+    <fragment name="KeccakPRG" inherits="KeccakPRGWidth200 KeccakPRGWidth400 KeccakPRGWidth800 KeccakPRGWidth1600"/>
+
+    <!-- KangarooTwelve -->
+
+    <fragment name="KangarooTwelve" inherits="KeccakSpongeWidth1600">
+        <c>Modes/KangarooTwelve.c</c>
+        <h>Modes/KangarooTwelve.h</h>
+        <h>Modes/Phases.h</h>
+    </fragment>
+
+    <!-- Kravatte and modes on top of it -->
+
+    <fragment name="Kravatte" inherits="common">
+        <c>Constructions/Kravatte.c</c>
+        <h>Constructions/Kravatte.h</h>
+        <c>Modes/KravatteModes.c</c>
+        <h>Modes/KravatteModes.h</h>
+    </fragment>
+
+    <fragment name="All" inherits="common Ketje Keyak KeccakSponge KeccakDuplex KeccakPRG FIPS202 SP800-185 KangarooTwelve Kravatte"/>
+
+</group>

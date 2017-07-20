@@ -16,7 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _SimpleFIPS202_h_
 #define _SimpleFIPS202_h_
 
-#include "KeccakSponge.h"
+#include "KeccakSpongeWidth1600.h"
 #include <string.h>
 
 /** Implementation of the SHAKE128 extendable output function (XOF) [FIPS 202].

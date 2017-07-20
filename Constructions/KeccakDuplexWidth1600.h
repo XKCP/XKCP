@@ -13,15 +13,15 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Ketjev2_h_
-#define _Ketjev2_h_
+#ifndef _KeccakDuplexWidth1600_h_
+#define _KeccakDuplexWidth1600_h_
 
-/* For the documentation, please follow the link: */
-#include "Ketje-documentation.h"
+#include "KeccakDuplex-common.h"
 
-#include "KetjeJr.h"
-#include "KetjeSr.h"
-#include "KetjeMn.h"
-#include "KetjeMj.h"
+#ifndef KeccakP1600_excluded
+    #include "KeccakP-1600-SnP.h"
+    KCP_DeclareDuplexStructure(KeccakWidth1600, KeccakP1600_stateSizeInBytes, KeccakP1600_stateAlignment)
+    KCP_DeclareDuplexFunctions(KeccakWidth1600)
+#endif
 
 #endif
