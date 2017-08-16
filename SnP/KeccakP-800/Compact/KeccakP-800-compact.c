@@ -44,7 +44,7 @@ typedef UINT32 tKeccakLane;
 
 const UINT8 KeccakP800_RotationConstants[25] =
 {
-     1,  3,  6, 10, 15, 21, 28, 36, 45, 55,  2, 14, 27, 41, 56,  8, 25, 43, 62, 18, 39, 61, 20, 44
+     1,  3,  6, 10, 15, 21, 28, 4, 13, 23,  2, 14, 27, 9, 24,  8, 25, 11, 30, 18, 7, 29, 20, 12
 };
 
 const UINT8 KeccakP800_PiLane[25] =
