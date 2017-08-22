@@ -235,7 +235,7 @@ int Kravatte_SAE_Wrap(Kravatte_Instance *kv, const BitSequence *plaintext, BitSe
 int Kravatte_SAE_Unwrap(Kravatte_Instance *kv, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen,
                             const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag)
 {
-    unsigned char tagPrime[Kravatte_SIV_TagLength];
+    unsigned char tagPrime[Kravatte_SAE_TagLength];
 
     if (dataBitLen != 0) {
         /*    P = C ^ Fk(history) << offset */

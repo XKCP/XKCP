@@ -36,7 +36,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, unsigned char *checksum)
 {
-    unsigned char acc[SnP_width/8];
     unsigned char sigma[SnP_width/8];
     unsigned char Z[SnP_width/8];
     unsigned int sigmaBitLength, ZByteLen, i, offset, size;

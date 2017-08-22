@@ -188,7 +188,7 @@ static void Kravatte_Roll( uint64_t *x, unsigned char *encbuf, unsigned int para
 
 }
 
-static const unsigned char * Kra_Compress( Kravatte_Instance *kv, unsigned char *k, unsigned char *x, const BitSequence *message, BitLength *messageBitLen, int lastFlag )
+static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, const BitSequence *message, BitLength *messageBitLen, int lastFlag )
 {
     unsigned char encbuf[MaxParallellism*Kravatte_RollSizeInBytes];
     size_t messageByteLen = *messageBitLen / 8; /* do not include partial last byte */
@@ -272,7 +272,7 @@ int Kravatte_MaskDerivation(Kravatte_Instance *kv, const BitSequence *Key, BitLe
     memcpy(kv->k.a, Key, KeyBitLen/8);
     numberOfBits = KeyBitLen & 7;
     if ((numberOfBits) != 0) {
-        lastByte = Key[KeyBitLen/8] & ((1 << numberOfBits) - 1) | (1 << numberOfBits);
+        lastByte = (Key[KeyBitLen/8] & ((1 << numberOfBits) - 1)) | (1 << numberOfBits);
     }
     else {
         lastByte = 1;
@@ -315,16 +315,16 @@ int Kra(Kravatte_Instance *kv, const BitSequence *input, BitLength inputBitLen, 
         inputBitLen -= bitlen;
         kv->queueOffset += bitlen;
         if ( kv->queueOffset == SnP_width ) { /* queue full */
-            Kra_Compress(kv, kv->kRoll.a, kv->xAccu.a, kv->queue.a, &kv->queueOffset, 0);
+            Kra_Compress(kv->kRoll.a, kv->xAccu.a, kv->queue.a, &kv->queueOffset, 0);
             kv->queueOffset = 0;
         } 
         else if ( finalFlag != 0 ) {
-            Kra_Compress(kv, kv->kRoll.a, kv->xAccu.a, kv->queue.a, &kv->queueOffset, 1);
+            Kra_Compress(kv->kRoll.a, kv->xAccu.a, kv->queue.a, &kv->queueOffset, 1);
             return 0;
         }
     }
     if ( (inputBitLen >= SnP_width) || (finalFlag != 0) ) { /* Compress blocks */
-        input = Kra_Compress(kv, kv->kRoll.a, kv->xAccu.a, input, &inputBitLen, finalFlag);
+        input = Kra_Compress(kv->kRoll.a, kv->xAccu.a, input, &inputBitLen, finalFlag);
     }
     if ( inputBitLen != 0 ) { /* Queue eventual residual message bytes */
         assert( inputBitLen < SnP_width );

@@ -297,7 +297,9 @@ void writeTestKravatte(const char *filename)
     writeTestKravatteOne(f);
     fclose(f);
 }
+#endif
 
+#if 0
 static void outputHex(const unsigned char *data, unsigned char length)
 {
     unsigned int i;
@@ -306,9 +308,6 @@ static void outputHex(const unsigned char *data, unsigned char length)
     printf("\n\n");
 }
 
-#endif
-
-#if 0
 void printKravatteTestVectors()
 {
     unsigned char *M, *C;
