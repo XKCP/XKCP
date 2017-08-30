@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
+Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
+denoted as "the implementer".
+
+For more information, feedback or questions, please refer to our websites:
+http://keccak.noekeon.org/
+http://keyak.noekeon.org/
+http://ketje.noekeon.org/
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
+-->
+<group>
+
+<!--
+The fragments below allow to make the desired packages for SUPERCOP and eBASH
+* SHAKE128
+* SHAKE256
+* SHA3-224
+* SHA3-256
+* SHA3-384
+* SHA3-512
+* KangarooTwelve
+-->
+
+    <!-- SUPERCOP packages -->
+
+    <fragment name="crypto_hash_test">
+        <h>SUPERCOP/test_crypto_hash.h</h>
+        <c>SUPERCOP/test_crypto_hash.c</c>
+    </fragment>
+
+    <fragment name="crypto_hash/shake128/kcp" inherits="KeccakSpongeWidth1600">
+        <c>SUPERCOP/SHAKE128/SHAKE128.c</c>
+        <h>SUPERCOP/SHAKE128/api.h</h>
+    </fragment>
+
+    <fragment name="SHAKE128_SelfTest" inherits="crypto_hash/shake128/kcp crypto_hash_test">
+        <c>SUPERCOP/SHAKE128/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_hash/shake256/kcp" inherits="KeccakSpongeWidth1600">
+        <c>SUPERCOP/SHAKE256/SHAKE256.c</c>
+        <h>SUPERCOP/SHAKE256/api.h</h>
+    </fragment>
+
+    <fragment name="SHAKE256_SelfTest" inherits="crypto_hash/shake256/kcp crypto_hash_test">
+        <c>SUPERCOP/SHAKE256/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_hash/sha3224/kcp" inherits="KeccakSpongeWidth1600">
+        <c>SUPERCOP/SHA3-224/SHA3-224.c</c>
+        <h>SUPERCOP/SHA3-224/api.h</h>
+    </fragment>
+
+    <fragment name="SHA3-224_SelfTest" inherits="crypto_hash/sha3224/kcp crypto_hash_test">
+        <c>SUPERCOP/SHA3-224/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_hash/sha3256/kcp" inherits="KeccakSpongeWidth1600">
+        <c>SUPERCOP/SHA3-256/SHA3-256.c</c>
+        <h>SUPERCOP/SHA3-256/api.h</h>
+    </fragment>
+
+    <fragment name="SHA3-256_SelfTest" inherits="crypto_hash/sha3256/kcp crypto_hash_test">
+        <c>SUPERCOP/SHA3-256/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_hash/sha3384/kcp" inherits="KeccakSpongeWidth1600">
+        <c>SUPERCOP/SHA3-384/SHA3-384.c</c>
+        <h>SUPERCOP/SHA3-384/api.h</h>
+    </fragment>
+
+    <fragment name="SHA3-384_SelfTest" inherits="crypto_hash/sha3384/kcp crypto_hash_test">
+        <c>SUPERCOP/SHA3-384/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_hash/sha3512/kcp" inherits="KeccakSpongeWidth1600">
+        <c>SUPERCOP/SHA3-512/SHA3-512.c</c>
+        <h>SUPERCOP/SHA3-512/api.h</h>
+    </fragment>
+
+    <fragment name="SHA3-512_SelfTest" inherits="crypto_hash/sha3512/kcp crypto_hash_test">
+        <c>SUPERCOP/SHA3-512/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_hash/k12/kcp" inherits="KangarooTwelve">
+        <c>SUPERCOP/KangarooTwelve/K12.c</c>
+        <h>SUPERCOP/KangarooTwelve/api.h</h>
+        <h>SUPERCOP/KangarooTwelve/KeccakP-1600-times2-SnP.h</h>
+        <h>SUPERCOP/KangarooTwelve/KeccakP-1600-times4-SnP.h</h>
+        <h>SUPERCOP/KangarooTwelve/KeccakP-1600-times8-SnP.h</h>
+    </fragment>
+
+    <fragment name="KangarooTwelve_SelfTest" inherits="crypto_hash/k12/kcp crypto_hash_test">
+        <c>SUPERCOP/KangarooTwelve/selftest.c</c>
+    </fragment>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_hash/shake128/kcp SHAKE128_SelfTest crypto_hash/shake256/kcp SHAKE256_SelfTest crypto_hash/sha3224/kcp SHA3-224_SelfTest crypto_hash/sha3256/kcp SHA3-256_SelfTest crypto_hash/sha3384/kcp SHA3-384_SelfTest crypto_hash/sha3512/kcp SHA3-512_SelfTest crypto_hash/k12/kcp KangarooTwelve_SelfTest"/>
+            <factor set="reference1600 reference1600-32bits compact1600 compact1600AVR8 inplace1600bi inplace1600ARMv6M inplace1600ARMv7M inplace1600ARMv7A optimized1600u6 optimized1600ufull optimized1600lcu6 optimized1600lcufull optimized1600lcufullshld optimized1600AsmX86-64 optimized1600AsmX86-64shld optimized1600AsmX86-64Apple optimized1600AVX2 optimized1600AVX512 optimized1600XOPu6 optimized1600XOPufull optimized1600ARMv6Mu1 optimized1600ARMv6Mu2 optimized1600ARMv7A optimized1600ARMv8A optimized1600AVR8"/>
+        </product>
+    </group>
+
+</group>

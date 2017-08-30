@@ -19,6 +19,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xi:include href="LowLevel.build"/>
     <xi:include href="Ketje/Ketje.build"/>
     <xi:include href="Keyak/Keyak.build"/>
+    <xi:include href="SUPERCOP/SUPERCOP.build"/>
     <xi:include href="HOWTO-customize.build"/>
 
     <!-- For the name of the targets, please see the end of this file. -->
