@@ -303,6 +303,7 @@
 @
 .align 8
 .global   KeccakP1600_StaticInitialize
+.type	KeccakP1600_StaticInitialize, %function;
 KeccakP1600_StaticInitialize:
     bx      lr
 
@@ -313,6 +314,7 @@ KeccakP1600_StaticInitialize:
 @
 .align 8
 .global   KeccakP1600_Initialize
+.type	KeccakP1600_Initialize, %function;
 KeccakP1600_Initialize:
     push    {r4 - r5}
     movs    r1, #0
@@ -340,6 +342,7 @@ KeccakP1600_Initialize:
 @
 .align 8
 .global   KeccakP1600_AddByte
+.type	KeccakP1600_AddByte, %function;
 KeccakP1600_AddByte:
     push    {r4 - r7}
     mov     r4, r8
@@ -378,6 +381,7 @@ KeccakP1600_AddByte:
 @
 .align 8
 .global   KeccakP1600_AddBytes
+.type	KeccakP1600_AddBytes, %function;
 KeccakP1600_AddBytes:
     cmp     r3, #0                                  @ .if length != 0
     beq     KeccakP1600_AddBytes_Exit1
@@ -556,6 +560,7 @@ __KeccakP1600_AddBytesInLane_Loop:
 @
 .align 8
 .global   KeccakP1600_OverwriteBytes
+.type	KeccakP1600_OverwriteBytes, %function;
 KeccakP1600_OverwriteBytes:
     cmp     r3, #0                                  @ .if length != 0
     beq     KeccakP1600_OverwriteBytes_Exit1
@@ -734,6 +739,7 @@ __KeccakP1600_OverwriteBytesInLane_Loop:
 @
 .align 8
 .global   KeccakP1600_OverwriteWithZeroes
+.type	KeccakP1600_OverwriteWithZeroes, %function;
 KeccakP1600_OverwriteWithZeroes:
     push    {r4 - r5}
     lsrs    r2, r1, #3
@@ -770,6 +776,7 @@ KeccakP1600_OverwriteWithZeroes_Exit:
 @
 .align 8
 .global   KeccakP1600_ExtractBytes
+.type	KeccakP1600_ExtractBytes, %function;
 KeccakP1600_ExtractBytes:
     cmp     r3, #0                                  @ .if length != 0
     beq     KeccakP1600_ExtractBytes_Exit1
@@ -917,6 +924,7 @@ __KeccakP1600_ExtractBytesInLane_Loop:
 @
 .align 8
 .global   KeccakP1600_ExtractAndAddBytes
+.type	KeccakP1600_ExtractAndAddBytes, %function;
 KeccakP1600_ExtractAndAddBytes:
     push    {r3 - r7, lr}
     mov     r4, r8
@@ -1104,6 +1112,7 @@ __KeccakP1600_ExtractAndAddBytesInLane_Loop:
 @
 .align 8
 .global   KeccakP1600_Permute_Nrounds
+.type	KeccakP1600_Permute_Nrounds, %function;
 KeccakP1600_Permute_Nrounds:
     movs    r2, r1
     lsls    r3, r2, #3
@@ -1160,6 +1169,7 @@ KeccakP1600_Permute_NroundsOdd:
 @
 .align 8
 .global   KeccakP1600_Permute_12rounds
+.type	KeccakP1600_Permute_12rounds, %function;
 KeccakP1600_Permute_12rounds:
     adr     r1, KeccakP1600_Permute_RoundConstants12
     b       KeccakP1600_Permute
@@ -1171,6 +1181,7 @@ KeccakP1600_Permute_12rounds:
 @
 .align 8
 .global   KeccakP1600_Permute_24rounds
+.type	KeccakP1600_Permute_24rounds, %function;
 KeccakP1600_Permute_24rounds:
     adr     r1, KeccakP1600_Permute_RoundConstants24
     b       KeccakP1600_Permute

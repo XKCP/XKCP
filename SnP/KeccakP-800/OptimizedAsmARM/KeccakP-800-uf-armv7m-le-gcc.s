@@ -196,6 +196,7 @@
 @
 .align 8
 .global   KeccakP800_StaticInitialize
+.type	KeccakP800_StaticInitialize, %function;
 KeccakP800_StaticInitialize:
     bx      lr
 
@@ -206,6 +207,7 @@ KeccakP800_StaticInitialize:
 @
 .align 8
 .global   KeccakP800_Initialize
+.type	KeccakP800_Initialize, %function;
 KeccakP800_Initialize:
     push    {r4 - r5}
     movs    r1, #0
@@ -228,6 +230,7 @@ KeccakP800_Initialize:
 @
 .align 8
 .global   KeccakP800_AddByte
+.type	KeccakP800_AddByte, %function;
 KeccakP800_AddByte:
     ldrb    r3, [r0, r2]
     eors    r3, r3, r1
@@ -241,6 +244,7 @@ KeccakP800_AddByte:
 @
 .align 8
 .global   KeccakP800_AddBytes
+.type	KeccakP800_AddBytes, %function;
 KeccakP800_AddBytes:
     push    {r4,lr}
     adds    r0, r0, r2                              @ state += offset
@@ -273,6 +277,7 @@ KeccakP800_AddBytes_Exit:
 @
 .align 8
 .global   KeccakP800_OverwriteBytes
+.type	KeccakP800_OverwriteBytes, %function;
 KeccakP800_OverwriteBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
@@ -300,6 +305,7 @@ KeccakP800_OverwriteBytes_Exit:
 @
 .align 8
 .global   KeccakP800_OverwriteWithZeroes
+.type	KeccakP800_OverwriteWithZeroes, %function;
 KeccakP800_OverwriteWithZeroes:
     movs    r3, #0
     lsrs    r2, r1, #2
@@ -325,6 +331,7 @@ KeccakP800_OverwriteWithZeroes_Exit:
 @
 .align 8
 .global   KeccakP800_ExtractBytes
+.type	KeccakP800_ExtractBytes, %function;
 KeccakP800_ExtractBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
@@ -352,6 +359,7 @@ KeccakP800_ExtractBytes_Exit:
 @
 .align 8
 .global   KeccakP800_ExtractAndAddBytes
+.type	KeccakP800_ExtractAndAddBytes, %function;
 KeccakP800_ExtractAndAddBytes:
     push    {r4,r5}
     adds    r0, r0, r3                                  @ state += offset (offset register no longer needed, reuse for length)
@@ -386,6 +394,7 @@ KeccakP800_ExtractAndAddBytes_Exit:
 @
 .align 8
 .global   KeccakP800_Permute_Nrounds
+.type	KeccakP800_Permute_Nrounds, %function;
 KeccakP800_Permute_Nrounds:
     push    {r4-r12,lr}
     sub     sp, sp, #_SAS
@@ -446,6 +455,7 @@ KeccakP800_Permute_RoundPointers:
 @
 .align 8
 .global   KeccakP800_Permute_12rounds
+.type	KeccakP800_Permute_12rounds, %function;
 KeccakP800_Permute_12rounds:
     push    {r4-r12,lr}
     sub     sp, sp, #_SAS
@@ -477,6 +487,7 @@ KeccakP800_Permute_12rounds:
 @
 .align 8
 .global   KeccakP800_Permute_22rounds
+.type	KeccakP800_Permute_22rounds, %function;
 KeccakP800_Permute_22rounds:
     push    {r4-r12,lr}
     sub     sp, sp, #_SAS

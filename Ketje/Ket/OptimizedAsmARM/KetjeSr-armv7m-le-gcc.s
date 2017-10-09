@@ -214,6 +214,7 @@
 @
 .align 8
 .global   KetSr_StateAddByte
+.type	KetSr_StateAddByte, %function;
 KetSr_StateAddByte:
     adr     r3, Ket_StateTwistIndexes
     lsr     r12, r2, #1
@@ -232,6 +233,7 @@ KetSr_StateAddByte:
 @
 .align 8
 .global   KetSr_StateExtractByte
+.type	KetSr_StateExtractByte, %function;
 KetSr_StateExtractByte:
     adr     r3, Ket_StateTwistIndexes
     lsrs    r2, r1, #1
@@ -248,6 +250,7 @@ KetSr_StateExtractByte:
 @
 .align 8
 .global   KetSr_StateOverwrite
+.type	KetSr_StateOverwrite, %function;
 KetSr_StateOverwrite:
     cmp     r3, #0
     beq     KetSr_StateOverwrite_Exit
@@ -282,6 +285,7 @@ KetSr_StateOverwrite_Exit:
 @
 .align 8
 .global   KetSr_Step
+.type	KetSr_Step, %function;
 KetSr_Step:
     push    {r4-r12,lr}
     sub     sp, sp, #_AllocSize
@@ -330,6 +334,7 @@ Ket_StateTwistIndexes:
 @
 .align 8
 .global   KetSr_FeedAssociatedDataBlocks
+.type	KetSr_FeedAssociatedDataBlocks, %function;
 KetSr_FeedAssociatedDataBlocks:
     push    {r4-r12,lr}
     sub     sp, sp, #_AllocSize
@@ -403,6 +408,7 @@ KetSr_FeedAssociatedDataBlocks_Odd:
 @
 .align 8
 .global   KetSr_UnwrapBlocks
+.type	KetSr_UnwrapBlocks, %function;
 KetSr_UnwrapBlocks:
     push    {r4-r12,lr}
     sub     sp, sp, #_AllocSize
@@ -486,6 +492,7 @@ KetSr_UnwrapBlocks_Odd:
 @
 .align 8
 .global   KetSr_WrapBlocks
+.type	KetSr_WrapBlocks, %function;
 KetSr_WrapBlocks:
     push    {r4-r12,lr}
     sub     sp, sp, #_AllocSize

@@ -272,6 +272,7 @@
 @
 .align 8
 .global   KeccakP1600_StaticInitialize
+.type	KeccakP1600_StaticInitialize, %function;
 KeccakP1600_StaticInitialize:
     bx      lr
 
@@ -282,6 +283,7 @@ KeccakP1600_StaticInitialize:
 @
 .align 8
 .global   KeccakP1600_Initialize
+.type	KeccakP1600_Initialize, %function;
 KeccakP1600_Initialize:
     vmov.i64    q0, #0
     vmov.i64    q1, #0
@@ -300,6 +302,7 @@ KeccakP1600_Initialize:
 @
 .align 8
 .global   KeccakP1600_AddByte
+.type	KeccakP1600_AddByte, %function;
 KeccakP1600_AddByte:
     ldrb    r3, [r0, r2]
     eors    r3, r3, r1
@@ -313,6 +316,7 @@ KeccakP1600_AddByte:
 @
 .align 8
 .global   KeccakP1600_AddBytes
+.type	KeccakP1600_AddBytes, %function;
 KeccakP1600_AddBytes:
     push    {r4,lr}
     adds    r0, r0, r2                              @ state += offset
@@ -349,6 +353,7 @@ KeccakP1600_AddBytes_Exit:
 @
 .align 8
 .global   KeccakP1600_OverwriteBytes
+.type	KeccakP1600_OverwriteBytes, %function;
 KeccakP1600_OverwriteBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #8                              @ .if length >= lane size
@@ -378,6 +383,7 @@ KeccakP1600_OverwriteBytes_Exit:
 @
 .align 8
 .global   KeccakP1600_OverwriteWithZeroes
+.type	KeccakP1600_OverwriteWithZeroes, %function;
 KeccakP1600_OverwriteWithZeroes:
     lsrs    r2, r1, #3
     beq     KeccakP1600_OverwriteWithZeroes_Bytes
@@ -404,6 +410,7 @@ KeccakP1600_OverwriteWithZeroes_Exit:
 @
 .align 8
 .global   KeccakP1600_ExtractBytes
+.type	KeccakP1600_ExtractBytes, %function;
 KeccakP1600_ExtractBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #8                              @ .if length >= lane size
@@ -433,6 +440,7 @@ KeccakP1600_ExtractBytes_Exit:
 @
 .align 8
 .global   KeccakP1600_ExtractAndAddBytes
+.type	KeccakP1600_ExtractAndAddBytes, %function;
 KeccakP1600_ExtractAndAddBytes:
     push    {r4,r5}
     add     r0, r0, r3                                  @ state += offset (offset register no longer needed, reuse for length)
@@ -471,6 +479,7 @@ KeccakP1600_ExtractAndAddBytes_Exit:
 @
 .align 8
 .global   KeccakP1600_Permute_Nrounds
+.type	KeccakP1600_Permute_Nrounds, %function;
 KeccakP1600_Permute_Nrounds:
     movs    r2, r1
     adr     r1, KeccakP1600_Permute_RoundConstants0
@@ -484,6 +493,7 @@ KeccakP1600_Permute_Nrounds:
 @
 .align 8
 .global   KeccakP1600_Permute_12rounds
+.type	KeccakP1600_Permute_12rounds, %function;
 KeccakP1600_Permute_12rounds:
     adr     r1, KeccakP1600_Permute_RoundConstants12
     movs    r2, #12
@@ -496,6 +506,7 @@ KeccakP1600_Permute_12rounds:
 @
 .align 8
 .global   KeccakP1600_Permute_24rounds
+.type	KeccakP1600_Permute_24rounds, %function;
 KeccakP1600_Permute_24rounds:
     adr     r1, KeccakP1600_Permute_RoundConstants24
     movs    r2, #24
@@ -622,6 +633,7 @@ KeccakP1600_Permute_RoundLoop:
 @
 .align 8
 .global   KeccakP1600_Permute
+.type	KeccakP1600_Permute, %function;
 KeccakP1600_Permute:
     mov     r3, lr
     vpush   {q4-q7}
@@ -641,6 +653,7 @@ KeccakP1600_Permute:
 @
 .align 8
 .global   KeccakF1600_FastLoop_Absorb
+.type	KeccakF1600_FastLoop_Absorb, %function;
 KeccakF1600_FastLoop_Absorb:
     push    {r4-r8,lr}                          @ 6 CPU registers (24 bytes)
     lsr     r3, r3, #3                          @ r3 nbrLanes = dataByteLen / SnP_laneLengthInBytes

@@ -112,6 +112,7 @@
 @
 .align 8
 .global   KetJr_StateAddByte
+.type	KetJr_StateAddByte, %function;
 KetJr_StateAddByte:
     adr     r3, Ket_StateTwistIndexes
     ldrb    r3, [r3, r2]
@@ -127,6 +128,7 @@ KetJr_StateAddByte:
 @
 .align 8
 .global   KetJr_StateExtractByte
+.type	KetJr_StateExtractByte, %function;
 KetJr_StateExtractByte:
     adr     r3, Ket_StateTwistIndexes
     ldrb    r3, [r3, r1]
@@ -140,6 +142,7 @@ KetJr_StateExtractByte:
 @
 .align 8
 .global   KetJr_StateOverwrite
+.type	KetJr_StateOverwrite, %function;
 KetJr_StateOverwrite:
     cmp     r3, #0
     beq     KetJr_StateOverwrite_Exit
@@ -163,6 +166,7 @@ KetJr_StateOverwrite_Exit:
 @
 .align 8
 .global   KetJr_Step
+.type	KetJr_Step, %function;
 KetJr_Step:
     push    {r4-r12,lr}
 
@@ -226,6 +230,7 @@ Ket_StateTwistIndexes:
 @
 .align 8
 .global   KetJr_FeedAssociatedDataBlocks
+.type	KetJr_FeedAssociatedDataBlocks, %function;
 KetJr_FeedAssociatedDataBlocks:
     push    {r4-r12,lr}
 
@@ -279,6 +284,7 @@ KetJr_FeedAssociatedDataBlocks_Loop:
 @
 .align 8
 .global   KetJr_UnwrapBlocks
+.type	KetJr_UnwrapBlocks, %function;
 KetJr_UnwrapBlocks:
     push    {r4-r12,lr}
 
@@ -337,6 +343,7 @@ KetJr_UnwrapBlocks_Loop:
 @
 .align 8
 .global   KetJr_WrapBlocks
+.type	KetJr_WrapBlocks, %function;
 KetJr_WrapBlocks:
     push    {r4-r12,lr}
 

@@ -198,6 +198,7 @@
 @
 .align 8
 .global   KeccakP400_StaticInitialize
+.type	KeccakP400_StaticInitialize, %function;
 KeccakP400_StaticInitialize:
     bx      lr
 
@@ -208,6 +209,7 @@ KeccakP400_StaticInitialize:
 @
 .align 8
 .global   KeccakP400_Initialize
+.type	KeccakP400_Initialize, %function;
 KeccakP400_Initialize:
     movs    r1, #0
     movs    r2, #0
@@ -226,6 +228,7 @@ KeccakP400_Initialize:
 @
 .align 8
 .global   KeccakP400_AddByte
+.type	KeccakP400_AddByte, %function;
 KeccakP400_AddByte:
     ldrb    r3, [r0, r2]
     eors    r3, r3, r1
@@ -239,6 +242,7 @@ KeccakP400_AddByte:
 @
 .align 8
 .global   KeccakP400_AddBytes
+.type	KeccakP400_AddBytes, %function;
 KeccakP400_AddBytes:
     subs    r3, r3, #1
     bcc     KeccakP400_AddBytes_Exit
@@ -262,6 +266,7 @@ KeccakP400_AddBytes_Exit:
 @
 .align 8
 .global   KeccakP400_OverwriteBytes
+.type	KeccakP400_OverwriteBytes, %function;
 KeccakP400_OverwriteBytes:
     subs    r3, r3, #1
     bcc     KeccakP400_OverwriteBytes_Exit
@@ -281,6 +286,7 @@ KeccakP400_OverwriteBytes_Exit:
 @
 .align 8
 .global   KeccakP400_OverwriteWithZeroes
+.type	KeccakP400_OverwriteWithZeroes, %function;
 KeccakP400_OverwriteWithZeroes:
     movs    r3, #0
     cmp     r1, #0
@@ -299,6 +305,7 @@ KeccakP400_OverwriteWithZeroes_Exit:
 @
 .align 8
 .global   KeccakP400_ExtractBytes
+.type	KeccakP400_ExtractBytes, %function;
 KeccakP400_ExtractBytes:
     subs    r3, r3, #1
     bcc     KeccakP400_ExtractBytes_Exit
@@ -318,6 +325,7 @@ KeccakP400_ExtractBytes_Exit:
 @
 .align 8
 .global   KeccakP400_ExtractAndAddBytes
+.type	KeccakP400_ExtractAndAddBytes, %function;
 KeccakP400_ExtractAndAddBytes:
     push    {r4,r5}
     adds    r0, r0, r3                              @ state += offset (offset register no longer needed, reuse for length)
@@ -342,6 +350,7 @@ KeccakP400_ExtractAndAddBytes_Exit:
 @
 .align 8
 .global   KeccakP400_Permute_Nrounds
+.type	KeccakP400_Permute_Nrounds, %function;
 KeccakP400_Permute_Nrounds:
     push    { r4 - r6, lr }
     mov     r2, r8
@@ -377,6 +386,7 @@ KeccakP400_Permute_Nrounds:
 @
 .align 8
 .global   KeccakP400_Permute_20rounds
+.type	KeccakP400_Permute_20rounds, %function;
 KeccakP400_Permute_20rounds:
     push        { r4 - r6, lr }
     mov         r2, r8

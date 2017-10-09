@@ -594,6 +594,7 @@
 @
 .align 8
 .global   KeccakP1600_Pl_StaticInitialize
+.type	KeccakP1600_Pl_StaticInitialize, %function;
 KeccakP1600_Pl_StaticInitialize:
     bx      lr
 
@@ -604,6 +605,7 @@ KeccakP1600_Pl_StaticInitialize:
 @
 .align 8
 .global   KeccakP1600times2_InitializeAll
+.type	KeccakP1600times2_InitializeAll, %function;
 KeccakP1600times2_InitializeAll:
     vmov.i64    q0, #0
     vmov.i64    q1, #0
@@ -626,6 +628,7 @@ KeccakP1600times2_InitializeAll:
 @
 .align 8
 .global   KeccakP1600times2_AddByte
+.type	KeccakP1600times2_AddByte, %function;
 KeccakP1600times2_AddByte:
     add     r0, r0, r1, LSL #3          @ states += 8 * instanceIndex
     lsr     r1, r3, #3                  @ states += (offset & ~7) * 2
@@ -645,6 +648,7 @@ KeccakP1600times2_AddByte:
 @
 .align 8
 .global   KeccakP1600times2_AddBytes
+.type	KeccakP1600times2_AddBytes, %function;
 KeccakP1600times2_AddBytes:
     add     r0, r0, r1, LSL #3          @ states += 8 * instanceIndex
     ldr     r1, [sp, #0*4]              @ r1 = length
@@ -702,6 +706,7 @@ KeccakP1600times2_AddBytes_Exit:
 @ void KeccakP1600times2_AddLanesAll( void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset )
 @
 .global   KeccakP1600times2_AddLanesAll
+.type	KeccakP1600times2_AddLanesAll, %function;
 .align 8
 KeccakP1600times2_AddLanesAll:
     cmp     r2, #0
@@ -735,6 +740,7 @@ KeccakP1600times2_AddLanesAll_Exit:
 @
 .align 8
 .global     KeccakP1600times2_OverwriteBytes
+.type	KeccakP1600times2_OverwriteBytes, %function;
 KeccakP1600times2_OverwriteBytes:
     add     r0, r0, r1, LSL #3          @ states += 8 * instanceIndex
     ldr     r1, [sp, #0*4]              @ r1 = length
@@ -785,6 +791,7 @@ KeccakP1600times2_OverwriteBytes_Exit:
 @
 .align 8
 .global     KeccakP1600times2_OverwriteLanesAll
+.type	KeccakP1600times2_OverwriteLanesAll, %function;
 KeccakP1600times2_OverwriteLanesAll:
     cmp     r2, #0
     beq     KeccakP1600times2_OverwriteLanesAll_Exit
@@ -829,6 +836,7 @@ KeccakP1600times2_OverwriteLanesAll_Exit:
 @
 .align 8
 .global     KeccakP1600times2_OverwriteWithZeroes
+.type	KeccakP1600times2_OverwriteWithZeroes, %function;
 KeccakP1600times2_OverwriteWithZeroes:
     add     r0, r0, r1, LSL #3          @ states += 8 * instanceIndex
     lsrs    r1, r2, #3                  @ r1: laneCount
@@ -858,6 +866,7 @@ KeccakP1600times2_OverwriteWithZeroes_Exit:
 @
 .align 8
 .global     KeccakP1600times2_ExtractBytes
+.type	KeccakP1600times2_ExtractBytes, %function;
 KeccakP1600times2_ExtractBytes:
     add     r0, r0, r1, LSL #3          @ states += 8 * instanceIndex
     ldr     r1, [sp, #0*4]              @ r1 = length
@@ -908,6 +917,7 @@ KeccakP1600times2_ExtractBytes_Exit:
 @
 .align 8
 .global     KeccakP1600times2_ExtractLanesAll
+.type	KeccakP1600times2_ExtractLanesAll, %function;
 KeccakP1600times2_ExtractLanesAll:
     cmp     r2, #0
     beq     KeccakP1600times2_ExtractLanesAll_Exit
@@ -954,6 +964,7 @@ KeccakP1600times2_ExtractLanesAll_Exit:
 @
 .align 8
 .global     KeccakP1600times2_ExtractAndAddBytes
+.type	KeccakP1600times2_ExtractAndAddBytes, %function;
 KeccakP1600times2_ExtractAndAddBytes:
     add     r0, r0, r1, LSL #3          @ states += 8 * instanceIndex
     ldr     r1, [sp, #1*4]              @ r1 = length
@@ -1015,6 +1026,7 @@ KeccakP1600times2_ExtractAndAddBytes_Exit:
 @
 .align 8
 .global     KeccakP1600times2_ExtractAndAddLanesAll
+.type	KeccakP1600times2_ExtractAndAddLanesAll, %function;
 KeccakP1600times2_ExtractAndAddLanesAll:
     cmp     r3, #0
     beq     KeccakP1600times2_ExtractAndAddLanesAll_Exit
@@ -1084,6 +1096,7 @@ KeccakP1600times2_ExtractAndAddLanesAll_Exit:
 @
 .align 8
 .global     KeccakP1600times2_PermuteAll_24rounds
+.type	KeccakP1600times2_PermuteAll_24rounds, %function;
 KeccakP1600times2_PermuteAll_24rounds:
     adr     r1, KeccakP1600times2_Permute_RoundConstants24
     movs    r2, #24
@@ -1096,6 +1109,7 @@ KeccakP1600times2_PermuteAll_24rounds:
 @
 .align 8
 .global     KeccakP1600times2_PermuteAll_12rounds
+.type	KeccakP1600times2_PermuteAll_12rounds, %function;
 KeccakP1600times2_PermuteAll_12rounds:
     adr     r1, KeccakP1600times2_Permute_RoundConstants12
     movs    r2, #12
