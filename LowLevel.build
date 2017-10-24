@@ -367,7 +367,7 @@ The fragments below allow to select the desired implementation of the permutatio
 -->
 
     <fragment name="optimized1600AVX2" inherits="width1600 optimized">
-        <c>SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.cpp</c>
+        <c>SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.c</c>
         <h>SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.h</h>
         <h>SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-SnP.h</h>
     </fragment>
