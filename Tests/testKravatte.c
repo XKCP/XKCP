@@ -57,13 +57,13 @@ unsigned int random( void );
 
 static void randomize( unsigned char* data, unsigned int length)
 {
-	#if !defined(EMBEDDED)
+    #if !defined(EMBEDDED)
     srand((unsigned int)time(0));
     while (length--)
     {
         *data++ = rand();
     }
-	#endif
+    #endif
 }
 
 static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2)
@@ -356,6 +356,6 @@ void testKravatte(void)
 //    printKravatteTestVectors();
     writeTestKravatte("Kravatte.txt");
 #endif
-    selfTestKravatte("\x6e\x08\x99\x96\x16\x4a\xe5\x75\x39\x74\xe1\xc6\x59\x79\x37\xa0");
+    selfTestKravatte("\xaa\xc1\xb7\x34\xff\x9b\xa3\x58\x6c\x7a\xc7\x57\x3a\x97\xdd\x13");
 #endif
 }

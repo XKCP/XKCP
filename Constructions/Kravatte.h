@@ -25,8 +25,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 
 #define SnP_widthInBytes            200
-#define Kravatte_RollSizeInBytes    (5*8)
-#define Kravatte_RollOffset         (SnP_widthInBytes-Kravatte_RollSizeInBytes)
+#define Kravatte_RollcSizeInBytes    (5*8)
+#define Kravatte_RollcOffset         (SnP_widthInBytes-Kravatte_RollcSizeInBytes)
+#define Kravatte_RolleSizeInBytes    (10*8)
+#define Kravatte_RolleOffset         (SnP_widthInBytes-Kravatte_RolleSizeInBytes)
 
 #define KRAVATTE_FLAG_NONE          0
 #define KRAVATTE_FLAG_INIT          1 /* If set, initialize a new Kra session */

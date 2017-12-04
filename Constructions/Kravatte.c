@@ -103,11 +103,11 @@ static void DUMP( const unsigned char * pText, const unsigned char * pData, unsi
         KeccakP1600times##Parallellism##_StaticInitialize(); \
         mInitializePl(states, Parallellism); \
         do { \
-            Kravatte_Roll( (uint64_t*)k, encbuf, Parallellism ); \
-            KeccakP1600times##Parallellism##_OverwriteLanesAll(states, k, Kravatte_RollOffset/8, 0); \
+            Kravatte_Rollc( (uint64_t*)k, encbuf, Parallellism ); \
+            KeccakP1600times##Parallellism##_OverwriteLanesAll(states, k, Kravatte_RollcOffset/8, 0); \
             i = 0; \
             do { \
-                KeccakP1600times##Parallellism##_OverwriteBytes(states, i, encbuf + i * Kravatte_RollSizeInBytes, Kravatte_RollOffset, Kravatte_RollSizeInBytes); \
+                KeccakP1600times##Parallellism##_OverwriteBytes(states, i, encbuf + i * Kravatte_RollcSizeInBytes, Kravatte_RollcOffset, Kravatte_RollcSizeInBytes); \
             } while ( ++i < Parallellism ); \
             KeccakP1600times##Parallellism##_AddLanesAll(states, message, widthInLanes, widthInLanes); \
             DUMP("msg pn", message, Parallellism * SnP_widthInBytes); \
@@ -130,13 +130,13 @@ static void DUMP( const unsigned char * pText, const unsigned char * pData, unsi
         KeccakP1600times##Parallellism##_StaticInitialize(); \
         mInitializePl(states, Parallellism); \
         do { \
-            Kravatte_Roll( (uint64_t*)kv->yAccu.a, encbuf, Parallellism ); \
-            KeccakP1600times##Parallellism##_OverwriteLanesAll(states, kv->yAccu.a, Kravatte_RollOffset/8, 0); \
+            Kravatte_Rolle( (uint64_t*)kv->yAccu.a, encbuf, Parallellism ); \
+            KeccakP1600times##Parallellism##_OverwriteLanesAll(states, kv->yAccu.a, Kravatte_RolleOffset/8, 0); \
             i = 0; \
             do { \
-                KeccakP1600times##Parallellism##_OverwriteBytes(states, i, encbuf + i * Kravatte_RollSizeInBytes, Kravatte_RollOffset, Kravatte_RollSizeInBytes); \
+                KeccakP1600times##Parallellism##_OverwriteBytes(states, i, encbuf + i * Kravatte_RolleSizeInBytes, Kravatte_RolleOffset, Kravatte_RolleSizeInBytes); \
             } while ( ++i < Parallellism ); \
-            KeccakP1600times##Parallellism##_PermuteAll_4rounds(states); \
+            KeccakP1600times##Parallellism##_PermuteAll_6rounds(states); \
             i = 0; \
             do { \
                 KeccakP1600times##Parallellism##_ExtractAndAddBytes(states, i, kv->kRoll.a, output, 0, SnP_widthInBytes); \
@@ -147,7 +147,7 @@ static void DUMP( const unsigned char * pText, const unsigned char * pData, unsi
         } while ( outputByteLen >= Parallellism * SnP_widthInBytes ); \
     }
 
-static void Kravatte_Roll( uint64_t *x, unsigned char *encbuf, unsigned int parallellism )
+static void Kravatte_Rollc( uint64_t *x, unsigned char *encbuf, unsigned int parallellism )
 {
     uint64_t    x0 = x[20];
     uint64_t    x1 = x[21];
@@ -156,7 +156,7 @@ static void Kravatte_Roll( uint64_t *x, unsigned char *encbuf, unsigned int para
     uint64_t    x4 = x[24];
     uint64_t    t;
     #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    uint64_t     *pEnc = (uint64_t*)encbuf;
+    uint64_t    *pEnc = (uint64_t*)encbuf;
     #endif
 
     do {
@@ -166,7 +166,7 @@ static void Kravatte_Roll( uint64_t *x, unsigned char *encbuf, unsigned int para
         *(pEnc++) = x2;
         *(pEnc++) = x3;
         *(pEnc++) = x4;
-        DUMP("caracolle", pEnc - 5, Kravatte_RollSizeInBytes);
+        DUMP("Rollc", pEnc - Kravatte_RollcSizeInBytes/8, Kravatte_RollcSizeInBytes);
         #else
         #error todo
         #endif
@@ -184,13 +184,74 @@ static void Kravatte_Roll( uint64_t *x, unsigned char *encbuf, unsigned int para
     x[22] = x2;
     x[23] = x3;
     x[24] = x4;
-    DUMP("caracolle state", pEnc - 5, Kravatte_RollSizeInBytes);
+    DUMP("Rollc state", pEnc - Kravatte_RollcSizeInBytes/8, Kravatte_RollcSizeInBytes);
+
+}
+
+static void Kravatte_Rolle( uint64_t *x, unsigned char *encbuf, unsigned int parallellism )
+{
+    uint64_t    x0 = x[15];
+    uint64_t    x1 = x[16];
+    uint64_t    x2 = x[17];
+    uint64_t    x3 = x[18];
+    uint64_t    x4 = x[19];
+    uint64_t    x5 = x[20];
+    uint64_t    x6 = x[21];
+    uint64_t    x7 = x[22];
+    uint64_t    x8 = x[23];
+    uint64_t    x9 = x[24];
+    uint64_t    t;
+    #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+    uint64_t    *pEnc = (uint64_t*)encbuf;
+    #endif
+
+    do {
+        #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+        *(pEnc++) = x0;
+        *(pEnc++) = x1;
+        *(pEnc++) = x2;
+        *(pEnc++) = x3;
+        *(pEnc++) = x4;
+        *(pEnc++) = x5;
+        *(pEnc++) = x6;
+        *(pEnc++) = x7;
+        *(pEnc++) = x8;
+        *(pEnc++) = x9;
+        DUMP("Rolle", pEnc - Kravatte_RolleSizeInBytes/8, Kravatte_RolleSizeInBytes);
+        #else
+        #error todo
+        #endif
+
+        t  = x0;
+        x0 = x1;
+        x1 = x2;
+        x2 = x3;
+        x3 = x4;
+        x4 = x5;
+        x5 = x6;
+        x6 = x7;
+        x7 = x8;
+        x8 = x9;
+        x9 = ROL64(t, 7) ^ ROL64(x0, 18) ^ (x1 & (x0 >> 1));
+    } while(--parallellism != 0); 
+
+    x[15] = x0;
+    x[16] = x1;
+    x[17] = x2;
+    x[18] = x3;
+    x[19] = x4;
+    x[20] = x5;
+    x[21] = x6;
+    x[22] = x7;
+    x[23] = x8;
+    x[24] = x9;
+    DUMP("Rolle state", pEnc - Kravatte_RolleSizeInBytes/8, Kravatte_RolleSizeInBytes);
 
 }
 
 static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, const BitSequence *message, BitLength *messageBitLen, int lastFlag )
 {
-    unsigned char encbuf[MaxParallellism*Kravatte_RollSizeInBytes];
+    unsigned char encbuf[MaxParallellism*Kravatte_RollcSizeInBytes];
     size_t messageByteLen = *messageBitLen / 8; /* do not include partial last byte */
 
     #if defined(KeccakP1600times8_implementation)
@@ -222,7 +283,7 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
         mInitialize(state);
         do {
             KeccakP1600_OverwriteBytes(state, k, 0, SnP_widthInBytes);
-            Kravatte_Roll((uint64_t*)k, encbuf, 1);
+            Kravatte_Rollc((uint64_t*)k, encbuf, 1);
             KeccakP1600_AddBytes(state, message, 0, SnP_widthInBytes);
             DUMP("msg p1", message, SnP_widthInBytes);
             KeccakP1600_Permute_Nrounds(state, 6);
@@ -240,7 +301,7 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
         KeccakP1600_StaticInitialize();
         mInitialize(state);
         KeccakP1600_OverwriteBytes(state, k, 0, SnP_widthInBytes); /* write k */
-        Kravatte_Roll((uint64_t*)k, encbuf, 1);
+        Kravatte_Rollc((uint64_t*)k, encbuf, 1);
         KeccakP1600_AddBytes(state, message, 0, messageByteLen); /* add message */
         DUMP("msg pL", state, SnP_widthInBytes);
         message += messageByteLen;
@@ -252,7 +313,7 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
         KeccakP1600_Permute_Nrounds(state, 6);
         KeccakP1600_ExtractAndAddBytes(state, x, x, 0, SnP_widthInBytes);
         DUMP("xAc pL", x, SnP_widthInBytes);
-        Kravatte_Roll((uint64_t*)k, encbuf, 1);
+        Kravatte_Rollc((uint64_t*)k, encbuf, 1);
         *messageBitLen = 0;
     }
     return message;
@@ -338,7 +399,7 @@ int Kra(Kravatte_Instance *kv, const BitSequence *input, BitLength inputBitLen, 
 int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, int flags)
 {
     size_t outputByteLen;
-    unsigned char encbuf[MaxParallellism*Kravatte_RollSizeInBytes];
+    unsigned char encbuf[MaxParallellism*Kravatte_RolleSizeInBytes];
     int finalFlag = flags & KRAVATTE_FLAG_LAST_PART;
 
     if ((finalFlag == 0) && ((outputBitLen & 7) != 0))
@@ -355,7 +416,7 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
             KeccakP1600_StaticInitialize();
             mInitialize(state);
             KeccakP1600_OverwriteBytes(state, kv->xAccu.a, 0, SnP_widthInBytes);
-            KeccakP1600_Permute_Nrounds(state, 4);
+            KeccakP1600_Permute_Nrounds(state, 6);
             KeccakP1600_ExtractBytes(state, kv->yAccu.a, 0, SnP_widthInBytes);
         }
         kv->phase = EXPANDING;
@@ -414,8 +475,8 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
         do {
             len = MyMin(outputByteLen, SnP_widthInBytes);
             KeccakP1600_OverwriteBytes(state, kv->yAccu.a, 0, SnP_widthInBytes);
-            Kravatte_Roll((uint64_t*)kv->yAccu.a, encbuf, 1);
-            KeccakP1600_Permute_Nrounds(state, 4);
+            Kravatte_Rolle((uint64_t*)kv->yAccu.a, encbuf, 1);
+            KeccakP1600_Permute_Nrounds(state, 6);
             KeccakP1600_ExtractAndAddBytes(state, kv->kRoll.a, output, 0, len);
             DUMP("out 1", output, len);
             output += len;

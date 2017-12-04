@@ -34,6 +34,8 @@ typedef unsigned long long int UINT64;
 typedef __m128i V128;
 typedef __m256i V256;
 
+//#define UseGatherScatter
+
 #define laneIndex(instanceIndex, lanePosition) ((lanePosition)*4 + instanceIndex)
 
 #if defined(KeccakP1600times4_useAVX2)
@@ -1057,17 +1059,6 @@ size_t KeccakP1600times4_12rounds_FastLoop_Absorb(void *states, unsigned int lan
 
 /* ------------------------------------------------------------------------- */
 
-#define Kravatte_Roll()                                                                                             \
-    Asa = x0x1x2x3,                                                                                                 \
-    Ase = x1x2x3x4,                                                                                                 \
-    ROL64in256(x1x2x3x4, x0x1x2x3, 7),                                                                              \
-    XOReq256(x1x2x3x4, Ase),                                                                                        \
-    XOReq256(x1x2x3x4, _mm256_srli_epi64(Ase, 3)),                                                                  \
-    Asi = _mm256_blend_epi32(_mm256_permute4x64_epi64(Ase, 0x39), _mm256_permute4x64_epi64(x1x2x3x4, 0x39), 0xC0),  \
-    Aso = PERM128(Ase, x1x2x3x4, 0x21),                                                                             \
-    Asu = _mm256_blend_epi32(_mm256_permute4x64_epi64(Ase, 0xFF), _mm256_permute4x64_epi64(x1x2x3x4, 0x90), 0xFC),  \
-    x0x1x2x3 = Asu
-
 #define UNINTLEAVEa(lanes0, lanes1, lanes2, lanes3)                                         \
                                     lanesL01 = UNPACKL( lanes0, lanes1 ),                   \
                                     lanesH01 = UNPACKH( lanes0, lanes1 ),                   \
@@ -1093,6 +1084,20 @@ size_t KeccakP1600times4_12rounds_FastLoop_Absorb(void *states, unsigned int lan
 
 /* ------------------------------------------------------------------------- */
 
+#if defined(UseGatherScatter)
+
+#define AddOverWr4( lanes0, lanes1, lanes2, lanes3, key, inp, argIndex )                    \
+                                    lanes0 = _mm256_i32gather_epi64((const long long int *)&inp[argIndex+0], gather, 1), \
+                                    lanes1 = _mm256_i32gather_epi64((const long long int *)&inp[argIndex+1], gather, 1), \
+                                    lanes2 = _mm256_i32gather_epi64((const long long int *)&inp[argIndex+2], gather, 1), \
+                                    lanes3 = _mm256_i32gather_epi64((const long long int *)&inp[argIndex+3], gather, 1), \
+                                    XOReq256( lanes0, CONST256_64( key[argIndex+0])),       \
+                                    XOReq256( lanes1, CONST256_64( key[argIndex+1])),       \
+                                    XOReq256( lanes2, CONST256_64( key[argIndex+2])),       \
+                                    XOReq256( lanes3, CONST256_64( key[argIndex+3]))
+
+#else
+
 #define AddOverWr4( lanes0, lanes1, lanes2, lanes3, key, inp, argIndex )                    \
                                     lanes0 = LOAD256u( inp[argIndex+0*25]),                 \
                                     lanes1 = LOAD256u( inp[argIndex+1*25]),                 \
@@ -1103,6 +1108,8 @@ size_t KeccakP1600times4_12rounds_FastLoop_Absorb(void *states, unsigned int lan
                                     XOReq256( lanes1, CONST256_64( key[argIndex+1])),       \
                                     XOReq256( lanes2, CONST256_64( key[argIndex+2])),       \
                                     XOReq256( lanes3, CONST256_64( key[argIndex+3]))
+
+#endif
 
 #define ExtrAccu( lanes, p, argIndex ) p[argIndex] ^= _mm256_extract_epi64(lanes, 0) ^ _mm256_extract_epi64(lanes, 1) \
                                                    ^  _mm256_extract_epi64(lanes, 2) ^ _mm256_extract_epi64(lanes, 3)
@@ -1116,6 +1123,17 @@ size_t KeccakP1600times4_12rounds_FastLoop_Absorb(void *states, unsigned int lan
                                     XOReq256( lanes0, lanes1 ),                             \
                                     STORE256( p[argIndex], lanes0 )
 
+#define Kravatte_Rollc()                                                                                            \
+    Asa = x0x1x2x3,                                                                                                 \
+    Ase = x1x2x3x4,                                                                                                 \
+    ROL64in256(x1x2x3x4, x0x1x2x3, 7),                                                                              \
+    XOReq256(x1x2x3x4, Ase),                                                                                        \
+    XOReq256(x1x2x3x4, _mm256_srli_epi64(Ase, 3)),                                                                  \
+    Asi = _mm256_blend_epi32(_mm256_permute4x64_epi64(Ase, 0x39), _mm256_permute4x64_epi64(x1x2x3x4, 0x39), 0xC0),  \
+    Aso = PERM128(Ase, x1x2x3x4, 0x21),                                                                             \
+    Asu = _mm256_blend_epi32(_mm256_permute4x64_epi64(Ase, 0xFF), _mm256_permute4x64_epi64(x1x2x3x4, 0x90), 0xFC),  \
+    x0x1x2x3 = Asu
+
 size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, const unsigned char *input, size_t inputByteLen)
 {
     uint64_t *in64 = (uint64_t *)input;
@@ -1126,6 +1144,9 @@ size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
     #endif
     V256    lanesL01, lanesL23, lanesH01, lanesH23;
     V256    x0x1x2x3, x1x2x3x4;
+    #if defined(UseGatherScatter)
+    V128    gather = _mm_setr_epi32(0*25*8, 1*25*8, 2*25*8, 3*25*8);
+    #endif
 
     x0x1x2x3 = LOAD256(kRoll[20]);
     x1x2x3x4 = LOAD256u(kRoll[21]);
@@ -1135,7 +1156,7 @@ size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
         AddOverWr4( Ago, Agu, Aka, Ake, kRoll, in64,  8 );
         AddOverWr4( Aki, Ako, Aku, Ama, kRoll, in64, 12 );
         AddOverWr4( Ame, Ami, Amo, Amu, kRoll, in64, 16 );
-        Kravatte_Roll();
+        Kravatte_Rollc();
         LoadXOReq256(Asa, in64, 20);
         LoadXOReq256(Ase, in64, 21);
         LoadXOReq256(Asi, in64, 22);
@@ -1165,18 +1186,26 @@ size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
 
 /* ------------------------------------------------------------------------- */
 
-#define OverWr4( lanes0, lanes1, lanes2, lanes3, p, argIndex )                              \
-                                    lanes0 = CONST256_64( p[argIndex+0]),                   \
-                                    lanes1 = CONST256_64( p[argIndex+1]),                   \
-                                    lanes2 = CONST256_64( p[argIndex+2]),                   \
-                                    lanes3 = CONST256_64( p[argIndex+3])
-
 #define ExtrAddKey( lanes, p, argIndex )                                                    \
                                     XOReq256(lanes, CONST256_64(kRoll[argIndex])),          \
                                     p[argIndex+0*25] = _mm256_extract_epi64(lanes, 0),      \
                                     p[argIndex+1*25] = _mm256_extract_epi64(lanes, 1),      \
                                     p[argIndex+2*25] = _mm256_extract_epi64(lanes, 2),      \
                                     p[argIndex+3*25] = _mm256_extract_epi64(lanes, 3)
+
+#if 0//defined(UseGatherScatter)
+
+#define ExtrAddKey4( lanes0, lanes1, lanes2, lanes3, p, argIndex )                                      \
+                                    XOReq256(lanes0, CONST256_64(kRoll[argIndex+0])),                   \
+                                    XOReq256(lanes1, CONST256_64(kRoll[argIndex+1])),                   \
+                                    XOReq256(lanes2, CONST256_64(kRoll[argIndex+2])),                   \
+                                    XOReq256(lanes3, CONST256_64(kRoll[argIndex+3])),                   \
+                                    _mm256_i32scatter_epi64((long long int *)&p[argIndex+0], scatter, lanes0, 1),   \
+                                    _mm256_i32scatter_epi64((long long int *)&p[argIndex+1], scatter, lanes1, 1),   \
+                                    _mm256_i32scatter_epi64((long long int *)&p[argIndex+2], scatter, lanes2, 1),   \
+                                    _mm256_i32scatter_epi64((long long int *)&p[argIndex+3], scatter, lanes3, 1)
+
+#else
 
 #define ExtrAddKey4( lanes0, lanes1, lanes2, lanes3, p, argIndex )                          \
                                     XOReq256(lanes0, CONST256_64(kRoll[argIndex+0])),       \
@@ -1189,6 +1218,8 @@ size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
                                     STORE256u( p[argIndex+2*25], lanes2 ),                  \
                                     STORE256u( p[argIndex+3*25], lanes3 )
 
+#endif
+
 size_t KeccakP1600times4_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, unsigned char *output, size_t outputByteLen)
 {
     uint64_t *out64 = (uint64_t *)output;
@@ -1198,18 +1229,53 @@ size_t KeccakP1600times4_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, 
     unsigned int i;
     #endif
     V256    lanesL01, lanesL23, lanesH01, lanesH23;
-    V256    x0x1x2x3, x1x2x3x4;
+    #if defined(UseGatherScatter)
+    V128    scatter = _mm_setr_epi32(0*25*8, 1*25*8, 2*25*8, 3*25*8);
+    #endif
 
-    x0x1x2x3 = LOAD256(yAccu[20]);
-    x1x2x3x4 = LOAD256u(yAccu[21]);
     do {
-        OverWr4( Aba, Abe, Abi, Abo, yAccu,  0 );
-        OverWr4( Abu, Aga, Age, Agi, yAccu,  4 );
-        OverWr4( Ago, Agu, Aka, Ake, yAccu,  8 );
-        OverWr4( Aki, Ako, Aku, Ama, yAccu, 12 );
-        OverWr4( Ame, Ami, Amo, Amu, yAccu, 16 );
-        Kravatte_Roll();
-        rounds4
+        Aba = CONST256_64(yAccu[0]);
+        Abe = CONST256_64(yAccu[1]);
+        Abi = CONST256_64(yAccu[2]);
+        Abo = CONST256_64(yAccu[3]);
+        Abu = CONST256_64(yAccu[4]);
+
+        Aga = CONST256_64(yAccu[5]);
+        Age = CONST256_64(yAccu[6]);
+        Agi = CONST256_64(yAccu[7]);
+        Ago = CONST256_64(yAccu[8]);
+        Agu = CONST256_64(yAccu[9]);
+
+        Aka = CONST256_64(yAccu[10]);
+        Ake = CONST256_64(yAccu[11]);
+        Aki = CONST256_64(yAccu[12]);
+        Ako = CONST256_64(yAccu[13]);
+        Aku = CONST256_64(yAccu[14]);
+
+        Ama = LOAD256u(yAccu[15]);
+        Ame = LOAD256 (yAccu[16]);
+        Ami = LOAD256u(yAccu[17]);
+        Amo = LOAD256u(yAccu[18]);
+        Amu = LOAD256u(yAccu[19]);
+
+        ROL64in256(lanesL01, Ama, 7);
+        ROL64in256(lanesH01, Ame, 18);
+        lanesL01 = XOR256(lanesL01, lanesH01);
+        lanesH01 = _mm256_and_si256(Ami, _mm256_srli_epi64(Ame, 1));
+        lanesL01 = XOR256(lanesL01, lanesH01);
+
+        Asa = LOAD256 (yAccu[20]);
+        Ase = LOAD256u(yAccu[21]);
+        Asi = _mm256_insert_epi64(_mm256_permute4x64_epi64(Ase, 0x39), _mm256_extract_epi64(lanesL01, 0), 3);
+        Aso = _mm256_permute2x128_si256(Ase, lanesL01, 0x21);
+        Asu = _mm256_insert_epi64(_mm256_permute4x64_epi64(lanesL01, 0x93), _mm256_extract_epi64(Ase, 3), 0);
+
+        STORE256u(yAccu[15], Amu);
+        yAccu[19] = _mm256_extract_epi64(Aso, 0);
+        yAccu[20] = _mm256_extract_epi64(Aso, 1);
+        STORE256u(yAccu[21], lanesL01);
+
+        rounds6
         ExtrAddKey4(Aba, Abe, Abi, Abo, out64,  0 );
         ExtrAddKey4(Abu, Aga, Age, Agi, out64,  4 );
         ExtrAddKey4(Ago, Agu, Aka, Ake, out64,  8 );
@@ -1220,8 +1286,6 @@ size_t KeccakP1600times4_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, 
         out64 += 4 * 25;
     }
     while(--nBlocks != 0);
-    STORE256(yAccu[20], x0x1x2x3);
-    yAccu[24] = _mm256_extract_epi64(x1x2x3x4, 3);
 
     return (size_t)out64 - (size_t)output;
 }

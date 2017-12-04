@@ -132,18 +132,18 @@ int Kravatte_SIV_Wrap(Kravatte_Instance *kv, const BitSequence *plaintext, BitSe
                         const BitSequence *AD, BitLength ADBitLen, unsigned char *tag)
 {
     ALIGN(KRAVATTE_ALIGNMENT) unsigned char xAccuAD[SnP_widthInBytes];
-    ALIGN(KRAVATTE_ALIGNMENT) unsigned char kRollAD[Kravatte_RollSizeInBytes];
+    ALIGN(KRAVATTE_ALIGNMENT) unsigned char kRollAD[Kravatte_RollcSizeInBytes];
 
     /*    T = Fk(P . A) */
     if (Kra(kv, AD, ADBitLen, KRAVATTE_FLAG_INIT | KRAVATTE_FLAG_LAST_PART) != 0)
         return 1;
-    memcpy(kRollAD, kv->kRoll.a+Kravatte_RollOffset, Kravatte_RollSizeInBytes);
+    memcpy(kRollAD, kv->kRoll.a+Kravatte_RollcOffset, Kravatte_RollcSizeInBytes);
     memcpy(xAccuAD, kv->xAccu.a, SnP_widthInBytes);
     if (Kravatte(kv, plaintext, dataBitLen, tag, Kravatte_SIV_TagLength * 8, KRAVATTE_FLAG_NONE) != 0)
         return 1;
 
     /*    C = P ^ Fk(T . A) */
-    memcpy(kv->kRoll.a+Kravatte_RollOffset, kRollAD, Kravatte_RollSizeInBytes);
+    memcpy(kv->kRoll.a+Kravatte_RollcOffset, kRollAD, Kravatte_RollcSizeInBytes);
     memcpy(kv->xAccu.a, xAccuAD, SnP_widthInBytes);
     if (Kravatte(kv, tag, Kravatte_SIV_TagLength * 8, ciphertext, dataBitLen, KRAVATTE_FLAG_NONE) != 0)
         return 1;
@@ -156,20 +156,20 @@ int Kravatte_SIV_Unwrap(Kravatte_Instance *kv, const BitSequence *ciphertext, Bi
                             const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag)
 {
     ALIGN(KRAVATTE_ALIGNMENT) unsigned char xAccuAD[SnP_widthInBytes];
-    ALIGN(KRAVATTE_ALIGNMENT) unsigned char kRollAD[Kravatte_RollSizeInBytes];
+    ALIGN(KRAVATTE_ALIGNMENT) unsigned char kRollAD[Kravatte_RollcSizeInBytes];
     unsigned char tagPrime[Kravatte_SIV_TagLength];
 
     /*    P = C ^ Fk(T . A) */
     if (Kra(kv, AD, ADBitLen, KRAVATTE_FLAG_INIT | KRAVATTE_FLAG_LAST_PART) != 0)
         return 1;
-    memcpy(kRollAD, kv->kRoll.a+Kravatte_RollOffset, Kravatte_RollSizeInBytes);
+    memcpy(kRollAD, kv->kRoll.a+Kravatte_RollcOffset, Kravatte_RollcSizeInBytes);
     memcpy(xAccuAD, kv->xAccu.a, SnP_widthInBytes);
     if (Kravatte(kv, tag, Kravatte_SIV_TagLength * 8, plaintext, dataBitLen, KRAVATTE_FLAG_NONE) != 0)
         return 1;
     memxoris(plaintext, ciphertext, dataBitLen);
 
     /*    Tprime = Fk( P . A) */
-    memcpy(kv->kRoll.a+Kravatte_RollOffset, kRollAD, Kravatte_RollSizeInBytes);
+    memcpy(kv->kRoll.a+Kravatte_RollcOffset, kRollAD, Kravatte_RollcSizeInBytes);
     memcpy(kv->xAccu.a, xAccuAD, SnP_widthInBytes);
     if (Kravatte(kv, plaintext, dataBitLen, tagPrime, Kravatte_SIV_TagLength * 8, KRAVATTE_FLAG_NONE) != 0)
         return 1;
@@ -297,7 +297,7 @@ int Kravatte_WBC_Encipher(Kravatte_Instance *kv, const BitSequence *plaintext, B
     size_t nR0 = MyMin(width, nR);
     unsigned char R0[SnP_widthInBytes];
     unsigned char HkW[SnP_widthInBytes];
-    unsigned char kRollAfterHkW[Kravatte_RollSizeInBytes];
+    unsigned char kRollAfterHkW[Kravatte_RollcSizeInBytes];
     unsigned int numberOfBitsInLastByte;
     BitSequence lastByte[1];
 
@@ -313,7 +313,7 @@ int Kravatte_WBC_Encipher(Kravatte_Instance *kv, const BitSequence *plaintext, B
     if (Kra(kv, W, WBitLen, KRAVATTE_FLAG_INIT | KRAVATTE_FLAG_LAST_PART) != 0)
         return 1;
     memcpy(HkW, kv->xAccu.a, SnP_widthInBytes);
-    memcpy(kRollAfterHkW, kv->kRoll.a+Kravatte_RollOffset, Kravatte_RollSizeInBytes);
+    memcpy(kRollAfterHkW, kv->kRoll.a+Kravatte_RollcOffset, Kravatte_RollcSizeInBytes);
     numberOfBitsInLastByte = nR & 7;
     lastByte[0] = (numberOfBitsInLastByte != 0) ? Rp[nR/8] : 0;
     if (nR0 == nR) {
@@ -335,7 +335,7 @@ int Kravatte_WBC_Encipher(Kravatte_Instance *kv, const BitSequence *plaintext, B
     memxoris(Lc, Lp, nL);
 
     /* R = R + Fk(L || 0 . W) */
-    memcpy(kv->kRoll.a+Kravatte_RollOffset, kRollAfterHkW, Kravatte_RollSizeInBytes);
+    memcpy(kv->kRoll.a+Kravatte_RollcOffset, kRollAfterHkW, Kravatte_RollcSizeInBytes);
     memcpy(kv->xAccu.a, HkW, SnP_widthInBytes);
     if (Kra(kv, Lc, nL, KRAVATTE_FLAG_NONE) != 0)
         return 1;
@@ -367,7 +367,7 @@ int Kravatte_WBC_Decipher(Kravatte_Instance *kv, const BitSequence *ciphertext, 
     size_t nR0 = MyMin(width, nR);
     unsigned char L0[SnP_widthInBytes];
     unsigned char HkW[SnP_widthInBytes];
-    unsigned char kRollAfterHkW[Kravatte_RollSizeInBytes];
+    unsigned char kRollAfterHkW[Kravatte_RollcSizeInBytes];
     unsigned int numberOfBitsInLastByte;
     BitSequence lastByte[1];
 
@@ -386,7 +386,7 @@ int Kravatte_WBC_Decipher(Kravatte_Instance *kv, const BitSequence *ciphertext, 
     if (Kra(kv, W, WBitLen, KRAVATTE_FLAG_INIT | KRAVATTE_FLAG_LAST_PART) != 0)
         return 1;
     memcpy(HkW, kv->xAccu.a, SnP_widthInBytes);
-    memcpy(kRollAfterHkW, kv->kRoll.a+Kravatte_RollOffset, Kravatte_RollSizeInBytes);
+    memcpy(kRollAfterHkW, kv->kRoll.a+Kravatte_RollcOffset, Kravatte_RollcSizeInBytes);
     if (Kra(kv, L0, nL0, KRAVATTE_FLAG_NONE) != 0) /* compress L0 */
         return 1;
     if (Kra(kv, Lc + nL0 / 8, nL - nL0, KRAVATTE_FLAG_NONE) != 0)  /* compress rest of L */
@@ -397,7 +397,7 @@ int Kravatte_WBC_Decipher(Kravatte_Instance *kv, const BitSequence *ciphertext, 
     memxoris(Rp, Rc, nR);
 
     /* L = L + Fk(R || 1 . W) */
-    memcpy(kv->kRoll.a+Kravatte_RollOffset, kRollAfterHkW, Kravatte_RollSizeInBytes);
+    memcpy(kv->kRoll.a+Kravatte_RollcOffset, kRollAfterHkW, Kravatte_RollcSizeInBytes);
     memcpy(kv->xAccu.a, HkW, SnP_widthInBytes);
     if (Kra(kv, Rp, nR - numberOfBitsInLastByte, KRAVATTE_FLAG_NONE) != 0)
         return 1;
