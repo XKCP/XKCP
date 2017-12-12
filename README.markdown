@@ -79,7 +79,9 @@ Most of the source and header files in the KCP are released to the **public doma
 
 * [`Common/brg_endian.h`](Common/brg_endian.h) is copyrighted by Brian Gladman and comes with a BSD 3-clause license;
 * [`Tests/genKAT.c`](Tests/genKAT.c) is based on [SHA-3 contest's code by Larry Bassham, NIST](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/KAT1.zip), which he licensed under a BSD 3-clause license;
-* [`Tests/timing.h`](Tests/timing.h) is based on code by Doug Whiting, which he released to the public domain.
+* [`Tests/timing.h`](Tests/timing.h) is based on code by Doug Whiting, which he released to the public domain;
+* [`KeccakP-1600-AVX2.s`](SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.s) is licensed under the [CRYPTOGAMS license](http://www.openssl.org/~appro/cryptogams/) (BSD-like).
+
 
 
 
@@ -186,7 +188,7 @@ When they refer to the functions in the [FIPS 202 standard][fips202_standard], t
 - `genKAT.c` based on the SHA-3 contest's genKAT.c by Larry Bassham, NIST
 - `brg_endian.h` by Brian Gladman
 - `timing.h` based on code by Doug Whiting
-- `SnP/KeccakP-1600/OptimizedAVX2/*` by Vladimir Sedach
+- `SnP/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.s` by Andy Polyakov and Ronny Van Keer
 - `TweetableFIPS202.c` by D. J. Bernstein, Peter Schwabe and Gilles Van Assche
 - `SnP/KeccakP-800/Optimized64AsmARM/*` by Andre C. de Moraes
 
