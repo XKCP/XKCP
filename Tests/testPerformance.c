@@ -395,7 +395,10 @@ void KeccakWidth800_timing()
 void KeccakWidth1600_timing()
 {
     uint_32t calibartion = KeccakWidth1600_start("Keccak sponge functions using Keccak-f[1600]", KeccakP1600_implementation);
+    KeccakWidth1600_timingRC(calibartion, 576, 1024);
+    KeccakWidth1600_timingRC(calibartion, 832,  768);
     KeccakWidth1600_timingRC(calibartion, 1088, 512);
+    KeccakWidth1600_timingRC(calibartion, 1152, 448);
     KeccakWidth1600_timingRC(calibartion, 1344, 256);
     printf("\n\n");
 }
