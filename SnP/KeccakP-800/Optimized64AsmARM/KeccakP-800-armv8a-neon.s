@@ -1,3 +1,11 @@
+// Implementation by Andre Moraes
+//
+// This file implements Keccak-p[800] in a SnP-compatible way.
+// Please refer to SnP-documentation.h for more details.
+//
+// This implementation comes with KeccakP-800-SnP.h in the same folder.
+// Please refer to LowLevel.build for the exact list of other files it must be combined with.
+
 // INFO: Tested on Cortex-A53(odroid-c2), using gcc.
 // WARNING: These functions work only on little endian CPU with ARMv8A architecture
 // WARNING: Don't use V8-V15 or X19-X28 since we aren't saving them

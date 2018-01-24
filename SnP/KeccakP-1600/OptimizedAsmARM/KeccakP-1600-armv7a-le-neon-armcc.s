@@ -1,16 +1,20 @@
 ;
-; Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
-; Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
-; denoted as "the implementer".
+; Implementation by Ronny Van Keer, hereby denoted as "the implementer".
 ;
-; For more information, feedback or questions, please refer to our websites:
-; http://keccak.noekeon.org/
-; http://keyak.noekeon.org/
-; http://ketje.noekeon.org/
+; For more information, feedback or questions, please refer to our website:
+; https://keccak.team/
 ;
 ; To the extent possible under law, the implementer has waived all copyright
 ; and related or neighboring rights to the source code in this file.
 ; http://creativecommons.org/publicdomain/zero/1.0/
+;
+; ---
+;
+; This file implements Keccak-p[1600] in a SnP-compatible way.
+; Please refer to SnP-documentation.h for more details.
+;
+; This implementation comes with KeccakP-1600-SnP.h in the same folder.
+; Please refer to LowLevel.build for the exact list of other files it must be combined with.
 ;
 
 ; WARNING: These functions work only on little endian CPU with ARMv7A + NEON architecture

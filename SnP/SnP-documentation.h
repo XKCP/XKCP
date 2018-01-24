@@ -1,12 +1,10 @@
 /*
-Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
-Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
-denoted as "the implementer".
+Implementation by the Keccak Team, namely, Guido Bertoni, Joan Daemen,
+Michaël Peeters, Gilles Van Assche and Ronny Van Keer,
+hereby denoted as "the implementer".
 
-For more information, feedback or questions, please refer to our websites:
-http://keccak.noekeon.org/
-http://keyak.noekeon.org/
-http://ketje.noekeon.org/
+For more information, feedback or questions, please refer to our website:
+https://keccak.team/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -26,13 +24,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
   *
   * The following functions are not actually implemented. Their documentation
   * is generic, with the prefix SnP replaced by
+  *  - KeccakP200 for Keccak-p[200]
+  *  - KeccakP400 for Keccak-p[400]
   *  - KeccakP800 for Keccak-p[800]
   *  - KeccakP1600 for Keccak-p[1600]
   * Functions can be replaced by macros, when appropriate.
   *
   * An implementation must provide each function (or macro) as listed below,
   * instantiated with the suitable prefix. In addition, the implementation
-  * must come with a header "KeccakP-800-SnP.h" or "KeccakP-1600-SnP.h"
+  * must come with a header "KeccakP-800-SnP.h", "KeccakP-1600-SnP.h" or similar
   * to define the following symbols (with SnP replaced by the appropriate prefix):
   *     - SnP_implementation: a synopsis of the implementation;
   *     - SnP_stateSizeInBytes: the number of bytes to store the state;
@@ -60,14 +60,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
   *     - SnP_Permute() is instantiated as
   *         - KeccakP800_Permute_12rounds() for Keccak-p[800, 12] and
   *         - KeccakP800_Permute_22rounds() for Keccak-f[800]=Keccak-p[800, 22].
-  *     - There is currently no instantiation of SnP_Permute_Nrounds() for Keccak-p[800].
+  *     - SnP_Permute_Nrounds() is instantiated as KeccakP800_Permute_Nrounds().
   *     - SnP_FastLoop_Absorb() can be instantiated as KeccakF800_FastLoop_Absorb() for Keccak-f[800].
   *
   * For Keccak-p[1600]:
   *     - SnP_Permute() is instantiated as
   *         - KeccakP1600_Permute_12rounds() for Keccak-p[1600, 12] and
   *         - KeccakP1600_Permute_24rounds() for Keccak-f[1600]=Keccak-p[1600, 24].
-  *     - There is currently no instantiation of SnP_Permute_Nrounds() for Keccak-p[1600].
+  *     - SnP_Permute_Nrounds() is instantiated as KeccakP1600_Permute_Nrounds().
   *     - SnP_FastLoop_Absorb() can be instantiated as KeccakF1600_FastLoop_Absorb() for Keccak-f[1600].
   */
 

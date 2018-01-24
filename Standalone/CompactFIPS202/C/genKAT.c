@@ -28,14 +28,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-Contributions were made by the Keccak, Keyak and Ketje Teams, namely,
-Guido Bertoni, Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer,
+Contributions were made by the Keccak Team, namely, Guido Bertoni, Joan Daemen,
+Michaël Peeters, Gilles Van Assche and Ronny Van Keer,
 hereby denoted as "the implementer".
 
-For more information, feedback or questions, please refer to our websites:
-http://keccak.noekeon.org/
-http://keyak.noekeon.org/
-http://ketje.noekeon.org/
+For more information, feedback or questions, please refer to our website:
+https://keccak.team/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the contributed source code in this file.
@@ -76,7 +74,7 @@ genKAT_main(void)
     /* http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf */
     /*  */
     /* Note: "SakuraSequential" translates into "input followed by 11", */
-    /* see http://keccak.noekeon.org/Sakura.pdf for more details. */
+    /* see https://keccak.team/files/Sakura.pdf for more details. */
     /*  */
     genShortMsgHash(1344, 256, 0x1F, 0, 4096,
         "ShortMsgKAT_SHAKE128.txt",

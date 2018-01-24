@@ -1,12 +1,10 @@
 /*
-Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
-Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
-denoted as "the implementer".
+Implementation by the Keccak Team, namely, Guido Bertoni, Joan Daemen,
+Michaël Peeters, Gilles Van Assche and Ronny Van Keer,
+hereby denoted as "the implementer".
 
-For more information, feedback or questions, please refer to our websites:
-http://keccak.noekeon.org/
-http://keyak.noekeon.org/
-http://ketje.noekeon.org/
+For more information, feedback or questions, please refer to our website:
+https://keccak.team/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -42,8 +40,8 @@ For a more complete set of implementations, please refer to
 the Keccak Code Package at https://github.com/gvanas/KeccakCodePackage
 
 For more information, please refer to:
-    * [Keccak Reference] http://keccak.noekeon.org/Keccak-reference-3.0.pdf
-    * [Keccak Specifications Summary] http://keccak.noekeon.org/specs_summary.html
+    * [Keccak Reference] https://keccak.team/files/Keccak-reference-3.0.pdf
+    * [Keccak Specifications Summary] https://keccak.team/keccak_specs_summary.html
 
 This file uses UTF-8 encoding, as some comments use Greek letters.
 ================================================================

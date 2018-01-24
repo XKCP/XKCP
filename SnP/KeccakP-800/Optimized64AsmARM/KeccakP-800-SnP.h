@@ -1,8 +1,13 @@
+/*
+Implementation by Andre Moraes
+
+---
+
+Please refer to SnP-documentation.h for more details.
+*/
+
 #ifndef _KeccakP_800_SnP_h_
 #define _KeccakP_800_SnP_h_
-
-/** For the documentation, see SnP-documentation.h.
- */
 
 #define KeccakP800_implementation      "64-bit optimized ARMv8a assembler implementation"
 #define KeccakP800_stateSizeInBytes    100

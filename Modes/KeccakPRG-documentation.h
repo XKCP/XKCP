@@ -1,12 +1,8 @@
 /*
-Implementation by the Keccak, Keyak and Ketje Teams, namely, Guido Bertoni,
-Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer, hereby
-denoted as "the implementer".
+Implementation by Gilles Van Assche, hereby denoted as "the implementer".
 
-For more information, feedback or questions, please refer to our websites:
-http://keccak.noekeon.org/
-http://keyak.noekeon.org/
-http://ketje.noekeon.org/
+For more information, feedback or questions, please refer to our website:
+https://keccak.team/
 
 To the extent possible under law, the implementer has waived all copyright
 and related or neighboring rights to the source code in this file.
@@ -17,7 +13,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
   *
   * The following functions implement a pseudo-random bit generator based on Keccak.
   * More specifically, they instantiate the SpongePRG mode, published in our SAC 2011 paper,
-  * with Keccak. (http://sponge.noekeon.org/SpongeDuplex.pdf)
+  * with Keccak. (https://keccak.team/files/SpongeDuplex.pdf)
   *
   * For the 128-bit security strength, we recommend SpongePRG on top of Keccak-f[1600]
   * with a capacity of 254 bits. If a smaller footprint is required, we recommend
