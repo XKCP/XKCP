@@ -161,13 +161,13 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
     }
 #else
     unsigned int i;
-    UINT8 *curData = data;
+    const UINT8 *curData = data;
     for(i=0; i<laneCount; i++, curData+=8) {
         UINT64 lane = (UINT64)curData[0]
-            | ((UINT64)curData[1] << 8)
+            | ((UINT64)curData[1] <<  8)
             | ((UINT64)curData[2] << 16)
             | ((UINT64)curData[3] << 24)
-            | ((UINT64)curData[4] <<32)
+            | ((UINT64)curData[4] << 32)
             | ((UINT64)curData[5] << 40)
             | ((UINT64)curData[6] << 48)
             | ((UINT64)curData[7] << 56);
@@ -211,7 +211,17 @@ void KeccakP1600_OverwriteBytesInLane(void *state, unsigned int lanePosition, co
         memcpy((unsigned char*)state+lanePosition*8+offset, data, length);
     }
 #else
+#ifdef KeccakP1600_useLaneComplementing
 #error "Not yet implemented"
+#else
+    UINT64 lane = ((UINT64*)state)[lanePosition];
+    unsigned int i;
+    for(i=0; i<length; i++) {
+        lane &= ~((UINT64)0xFF << ((offset+i)*8));
+        lane |= (UINT64)data[i] << ((offset+i)*8);
+    }
+    ((UINT64*)state)[lanePosition] = lane;
+#endif
 #endif
 }
 
@@ -232,7 +242,23 @@ void KeccakP1600_OverwriteLanes(void *state, const unsigned char *data, unsigned
     memcpy(state, data, laneCount*8);
 #endif
 #else
+#ifdef KeccakP1600_useLaneComplementing
 #error "Not yet implemented"
+#else
+    unsigned int i;
+    const UINT8 *curData = data;
+    for(i=0; i<laneCount; i++, curData+=8) {
+        UINT64 lane = (UINT64)curData[0]
+            | ((UINT64)curData[1] <<  8)
+            | ((UINT64)curData[2] << 16)
+            | ((UINT64)curData[3] << 24)
+            | ((UINT64)curData[4] << 32)
+            | ((UINT64)curData[5] << 40)
+            | ((UINT64)curData[6] << 48)
+            | ((UINT64)curData[7] << 56);
+        ((UINT64*)state)[i] = lane;
+    }
+#endif
 #endif
 }
 
@@ -267,7 +293,23 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
     memset(state, 0, byteCount);
 #endif
 #else
+#ifdef KeccakP1600_useLaneComplementing
 #error "Not yet implemented"
+#else
+    unsigned int i, j;
+    for(i=0; i<byteCount; i+=8) {
+        unsigned int lanePosition = i/8;
+        if (i+8 <= byteCount) {
+            ((UINT64*)state)[lanePosition] = 0;
+        }
+        else {
+            UINT64 lane = ((UINT64*)state)[lanePosition];
+            for(j=0; j<byteCount%8; j++)
+                lane &= ~((UINT64)0xFF << (j*8));
+            ((UINT64*)state)[lanePosition] = lane;
+        }
+    }
+#endif
 #endif
 }
 
