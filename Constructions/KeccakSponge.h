@@ -15,7 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _KeccakSponge_h_
 
 /* For the documentation, please follow the link: */
-#include "KeccakSponge-documentation.h"
+/* #include "KeccakSponge-documentation.h" */
 
 #include "KeccakSpongeWidth200.h"
 #include "KeccakSpongeWidth400.h"

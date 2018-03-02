@@ -13,7 +13,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _KeccakPRG_h_
 
 /* For the documentation, please follow the link: */
-#include "KeccakPRG-documentation.h"
+/* #include "KeccakPRG-documentation.h" */
 
 #include "KeccakPRGWidth200.h"
 #include "KeccakPRGWidth400.h"

@@ -13,7 +13,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _Ketjev2_h_
 
 /* For the documentation, please follow the link: */
-#include "Ketje-documentation.h"
+/* #include "Ketje-documentation.h" */
 
 #include "KetjeJr.h"
 #include "KetjeSr.h"

@@ -13,7 +13,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _Keyakv2_h_
 
 /* For the documentation, please follow the link: */
-#include "Keyak-documentation.h"
+/* #include "Keyak-documentation.h" */
 
 #include "RiverKeyak.h"
 #include "LakeKeyak.h"

@@ -15,7 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _KeccakDuplex_h_
 
 /* For the documentation, please follow the link: */
-#include "KeccakDuplex-documentation.h"
+/* #include "KeccakDuplex-documentation.h" */
 
 #include "KeccakDuplexWidth200.h"
 #include "KeccakDuplexWidth400.h"
