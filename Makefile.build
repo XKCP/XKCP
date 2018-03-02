@@ -77,7 +77,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <!-- To compute a hash of a file -->
-    <fragment name="KeccakSum" inherits="FIPS202 KangarooTwelve">
+    <fragment name="KeccakSum" inherits="FIPS202 SP800-185 KangarooTwelve">
         <c>KeccakSum/KeccakSum.c</c>
         <c>KeccakSum/base64.c</c>
         <h>KeccakSum/base64.h</h>
