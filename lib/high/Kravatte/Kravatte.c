@@ -73,8 +73,19 @@ static void DUMP( const unsigned char * pText, const unsigned char * pData, unsi
         printf(" %02x", (int)pData[i]);
     printf("\n");
 }
+
+static void DUMP64( const unsigned char * pText, const unsigned char * pData, unsigned int size )
+{
+    unsigned int i;
+    size /=8;
+    printf("%s (%u lanes):", pText, size);
+    for(i=0; i<size; i++)
+        printf(" %016lx", ((uint64_t*)pData)[i]);
+    printf("\n");
+}
 #else
 #define DUMP(pText, pData, size )
+#define DUMP64(pText, pData, size )
 #endif
 
 #define ParallelCompressLoopFast( Parallellism ) \
@@ -254,7 +265,7 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
     #if defined(KeccakF1600times8_FastKravatte_supported)
     ParallelCompressLoopFast( 8 )
     #else
-//!!    ParallelCompressLoopPlSnP( 8 )
+    ParallelCompressLoopPlSnP( 8 )
     #endif
     #endif
     #if defined(KeccakP1600times4_implementation)
@@ -445,7 +456,7 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
     #if defined(KeccakF1600times8_FastKravatte_supported)
     ParallelExpandLoopFast( 8 )
     #else
-//    ParallelExpandLoopPlSnP( 8 )
+    ParallelExpandLoopPlSnP( 8 )
     #endif
     #endif
     #if defined(KeccakP1600times4_implementation)

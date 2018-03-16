@@ -142,7 +142,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Implementations selected for the Haswell microarchitecture -->
     <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 Ket-SnP"/>
     <!-- Implementations selected for the Knights Landing microarchitecture -->
-    <fragment name="KnightsLanding" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 800times2on1 800times4on1 800times8on1 SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12 Ket-SnP"/>
+    <fragment name="SkylakeX" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 800times2on1 800times4on1 800times8on1 SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12 Ket-SnP"/>
 
     <!-- Implementations selected for ARMv6M -->
     <fragment name="ARMv6M" inherits="optimized200ARMv6M optimized400ARMv6M optimized800ARMv6Mu2 optimized1600ARMv6Mu2 serial-fallbacks Ket-optimizedLE"/>
@@ -159,7 +159,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Target names are of the form x/y where x is taken from the first set and y from the second set. -->
     <group all="Keccak">
         <product delimiter="/">
-            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell KnightsLanding ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
+            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell SkylakeX ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
             <factor set="KeccakTests KeccakSum libkeccak.a"/>
         </product>
     </group>

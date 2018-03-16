@@ -21,6 +21,7 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <assert.h>
 #include <smmintrin.h>
 #include <wmmintrin.h>
 #include <immintrin.h>
@@ -34,24 +35,29 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #error Expecting a little-endian platform
 #endif
 
-/* Comment the define hereunder when compiling for a CPU with AVX-512 SIMD */
-/* 
- * Warning: This code has only been tested on Haswell (AVX2) with SIMULATE_AVX512 defined,
- *          errors will occur if we did a bad interpretation of the AVX-512 intrinsics' 
- *          API or functionality.
- */
-/* #define SIMULATE_AVX512 */
+/*
+** Uncomment the define hereunder when compiling for a CPU without AVX-512 SIMD.
+#define SIMULATE_AVX512
+*/
 
-typedef uint8_t     UINT8;
-typedef uint32_t    UINT32;
-typedef uint64_t    UINT64;
+#define    VERBOSE        0
 
 #if defined(SIMULATE_AVX512)
 
 typedef struct
 {
-    UINT64 x[8];
+    uint64_t x[8];
 } __m512i;
+
+static __m512i _mm512_and_si512( __m512i a, __m512i b)
+{
+    __m512i r;
+    unsigned int i;
+
+    for ( i = 0; i < 8; ++i )
+        r.x[i] = a.x[i] & b.x[i];
+    return(r);
+}
 
 static __m512i _mm512_xor_si512( __m512i a, __m512i b)
 {
@@ -91,11 +97,22 @@ static __m512i _mm512_rol_epi64(__m512i a, int offset)
     return(r);
 }
 
+static __m512i _mm512_srli_epi64(__m512i a, int offset)
+{
+    __m512i r;
+    unsigned int i;
+
+    for ( i = 0; i < 8; ++i )
+        r.x[i] = (a.x[i] >> offset);
+    return(r);
+}
+
+
 static __m512i _mm512_broadcast_f64x4(__m256d a)
 {
     __m512i r;
     unsigned int i;
-    UINT64 t[4];
+    uint64_t t[4];
 
     _mm256_store_si256( (__m256i*)t, (__m256i)a );
     for ( i = 0; i < 4; ++i )
@@ -103,7 +120,7 @@ static __m512i _mm512_broadcast_f64x4(__m256d a)
     return(r);
 }
 
-static __m512i _mm512_set_epi64(UINT64 a, UINT64 b, UINT64 c, UINT64 d, UINT64 e, UINT64 f, UINT64 g, UINT64 h)
+static __m512i _mm512_set_epi64(uint64_t a, uint64_t b, uint64_t c, uint64_t d, uint64_t e, uint64_t f, uint64_t g, uint64_t h)
 {
     __m512i r;
 
@@ -122,22 +139,107 @@ static __m512i _mm512_i32gather_epi64(__m256i idx, const void *p, int scale)
 {
     __m512i r;
     unsigned int i;
-    UINT32 offset[16];
+    uint32_t offset[8];
 
     _mm256_store_si256( (__m256i*)offset, idx );
     for ( i = 0; i < 8; ++i )
-        r.x[i] = *(const UINT64*)((const char*)p + offset[i] * scale);
+        r.x[i] = *(const uint64_t*)((const char*)p + offset[i] * scale);
     return(r);
 }
 
 static void _mm512_i32scatter_epi64( void *p, __m256i idx, __m512i value, int scale)
 {
     unsigned int i;
-    UINT32 offset[16];
+    uint32_t offset[8];
 
     _mm256_store_si256( (__m256i*)offset, idx );
     for ( i = 0; i < 8; ++i )
-        *(UINT64*)((char*)p + offset[i] * scale) = value.x[i];
+        *(uint64_t*)((char*)p + offset[i] * scale) = value.x[i];
+}
+
+static __m512i _mm512_permutex2var_epi64(__m512i a, __m512i idx, __m512i b)
+{
+    __m512i r;
+    unsigned int i;
+    for ( i = 0; i < 8; ++i )
+        r.x[i] = (idx.x[i] & 8) ? b.x[idx.x[i] & 7] :  a.x[idx.x[i] & 7];
+    return(r);
+}
+
+static __m512i _mm512_maskz_loadu_epi64(uint8_t k, const void *mem_addr)
+{
+    __m512i r;
+    const uint64_t *p64 = (const uint64_t *)mem_addr;
+    unsigned int i;
+
+    for ( i = 0; i < 8; ++i ) {
+        if ((k & (1 << i)) != 0) {
+            r.x[i] = p64[i];
+        }
+        else {
+            r.x[i]   = 0;
+        }
+    }
+    return(r);
+}
+
+#define _mm512_maskz_load_epi64 _mm512_maskz_loadu_epi64
+
+static void _mm512_storeu_si512(__m512i * mem_addr, __m512i a)
+{
+    uint64_t *p64 = (uint64_t *)mem_addr;
+    unsigned int i;
+
+    for ( i = 0; i < 8; ++i )
+        p64[i] = a.x[i];
+}
+
+#define _mm512_store_si512    _mm512_storeu_si512
+
+static __m512i _mm512_loadu_si512(const __m512i * mem_addr)
+{
+    __m512i r;
+    const uint64_t *p64 = (const uint64_t *)mem_addr;
+    unsigned int i;
+
+    for ( i = 0; i < 8; ++i )
+        r.x[i] = p64[i];
+    return(r);
+}
+
+#define _mm512_load_si512    _mm512_loadu_si512
+
+static void _mm512_mask_storeu_epi64(void *mem_addr, uint8_t k, __m512i a)
+{
+    uint64_t *p64 = (uint64_t *)mem_addr;
+    unsigned int i;
+
+    for ( i = 0; i < 8; ++i ) {
+        if ((k & (1 << i)) != 0)
+            p64[i] = a.x[i];
+    }
+}
+
+#define _mm512_mask_store_epi64 _mm512_mask_storeu_epi64
+
+static __m512i _mm512_setzero_si512(void)
+{
+    __m512i r;
+    unsigned int i;
+
+    for ( i = 0; i < 8; ++i )
+        r.x[i] = 0;
+    return(r);
+}
+
+static __m256i _mm512_extracti64x4_epi64(__m512i a, int imm8)
+{
+    uint64_t buf[8];
+    __m256i r;
+
+    _mm512_storeu_si512((__m512i*)buf, a);
+    r = *(__m256i*)&buf[((imm8 == 0) ? 0 : 4)];
+    return(r);
 }
 
 #endif
@@ -151,16 +253,80 @@ typedef __m512i     V512;
 #define XOR(a,b)                    _mm512_xor_si512(a,b)
 #define XOR3(a,b,c)                 _mm512_ternarylogic_epi64(a,b,c,0x96)
 #define XOR5(a,b,c,d,e)             XOR3(XOR3(a,b,c),d,e)
+#define XOReq512(a, b)              a = XOR(a,b)
+
 #define ROL(a,offset)               _mm512_rol_epi64(a,offset)
 #define Chi(a,b,c)                  _mm512_ternarylogic_epi64(a,b,c,0xD2)
 
 #define CONST8_64(a)                (V512)_mm512_broadcast_f64x4(_mm256_broadcast_sd((const double*)(&a)))
-#define LOAD8_32(a,b,c,d,e,f,g,h)   _mm256_set_epi32((UINT64)(a), (UINT32)(b), (UINT32)(c), (UINT32)(d), (UINT32)(e), (UINT32)(f), (UINT32)(g), (UINT32)(h))
-#define LOAD8_64(a,b,c,d,e,f,g,h)   _mm512_set_epi64((UINT64)(a), (UINT64)(b), (UINT64)(c), (UINT64)(d), (UINT64)(e), (UINT64)(f), (UINT64)(g), (UINT64)(h))
+
+#define LOAD512(a)                  _mm512_load_si512((const V512 *)&(a))
+#define LOAD512u(a)                 _mm512_loadu_si512((const V512 *)&(a))
+#define LOAD8_32(a,b,c,d,e,f,g,h)   _mm256_set_epi32((uint64_t)(a), (uint32_t)(b), (uint32_t)(c), (uint32_t)(d), (uint32_t)(e), (uint32_t)(f), (uint32_t)(g), (uint32_t)(h))
+#define LOAD8_64(a,b,c,d,e,f,g,h)   _mm512_set_epi64((uint64_t)(a), (uint64_t)(b), (uint64_t)(c), (uint64_t)(d), (uint64_t)(e), (uint64_t)(f), (uint64_t)(g), (uint64_t)(h))
 #define LOAD_GATHER8_64(idx,p)      _mm512_i32gather_epi64( idx, (const void*)(p), 8)
+
 #define STORE_SCATTER8_64(p,idx, v) _mm512_i32scatter_epi64( (void*)(p), idx, v, 8)
 
 #endif
+
+#if (VERBOSE > 0)
+    #define     DumpMem(__t, buf, __n) { \
+                                        uint32_t i; \
+                                        printf("%s ", __t); \
+                                        for (i = 0; i < __n; ++i) { \
+                                            printf("%016lx ", (buf)[i]); \
+                                            /*if ((i%5) == 4) printf("\n"); */\
+                                        } \
+                                            printf("\n"); \
+                                        }
+
+    #define     DumpOne(__v,__i) {  \
+                                    uint64_t    buf[8];    \
+                                    _mm512_storeu_si512((V512*)buf, __v##__i); \
+                                    printf("%016lx %016lx %016lx %016lx %016lx %016lx %016lx %016lx\n", \
+                                      buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]); \
+                }
+
+    #define     Dump(__t,__v)    {                  \
+                            printf("%s\n", __t);    \
+                            DumpOne(__v, ba);  \
+                            DumpOne(__v, be);  \
+                            DumpOne(__v, bi);  \
+                            DumpOne(__v, bo);  \
+                            DumpOne(__v, bu);  \
+                            DumpOne(__v, ga);  \
+                            DumpOne(__v, ge);  \
+                            DumpOne(__v, gi);  \
+                            DumpOne(__v, go);  \
+                            DumpOne(__v, gu);  \
+                            DumpOne(__v, ka);  \
+                            DumpOne(__v, ke);  \
+                            DumpOne(__v, ki);  \
+                            DumpOne(__v, ko);  \
+                            DumpOne(__v, ku);  \
+                            DumpOne(__v, ma);  \
+                            DumpOne(__v, me);  \
+                            DumpOne(__v, mi);  \
+                            DumpOne(__v, mo);  \
+                            DumpOne(__v, mu);  \
+                            DumpOne(__v, sa);  \
+                            DumpOne(__v, se);  \
+                            DumpOne(__v, si);  \
+                            DumpOne(__v, so);  \
+                            DumpOne(__v, su);  \
+                            printf("\n");      \
+                        }
+
+    #define     DumpReg(__t,__v,__i)  printf("%s ", __t); DumpOne(__v,__i)
+
+#else
+    #define     DumpMem(__t, buf,len)
+    #define     DumpOne(__v,__i)
+    #define     Dump(__t,__v)
+    #define     DumpReg(__t,__v,__i)
+#endif
+
 
 #define laneIndex(instanceIndex, lanePosition)  ((lanePosition)*8 + instanceIndex)
 #define SnP_laneLengthInBytes                   8
@@ -176,11 +342,11 @@ void KeccakP1600times8_AddBytes(void *states, unsigned int instanceIndex, const 
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     const unsigned char *curData = data;
-    UINT64 *statesAsLanes = states;
+    uint64_t *statesAsLanes = states;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
-        UINT64 lane = 0;
+        uint64_t lane = 0;
         if (bytesInLane > sizeLeft)
             bytesInLane = sizeLeft;
         memcpy((unsigned char*)&lane + offsetInLane, curData, bytesInLane);
@@ -191,7 +357,7 @@ void KeccakP1600times8_AddBytes(void *states, unsigned int instanceIndex, const 
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        UINT64 lane = *((const UINT64*)curData);
+        uint64_t lane = *((const uint64_t*)curData);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] ^= lane;
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
@@ -199,7 +365,7 @@ void KeccakP1600times8_AddBytes(void *states, unsigned int instanceIndex, const 
     }
 
     if (sizeLeft > 0) {
-        UINT64 lane = 0;
+        uint64_t lane = 0;
         memcpy(&lane, curData, sizeLeft);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] ^= lane;
     }
@@ -208,7 +374,7 @@ void KeccakP1600times8_AddBytes(void *states, unsigned int instanceIndex, const 
 void KeccakP1600times8_AddLanesAll(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
     V512 *stateAsLanes = states;
-    const UINT64 *dataAsLanes = (const UINT64 *)data;
+    const uint64_t *dataAsLanes = (const uint64_t *)data;
     unsigned int i;
     V256 index;
 
@@ -257,7 +423,7 @@ void KeccakP1600times8_OverwriteBytes(void *states, unsigned int instanceIndex, 
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     const unsigned char *curData = data;
-    UINT64 *statesAsLanes = states;
+    uint64_t *statesAsLanes = states;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -270,7 +436,7 @@ void KeccakP1600times8_OverwriteBytes(void *states, unsigned int instanceIndex, 
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        UINT64 lane = *((const UINT64*)curData);
+        uint64_t lane = *((const uint64_t*)curData);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] = lane;
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
@@ -285,7 +451,7 @@ void KeccakP1600times8_OverwriteBytes(void *states, unsigned int instanceIndex, 
 void KeccakP1600times8_OverwriteLanesAll(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
     V512 *stateAsLanes = states;
-    const UINT64 *dataAsLanes = (const UINT64 *)data;
+    const uint64_t *dataAsLanes = (const uint64_t *)data;
     unsigned int i;
     V256 index;
 
@@ -332,7 +498,7 @@ void KeccakP1600times8_OverwriteWithZeroes(void *states, unsigned int instanceIn
 {
     unsigned int sizeLeft = byteCount;
     unsigned int lanePosition = 0;
-    UINT64 *statesAsLanes = states;
+    uint64_t *statesAsLanes = states;
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] = 0;
@@ -351,7 +517,7 @@ void KeccakP1600times8_ExtractBytes(const void *states, unsigned int instanceInd
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     unsigned char *curData = data;
-    const UINT64 *statesAsLanes = states;
+    const uint64_t *statesAsLanes = states;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -364,7 +530,7 @@ void KeccakP1600times8_ExtractBytes(const void *states, unsigned int instanceInd
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *(UINT64*)curData = statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        *(uint64_t*)curData = statesAsLanes[laneIndex(instanceIndex, lanePosition)];
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curData += SnP_laneLengthInBytes;
@@ -378,7 +544,7 @@ void KeccakP1600times8_ExtractBytes(const void *states, unsigned int instanceInd
 void KeccakP1600times8_ExtractLanesAll(const void *states, unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
     const V512 *stateAsLanes = states;
-    UINT64 *dataAsLanes = (UINT64 *)data;
+    uint64_t *dataAsLanes = (uint64_t *)data;
     unsigned int i;
     V256 index;
 
@@ -428,11 +594,11 @@ void KeccakP1600times8_ExtractAndAddBytes(const void *states, unsigned int insta
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     const unsigned char *curInput = input;
     unsigned char *curOutput = output;
-    const UINT64 *statesAsLanes = states;
+    const uint64_t *statesAsLanes = states;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
-        UINT64 lane = statesAsLanes[laneIndex(instanceIndex, lanePosition)] >> (8 * offsetInLane);
+        uint64_t lane = statesAsLanes[laneIndex(instanceIndex, lanePosition)] >> (8 * offsetInLane);
         if (bytesInLane > sizeLeft)
             bytesInLane = sizeLeft;
         sizeLeft -= bytesInLane;
@@ -444,7 +610,7 @@ void KeccakP1600times8_ExtractAndAddBytes(const void *states, unsigned int insta
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *((UINT64*)curOutput) = *((UINT64*)curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        *((uint64_t*)curOutput) = *((uint64_t*)curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)];
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curInput += SnP_laneLengthInBytes;
@@ -452,7 +618,7 @@ void KeccakP1600times8_ExtractAndAddBytes(const void *states, unsigned int insta
     }
 
     if (sizeLeft != 0) {
-        UINT64 lane = statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        uint64_t lane = statesAsLanes[laneIndex(instanceIndex, lanePosition)];
         do {
             *(curOutput++) = *(curInput++) ^ (unsigned char)lane;
             lane >>= 8;
@@ -463,8 +629,8 @@ void KeccakP1600times8_ExtractAndAddBytes(const void *states, unsigned int insta
 void KeccakP1600times8_ExtractAndAddLanesAll(const void *states, const unsigned char *input, unsigned char *output, unsigned int laneCount, unsigned int laneOffset)
 {
     const V512 *stateAsLanes = states;
-    const UINT64 *inAsLanes = (const UINT64 *)input;
-    UINT64 *outAsLanes = (UINT64 *)output;
+    const uint64_t *inAsLanes = (const uint64_t *)input;
+    uint64_t *outAsLanes = (uint64_t *)output;
     unsigned int i;
     V256 index;
 
@@ -508,7 +674,7 @@ void KeccakP1600times8_ExtractAndAddLanesAll(const void *states, const unsigned 
 
 }
 
-static ALIGN(KeccakP1600times8_statesAlignment) const UINT64 KeccakP1600RoundConstants[24] = {
+static ALIGN(KeccakP1600times8_statesAlignment) const uint64_t KeccakP1600RoundConstants[24] = {
     0x0000000000000001ULL,
     0x0000000000008082ULL,
     0x800000000000808aULL,
@@ -789,7 +955,7 @@ void KeccakP1600times8_PermuteAll_12rounds(void *states)
     copyFromState(statesAsLanes);
     rounds12;
     copyToState(statesAsLanes);
-}
+} 
 
 void KeccakP1600times8_PermuteAll_6rounds(void *states)
 {
@@ -821,7 +987,7 @@ size_t KeccakF1600times8_FastLoop_Absorb(void *states, unsigned int laneCount, u
         #endif
         const unsigned char *dataStart = data;
         V512 *statesAsLanes = states;
-        const UINT64 *dataAsLanes = (const UINT64 *)data;
+        const uint64_t *dataAsLanes = (const uint64_t *)data;
         KeccakP_DeclareVars;
         V256 index;
 
@@ -881,7 +1047,7 @@ size_t KeccakP1600times8_12rounds_FastLoop_Absorb(void *states, unsigned int lan
         #endif
         const unsigned char *dataStart = data;
         V512 *statesAsLanes = states;
-        const UINT64 *dataAsLanes = (const UINT64 *)data;
+        const uint64_t *dataAsLanes = (const uint64_t *)data;
         KeccakP_DeclareVars;
         V256 index;
 
@@ -929,4 +1095,379 @@ size_t KeccakP1600times8_12rounds_FastLoop_Absorb(void *states, unsigned int lan
         }
         return data - dataStart;
     }
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* Remap lanes to start after two rounds */
+#define Iba _ba
+#define Ibe _me
+#define Ibi _gi
+#define Ibo _so
+#define Ibu _ku
+#define Iga _sa
+#define Ige _ke
+#define Igi _bi
+#define Igo _mo
+#define Igu _gu
+#define Ika _ma
+#define Ike _ge
+#define Iki _si
+#define Iko _ko
+#define Iku _bu
+#define Ima _ka
+#define Ime _be
+#define Imi _mi
+#define Imo _go
+#define Imu _su
+#define Isa _ga
+#define Ise _se
+#define Isi _ki
+#define Iso _bo
+#define Isu _mu
+
+#define LoadInput(argIndex) _mm512_i32gather_epi64(gather, (const long long int *)&in64[argIndex], 8)
+#define AddInput(argIndex)  XOR( LoadInput(argIndex), CONST8_64(kRoll[argIndex]))
+
+
+ALIGN(64) static const uint64_t     oLow256[]       = {   0,   1,   2,   3, 8+0, 8+1, 8+2, 8+3 };
+ALIGN(64) static const uint64_t     oHigh256[]      = {   4,   5,   6,   7, 8+4, 8+5, 8+6, 8+7 };
+
+ALIGN(64) static const uint64_t     oLow128[]       = {   0,   1, 8+0, 8+1,   4,   5, 8+4, 8+5 };
+ALIGN(64) static const uint64_t     oHigh128[]      = {   2,   3, 8+2, 8+3,   6,   7, 8+6, 8+7 };
+
+ALIGN(64) static const uint64_t     oLow64[]        = {   0, 8+0,   2, 8+2,   4, 8+4,   6, 8+6 };
+ALIGN(64) static const uint64_t     oHigh64[]       = {   1, 8+1,   3, 8+3,   5, 8+5,   7, 8+7 };
+
+ALIGN(64) static const uint64_t     o01234_012[]    = {   0,   1,   2,   3,   4, 8+0, 8+1, 8+2 };
+ALIGN(64) static const uint64_t     o1234_0123[]    = {   1,   2,   3,   4, 8+0, 8+1, 8+2, 8+3 };
+ALIGN(64) static const uint64_t     o1234567_0[]    = {   1,   2,   3,   4,   5,   6,   7, 8+0 };
+ALIGN(64) static const uint64_t     o1234567_3[]    = {   1,   2,   3,   4,   5,   6,   7, 8+3 };
+ALIGN(64) static const uint64_t     o1234567_4[]    = {   1,   2,   3,   4,   5,   6,   7, 8+4 };
+ALIGN(64) static const uint64_t     o234567_45[]    = {   2,   3,   4,   5,   6,   7, 8+4, 8+5 };
+ALIGN(64) static const uint64_t     o34567_456[]    = {   3,   4,   5,   6,   7, 8+4, 8+5, 8+6 };
+
+ALIGN(32) static const uint32_t     oGatherScatter[]= {0*25, 1*25, 2*25, 3*25, 4*25, 5*25, 6*25, 7*25};
+
+size_t KeccakP1600times8_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, const unsigned char *input, size_t inputByteLen)
+{
+    #if    !defined(KeccakP1600times4_fullUnrolling)
+    unsigned int i;
+    #endif
+    uint64_t *in64 = (uint64_t *)input;
+    size_t    nBlocks = inputByteLen / (8 * 200);
+    KeccakP_DeclareVars;
+    V512    x01234567, x12345678;
+    V512    Xba, Xbe, Xbi, Xbo, Xbu;
+    V512    Xga, Xge, Xgi, Xgo, Xgu;
+    V512    Xka, Xke, Xki, Xko, Xku;
+    V512    Xma, Xme, Xmi, Xmo, Xmu;
+    V512    Xsa, Xse, Xsi, Xso, Xsu;
+    V256    v1, v2;
+    V512    p1, p2;
+    V256    gather = *(V256*)oGatherScatter;
+
+    /* Clear internal X accu */
+    Xba = _mm512_setzero_si512();
+    Xbe = _mm512_setzero_si512();
+    Xbi = _mm512_setzero_si512();
+    Xbo = _mm512_setzero_si512();
+    Xbu = _mm512_setzero_si512();
+    Xga = _mm512_setzero_si512();
+    Xge = _mm512_setzero_si512();
+    Xgi = _mm512_setzero_si512();
+    Xgo = _mm512_setzero_si512();
+    Xgu = _mm512_setzero_si512();
+    Xka = _mm512_setzero_si512();
+    Xke = _mm512_setzero_si512();
+    Xki = _mm512_setzero_si512();
+    Xko = _mm512_setzero_si512();
+    Xku = _mm512_setzero_si512();
+    Xma = _mm512_setzero_si512();
+    Xme = _mm512_setzero_si512();
+    Xmi = _mm512_setzero_si512();
+    Xmo = _mm512_setzero_si512();
+    Xmu = _mm512_setzero_si512();
+    Xsa = _mm512_setzero_si512();
+    Xse = _mm512_setzero_si512();
+    Xsi = _mm512_setzero_si512();
+    Xso = _mm512_setzero_si512();
+    Xsu = _mm512_setzero_si512();
+
+    /* prepare 8 lanes for roll-c */
+    x01234567 = _mm512_maskz_loadu_epi64(0x1F, &kRoll[20]); /* 5 lanes ok */
+    _ba = _mm512_maskz_loadu_epi64(0x0F, &kRoll[21]); /* 4 lanes ok */
+    _be = XOR3(ROL(x01234567, 7), _ba, _mm512_srli_epi64(_ba, 3));
+    x01234567 = _mm512_permutex2var_epi64(x01234567, *(V512*)o01234_012, _be);
+    x12345678 = _mm512_permutex2var_epi64(x01234567, *(V512*)o1234_0123, _be);
+
+    do {
+        Iba = AddInput( 0);
+        Ibe = AddInput( 1);
+        Ibi = AddInput( 2);
+        Ibo = AddInput( 3);
+        Ibu = AddInput( 4);
+        Iga = AddInput( 5);
+        Ige = AddInput( 6);
+        Igi = AddInput( 7);
+        Igo = AddInput( 8);
+        Igu = AddInput( 9);
+        Ika = AddInput(10);
+        Ike = AddInput(11);
+        Iki = AddInput(12);
+        Iko = AddInput(13);
+        Iku = AddInput(14);
+        Ima = AddInput(15);
+        Ime = AddInput(16);
+        Imi = AddInput(17);
+        Imo = AddInput(18);
+        Imu = AddInput(19);
+
+        /* Roll-c */
+        Isa = x01234567;
+        Ise = x12345678;
+        Isu = XOR3(ROL(x01234567, 7), x12345678, _mm512_srli_epi64(x12345678, 3));
+        Ise = _mm512_permutex2var_epi64(x01234567, *(V512*)o1234567_3, Isu);
+        Isi = _mm512_permutex2var_epi64(Ise, *(V512*)o1234567_4, Isu);
+        Iso = _mm512_permutex2var_epi64(Ise, *(V512*)o234567_45, Isu);
+        Isu = _mm512_permutex2var_epi64(Ise, *(V512*)o34567_456, Isu);
+
+        x01234567 = XOR3(ROL(Iso, 7), Isu, _mm512_srli_epi64(Isu, 3));
+        x12345678 = _mm512_permutex2var_epi64(x01234567, *(V512*)o1234567_4, x01234567);
+
+        XOReq512(Isa, LoadInput(20));
+        XOReq512(Ise, LoadInput(21));
+        XOReq512(Isi, LoadInput(22));
+        XOReq512(Iso, LoadInput(23));
+        XOReq512(Isu, LoadInput(24));
+
+        rounds6
+        Dump( "P-out", _);
+
+        /*    Accumulate in X */
+        XOReq512(Xba, _ba);
+        XOReq512(Xbe, _be);
+        XOReq512(Xbi, _bi);
+        XOReq512(Xbo, _bo);
+        XOReq512(Xbu, _bu);
+        XOReq512(Xga, _ga);
+        XOReq512(Xge, _ge);
+        XOReq512(Xgi, _gi);
+        XOReq512(Xgo, _go);
+        XOReq512(Xgu, _gu);
+        XOReq512(Xka, _ka);
+        XOReq512(Xke, _ke);
+        XOReq512(Xki, _ki);
+        XOReq512(Xko, _ko);
+        XOReq512(Xku, _ku);
+        XOReq512(Xma, _ma);
+        XOReq512(Xme, _me);
+        XOReq512(Xmi, _mi);
+        XOReq512(Xmo, _mo);
+        XOReq512(Xmu, _mu);
+        XOReq512(Xsa, _sa);
+        XOReq512(Xse, _se);
+        XOReq512(Xsi, _si);
+        XOReq512(Xso, _so);
+        XOReq512(Xsu, _su);
+        Dump( "X", X);
+
+        in64 += 8 * 25;
+    }
+    while(--nBlocks != 0);
+
+    /* Add horizontally Xba ... Xgi Reduce from lanes 8 to 4 */
+    p1 = *(V512*)oLow256;
+    p2 = *(V512*)oHigh256;
+    Xba = XOR(_mm512_permutex2var_epi64(Xba, p1, Xbu), _mm512_permutex2var_epi64(Xba, p2, Xbu));
+    Xbe = XOR(_mm512_permutex2var_epi64(Xbe, p1, Xga), _mm512_permutex2var_epi64(Xbe, p2, Xga));
+    Xbi = XOR(_mm512_permutex2var_epi64(Xbi, p1, Xge), _mm512_permutex2var_epi64(Xbi, p2, Xge));
+    Xbo = XOR(_mm512_permutex2var_epi64(Xbo, p1, Xgi), _mm512_permutex2var_epi64(Xbo, p2, Xgi));
+
+    /* Add horizontally Xgo ... Xma Reduce from lanes 8 to 4 */
+    Xgo = XOR(_mm512_permutex2var_epi64(Xgo, p1, Xki), _mm512_permutex2var_epi64(Xgo, p2, Xki));
+    Xgu = XOR(_mm512_permutex2var_epi64(Xgu, p1, Xko), _mm512_permutex2var_epi64(Xgu, p2, Xko));
+    Xka = XOR(_mm512_permutex2var_epi64(Xka, p1, Xku), _mm512_permutex2var_epi64(Xka, p2, Xku));
+    Xke = XOR(_mm512_permutex2var_epi64(Xke, p1, Xma), _mm512_permutex2var_epi64(Xke, p2, Xma));
+
+    /* Add horizontally Xme ... Xso Reduce from lanes 8 to 4 */
+    Xme = XOR(_mm512_permutex2var_epi64(Xme, p1, Xsa), _mm512_permutex2var_epi64(Xme, p2, Xsa));
+    Xmi = XOR(_mm512_permutex2var_epi64(Xmi, p1, Xse), _mm512_permutex2var_epi64(Xmi, p2, Xse));
+    Xmo = XOR(_mm512_permutex2var_epi64(Xmo, p1, Xsi), _mm512_permutex2var_epi64(Xmo, p2, Xsi));
+    Xmu = XOR(_mm512_permutex2var_epi64(Xmu, p1, Xso), _mm512_permutex2var_epi64(Xmu, p2, Xso));
+
+    /* Add horizontally Xba ... Xbo Reduce from lanes 4 to 2 */
+    p1 = *(V512*)oLow128;
+    p2 = *(V512*)oHigh128;
+    Xba = XOR(_mm512_permutex2var_epi64(Xba, p1, Xbi), _mm512_permutex2var_epi64(Xba, p2, Xbi));
+    Xbe = XOR(_mm512_permutex2var_epi64(Xbe, p1, Xbo), _mm512_permutex2var_epi64(Xbe, p2, Xbo));
+
+    /* Add horizontally Xgo ... Xke Reduce from lanes 4 to 2 */
+    Xgo = XOR(_mm512_permutex2var_epi64(Xgo, p1, Xka), _mm512_permutex2var_epi64(Xgo, p2, Xka));
+    Xgu = XOR(_mm512_permutex2var_epi64(Xgu, p1, Xke), _mm512_permutex2var_epi64(Xgu, p2, Xke));
+
+    /* Add horizontally Xme ... Xmu Reduce from lanes 4 to 2 */
+    Xme = XOR(_mm512_permutex2var_epi64(Xme, p1, Xmo), _mm512_permutex2var_epi64(Xme, p2, Xmo));
+    Xmi = XOR(_mm512_permutex2var_epi64(Xmi, p1, Xmu), _mm512_permutex2var_epi64(Xmi, p2, Xmu));
+
+    /* Add horizontally Xba ... Xbe Reduce from lanes 2 to 1 */
+    p1 = *(V512*)oLow64;
+    p2 = *(V512*)oHigh64;
+    Xba = XOR(_mm512_permutex2var_epi64(Xba, p1, Xbe), _mm512_permutex2var_epi64(Xba, p2, Xbe));
+
+    /* Add horizontally Xgo ... Xgu Reduce from lanes 2 to 1 */
+    Xgo = XOR(_mm512_permutex2var_epi64(Xgo, p1, Xgu), _mm512_permutex2var_epi64(Xgo, p2, Xgu));
+
+    /* Add horizontally Xme ... Xmi Reduce from lanes 2 to 1 */
+    Xme = XOR(_mm512_permutex2var_epi64(Xme, p1, Xmi), _mm512_permutex2var_epi64(Xme, p2, Xmi));
+
+    /* Add and store in xAccu */
+    Xba = XOR( Xba, *(V512*)&xAccu[0]);
+    Xgo = XOR( Xgo, *(V512*)&xAccu[8]);
+    Xme = XOR( Xme, *(V512*)&xAccu[16]);
+    _mm512_store_si512((V512*)&xAccu[0], Xba);
+    _mm512_store_si512((V512*)&xAccu[8], Xgo);
+    _mm512_store_si512((V512*)&xAccu[16], Xme);
+
+    /* Add horizontally Xsu */
+    v1 = _mm256_xor_si256( _mm512_extracti64x4_epi64(Xsu, 0), _mm512_extracti64x4_epi64(Xsu, 1));
+    v1 = _mm256_xor_si256( v1, _mm256_permute4x64_epi64(v1, 0xEE));
+    xAccu[24] ^= _mm256_extract_epi64(v1, 0) ^ _mm256_extract_epi64(v1, 1);
+    DumpMem("xAccu", xAccu, 5*5);
+
+    /*    Store new kRoll */
+    _mm512_mask_storeu_epi64(&kRoll[20], 0x1F, x01234567);
+    DumpMem("Next kRoll", kRoll+20, 5);
+
+    return (size_t)in64 - (size_t)input;
+}
+
+#undef LoadInput
+#undef AddInput
+
+ALIGN(64) static const uint64_t     o1234567_6[]    = {   1,   2,   3,   4,   5,   6,   7, 8+6 };
+ALIGN(64) static const uint64_t     o234567_01[]    = {   2,   3,   4,   5,   6,   7, 8+0, 8+1 };
+ALIGN(64) static const uint64_t     o34567_012[]    = {   3,   4,   5,   6,   7, 8+0, 8+1, 8+2 };
+ALIGN(64) static const uint64_t     o4567_0123[]    = {   4,   5,   6,   7, 8+0, 8+1, 8+2, 8+3 };
+ALIGN(64) static const uint64_t     o567_01234[]    = {   5,   6,   7, 8+0, 8+1, 8+2, 8+3, 8+4 };
+ALIGN(64) static const uint64_t     o67_012345[]    = {   6,   7, 8+0, 8+1, 8+2, 8+3, 8+4, 8+5 };
+ALIGN(64) static const uint64_t     o7_0123456[]    = {   7, 8+0, 8+1, 8+2, 8+3, 8+4, 8+5, 8+6 };
+
+size_t KeccakP1600times8_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, unsigned char *output, size_t outputByteLen)
+{
+    uint64_t *o64 = (uint64_t *)output;
+    size_t    nBlocks = outputByteLen / (8 * 200);
+    KeccakP_DeclareVars;
+    #if    !defined(KeccakP1600times4_fullUnrolling)
+    unsigned int i;
+    #endif
+    V512    x01234567, x23456789;
+    V256    scatter = *(V256*)oGatherScatter;
+
+    x01234567 = LOAD512u(yAccu[15]);
+    x23456789 = LOAD512u(yAccu[17]);
+
+    do {
+        Iba = CONST8_64(yAccu[0]);
+        Ibe = CONST8_64(yAccu[1]);
+        Ibi = CONST8_64(yAccu[2]);
+        Ibo = CONST8_64(yAccu[3]);
+        Ibu = CONST8_64(yAccu[4]);
+
+        Iga = CONST8_64(yAccu[5]);
+        Ige = CONST8_64(yAccu[6]);
+        Igi = CONST8_64(yAccu[7]);
+        Igo = CONST8_64(yAccu[8]);
+        Igu = CONST8_64(yAccu[9]);
+
+        Ika = CONST8_64(yAccu[10]);
+        Ike = CONST8_64(yAccu[11]);
+        Iki = CONST8_64(yAccu[12]);
+        Iko = CONST8_64(yAccu[13]);
+        Iku = CONST8_64(yAccu[14]);
+
+        /*  roll-e */
+        Ima = x01234567;
+        Ime = _mm512_permutex2var_epi64(x01234567, *(V512*)o1234567_6, x23456789);
+        Imi = x23456789;
+
+        x23456789 = XOR3(ROL(Ima, 7), ROL(Ime, 18), _mm512_and_si512(Imi, _mm512_srli_epi64(Ime, 1)));
+        Imo = _mm512_permutex2var_epi64(Imi, *(V512*)o1234567_0, x23456789);
+        Imu = _mm512_permutex2var_epi64(Imi, *(V512*)o234567_01, x23456789);
+        Isa = _mm512_permutex2var_epi64(Imi, *(V512*)o34567_012, x23456789);
+        Ise = _mm512_permutex2var_epi64(Imi, *(V512*)o4567_0123, x23456789);
+        Isi = _mm512_permutex2var_epi64(Imi, *(V512*)o567_01234, x23456789);
+        Iso = _mm512_permutex2var_epi64(Imi, *(V512*)o67_012345, x23456789);
+        Isu = _mm512_permutex2var_epi64(Imi, *(V512*)o7_0123456, x23456789);
+        x01234567 = Iso;
+        Dump( "After roll-e", I);
+
+        rounds6
+
+        /*  Add kRoll */
+        _ba = XOR(_ba, CONST8_64(kRoll[0]));
+        _be = XOR(_be, CONST8_64(kRoll[1]));
+        _bi = XOR(_bi, CONST8_64(kRoll[2]));
+        _bo = XOR(_bo, CONST8_64(kRoll[3]));
+        _bu = XOR(_bu, CONST8_64(kRoll[4]));
+        _ga = XOR(_ga, CONST8_64(kRoll[5]));
+        _ge = XOR(_ge, CONST8_64(kRoll[6]));
+        _gi = XOR(_gi, CONST8_64(kRoll[7]));
+        _go = XOR(_go, CONST8_64(kRoll[8]));
+        _gu = XOR(_gu, CONST8_64(kRoll[9]));
+        _ka = XOR(_ka, CONST8_64(kRoll[10]));
+        _ke = XOR(_ke, CONST8_64(kRoll[11]));
+        _ki = XOR(_ki, CONST8_64(kRoll[12]));
+        _ko = XOR(_ko, CONST8_64(kRoll[13]));
+        _ku = XOR(_ku, CONST8_64(kRoll[14]));
+        _ma = XOR(_ma, CONST8_64(kRoll[15]));
+        _me = XOR(_me, CONST8_64(kRoll[16]));
+        _mi = XOR(_mi, CONST8_64(kRoll[17]));
+        _mo = XOR(_mo, CONST8_64(kRoll[18]));
+        _mu = XOR(_mu, CONST8_64(kRoll[19]));
+        _sa = XOR(_sa, CONST8_64(kRoll[20]));
+        _se = XOR(_se, CONST8_64(kRoll[21]));
+        _si = XOR(_si, CONST8_64(kRoll[22]));
+        _so = XOR(_so, CONST8_64(kRoll[23]));
+        _su = XOR(_su, CONST8_64(kRoll[24]));
+        Dump( "After add kRoll", _);
+
+        /*  Extract */
+        STORE_SCATTER8_64(o64+0, scatter, _ba);
+        STORE_SCATTER8_64(o64+1, scatter, _be);
+        STORE_SCATTER8_64(o64+2, scatter, _bi);
+        STORE_SCATTER8_64(o64+3, scatter, _bo);
+        STORE_SCATTER8_64(o64+4, scatter, _bu);
+        STORE_SCATTER8_64(o64+5, scatter, _ga);
+        STORE_SCATTER8_64(o64+6, scatter, _ge);
+        STORE_SCATTER8_64(o64+7, scatter, _gi);
+        STORE_SCATTER8_64(o64+8, scatter, _go);
+        STORE_SCATTER8_64(o64+9, scatter, _gu);
+        STORE_SCATTER8_64(o64+10, scatter, _ka);
+        STORE_SCATTER8_64(o64+11, scatter, _ke);
+        STORE_SCATTER8_64(o64+12, scatter, _ki);
+        STORE_SCATTER8_64(o64+13, scatter, _ko);
+        STORE_SCATTER8_64(o64+14, scatter, _ku);
+        STORE_SCATTER8_64(o64+15, scatter, _ma);
+        STORE_SCATTER8_64(o64+16, scatter, _me);
+        STORE_SCATTER8_64(o64+17, scatter, _mi);
+        STORE_SCATTER8_64(o64+18, scatter, _mo);
+        STORE_SCATTER8_64(o64+19, scatter, _mu);
+        STORE_SCATTER8_64(o64+20, scatter, _sa);
+        STORE_SCATTER8_64(o64+21, scatter, _se);
+        STORE_SCATTER8_64(o64+22, scatter, _si);
+        STORE_SCATTER8_64(o64+23, scatter, _so);
+        STORE_SCATTER8_64(o64+24, scatter, _su);
+        DumpMem("Output", o64, 8*25);
+
+        o64 += 8 * 25;
+    }
+    while(--nBlocks != 0);
+
+    /*    Store new yAccu */
+    _mm512_mask_storeu_epi64(&yAccu[15], 0xFF, x01234567);
+    _mm512_mask_storeu_epi64(&yAccu[17], 0xC0, x23456789);
+    DumpMem("yAccu", yAccu, 25);
+
+    return (size_t)o64 - (size_t)output;
 }

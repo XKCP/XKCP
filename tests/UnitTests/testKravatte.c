@@ -264,6 +264,7 @@ void selfTestKravatte(const unsigned char *expected)
         fflush(stdout);
 #endif
         performTestKravatte(checksum, mode);
+        fflush(stdout);
         assert(memcmp(expected, checksum, checksumByteSize) == 0);
 #ifdef OUTPUT
         printf(" - OK.\n");

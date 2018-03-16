@@ -23,8 +23,10 @@ Please refer to PlSnP-documentation.h for more details.
 #define KeccakP1600times8_statesAlignment       64
 #define KeccakF1600times8_FastLoop_supported
 #define KeccakP1600times8_12rounds_FastLoop_supported
+#define KeccakF1600times8_FastKravatte_supported
 
 #include <stddef.h>
+#include <stdint.h>
 
 #define KeccakP1600times8_StaticInitialize()
 void KeccakP1600times8_InitializeAll(void *states);
@@ -45,5 +47,7 @@ void KeccakP1600times8_ExtractAndAddBytes(const void *states, unsigned int insta
 void KeccakP1600times8_ExtractAndAddLanesAll(const void *states, const unsigned char *input, unsigned char *output, unsigned int laneCount, unsigned int laneOffset);
 size_t KeccakF1600times8_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen);
 size_t KeccakP1600times8_12rounds_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen);
+size_t KeccakP1600times8_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, const unsigned char *input, size_t inputByteLen);
+size_t KeccakP1600times8_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, unsigned char *output, size_t outputByteLen);
 
 #endif
