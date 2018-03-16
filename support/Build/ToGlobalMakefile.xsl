@@ -75,15 +75,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:value-of select="$makefile"/>
     <xsl:text>: </xsl:text>
     <xsl:value-of select="$targetfile"/>
-    <xsl:text> Build/ToTargetMakefile.xsl
-&#9;xsltproc -o $@ Build/ToTargetMakefile.xsl $&lt;
+    <xsl:text> support/Build/ToTargetMakefile.xsl
+&#9;xsltproc -o $@ support/Build/ToTargetMakefile.xsl $&lt;
 </xsl:text>
 
     <xsl:value-of select="$targetfile"/>
-    <xsl:text>: Build/ToOneTarget.xsl bin/.build/Makefile.expanded Makefile.build
+    <xsl:text>: support/Build/ToOneTarget.xsl bin/.build/Makefile.expanded Makefile.build
 &#9;xsltproc -o $@ -param nameTarget "'</xsl:text>
     <xsl:value-of select="@name"/>
-    <xsl:text>'" Build/ToOneTarget.xsl bin/.build/Makefile.expanded
+    <xsl:text>'" support/Build/ToOneTarget.xsl bin/.build/Makefile.expanded
 
 </xsl:text>
 </xsl:template>

@@ -27,74 +27,74 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
     <!-- SUPERCOP packages -->
 
     <fragment name="crypto_hash_test">
-        <h>SUPERCOP/test_crypto_hash.h</h>
-        <c>SUPERCOP/test_crypto_hash.c</c>
+        <h>tests/SUPERCOP/test_crypto_hash.h</h>
+        <c>tests/SUPERCOP/test_crypto_hash.c</c>
     </fragment>
 
     <fragment name="crypto_hash/shake128/kcp" inherits="KeccakSpongeWidth1600">
-        <c>SUPERCOP/SHAKE128/SHAKE128.c</c>
-        <h>SUPERCOP/SHAKE128/api.h</h>
+        <c>tests/SUPERCOP/SHAKE128/SHAKE128.c</c>
+        <h>tests/SUPERCOP/SHAKE128/api.h</h>
     </fragment>
 
     <fragment name="SHAKE128_SelfTest" inherits="crypto_hash/shake128/kcp crypto_hash_test">
-        <c>SUPERCOP/SHAKE128/selftest.c</c>
+        <c>tests/SUPERCOP/SHAKE128/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_hash/shake256/kcp" inherits="KeccakSpongeWidth1600">
-        <c>SUPERCOP/SHAKE256/SHAKE256.c</c>
-        <h>SUPERCOP/SHAKE256/api.h</h>
+        <c>tests/SUPERCOP/SHAKE256/SHAKE256.c</c>
+        <h>tests/SUPERCOP/SHAKE256/api.h</h>
     </fragment>
 
     <fragment name="SHAKE256_SelfTest" inherits="crypto_hash/shake256/kcp crypto_hash_test">
-        <c>SUPERCOP/SHAKE256/selftest.c</c>
+        <c>tests/SUPERCOP/SHAKE256/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_hash/sha3224/kcp" inherits="KeccakSpongeWidth1600">
-        <c>SUPERCOP/SHA3-224/SHA3-224.c</c>
-        <h>SUPERCOP/SHA3-224/api.h</h>
+        <c>tests/SUPERCOP/SHA3-224/SHA3-224.c</c>
+        <h>tests/SUPERCOP/SHA3-224/api.h</h>
     </fragment>
 
     <fragment name="SHA3-224_SelfTest" inherits="crypto_hash/sha3224/kcp crypto_hash_test">
-        <c>SUPERCOP/SHA3-224/selftest.c</c>
+        <c>tests/SUPERCOP/SHA3-224/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_hash/sha3256/kcp" inherits="KeccakSpongeWidth1600">
-        <c>SUPERCOP/SHA3-256/SHA3-256.c</c>
-        <h>SUPERCOP/SHA3-256/api.h</h>
+        <c>tests/SUPERCOP/SHA3-256/SHA3-256.c</c>
+        <h>tests/SUPERCOP/SHA3-256/api.h</h>
     </fragment>
 
     <fragment name="SHA3-256_SelfTest" inherits="crypto_hash/sha3256/kcp crypto_hash_test">
-        <c>SUPERCOP/SHA3-256/selftest.c</c>
+        <c>tests/SUPERCOP/SHA3-256/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_hash/sha3384/kcp" inherits="KeccakSpongeWidth1600">
-        <c>SUPERCOP/SHA3-384/SHA3-384.c</c>
-        <h>SUPERCOP/SHA3-384/api.h</h>
+        <c>tests/SUPERCOP/SHA3-384/SHA3-384.c</c>
+        <h>tests/SUPERCOP/SHA3-384/api.h</h>
     </fragment>
 
     <fragment name="SHA3-384_SelfTest" inherits="crypto_hash/sha3384/kcp crypto_hash_test">
-        <c>SUPERCOP/SHA3-384/selftest.c</c>
+        <c>tests/SUPERCOP/SHA3-384/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_hash/sha3512/kcp" inherits="KeccakSpongeWidth1600">
-        <c>SUPERCOP/SHA3-512/SHA3-512.c</c>
-        <h>SUPERCOP/SHA3-512/api.h</h>
+        <c>tests/SUPERCOP/SHA3-512/SHA3-512.c</c>
+        <h>tests/SUPERCOP/SHA3-512/api.h</h>
     </fragment>
 
     <fragment name="SHA3-512_SelfTest" inherits="crypto_hash/sha3512/kcp crypto_hash_test">
-        <c>SUPERCOP/SHA3-512/selftest.c</c>
+        <c>tests/SUPERCOP/SHA3-512/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_hash/k12/kcp" inherits="KangarooTwelve">
-        <c>SUPERCOP/KangarooTwelve/K12.c</c>
-        <h>SUPERCOP/KangarooTwelve/api.h</h>
-        <h>SUPERCOP/KangarooTwelve/KeccakP-1600-times2-SnP.h</h>
-        <h>SUPERCOP/KangarooTwelve/KeccakP-1600-times4-SnP.h</h>
-        <h>SUPERCOP/KangarooTwelve/KeccakP-1600-times8-SnP.h</h>
+        <c>tests/SUPERCOP/KangarooTwelve/K12.c</c>
+        <h>tests/SUPERCOP/KangarooTwelve/api.h</h>
+        <h>tests/SUPERCOP/KangarooTwelve/KeccakP-1600-times2-SnP.h</h>
+        <h>tests/SUPERCOP/KangarooTwelve/KeccakP-1600-times4-SnP.h</h>
+        <h>tests/SUPERCOP/KangarooTwelve/KeccakP-1600-times8-SnP.h</h>
     </fragment>
 
     <fragment name="KangarooTwelve_SelfTest" inherits="crypto_hash/k12/kcp crypto_hash_test">
-        <c>SUPERCOP/KangarooTwelve/selftest.c</c>
+        <c>tests/SUPERCOP/KangarooTwelve/selftest.c</c>
     </fragment>
 
     <group all="supercop">

@@ -25,34 +25,34 @@ The fragments below allow to select the desired Keyak instances.
 -->
 
     <fragment name="Keyak-common" inherits="common">
-        <h>Keyak/Motorist.inc</h>
-        <h>Keyak/Keyak-common.h</h>
-        <h>Keyak/Keyakv2.inc</h>
+        <h>lib/high/Keyak/Motorist.inc</h>
+        <h>lib/high/Keyak/Keyak-common.h</h>
+        <h>lib/high/Keyak/Keyakv2.inc</h>
     </fragment>
 
     <fragment name="RiverKeyak" inherits="Keyak-common">
-        <c>Keyak/RiverKeyak.c</c>
-        <h>Keyak/RiverKeyak.h</h>
+        <c>lib/high/Keyak/RiverKeyak.c</c>
+        <h>lib/high/Keyak/RiverKeyak.h</h>
     </fragment>
 
     <fragment name="LakeKeyak" inherits="Keyak-common">
-        <c>Keyak/LakeKeyak.c</c>
-        <h>Keyak/LakeKeyak.h</h>
+        <c>lib/high/Keyak/LakeKeyak.c</c>
+        <h>lib/high/Keyak/LakeKeyak.h</h>
     </fragment>
 
     <fragment name="SeaKeyak" inherits="Keyak-common">
-        <c>Keyak/SeaKeyak.c</c>
-        <h>Keyak/SeaKeyak.h</h>
+        <c>lib/high/Keyak/SeaKeyak.c</c>
+        <h>lib/high/Keyak/SeaKeyak.h</h>
     </fragment>
 
     <fragment name="OceanKeyak" inherits="Keyak-common">
-        <c>Keyak/OceanKeyak.c</c>
-        <h>Keyak/OceanKeyak.h</h>
+        <c>lib/high/Keyak/OceanKeyak.c</c>
+        <h>lib/high/Keyak/OceanKeyak.h</h>
     </fragment>
 
     <fragment name="LunarKeyak" inherits="Keyak-common">
-        <c>Keyak/LunarKeyak.c</c>
-        <h>Keyak/LunarKeyak.h</h>
+        <c>lib/high/Keyak/LunarKeyak.c</c>
+        <h>lib/high/Keyak/LunarKeyak.h</h>
     </fragment>
 
     <fragment name="Keyak" inherits="RiverKeyak LakeKeyak SeaKeyak OceanKeyak LunarKeyak"/>
@@ -60,48 +60,48 @@ The fragments below allow to select the desired Keyak instances.
     <!-- Keyak with CAESAR API and SUPERCOP packages -->
 
     <fragment name="crypto_aead/riverkeyakv2" inherits="RiverKeyak">
-        <c>CAESAR/RiverKeyak/encrypt.c</c>
-        <h>CAESAR/RiverKeyak/api.h</h>
+        <c>tests/SUPERCOP/RiverKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/RiverKeyak/api.h</h>
     </fragment>
 
     <fragment name="RiverKeyakSelfTest" inherits="crypto_aead/riverkeyakv2 crypto_aead_test">
-        <c>CAESAR/RiverKeyak/selftest.c</c>
+        <c>tests/SUPERCOP/RiverKeyak/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_aead/lakekeyakv2" inherits="LakeKeyak">
-        <c>CAESAR/LakeKeyak/encrypt.c</c>
-        <h>CAESAR/LakeKeyak/api.h</h>
+        <c>tests/SUPERCOP/LakeKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/LakeKeyak/api.h</h>
     </fragment>
 
     <fragment name="LakeKeyakSelfTest" inherits="crypto_aead/lakekeyakv2 crypto_aead_test">
-        <c>CAESAR/LakeKeyak/selftest.c</c>
+        <c>tests/SUPERCOP/LakeKeyak/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_aead/seakeyakv2" inherits="SeaKeyak">
-        <c>CAESAR/SeaKeyak/encrypt.c</c>
-        <h>CAESAR/SeaKeyak/api.h</h>
+        <c>tests/SUPERCOP/SeaKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/SeaKeyak/api.h</h>
     </fragment>
 
     <fragment name="SeaKeyakSelfTest" inherits="crypto_aead/seakeyakv2 crypto_aead_test">
-        <c>CAESAR/SeaKeyak/selftest.c</c>
+        <c>tests/SUPERCOP/SeaKeyak/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_aead/oceankeyakv2" inherits="OceanKeyak">
-        <c>CAESAR/OceanKeyak/encrypt.c</c>
-        <h>CAESAR/OceanKeyak/api.h</h>
+        <c>tests/SUPERCOP/OceanKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/OceanKeyak/api.h</h>
     </fragment>
 
     <fragment name="OceanKeyakSelfTest" inherits="crypto_aead/oceankeyakv2 crypto_aead_test">
-        <c>CAESAR/OceanKeyak/selftest.c</c>
+        <c>tests/SUPERCOP/OceanKeyak/selftest.c</c>
     </fragment>
 
     <fragment name="crypto_aead/lunarkeyakv2" inherits="LunarKeyak">
-        <c>CAESAR/LunarKeyak/encrypt.c</c>
-        <h>CAESAR/LunarKeyak/api.h</h>
+        <c>tests/SUPERCOP/LunarKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/LunarKeyak/api.h</h>
     </fragment>
 
     <fragment name="LunarKeyakSelfTest" inherits="crypto_aead/lunarkeyakv2 crypto_aead_test">
-        <c>CAESAR/LunarKeyak/selftest.c</c>
+        <c>tests/SUPERCOP/LunarKeyak/selftest.c</c>
     </fragment>
 
     <group all="supercop">

@@ -13,74 +13,74 @@ http://creativecommons.org/publicdomain/zero/1.0/
 -->
 <build all="all" xmlns:xi="http://www.w3.org/2001/XInclude">
 
-    <xi:include href="HighLevel.build"/>
-    <xi:include href="LowLevel.build"/>
-    <xi:include href="Ketje/Ketje.build"/>
-    <xi:include href="Keyak/Keyak.build"/>
-    <xi:include href="SUPERCOP/SUPERCOP.build"/>
-    <xi:include href="HOWTO-customize.build"/>
+    <xi:include href="lib/HighLevel.build"/>
+    <xi:include href="lib/LowLevel.build"/>
+    <xi:include href="lib/Ketje.build"/>
+    <xi:include href="lib/Keyak.build"/>
+    <xi:include href="tests/SUPERCOP/SUPERCOP.build"/>
+    <xi:include href="doc/HOWTO-customize.build"/>
 
     <!-- For the name of the targets, please see the end of this file. -->
 
     <fragment name="common">
-        <h>Common/align.h</h>
-        <h>Common/brg_endian.h</h>
+        <h>lib/common/align.h</h>
+        <h>lib/common/brg_endian.h</h>
     </fragment>
 
     <!-- *** Utilities *** -->
 
     <!-- To run many tests -->
     <fragment name="KeccakTests" inherits="All">
-        <c>Tests/main.c</c>
-        <c>Tests/testSnP.c</c>
-        <h>Tests/testSnP.inc</h>
-        <h>Tests/testSnP.h</h>
-        <c>Tests/testPlSnP.c</c>
-        <h>Tests/testPlSnP.inc</h>
-        <h>Tests/testPlSnP.h</h>
-        <c>Tests/testSponge.c</c>
-        <h>Tests/testSponge.inc</h>
-        <h>Tests/testSponge.h</h>
-        <c>Tests/testDuplex.c</c>
-        <h>Tests/testDuplex.inc</h>
-        <h>Tests/testDuplex.h</h>
-        <c>Tests/testMotorist.c</c>
-        <h>Tests/testMotorist.inc</h>
-        <h>Tests/testMotorist.h</h>
-        <c>Tests/testKeyakv2.c</c>
-        <h>Tests/testKeyakv2.inc</h>
-        <h>Tests/testKeyakv2.h</h>
-        <c>Tests/testKetjev2.c</c>
-        <h>Tests/testKetjev2.h</h>
-        <h>Tests/testKetjev2.inc</h>
-        <c>Tests/genKAT.c</c>
-        <h>Tests/genKAT.h</h>
-        <c>Tests/testPerformance.c</c>
-        <h>Tests/timing.h</h>
-        <h>Tests/testPerformance.h</h>
-        <h>Tests/timingSnP.inc</h>
-        <h>Tests/timingPlSnP.inc</h>
-        <h>Tests/timingSponge.inc</h>
-        <h>Tests/timingKeyak.inc</h>
-        <c>Tests/testKeccakPRG.c</c>
-        <h>Tests/testKeccakPRG.inc</h>
-        <h>Tests/testKeccakPRG.h</h>
-        <c>Tests/testKangarooTwelve.c</c>
-        <h>Tests/testKangarooTwelve.h</h>
-        <c>Tests/testKravatte.c</c>
-        <h>Tests/testKravatte.h</h>
-        <c>Tests/testKravatteModes.c</c>
-        <h>Tests/testKravatteModes.h</h>
-        <c>Tests/testSP800-185.c</c>
-        <h>Tests/testSP800-185.h</h>
+        <c>tests/UnitTests/main.c</c>
+        <c>tests/UnitTests/testSnP.c</c>
+        <h>tests/UnitTests/testSnP.inc</h>
+        <h>tests/UnitTests/testSnP.h</h>
+        <c>tests/UnitTests/testPlSnP.c</c>
+        <h>tests/UnitTests/testPlSnP.inc</h>
+        <h>tests/UnitTests/testPlSnP.h</h>
+        <c>tests/UnitTests/testSponge.c</c>
+        <h>tests/UnitTests/testSponge.inc</h>
+        <h>tests/UnitTests/testSponge.h</h>
+        <c>tests/UnitTests/testDuplex.c</c>
+        <h>tests/UnitTests/testDuplex.inc</h>
+        <h>tests/UnitTests/testDuplex.h</h>
+        <c>tests/UnitTests/testMotorist.c</c>
+        <h>tests/UnitTests/testMotorist.inc</h>
+        <h>tests/UnitTests/testMotorist.h</h>
+        <c>tests/UnitTests/testKeyakv2.c</c>
+        <h>tests/UnitTests/testKeyakv2.inc</h>
+        <h>tests/UnitTests/testKeyakv2.h</h>
+        <c>tests/UnitTests/testKetjev2.c</c>
+        <h>tests/UnitTests/testKetjev2.h</h>
+        <h>tests/UnitTests/testKetjev2.inc</h>
+        <c>tests/UnitTests/genKAT.c</c>
+        <h>tests/UnitTests/genKAT.h</h>
+        <c>tests/UnitTests/testPerformance.c</c>
+        <h>tests/UnitTests/timing.h</h>
+        <h>tests/UnitTests/testPerformance.h</h>
+        <h>tests/UnitTests/timingSnP.inc</h>
+        <h>tests/UnitTests/timingPlSnP.inc</h>
+        <h>tests/UnitTests/timingSponge.inc</h>
+        <h>tests/UnitTests/timingKeyak.inc</h>
+        <c>tests/UnitTests/testKeccakPRG.c</c>
+        <h>tests/UnitTests/testKeccakPRG.inc</h>
+        <h>tests/UnitTests/testKeccakPRG.h</h>
+        <c>tests/UnitTests/testKangarooTwelve.c</c>
+        <h>tests/UnitTests/testKangarooTwelve.h</h>
+        <c>tests/UnitTests/testKravatte.c</c>
+        <h>tests/UnitTests/testKravatte.h</h>
+        <c>tests/UnitTests/testKravatteModes.c</c>
+        <h>tests/UnitTests/testKravatteModes.h</h>
+        <c>tests/UnitTests/testSP800-185.c</c>
+        <h>tests/UnitTests/testSP800-185.h</h>
         <gcc>-lm</gcc>
     </fragment>
 
     <!-- To compute a hash of a file -->
     <fragment name="KeccakSum" inherits="FIPS202 SP800-185 KangarooTwelve">
-        <c>KeccakSum/KeccakSum.c</c>
-        <c>KeccakSum/base64.c</c>
-        <h>KeccakSum/base64.h</h>
+        <c>util/KeccakSum/KeccakSum.c</c>
+        <c>util/KeccakSum/base64.c</c>
+        <h>util/KeccakSum/base64.h</h>
     </fragment>
 
     <!-- To make a library -->
@@ -89,8 +89,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- *** CAESAR-related targets *** -->
 
     <fragment name="crypto_aead_test">
-        <h>CAESAR/test_crypto_aead.h</h>
-        <c>CAESAR/test_crypto_aead.c</c>
+        <h>tests/SUPERCOP/test_crypto_aead.h</h>
+        <c>tests/SUPERCOP/test_crypto_aead.c</c>
     </fragment>
 
     <!-- *** Targets *** -->
@@ -99,8 +99,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <!-- Reference implementations -->
     <fragment name="reference" inherits="reference200 reference400 reference800 reference1600 serial-fallbacks Ket-SnP">
-        <c>Tests/displayIntermediateValues.c</c>
-        <h>Tests/displayIntermediateValues.h</h>
+        <c>tests/UnitTests/displayIntermediateValues.c</c>
+        <h>tests/UnitTests/displayIntermediateValues.h</h>
         <define>KeccakReference</define>
         <gcc>-O</gcc>
     </fragment>
@@ -108,8 +108,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Reference implementations dedicated to 32-bit platforms
         (i.e., featuring bit interleaving for Keccak-p[1600]) -->
     <fragment name="reference32bits" inherits="reference200 reference400 reference800 reference1600-32bits serial-fallbacks Ket-SnP">
-        <c>Tests/displayIntermediateValues.c</c>
-        <h>Tests/displayIntermediateValues.h</h>
+        <c>tests/UnitTests/displayIntermediateValues.c</c>
+        <h>tests/UnitTests/displayIntermediateValues.h</h>
         <define>KeccakReference</define>
         <define>KeccakReference32BI</define>
         <gcc>-O</gcc>

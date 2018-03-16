@@ -32,71 +32,71 @@ In addition, one of the following fragments is required:
     <!-- "Ket", the layer between SnP and Ketje services -->
 
     <fragment name="Ket-SnP-common">
-        <h>Ketje/Ket/SnP-compliant/Ket.inc</h>
-        <h>Ketje/Ket/SnP-compliant/Ket-common.h</h>
+        <h>lib/low/Ketje/SnP-compliant/Ket.inc</h>
+        <h>lib/low/Ketje/SnP-compliant/Ket-common.h</h>
     </fragment>
 
     <fragment name="KetJr-SnP" inherits="Ket-SnP-common">
-        <c>Ketje/Ket/SnP-compliant/KetJr.c</c>
-        <h>Ketje/Ket/SnP-compliant/KetJr.h</h>
+        <c>lib/low/Ketje/SnP-compliant/KetJr.c</c>
+        <h>lib/low/Ketje/SnP-compliant/KetJr.h</h>
     </fragment>
 
     <fragment name="KetSr-SnP" inherits="Ket-SnP-common">
-        <c>Ketje/Ket/SnP-compliant/KetSr.c</c>
-        <h>Ketje/Ket/SnP-compliant/KetSr.h</h>
+        <c>lib/low/Ketje/SnP-compliant/KetSr.c</c>
+        <h>lib/low/Ketje/SnP-compliant/KetSr.h</h>
     </fragment>
 
     <fragment name="KetMn-SnP" inherits="Ket-SnP-common">
-        <c>Ketje/Ket/SnP-compliant/KetMn.c</c>
-        <h>Ketje/Ket/SnP-compliant/KetMn.h</h>
+        <c>lib/low/Ketje/SnP-compliant/KetMn.c</c>
+        <h>lib/low/Ketje/SnP-compliant/KetMn.h</h>
     </fragment>
 
     <fragment name="KetMj-SnP" inherits="Ket-SnP-common">
-        <c>Ketje/Ket/SnP-compliant/KetMj.c</c>
-        <h>Ketje/Ket/SnP-compliant/KetMj.h</h>
+        <c>lib/low/Ketje/SnP-compliant/KetMj.c</c>
+        <h>lib/low/Ketje/SnP-compliant/KetMj.h</h>
     </fragment>
 
     <fragment name="Ket-SnP" inherits="KetJr-SnP KetSr-SnP KetMn-SnP KetMj-SnP"/>
 
     <fragment name="Ket-optimizedLE-common">
-        <h>Ketje/Ket/OptimizedLE/Ket.inc</h>
-        <h>Ketje/Ket/OptimizedLE/Ket-common.h</h>
+        <h>lib/low/Ketje/OptimizedLE/Ket.inc</h>
+        <h>lib/low/Ketje/OptimizedLE/Ket-common.h</h>
     </fragment>
 
     <fragment name="KetJr-optimizedLE" inherits="Ket-optimizedLE-common">
-        <c>Ketje/Ket/OptimizedLE/KetJr.c</c>
-        <h>Ketje/Ket/OptimizedLE/KetJr.h</h>
+        <c>lib/low/Ketje/OptimizedLE/KetJr.c</c>
+        <h>lib/low/Ketje/OptimizedLE/KetJr.h</h>
     </fragment>
 
     <fragment name="KetSr-optimizedLE" inherits="Ket-optimizedLE-common">
-        <c>Ketje/Ket/OptimizedLE/KetSr.c</c>
-        <h>Ketje/Ket/OptimizedLE/KetSr.h</h>
+        <c>lib/low/Ketje/OptimizedLE/KetSr.c</c>
+        <h>lib/low/Ketje/OptimizedLE/KetSr.h</h>
     </fragment>
 
     <fragment name="KetMn-optimizedLE" inherits="Ket-optimizedLE-common">
-        <c>Ketje/Ket/OptimizedLE/KetMn.c</c>
-        <h>Ketje/Ket/OptimizedLE/KetMn.h</h>
+        <c>lib/low/Ketje/OptimizedLE/KetMn.c</c>
+        <h>lib/low/Ketje/OptimizedLE/KetMn.h</h>
     </fragment>
 
     <fragment name="KetMj-optimizedLE" inherits="Ket-optimizedLE-common">
-        <c>Ketje/Ket/OptimizedLE/KetMj.c</c>
-        <h>Ketje/Ket/OptimizedLE/KetMj.h</h>
+        <c>lib/low/Ketje/OptimizedLE/KetMj.c</c>
+        <h>lib/low/Ketje/OptimizedLE/KetMj.h</h>
     </fragment>
 
     <fragment name="Ket-optimizedLE" inherits="KetJr-optimizedLE KetSr-optimizedLE KetMn-optimizedLE KetMj-optimizedLE"/>
 
     <fragment name="Ket-ARMv7M-common">
-        <h>Ketje/Ket/OptimizedAsmARM/Ket-common.h</h>
+        <h>lib/low/Ketje/OptimizedAsmARM/Ket-common.h</h>
     </fragment>
 
     <fragment name="KetJr-ARMv7M" inherits="Ket-ARMv7M-common">
-        <h>Ketje/Ket/OptimizedAsmARM/KetJr.h</h>
-        <c>Ketje/Ket/OptimizedAsmARM/KetjeJr-armv7m-le-gcc.s</c>
+        <h>lib/low/Ketje/OptimizedAsmARM/KetJr.h</h>
+        <c>lib/low/Ketje/OptimizedAsmARM/KetjeJr-armv7m-le-gcc.s</c>
     </fragment>
 
     <fragment name="KetSr-ARMv7M" inherits="Ket-ARMv7M-common">
-        <h>Ketje/Ket/OptimizedAsmARM/KetSr.h</h>
-        <c>Ketje/Ket/OptimizedAsmARM/KetjeSr-armv7m-le-gcc.s</c>
+        <h>lib/low/Ketje/OptimizedAsmARM/KetSr.h</h>
+        <c>lib/low/Ketje/OptimizedAsmARM/KetjeSr-armv7m-le-gcc.s</c>
     </fragment>
 
     <fragment name="Ket-ARMv7M" inherits="KetJr-ARMv7M KetSr-ARMv7M"/>
@@ -104,32 +104,32 @@ In addition, one of the following fragments is required:
     <!-- *** High-level services *** -->
 
     <fragment name="Ketje-common" inherits="common">
-        <h>Ketje/Ketje-common.h</h>
-        <h>Ketje/Ketjev2.inc</h>
+        <h>lib/high/Ketje/Ketje-common.h</h>
+        <h>lib/high/Ketje/Ketjev2.inc</h>
     </fragment>
 
     <fragment name="KetjeJr" inherits="Ketje-common">
-        <c>Ketje/KetjeJr.c</c>
-        <h>Ketje/KetjeJr.h</h>
+        <c>lib/high/Ketje/KetjeJr.c</c>
+        <h>lib/high/Ketje/KetjeJr.h</h>
     </fragment>
 
     <fragment name="KetjeSr" inherits="Ketje-common">
-        <c>Ketje/KetjeSr.c</c>
-        <h>Ketje/KetjeSr.h</h>
+        <c>lib/high/Ketje/KetjeSr.c</c>
+        <h>lib/high/Ketje/KetjeSr.h</h>
     </fragment>
 
     <fragment name="KetjeMn" inherits="Ketje-common">
-        <c>Ketje/KetjeMn.c</c>
-        <h>Ketje/KetjeMn.h</h>
+        <c>lib/high/Ketje/KetjeMn.c</c>
+        <h>lib/high/Ketje/KetjeMn.h</h>
     </fragment>
 
     <fragment name="KetjeMj" inherits="Ketje-common">
-        <c>Ketje/KetjeMj.c</c>
-        <h>Ketje/KetjeMj.h</h>
+        <c>lib/high/Ketje/KetjeMj.c</c>
+        <h>lib/high/Ketje/KetjeMj.h</h>
     </fragment>
 
     <fragment name="Ketje" inherits="KetjeJr KetjeSr KetjeMn KetjeMj">
-        <h>Ketje/Ketjev2.h</h>
+        <h>lib/high/Ketje/Ketjev2.h</h>
     </fragment>
 
     <!-- Ketje with CAESAR API and SUPERCOP packages -->
@@ -137,12 +137,12 @@ In addition, one of the following fragments is required:
     <!-- Ketje Jr -->
 
     <fragment name="crypto_aead/ketjejrv2" inherits="KetjeJr">
-        <c>CAESAR/KetjeJr/encrypt.c</c>
-        <h>CAESAR/KetjeJr/api.h</h>
+        <c>tests/SUPERCOP/KetjeJr/encrypt.c</c>
+        <h>tests/SUPERCOP/KetjeJr/api.h</h>
     </fragment>
 
     <fragment name="KetjeJrSelfTest" inherits="crypto_aead/ketjejrv2 crypto_aead_test">
-        <c>CAESAR/KetjeJr/selftest.c</c>
+        <c>tests/SUPERCOP/KetjeJr/selftest.c</c>
     </fragment>
 
     <fragment name="KetjeJr-compact" inherits="KetjeJr KetJr-SnP compact200"/>
@@ -160,12 +160,12 @@ In addition, one of the following fragments is required:
     <!-- Ketje Sr -->
 
     <fragment name="crypto_aead/ketjesrv2" inherits="KetjeSr">
-        <c>CAESAR/KetjeSr/encrypt.c</c>
-        <h>CAESAR/KetjeSr/api.h</h>
+        <c>tests/SUPERCOP/KetjeSr/encrypt.c</c>
+        <h>tests/SUPERCOP/KetjeSr/api.h</h>
     </fragment>
 
     <fragment name="KetjeSrSelfTest" inherits="crypto_aead/ketjesrv2 crypto_aead_test">
-        <c>CAESAR/KetjeSr/selftest.c</c>
+        <c>tests/SUPERCOP/KetjeSr/selftest.c</c>
     </fragment>
 
     <fragment name="KetjeSr-compact" inherits="KetjeSr KetSr-SnP reference400"/>
@@ -183,12 +183,12 @@ In addition, one of the following fragments is required:
     <!-- Ketje Minor -->
 
     <fragment name="crypto_aead/ketjeminorv2" inherits="KetjeMn">
-        <c>CAESAR/KetjeMn/encrypt.c</c>
-        <h>CAESAR/KetjeMn/api.h</h>
+        <c>tests/SUPERCOP/KetjeMn/encrypt.c</c>
+        <h>tests/SUPERCOP/KetjeMn/api.h</h>
     </fragment>
 
     <fragment name="KetjeMnSelfTest" inherits="crypto_aead/ketjeminorv2 crypto_aead_test">
-        <c>CAESAR/KetjeMn/selftest.c</c>
+        <c>tests/SUPERCOP/KetjeMn/selftest.c</c>
     </fragment>
 
     <fragment name="KetjeMn-compact" inherits="KetjeMn KetMn-SnP compact800"/>
@@ -210,12 +210,12 @@ In addition, one of the following fragments is required:
     <!-- Ketje Major -->
 
     <fragment name="crypto_aead/ketjemajorv2" inherits="KetjeMj">
-        <c>CAESAR/KetjeMj/encrypt.c</c>
-        <h>CAESAR/KetjeMj/api.h</h>
+        <c>tests/SUPERCOP/KetjeMj/encrypt.c</c>
+        <h>tests/SUPERCOP/KetjeMj/api.h</h>
     </fragment>
 
     <fragment name="KetjeMjSelfTest" inherits="crypto_aead/ketjemajorv2 crypto_aead_test">
-        <c>CAESAR/KetjeMj/selftest.c</c>
+        <c>tests/SUPERCOP/KetjeMj/selftest.c</c>
     </fragment>
 
     <fragment name="KetjeMj-compact" inherits="KetjeMj KetMj-SnP compact1600"/>
