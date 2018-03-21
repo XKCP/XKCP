@@ -261,21 +261,21 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
     unsigned char encbuf[MaxParallellism*Kravatte_RollcSizeInBytes];
     size_t messageByteLen = *messageBitLen / 8; /* do not include partial last byte */
 
-    #if defined(KeccakP1600times8_implementation)
+    #if defined(KeccakP1600times8_implementation) && !defined(KeccakP1600times8_isFallback)
     #if defined(KeccakF1600times8_FastKravatte_supported)
     ParallelCompressLoopFast( 8 )
     #else
     ParallelCompressLoopPlSnP( 8 )
     #endif
     #endif
-    #if defined(KeccakP1600times4_implementation)
+    #if defined(KeccakP1600times4_implementation) && !defined(KeccakP1600times4_isFallback)
     #if defined(KeccakF1600times4_FastKravatte_supported)
     ParallelCompressLoopFast( 4 )
     #else
     ParallelCompressLoopPlSnP( 4 )
     #endif
     #endif
-    #if defined(KeccakP1600times2_implementation)
+    #if defined(KeccakP1600times2_implementation) && !defined(KeccakP1600times2_isFallback)
     #if defined(KeccakF1600times2_FastKravatte_supported)
     ParallelCompressLoopFast( 2 )
     #else
@@ -452,21 +452,21 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
     }
 
     outputByteLen = (outputBitLen + 7) / 8;
-    #if defined(KeccakP1600times8_implementation)
+    #if defined(KeccakP1600times8_implementation) && !defined(KeccakP1600times8_isFallback)
     #if defined(KeccakF1600times8_FastKravatte_supported)
     ParallelExpandLoopFast( 8 )
     #else
     ParallelExpandLoopPlSnP( 8 )
     #endif
     #endif
-    #if defined(KeccakP1600times4_implementation)
+    #if defined(KeccakP1600times4_implementation) && !defined(KeccakP1600times4_isFallback)
     #if defined(KeccakF1600times4_FastKravatte_supported)
     ParallelExpandLoopFast( 4 )
     #else
     ParallelExpandLoopPlSnP( 4 )
     #endif
     #endif
-    #if defined(KeccakP1600times2_implementation)
+    #if defined(KeccakP1600times2_implementation) && !defined(KeccakP1600times2_isFallback)
     #if defined(KeccakF1600times2_FastKravatte_supported)
     ParallelExpandLoopFast( 2 )
     #else

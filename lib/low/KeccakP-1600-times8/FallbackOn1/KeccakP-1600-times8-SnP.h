@@ -23,6 +23,7 @@ Please refer to PlSnP-documentation.h for more details.
 #define KeccakP1600times8_implementation        "fallback on serial implementation (" KeccakP1600_implementation ")"
 #define KeccakP1600times8_statesSizeInBytes     (((KeccakP1600_stateSizeInBytes+(KeccakP1600_stateAlignment-1))/KeccakP1600_stateAlignment)*KeccakP1600_stateAlignment*8)
 #define KeccakP1600times8_statesAlignment       KeccakP1600_stateAlignment
+#define KeccakP1600times8_isFallback
 
 void KeccakP1600times8_StaticInitialize( void );
 void KeccakP1600times8_InitializeAll(void *states);

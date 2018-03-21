@@ -487,16 +487,80 @@ uint_32t measureParallelHash(uint_32t dtMin, unsigned int securityStrength, unsi
         return 0;
 }
 
+void printParallelImplementations(
+    int useKeccakF1600timesN_FastLoop_Absorb,
+    int useKeccakP1600timesN_12rounds_FastLoop_Absorb,
+    int useKeccakF1600timesN_FastKravatte
+)
+{
+        printf("- \303\2271: " KeccakP1600_implementation "\n");
+
+    #if defined(KeccakP1600times2_implementation) && !defined(KeccakP1600times2_isFallback)
+    printf("- \303\2272: " KeccakP1600times2_implementation "\n");
+    #if defined(KeccakP1600times2_12rounds_FastLoop_supported)
+    if (useKeccakP1600timesN_12rounds_FastLoop_Absorb)
+        printf("      + KeccakP1600times2_12rounds_FastLoop_Absorb()\n");
+    #endif
+    #if defined(KeccakF1600times2_FastLoop_supported)
+    if (useKeccakF1600timesN_FastLoop_Absorb)
+        printf("      + KeccakF1600times2_FastLoop_Absorb()\n");
+    #endif
+    #if defined(KeccakF1600times2_FastKravatte_supported)
+    if (useKeccakF1600timesN_FastKravatte) {
+        printf("      + KeccakP1600times2_KravatteCompress()\n");
+        printf("      + KeccakP1600times2_KravatteExpand()\n");
+    }
+    #endif
+    #else
+    printf("- \303\2272: not used\n");
+    #endif
+
+    #if defined(KeccakP1600times4_implementation) && !defined(KeccakP1600times4_isFallback)
+    printf("- \303\2274: " KeccakP1600times4_implementation "\n");
+    #if defined(KeccakP1600times4_12rounds_FastLoop_supported)
+    if (useKeccakP1600timesN_12rounds_FastLoop_Absorb)
+        printf("      + KeccakP1600times4_12rounds_FastLoop_Absorb()\n");
+    #endif
+    #if defined(KeccakF1600times4_FastLoop_supported)
+    if (useKeccakF1600timesN_FastLoop_Absorb)
+        printf("      + KeccakF1600times4_FastLoop_Absorb()\n");
+    #endif
+    #if defined(KeccakF1600times4_FastKravatte_supported)
+    if (useKeccakF1600timesN_FastKravatte) {
+        printf("      + KeccakP1600times4_KravatteCompress()\n");
+        printf("      + KeccakP1600times4_KravatteExpand()\n");
+    }
+    #endif
+    #else
+    printf("- \303\2274: not used\n");
+    #endif
+
+    #if defined(KeccakP1600times8_implementation) && !defined(KeccakP1600times8_isFallback)
+    printf("- \303\2278: " KeccakP1600times8_implementation "\n");
+    #if defined(KeccakP1600times8_12rounds_FastLoop_supported)
+    if (useKeccakP1600timesN_12rounds_FastLoop_Absorb)
+        printf("      + KeccakP1600times8_12rounds_FastLoop_Absorb()\n");
+    #endif
+    #if defined(KeccakF1600times8_FastLoop_supported)
+    if (useKeccakF1600timesN_FastLoop_Absorb)
+        printf("      + KeccakF1600times8_FastLoop_Absorb()\n");
+    #endif
+    #if defined(KeccakF1600times8_FastKravatte_supported)
+    if (useKeccakF1600timesN_FastKravatte) {
+        printf("      + KeccakP1600times8_KravatteCompress()\n");
+        printf("      + KeccakP1600times8_KravatteExpand()\n");
+    }
+    #endif
+    #else
+    printf("- \303\2278: not used\n");
+    #endif
+}
+
 void printParallelHashPerformanceHeader(unsigned int securityStrength)
 {
     printf("*** ParallelHash%d ***\n", securityStrength);
     printf("Using Keccak-f[1600] implementations:\n");
-    printf("- \303\2271: " KeccakP1600_implementation "\n");
-#ifndef KeccakP1600timesN_excluded
-    printf("- \303\2272: " KeccakP1600times2_implementation "\n");
-    printf("- \303\2274: " KeccakP1600times4_implementation "\n");
-    printf("- \303\2278: " KeccakP1600times8_implementation "\n");
-#endif
+    printParallelImplementations(1, 0, 0);
     printf("\n");
 }
 
@@ -559,12 +623,7 @@ void printKangarooTwelvePerformanceHeader( void )
 {
     printf("*** KangarooTwelve ***\n");
     printf("Using Keccak-p[1600,12] implementations:\n");
-    printf("- \303\2271: " KeccakP1600_implementation "\n");
-#ifndef KeccakP1600timesN_excluded
-    printf("- \303\2272: " KeccakP1600times2_implementation "\n");
-    printf("- \303\2274: " KeccakP1600times4_implementation "\n");
-    printf("- \303\2278: " KeccakP1600times8_implementation "\n");
-#endif
+    printParallelImplementations(0, 1, 0);
     printf("\n");
 }
 
@@ -761,12 +820,7 @@ void printKravattePerformanceHeader( void )
 {
     printf("*** Kravatte ***\n");
     printf("Using Keccak-p[1600,6] implementations:\n");
-    printf("- \303\2271: " KeccakP1600_implementation "\n");
-#ifndef KeccakP1600timesN_excluded
-    printf("- \303\2272: " KeccakP1600times2_implementation "\n");
-    printf("- \303\2274: " KeccakP1600times4_implementation "\n");
-    printf("- \303\2278: " KeccakP1600times8_implementation "\n");
-#endif
+    printParallelImplementations(0, 0, 1);
     printf("\n");
 }
 
