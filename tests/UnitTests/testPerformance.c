@@ -777,6 +777,9 @@ uint_32t testKravatteNextLen( uint_32t len )
         if (len > Kravatte_rate)
             len = Kravatte_rate;
     }
+    else if (len < 16*Kravatte_rate) {
+        len += Kravatte_rate;
+    }
     else
         len <<= 1;
 	return len;
@@ -785,6 +788,11 @@ uint_32t testKravatteNextLen( uint_32t len )
 uint_32t testKravatteAdaptLen( uint_32t len )
 {
     return (len < Kravatte_rate) ? len : (len-8);
+}
+
+uint_32t testKravatteWBCAdaptLen( uint_32t len )
+{
+    return (len < Kravatte_rate) ? len : (len-16);
 }
 
 typedef uint_32t (* measurePerf)(uint_32t, unsigned int);
@@ -834,6 +842,11 @@ void testKravattePerformanceOne( void )
     printf("Kravatte Mask Derivation %9d cycles\n\n", time);
 
     printf("Kra\n");
+    {
+        len = 4096*8;
+        time = measureKra(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureKra(calibration, testKravatteAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
@@ -841,6 +854,11 @@ void testKravattePerformanceOne( void )
 	testKravattePerfSlope(measureKra, calibration);
 
     printf("\nVatte\n");
+    {
+        len = 4096*8;
+        time = measureVatte(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureVatte(calibration, testKravatteAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
@@ -848,6 +866,11 @@ void testKravattePerformanceOne( void )
 	testKravattePerfSlope(measureVatte, calibration);
 
     printf("\nKravatte_SIV\n");
+    {
+        len = 4096*8;
+        time = measureKravatte_SIV(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureKravatte_SIV(calibration, testKravatteAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
@@ -855,6 +878,11 @@ void testKravattePerformanceOne( void )
 	testKravattePerfSlope(measureKravatte_SIV, calibration);
 
     printf("\nKravatte_SAE Wrap (only plaintext input, no AD)\n");
+    {
+        len = 4096*8;
+        time = measureKravatte_SAE_Wrap(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureKravatte_SAE_Wrap(calibration, testKravatteAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
@@ -862,6 +890,11 @@ void testKravattePerformanceOne( void )
 	testKravattePerfSlope(measureKravatte_SAE_Wrap, calibration);
 
     printf("\nKravatte_SAE MAC (only AD input, no plaintext)\n");
+    {
+        len = 4096*8;
+        time = measureKravatte_SAE_MAC(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureKravatte_SAE_MAC(calibration, testKravatteAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
@@ -869,9 +902,13 @@ void testKravattePerformanceOne( void )
 	testKravattePerfSlope(measureKravatte_SAE_MAC, calibration);
 
     printf("\nKravatte_WBC (Tweak 128 bits)\n");
+    for(len=2048*8; len<=16384*8; len*=2) {
+        time = measureKravatte_WBC(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
-        time = measureKravatte_WBC(calibration, testKravatteAdaptLen(len));
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
+        time = measureKravatte_WBC(calibration, testKravatteWBCAdaptLen(len));
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteWBCAdaptLen(len)/8, time, time*1.0/(len/8));
     }
 	testKravattePerfSlope(measureKravatte_WBC, calibration);
 
