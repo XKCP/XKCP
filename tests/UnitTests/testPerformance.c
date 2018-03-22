@@ -240,72 +240,6 @@ unsigned int KeccakP1600_gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *
 }
 #endif
 
-#ifndef KeccakP800timesN_excluded
-    #include "KeccakP-800-times2-SnP.h"
-
-    #define prefix                      KeccakP800times2
-    #define PlSnP                       KeccakP800times2
-    #define PlSnP_parallelism           2
-    #define SnP_width                   800
-    #define PlSnP_PermuteAll            KeccakP800times2_PermuteAll_22rounds
-    #define PlSnP_PermuteAll_12rounds   KeccakP800times2_PermuteAll_12rounds
-    #if defined(KeccakF800times2_FastLoop_supported)
-        #define PlSnP_FastLoop_Absorb KeccakF800times2_FastLoop_Absorb
-    #endif
-        #include "timingPlSnP.inc"
-    #undef prefix
-    #undef PlSnP
-    #undef PlSnP_parallelism
-    #undef SnP_width
-    #undef PlSnP_PermuteAll
-    #undef PlSnP_PermuteAll_12rounds
-    #undef PlSnP_FastLoop_Absorb
-#endif
-
-#ifndef KeccakP800timesN_excluded
-    #include "KeccakP-800-times4-SnP.h"
-
-    #define prefix                      KeccakP800times4
-    #define PlSnP                       KeccakP800times4
-    #define PlSnP_parallelism           4
-    #define SnP_width                   800
-    #define PlSnP_PermuteAll            KeccakP800times4_PermuteAll_22rounds
-    #define PlSnP_PermuteAll_12rounds   KeccakP800times4_PermuteAll_12rounds
-    #if defined(KeccakF800times4_FastLoop_supported)
-        #define PlSnP_FastLoop_Absorb KeccakF800times4_FastLoop_Absorb
-    #endif
-        #include "timingPlSnP.inc"
-    #undef prefix
-    #undef PlSnP
-    #undef PlSnP_parallelism
-    #undef SnP_width
-    #undef PlSnP_PermuteAll
-    #undef PlSnP_PermuteAll_12rounds
-    #undef PlSnP_FastLoop_Absorb
-#endif
-
-#ifndef KeccakP800timesN_excluded
-    #include "KeccakP-800-times8-SnP.h"
-
-    #define prefix                      KeccakP800times8
-    #define PlSnP                       KeccakP800times8
-    #define PlSnP_parallelism           8
-    #define SnP_width                   800
-    #define PlSnP_PermuteAll            KeccakP800times8_PermuteAll_22rounds
-    #define PlSnP_PermuteAll_12rounds   KeccakP800times8_PermuteAll_12rounds
-    #if defined(KeccakF800times8_FastLoop_supported)
-        #define PlSnP_FastLoop_Absorb KeccakF800times8_FastLoop_Absorb
-    #endif
-        #include "timingPlSnP.inc"
-    #undef prefix
-    #undef PlSnP
-    #undef PlSnP_parallelism
-    #undef SnP_width
-    #undef PlSnP_PermuteAll
-    #undef PlSnP_PermuteAll_12rounds
-    #undef PlSnP_FastLoop_Absorb
-#endif
-
 #ifndef KeccakP1600timesN_excluded
     #include "KeccakP-1600-times2-SnP.h"
 
@@ -988,11 +922,6 @@ void testPerformance()
 
 #ifndef KeccakP800_excluded
     KeccakP800_timingSnP("Keccak-p[800]", KeccakP800_implementation);
-#endif
-#ifndef KeccakP800timesN_excluded
-    KeccakP800times2_timingPlSnP("Keccak-p[800]\303\2272", KeccakP800times2_implementation);
-    KeccakP800times4_timingPlSnP("Keccak-p[800]\303\2274", KeccakP800times4_implementation);
-    KeccakP800times8_timingPlSnP("Keccak-p[800]\303\2278", KeccakP800times8_implementation);
 #endif
 
 #ifndef KeccakP1600_excluded

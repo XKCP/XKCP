@@ -95,7 +95,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <!-- *** Targets *** -->
 
-    <fragment name="serial-fallbacks" inherits="800times2on1 800times4on1 800times8on1 1600times2on1 1600times4on1 1600times8on1"/>
+    <fragment name="serial-fallbacks" inherits="1600times2on1 1600times4on1 1600times8on1"/>
 
     <!-- Reference implementations -->
     <fragment name="reference" inherits="reference200 reference400 reference800 reference1600 serial-fallbacks Ket-SnP">
@@ -134,22 +134,22 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="asmX86-64shld" inherits="reference200 reference400 reference800 optimized1600AsmX86-64shld serial-fallbacks Ket-SnP"/>
 
     <!-- Implementations selected for the Nehalem microarchitecture -->
-    <fragment name="Nehalem" inherits="reference200 reference400 optimized800lcufull optimized1600lcufull 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 1600times4on2 1600times8on2 Ket-SnP"/>
+    <fragment name="Nehalem" inherits="reference200 reference400 optimized800lcufull optimized1600lcufull SIMD128-SSE2u2 1600times4on2 1600times8on2 Ket-SnP"/>
     <!-- Implementations selected for the Sandy Bridge microarchitecture -->
-    <fragment name="SandyBridge" inherits="reference200 reference400 optimized800lcufull optimized1600lcufullshld 800times2on1 800times4on1 800times8on1 SIMD128-SSE2ufull 1600times4on2 1600times8on2 Ket-SnP"/>
+    <fragment name="SandyBridge" inherits="reference200 reference400 optimized800lcufull optimized1600lcufullshld SIMD128-SSE2ufull 1600times4on2 1600times8on2 Ket-SnP"/>
     <!-- Implementations selected for the Bulldozer microarchitecture -->
-    <fragment name="Bulldozer" inherits="reference200 reference400 optimized800lcufull optimized1600XOPufull 800times2on1 800times4on1 800times8on1 SIMD128-XOPufull 1600times4on2 1600times8on2 Ket-SnP"/>
+    <fragment name="Bulldozer" inherits="reference200 reference400 optimized800lcufull optimized1600XOPufull SIMD128-XOPufull 1600times4on2 1600times8on2 Ket-SnP"/>
     <!-- Implementations selected for the Haswell microarchitecture -->
-    <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 800times2on1 800times4on1 800times8on1 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 Ket-SnP"/>
+    <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 Ket-SnP"/>
     <!-- Implementations selected for the Knights Landing microarchitecture -->
-    <fragment name="SkylakeX" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 800times2on1 800times4on1 800times8on1 SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12 Ket-SnP"/>
+    <fragment name="SkylakeX" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12 Ket-SnP"/>
 
     <!-- Implementations selected for ARMv6M -->
     <fragment name="ARMv6M" inherits="optimized200ARMv6M optimized400ARMv6M optimized800ARMv6Mu2 optimized1600ARMv6Mu2 serial-fallbacks Ket-optimizedLE"/>
     <!-- Implementations selected for ARMv7M -->
     <fragment name="ARMv7M" inherits="optimized200ARMv7M optimized400ARMv7M optimized800ARMv7Mu2 inplace1600ARMv7M serial-fallbacks Ket-ARMv7M"/>
     <!-- Implementations selected for ARMv7A -->
-    <fragment name="ARMv7A" inherits="reference200 reference400 optimized800ARMv7Au2 optimized1600ARMv7A 800times2on1 800times4ARMv7A 800times8on1 1600times2ARMV7A 1600times4on2 1600times8on2 Ket-optimizedLE"/>
+    <fragment name="ARMv7A" inherits="reference200 reference400 optimized800ARMv7Au2 optimized1600ARMv7A 1600times2ARMV7A 1600times4on2 1600times8on2 Ket-optimizedLE"/>
     <!-- Implementations selected for ARMv8A -->
     <fragment name="ARMv8A" inherits="reference200 reference400 optimized800ARMv8A optimized1600ARMv8A serial-fallbacks Ket-optimizedLE"/>
 

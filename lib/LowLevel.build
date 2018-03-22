@@ -417,36 +417,6 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-SnP.h</h>
     </fragment>
 
-    <!-- Keccak-p[800]×2 -->
-
-    <fragment name="800times2on1">
-        <c>lib/low/KeccakP-800-times2/FallbackOn1/KeccakP-800-times2-on1.c</c>
-        <h>lib/low/KeccakP-800-times2/FallbackOn1/KeccakP-800-times2-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
-    </fragment>
-
-    <!-- Keccak-p[800]×4 -->
-
-    <fragment name="800times4on1">
-        <c>lib/low/KeccakP-800-times4/FallbackOn1/KeccakP-800-times4-on1.c</c>
-        <h>lib/low/KeccakP-800-times4/FallbackOn1/KeccakP-800-times4-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
-    </fragment>
-
-    <fragment name="800times4ARMv7A" inherits="800times4on1"/>
-
-    <!-- Keccak-p[800]×8 -->
-
-    <fragment name="800times8on1">
-        <c>lib/low/KeccakP-800-times8/FallbackOn1/KeccakP-800-times8-on1.c</c>
-        <h>lib/low/KeccakP-800-times8/FallbackOn1/KeccakP-800-times8-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
-    </fragment>
-
-    <fragment name="no_parallel800">
-        <define>KeccakP800timesN_excluded</define>
-    </fragment>
-
     <!-- Keccak-p[1600]×2 -->
 
     <fragment name="1600times2on1">

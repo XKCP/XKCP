@@ -19,17 +19,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
   *
   * The following functions are not actually implemented. Their documentation
   * is generic, with the prefix PlSnP replaced by
-  *  - KeccakP800times2 for Keccak-p[800]×2 (i.e., two states of 800 bits each)
-  *  - KeccakP800times4 for Keccak-p[800]×4
-  *  - KeccakP800times8 for Keccak-p[800]×8
-  *  - KeccakP1600times2 for Keccak-p[1600]×2
+  *  - KeccakP1600times2 for Keccak-p[1600]×2 (i.e., two states of 1600 bits each)
   *  - KeccakP1600times4 for Keccak-p[1600]×4
   *  - KeccakP1600times8 for Keccak-p[1600]×8 (i.e., eight states of 1600 bits each)
   * Functions can be replaced by macros, when appropriate.
   *
   * An implementation must provide each function (or macro) as listed below,
   * instantiated with the suitable prefix. In addition, the implementation
-  * must come with a header "KeccakP-{800,1600}-times{2,4,8}-SnP.h"
+  * must come with a header "KeccakP-1600-times{2,4,8}-SnP.h"
   * to define the following symbols (with PlSnP replaced by the appropriate prefix):
   *     - PlSnP_implementation: a synopsis of the implementation;
   *     - PlSnP_statesSizeInBytes: the number of bytes to store the states;
@@ -38,13 +35,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
   *
   * An implementation may also instantiate the function PlSnP_FastLoop_Absorb(),
   * in which case the header must define the symbol PlSnP_FastLoop_supported.
-  *
-  * For Keccak-p[800]:
-  *     -  PlSnP_PermuteAll() is instantiated as
-  *         - KeccakP800_PermuteAll_12rounds() for Keccak-p[800, 12] and
-  *         - KeccakP800_PermuteAll_22rounds() for Keccak-f[800]=Keccak-p[800, 22].
-  *     - PlSnP_FastLoop_Absorb() can be instantiated as
-  *         KeccakF800times{2,4,8}_FastLoop_Absorb() for Keccak-f[800].
   *
   * For Keccak-p[1600]:
   *     - PlSnP_PermuteAll() is instantiated as

@@ -22,72 +22,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 #include <string.h>
 
-#ifndef KeccakP800timesN_excluded
-    #include "KeccakP-800-times2-SnP.h"
-
-    #define prefix                      KeccakP800times2
-    #define PlSnP                       KeccakP800times2
-    #define PlSnP_parallelism           2
-    #define PlSnP_PermuteAll            KeccakP800times2_PermuteAll_22rounds
-    #define PlSnP_PermuteAll_12rounds   KeccakP800times2_PermuteAll_12rounds
-    #define SnP_width                   800
-    #if defined(KeccakF800times2_FastLoop_supported)
-        #define PlSnP_FastLoop_Absorb KeccakF800times2_FastLoop_Absorb
-    #endif
-        #include "testPlSnP.inc"
-    #undef prefix
-    #undef PlSnP
-    #undef PlSnP_parallelism
-    #undef PlSnP_PermuteAll
-    #undef PlSnP_PermuteAll_12rounds
-    #undef SnP_width
-    #undef PlSnP_FastLoop_Absorb
-#endif
-
-#ifndef KeccakP800timesN_excluded
-    #include "KeccakP-800-times4-SnP.h"
-
-    #define prefix                      KeccakP800times4
-    #define PlSnP                       KeccakP800times4
-    #define PlSnP_parallelism           4
-    #define PlSnP_PermuteAll            KeccakP800times4_PermuteAll_22rounds
-    #define PlSnP_PermuteAll_12rounds   KeccakP800times4_PermuteAll_12rounds
-    #define SnP_width                   800
-    #if defined(KeccakF800times4_FastLoop_supported)
-        #define PlSnP_FastLoop_Absorb KeccakF800times4_FastLoop_Absorb
-    #endif
-        #include "testPlSnP.inc"
-    #undef prefix
-    #undef PlSnP
-    #undef PlSnP_parallelism
-    #undef PlSnP_PermuteAll
-    #undef PlSnP_PermuteAll_12rounds
-    #undef SnP_width
-    #undef PlSnP_FastLoop_Absorb
-#endif
-
-#ifndef KeccakP800timesN_excluded
-    #include "KeccakP-800-times8-SnP.h"
-
-    #define prefix                      KeccakP800times8
-    #define PlSnP                       KeccakP800times8
-    #define PlSnP_parallelism           8
-    #define PlSnP_PermuteAll            KeccakP800times8_PermuteAll_22rounds
-    #define PlSnP_PermuteAll_12rounds   KeccakP800times8_PermuteAll_12rounds
-    #define SnP_width                   800
-    #if defined(KeccakF800times8_FastLoop_supported)
-        #define PlSnP_FastLoop_Absorb KeccakF800times8_FastLoop_Absorb
-    #endif
-        #include "testPlSnP.inc"
-    #undef prefix
-    #undef PlSnP
-    #undef PlSnP_parallelism
-    #undef PlSnP_PermuteAll
-    #undef PlSnP_PermuteAll_12rounds
-    #undef SnP_width
-    #undef PlSnP_FastLoop_Absorb
-#endif
-
 #ifndef KeccakP1600timesN_excluded
     #include "KeccakP-1600-times2-SnP.h"
 
@@ -168,18 +102,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 void testPlSnP()
 {
-#ifndef KeccakP800timesN_excluded
-    KeccakP800times2_testPlSnP("KeccakP-800-times2.txt", "Keccak-p[800]\303\2272",
-        "\x40\xf1\x05\x3c\xa1\xb7\x5b\xd0\x69\x68\x00\x10\xa7\xd3\xbd\x3d\x5e\x48\xba\x6d\xd8\xe5\x1c\x3b\x61\xd4\x61\x51\xde\xd3\x0b\xa2\x88\x19\x85\x24\xc7\xb5\x2e\x0b\x58\xe3\x7c\x76\xe0\xe0\x59\x07\x45\x83\x31\x3a\x85\x42\x71\x49\xea\x2e\xec\x15\xe2\xfe\xf1\x21\x4a\x82\x9d\x13\x34\xb1\xfe\x0e\x53\xe1\x7e\xcb\xe7\x12\x8b\x63\xb0\x96\xe6\x8d\xe0\x98\x76\xa1\x6c\x1f\xd2\xa1\x90\x0e\x11\x20\xdb\x58\x84\x6e"
-    );
-    KeccakP800times4_testPlSnP("KeccakP-800-times4.txt", "Keccak-p[800]\303\2274",
-        "\x28\x58\x09\xa9\xf9\xd7\xf2\xa4\x8b\x8e\x41\x3a\xdc\x8a\x9e\xcd\x89\x59\xb7\x4d\xf1\x35\x89\x24\x6c\x88\xea\xc3\x3b\x96\x4f\x1d\xb1\x80\x61\x33\xe6\x54\x23\xfe\xb6\x83\x06\x5b\x64\x3b\xee\x9c\xbe\x28\x50\x09\xf1\x2a\x45\xd5\xcf\xc8\xa6\xdf\xdc\x1c\x25\x3f\xdc\xae\x69\x3c\x00\xde\x9a\x56\x10\xff\xb5\x3f\x75\xdf\x50\xb8\x38\x77\x50\xba\x43\xda\x09\xee\x38\xd5\xee\xb8\x75\xd2\xcc\x75\x63\xe6\xfd\xa5"
-    );
-    KeccakP800times8_testPlSnP("KeccakP-800-times8.txt", "Keccak-p[800]\303\2278",
-        "\xbb\x9d\x80\x37\x54\xc2\x30\xcc\x54\xc6\x15\x9a\x6a\x4c\x1b\x24\xb8\x06\xd4\x5d\x80\xdf\x98\x97\xe3\x40\x55\xdc\x45\x3d\xa7\x3a\xdc\x0c\xf1\xf0\x86\x93\xaf\xbd\xf8\x91\x5a\x3b\x7e\xee\x9f\xa9\x10\x0c\x65\x74\x6f\x0c\x51\xc0\x57\xee\x68\x7d\x2f\x0a\x0c\x61\x15\xbb\x58\x2c\xb7\xaa\x34\x90\xce\x58\x7f\xb6\x96\x3e\xf9\xda\x4b\x6f\x02\xb8\x62\xb1\x8d\xec\xba\x81\x28\xe7\xb2\xd6\x2c\x0a\x5e\xb2\x90\xd6"
-    );
-#endif
-
 #ifndef KeccakP1600timesN_excluded
     KeccakP1600times2_testPlSnP("KeccakP-1600-times2.txt", "Keccak-p[1600]\303\2272",
         "\xf8\x84\x8f\x67\x6a\x80\x87\x4e\xc1\x65\x2e\xea\xb1\x59\xd5\x48\x35\x7b\x12\xa4\xb4\x16\x98\x8d\xdd\xeb\xf8\xa8\x7d\xa8\xf3\xec\xfc\x4e\x86\x22\x60\x96\x43\x48\x39\xc6\xd2\x9f\xca\xa6\xaf\xab\xb2\x20\x63\xdb\x5f\xf9\xc2\xbf\x28\xb3\xff\x9f\x9e\xa8\xca\xb2\xe3\xee\xbf\x73\x3a\x8e\xe6\x68\x6a\x21\x2a\x5a\x55\x34\x64\x3e\xaf\x90\xed\xc4\x7e\x94\x69\x93\x2c\x6c\xbf\x90\x17\x49\xcd\x6e\x65\xab\x26\x7f\xd7\x63\xee\xc0\x1b\x09\x8c\x00\xc2\xf3\x69\x38\xd9\x29\x12\x66\x1a\x95\x5e\x0c\xe2\x4b\x28\x0c\x7b\x90\x90\x1b\x84\xaf\x9f\x43\x34\xad\x9e\x4f\xaa\xdd\xfb\x89\xae\xe6\x00\x05\x6e\xc0\xe0\xe2\x8c\x11\xc6\x46\x5b\xc5\x06\x8c\x23\xa6\xdc\xeb\xb0\x4d\xc0\xee\xc7\x63\xe5\xd2\x85\xd8\x07\xf0\x8f\xf0\x68\x95\xab\xac\xc2\xdf\x9d\xe8\x3c\xb6\x1d\x00\xfc\x87\x38\x6e\x66\x01\x81\x1d\x4d\x83\xe0\xc4\x8c\x05"
