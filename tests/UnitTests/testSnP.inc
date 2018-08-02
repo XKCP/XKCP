@@ -50,7 +50,7 @@ void dumpState(const unsigned char *state, char *message)
     unsigned char buffer[SnP_width/8];
 
     SnP_ExtractBytes(state, buffer, 0, SnP_width/8 );
-    printf( "\n%s @%p\n", message, state );
+    printf( "\n%s\n", message );
     state = buffer;
     for ( i = 0; i < 25; ++i, state += SnP_width/200 )
     {
@@ -129,7 +129,7 @@ void testSnP(const char *fileName, const char *synopsis, const unsigned char *ex
     nominalSnPtest(fileName, synopsis, expected);
 }
 
-#define padding 32
+#define padding 64
 void checkStatePadding(const unsigned char *paddedState)
 {
     unsigned int i;
