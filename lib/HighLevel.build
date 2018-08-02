@@ -26,6 +26,8 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
 * KeccakPRG: the pseudo-random bit generators for all widths.
 * KangarooTwelve: the KangarooTwelve extendable output function.
 * Kravatte: the Kravatte pseudo-random function and its modes (Kravatte-SAE, -SIV, -WBC and -WBC-AE).
+
+* Xoofff: the Xoofff pseudo-random function and its modes (Xoofff-SANE, Xoofff-SANSE, Xoofff-WBC and Xoofff-WBC-AE).
 -->
 
     <!-- *** High-level services *** -->
@@ -151,5 +153,16 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     </fragment>
 
     <fragment name="All" inherits="common Ketje Keyak KeccakSponge KeccakDuplex KeccakPRG FIPS202 SP800-185 KangarooTwelve Kravatte"/>
+
+    <!-- Xoofff and modes on top of it -->
+
+    <fragment name="Xoofff" inherits="common">
+        <c>lib/high/Xoofff/Xoofff.c</c>
+        <h>lib/high/Xoofff/Xoofff.h</h>
+        <c>lib/high/Xoofff/XoofffModes.c</c>
+        <h>lib/high/Xoofff/XoofffModes.h</h>
+    </fragment>
+
+    <fragment name="XooAll" inherits="common Xoofff"/>
 
 </group>

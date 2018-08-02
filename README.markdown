@@ -1,27 +1,32 @@
-# What is the KCP?
+# What is the XKCP?
 
-The **Keccak Code Package** (abbreviated as **KCP**) gathers different free and open-source implementations of the [Keccak sponge function family](http://keccak.noekeon.org/)
+The **eXtended Keccak Code Package** (or the **Xoodoo and Keccak Code Package**, in both cases abbreviated as **XKCP**) gathers different free and open-source implementations of the [Keccak sponge function family](http://keccak.noekeon.org/)
 and closely related variants, such as
 
 * the SHAKE extendable-output functions and SHA-3 hash functions from [FIPS 202][fips202_standard],
 * the cSHAKE, KMAC, ParallelHash and TupleHash functions from [NIST SP 800-185][sp800_185_standard],
 * the [Ketje v2][caesar_ketje] and [Keyak v2][caesar_keyak] authenticated encryption schemes,
-* the fast [KangarooTwelve][k12] extendable-output function.
+* the fast [KangarooTwelve][k12] extendable-output function,
+* the [Kravatte](https://keccak.team/kravatte.html) pseudo-random function and its modes.
+
+In addition, the XKCP contains implementations of
+
+* the Xoodoo permutation,
+* the Xoofff pseudo-random function and its modes (experimental).
 
 
-
-# What does the KCP contain?
+# What does the XKCP contain?
 
 First, the services available in this package are divided into high-level and low-level services. In a nutshell, the low level corresponds to Keccak-_f_[1600] and basic state manipulation, while the high level contains the constructions and the modes for, e.g., sponge functions, hashing or authenticated encryption. For more details, please see the section "_How is the code organized?_" below.
 
-Then, the KCP also contains some utilities for testing and illustration purposes.
+Then, the XKCP also contains some utilities for testing and illustration purposes.
 
 Finally, the project contains some standalone implementations.
 
 
 ## High-level services
 
-When used as a library or directly from the sources, the KCP offers the high-level services documented in the following header files:
+When used as a library or directly from the sources, the XKCP offers the high-level services documented in the following header files:
 
 * [`SimpleFIPS202`](lib/high/Keccak/FIPS202/SimpleFIPS202.h), the six approved FIPS 202 instances (SHAKE128, SHAKE256 and the SHA-3 hash functions) through simple functions.
 * [`KeccakHash`](lib/high/Keccak/FIPS202/KeccakHash.h), the six approved FIPS 202 instances, as well as any Keccak instance based on Keccak-_f_[1600]. This more advanced interface proposes a message queue (init-update-final) and supports bit-level inputs if needed.
@@ -65,7 +70,7 @@ The package contains:
 
 ## Standalone implementations
 
-The KCP also provides a number of standalone implementations, including:
+The XKCP also provides a number of standalone implementations, including:
 
 * a very [compact](http://keccak.noekeon.org/tweetfips202.html) C code of the FIPS 202 (SHA-3) standard in [`Standalone/CompactFIPS202/C/`](Standalone/CompactFIPS202/C/);
 * a compact implementation in Python in [`Standalone/CompactFIPS202/Python/`](Standalone/CompactFIPS202/Python/);
@@ -73,9 +78,9 @@ The KCP also provides a number of standalone implementations, including:
 
 
 
-# Under which license is the KCP distributed?
+# Under which license is the XKCP distributed?
 
-Most of the source and header files in the KCP are released to the **public domain** and associated to the [CC0](http://creativecommons.org/publicdomain/zero/1.0/) deed. The exceptions are the following:
+Most of the source and header files in the XKCP are released to the **public domain** and associated to the [CC0](http://creativecommons.org/publicdomain/zero/1.0/) deed. The exceptions are the following:
 
 * [`lib/common/brg_endian.h`](lib/common/brg_endian.h) is copyrighted by Brian Gladman and comes with a BSD 3-clause license;
 * [`tests/UnitTests/genKAT.c`](tests/UnitTests/genKAT.c) is based on [SHA-3 contest's code by Larry Bassham, NIST](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/KAT1.zip), which he licensed under a BSD 3-clause license;
@@ -85,7 +90,7 @@ Most of the source and header files in the KCP are released to the **public doma
 
 
 
-# How can I build the KCP?
+# How can I build the XKCP?
 
 To build, the following tools are needed:
 
@@ -131,19 +136,19 @@ The situation is similar for parallelized services, as illustrated on the follow
 
 ![Parallel layers](doc/figures/ParallelLayers.png)
 
-*Disclaimer*: the above figures aim at illustrative purposes only, as not all modes, constructions or permutations are currently implemented in the KCP or represented on the figures.
+*Disclaimer*: the above figures aim at illustrative purposes only, as not all modes, constructions or permutations are currently implemented in the XKCP or represented on the figures.
 
 
 
 # Where can I find more information?
 
-About the KCP, we gave some presentations on its motivation and structure, e.g.,
+About the XKCP, we gave some presentations on its motivation and structure, e.g.,
 
 * at [FOSDEM in February 2017][FOSDEM2017] ([slides][slidesAtFOSDEM2017]),
 * at [SPEED-B in October 2016][SPEEDB] ([slides][slidesAtSPEEDB]) ([paper][paperAtSPEEDB]),
 * at the [SHA-3 Workshop in Santa Barbara in August 2014][SHA3workshop2014] ([slides][KCPslides]).
 
-The KCP follows an improved version of the structure proposed in the note ["A software interface for Keccak"][keccakinterface].
+The XKCP follows an improved version of the structure proposed in the note ["A software interface for Keccak"][keccakinterface].
 
 More information on the cryptographic aspects can be found:
 

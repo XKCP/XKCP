@@ -107,6 +107,29 @@ The fragments below allow to select the desired implementation of the permutatio
 * SIMD512-8-AVX512u12: same as SIMD512-8-AVX512u4, but with 12 rounds unrolled
 * SIMD512-8-AVX512ufull: same as SIMD512-8-AVX512u4, but with all rounds unrolled
 
+# For Xoodoo:
+
+* reference: the unoptimized reference implementation
+* optimized: a generically optimized implementation for 32-bit platforms, fully unrolled
+* optimizedARMv6M: assembler optimized for ARMv6M, one round unrolled
+* optimizedARMv7M: assembler optimized for ARMv7M, fully unrolled
+* optimizedSIMD128: Optimized for SIMD-128, fully unrolled
+* optimizedSIMD512: Optimized for AVX-512, fully unrolled
+
+# For Xoodoo×4:
+
+* SIMD128: an implementation taking advantage of the SIMD-128 instruction set, fully unrolled
+* SIMD512: an implementation taking advantage of the AVX-512 instruction set, fully unrolled
+
+# For Xoodoo×8:
+
+* SIMD256: an implementation taking advantage of the AVX-2 instruction set, fully unrolled
+* SIMD512: an implementation taking advantage of the AVX-512 instruction set, fully unrolled
+
+# For Xoodoo×16:
+
+* SIMD512: an implementation taking advantage of the AVX-512 instruction set, fully unrolled
+
 -->
 
 
@@ -557,6 +580,95 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="no_parallel1600">
         <define>KeccakP1600timesN_excluded</define>
+    </fragment>
+
+    <!-- ++++++++++++++++++++++++ Xoodoo +++++++++++++++++++++ -->
+
+    <fragment name="XooWidth384">
+        <h>lib/low/Xoodoo/Xoodoo.h</h>
+    </fragment>
+
+    <fragment name="XooReference" inherits="common XooWidth384">
+        <c>lib/low/Xoodoo/Reference/Xoodoo-reference.c</c>
+        <h>lib/low/Xoodoo/Reference/Xoodoo-SnP.h</h>
+    </fragment>
+
+    <fragment name="XooOptimized32" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo/Optimized/Xoodoo-optimized.c</c>
+        <h>lib/low/Xoodoo/Optimized/Xoodoo-SnP.h</h>
+    </fragment>
+
+    <fragment name="XooOptimizedARMv6M" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-u1-armv6m-le-gcc.s</c>
+        <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
+    </fragment>
+
+    <fragment name="XooOptimizedARMv7M" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-uf-armv7m-le-gcc.s</c>
+        <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
+    </fragment>
+
+    <fragment name="XooOptimizedSIMD128" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SIMD128.c</c>
+        <h>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SnP.h</h>
+    </fragment>
+
+    <fragment name="XooOptimizedSIMD512" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo/OptimizedSIMD512/Xoodoo-SIMD512.c</c>
+        <h>lib/low/Xoodoo/OptimizedSIMD512/Xoodoo-SnP.h</h>
+    </fragment>
+
+    <!-- Xoodoo×4 -->
+
+    <fragment name="XooOptimizedTimes4_On1" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo-times4/FallbackOn1/Xoodoo-times4-on1.c</c>
+        <h>lib/low/Xoodoo-times4/FallbackOn1/Xoodoo-times4-SnP.h</h>
+        <h>lib/low/common/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="XooOptimizedTimes4_SIMD128" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo-times4/SIMD128/Xoodoo-times4-SIMD128.c</c>
+        <h>lib/low/Xoodoo-times4/SIMD128/Xoodoo-times4-SnP.h</h>
+    </fragment>
+
+    <fragment name="XooOptimizedTimes4_AVX512" inherits="common optimized XooWidth384">>
+        <c>lib/low/Xoodoo-times4/SIMD512/Xoodoo-times4-SIMD512.c</c>
+        <h>lib/low/Xoodoo-times4/SIMD512/Xoodoo-times4-SnP.h</h>
+    </fragment>
+
+    <!-- Xoodoo×8 -->
+
+    <fragment name="XooOptimizedTimes8_On1" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo-times8/FallbackOn1/Xoodoo-times8-on1.c</c>
+        <h>lib/low/Xoodoo-times8/FallbackOn1/Xoodoo-times8-SnP.h</h>
+        <h>lib/low/common/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="XooOptimizedTimes8_AVX2" inherits="common optimized XooWidth384">>
+        <c>lib/low/Xoodoo-times8/SIMD256/Xoodoo-times8-SIMD256.c</c>
+        <h>lib/low/Xoodoo-times8/SIMD256/Xoodoo-times8-SnP.h</h>
+    </fragment>
+
+    <fragment name="XooOptimizedTimes8_AVX512" inherits="common optimized XooWidth384">>
+        <c>lib/low/Xoodoo-times8/SIMD512/Xoodoo-times8-SIMD512.c</c>
+        <h>lib/low/Xoodoo-times8/SIMD512/Xoodoo-times8-SnP.h</h>
+    </fragment>
+
+    <!-- Xoodoo×16 -->
+
+    <fragment name="XooOptimizedTimes16_On1" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo-times16/FallbackOn1/Xoodoo-times16-on1.c</c>
+        <h>lib/low/Xoodoo-times16/FallbackOn1/Xoodoo-times16-SnP.h</h>
+        <h>lib/low/common/PlSnP-Fallback.inc</h>
+    </fragment>
+
+    <fragment name="XooOptimizedTimes16_AVX512" inherits="common optimized XooWidth384">>
+        <c>lib/low/Xoodoo-times16/SIMD512/Xoodoo-times16-SIMD512.c</c>
+        <h>lib/low/Xoodoo-times16/SIMD512/Xoodoo-times16-SnP.h</h>
+    </fragment>
+
+    <fragment name="no_parallel">
+        <define>XoodooMaxParallellism=1</define>
     </fragment>
 
 </group>

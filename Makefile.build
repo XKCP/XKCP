@@ -93,6 +93,36 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>tests/SUPERCOP/test_crypto_aead.c</c>
     </fragment>
 
+    <!-- *** Xoo *** -->
+
+    <fragment name="XooTests" inherits="XooAll">
+        <c>tests/UnitTests/testXooMain.c</c>
+        <c>tests/UnitTests/testXooSnP.c</c>
+        <h>tests/UnitTests/testXooSnP.inc</h>
+        <h>tests/UnitTests/testXooSnP.h</h>
+        <c>tests/UnitTests/testXooPlSnP.c</c>
+        <h>tests/UnitTests/testXooPlSnP.inc</h>
+        <h>tests/UnitTests/testXooPlSnP.h</h>
+        <c>tests/UnitTests/testXoofff.c</c>
+        <h>tests/UnitTests/testXoofff.h</h>
+        <c>tests/UnitTests/testXoofffModes.c</c>
+        <h>tests/UnitTests/testXoofffModes.h</h>
+
+        <c>tests/UnitTests/testXooPerformance.c</c>
+        <h>tests/UnitTests/testXooPerformance.h</h>
+        <h>tests/UnitTests/timing.h</h>
+        <h>tests/UnitTests/timingXooSnP.inc</h>
+        <h>tests/UnitTests/timingXooPlSnP.inc</h>
+
+        <h>lib/low/common/SnP-Relaned.h</h>
+        <c>lib/high/Keccak/KeccakSpongeWidth1600.c</c>
+        <h>lib/high/Keccak/KeccakSpongeWidth1600.h</h>
+        <gcc>-lm</gcc>
+    </fragment>
+
+    <!-- To make a library -->
+    <fragment name="libXoo.a" inherits="XooAll"/>
+
     <!-- *** Targets *** -->
 
     <fragment name="serial-fallbacks" inherits="1600times2on1 1600times4on1 1600times8on1"/>
@@ -119,7 +149,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="compact" inherits="compact200 reference400 compact800 compact1600 serial-fallbacks Ket-SnP"/>
 
     <!-- Generically optimized 32-bit implementations -->
-    <fragment name="generic32" inherits="reference200 reference400 optimized800u2 inplace1600bi serial-fallbacks Ket-SnP"/>
+    <fragment name="generic32" inherits="no_parallel reference200 reference400 optimized800u2 inplace1600bi serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
     <!-- Generically optimized 32-bit implementations, featuring lane complementing -->
     <fragment name="generic32lc" inherits="reference200 reference400 optimized800lcu2 inplace1600bi serial-fallbacks Ket-SnP"/>
 
@@ -134,20 +164,22 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="asmX86-64shld" inherits="reference200 reference400 reference800 optimized1600AsmX86-64shld serial-fallbacks Ket-SnP"/>
 
     <!-- Implementations selected for the Nehalem microarchitecture -->
-    <fragment name="Nehalem" inherits="reference200 reference400 optimized800lcufull optimized1600lcufull SIMD128-SSE2u2 1600times4on2 1600times8on2 Ket-SnP"/>
-    <!-- Implementations selected for the Sandy Bridge microarchitecture -->
+    <fragment name="Nehalem" inherits="reference200 reference400 optimized800lcufull optimized1600lcufull SIMD128-SSE2u2 1600times4on2 1600times8on2 Ket-SnP XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
+
+	<!-- Implementations selected for the Sandy Bridge microarchitecture -->
     <fragment name="SandyBridge" inherits="reference200 reference400 optimized800lcufull optimized1600lcufullshld SIMD128-SSE2ufull 1600times4on2 1600times8on2 Ket-SnP"/>
     <!-- Implementations selected for the Bulldozer microarchitecture -->
     <fragment name="Bulldozer" inherits="reference200 reference400 optimized800lcufull optimized1600XOPufull SIMD128-XOPufull 1600times4on2 1600times8on2 Ket-SnP"/>
     <!-- Implementations selected for the Haswell microarchitecture -->
-    <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 Ket-SnP"/>
+    <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 Ket-SnP XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_AVX2 XooOptimizedTimes16_On1"/>
+
     <!-- Implementations selected for the Knights Landing microarchitecture -->
-    <fragment name="SkylakeX" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12 Ket-SnP"/>
+    <fragment name="SkylakeX" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12 Ket-SnP XooOptimizedSIMD512 XooOptimizedTimes4_AVX512 XooOptimizedTimes8_AVX512 XooOptimizedTimes16_AVX512"/>
 
     <!-- Implementations selected for ARMv6M -->
-    <fragment name="ARMv6M" inherits="optimized200ARMv6M optimized400ARMv6M optimized800ARMv6Mu2 optimized1600ARMv6Mu2 serial-fallbacks Ket-optimizedLE"/>
+    <fragment name="ARMv6M" inherits="optimized200ARMv6M optimized400ARMv6M optimized800ARMv6Mu2 optimized1600ARMv6Mu2 serial-fallbacks Ket-optimizedLE XooOptimizedARMv6M XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
     <!-- Implementations selected for ARMv7M -->
-    <fragment name="ARMv7M" inherits="optimized200ARMv7M optimized400ARMv7M optimized800ARMv7Mu2 inplace1600ARMv7M serial-fallbacks Ket-ARMv7M"/>
+    <fragment name="ARMv7M" inherits="optimized200ARMv7M optimized400ARMv7M optimized800ARMv7Mu2 inplace1600ARMv7M serial-fallbacks Ket-ARMv7M XooOptimizedARMv7M XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
     <!-- Implementations selected for ARMv7A -->
     <fragment name="ARMv7A" inherits="reference200 reference400 optimized800ARMv7Au2 optimized1600ARMv7A 1600times2ARMV7A 1600times4on2 1600times8on2 Ket-optimizedLE"/>
     <!-- Implementations selected for ARMv8A -->
@@ -164,4 +196,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         </product>
     </group>
 
+    <group all="Xoodoo">
+        <product delimiter="/">
+            <factor set="reference generic32 Nehalem Haswell SkylakeX ARMv6M ARMv7M"/>
+            <factor set="XooTests libXoo.a"/>
+        </product>
+    </group>
 </build>
