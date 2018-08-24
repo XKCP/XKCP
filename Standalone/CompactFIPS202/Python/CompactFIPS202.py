@@ -8,48 +8,75 @@
 # and related or neighboring rights to the source code in this file.
 # http://creativecommons.org/publicdomain/zero/1.0/
 
-def ROL64(a, n):
-    return ((a >> (64-(n%64))) + (a << (n%64))) % (1 << 64)
+import numpy as np
 
-def KeccakF1600onLanes(lanes):
-    R = 1
-    for round in range(24):
-        # θ
-        C = [lanes[x][0] ^ lanes[x][1] ^ lanes[x][2] ^ lanes[x][3] ^ lanes[x][4] for x in range(5)]
-        D = [C[(x+4)%5] ^ ROL64(C[(x+1)%5], 1) for x in range(5)]
-        lanes = [[lanes[x][y]^D[x] for y in range(5)] for x in range(5)]
-        # ρ and π
-        (x, y) = (1, 0)
-        current = lanes[x][y]
-        for t in range(24):
-            (x, y) = (y, (2*x+3*y)%5)
-            (current, lanes[x][y]) = (lanes[x][y], ROL64(current, (t+1)*(t+2)//2))
-        # χ
-        for y in range(5):
-            T = [lanes[x][y] for x in range(5)]
-            for x in range(5):
-                lanes[x][y] = T[x] ^((~T[(x+1)%5]) & T[(x+2)%5])
-        # ι
-        for j in range(7):
-            R = ((R << 1) ^ ((R >> 7)*0x71)) % 256
-            if (R & 2):
-                lanes[0][0] = lanes[0][0] ^ (1 << ((1<<j)-1))
-    return lanes
+KECCAK_BYTES = 200
+KECCAK_LANES = 25
+KECCAK_PLANES_SLICES = 5
 
-def load64(b):
-    return sum((b[i] << (8*i)) for i in range(8))
+THETA_REORDER = ((4, 0, 1, 2, 3), (1, 2, 3, 4, 0))
 
-def store64(a):
-    return list((a >> (8*i)) % 256 for i in range(8))
+#Iota Step Round Constants For Keccak-p(1600, 24)
+IOTA_CONSTANTS = np.array([0x0000000000000001,0x0000000000008082, 0x800000000000808A,
+                            0x8000000080008000, 0x000000000000808B, 0x0000000080000001,
+                            0x8000000080008081, 0x8000000000008009, 0x000000000000008A,
+                            0x0000000000000088, 0x0000000080008009, 0x000000008000000A,
+                            0x000000008000808B, 0x800000000000008B, 0x8000000000008089,
+                            0x8000000000008003, 0x8000000000008002, 0x8000000000000080,
+                            0x000000000000800A, 0x800000008000000A, 0x8000000080008081,
+                            0x8000000000008080, 0x0000000080000001, 0x8000000080008008],
+                          dtype=np.uint64)
+
+#Lane Shifts for Rho Step
+RHO_SHIFTS = np.array([[0, 36, 3, 41, 18],
+                       [1, 44, 10, 45, 2],
+                       [62, 6, 43, 15, 61],
+                       [28, 55, 25, 21, 56],
+                       [27, 20, 39, 8, 14]], dtype=np.uint64)
+
+#Lane Re-order Mapping for Chi Step
+CHI_REORDER = ((1, 2, 3, 4, 0), (2, 3, 4, 0, 1))
+
+#Row Re-order Mapping for Pi Step
+PI_ROW_REORDER = np.array([[0, 3, 1, 4, 2],
+                           [1, 4, 2, 0, 3],
+                           [2, 0, 3, 1, 4],
+                           [3, 1, 4, 2, 0],
+                           [4, 2, 0, 3, 1]])
+
+#Column Re-order Mapping for Pi Step
+PI_COLUMN_REORDER = np.array([[0, 0, 0, 0, 0],
+                              [1, 1, 1, 1, 1],
+                              [2, 2, 2, 2, 2],
+                              [3, 3, 3, 3, 3],
+                              [4, 4, 4, 4, 4]])
+
 
 def KeccakF1600(state):
-    lanes = [[load64(state[8*(x+5*y):8*(x+5*y)+8]) for y in range(5)] for x in range(5)]
-    lanes = KeccakF1600onLanes(lanes)
-    state = bytearray(200)
-    for x in range(5):
-        for y in range(5):
-            state[8*(x+5*y):8*(x+5*y)+8] = store64(lanes[x][y])
-    return state
+    state = np.copy(np.frombuffer(state, dtype=np.uint64, count=25).reshape([5, 5], order='F'))
+    for round_num in range(24):
+        # theta_step:
+        # Exclusive-or each slice-lane by state based permutation value
+        array_shift = state << 1 | state >> 63
+        state ^= np.bitwise_xor.reduce(state[THETA_REORDER[0], ], 1, keepdims=True) ^ np.bitwise_xor.reduce(array_shift[THETA_REORDER[1], ], 1, keepdims=True)
+
+        # rho_step:
+        # Left Rotate each lane by pre-calculated value
+        state = state << RHO_SHIFTS | state >> np.uint64(64 - RHO_SHIFTS)
+
+        # pi_step:
+        # Shuffle lanes to pre-calculated positions
+        state = state[PI_ROW_REORDER, PI_COLUMN_REORDER]
+
+        # chi_step:
+        # Exclusive-or each individual lane based on and/invert permutation
+        state ^= ~state[CHI_REORDER[0], ] & state[CHI_REORDER[1], ]
+
+        # iota_step:
+        # Exclusive-or first lane of state with round constant
+        state[0, 0] ^= IOTA_CONSTANTS[round_num]
+    
+    return bytearray(state.tobytes(order='F'))
 
 def Keccak(rate, capacity, inputBytes, delimitedSuffix, outputByteLen):
     outputBytes = bytearray()
