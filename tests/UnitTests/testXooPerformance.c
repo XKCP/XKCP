@@ -262,6 +262,10 @@ void testXoofffPerformanceOne( void )
         time = measureXoofff_Compress(calibration, testXoofffAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testXoofffAdaptLen(len)/8, time, time*1.0/(len/8));
     }
+    for(len=128*8; len <= 8192*8; len = len*2) {
+        time = measureXoofff_Compress(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
     testXooPerfSlope(measureXoofff_Compress, calibration);
     
     printf("\nXoofff_Expand\n");
@@ -269,12 +273,20 @@ void testXoofffPerformanceOne( void )
         time = measureXoofff_Expand(calibration, testXoofffAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testXoofffAdaptLen(len)/8, time, time*1.0/(len/8));
     }
+    for(len=128*8; len <= 8192*8; len = len*2) {
+        time = measureXoofff_Expand(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
     testXooPerfSlope(measureXoofff_Expand, calibration);
 
     printf("\nXoofff-WBC (Tweak 128 bits)\n");
     for(len=8; len <= 256*Xoofff_rate; len = testXoofffNextLen(len)) {
         time = measureXoofffWBC(calibration, testXoofffAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testXoofffAdaptLen(len)/8, time, time*1.0/(len/8));
+    }
+    for(len=128*8; len <= 8192*8; len = len*2) {
+        time = measureXoofffWBC(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     testXooPerfSlope(measureXoofffWBC, calibration);
 
