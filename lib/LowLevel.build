@@ -66,7 +66,8 @@ The fragments below allow to select the desired implementation of the permutatio
 * optimized1600AsmX86-64shld: same as optimized1600AsmX86-64, but with the 'shld' instruction
 * optimized1600AsmX86-64Apple: same as optimized1600AsmX86-64, but with a syntax that works better on some Apple platforms
 * optimized1600AVX2: an optimized implementation taking advantage of the AVX2 instruction set
-* optimized1600AVX512: an optimized implementation taking advantage of the AVX512 instruction set
+* optimized1600AVX512a: an optimized implementation taking advantage of the AVX512 instruction set (in assembler)
+* optimized1600AVX512c: an optimized implementation taking advantage of the AVX512 instruction set (in C)
 * optimized1600XOPu6: an optimized implementation taking advantage of the XOP instruction set, with 6 rounds unrolled
 * optimized1600XOPufull: same as optimized1600XOPu6, but with all rounds unrolled
 * optimized1600ARMv6Mu1: an assembly-optimized implementation for ARMv6M (no round unrolling)
@@ -392,10 +393,15 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/KeccakP-1600/OptimizedAVX2/KeccakP-1600-SnP.h</h>
     </fragment>
 
-    <fragment name="optimized1600AVX512" inherits="width1600 optimized">
-        <c>lib/low/KeccakP-1600/OptimizedAVX512/KeccakP-1600-AVX512.c</c>
-        <h>lib/low/KeccakP-1600/OptimizedAVX512/AVX512u12/KeccakP-1600-AVX512-config.h</h>
-        <h>lib/low/KeccakP-1600/OptimizedAVX512/KeccakP-1600-SnP.h</h>
+    <fragment name="optimized1600AVX512c" inherits="width1600 optimized">
+        <c>lib/low/KeccakP-1600/OptimizedAVX512c/KeccakP-1600-AVX512.c</c>
+        <h>lib/low/KeccakP-1600/OptimizedAVX512c/AVX512u12/KeccakP-1600-AVX512-config.h</h>
+        <h>lib/low/KeccakP-1600/OptimizedAVX512c/KeccakP-1600-SnP.h</h>
+    </fragment>
+
+    <fragment name="optimized1600AVX512a" inherits="width1600 optimized">
+        <c>lib/low/KeccakP-1600/OptimizedAVX512a/KeccakP-1600-AVX512.s</c>
+        <h>lib/low/KeccakP-1600/OptimizedAVX512a/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="optimized1600XOP" inherits="width1600 optimized">

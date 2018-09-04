@@ -174,7 +174,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 Ket-SnP XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_AVX2 XooOptimizedTimes16_On1"/>
 
     <!-- Implementations selected for the Knights Landing microarchitecture -->
-    <fragment name="SkylakeX" inherits="reference200 reference400 optimized800lcufull optimized1600AVX512 SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12 Ket-SnP XooOptimizedSIMD512 XooOptimizedTimes4_AVX512 XooOptimizedTimes8_AVX512 XooOptimizedTimes16_AVX512"/>
+    <fragment name="SkylakeX"  inherits="reference200 reference400 optimized800lcufull optimized1600AVX512a SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12 Ket-SnP XooOptimizedSIMD512 XooOptimizedTimes4_AVX512 XooOptimizedTimes8_AVX512 XooOptimizedTimes16_AVX512"/>
 
     <!-- Implementations selected for ARMv6M -->
     <fragment name="ARMv6M" inherits="optimized200ARMv6M optimized400ARMv6M optimized800ARMv6Mu2 optimized1600ARMv6Mu2 serial-fallbacks Ket-optimizedLE XooOptimizedARMv6M XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
