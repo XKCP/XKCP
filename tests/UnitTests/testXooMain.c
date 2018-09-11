@@ -24,7 +24,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testXooPlSnP.h"
 #include "testXoofff.h"
 #include "testXoofffModes.h"
-#include "testPerformance.h"
+#include "testXooPerformance.h"
 
 #define MEASURE_PERF
 

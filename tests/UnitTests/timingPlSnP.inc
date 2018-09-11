@@ -61,9 +61,10 @@ uint_32t measurePlSnP_FastLoop_Absorb_interleaved(uint_32t dtMin, unsigned int l
     ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
     ALIGN(PlSnP_statesAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes*PlSnP_P];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes*PlSnP_P;
+    measureTimingDeclare
     assert(dataSize <= sizeof(data));
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     PlSnP_FastLoop_Absorb(&states, laneCount, laneCount, laneCount*PlSnP_P, data, dataSize);
     measureTimingEnd
 }
@@ -92,9 +93,10 @@ uint_32t measurePlSnP_FastLoop_Absorb_segmented(uint_32t dtMin, unsigned int lan
     ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
     ALIGN(PlSnP_statesAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes*PlSnP_P];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes*PlSnP_P;
+    measureTimingDeclare
     assert(dataSize <= sizeof(data));
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     PlSnP_FastLoop_Absorb(&states, laneCount, laneCount*blockCount, laneCount, data, dataSize);
     measureTimingEnd
 }
@@ -124,9 +126,10 @@ uint_32t measurePlSnP_GenericLoop_Absorb_interleaved(uint_32t dtMin, unsigned in
     ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
     ALIGN(PlSnP_statesAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes*PlSnP_P];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes*PlSnP_P;
+    measureTimingDeclare
     assert(dataSize <= sizeof(data));
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     {
         const unsigned char *curData = data;
         unsigned int rateInBytes = laneCount*SnP_laneLengthInBytes*PlSnP_P;

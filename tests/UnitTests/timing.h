@@ -86,6 +86,15 @@ static uint_32t calibrate()
     return dtMin;
 }
 
+#define measureTimingDeclare \
+    uint_32t tMin = 0xFFFFFFFF; \
+    uint_32t t0,t1,i;
+
+#define measureTimingBeginDeclared \
+    for (i=0;i < TIMER_SAMPLE_CNT;i++) \
+        { \
+        t0 = HiResTime();
+
 #define measureTimingBegin \
     uint_32t tMin = 0xFFFFFFFF; \
     uint_32t t0,t1,i; \

@@ -35,6 +35,7 @@ uint_32t measureWrap(uint_32t dtMin, unsigned int lenI, unsigned int lenA)
     ALIGN(32) unsigned char O[bufferSize];
     ALIGN(32) unsigned char A[bufferSize];
     ALIGN(32) unsigned char T[16];
+    measureTimingDeclare
 
     assert(lenI <= bufferSize);
     assert(lenA <= bufferSize);
@@ -46,7 +47,7 @@ uint_32t measureWrap(uint_32t dtMin, unsigned int lenI, unsigned int lenA)
     memset(A, 0x44, bufferSize);
     memset(T, 0x55, 16);
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     Keyak_Initialize(&keyak, key, 16, nonce, 16, 0, (unsigned char *)0, 0, 0);
     Keyak_Wrap(&keyak, I, O, lenI, A, lenA, T, 0, 0);
     measureTimingEnd

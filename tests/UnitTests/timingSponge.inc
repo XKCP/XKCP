@@ -30,6 +30,7 @@ uint_32t measureSponge(uint_32t dtMin, unsigned int r, unsigned int c, unsigned 
 {
     ALIGN(32) unsigned char I[bufferSize];
     ALIGN(32) unsigned char O[bufferSize];
+    measureTimingDeclare
 
     assert(lenIn <= bufferSize);
     assert(lenOut <= bufferSize);
@@ -37,7 +38,7 @@ uint_32t measureSponge(uint_32t dtMin, unsigned int r, unsigned int c, unsigned 
     memset(I, 0x12, bufferSize);
     memset(O, 0x34, bufferSize);
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     Sponge(r, c, I, lenIn, 0x01, O, lenOut);
     measureTimingEnd
 }

@@ -16,6 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdio.h>
 #include <string.h>
 #include "KangarooTwelve.h"
+#include "KeccakSpongeWidth800.h"
+#include "KeccakSpongeWidth1600.h"
 #include "Keyakv2.h"
 #include "Kravatte.h"
 #include "KravatteModes.h"
@@ -402,18 +404,19 @@ uint_32t measureParallelHash(uint_32t dtMin, unsigned int securityStrength, unsi
 {
     ALIGN(32) unsigned char input[1024*1024];
     ALIGN(32) unsigned char output[32];
+    measureTimingDeclare
 
     assert(inputLen <= 1024*1024);
 
     memset(input, 0xA5, 16);
 
     if(securityStrength == 128) {
-        measureTimingBegin
+        measureTimingBeginDeclared
         ParallelHash128(input, inputLen*8, blockByteLen, output, 256, "", 0);
         measureTimingEnd
     }
     else if(securityStrength == 256) {
-        measureTimingBegin
+        measureTimingBeginDeclared
         ParallelHash256(input, inputLen*8, blockByteLen, output, 256, "", 0);
         measureTimingEnd
     }
@@ -543,12 +546,13 @@ uint_32t measureKangarooTwelve(uint_32t dtMin, unsigned int inputLen)
 {
     ALIGN(32) unsigned char input[1024*1024];
     ALIGN(32) unsigned char output[32];
+    measureTimingDeclare
 
     assert(inputLen <= 1024*1024);
 
     memset(input, 0xA5, 16);
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     KangarooTwelve(input, inputLen, output, 32, "", 0);
     measureTimingEnd
 }
@@ -619,10 +623,11 @@ uint_32t measureKravatte_MaskDerivation(uint_32t dtMin)
 {
     ALIGN(32) unsigned char key[Kravatte_KeyLen];
     Kravatte_Instance kv;
+    measureTimingDeclare
  
     memset(key, 0xA5, Kravatte_KeyLen);
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     Kravatte_MaskDerivation(&kv, key, Kravatte_KeyLen*8);
     measureTimingEnd
 }
@@ -632,6 +637,7 @@ uint_32t measureKra(uint_32t dtMin, unsigned int inputLen)
     ALIGN(32) unsigned char input[1024*1024];
     ALIGN(32) unsigned char key[Kravatte_KeyLen];
     Kravatte_Instance kv;
+    measureTimingDeclare
  
     assert(inputLen <= 1024*1024);
 
@@ -639,7 +645,7 @@ uint_32t measureKra(uint_32t dtMin, unsigned int inputLen)
     Kravatte_MaskDerivation(&kv, key, Kravatte_KeyLen*8);
     memset(input, 0xA5, inputLen/8);
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     Kra(&kv, input, inputLen, KRAVATTE_FLAG_LAST_PART);
     measureTimingEnd
 }
@@ -649,6 +655,7 @@ uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
     ALIGN(32) unsigned char output[1024*1024];
     ALIGN(32) unsigned char key[Kravatte_KeyLen];
     Kravatte_Instance kv;
+    measureTimingDeclare
 
     assert(outputLen <= 1024*1024);
 
@@ -657,7 +664,7 @@ uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
     output[0] = 0;
     Kra(&kv, output, 0, KRAVATTE_FLAG_LAST_PART);
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     kv.phase = COMPRESSING; /* avoid error when calling multiple times with last flag set */
     Vatte(&kv, output, outputLen, KRAVATTE_FLAG_LAST_PART);
     measureTimingEnd
@@ -671,6 +678,7 @@ uint_32t measureKravatte_SIV(uint_32t dtMin, unsigned int inputLen)
     ALIGN(32) unsigned char AD[16];
     ALIGN(32) unsigned char tag[Kravatte_SIV_TagLength];
     Kravatte_Instance kv;
+    measureTimingDeclare
 
     assert(inputLen <= 1024*1024);
 
@@ -679,7 +687,7 @@ uint_32t measureKravatte_SIV(uint_32t dtMin, unsigned int inputLen)
     memset(input, 0xA5, inputLen/8);
     memset(AD, 0x5A, sizeof(AD));
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     Kravatte_SIV_Wrap(&kv, input, output, inputLen, AD, sizeof(AD)*8, tag);
     measureTimingEnd
 }
@@ -693,6 +701,7 @@ uint_32t measureKravatte_SAE_Wrap(uint_32t dtMin, unsigned int inputLen)
     ALIGN(32) unsigned char AD[16];
     ALIGN(32) unsigned char tag[Kravatte_SAE_TagLength];
     Kravatte_Instance kv;
+    measureTimingDeclare
 
     assert(inputLen <= 1024*1024);
 
@@ -702,7 +711,7 @@ uint_32t measureKravatte_SAE_Wrap(uint_32t dtMin, unsigned int inputLen)
     memset(input, 0xA5, inputLen/8);
     memset(AD, 0x5A, sizeof(AD));
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     Kravatte_SAE_Wrap(&kv, input, output, inputLen, AD, 0, tag);
     measureTimingEnd
 }
@@ -716,6 +725,7 @@ uint_32t measureKravatte_SAE_MAC(uint_32t dtMin, unsigned int ADLen)
     ALIGN(32) unsigned char AD[1024*1024];
     ALIGN(32) unsigned char tag[Kravatte_SAE_TagLength];
     Kravatte_Instance kv;
+    measureTimingDeclare
 
     assert(ADLen <= 1024*1024);
 
@@ -725,7 +735,7 @@ uint_32t measureKravatte_SAE_MAC(uint_32t dtMin, unsigned int ADLen)
     memset(input, 0xA5, sizeof(input));
     memset(AD, 0x5A, ADLen/8);
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     Kravatte_SAE_Wrap(&kv, input, output, 0, AD, ADLen, tag);
     measureTimingEnd
 }
@@ -737,6 +747,7 @@ uint_32t measureKravatte_WBC(uint_32t dtMin, unsigned int inputLen)
     ALIGN(32) unsigned char key[Kravatte_KeyLen];
     ALIGN(32) unsigned char W[16];
     Kravatte_Instance kvw;
+    measureTimingDeclare
 
     assert(inputLen <= 1024*1024);
 
@@ -745,7 +756,7 @@ uint_32t measureKravatte_WBC(uint_32t dtMin, unsigned int inputLen)
     memset(input, 0xA5, inputLen/8);
     memset(W, 0x55, sizeof(W));
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     Kravatte_WBC_Encipher(&kvw, input, output, inputLen, W, sizeof(W)*8);
     measureTimingEnd
 }

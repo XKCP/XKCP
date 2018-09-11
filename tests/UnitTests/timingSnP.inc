@@ -58,9 +58,10 @@ uint_32t measureSnP_FastLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsi
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
     ALIGN(SnP_stateAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
+    measureTimingDeclare
     assert(dataSize <= sizeof(data));
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     SnP_FastLoop_Absorb(&state, laneCount, data, dataSize);
     measureTimingEnd
 }
@@ -73,9 +74,10 @@ uint_32t measureSnP_GenericLoop_Absorb(uint_32t dtMin, unsigned int laneCount, u
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
     ALIGN(SnP_stateAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
+    measureTimingDeclare
     assert(dataSize <= sizeof(data));
 
-    measureTimingBegin
+    measureTimingBeginDeclared
     {
         const unsigned char *curData = data;
         unsigned int rateInBytes = laneCount*SnP_laneLengthInBytes;
