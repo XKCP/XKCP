@@ -155,6 +155,80 @@ uint_32t measureXoofff_Expand(uint_32t dtMin, unsigned int outputLen)
     }
 }
 
+uint_32t measureXoofffSANE_Wrap(uint_32t dtMin, unsigned int inputLen)
+{
+    ALIGN(64) unsigned char input[256*Xoofff_rate];
+    ALIGN(64) unsigned char output[256*Xoofff_rate];
+    ALIGN(64) unsigned char key[Xoofff_KeyLen];
+    ALIGN(64) unsigned char nonce[16];
+    ALIGN(64) unsigned char AD[16];
+    ALIGN(64) unsigned char tag[XoofffSANE_TagLength];
+    XoofffSANE_Instance xp;
+
+    assert(inputLen <= 256*Xoofff_rate);
+
+    memset(key, 0xA5, Xoofff_KeyLen);
+    memset(nonce, 0x55, sizeof(nonce));
+    XoofffSANE_Initialize(&xp, key, Xoofff_KeyLen*8, nonce, sizeof(nonce)*8, tag);
+    memset(input, 0xA5, inputLen/8);
+    memset(AD, 0x5A, sizeof(AD));
+
+    {
+        measureTimingBegin
+        XoofffSANE_Wrap(&xp, input, output, inputLen, AD, 0, tag);
+        measureTimingEnd
+    }
+}
+
+uint_32t measureXoofffSANE_MAC(uint_32t dtMin, unsigned int ADLen)
+{
+    ALIGN(64) unsigned char input[1];
+    ALIGN(64) unsigned char output[1];
+    ALIGN(64) unsigned char key[Xoofff_KeyLen];
+    ALIGN(64) unsigned char nonce[16];
+    ALIGN(64) unsigned char AD[256*Xoofff_rate];
+    ALIGN(64) unsigned char tag[XoofffSANE_TagLength];
+    XoofffSANE_Instance xp;
+
+    assert(ADLen <= 256*Xoofff_rate);
+
+    memset(key, 0xA5, Xoofff_KeyLen);
+    memset(nonce, 0x55, sizeof(nonce));
+    XoofffSANE_Initialize(&xp, key, Xoofff_KeyLen*8, nonce, sizeof(nonce)*8, tag);
+    memset(input, 0xA5, sizeof(input));
+    memset(AD, 0x5A, ADLen/8);
+
+    {
+        measureTimingBegin
+        XoofffSANE_Wrap(&xp, input, output, 0, AD, ADLen, tag);
+        measureTimingEnd
+    }
+}
+
+uint_32t measureXoofffSANSE(uint_32t dtMin, unsigned int inputLen)
+{
+    ALIGN(64) unsigned char input[256*Xoofff_rate];
+    ALIGN(64) unsigned char output[256*Xoofff_rate];
+    ALIGN(64) unsigned char key[Xoofff_KeyLen];
+    ALIGN(64) unsigned char AD[16];
+    ALIGN(64) unsigned char tag[XoofffSANSE_TagLength];
+    XoofffSANSE_Instance xp;
+
+    assert(inputLen <= 256*Xoofff_rate);
+
+    memset(key, 0xA5, Xoofff_KeyLen);
+    XoofffSANSE_Initialize(&xp, key, Xoofff_KeyLen*8);
+    memset(input, 0xA5, inputLen/8);
+    memset(AD, 0x5A, sizeof(AD));
+
+    {
+        measureTimingBegin
+        XoofffSANSE_Wrap(&xp, input, output, inputLen, AD, sizeof(AD)*8, tag);
+        measureTimingEnd
+    }
+}
+
+
 uint_32t measureXoofffWBC(uint_32t dtMin, unsigned int inputLen)
 {
     ALIGN(64) unsigned char input[256*Xoofff_rate];
@@ -278,6 +352,39 @@ void testXoofffPerformanceOne( void )
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     testXooPerfSlope(measureXoofff_Expand, calibration);
+
+    printf("\nXoofff-SANE Wrap (only plaintext input, no AD)\n");
+    for(len=8; len <= 256*Xoofff_rate; len = testXoofffNextLen(len)) {
+        time = measureXoofffSANE_Wrap(calibration, testXoofffAdaptLen(len));
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testXoofffAdaptLen(len)/8, time, time*1.0/(len/8));
+    }
+    for(len=128*8; len <= 8192*8; len = len*2) {
+        time = measureXoofffSANE_Wrap(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
+    testXooPerfSlope(measureXoofffSANE_Wrap, calibration);
+
+    printf("\nXoofff-SANE MAC (only AD input, no plaintext)\n");
+    for(len=8; len <= 256*Xoofff_rate; len = testXoofffNextLen(len)) {
+        time = measureXoofffSANE_MAC(calibration, testXoofffAdaptLen(len));
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testXoofffAdaptLen(len)/8, time, time*1.0/(len/8));
+    }
+    for(len=128*8; len <= 8192*8; len = len*2) {
+        time = measureXoofffSANE_MAC(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
+    testXooPerfSlope(measureXoofffSANE_MAC, calibration);
+
+    printf("\nXoofff-SANSE\n");
+    for(len=8; len <= 256*Xoofff_rate; len = testXoofffNextLen(len)) {
+        time = measureXoofffSANSE(calibration, testXoofffAdaptLen(len));
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testXoofffAdaptLen(len)/8, time, time*1.0/(len/8));
+    }
+    for(len=128*8; len <= 8192*8; len = len*2) {
+        time = measureXoofffSANSE(calibration, len);
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+    }
+    testXooPerfSlope(measureXoofffSANSE, calibration);
 
     printf("\nXoofff-WBC (Tweak 128 bits)\n");
     for(len=8; len <= 256*Xoofff_rate; len = testXoofffNextLen(len)) {

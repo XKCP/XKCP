@@ -20,6 +20,118 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "Xoofff.h"
 
 /**
+  * XoofffSANE Tag Length in bytes.
+  */
+#define XoofffSANE_TagLength      16
+
+typedef struct {
+    Xoofff_Instance xoofff;
+    unsigned int    e;
+} XoofffSANE_Instance;
+
+/**
+  * Function to initialize a XoofffSANE instance with given key and nonce.
+  * @param  xpInstance      Pointer to the instance to be initialized.
+  * @param  Key             Pointer to the key (K).
+  * @param  KeyBitLen       The length of the key in bits.
+  * @param  Nonce           Pointer to the nonce (N).
+  * @param  NonceBitLen     The length of the nonce in bits.
+  * @param  tag             The buffer where to store the tag.
+  *                         This buffer must be minimum XoofffSANE_TagLength bytes long.
+  * @return 0 if successful, 1 otherwise.
+  */
+int XoofffSANE_Initialize(XoofffSANE_Instance *xpInstance, const BitSequence *Key, BitLength KeyBitLen, 
+                            const BitSequence *Nonce, BitLength NonceBitLen, unsigned char *tag);
+
+/**
+  * Function to wrap plaintext into ciphertext.
+  * @param  xpInstance      Pointer to the instance initialized by XoofffSANE_Initialize().
+  * @param  plaintext       Pointer to plaintext data to wrap.
+  * @param  ciphertext      Pointer to buffer where the full wrapped data will be stored.
+  *                         The ciphertext buffer must not overlap plaintext.
+  * @param  dataBitLen      The size of the plaintext/ciphertext data.
+  * @param  AD              Pointer to the Associated Data.
+  * @param  ADBitLen        The number of bytes provided in the Associated Data.
+  * @param  tag             The buffer where to store the tag.
+  *                         This buffer must be minimum XoofffSANE_TagLength bytes long.
+  * @return 0 if successful, 1 otherwise.
+  */
+int XoofffSANE_Wrap(XoofffSANE_Instance *xpInstance, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
+                        const BitSequence *AD, BitLength ADBitLen, unsigned char *tag);
+
+/**
+  * Function to unwrap ciphertext into plaintext.
+  * @param  xpInstance      Pointer to the instance initialized by XoofffSANE_Initialize().
+  * @param  ciphertext      Pointer to ciphertext data to unwrap.
+  * @param  plaintext       Pointer to buffer where the full unwrapped data will be stored.
+  *                         The plaintext buffer must not overlap ciphertext.
+  * @param  dataBitLen      The size of the ciphertext/plaintext data.
+  * @param  AD              Pointer to the Associated Data.
+  * @param  ADBitLen        The number of bytes provided in the Associated Data.
+  * @param  tag             The buffer where to read the tag to check (when lastFlag is set).
+  *                         This buffer must be minimum XoofffSANE_TagLength bytes long.
+  * @return 0 if successful, 1 otherwise.
+  */
+int XoofffSANE_Unwrap(XoofffSANE_Instance *xpInstance, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
+                            const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag);
+
+/* ------------------------------------------------------------------------- */
+
+/**
+  * XoofffSANSE Tag Length in bytes.
+  */
+#define XoofffSANSE_TagLength      32
+
+typedef struct {
+    Xoofff_Instance xoofff;
+    unsigned int    e;
+} XoofffSANSE_Instance;
+
+
+/**
+  * Function to initialize a XoofffSANSE instance with given key and nonce.
+  * @param  xpInstance      Pointer to the instance to be initialized.
+  * @param  Key             Pointer to the key (K).
+  * @param  KeyBitLen       The length of the key in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int XoofffSANSE_Initialize(XoofffSANSE_Instance *xpInstance, const BitSequence *Key, BitLength KeyBitLen);
+
+/**
+  * Function to wrap plaintext into ciphertext.
+  * @param  xpInstance      Pointer to the instance initialized by XoofffSANSE_MaskDerivation().
+  * @param  plaintext       Pointer to plaintext data to wrap.
+  * @param  ciphertext      Pointer to buffer where the full wrapped data will be stored.
+  *                         The ciphertext buffer must not overlap plaintext.
+  * @param  dataBitLen      The size of the plaintext/ciphertext data.
+  * @param  AD              Pointer to the Associated Data.
+  * @param  ADBitLen        The number of bytes provided in the Associated Data.
+  * @param  tag             The buffer where to store the tag.
+  *                         This buffer must be minimum XoofffSANSE_TagLength bytes long.
+  * @return 0 if successful, 1 otherwise.
+  */
+int XoofffSANSE_Wrap(XoofffSANSE_Instance *xpInstance, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
+                        const BitSequence *AD, BitLength ADBitLen, unsigned char *tag);
+
+/**
+  * Function to unwrap ciphertext into plaintext.
+  * @param  xpInstance      Pointer to the instance initialized by XoofffSANSE_MaskDerivation().
+  * @param  ciphertext      Pointer to ciphertext data to unwrap.
+  * @param  plaintext       Pointer to buffer where the full unwrapped data will be stored.
+  *                         The plaintext buffer must not overlap ciphertext.
+  * @param  dataBitLen      The size of the ciphertext/plaintext data.
+  * @param  AD              Pointer to the Associated Data.
+  * @param  ADBitLen        The number of bytes provided in the Associated Data.
+  * @param  tag             The buffer where to read the tag to check (when lastFlag is set).
+  *                         This buffer must be minimum XoofffSANSE_TagLength bytes long.
+  * @return 0 if successful, 1 otherwise.
+  */
+int XoofffSANSE_Unwrap(XoofffSANSE_Instance *xpInstance, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
+                            const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag);
+
+/* ------------------------------------------------------------------------- */
+
+/**
   * Definition of the constant l, used to split the input into two parts.
   * The left part of the input will be a multiple of l bits.
   */
