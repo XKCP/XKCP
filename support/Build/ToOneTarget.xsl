@@ -53,7 +53,30 @@ http://creativecommons.org/publicdomain/zero/1.0/
 </xsl:template>
 
 <xsl:template match="target|fragment">
-    <xsl:apply-templates select="*"/>
+    <xsl:apply-templates select="*|text()"/>
+</xsl:template>
+
+<xsl:template name="getFilePrefix">
+    <xsl:param name="fullPath"/>
+    <xsl:param name="prefix"/>
+    <xsl:choose>
+        <xsl:when test="contains($fullPath, '/')">
+            <xsl:call-template name="getFilePrefix">
+                <xsl:with-param name="fullPath" select="substring-after($fullPath, '/')"/>
+                <xsl:with-param name="prefix" select="concat($prefix, substring-before($fullPath, '/'), '/')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$prefix"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="h">
+    <xsl:copy-of select="."/>
+    <I><xsl:call-template name="getFilePrefix">
+        <xsl:with-param name="fullPath" select="."/>
+    </xsl:call-template></I>
 </xsl:template>
 
 <xsl:template match="*">

@@ -13,6 +13,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version='1.0'>
 
+<xsl:key name="I" match="I" use="."/>
+<xsl:key name="h" match="h" use="."/>
+<xsl:key name="c" match="c" use="."/>
+
 <xsl:output method="text" indent="no" encoding="UTF-8"/>
 
 <xsl:template name="filename">
@@ -43,22 +47,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </xsl:choose>
 </xsl:template>
 
-<xsl:template name="getFilePrefix">
-    <xsl:param name="fullPath"/>
-    <xsl:param name="prefix"/>
-    <xsl:choose>
-        <xsl:when test="contains($fullPath, '/')">
-            <xsl:call-template name="getFilePrefix">
-                <xsl:with-param name="fullPath" select="substring-after($fullPath, '/')"/>
-                <xsl:with-param name="prefix" select="concat($prefix, substring-before($fullPath, '/'), '/')"/>
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$prefix"/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <xsl:template match="gcc">
     <xsl:text>CFLAGS := $(CFLAGS) </xsl:text>
     <xsl:value-of select="."/>
@@ -76,46 +64,53 @@ http://creativecommons.org/publicdomain/zero/1.0/
 </xsl:text>
 </xsl:template>
 
+<xsl:template match="I">
+    <xsl:if test="generate-id()=generate-id(key('I', .)[1])">
+        <xsl:text>CFLAGS := $(CFLAGS) -I</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>
+</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="h">
-    <xsl:text>HEADERS := $(HEADERS) </xsl:text>
-    <xsl:value-of select="."/>
-    <xsl:text>
+    <xsl:if test="generate-id()=generate-id(key('h', .)[1])">
+        <xsl:text>HEADERS := $(HEADERS) </xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>
 </xsl:text>
-    <xsl:text>SOURCES := $(SOURCES) </xsl:text>
-    <xsl:value-of select="."/>
-    <xsl:text>
-</xsl:text>
-    <xsl:text>CFLAGS := $(CFLAGS) -I</xsl:text>
-    <xsl:call-template name="getFilePrefix">
-        <xsl:with-param name="fullPath" select="."/>
-    </xsl:call-template>
-    <xsl:text>
+        <xsl:text>SOURCES := $(SOURCES) </xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>
 
 </xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="c">
-    <xsl:text>SOURCES := $(SOURCES) </xsl:text>
-    <xsl:value-of select="."/>
-    <xsl:text>
+    <xsl:if test="generate-id()=generate-id(key('c', .)[1])">
+        <xsl:text>SOURCES := $(SOURCES) </xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>
 </xsl:text>
-    <xsl:variable name="object">
-        <xsl:text>$(BINDIR)/</xsl:text>
-        <xsl:call-template name="getFileNameWithoutExtension">
-            <xsl:with-param name="fullPath" select="."/>
-        </xsl:call-template>
-        <xsl:text>.o</xsl:text>
-    </xsl:variable>
-    <xsl:value-of select="$object"/>
-    <xsl:text>: </xsl:text>
-    <xsl:value-of select="."/>
-    <xsl:text> $(HEADERS)
+        <xsl:variable name="object">
+            <xsl:text>$(BINDIR)/</xsl:text>
+            <xsl:call-template name="getFileNameWithoutExtension">
+                <xsl:with-param name="fullPath" select="."/>
+            </xsl:call-template>
+            <xsl:text>.o</xsl:text>
+        </xsl:variable>
+        <xsl:value-of select="$object"/>
+        <xsl:text>: </xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text> $(HEADERS)
 &#9;$(CC) $(INCLUDES) $(CFLAGS) -c $&lt; -o $@
 OBJECTS := $(OBJECTS) </xsl:text>
-    <xsl:value-of select="$object"/>
-    <xsl:text>
+        <xsl:value-of select="$object"/>
+        <xsl:text>
 
 </xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="text()"/>
@@ -150,9 +145,9 @@ CC ?= gcc
 AR = ar
 
 </xsl:text>
-    <xsl:apply-templates select="gcc|define"/>
-    <xsl:apply-templates select="h|hpp"/>
-    <xsl:apply-templates select="c|cpp"/>
+    <xsl:apply-templates select="gcc|define|I"/>
+    <xsl:apply-templates select="h"/>
+    <xsl:apply-templates select="c"/>
 
     <xsl:text>bin/</xsl:text>
     <xsl:value-of select="@name"/>

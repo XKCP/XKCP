@@ -20,6 +20,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:variable name="makefile" select="concat('bin/.build/', @name, '.make')"/>
     <xsl:variable name="object" select="concat('bin/', @name)"/>
     <xsl:variable name="pack" select="concat(@name, '.pack')"/>
+    <xsl:variable name="vcxprojname" select="concat(@name, '.vcxproj')"/>
+    <xsl:variable name="vcxprojfile" select="concat('bin/VC/', translate(@name, '/', '_'), '.vcxproj')"/>
     <xsl:variable name="all" select="../@all"/>
 
     <xsl:if test="$all!=''">
@@ -41,6 +43,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:value-of select="$object"/>
     <xsl:text> </xsl:text>
     <xsl:value-of select="$pack"/>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$vcxprojname"/>
     <xsl:text>
 </xsl:text>
 
@@ -69,6 +73,22 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:value-of select="$makefile"/>
     <xsl:text> </xsl:text>
     <xsl:value-of select="$pack"/>
+    <xsl:text>
+</xsl:text>
+
+    <xsl:value-of select="$vcxprojname"/>
+    <xsl:text>: </xsl:text>
+    <xsl:value-of select="$vcxprojfile"/>
+    <xsl:text>
+</xsl:text>
+
+    <xsl:value-of select="$vcxprojfile"/>
+    <xsl:text>: </xsl:text>
+    <xsl:value-of select="$targetfile"/>
+    <xsl:text>
+&#9;mkdir -p $(dir $@)
+&#9;xsltproc -o $@ support/Build/ToVCXProj.xsl </xsl:text>
+    <xsl:value-of select="$targetfile"/>
     <xsl:text>
 </xsl:text>
 
@@ -76,11 +96,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:text>: </xsl:text>
     <xsl:value-of select="$targetfile"/>
     <xsl:text> support/Build/ToTargetMakefile.xsl
+&#9;mkdir -p $(dir $@)
 &#9;xsltproc -o $@ support/Build/ToTargetMakefile.xsl $&lt;
 </xsl:text>
 
     <xsl:value-of select="$targetfile"/>
     <xsl:text>: support/Build/ToOneTarget.xsl bin/.build/Makefile.expanded Makefile.build
+&#9;mkdir -p $(dir $@)
 &#9;xsltproc -o $@ -param nameTarget "'</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>'" support/Build/ToOneTarget.xsl bin/.build/Makefile.expanded
@@ -126,7 +148,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 <xsl:template match="target" mode="list">
     <xsl:text>&#9;@echo "- </xsl:text>
     <xsl:value-of select="@name"/>
-    <xsl:text>[.pack]"
+    <xsl:text>[.pack|.vcxproj]"
 </xsl:text>
 </xsl:template>
 
