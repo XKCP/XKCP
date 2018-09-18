@@ -88,7 +88,7 @@ int XoofffWBC_Encipher(Xoofff_Instance *xp, const BitSequence *plaintext, BitSeq
     if (Xoofff_Compress(xp, Lp, nL, Xoofff_FlagInit) != 0) /* Do complete L, is always a multiple of 8 bits */
         return 1;
     lastByte[0] = 0;
-    if (Xoofff(xp, lastByte, 1, R0, nR0, Xoofff_FlagShort) != 0)
+    if (Xoofff(xp, lastByte, 1, R0, nR0, Xoofff_FlagXoofffie) != 0)
         return 1;
     Xoofff_AddIs(R0, Rp, nR0);
 
@@ -134,7 +134,7 @@ int XoofffWBC_Encipher(Xoofff_Instance *xp, const BitSequence *plaintext, BitSeq
     lastByte[0] = (numberOfBitsInLastByte != 0) ? Rc[nR/8] : 0;
     lastByte[0] &= (1 << numberOfBitsInLastByte) - 1;
     lastByte[0] |= 1 << numberOfBitsInLastByte;
-    if (Xoofff(xp, lastByte, numberOfBitsInLastByte + 1, R0, nL0, Xoofff_FlagShort) != 0)
+    if (Xoofff(xp, lastByte, numberOfBitsInLastByte + 1, R0, nL0, Xoofff_FlagXoofffie) != 0)
         return 1;
     Xoofff_AddIs(Lc, R0, nL0);
 
@@ -161,7 +161,7 @@ int XoofffWBC_Decipher(Xoofff_Instance *xp, const BitSequence *ciphertext, BitSe
     lastByte[0] = (numberOfBitsInLastByte != 0) ? Rc[nR/8] : 0;
     lastByte[0] &= (1 << numberOfBitsInLastByte) - 1;
     lastByte[0] |= 1 << numberOfBitsInLastByte;
-    if (Xoofff(xp, lastByte, numberOfBitsInLastByte + 1, L0, nL0, Xoofff_FlagShort) != 0)
+    if (Xoofff(xp, lastByte, numberOfBitsInLastByte + 1, L0, nL0, Xoofff_FlagXoofffie) != 0)
         return 1;
     Xoofff_AddIs( L0, Lc, nL0);
 
@@ -196,7 +196,7 @@ int XoofffWBC_Decipher(Xoofff_Instance *xp, const BitSequence *ciphertext, BitSe
     if (Xoofff_Compress(xp, Lp, nL, Xoofff_FlagInit) != 0) /* Do all, L is always a multiple of 8 bits */
         return 1;
     lastByte[0] = 0;
-    if (Xoofff(xp, lastByte, 1, L0, nR0, Xoofff_FlagShort) != 0)
+    if (Xoofff(xp, lastByte, 1, L0, nR0, Xoofff_FlagXoofffie) != 0)
         return 1;
     Xoofff_AddIs(Rp, L0, nR0);
 

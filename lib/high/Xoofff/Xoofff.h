@@ -27,7 +27,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define Xoofff_FlagNone          0
 #define Xoofff_FlagInit          1 /* If set, initialize a new Xoofff_Compress session */
 #define Xoofff_FlagLastPart      2 /* If set, indicates the last part of input/output */
-#define Xoofff_FlagShort         4 /* If set, indicates Short-Xoofff will be performed */
+#define Xoofff_FlagXoofffie      4 /* If set, indicates Xoofffie will be performed */
 
 #ifndef _Keccak_BitTypes_
 #define _Keccak_BitTypes_
@@ -111,7 +111,7 @@ int Xoofff_Compress(Xoofff_Instance *xpInstance, const BitSequence *input, BitLe
   * @param  output          Pointer to the buffer where to store the output data.
   * @param  outputBitLen    The number of output bits desired.
   *                         This must be a multiple of 8 if Xoofff_FlagLastPart flag not set.
-  * @param  flags           Bitwise or combination of Xoofff_FlagNone, Xoofff_FlagShort, Xoofff_FlagLastPart.
+  * @param  flags           Bitwise or combination of Xoofff_FlagNone, Xoofff_FlagXoofffie, Xoofff_FlagLastPart.
   * @return 0 if successful, 1 otherwise.
   */
 int Xoofff_Expand(Xoofff_Instance *xpInstance, BitSequence *output, BitLength outputBitLen, int flags);
@@ -122,7 +122,7 @@ int Xoofff_Expand(Xoofff_Instance *xpInstance, BitSequence *output, BitLength ou
   * @param  inputBitLen     The number of bits provided in the input message data.
   * @param  output          Pointer to the output buffer.
   * @param  outputBitLen    The number of output bits desired.
-  * @param  flags           Bitwise or combination of Xoofff_FlagNone, Xoofff_FlagInit, Xoofff_FlagShort, Xoofff_FlagLastPart.
+  * @param  flags           Bitwise or combination of Xoofff_FlagNone, Xoofff_FlagInit, Xoofff_FlagXoofffie, Xoofff_FlagLastPart.
   *                         Xoofff_FlagLastPart is internally forced to true for input and output.
   * @return 0 if successful, 1 otherwise.
   */

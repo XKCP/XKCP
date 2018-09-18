@@ -509,7 +509,7 @@ int Xoofff_Expand(Xoofff_Instance *xp, BitSequence *output, BitLength outputBitL
     if ( xp->phase == COMPRESSING) {
         if ( xp->queueOffset != 0 )
             return 1;
-        if ((flags & Xoofff_FlagShort) != 0) {
+        if ((flags & Xoofff_FlagXoofffie) != 0) {
             memcpy(xp->yAccu.a, xp->xAccu.a, SnP_widthInBytes);
         }
         else {
