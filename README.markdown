@@ -1,18 +1,17 @@
 # What is the XKCP?
 
-The **eXtended Keccak Code Package** (or the **Xoodoo and Keccak Code Package**, in both cases abbreviated as **XKCP**) gathers different free and open-source implementations of the [Keccak sponge function family](http://keccak.noekeon.org/)
+The **eXtended Keccak Code Package** (or the **Xoodoo and Keccak Code Package**, in both cases abbreviated as **XKCP**) gathers different free and open-source implementations of the [Keccak sponge function family](https://keccak.team/keccak.html)
 and closely related variants, such as
 
 * the SHAKE extendable-output functions and SHA-3 hash functions from [FIPS 202][fips202_standard],
 * the cSHAKE, KMAC, ParallelHash and TupleHash functions from [NIST SP 800-185][sp800_185_standard],
 * the [Ketje v2][caesar_ketje] and [Keyak v2][caesar_keyak] authenticated encryption schemes,
 * the fast [KangarooTwelve][k12] extendable-output function,
-* the [Kravatte](https://keccak.team/kravatte.html) pseudo-random function and its modes.
+* the [Kravatte](https://keccak.team/kravatte.html) pseudo-random function and its modes,
 
-In addition, the XKCP contains implementations of
+as well as the [Xoodoo][XoodooCookbook] permutation and
 
-* the Xoodoo permutation,
-* the Xoofff pseudo-random function and its modes (experimental).
+* the [Xoofff][XoodooCookbook] pseudo-random function and its modes (experimental).
 
 
 # What does the XKCP contain?
@@ -38,7 +37,7 @@ When used as a library or directly from the sources, the XKCP offers the high-le
 * [`Ketjev2`](doc/Ketje-documentation.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
 * [`KangarooTwelve`](lib/high/KangarooTwelve/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
 * [`Kravatte`](lib/high/Kravatte/Kravatte.h) and [`KravatteModes`](lib/high/Kravatte/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SAE, SIV, WBC and WBC-AE).
-
+* [`Xoofff`](lib/high/Xoofff/Xoofff.h) and [`XoofffModes`](lib/high/Xoofff/XoofffModes.h), the pseudo-random function Xoofff, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
 
 ## Low-level services
 
@@ -51,6 +50,7 @@ The low-level services provide an opaque representation of the state together wi
     + [`lib/low/KeccakP-400/`](lib/low/KeccakP-400/), for Keccak-_p_[400].
     + [`lib/low/KeccakP-800/`](lib/low/KeccakP-800/), for Keccak-_p_[800].
     + [`lib/low/KeccakP-1600/`](lib/low/KeccakP-1600/), for Keccak-_p_[1600]. This is the one used in the six approved FIPS 202 instances.
+    + [`lib/low/Xoodoo/`](lib/low/Xoodoo/), for Xoodoo.
 
 * In addition, one can find the implementation of parallelized permutations. There are both implementations based on SIMD instructions and "fallback" implementations relying on a parallelized with a lower degree implementation or on a serial one.
 
@@ -72,7 +72,7 @@ The package contains:
 
 The XKCP also provides a number of standalone implementations, including:
 
-* a very [compact](http://keccak.noekeon.org/tweetfips202.html) C code of the FIPS 202 (SHA-3) standard in [`Standalone/CompactFIPS202/C/`](Standalone/CompactFIPS202/C/);
+* a very [compact](https://keccak.team/2015/tweetfips202.html) C code of the FIPS 202 (SHA-3) standard in [`Standalone/CompactFIPS202/C/`](Standalone/CompactFIPS202/C/);
 * a compact implementation in Python in [`Standalone/CompactFIPS202/Python/`](Standalone/CompactFIPS202/Python/);
 * the reference code of KangarooTwelve in Python in [`Standalone/KangarooTwelve/Python/`](Standalone/KangarooTwelve/Python/).
 
@@ -113,6 +113,17 @@ This creates a `.tar.gz` archive with all the necessary files to build the given
 The list of targets can be found at the end of [`Makefile.build`](Makefile.build) or by running `make` without parameters.
 
 
+## Microsoft Visual Studio support (experimental)
+
+The XKCP offers support for the creation of Microsoft Visual Studio (VS) project files. To get a project file for a given target, simply append `.vcxproj` to the target name, e.g.,
+
+> `make generic32/KeccakTests.vcxproj`
+
+This is still somehow experimental, but it should be easy to extend/adapt by someone with more experience with VS. (*Help welcome!*) In particular, please note the current limitations:
+
+- The generated project files current target Win32 only, but this should be easy to adapt for 64-bit support. See the file [`ToVCXProj.xsl`](support/Build/ToVCXProj.xsl).
+- The assembly code, as used in some targets, follows the GCC syntax and at this point cannot be used directly with VS.
+
 
 # How do I build/extract just the part I need?
 
@@ -152,20 +163,22 @@ The XKCP follows an improved version of the structure proposed in the note ["A s
 
 More information on the cryptographic aspects can be found:
 
-* on Keccak in general at [`keccak.noekeon.org`](http://keccak.noekeon.org/)
+* on Keccak at [`keccak.team`](https://keccak.team/keccak.html)
 * on the FIPS 202 standard at [`csrc.nist.gov`](http://csrc.nist.gov/groups/ST/hash/sha-3/fips202_standard_2015.html)
-* on the NIST SP 800-185 standard at [`keccak.noekeon.org`](http://keccak.noekeon.org/sp_800_185.html)
-* on Ketje at [`ketje.noekeon.org`](http://ketje.noekeon.org/)
-* on Keyak at [`keyak.noekeon.org`](http://keyak.noekeon.org/)
-* on KangarooTwelve at [`kangarootwelve.org`](http://kangarootwelve.org/)
-* on cryptographic sponge functions at [`sponge.noekeon.org`](http://sponge.noekeon.org/)
-* on Kravatte at [`eprint.iacr.org`](https://eprint.iacr.org/2016/1188)
+* on the NIST SP 800-185 standard at [`keccak.team`](https://keccak.team/2016/sp_800_185.html)
+* on Ketje at [`keccak.team`](https://keccak.team/ketje.html)
+* on Keyak at [`keccak.team`](https://keccak.team/keyak.html)
+* on KangarooTwelve at [`keccak.team`](https://keccak.team/kangarootwelve.html)
+* on cryptographic sponge functions at [`keccak.team`](https://keccak.team/sponge_duplex.html)
+* on Kravatte at [`keccak.team`](https://keccak.team/kravatte.html)
+* on Xoodoo and Xoofff at [`eprint.iacr.org`](https://eprint.iacr.org/2018/767)
+* on the Farfalle construction at [`keccak.team`](https://keccak.team/farfalle.html)
 
 
 
 # How can I contribute?
 
-We welcome contributions in various forms, e.g., general feedback, bug reports, improvements and optimized implementations on your favorite platforms. The best is to do this through GitHub. Alternatively, you can send us a mail at `keccak` _-at-_ `noekeon` _-dot-_ `org`.
+We welcome contributions in various forms, e.g., general feedback, bug reports, improvements and optimized implementations on your favorite platforms. The best is to do this through GitHub. Alternatively, you can send us a mail at `all` _-at-_ `keccak` _-dot-_ `team`.
 
 
 
@@ -177,7 +190,7 @@ If you need to implement the standard FIPS 202 functions, the functions in [`Sim
 
 Compared to the (plain) Keccak sponge function, the [FIPS 202 standard][fips202_standard] adds suffixes to ensure that the hash functions (SHA-3) and the XOFs (SHAKE) are domain separated (i.e., so that their outputs are unrelated even with equal inputs), as well as to make the SHAKE functions compatible with the [Sakura][sakura] tree hashing coding.
 
-[sakura]: http://keccak.noekeon.org/Sakura.pdf "Sakura: a flexible coding for tree hashing"
+[sakura]: https://keccak.team/files/Sakura.pdf "Sakura: a flexible coding for tree hashing"
 
 A brief summary:
 
@@ -201,19 +214,20 @@ And thanks to all contributors!
 
 ***
 
-The Keccak, Keyak and Ketje Teams: Guido Bertoni, Joan Daemen,
+The Keccak and Xoodoo designers: Guido Bertoni, Joan Daemen, Seth Hoffert,
 Michaël Peeters, Gilles Van Assche, and Ronny Van Keer.
 
-[keccakinterface]: http://keccak.noekeon.org/NoteSoftwareInterface.pdf
+[keccakinterface]: https://keccak.team/files/NoteSoftwareInterface.pdf
 [SHA3workshop2014]: http://csrc.nist.gov/groups/ST/hash/sha-3/Aug2014/index.html
 [KCPslides]: http://csrc.nist.gov/groups/ST/hash/sha-3/Aug2014/documents/vanassche_keccak_code.pdf
 [FOSDEM2017]: https://fosdem.org/2017/schedule/event/keccak/
 [slidesAtFOSDEM2017]: https://fosdem.org/2017/schedule/event/keccak/attachments/slides/1692/export/events/attachments/keccak/slides/1692/KeccakAtFOSDEM2017.pdf
 [fips202_standard]: http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf "FIPS 202 standard"
 [sp800_185_standard]: https://doi.org/10.6028/NIST.SP.800-185 "NIST SP 800-185 standard"
-[caesar_ketje]: http://ketje.noekeon.org/
-[caesar_keyak]: http://keyak.noekeon.org/
-[k12]: http://keccak.noekeon.org/KangarooTwelve.pdf
+[caesar_ketje]: https://keccak.team/ketje.html
+[caesar_keyak]: https://keccak.team/keyak.html
+[k12]: https://keccak.team/kangarootwelve.html
 [SPEEDB]: http://ccccspeed.win.tue.nl/
 [paperAtSPEEDB]: http://ccccspeed.win.tue.nl/papers/KeccakSoftware.pdf
 [slidesAtSPEEDB]: http://ccccspeed.win.tue.nl/presentations/KeccakSoftware-slides.pdf
+[XoodooCookbook]: https://eprint.iacr.org/2018/767
