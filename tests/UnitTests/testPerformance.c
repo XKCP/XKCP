@@ -431,6 +431,14 @@ void printParallelImplementations(
 )
 {
         printf("- \303\2271: " KeccakP1600_implementation "\n");
+    #if defined(KeccakF1600_FastLoop_supported)
+    if (useKeccakF1600timesN_FastLoop_Absorb)
+        printf("      + KeccakF1600_FastLoop_Absorb()\n");
+    #endif
+    #if defined(KeccakP1600_12rounds_FastLoop_supported)
+    if (useKeccakP1600timesN_12rounds_FastLoop_Absorb)
+        printf("      + KeccakP1600_12rounds_FastLoop_Absorb()\n");
+    #endif
 
     #if defined(KeccakP1600times2_implementation) && !defined(KeccakP1600times2_isFallback)
     printf("- \303\2272: " KeccakP1600times2_implementation "\n");
