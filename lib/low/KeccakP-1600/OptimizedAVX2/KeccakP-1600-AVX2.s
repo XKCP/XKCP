@@ -44,7 +44,8 @@ KeccakP1600_AddByte:
     mov         %rdx, %rax
     and         $7, %rax
     and         $0xFFFFFFF8, %edx
-    mov         mapState(%rdx), %rdx
+    lea         mapState(%rip), %r9
+    mov         (%r9, %rdx), %rdx
     add         %rdx, %rdi
     add         %rax, %rdi
     xorb        %sil, (%rdi)
@@ -64,7 +65,8 @@ KeccakP1600_AddBytes:
     jz          KeccakP1600_AddBytes_Exit
     mov         %rdx, %rax                              # rax offset in lane
     and         $0xFFFFFFF8, %edx                       # rdx pointer into state index mapper
-    lea         mapState(%rdx), %rdx
+    lea         mapState(%rip), %r9
+    add         %r9, %rdx
     and         $7, %rax
     jz          KeccakP1600_AddBytes_LaneAlignedCheck
     mov         $8, %r9                                 # r9 is (max) length of incomplete lane
@@ -122,7 +124,8 @@ KeccakP1600_OverwriteBytes:
     jz          KeccakP1600_OverwriteBytes_Exit
     mov         %rdx, %rax                              # rax offset in lane
     and         $0xFFFFFFF8, %edx                       # rdx pointer into state index mapper
-    lea         mapState(%rdx),  %rdx
+    lea         mapState(%rip), %r9
+    add         %r9, %rdx
     and         $7, %rax
     jz          KeccakP1600_OverwriteBytes_LaneAlignedCheck
     mov         $8, %r9                                 # r9 is (max) length of incomplete lane
@@ -178,7 +181,7 @@ KeccakP1600_OverwriteBytes_Exit:
 KeccakP1600_OverwriteWithZeroes:
     cmp         $0, %rsi
     jz          KeccakP1600_OverwriteWithZeroes_Exit
-    lea         mapState, %rdx                          # rdx pointer into state index mapper
+    lea         mapState(%rip), %rdx                          # rdx pointer into state index mapper
     jmp         KeccakP1600_OverwriteWithZeroes_LaneAlignedCheck
 KeccakP1600_OverwriteWithZeroes_LaneAlignedLoop:
     mov         (%rdx), %rax
@@ -216,7 +219,8 @@ KeccakP1600_ExtractBytes:
     jz          KeccakP1600_ExtractBytes_Exit
     mov         %rdx, %rax                              # rax offset in lane
     and         $0xFFFFFFF8, %edx                       # rdx pointer into state index mapper
-    lea         mapState(%rdx),  %rdx
+    lea         mapState(%rip), %r9
+    add         %r9, %rdx
     and         $7, %rax
     jz          KeccakP1600_ExtractBytes_LaneAlignedCheck
     mov         $8, %rbx                                # rbx is (max) length of incomplete lane
@@ -278,7 +282,8 @@ KeccakP1600_ExtractAndAddBytes:
     jz          KeccakP1600_ExtractAndAddBytes_Exit
     mov         %rcx, %rax                              # rax offset in lane
     and         $0xFFFFFFF8, %ecx                       # rcx pointer into state index mapper
-    lea         mapState(%rcx), %rcx
+    lea         mapState(%rip), %r9
+    add         %r9, %rcx
     and         $7, %rax
     jz          KeccakP1600_ExtractAndAddBytes_LaneAlignedCheck
     mov         $8, %rbx                                # rbx is (max) length of incomplete lane
