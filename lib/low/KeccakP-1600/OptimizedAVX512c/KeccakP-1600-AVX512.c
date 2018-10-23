@@ -612,7 +612,7 @@ size_t KeccakP1600_12rounds_FastLoop_Absorb(void *state, unsigned int laneCount,
     else {
         while(dataByteLen >= laneCount*8) {
             KeccakP1600_AddBytes(state, data, 0, laneCount*8);
-            KeccakP1600_Permute_24rounds(state);
+            KeccakP1600_Permute_12rounds(state);
             data += laneCount*8;
             dataByteLen -= laneCount*8;
         }
