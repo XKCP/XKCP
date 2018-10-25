@@ -25,7 +25,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
 * KeccakPRGWidth{200, 400, 800, 1600}: a pseudo-random bit generator based on Keccak with the given permutation width.
 * KeccakPRG: the pseudo-random bit generators for all widths.
 * KangarooTwelve: the KangarooTwelve extendable output function.
-* Kravatte: the Kravatte pseudo-random function and its modes (Kravatte-SAE, -SIV, -WBC and -WBC-AE).
+* Kravatte: the Kravatte pseudo-random function and its modes (Kravatte-SANE, -SANSE, -WBC and -WBC-AE).
 
 * Xoofff: the Xoofff pseudo-random function and its modes (Xoofff-SANE, Xoofff-SANSE, Xoofff-WBC and Xoofff-WBC-AE).
 -->

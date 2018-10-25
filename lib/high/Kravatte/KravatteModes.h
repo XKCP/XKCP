@@ -20,78 +20,38 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "Kravatte.h"
 
 /**
-  * Kravatte-SIV Tag Length in bytes.
+  * Kravatte-SANE Tag Length in bytes.
   */
-#define Kravatte_SIV_TagLength      32
-
-/**
-  * Macro to initialize a Kravatte_SIV instance with given key.
-  * @param  kv              Pointer to the instance to be initialized.
-  * @param  Key             Pointer to the key (K).
-  * @param  KeyBitLen       The length of the key in bits.
-  * @return 0 if successful, 1 otherwise.
-  */
-#define Kravatte_SIV_MaskDerivation(kv, Key, KeyBitLen)    Kravatte_MaskDerivation(kv, Key, KeyBitLen)
-
-/**
-  * Function to wrap plaintext into ciphertext.
-  * @param  kvInstance      Pointer to the instance initialized by Kravatte_SIV_MaskDerivation().
-  * @param  plaintext       Pointer to plaintext data to wrap.
-  * @param  ciphertext      Pointer to buffer where the full wrapped data will be stored.
-  *                         The ciphertext buffer must not overlap plaintext.
-  * @param  dataBitLen      The size of the plaintext/ciphertext data.
-  * @param  AD              Pointer to the Associated Data.
-  * @param  ADBitLen        The number of bytes provided in the Associated Data.
-  * @param  tag             The buffer where to store the tag.
-  *                         This buffer must be minimum Kravatte_SIV_TagLength bytes long.
-  * @return 0 if successful, 1 otherwise.
-  */
-int Kravatte_SIV_Wrap(Kravatte_Instance *kvInstance, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
-                        const BitSequence *AD, BitLength ADBitLen, unsigned char *tag);
-
-/**
-  * Function to unwrap ciphertext into plaintext.
-  * @param  kvInstance      Pointer to the instance initialized by Kravatte_SIV_MaskDerivation().
-  * @param  ciphertext      Pointer to ciphertext data to unwrap.
-  * @param  plaintext       Pointer to buffer where the full unwrapped data will be stored.
-  *                         The plaintext buffer must not overlap ciphertext.
-  * @param  dataBitLen      The size of the ciphertext/plaintext data.
-  * @param  tag             The buffer where to read the tag to check (when lastFlag is set).
-  *                         This buffer must be minimum Kravatte_SIV_TagLength bytes long.
-  * @return 0 if successful, 1 otherwise.
-  */
-int Kravatte_SIV_Unwrap(Kravatte_Instance *kvInstance, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
-                            const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag);
-
-/* ------------------------------------------------------------------------- */
-
-/**
-  * Kravatte-SAE Tag Length in bytes.
-  */
-#define Kravatte_SAE_TagLength      16
+#define Kravatte_SANE_TagLength      16
 
 /**
   * Definition of the constant l.
   */
-#define Kravatte_SAE_l              128
+#define Kravatte_SANE_l              8
+
+typedef struct {
+    Kravatte_Instance   kravatte;
+    unsigned int        e;
+} Kravatte_SANE_Instance;
+
 
 /**
-  * Function to initialize a Kravatte SAE instance with given key and nonce.
+  * Function to initialize a Kravatte SANE instance with given key and nonce.
   * @param  kvInstance      Pointer to the instance to be initialized.
   * @param  Key             Pointer to the key (K).
   * @param  KeyBitLen       The length of the key in bits.
   * @param  Nonce           Pointer to the nonce (N).
   * @param  NonceBitLen     The length of the nonce in bits.
   * @param  tag             The buffer where to store the tag.
-  *                         This buffer must be minimum Kravatte_SAE_TagLength bytes long.
+  *                         This buffer must be minimum Kravatte_SANE_TagLength bytes long.
   * @return 0 if successful, 1 otherwise.
   */
-int Kravatte_SAE_Initialize(Kravatte_Instance *kvInstance, const BitSequence *Key, BitLength KeyBitLen, 
+int Kravatte_SANE_Initialize(Kravatte_SANE_Instance *kvInstance, const BitSequence *Key, BitLength KeyBitLen, 
                             const BitSequence *Nonce, BitLength NonceBitLen, unsigned char *tag);
 
 /**
   * Function to wrap plaintext into ciphertext.
-  * @param  kvInstance      Pointer to the instance initialized by Kravatte_SAE_Initialize().
+  * @param  kvInstance      Pointer to the instance initialized by Kravatte_SANE_Initialize().
   * @param  plaintext       Pointer to plaintext data to wrap.
   * @param  ciphertext      Pointer to buffer where the full wrapped data will be stored.
   *                         The ciphertext buffer must not overlap plaintext.
@@ -99,24 +59,80 @@ int Kravatte_SAE_Initialize(Kravatte_Instance *kvInstance, const BitSequence *Ke
   * @param  AD              Pointer to the Associated Data.
   * @param  ADBitLen        The number of bytes provided in the Associated Data.
   * @param  tag             The buffer where to store the tag.
-  *                         This buffer must be minimum Kravatte_SAE_TagLength bytes long.
+  *                         This buffer must be minimum Kravatte_SANE_TagLength bytes long.
   * @return 0 if successful, 1 otherwise.
   */
-int Kravatte_SAE_Wrap(Kravatte_Instance *kvInstance, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
+int Kravatte_SANE_Wrap(Kravatte_SANE_Instance *kvInstance, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
                         const BitSequence *AD, BitLength ADBitLen, unsigned char *tag);
 
 /**
   * Function to unwrap ciphertext into plaintext.
-  * @param  kvInstance      Pointer to the instance initialized by Kravatte_SAE_Initialize().
+  * @param  kvInstance      Pointer to the instance initialized by Kravatte_SANE_Initialize().
   * @param  ciphertext      Pointer to ciphertext data to unwrap.
   * @param  plaintext       Pointer to buffer where the full unwrapped data will be stored.
   *                         The plaintext buffer must not overlap ciphertext.
   * @param  dataBitLen      The size of the ciphertext/plaintext data.
+  * @param  AD              Pointer to the Associated Data.
+  * @param  ADBitLen        The number of bytes provided in the Associated Data.
   * @param  tag             The buffer where to read the tag to check (when lastFlag is set).
-  *                         This buffer must be minimum Kravatte_SAE_TagLength bytes long.
+  *                         This buffer must be minimum Kravatte_SANE_TagLength bytes long.
   * @return 0 if successful, 1 otherwise.
   */
-int Kravatte_SAE_Unwrap(Kravatte_Instance *kvInstance, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
+int Kravatte_SANE_Unwrap(Kravatte_SANE_Instance *kvInstance, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
+                            const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag);
+
+/* ------------------------------------------------------------------------- */
+
+/**
+  * Kravatte-SANSE Tag Length in bytes.
+  */
+#define Kravatte_SANSE_TagLength      32
+
+typedef struct {
+    Kravatte_Instance   kravatte;
+    unsigned int        e;
+} Kravatte_SANSE_Instance;
+
+
+/**
+  * Function to initialize a Kravatte SANSE instance with given key and nonce.
+  * @param  kvInstance      Pointer to the instance to be initialized.
+  * @param  Key             Pointer to the key (K).
+  * @param  KeyBitLen       The length of the key in bits.
+  * @return 0 if successful, 1 otherwise.
+  */
+int Kravatte_SANSE_Initialize(Kravatte_SANSE_Instance *kvInstance, const BitSequence *Key, BitLength KeyBitLen);
+
+/**
+  * Function to wrap plaintext into ciphertext.
+  * @param  kvInstance      Pointer to the instance initialized by Kravatte_SANSE_Initialize().
+  * @param  plaintext       Pointer to plaintext data to wrap.
+  * @param  ciphertext      Pointer to buffer where the full wrapped data will be stored.
+  *                         The ciphertext buffer must not overlap plaintext.
+  * @param  dataBitLen      The size of the plaintext/ciphertext data.
+  * @param  AD              Pointer to the Associated Data.
+  * @param  ADBitLen        The number of bytes provided in the Associated Data.
+  * @param  tag             The buffer where to store the tag.
+  *                         This buffer must be minimum Kravatte_SANSE_TagLength bytes long.
+  * @return 0 if successful, 1 otherwise.
+  */
+int Kravatte_SANSE_Wrap(Kravatte_SANSE_Instance *kvInstance, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
+                        const BitSequence *AD, BitLength ADBitLen, unsigned char *tag);
+
+/**
+  * Function to unwrap ciphertext into plaintext.
+  * @param  kvInstance      Pointer to the instance initialized by Kravatte_SANSE_Initialize().
+  * @param  ciphertext      Pointer to ciphertext data to unwrap.
+  * @param  plaintext       Pointer to buffer where the full unwrapped data will be stored.
+  *                         The plaintext buffer must not overlap ciphertext.
+  * @param  dataBitLen      The size of the ciphertext/plaintext data.
+  * @param  AD              Pointer to the Associated Data.
+  * @param  ADBitLen        The number of bytes provided in the Associated Data.
+  * @param  tag             The buffer where to read the tag to check (when lastFlag is set).
+  *                         This buffer must be minimum Kravatte_SANSE_TagLength bytes long.
+  * @return 0 if successful, 1 otherwise.
+  */
+int Kravatte_SANSE_Unwrap(Kravatte_SANSE_Instance *kvInstance, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
                             const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag);
 
 /* ------------------------------------------------------------------------- */

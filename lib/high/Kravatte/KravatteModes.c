@@ -124,54 +124,99 @@ static void memxor(BitSequence *target, const BitSequence *source1, const BitSeq
 
 /* ------------------------------------------------------------------------- */
 
-int Kravatte_SIV_Wrap(Kravatte_Instance *kv, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen,
-                        const BitSequence *AD, BitLength ADBitLen, unsigned char *tag)
+int Kravatte_SANE_Initialize(Kravatte_SANE_Instance *kp, const BitSequence *Key, BitLength KeyBitLen, 
+                            const BitSequence *Nonce, BitLength NonceBitLen, unsigned char *tag)
 {
-    ALIGN(KRAVATTE_ALIGNMENT) unsigned char xAccuAD[SnP_widthInBytes];
-    ALIGN(KRAVATTE_ALIGNMENT) unsigned char kRollAD[Kravatte_RollcSizeInBytes];
-
-    /*    T = Fk(P . A) */
-    if (Kra(kv, AD, ADBitLen, KRAVATTE_FLAG_INIT | KRAVATTE_FLAG_LAST_PART) != 0)
+    kp->e = 0;
+    if (Kravatte_MaskDerivation(&kp->kravatte, Key, KeyBitLen) != 0)
         return 1;
-    memcpy(kRollAD, kv->kRoll.a+Kravatte_RollcOffset, Kravatte_RollcSizeInBytes);
-    memcpy(xAccuAD, kv->xAccu.a, SnP_widthInBytes);
-    if (Kravatte(kv, plaintext, dataBitLen, tag, Kravatte_SIV_TagLength * 8, KRAVATTE_FLAG_NONE) != 0)
+    if (Kra(&kp->kravatte, Nonce, NonceBitLen, KRAVATTE_FLAG_INIT | KRAVATTE_FLAG_LAST_PART) != 0)
         return 1;
-
-    /*    C = P ^ Fk(T . A) */
-    memcpy(kv->kRoll.a+Kravatte_RollcOffset, kRollAD, Kravatte_RollcSizeInBytes);
-    memcpy(kv->xAccu.a, xAccuAD, SnP_widthInBytes);
-    if (Kravatte(kv, tag, Kravatte_SIV_TagLength * 8, ciphertext, dataBitLen, KRAVATTE_FLAG_NONE) != 0)
-        return 1;
-    memxoris(ciphertext, plaintext, dataBitLen);
-
-    return 0;
+    return Vatte(&kp->kravatte, tag, Kravatte_SANE_TagLength * 8, KRAVATTE_FLAG_NONE);
 }
 
-int Kravatte_SIV_Unwrap(Kravatte_Instance *kv, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen,
+static int Kravatte_SANE_AddToHistory(Kravatte_SANE_Instance *kp, const BitSequence *data, BitLength dataBitLen, unsigned char appendix)
+{
+    BitSequence lastByte[1];
+
+    if (Kra(&kp->kravatte, data, dataBitLen & ~7, KRAVATTE_FLAG_NONE) != 0) /* Do all except last byte if incomplete */
+        return 1;
+
+    data += dataBitLen >> 3; /* move pointer to last incomplete byte (if no incomplete last byte, it will point beyond the buffer, but pointer won't be dereferenced) */
+    dataBitLen &= 7; /* dataBitLen is now number of bits in last possible incomplete byte */
+    if (dataBitLen == 0) {
+        lastByte[0] = (BitSequence)(appendix | (kp->e << 1));
+        dataBitLen = 2;
+    }
+    else if (dataBitLen <= 6) {
+        lastByte[0] = (BitSequence)(*data | (appendix << dataBitLen) | (kp->e << (dataBitLen + 1)));
+        dataBitLen += 2;
+    }
+    else { /* dataBitLen == 7 */
+        lastByte[0] = (BitSequence)(*data | (appendix << 7));
+        if ( Kra(&kp->kravatte, lastByte, 8, KRAVATTE_FLAG_NONE) != 0) {
+            return 1;
+        }
+        lastByte[0] = (BitSequence)kp->e;
+        dataBitLen = 1;
+    }
+    return Kra(&kp->kravatte, lastByte, dataBitLen, KRAVATTE_FLAG_LAST_PART);
+}
+
+
+int Kravatte_SANE_Wrap(Kravatte_SANE_Instance *kp, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
+                        const BitSequence *AD, BitLength ADBitLen, unsigned char *tag)
+{
+
+    if (dataBitLen != 0) {
+        /* C = P ^ Fk(history) << offset */
+        if (Vatte(&kp->kravatte, ciphertext, dataBitLen, KRAVATTE_FLAG_LAST_PART) != 0)
+            return 1;
+        memxoris(ciphertext, plaintext, dataBitLen);
+    }
+    if ((ADBitLen != 0) || (dataBitLen == 0)) {
+        /* history <- A || 0 || e ° history */
+        if (Kravatte_SANE_AddToHistory(kp, AD, ADBitLen, 0 ) != 0)
+            return 1;
+    }
+    if (dataBitLen != 0) {
+        /* history <- C || 1 || e ° history */
+        if (Kravatte_SANE_AddToHistory(kp, ciphertext, dataBitLen, 1 ) != 0)
+            return 1;
+    }
+    kp->e ^= 1;
+
+    /* T = Fk(history) */
+    return Vatte(&kp->kravatte, tag, Kravatte_SANE_TagLength * 8, KRAVATTE_FLAG_NONE);
+}
+
+int Kravatte_SANE_Unwrap(Kravatte_SANE_Instance *kp, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
                             const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag)
 {
-    ALIGN(KRAVATTE_ALIGNMENT) unsigned char xAccuAD[SnP_widthInBytes];
-    ALIGN(KRAVATTE_ALIGNMENT) unsigned char kRollAD[Kravatte_RollcSizeInBytes];
-    unsigned char tagPrime[Kravatte_SIV_TagLength];
+    unsigned char tagPrime[Kravatte_SANE_TagLength];
 
-    /*    P = C ^ Fk(T . A) */
-    if (Kra(kv, AD, ADBitLen, KRAVATTE_FLAG_INIT | KRAVATTE_FLAG_LAST_PART) != 0)
+    if (dataBitLen != 0) {
+        /*    P = C ^ Fk(history) << offset */
+        if (Vatte(&kp->kravatte, plaintext, dataBitLen, KRAVATTE_FLAG_LAST_PART) != 0)
+            return 1;
+        memxoris(plaintext, ciphertext, dataBitLen);
+    }
+    if ((ADBitLen != 0) || (dataBitLen == 0)) {
+        /* history <- A || 0 || e ° history */
+        if (Kravatte_SANE_AddToHistory(kp, AD, ADBitLen, 0 ) != 0)
+            return 1;
+    }
+    if (dataBitLen != 0) {
+        /* history <- C || 1 || e  ° history */
+        if (Kravatte_SANE_AddToHistory(kp, ciphertext, dataBitLen, 1 ) != 0)
+            return 1;
+    }
+    /* Tprime = Fk(history) */
+    if (Vatte(&kp->kravatte, tagPrime, Kravatte_SANE_TagLength * 8, KRAVATTE_FLAG_NONE) != 0)
         return 1;
-    memcpy(kRollAD, kv->kRoll.a+Kravatte_RollcOffset, Kravatte_RollcSizeInBytes);
-    memcpy(xAccuAD, kv->xAccu.a, SnP_widthInBytes);
-    if (Kravatte(kv, tag, Kravatte_SIV_TagLength * 8, plaintext, dataBitLen, KRAVATTE_FLAG_NONE) != 0)
-        return 1;
-    memxoris(plaintext, ciphertext, dataBitLen);
-
-    /*    Tprime = Fk( P . A) */
-    memcpy(kv->kRoll.a+Kravatte_RollcOffset, kRollAD, Kravatte_RollcSizeInBytes);
-    memcpy(kv->xAccu.a, xAccuAD, SnP_widthInBytes);
-    if (Kravatte(kv, plaintext, dataBitLen, tagPrime, Kravatte_SIV_TagLength * 8, KRAVATTE_FLAG_NONE) != 0)
-        return 1;
-
-    /*  Wipe plaintext on tag difference */
-    if ( memcmp( tagPrime, tag, Kravatte_SIV_TagLength) != 0) {
+    kp->e ^= 1;
+     /* Wipe plaintext on tag difference */
+    if ( memcmp( tagPrime, tag, Kravatte_SANE_TagLength) != 0) {
         memset(plaintext, 0, (dataBitLen + 7) / 8);
         return 1;
     }
@@ -180,83 +225,131 @@ int Kravatte_SIV_Unwrap(Kravatte_Instance *kv, const BitSequence *ciphertext, Bi
 
 /* ------------------------------------------------------------------------- */
 
-int Kravatte_SAE_Initialize(Kravatte_Instance *kv, const BitSequence *Key, BitLength KeyBitLen,
-                            const BitSequence *Nonce, BitLength NonceBitLen, unsigned char *tag)
+int Kravatte_SANSE_Initialize(Kravatte_SANSE_Instance *kp, const BitSequence *Key, BitLength KeyBitLen)
 {
-
-    if (Kravatte_MaskDerivation(kv, Key, KeyBitLen) != 0)
-        return 1;
-    if (Kra(kv, Nonce, NonceBitLen, KRAVATTE_FLAG_INIT | KRAVATTE_FLAG_LAST_PART) != 0)
-        return 1;
-    return Vatte(kv, tag, Kravatte_SAE_TagLength * 8, KRAVATTE_FLAG_NONE);
+    kp->e = 0;
+    return Kravatte_MaskDerivation(&kp->kravatte, Key, KeyBitLen);
 }
 
-static int Kravatte_SAE_AddToHistory(Kravatte_Instance *kv, const BitSequence *data, BitLength dataBitLen, unsigned char appendix)
+static int Kravatte_SANSE_AddToHistory(Kravatte_SANSE_Instance *kp, const BitSequence *data, BitLength dataBitLen, unsigned char appendix, unsigned int appendixLen)
 {
     BitSequence lastByte[1];
 
-    if (Kra(kv, data, dataBitLen & ~7, KRAVATTE_FLAG_NONE) != 0) /* Do all except last byte if incomplete */
+    if (Kra(&kp->kravatte, data, dataBitLen & ~7, KRAVATTE_FLAG_NONE) != 0) /* Do all except last byte if incomplete */
         return 1;
-    lastByte[0] = (dataBitLen & 7) ? data[dataBitLen >> 3] : 0;
-    dataBitLen &= 7; /* dataBitLen is now number of bits in last unprocessed byte */
-    lastByte[0] &= (1 << dataBitLen) - 1;
-    lastByte[0] |= appendix << dataBitLen;
-    return Kra(kv, lastByte, dataBitLen + 1, KRAVATTE_FLAG_LAST_PART);
+    data += dataBitLen >> 3; /* move pointer to last incomplete byte (if no incomplete last byte, it will point beyond the buffer, but pointer won't be dereferenced) */
+    dataBitLen &= 7; /* dataBitLen is now number of bits in last possible incomplete byte */
+    if (dataBitLen == 0) {
+        lastByte[0] = (BitSequence)(appendix | (kp->e << appendixLen));
+        dataBitLen = appendixLen + 1;
+    }
+    else if (dataBitLen <= (8 - (appendixLen + 1))) {
+        lastByte[0] = (BitSequence)((*data & ((1 << dataBitLen) - 1)) | (appendix << dataBitLen) | (kp->e << (dataBitLen + appendixLen)));
+        dataBitLen += appendixLen + 1;
+    }
+    else { /* dataBitLen too big to hold everything in last byte */
+        unsigned int bitsLeft;
+
+        bitsLeft = 8 - dataBitLen;
+        lastByte[0] = (BitSequence)((*data & ((1 << dataBitLen) - 1)) | ((appendix & ((1 << bitsLeft) - 1)) << dataBitLen));
+        appendixLen -= bitsLeft;
+        appendix >>= bitsLeft;
+        if ( Kra(&kp->kravatte, lastByte, 8, KRAVATTE_FLAG_NONE) != 0) {
+            return 1;
+        }
+        lastByte[0] = (BitSequence)(appendix | (kp->e << appendixLen));
+        dataBitLen = appendixLen + 1;
+    }
+    return Kra(&kp->kravatte, lastByte, dataBitLen, KRAVATTE_FLAG_LAST_PART);
 }
 
-int Kravatte_SAE_Wrap(Kravatte_Instance *kv, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen,
+int Kravatte_SANSE_Wrap(Kravatte_SANSE_Instance *kp, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
                         const BitSequence *AD, BitLength ADBitLen, unsigned char *tag)
 {
 
+    /* if |A| > 0 OR |P| = 0 then */
+    if ((ADBitLen != 0) || (dataBitLen == 0)) {
+        /* history <- A || 0 || e . history */
+        if (Kravatte_SANSE_AddToHistory(kp, AD, ADBitLen, 0, 1 ) != 0)
+            return 1;
+    }
+    /* if |P| > 0 then */
     if (dataBitLen != 0) {
-        /* C = P ^ Fk(history) << offset */
-        if (Vatte(kv, ciphertext, dataBitLen, KRAVATTE_FLAG_LAST_PART) != 0)
+        Kravatte_Instance initialHistory = kp->kravatte;
+        Kravatte_Instance newHistory;
+
+        /* T = 0t + FK (P || 01 || e . history) */
+        if (Kravatte_SANSE_AddToHistory(kp, plaintext, dataBitLen, 2, 2 ) != 0)
+            return 1;
+        newHistory = kp->kravatte;
+        if ( Vatte(&kp->kravatte, tag, Kravatte_SANSE_TagLength * 8, KRAVATTE_FLAG_NONE) != 0)
+            return 1;
+
+        /* C = P + FK (T || 11 || e . history) */
+        kp->kravatte = initialHistory;
+        if (Kravatte_SANSE_AddToHistory(kp, tag, Kravatte_SANSE_TagLength * 8, 3, 2 ) != 0)
+            return 1;
+        if (Vatte(&kp->kravatte, ciphertext, dataBitLen, KRAVATTE_FLAG_LAST_PART) != 0)
             return 1;
         memxoris(ciphertext, plaintext, dataBitLen);
+
+        /* history = P || 01 || e . history */
+        kp->kravatte = newHistory;
     }
-    if ((ADBitLen != 0) || (dataBitLen == 0)) {
-        /* history <- A || 0 ° history */
-        if (Kravatte_SAE_AddToHistory(kv, AD, ADBitLen, 0 ) != 0)
+    else {
+        /* T = 0t + FK (history)  */
+        if ( Vatte(&kp->kravatte, tag, Kravatte_SANSE_TagLength * 8, KRAVATTE_FLAG_NONE) != 0)
             return 1;
     }
-    if (dataBitLen != 0) {
-        /* history <- C || 1 ° history */
-        if (Kravatte_SAE_AddToHistory(kv, ciphertext, dataBitLen, 1 ) != 0)
-            return 1;
-    }
-    /* T = Fk(history) */
-    return Vatte(kv, tag, Kravatte_SAE_TagLength * 8, KRAVATTE_FLAG_NONE);
+    /* e = e + 1 */
+    kp->e ^= 1;
+
+    return 0;
 }
 
-int Kravatte_SAE_Unwrap(Kravatte_Instance *kv, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen,
+int Kravatte_SANSE_Unwrap(Kravatte_SANSE_Instance *kp, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
                             const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag)
 {
-    unsigned char tagPrime[Kravatte_SAE_TagLength];
+    unsigned char tagPrime[Kravatte_SANSE_TagLength];
 
+    /* if |A| > 0 OR |C| = 0 then */
+    if ((ADBitLen != 0) || (dataBitLen == 0)) {
+        /* history = A || 0 || e . history */
+        if (Kravatte_SANSE_AddToHistory(kp, AD, ADBitLen, 0, 1 ) != 0)
+            return 1;
+    }
+
+    /* if |C| > 0 then */
     if (dataBitLen != 0) {
-        /*    P = C ^ Fk(history) << offset */
-        if (Vatte(kv, plaintext, dataBitLen, KRAVATTE_FLAG_LAST_PART) != 0)
+        Kravatte_Instance initialHistory = kp->kravatte;
+
+        /* P = C + FK (T || 11 || e . history) */
+        if (Kravatte_SANSE_AddToHistory(kp, tag, Kravatte_SANSE_TagLength * 8, 3, 2 ) != 0)
+            return 1;
+        if (Vatte(&kp->kravatte, plaintext, dataBitLen, KRAVATTE_FLAG_LAST_PART) != 0)
             return 1;
         memxoris(plaintext, ciphertext, dataBitLen);
-    }
-    if ((ADBitLen != 0) || (dataBitLen == 0)) {
-        /* history <- A || 0 ° history */
-        if (Kravatte_SAE_AddToHistory(kv, AD, ADBitLen, 0 ) != 0)
+
+        /* history = P || 01 || e . history */
+        kp->kravatte = initialHistory;
+        if (Kravatte_SANSE_AddToHistory(kp, plaintext, dataBitLen, 2, 2 ) != 0)
             return 1;
     }
-    if (dataBitLen != 0) {
-        /* history <- C || 1 ° history */
-        if (Kravatte_SAE_AddToHistory(kv, ciphertext, dataBitLen, 1 ) != 0)
-            return 1;
-    }
-    /* Tprime = Fk(history) */
-    if (Vatte(kv, tagPrime, Kravatte_SAE_TagLength * 8, KRAVATTE_FLAG_NONE) != 0)
+
+    /* T' = 0t + FK (history) */
+    if ( Vatte(&kp->kravatte, tagPrime, sizeof(tagPrime) * 8, KRAVATTE_FLAG_NONE) != 0)
         return 1;
-    /* Wipe plaintext on tag difference */
-    if ( memcmp( tagPrime, tag, Kravatte_SAE_TagLength) != 0) {
+
+    /* e = e + 1 */
+    kp->e ^= 1;
+
+    /* if T' != T then */
+    if ( memcmp( tagPrime, tag, sizeof(tagPrime)) != 0) {
+        /* wipe P, return error! */
         memset(plaintext, 0, (dataBitLen + 7) / 8);
         return 1;
     }
+    /* else return P */
     return 0;
 }
 

@@ -36,7 +36,7 @@ When used as a library or directly from the sources, the XKCP offers the high-le
 * [`Keyakv2`](doc/Keyak-documentation.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
 * [`Ketjev2`](doc/Ketje-documentation.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
 * [`KangarooTwelve`](lib/high/KangarooTwelve/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
-* [`Kravatte`](lib/high/Kravatte/Kravatte.h) and [`KravatteModes`](lib/high/Kravatte/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SAE, SIV, WBC and WBC-AE).
+* [`Kravatte`](lib/high/Kravatte/Kravatte.h) and [`KravatteModes`](lib/high/Kravatte/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
 * [`Xoofff`](lib/high/Xoofff/Xoofff.h) and [`XoofffModes`](lib/high/Xoofff/XoofffModes.h), the pseudo-random function Xoofff, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
 
 ## Low-level services

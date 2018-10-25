@@ -678,73 +678,73 @@ uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
     measureTimingEnd
 }
 
-uint_32t measureKravatte_SIV(uint_32t dtMin, unsigned int inputLen)
+uint_32t measureKravatte_SANSE(uint_32t dtMin, unsigned int inputLen)
 {
     ALIGN(32) unsigned char input[1024*1024];
     ALIGN(32) unsigned char output[1024*1024];
     ALIGN(32) unsigned char key[Kravatte_KeyLen];
     ALIGN(32) unsigned char AD[16];
-    ALIGN(32) unsigned char tag[Kravatte_SIV_TagLength];
-    Kravatte_Instance kv;
+    ALIGN(32) unsigned char tag[Kravatte_SANSE_TagLength];
+    Kravatte_SANSE_Instance kv;
     measureTimingDeclare
 
     assert(inputLen <= 1024*1024);
 
     memset(key, 0xA5, Kravatte_KeyLen);
-    Kravatte_SIV_MaskDerivation(&kv, key, Kravatte_KeyLen*8);
+    Kravatte_SANSE_Initialize(&kv, key, Kravatte_KeyLen*8);
     memset(input, 0xA5, inputLen/8);
     memset(AD, 0x5A, sizeof(AD));
 
     measureTimingBeginDeclared
-    Kravatte_SIV_Wrap(&kv, input, output, inputLen, AD, sizeof(AD)*8, tag);
+    Kravatte_SANSE_Wrap(&kv, input, output, inputLen, AD, sizeof(AD)*8, tag);
     measureTimingEnd
 }
 
-uint_32t measureKravatte_SAE_Wrap(uint_32t dtMin, unsigned int inputLen)
+uint_32t measureKravatte_SANE_Wrap(uint_32t dtMin, unsigned int inputLen)
 {
     ALIGN(32) unsigned char input[1024*1024];
     ALIGN(32) unsigned char output[1024*1024];
     ALIGN(32) unsigned char key[Kravatte_KeyLen];
     ALIGN(32) unsigned char nonce[16];
     ALIGN(32) unsigned char AD[16];
-    ALIGN(32) unsigned char tag[Kravatte_SAE_TagLength];
-    Kravatte_Instance kv;
+    ALIGN(32) unsigned char tag[Kravatte_SANE_TagLength];
+    Kravatte_SANE_Instance kv;
     measureTimingDeclare
 
     assert(inputLen <= 1024*1024);
 
     memset(key, 0xA5, Kravatte_KeyLen);
     memset(nonce, 0x55, sizeof(nonce));
-    Kravatte_SAE_Initialize(&kv, key, Kravatte_KeyLen*8, nonce, sizeof(nonce)*8, tag);
+    Kravatte_SANE_Initialize(&kv, key, Kravatte_KeyLen*8, nonce, sizeof(nonce)*8, tag);
     memset(input, 0xA5, inputLen/8);
     memset(AD, 0x5A, sizeof(AD));
 
     measureTimingBeginDeclared
-    Kravatte_SAE_Wrap(&kv, input, output, inputLen, AD, 0, tag);
+    Kravatte_SANE_Wrap(&kv, input, output, inputLen, AD, 0, tag);
     measureTimingEnd
 }
 
-uint_32t measureKravatte_SAE_MAC(uint_32t dtMin, unsigned int ADLen)
+uint_32t measureKravatte_SANE_MAC(uint_32t dtMin, unsigned int ADLen)
 {
     ALIGN(32) unsigned char input[1];
     ALIGN(32) unsigned char output[1];
     ALIGN(32) unsigned char key[Kravatte_KeyLen];
     ALIGN(32) unsigned char nonce[16];
     ALIGN(32) unsigned char AD[1024*1024];
-    ALIGN(32) unsigned char tag[Kravatte_SAE_TagLength];
-    Kravatte_Instance kv;
+    ALIGN(32) unsigned char tag[Kravatte_SANE_TagLength];
+    Kravatte_SANE_Instance kv;
     measureTimingDeclare
 
     assert(ADLen <= 1024*1024);
 
     memset(key, 0xA5, Kravatte_KeyLen);
     memset(nonce, 0x55, sizeof(nonce));
-    Kravatte_SAE_Initialize(&kv, key, Kravatte_KeyLen*8, nonce, sizeof(nonce)*8, tag);
+    Kravatte_SANE_Initialize(&kv, key, Kravatte_KeyLen*8, nonce, sizeof(nonce)*8, tag);
     memset(input, 0xA5, sizeof(input));
     memset(AD, 0x5A, ADLen/8);
 
     measureTimingBeginDeclared
-    Kravatte_SAE_Wrap(&kv, input, output, 0, AD, ADLen, tag);
+    Kravatte_SANE_Wrap(&kv, input, output, 0, AD, ADLen, tag);
     measureTimingEnd
 }
 
@@ -872,41 +872,41 @@ void testKravattePerformanceOne( void )
     }
 	testKravattePerfSlope(measureVatte, calibration);
 
-    printf("\nKravatte_SIV\n");
+    printf("\nKravatte_SANE Wrap (only plaintext input, no AD)\n");
     {
         len = 4096*8;
-        time = measureKravatte_SIV(calibration, len);
+        time = measureKravatte_SANE_Wrap(calibration, len);
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
-        time = measureKravatte_SIV(calibration, testKravatteAdaptLen(len));
+        time = measureKravatte_SANE_Wrap(calibration, testKravatteAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
     }
-	testKravattePerfSlope(measureKravatte_SIV, calibration);
+	testKravattePerfSlope(measureKravatte_SANE_Wrap, calibration);
 
-    printf("\nKravatte_SAE Wrap (only plaintext input, no AD)\n");
+    printf("\nKravatte_SANE MAC (only AD input, no plaintext)\n");
     {
         len = 4096*8;
-        time = measureKravatte_SAE_Wrap(calibration, len);
+        time = measureKravatte_SANE_MAC(calibration, len);
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
-        time = measureKravatte_SAE_Wrap(calibration, testKravatteAdaptLen(len));
+        time = measureKravatte_SANE_MAC(calibration, testKravatteAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
     }
-	testKravattePerfSlope(measureKravatte_SAE_Wrap, calibration);
+	testKravattePerfSlope(measureKravatte_SANE_MAC, calibration);
 
-    printf("\nKravatte_SAE MAC (only AD input, no plaintext)\n");
+    printf("\nKravatte_SANSE\n");
     {
         len = 4096*8;
-        time = measureKravatte_SAE_MAC(calibration, len);
+        time = measureKravatte_SANSE(calibration, len);
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
-        time = measureKravatte_SAE_MAC(calibration, testKravatteAdaptLen(len));
+        time = measureKravatte_SANSE(calibration, testKravatteAdaptLen(len));
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
     }
-	testKravattePerfSlope(measureKravatte_SAE_MAC, calibration);
+	testKravattePerfSlope(measureKravatte_SANSE, calibration);
 
     printf("\nKravatte_WBC (Tweak 128 bits)\n");
     for(len=2048*8; len<=16384*8; len*=2) {
