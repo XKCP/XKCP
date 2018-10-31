@@ -85,6 +85,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <!-- To make a library -->
     <fragment name="libkeccak.a" inherits="All"/>
+    <fragment name="libkeccak.so" inherits="All"/>
 
     <!-- *** CAESAR-related targets *** -->
 
@@ -122,6 +123,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <!-- To make a library -->
     <fragment name="libXoo.a" inherits="XooAll"/>
+    <fragment name="libXoo.so" inherits="XooAll"/>
 
     <!-- *** Targets *** -->
 
@@ -192,14 +194,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <group all="Keccak">
         <product delimiter="/">
             <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell SkylakeX ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
-            <factor set="KeccakTests KeccakSum libkeccak.a"/>
+            <factor set="KeccakTests KeccakSum libkeccak.a libkeccak.so"/>
         </product>
     </group>
 
     <group all="Xoodoo">
         <product delimiter="/">
             <factor set="reference generic32 Nehalem Haswell SkylakeX ARMv6M ARMv7M"/>
-            <factor set="XooTests libXoo.a"/>
+            <factor set="XooTests libXoo.a libXoo.so"/>
         </product>
     </group>
 </build>

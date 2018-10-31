@@ -63,7 +63,7 @@ The documentation of the low-level services can be found in [`SnP-documentation.
 
 The package contains:
 
-* The possibility to create a library **`libkeccak.a`**;
+* The possibility to create a static library **`libkeccak.a`** or a dynamic library **`libkeccak.so`**;
 * [**Self-tests**](tests/UnitTests/main.c) that ensure that the implementation is working properly;
 * [**KeccakSum**](util/KeccakSum/KeccakSum.c) that computes a hash of the file (or multiple files) given in parameter.
 
@@ -102,7 +102,7 @@ The different targets are defined in [`Makefile.build`](Makefile.build). This fi
 
 > `make generic64/KeccakTests`
 
-to build KeccakTests generically optimized for 64-bit platforms. The name before the slash indicates the platform, while the part after the slash is the executable to build. As another example, the static library is built by typing `make generic64/libkeccak.a` or similarly with `generic64` replaced with the appropriate platform name.  An alternate C compiler can be specified via the `CC` environment variable.
+to build KeccakTests generically optimized for 64-bit platforms. The name before the slash indicates the platform, while the part after the slash is the executable to build. As another example, the static (resp. dynamic) library is built by typing `make generic64/libkeccak.a` (resp. `.so`) or similarly with `generic64` replaced with the appropriate platform name.  An alternate C compiler can be specified via the `CC` environment variable.
 
 Instead of building an executable with *GCC*, one can choose to select the files needed and make a package. For this, simply append `.pack` to the target name, e.g.,
 

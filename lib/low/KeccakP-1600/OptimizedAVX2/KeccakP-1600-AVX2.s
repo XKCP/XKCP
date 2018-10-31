@@ -733,7 +733,7 @@ KeccakF1600_FastLoop_Absorb_LanesAddLoop:
     push            %rsi
     push            %rdx
     push            %rcx
-    call            KeccakP1600_Permute_24rounds
+    call            KeccakP1600_Permute_24rounds@PLT
     pop             %rcx
     pop             %rdx
     pop             %rsi
@@ -902,7 +902,7 @@ KeccakP1600_12rounds_FastLoop_Absorb_LanesAddLoop:
     push            %rsi
     push            %rdx
     push            %rcx
-    call            KeccakP1600_Permute_12rounds
+    call            KeccakP1600_Permute_12rounds@PLT
     pop             %rcx
     pop             %rdx
     pop             %rsi

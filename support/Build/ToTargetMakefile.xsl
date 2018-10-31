@@ -145,6 +145,12 @@ CC ?= gcc
 AR = ar
 
 </xsl:text>
+
+    <xsl:if test="substring(@name, string-length(@name)-2, 3)='.so'">
+        <xsl:text>CFLAGS := $(CFLAGS) -fpic
+</xsl:text>
+    </xsl:if>
+
     <xsl:apply-templates select="gcc|define|I"/>
     <xsl:apply-templates select="h"/>
     <xsl:apply-templates select="c"/>
@@ -162,11 +168,20 @@ AR = ar
 &#9;$(AR) rcsv $@ $(OBJECTS)
 </xsl:text>
         </xsl:when>
+        <xsl:when test="substring(@name, string-length(@name)-2, 3)='.so'">
+            <xsl:text>&#9;mkdir -p $@.headers
+&#9;cp -f $(HEADERS) $@.headers/
+&#9;$(CC) -shared -o $@ $(OBJECTS) $(CFLAGS)
+</xsl:text>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:text>&#9;$(CC) -o $@ $(OBJECTS) $(CFLAGS)
 </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+
+    <xsl:text>
+</xsl:text>
 
     <xsl:value-of select="$pack"/>
     <xsl:text>: $(SOURCES)
