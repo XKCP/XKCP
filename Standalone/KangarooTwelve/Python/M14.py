@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Implementation by Gilles Van Assche, hereby denoted as "the implementer".
+# Implementation by DonaldTsang
 #
 # For more information, feedback or questions, please refer to our website:
 # https://keccak.team/
