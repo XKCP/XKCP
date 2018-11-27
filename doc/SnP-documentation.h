@@ -83,7 +83,7 @@ void SnP_Initialize(void *state);
 
 /** Function to add (in GF(2), using bitwise exclusive-or) a given byte into the state.
   * The bit positions that are affected by this function are
-  * from @a offset*8 to @a offset*8 + @a length*8.
+  * from @a offset*8 to @a offset*8 + 8.
   * (The bit positions, the x,y,z coordinates and their link are defined in the "Keccak reference".)
   * @param  state   Pointer to the state.
   * @param  data    The input byte.
