@@ -56,16 +56,14 @@ void PlSnP_InitializeAll(void *states);
 
 /** Function to add (in GF(2), using bitwise exclusive-or) a given byte into one of the states.
   * The bit positions that are affected by this function are
-  * from @a offset*8 to @a offset*8 + @a length*8.
+  * from @a offset*8 to @a offset*8 + 8.
   * (The bit positions, the x,y,z coordinates and their link are defined in the "Keccak reference".)
   * @param  states  Pointer to the states.
   * @param  instanceIndex   Index of the state instance from 0 to P-1
   *                         if there are P parallel instances.
   * @param  data    The input byte.
   * @param  offset  Offset in bytes within the state.
-  * @param  length  Number of bytes.
   * @pre    0 ≤ @a offset < (width in bytes)
-  * @pre    0 ≤ @a offset + @a length ≤ (width in bytes)
   */
 void PlSnP_AddByte(void *states, unsigned int instanceIndex, unsigned char data, unsigned int offset);
 
