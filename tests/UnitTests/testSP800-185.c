@@ -10,6 +10,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include "SP800-185.h"
+#include "KeccakHash.h"
 
 #define OUTPUT
 /* #define VERBOSE */
@@ -78,6 +79,29 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
         else
             result = cSHAKE256( input, inputLen, output, outputLen, name, nameLen, customization, customLen );
         assert(result == 0);
+
+        if ((nameLen == 0) && (customLen == 0))
+        {    /* Check cSHAKE-xxx output is equal to SHAKE-xxx */
+            Keccak_HashInstance    hi;
+            unsigned char outputShake[outputByteSize];
+
+            if ( securityStrength == 128 )
+            {
+                Keccak_HashInitialize_SHAKE128(&hi);
+            }
+            else
+            {
+                Keccak_HashInitialize_SHAKE256(&hi);
+            }
+            result = Keccak_HashUpdate(&hi, input, inputLen);
+            assert(result == 0);
+            result = Keccak_HashFinal(&hi, NULL);
+            assert(result == 0);
+            result = Keccak_HashSqueeze(&hi, outputShake, (outputLen + 7) & ~7);
+            assert(result == 0);
+            outputShake[outputLen / 8] &= ((1 << (outputLen & 7)) - 1);
+            assert(!memcmp(output, outputShake, (outputLen + 7) / 8));
+        }
     }
     else if (mode == 1)
     {
@@ -1589,10 +1613,10 @@ void testSP800_185(void)
     writeTestParallelHash("ParallelHash.txt");
 #endif
 
-    selfTestcSHAKE(128, "\x2f\xa1\x0d\x72\x81\x29\x5c\x97\x43\x63\xcd\xe9\x3f\xcf\x06\xa1");
-    selfTestcSHAKE(256, "\xf1\xdb\x1c\xb9\xc1\x9c\xad\xf4\x3a\x4f\x59\x3a\xd6\x70\x6e\xbb");
-    selfTestcSHAKEXOF(128, "\x84\xd0\x58\xb3\x86\xc6\x64\xf0\xb5\x58\xa2\x6d\xaf\x05\x4a\xf8");
-    selfTestcSHAKEXOF(256, "\x0b\xb6\x5b\x5c\xcb\x08\x05\x02\x9c\x79\x28\x8c\xf7\xcb\x9f\x03");
+    selfTestcSHAKE(128, "\x84\x70\xd7\x09\x05\xba\xc8\xf8\x6b\x72\x1d\xbc\xee\x4b\x18\x6c");
+    selfTestcSHAKE(256, "\x4b\x94\x42\x87\x45\xdf\x7c\x24\xd2\xb6\x97\x4c\x18\xa0\xbf\x76");
+    selfTestcSHAKEXOF(128, "\xc0\x05\x80\xf0\x89\x3f\xd5\x85\x48\x5e\x8c\xbe\x14\x40\x46\xb9");
+    selfTestcSHAKEXOF(256, "\x88\xe0\x04\x85\xd8\xe4\xe1\x6d\x30\xae\xa8\x74\x99\xd7\x7e\xc9");
 
     selfTestParallelHash(128, "\x88\xff\x7d\xe7\x9d\x0d\x8b\xbf\xf3\x47\xab\x9a\x3d\x5e\xee\x7e");
     selfTestParallelHash(256, "\x9e\xd2\x25\x93\x93\x33\x60\x60\x74\x96\x96\xb7\x10\xe9\x99\x7a");

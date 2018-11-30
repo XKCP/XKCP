@@ -27,11 +27,12 @@ typedef size_t BitLength;
 #endif
 
 typedef struct {
-    KeccakWidth1600_SpongeInstance sponge;
-    BitLength fixedOutputLength;
-    unsigned int lastByteBitLen;
-    BitSequence lastByteValue;
-    KCP_Phases phase;
+    KeccakWidth1600_SpongeInstance  sponge;
+    BitLength                       fixedOutputLength;
+    unsigned int                    lastByteBitLen;
+    BitSequence                     lastByteValue;
+    int                             emptyNameCustom;
+    KCP_Phases                      phase;
 } cSHAKE_Instance;
 
 /** cSHAKE128 function, as defined in NIST's Special Publication 800-185,

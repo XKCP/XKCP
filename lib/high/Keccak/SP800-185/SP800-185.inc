@@ -40,27 +40,34 @@ int cSHAKE_Initialize(cSHAKE_Instance *csk, BitLength outputBitLen, const BitSeq
     csk->fixedOutputLength = outputBitLen;
     csk->phase = ABSORBING;
 
-    /* Absorb bytepad(.., rate) */
-    if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, encbuf, left_encode(encbuf, rateInBytes)) != 0)
-        return 1;
+    if ((nameBitLen == 0) && (customBitLen == 0))
+        csk->emptyNameCustom = 1;
+    else
+    {
+        csk->emptyNameCustom = 0;
 
-    /* Absorb encode_string(name) */
-    if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, encbuf, left_encode(encbuf, nameBitLen)) != 0)
-        return 1;
-    if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, name, nameBitLen / 8) != 0)
-        return 1;
+        /* Absorb bytepad(.., rate) */
+        if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, encbuf, left_encode(encbuf, rateInBytes)) != 0)
+            return 1;
 
-    /* Absorb encode_string(customization) */
-    if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, encbuf, left_encode(encbuf, customBitLen)) != 0)
-        return 1;
-    if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, customization, (customBitLen + 7) / 8) != 0) /* allowed to be a bit string, as zero padding is following */
-        return 1;
-        
-    /* Zero padding up to rate */
-    if ( csk->sponge.byteIOIndex != 0 ) {
-        csk->sponge.byteIOIndex = rateInBytes - 1;
-        encbuf[0] = 0;
-        return KeccakWidth1600_SpongeAbsorb(&csk->sponge, encbuf, 1);
+        /* Absorb encode_string(name) */
+        if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, encbuf, left_encode(encbuf, nameBitLen)) != 0)
+            return 1;
+        if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, name, nameBitLen / 8) != 0)
+            return 1;
+
+        /* Absorb encode_string(customization) */
+        if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, encbuf, left_encode(encbuf, customBitLen)) != 0)
+            return 1;
+        if (KeccakWidth1600_SpongeAbsorb(&csk->sponge, customization, (customBitLen + 7) / 8) != 0) /* allowed to be a bit string, as zero padding is following */
+            return 1;
+            
+        /* Zero padding up to rate */
+        if ( csk->sponge.byteIOIndex != 0 ) {
+            csk->sponge.byteIOIndex = rateInBytes - 1;
+            encbuf[0] = 0;
+            return KeccakWidth1600_SpongeAbsorb(&csk->sponge, encbuf, 1);
+        }
     }
     return 0;
 }
@@ -87,7 +94,10 @@ int cSHAKE_Final(cSHAKE_Instance *csk, BitSequence *output)
         return 1;
 
     /* Concatenate the last few input bits with those of the suffix */
-    delimitedLastBytes = (unsigned short)(csk->lastByteValue | (0x04 << csk->lastByteBitLen)); /* Suffix '04': 2 zero bits '00' */
+    if (csk->emptyNameCustom != 0)
+        delimitedLastBytes = (unsigned short)(csk->lastByteValue | (0x1F << csk->lastByteBitLen));
+    else
+        delimitedLastBytes = (unsigned short)(csk->lastByteValue | (0x04 << csk->lastByteBitLen)); /* Suffix '04': 2 zero bits '00' */
     if ((delimitedLastBytes >> 8) == 0) {
         delimitedSuffix = (unsigned char)delimitedLastBytes;
     }
