@@ -67,6 +67,9 @@ The package contains:
 * [**Self-tests**](tests/UnitTests/main.c) that ensure that the implementation is working properly;
 * [**KeccakSum**](util/KeccakSum/KeccakSum.c) that computes a hash of the file (or multiple files) given in parameter.
 
+The self-tests contain also benchmarking code to measure the performance of the different functions. This is invoked with `KeccakTests -s`.
+Note that on ARM processors, you may need to include the Kernel-PMU module, see [`Kernel-pmu.md`](support/Kernel-PMU/Kernel-pmu.md) for more details.
+
 
 ## Standalone implementations
 
@@ -85,7 +88,8 @@ Most of the source and header files in the XKCP are released to the **public dom
 * [`lib/common/brg_endian.h`](lib/common/brg_endian.h) is copyrighted by Brian Gladman and comes with a BSD 3-clause license;
 * [`tests/UnitTests/genKAT.c`](tests/UnitTests/genKAT.c) is based on [SHA-3 contest's code by Larry Bassham, NIST](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/KAT1.zip), which he licensed under a BSD 3-clause license;
 * [`tests/UnitTests/timing.h`](tests/UnitTests/timing.h) is based on code by Doug Whiting, which he released to the public domain;
-* [`KeccakP-1600-AVX2.s`](lib/low/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.s) is licensed under the [CRYPTOGAMS license](http://www.openssl.org/~appro/cryptogams/) (BSD-like).
+* [`KeccakP-1600-AVX2.s`](lib/low/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.s) is licensed under the [CRYPTOGAMS license](http://www.openssl.org/~appro/cryptogams/) (BSD-like);
+* [`support/Kernel-PMU/enable_arm_pmu.c`](support/Kernel-PMU/enable_arm_pmu.c) is licensed under the GNU General Public License by Bruno Pairault.
 
 
 

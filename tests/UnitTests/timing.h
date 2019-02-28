@@ -19,6 +19,17 @@ This code works on x86 family CPUs (32-big and 64-bit), under MSVC, gcc, and Bor
 /************** Timing routine (for performance measurements) ***********/
 /* By Doug Whiting */
 /* unfortunately, this is generally assembly code and not very portable */
+
+/* 2019-01-01 Bruno Pairault : ARM CYCLE COUNT IS BASED on PMU assuming Linux Kernel allow User Access to the PMU.
+   The method checks on GCC if the Architecture is Aarch64 for PMU Aarch64 or ARM version 7-A to implement PMU 32.
+   It's very likely that you have to check all the parameters depending on your OS, GCC native parameters.
+   Example : 2019/01/01 : Raspbian OS 9- Kernel 4.14.79 is an Aarch32 OS and declared as ARMv7l.
+                          it uses gcc version 6.3.0 20170516 (Raspbian 6.3.0-18+rpi1+deb9u1) with -arch=armv6 as target=native.
+                          There's only few OS that support Aarch64 as OpenSuse on RPI3B+.
+                          it will then provide performance and Aarch64 PMU.
+*/
+
+
 #if defined(_M_IX86) || defined(__i386) || defined(_i386) || defined(__i386__) || defined(i386) || \
     defined(_X86_)   || defined(__x86_64__) || defined(_M_X64) || defined(__x86_64)
 #define _Is_X86_    1
@@ -63,7 +74,21 @@ static uint_32t HiResTime(void)           /* return the current value of time st
 #else
     /* avoid annoying MSVC 9.0 compiler warning #4720 in ANSI mode! */
 #if (!defined(_MSC_VER)) || (!defined(__STDC__)) || (_MSC_VER < 1300)
-    FatalError("No support for RDTSC on this CPU platform\n");
+    /* Detecting ARM ARCHITECTURE on GCC */
+    #ifdef __aarch64__
+    /* Implement Aarch64 bits on PMU : Tested on Cortex a-53 */
+        uint32_t cycle_count;
+        asm volatile("MRS %0, pmevcntr0_el0" : "=r" (cycle_count));
+        return cycle_count;
+    #elif  defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A_)
+    /* Implement Aarch32 bits on PMU : Tested on Cortex a-53 */
+        uint32_t cycle_count;
+        asm volatile("MRC p15, 0, %0, c9, c13, 0 \t\n" : "=r"(cycle_count));
+        return cycle_count;
+    #elif defined(__ARM_ARCH_6__)
+        #error "Unsupported ARM. Check the option -march and your CPU. Alternatively you can return 0. "
+        #error "RPI3 B+ running 32 bits OS will support to force ARCH_7A until these OS updates with there native Arch 6 GCC implementation."
+    #endif
 #endif
     return 0;
 #endif /* defined(HI_RES_CLK_OK) */
@@ -75,7 +100,36 @@ static uint_32t calibrate()
 {
     uint_32t dtMin = 0xFFFFFFFF;        /* big number to start */
     uint_32t t0,t1,i;
-
+    /* if GCC and ARM then Initialize PMU. Theoretically applied once but choosen to be set for Code Simplication */
+    #if (!defined(_MSC_VER)) || (!defined(__STDC__)) || (_MSC_VER < 1300)
+        #ifdef __aarch64__
+        /* Implement Aarch64 bits on PMU : Tested on Cortex a-53 */
+            uint32_t evtCount;
+            evtCount= 0x008;
+            #define ARMV8_PMEVTYPER_EVTCOUNT_MASK  0x3ff
+            evtCount &= ARMV8_PMEVTYPER_EVTCOUNT_MASK;
+            asm volatile("isb");
+            /* Just use counter 0 */
+            asm volatile("msr pmevtyper0_el0, %0" : : "r" (evtCount));
+            /*   Performance Monitors Count Enable Set register bit 30:1 disable, 31,1 enable */
+            uint32_t r = 0;
+            asm volatile("mrs %0, pmcntenset_el0" : "=r" (r));
+            asm volatile("msr pmcntenset_el0, %0" : : "r" (r|1));
+        #elif  defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A_)
+        /* Implement Aarch32 bits on PMU : Tested on Cortex a-53 */
+            /* Enable counters in Control Register and reset cycle count and event count */
+            printf("PMU32 Enable.. \n");
+            asm volatile("MCR   p15, 0, %0, c9, c12, 0" : : "r"(0x00000007));
+            /* Event counter selection register, which counter to access */
+            asm volatile("MCR   p15, 0, %0, c9, c12, 5" : : "r"(0x0));
+            /* selected event type to record, instructions executed */
+            asm volatile("MCR   p15, 0, %0, c9, c13, 1" : : "r"(0x00000008));
+            /* count enable set register, bit 31 enables the cycle counter,and bit 0 enables the first counter */
+            asm volatile("MCR   p15, 0, %0, c9, c12, 1" : : "r"(0x8000000f));
+        #elif defined(__ARM_ARCH_6__)
+            printf("Do nothing.. Check the configuration. Unsupported ARM\n");
+        #endif
+    #endif
     for (i=0;i < TIMER_SAMPLE_CNT;i++)  /* calibrate the overhead for measuring time */
         {
         t0 = HiResTime();
