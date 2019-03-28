@@ -289,6 +289,8 @@ void printKangarooTwelveTestVectors()
         printf("KangarooTwelve(M=pattern 0x00 to 0xFA for 17^%d bytes, C=empty, 32 output bytes):\n", i);
         KangarooTwelve(M, l, output, 32, 0, 0);
         outputHex(output, 32);
+        printf("M: ");
+        outputHex(M, l);
         free(M);
     }
     for(l=1, i=0; i<4; i++, l=l*41) {
@@ -301,6 +303,8 @@ void printKangarooTwelveTestVectors()
         printf("KangarooTwelve(M=%d times byte 0xFF, C=pattern 0x00 to 0xFA for 41^%d bytes, 32 output bytes):\n", ll, i);
         KangarooTwelve(M, ll, output, 32, C, l);
         outputHex(output, 32);
+        printf("M: ");
+        outputHex(M, l);
         free(M);
         free(C);
     }
