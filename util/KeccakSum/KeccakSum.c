@@ -36,6 +36,32 @@ int hexencode(const void* data_buf, size_t dataLength, char* result, size_t resu
    return 0;   /* indicate success */
 }
 
+int hexdecode(const char* str_buf, size_t strLength, char* result)
+{
+    size_t i;
+    if (strLength & 1)
+    {
+        return 1;
+    }
+    for(i = 0; i < (strLength + 1) / 2; i++)
+    {
+        char byte_str[3];
+        char* endptr;
+        long v;
+        byte_str[0] = str_buf[2*i];
+        byte_str[1] = str_buf[2*i + 1];
+        byte_str[2] = 0;
+        v = strtoul(byte_str, &endptr, 16);
+        if (v < 0 || 0xFF < v || endptr != byte_str + 2)
+        {
+          return 1;
+        }
+        result[i] = (char)v;
+    }
+    result[i] = 0;
+    return 0;
+}
+
 #define bufferSize 65536
 #define algorithm_Keccak    0
 #define algorithm_K12       1
@@ -138,7 +164,7 @@ int processFile(const char *fileName, const Specifications *specs, int base64)
     return 0;
 }
 
-int processString(const char *input, const Specifications *specs, int base64)
+int processString(const char *input, const Specifications *specs, int base64, int hex_input)
 {
     Instance instance;
     unsigned char buffer[bufferSize];
@@ -151,7 +177,25 @@ int processString(const char *input, const Specifications *specs, int base64)
     if (hashInitialize(&instance, specs)) {
         return -1;
     }
-    hashUpdate(&instance, specs, input, strlen(input));
+    if (hex_input)
+    {
+        char decoded[bufferSize];
+        if (strlen(input) / 2 >= bufferSize)
+        {
+            printf("--hex-input does not support too long strings.\n");
+            return -1;
+        }
+        if (hexdecode(input, strlen(input), decoded))
+        {
+            printf("Error while parsing hex string.\n");
+            return -1;
+        }
+        hashUpdate(&instance, specs, decoded, strlen(input)/2);
+    }
+    else
+    {
+        hashUpdate(&instance, specs, input, strlen(input));
+    }
     hashFinal(&instance, specs, buffer);
     if (base64) {
         if (base64encode(buffer, (specs->hashbitlen+7)/8, display, bufferSize*2)) {
@@ -176,6 +220,7 @@ void printHelp()
     printf("  --help or -h                To display this page\n");
     printf("  --base64                    Print in base64\n");
     printf("  --hex                       Print in hexadecimal\n");
+    printf("  --hex-input                 Parse --string input as hexadecimal\n");
     printf("  --outputbits <numberOfBits> Number of bits as output\n");
     printf("  --shake128                  Use SHAKE128\n");
     printf("  --shake256                  Use SHAKE256\n");
@@ -195,6 +240,7 @@ int process(int argc, char* argv[])
 {
     Specifications specs;
     int base64 = 1;
+    int hex_input = 0;
     int i, r;
     specs.algorithm = algorithm_Keccak;
     specs.rate = 1344;
@@ -208,6 +254,8 @@ int process(int argc, char* argv[])
             base64 = 1;
         else if (strcmp("--hex", argv[i]) == 0)
             base64 = 0;
+        else if (strcmp("--hex-input", argv[i]) == 0)
+            hex_input = 1;
         else if ((strcmp("--outputbits", argv[i]) == 0) || (strcmp("-n", argv[i]) == 0)) {
             if ((i+1) >= argc) {
                 printf("Error: missing argument for --outputbits\n");
@@ -286,7 +334,7 @@ int process(int argc, char* argv[])
                 return -1;
             }
             i++;
-            processString(argv[i], &specs, base64);
+            processString(argv[i], &specs, base64, hex_input);
         }
         else if (strcmp("--help", argv[i]) == 0 || strcmp("-h", argv[i]) == 0) {
             printHelp();
