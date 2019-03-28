@@ -257,12 +257,15 @@ void writeTestKangarooTwelve(const char *filename)
 }
 #endif
 
-static void outputHex(const unsigned char *data, unsigned char length)
+static void outputHex(const unsigned char *data, unsigned int length)
 {
+    static const unsigned int length_max = 8192;
     #ifndef EMBEDDED
     unsigned int i;
-    for(i=0; i<length; i++)
-        printf("%02x ", (int)data[i]);
+    for(i=0; i< (length > length_max ? length_max : length); i++)
+        printf("%02x", (int)data[i]);
+    if (length > length_max)
+        printf(" ...");
     printf("\n\n");
     #endif
 }
