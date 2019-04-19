@@ -20,14 +20,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "Xoodoo-SnP.h"
 
 
-#define SnP_widthInBytes          (3*4*4)
-#define Xoofff_RollSizeInBytes    SnP_widthInBytes
-#define Xoofff_RollOffset         0
+#define SnP_widthInBytes        (3*4*4)
+#define Xoofff_RollSizeInBytes  SnP_widthInBytes
+#define Xoofff_RollOffset       0
 
-#define Xoofff_FlagNone          0
-#define Xoofff_FlagInit          1 /* If set, initialize a new Xoofff_Compress session */
-#define Xoofff_FlagLastPart      2 /* If set, indicates the last part of input/output */
-#define Xoofff_FlagXoofffie      4 /* If set, indicates Xoofffie will be performed */
+#define Xoofff_FlagNone         0
+#define Xoofff_FlagInit         1 /* If set, initialize a new Xoofff_Compress session */
+#define Xoofff_FlagLastPart     2 /* If set, indicates the last part of input/output */
+#define Xoofff_FlagXoofffie     4 /* If set, indicates Xoofffie will be performed */
 
 #ifndef _Keccak_BitTypes_
 #define _Keccak_BitTypes_
@@ -48,26 +48,26 @@ typedef enum
 #include "Xoodoo-times4-SnP.h"
 #include "Xoodoo-SnP.h"
 #if !defined(Xoodootimes16_isFallback)
-    #define XoodooMaxParallellism	16
-    #define Xoofff_Alignment    	Xoodootimes16_statesAlignment
+    #define XoodooMaxParallellism   16
+    #define Xoofff_Alignment        Xoodootimes16_statesAlignment
     #if defined(Xoodootimes16_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes16_AddIs
-	#endif
+    #endif
 #elif !defined(Xoodootimes8_isFallback)
-    #define XoodooMaxParallellism	8
-    #define Xoofff_Alignment    	Xoodootimes8_statesAlignment
+    #define XoodooMaxParallellism   8
+    #define Xoofff_Alignment        Xoodootimes8_statesAlignment
     #if defined(Xoodootimes8_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes8_AddIs
-	#endif
+    #endif
 #elif !defined(Xoodootimes4_isFallback)
-    #define XoodooMaxParallellism	4
-    #define Xoofff_Alignment    	Xoodootimes4_statesAlignment
+    #define XoodooMaxParallellism   4
+    #define Xoofff_Alignment        Xoodootimes4_statesAlignment
     #if defined(Xoodootimes4_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes4_AddIs
-	#endif
+    #endif
 #else
-    #define XoodooMaxParallellism	1
-    #define Xoofff_Alignment    	Xoodoo_stateAlignment
+    #define XoodooMaxParallellism   1
+    #define Xoofff_Alignment        Xoodoo_stateAlignment
 #endif
 
 ALIGN(Xoofff_Alignment) typedef struct

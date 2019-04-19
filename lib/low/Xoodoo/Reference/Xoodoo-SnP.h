@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _Xoodoo_SnP_h_
 #define _Xoodoo_SnP_h_
 
+#include <stddef.h>
+#include <stdint.h>
+
 /** For the documentation, see SnP-documentation.h.
  */
 
@@ -22,14 +25,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 void Xoodoo_StaticInitialize( void );
 void Xoodoo_Initialize(void *state);
-void Xoodoo_AddByte(void *state, unsigned char data, unsigned int offset);
-void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
-void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
+#define Xoodoo_AddByte(argS, argData, argOffset)    ((uint8_t*)argS)[argOffset] ^= (argData)
+void Xoodoo_AddBytes(void *state, const uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_OverwriteBytes(void *state, const uint8_t *data, unsigned int offset, unsigned int length);
 void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount);
 void Xoodoo_Permute_Nrounds(void *state, unsigned int nrounds);
 void Xoodoo_Permute_6rounds(void *state);
 void Xoodoo_Permute_12rounds(void *state);
-void Xoodoo_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length);
-void Xoodoo_ExtractAndAddBytes(const void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
+void Xoodoo_ExtractBytes(const void *state, uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_ExtractAndAddBytes(const void *state, const uint8_t *input, uint8_t *output, unsigned int offset, unsigned int length);
 
 #endif

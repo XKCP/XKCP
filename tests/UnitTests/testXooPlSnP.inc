@@ -135,7 +135,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
 
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++) {
             for(offset=0; offset<(SnP_width/8); offset += (offset < 6) ? 1 : (9+2*instanceIndex)) {
-                unsigned char byte = 0xCD - offset*4 + instanceIndex*16;
+                uint8_t byte = (uint8_t)(0xCD - offset*4 + instanceIndex*16);
                 PlSnP_AddByte(stateTest, instanceIndex, byte, offset);
                 accumulateStateParallel(stateAccumulated, stateTest);
             }
@@ -152,7 +152,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
 
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++) {
             for(i=0; i<sizeof(buffer); i++)
-                buffer[i] = 0xF3 + 5*i + 3*instanceIndex;
+                buffer[i] = (uint8_t)(0xF3 + 5*i + 3*instanceIndex);
 
             for(offset=0; offset<(SnP_width/8); offset += (offset < 10) ? 1 : (7+4*instanceIndex))
             for(length=(offset == instanceIndex) ? 0 : ((SnP_width/8)-offset); length<=(SnP_width/8)-offset; length += ((SnP_width/8)-offset-length < 20) ? 1 : (5+2*instanceIndex)) {
@@ -175,7 +175,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             laneOffset = laneCount + (laneCount+1)%4;
             alignment = (laneCount+2)%8;
             for(i=0; i<sizeof(buffer)-8; i++)
-                buffer[i+alignment] = 0x75 + 3*i - 8*alignment;
+                buffer[i+alignment] = (uint8_t)(0x75 + 3*i - 8*alignment);
             PlSnP_AddLanesAll(stateTest, buffer+alignment, laneCount, laneOffset);
             accumulateStateParallel(stateAccumulated, stateTest);
         }
@@ -194,7 +194,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             for(length=(offset == instanceIndex) ? 0 : ((SnP_width/8)-offset); length<=(SnP_width/8)-offset; length += ((SnP_width/8)-offset-length < 21) ? 1 : (9+2*instanceIndex)) {
                 alignment = (offset+length+instanceIndex+3)%8;
                 for(i=0; i<sizeof(buffer); i++)
-                    buffer[i] = 0xF3 + 5*i + alignment + offset + length + instanceIndex;
+                    buffer[i] = (uint8_t)(0xF3 + 5*i + alignment + offset + length + instanceIndex);
                 PlSnP_OverwriteBytes(stateTest, instanceIndex, buffer+alignment, offset, length);
                 accumulateStateParallel(stateAccumulated, stateTest);
             }
@@ -213,7 +213,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             laneOffset = laneCount + (laneCount+2)%4;
             alignment = (laneCount+4)%8;
             for(i=0; i<sizeof(buffer)-8; i++)
-                buffer[i+alignment] = 0x75 + 3*i - 8*alignment - laneCount;
+                buffer[i+alignment] = (uint8_t)(0x75 + 3*i - 8*alignment - laneCount);
             PlSnP_OverwriteLanesAll(stateTest, buffer+alignment, laneCount, laneOffset);
             accumulateStateParallel(stateAccumulated, stateTest);
         }

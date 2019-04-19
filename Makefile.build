@@ -18,6 +18,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xi:include href="lib/Ketje.build"/>
     <xi:include href="lib/Keyak.build"/>
     <xi:include href="tests/SUPERCOP/SUPERCOP.build"/>
+    <xi:include href="tests/NIST_LWC/NIST_LWC.build"/>
     <xi:include href="doc/HOWTO-customize.build"/>
 
     <!-- For the name of the targets, please see the end of this file. -->
@@ -108,6 +109,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>tests/UnitTests/testXoofff.h</h>
         <c>tests/UnitTests/testXoofffModes.c</c>
         <h>tests/UnitTests/testXoofffModes.h</h>
+        <c>tests/UnitTests/testXoodyak.c</c>
+        <h>tests/UnitTests/testXoodyak.h</h>
 
         <c>tests/UnitTests/testXooPerformance.c</c>
         <h>tests/UnitTests/testXooPerformance.h</h>
@@ -130,7 +133,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="serial-fallbacks" inherits="1600times2on1 1600times4on1 1600times8on1"/>
 
     <!-- Reference implementations -->
-    <fragment name="reference" inherits="reference200 reference400 reference800 reference1600 serial-fallbacks Ket-SnP">
+    <fragment name="reference" inherits="reference200 reference400 reference800 reference1600 serial-fallbacks Ket-SnP XooReference XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1">
         <c>tests/UnitTests/displayIntermediateValues.c</c>
         <h>tests/UnitTests/displayIntermediateValues.h</h>
         <define>KeccakReference</define>
@@ -198,10 +201,27 @@ http://creativecommons.org/publicdomain/zero/1.0/
         </product>
     </group>
 
+    
+    
+    <!-- Reference implementations -->
+    <fragment name="Xreference" inherits="XooReference no_parallel">
+        <define>XooReference</define>
+        <gcc>-O</gcc>
+    </fragment>
+
+    <fragment name="Xoptimized32" inherits="XooOptimized32 no_parallel"/>
+
     <group all="Xoodoo">
         <product delimiter="/">
-            <factor set="reference generic32 Nehalem Haswell SkylakeX ARMv6M ARMv7M"/>
+            <factor set="reference generic32 Nehalem Haswell SkylakeX ARMv6M ARMv7M "/>
             <factor set="XooTests libXoo.a libXoo.so"/>
+        </product>
+    </group>
+
+    <group all="Xoodyak">
+        <product delimiter="/">
+            <factor set="Xreference Xoptimized32 XSIMD128 XSIMD512 XARMv6M XARMv7M"/>
+            <factor set="Xoodyak_aead_kat Xoodyak_hash_kat Xoodyak_aead_pack Xoodyak_hash_pack"/>
         </product>
     </group>
 </build>

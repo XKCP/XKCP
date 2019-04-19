@@ -163,6 +163,13 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
         <h>lib/high/Xoofff/XoofffModes.h</h>
     </fragment>
 
-    <fragment name="XooAll" inherits="common Xoofff"/>
+    <fragment name="Xoodyak" inherits="common">
+        <c>lib/high/Xoodyak/Xoodyak.c</c>
+        <h>lib/high/Xoodyak/Xoodyak.h</h>
+        <h>lib/high/Xoodyak/Cyclist.h</h>
+        <h>lib/high/Xoodyak/Cyclist.inc</h>
+    </fragment>
+
+    <fragment name="XooAll" inherits="common Xoofff Xoodyak"/>
 
 </group>

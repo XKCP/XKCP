@@ -20,10 +20,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 #include "Xoofff.h"
 #include "XoofffModes.h"
+#include "Xoodyak.h"
 #include "testXooSnP.h"
 #include "testXooPlSnP.h"
 #include "testXoofff.h"
 #include "testXoofffModes.h"
+#include "testXoodyak.h"
 #include "testXooPerformance.h"
 
 #define MEASURE_PERF
@@ -92,6 +94,11 @@ int main( void )
     testXoofffModes();
     #if !defined(EMBEDDED)
     printf( "\nXoofffModes OK\n" );
+    #endif
+
+    testXoodyak();
+    #if !defined(EMBEDDED)
+    printf( "\nXoodyak OK\n" );
     #endif
 
     #if !defined(EMBEDDED)

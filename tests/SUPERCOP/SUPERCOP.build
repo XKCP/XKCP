@@ -22,6 +22,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
 * SHA3-384
 * SHA3-512
 * KangarooTwelve
+* Xoodyak_hash
 -->
 
     <!-- SUPERCOP packages -->
@@ -29,6 +30,11 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
     <fragment name="crypto_hash_test">
         <h>tests/SUPERCOP/test_crypto_hash.h</h>
         <c>tests/SUPERCOP/test_crypto_hash.c</c>
+    </fragment>
+
+    <fragment name="crypto_aead_test">
+        <h>tests/SUPERCOP/test_crypto_aead.h</h>
+        <c>tests/SUPERCOP/test_crypto_aead.c</c>
     </fragment>
 
     <fragment name="crypto_hash/shake128/kcp" inherits="KeccakSpongeWidth1600">
@@ -101,6 +107,33 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <product delimiter="/">
             <factor set="crypto_hash/shake128/kcp SHAKE128_SelfTest crypto_hash/shake256/kcp SHAKE256_SelfTest crypto_hash/sha3224/kcp SHA3-224_SelfTest crypto_hash/sha3256/kcp SHA3-256_SelfTest crypto_hash/sha3384/kcp SHA3-384_SelfTest crypto_hash/sha3512/kcp SHA3-512_SelfTest crypto_hash/k12/kcp KangarooTwelve_SelfTest"/>
             <factor set="reference1600 reference1600-32bits compact1600 compact1600AVR8 inplace1600bi inplace1600ARMv6M inplace1600ARMv7M inplace1600ARMv7A optimized1600u6 optimized1600ufull optimized1600lcu6 optimized1600lcufull optimized1600lcufullshld optimized1600AsmX86-64 optimized1600AsmX86-64shld optimized1600AsmX86-64Apple optimized1600AVX2 optimized1600AVX512 optimized1600XOPu6 optimized1600XOPufull optimized1600ARMv6Mu1 optimized1600ARMv6Mu2 optimized1600ARMv7A optimized1600ARMv8A optimized1600AVR8"/>
+        </product>
+    </group>
+
+	<!-- **************************************************************** -->
+
+    <fragment name="crypto_hash/Xoodyak_hash/kcp" inherits="Xoodyak">
+        <c>tests/SUPERCOP/Xoodyak_hash/hash.c</c>
+        <h>tests/SUPERCOP/Xoodyak_hash/api.h</h>
+    </fragment>
+
+    <fragment name="Xoodyak_hash_SelfTest" inherits="crypto_hash/Xoodyak_hash/kcp crypto_hash_test">
+        <c>tests/SUPERCOP/Xoodyak_hash/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_aead/Xoodyak_aead/kcp" inherits="Xoodyak">
+        <c>tests/SUPERCOP/Xoodyak_aead/encrypt.c</c>
+        <h>tests/SUPERCOP/Xoodyak_aead/api.h</h>
+    </fragment>
+
+    <fragment name="Xoodyak_aead_SelfTest" inherits="crypto_aead/Xoodyak_aead/kcp crypto_aead_test">
+        <c>tests/SUPERCOP/Xoodyak_aead/selftest.c</c>
+    </fragment>
+
+    <group all="supercopXoodyak">
+        <product delimiter="/">
+            <factor set="crypto_hash/Xoodyak_hash/kcp Xoodyak_hash_SelfTest crypto_aead/Xoodyak_aead/kcp Xoodyak_aead_SelfTest"/>
+            <factor set="XooReference XooOptimized32 XooOptimizedARMv6M XooOptimizedARMv7M XooOptimizedSIMD128 XooOptimizedSIMD512"/>
         </product>
     </group>
 

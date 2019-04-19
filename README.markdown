@@ -11,7 +11,8 @@ and closely related variants, such as
 
 as well as the [Xoodoo][XoodooCookbook] permutation and
 
-* the [Xoofff][XoodooCookbook] pseudo-random function and its modes (experimental).
+* the [Xoofff][XoodooCookbook] pseudo-random function and its modes (experimental),
+* the [Xoodyak][XoodooCookbook] scheme (submission to the NIST lightweight crypto standardization process).
 
 
 # What does the XKCP contain?
@@ -38,6 +39,8 @@ When used as a library or directly from the sources, the XKCP offers the high-le
 * [`KangarooTwelve`](lib/high/KangarooTwelve/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
 * [`Kravatte`](lib/high/Kravatte/Kravatte.h) and [`KravatteModes`](lib/high/Kravatte/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
 * [`Xoofff`](lib/high/Xoofff/Xoofff.h) and [`XoofffModes`](lib/high/Xoofff/XoofffModes.h), the pseudo-random function Xoofff, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
+* [`Xoodyak`](doc/Xoodyak-documentation.h), the lightweight cryptographic scheme Xoodyak that can be used for hashing, encryption, MAC computation and authenticated encryption.
+
 
 ## Low-level services
 
@@ -175,7 +178,7 @@ More information on the cryptographic aspects can be found:
 * on KangarooTwelve at [`keccak.team`](https://keccak.team/kangarootwelve.html)
 * on cryptographic sponge functions at [`keccak.team`](https://keccak.team/sponge_duplex.html)
 * on Kravatte at [`keccak.team`](https://keccak.team/kravatte.html)
-* on Xoodoo and Xoofff at [`eprint.iacr.org`](https://eprint.iacr.org/2018/767)
+* on Xoodoo, Xoofff and Xoodyak at [`eprint.iacr.org`](https://eprint.iacr.org/2018/767)
 * on the Farfalle construction at [`keccak.team`](https://keccak.team/farfalle.html)
 
 

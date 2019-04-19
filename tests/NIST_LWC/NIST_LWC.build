@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Implementation by Ronny Van Keer, hereby denoted as "the implementer".
+
+For more information, feedback or questions, please refer to our website:
+https://keccak.team/
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
+-->
+<group>
+
+<!--
+The fragments below allow to generate the KAT files for NIST LWC contest
+* Xoodyak_aead
+* Xoodyak_hash
+-->
+
+    <fragment name="Xoodyak_aead_kat" inherits="crypto_aead/Xoodyak_aead/kcp">
+        <gcc>-std=c99</gcc>
+        <h>tests/NIST_LWC/crypto_aead.h</h>
+        <c>tests/NIST_LWC/genkat_aead.c</c>
+    </fragment>
+
+    <fragment name="Xoodyak_hash_kat" inherits="crypto_hash/Xoodyak_hash/kcp">
+        <gcc>-std=c99</gcc>
+        <h>tests/NIST_LWC/crypto_hash.h</h>
+        <c>tests/NIST_LWC/genkat_hash.c</c>
+    </fragment>
+
+    <fragment name="Xoodyak_aead_pack" inherits="crypto_aead/Xoodyak_aead/kcp">
+    </fragment>
+
+    <fragment name="Xoodyak_hash_pack" inherits="crypto_hash/Xoodyak_hash/kcp">
+    </fragment>
+
+</group>

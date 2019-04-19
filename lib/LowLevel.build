@@ -601,27 +601,32 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="XooOptimized32" inherits="common optimized XooWidth384">
         <c>lib/low/Xoodoo/Optimized/Xoodoo-optimized.c</c>
+        <c>lib/low/Xoodoo/Optimized/Xoodyak-full-blocks.c</c>
         <h>lib/low/Xoodoo/Optimized/Xoodoo-SnP.h</h>
     </fragment>
 
     <fragment name="XooOptimizedARMv6M" inherits="common optimized XooWidth384">
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-u1-armv6m-le-gcc.s</c>
+        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-u1-armv6m-le-gcc.s</c>
         <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
     </fragment>
 
     <fragment name="XooOptimizedARMv7M" inherits="common optimized XooWidth384">
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-uf-armv7m-le-gcc.s</c>
+        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-uf-armv7m-le-gcc.s</c>
         <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
     </fragment>
 
     <fragment name="XooOptimizedSIMD128" inherits="common optimized XooWidth384">
         <c>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SIMD128.c</c>
         <h>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SnP.h</h>
+        <c>lib/low/Xoodoo/OptimizedSIMD128/Xoodyak-full-block-SIMD128.c</c>
     </fragment>
 
     <fragment name="XooOptimizedSIMD512" inherits="common optimized XooWidth384">
         <c>lib/low/Xoodoo/OptimizedSIMD512/Xoodoo-SIMD512.c</c>
         <h>lib/low/Xoodoo/OptimizedSIMD512/Xoodoo-SnP.h</h>
+        <c>lib/low/Xoodoo/OptimizedSIMD512/Xoodyak-full-block-SIMD512.c</c>
     </fragment>
 
     <!-- Xoodoo×4 -->

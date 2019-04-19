@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _Xoodoo_SnP_h_
 #define _Xoodoo_SnP_h_
 
+#include <stddef.h>
+#include <stdint.h>
+
 /** For the documentation, see SnP-documentation.h.
  */
 
@@ -23,15 +26,23 @@ http://creativecommons.org/publicdomain/zero/1.0/
 /* void Xoodoo_StaticInitialize( void ); */
 #define Xoodoo_StaticInitialize()
 void Xoodoo_Initialize(void *state);
-/* void Xoodoo_AddByte(void *state, unsigned char data, unsigned int offset); */
-#define Xoodoo_AddByte(argS, argData, argOffset)    ((unsigned char*)argS)[argOffset] ^= (argData)
-void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
-void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
+/* void Xoodoo_AddByte(void *state, uint8_t data, unsigned int offset); */
+#define Xoodoo_AddByte(argS, argData, argOffset)    ((uint8_t*)argS)[argOffset] ^= (argData)
+void Xoodoo_AddBytes(void *state, const uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_OverwriteBytes(void *state, const uint8_t *data, unsigned int offset, unsigned int length);
 void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount);
 void Xoodoo_Permute_Nrounds(void *state, unsigned int nrounds);
 void Xoodoo_Permute_6rounds(void *state);
 void Xoodoo_Permute_12rounds(void *state);
-void Xoodoo_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length);
-void Xoodoo_ExtractAndAddBytes(const void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
+void Xoodoo_ExtractBytes(const void *state, uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_ExtractAndAddBytes(const void *state, const uint8_t *input, uint8_t *output, unsigned int offset, unsigned int length);
+
+#define CyclistFullBlocks_supported
+size_t Xoodyak_AbsorbKeyedFullBlocks(void *state, const uint8_t *X, size_t XLen);
+size_t Xoodyak_AbsorbHashFullBlocks(void *state, const uint8_t *X, size_t XLen);
+size_t Xoodyak_SqueezeHashFullBlocks(void *state, uint8_t *Y, size_t YLen);
+size_t Xoodyak_SqueezeKeyedFullBlocks(void *state, uint8_t *Y, size_t YLen);
+size_t Xoodyak_EncryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size_t IOLen);
+size_t Xoodyak_DecryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size_t IOLen);
 
 #endif

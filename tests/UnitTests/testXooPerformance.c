@@ -15,6 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include "Xoofff.h"
 #include "XoofffModes.h"
+#include "Xoodyak.h"
 #include "timing.h"
 #include "testXooPerformance.h"
 
@@ -405,6 +406,168 @@ void testXoofffPerformance(void)
     printXoofffPerformanceHeader();
     testXoofffPerformanceOne();
 }
+
+/* Xoodyak ------------------------------------------- */
+
+#define	Xoodyak_TagLength	16
+
+static uint_32t measureXoodyak_MAC(uint_32t dtMin, unsigned int ADLen)
+{
+    ALIGN(64) uint8_t key[16];
+    ALIGN(64) uint8_t AD[32*Xoodyak_Rkin];
+    ALIGN(64) uint8_t tag[Xoodyak_TagLength];
+    Xoodyak_Instance xd;
+
+    assert(ADLen <= sizeof(AD));
+
+    memset(key, 0xA5, sizeof(key));
+    memset(AD, 0x5A, ADLen/8);
+    Xoodyak_Initialize(&xd, key, sizeof(key), NULL, 0, NULL, 0);
+    {
+        measureTimingBegin
+		Xoodyak_Absorb(&xd, AD, (size_t)ADLen);
+	    Xoodyak_Squeeze(&xd, tag, Xoodyak_TagLength);
+        measureTimingEnd
+    }
+}
+
+static uint_32t measureXoodyak_Wrap(uint_32t dtMin, unsigned int inputLen)
+{
+    ALIGN(64) uint8_t input[32*Xoodyak_Rkout];
+    ALIGN(64) uint8_t output[32*Xoodyak_Rkout];
+    ALIGN(64) uint8_t key[16];
+    ALIGN(64) uint8_t AD[16];
+    ALIGN(64) uint8_t tag[Xoodyak_TagLength];
+    Xoodyak_Instance xd;
+
+    assert(inputLen <= sizeof(input));
+
+    memset(key, 0xA5, sizeof(key));
+    memset(input, 0xA5, sizeof(input));
+    memset(AD, 0x5A, sizeof(AD));
+    Xoodyak_Initialize(&xd, key, sizeof(key), NULL, 0, NULL, 0);
+    {
+        measureTimingBegin
+		Xoodyak_Absorb(&xd, AD, sizeof(AD));
+	    Xoodyak_Encrypt(&xd, input, output, (size_t)inputLen);
+	    Xoodyak_Squeeze(&xd, tag, Xoodyak_TagLength);
+        measureTimingEnd
+    }
+}
+
+static uint_32t measureXoodyak_Hash(uint_32t dtMin, unsigned int messageLen)
+{
+    ALIGN(64) uint8_t message[32*Xoodyak_Rhash];
+    ALIGN(64) uint8_t hash[32];
+    Xoodyak_Instance xd;
+
+    assert(messageLen <= sizeof(message));
+
+    memset(message, 0xA5, sizeof(message));
+    Xoodyak_Initialize(&xd, NULL, 0, NULL, 0, NULL, 0);
+    {
+        measureTimingBegin
+		Xoodyak_Absorb(&xd, message, messageLen);
+	    Xoodyak_Squeeze(&xd, hash, sizeof(hash));
+        measureTimingEnd
+    }
+}
+
+uint_32t testXoodyakNextLen(uint_32t len, uint_32t rateInBytes)
+{
+    if (len < rateInBytes) {
+        len <<= 1;
+        if (len > rateInBytes)
+            len = rateInBytes;
+    }
+    else
+        len <<= 1;
+    return len;
+}
+
+uint_32t testXoodyakAdaptLen(uint_32t len, uint_32t rateInBytes)
+{
+    return (len < rateInBytes) ? len : (len-8);
+}
+
+static void testXoodyakPerfSlope( measurePerf pFunc, uint_32t calibration, uint32_t rateInBytes )
+{
+    uint_32t len;
+    uint_32t count;
+    uint_32t time;
+    uint_32t time16;
+    uint_32t time32;
+
+    time16 = 0xFFFFFFFF;
+    len = 16*rateInBytes;
+    count = 100;
+    do {
+        time = pFunc(calibration, len);
+        if (time < time16) {
+            time16 = time;
+            count = 100;
+        }
+    } while( --count != 0);
+    time32 = 0xFFFFFFFF;
+    len = 32*rateInBytes;
+    count = 100;
+    do {
+        time = pFunc(calibration, len);
+        if (time < time32) {
+            time32 = time;
+            count = 100;
+        }
+    } while( --count != 0);
+
+    time = time32-time16;
+    len = 16*rateInBytes;
+    /*printf("%8u %8u\n", time16, time32);*/
+    printf("Slope %8d bytes (%u blocks): %9d cycles, %6.3f cycles/byte\n", len, len/rateInBytes, time, time*1.0/len);
+}
+
+void testXoodyakPerformanceOne( void )
+{
+    uint_32t calibration = calibrate();
+    uint_32t len;
+    uint_32t time;
+
+    printf("\nXoodyak Hash\n");
+    for(len=1; len <= 32*Xoodyak_Rhash; len = testXoodyakNextLen(len, Xoodyak_Rhash)) {
+        time = measureXoodyak_Hash(calibration, testXoodyakAdaptLen(len, Xoodyak_Rhash));
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testXoodyakAdaptLen(len, Xoodyak_Rhash), time, time*1.0/len);
+    }
+    testXoodyakPerfSlope(measureXoodyak_Hash, calibration, Xoodyak_Rhash);
+
+    printf("\nXoodyak Wrap (plaintext + 16 bytes AD)\n");
+    for(len=1; len <= 32*Xoodyak_Rkout; len = testXoodyakNextLen(len, Xoodyak_Rkout)) {
+        time = measureXoodyak_Wrap(calibration, testXoodyakAdaptLen(len, Xoodyak_Rkout));
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testXoodyakAdaptLen(len, Xoodyak_Rkout), time, time*1.0/len);
+    }
+    testXoodyakPerfSlope(measureXoodyak_Wrap, calibration, Xoodyak_Rkout);
+
+    printf("\nXoodyak MAC (only AD)\n");
+    for(len=1; len <= 32*Xoodyak_Rkin; len = testXoodyakNextLen(len, Xoodyak_Rkin)) {
+        time = measureXoodyak_MAC(calibration, testXoodyakAdaptLen(len, Xoodyak_Rkin));
+        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testXoodyakAdaptLen(len, Xoodyak_Rkin), time, time*1.0/len);
+    }
+    testXoodyakPerfSlope(measureXoodyak_MAC, calibration, Xoodyak_Rkin);
+
+    printf("\n\n");
+}
+
+void printXoodyakPerformanceHeader( void )
+{
+    printf("*** Xoodyak ***\n");
+    printf("Using Xoodoo implementations:\n");
+    printf("- \303\227\x31: " Xoodoo_implementation "\n");
+    printf("\n");
+}
+
+void testXoodyakPerformance(void)
+{
+    printXoodyakPerformanceHeader();
+    testXoodyakPerformanceOne();
+}
 #endif
 
 void testXooPerformance(void)
@@ -425,6 +588,7 @@ void testXooPerformance(void)
 
 #ifndef Xoodoo_excluded
     testXoofffPerformance();
+    testXoodyakPerformance();
 #endif
 }
 
