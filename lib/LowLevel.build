@@ -592,6 +592,7 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="XooWidth384">
         <h>lib/low/Xoodoo/Xoodoo.h</h>
+        <h>lib/high/Xoodyak/Xoodyak-parameters.h</h>
     </fragment>
 
     <fragment name="XooReference" inherits="common XooWidth384">

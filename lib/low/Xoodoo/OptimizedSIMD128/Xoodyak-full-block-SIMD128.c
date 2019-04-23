@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <x86intrin.h>
 #include "align.h"
 #include "Xoodoo.h"
-#include "Xoodyak.h"
+#include "Xoodyak-parameters.h"
 
 #include "brg_endian.h"
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)

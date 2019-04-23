@@ -9,15 +9,13 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef _Xoodyak_h_
-#define _Xoodyak_h_
+#ifndef _Xoodyak_parameters_h_
+#define _Xoodyak_parameters_h_
 
-#include <stddef.h>
-#include "Cyclist.h"
-#include "Xoodoo-SnP.h"
-#include "Xoodyak-parameters.h"
-
-KCP_DeclareCyclistStructure(Xoodyak, Xoodoo_stateSizeInBytes, Xoodoo_stateAlignment)
-KCP_DeclareCyclistFunctions(Xoodyak)
+#define Xoodyak_f_bPrime    48
+#define Xoodyak_Rhash       16
+#define Xoodyak_Rkin        44
+#define Xoodyak_Rkout       24
+#define Xoodyak_lRatchet    16
 
 #endif
