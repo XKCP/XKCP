@@ -19,7 +19,7 @@
 ;
 ;  void Xoodoo_Initialize(void *state)
 ;
-    ALIGN
+    align   4
     EXPORT  Xoodoo_Initialize
 Xoodoo_Initialize   PROC
     movs    r1, #0
@@ -229,12 +229,12 @@ _rc1x12 equ 0x00000120
     if (($rho_e1)%32) == 0
     eors    $ro, $a0, $a1
     else
-    eor     $ro, $a0, $a1, ROR #32-(($rho_e1)%32)
+    eor     $ro, $a0, $a1, ROR #(32-($rho_e1))%32
     endif
     if (($rho_e2)%32) == 0
     eors    $ro, $ro, $a2
     else
-    eor     $ro, $ro, $a2, ROR #32-(($rho_e2)%32)
+    eor     $ro, $ro, $a2, ROR #(32-($rho_e2))%32
     endif
     MEND
 
@@ -243,7 +243,7 @@ _rc1x12 equ 0x00000120
     if (($rot)%32) == 0
     eors    $ro, $ro, $ri
     else
-    eor     $ro, $ro, $ri, ROR #32-($rot)%32
+    eor     $ro, $ro, $ri, ROR #(32-($rot))%32
     endif
     MEND
 
@@ -252,7 +252,7 @@ _rc1x12 equ 0x00000120
     if (($rot)%32) == 0
     eors    $ro, $ro, $ri
     else
-    eor     $ro, $ri, $ro, ROR #32-($rot)%32
+    eor     $ro, $ri, $ro, ROR #(32-($rot))%32
     endif
     MEND
 
@@ -606,8 +606,8 @@ Xoofff_CompressFastLoop_Loop
     ldr     lr, [r0], #4
     ldmia   r0!, {r10-r12}    
     ldmia   r0!, {r2-r9}    
-    eors    lr, lr, LSL #13
-    eors    lr, r2, ROR #32-3
+    eors    lr, lr, lr, LSL #13
+    eors    lr, lr, r2, ROR #32-3
     sub     r0, #Xoofff_BlockSize
     stmia   r0, {r2-r12,lr}
     ; loop management
@@ -697,7 +697,7 @@ Xoofff_ExpandFastLoop_Loop
     ldmia   r0!, {r2-r9}    
     and     r1, r6, r2
     eor     lr, r1, lr, ROR #32-5
-    eor     lr, r2, ROR #32-13
+    eor     lr, lr, r2, ROR #32-13
     eor     lr, lr, #7
     sub     r0, #Xoofff_BlockSize
     stmia   r0, {r2-r12,lr}

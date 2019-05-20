@@ -67,12 +67,12 @@ _rc1x12 equ 0x00000120
     if (($rho_e1)%32) == 0
     eors    $ro, $a0, $a1
     else
-    eor     $ro, $a0, $a1, ROR #32-(($rho_e1)%32)
+    eor     $ro, $a0, $a1, ROR #(32-($rho_e1))%32
     endif
     if (($rho_e2)%32) == 0
     eors    $ro, $ro, $a2
     else
-    eor     $ro, $ro, $a2, ROR #32-(($rho_e2)%32)
+    eor     $ro, $ro, $a2, ROR #(32-($rho_e2))%32
     endif
     MEND
 
@@ -81,7 +81,7 @@ _rc1x12 equ 0x00000120
     if (($rot)%32) == 0
     eors    $ro, $ro, $ri
     else
-    eor     $ro, $ro, $ri, ROR #32-($rot)%32
+    eor     $ro, $ro, $ri, ROR #(32-($rot))%32
     endif
     MEND
 
@@ -90,7 +90,7 @@ _rc1x12 equ 0x00000120
     if (($rot)%32) == 0
     eors    $ro, $ro, $ri
     else
-    eor     $ro, $ri, $ro, ROR #32-($rot)%32
+    eor     $ro, $ri, $ro, ROR #(32-($rot))%32
     endif
     MEND
 

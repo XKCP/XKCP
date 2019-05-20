@@ -99,7 +99,7 @@ In addition, one of the following fragments is required:
         <c>lib/low/Ketje/OptimizedAsmARM/KetjeSr-armv7m-le-gcc.s</c>
     </fragment>
 
-    <fragment name="Ket-ARMv7M" inherits="KetJr-ARMv7M KetSr-ARMv7M"/>
+    <fragment name="Ket-ARMv7M" inherits="KetJr-ARMv7M KetSr-ARMv7M KetMn-optimizedLE KetMj-SnP"/>
 
     <!-- *** High-level services *** -->
 

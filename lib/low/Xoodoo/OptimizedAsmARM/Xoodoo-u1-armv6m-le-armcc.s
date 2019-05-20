@@ -19,7 +19,7 @@
 ;
 ;  void Xoodoo_Initialize(void *state)
 ;
-    ALIGN
+    align   4
     EXPORT  Xoodoo_Initialize
 Xoodoo_Initialize   PROC
     movs    r1, #0

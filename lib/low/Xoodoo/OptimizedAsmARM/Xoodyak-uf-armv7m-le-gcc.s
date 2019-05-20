@@ -67,12 +67,12 @@
     .if ((\rho_e1)%32) == 0
     eors    \ro, \a0, \a1
     .else
-    eor     \ro, \a0, \a1, ROR #32-((\rho_e1)%32)
+    eor     \ro, \a0, \a1, ROR #(32-(\rho_e1))%32
     .endif
     .if ((\rho_e2)%32) == 0
     eors    \ro, \ro, \a2
     .else
-    eor     \ro, \ro, \a2, ROR #32-((\rho_e2)%32)
+    eor     \ro, \ro, \a2, ROR #(32-(\rho_e2))%32
     .endif
     .endm
 
@@ -80,7 +80,7 @@
     .if ((\rot)%32) == 0
     eors    \ro, \ro, \ri
     .else
-    eor     \ro, \ro, \ri, ROR #32-(\rot)%32
+    eor     \ro, \ro, \ri, ROR #(32-(\rot))%32
     .endif
     .endm
 
@@ -88,7 +88,7 @@
     .if ((\rot)%32) == 0
     eors    \ro, \ro, \ri
     .else
-    eor     \ro, \ri, \ro, ROR #32-(\rot)%32
+    eor     \ro, \ri, \ro, ROR #(32-(\rot))%32
     .endif
     .endm
 
@@ -153,6 +153,7 @@
 @
 @  Xoodoo_Permute_12roundsAsm: only callable from asm
 @
+.type	Xoodoo_Permute_12roundsAsm, %function;
 Xoodoo_Permute_12roundsAsm:
     mRound  r6, r7, r8, r9,    r9, r6, r7, r8,    r10, r11, r12, lr,   32,      32, _rc12x1
     mRound  r9, r6, r7, r8,    r8, r9, r6, r7,    r12, lr, r10, r11,    1, _e1+_w1, _rc11x2
@@ -179,7 +180,7 @@ Xoodoo_Permute_12roundsAsm:
     ror     r12, r12, #32-(12*_r0+_e1+_w1)%32
     ror     lr, lr, #32-(12*_r0+_e1+_w1)%32
     ldr     pc, [sp, #offsetReturn]
-    align   4
+    .align  4
 
 
 
@@ -203,7 +204,8 @@ Xoodoo_Permute_12roundsAsm:
 .equ offsetAbsorbX          , 4
 .equ offsetAbsorbXLen       , 8
 
-.global   Xoodyak_AbsorbKeyedFullBlocks
+.global Xoodyak_AbsorbKeyedFullBlocks
+.type	Xoodyak_AbsorbKeyedFullBlocks, %function;
 Xoodyak_AbsorbKeyedFullBlocks:
     push    {r4-r12,lr}
     mov     r4, r2                    @ r4 initialLength
@@ -249,7 +251,7 @@ Xoodyak_AbsorbKeyedFullBlocks_Ret:
     adds    r2, r2, #44
     sub     r0, r4, r2
     pop     {r4-r12,pc}
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
@@ -269,7 +271,8 @@ Xoodyak_AbsorbKeyedFullBlocks_Ret:
 @     return initialLength - XLen@
 @ }
 @
-.global   Xoodyak_AbsorbHashFullBlocks
+.global Xoodyak_AbsorbHashFullBlocks
+.type	Xoodyak_AbsorbHashFullBlocks, %function;
 Xoodyak_AbsorbHashFullBlocks:
     push    {r4-r12,lr}
     mov     r4, r2                    @ r4 initialLength
@@ -301,7 +304,7 @@ Xoodyak_AbsorbHashFullBlocks_Ret:
     adds    r2, r2, #16
     sub     r0, r4, r2
     pop     {r4-r12,pc}
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
@@ -324,7 +327,8 @@ Xoodyak_AbsorbHashFullBlocks_Ret:
 .equ offsetSqueezeY         , 4
 .equ offsetSqueezeYLen      , 8
 
-.global   Xoodyak_SqueezeKeyedFullBlocks
+.global Xoodyak_SqueezeKeyedFullBlocks
+.type	Xoodyak_SqueezeKeyedFullBlocks, %function;
 Xoodyak_SqueezeKeyedFullBlocks:
     push    {r4-r12,lr}
     mov     r4, r2                    @ r4 initialLength
@@ -354,7 +358,7 @@ Xoodyak_SqueezeKeyedFullBlocks_Ret:
     adds    r2, r2, #24
     sub     r0, r4, r2
     pop     {r4-r12,pc}
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
@@ -374,7 +378,8 @@ Xoodyak_SqueezeKeyedFullBlocks_Ret:
 @     return initialLength - YLen@
 @ }
 @
-.global   Xoodyak_SqueezeHashFullBlocks
+.global Xoodyak_SqueezeHashFullBlocks
+.type	Xoodyak_SqueezeHashFullBlocks, %function;
 Xoodyak_SqueezeHashFullBlocks:
     push    {r4-r12,lr}
     mov     r4, r2                    @ r4 initialLength
@@ -402,7 +407,7 @@ Xoodyak_SqueezeHashFullBlocks_Ret:
     adds    r2, r2, #16
     sub     r0, r4, r2
     pop     {r4-r12,pc}
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
@@ -428,7 +433,8 @@ Xoodyak_SqueezeHashFullBlocks_Ret:
 .equ offsetCryptO           , 8+8
 .equ offsetCryptIOLen       , 12
 
-.global   Xoodyak_EncryptFullBlocks
+.global Xoodyak_EncryptFullBlocks
+.type	Xoodyak_EncryptFullBlocks, %function;
 Xoodyak_EncryptFullBlocks:
     push    {r4-r12,lr}
     mov     r4, r3                    @ r4 initialLength
@@ -474,7 +480,7 @@ Xoodyak_EncryptFullBlocks_Ret:
     adds    r3, r3, #24
     sub     r0, r4, r3
     pop     {r4-r12,pc}
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
@@ -496,7 +502,8 @@ Xoodyak_EncryptFullBlocks_Ret:
 @     return initialLength - IOLen@
 @ }
 @
-.global   Xoodyak_DecryptFullBlocks
+.global Xoodyak_DecryptFullBlocks
+.type	Xoodyak_DecryptFullBlocks, %function;
 Xoodyak_DecryptFullBlocks:
     push    {r4-r12,lr}
     mov     r4, r3                    @ r4 initialLength
@@ -548,6 +555,6 @@ Xoodyak_DecryptFullBlocks_Ret:
     adds    r3, r3, #24
     sub     r0, r4, r3
     pop     {r4-r12,pc}
-    align   4
+    .align  4
 
 

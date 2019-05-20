@@ -20,8 +20,9 @@
 @
 @  void Xoodoo_Initialize(void *state)
 @
-.align 8
-.global   Xoodoo_Initialize
+    .align  4
+.global Xoodoo_Initialize
+.type	Xoodoo_Initialize, %function;
 Xoodoo_Initialize:
     movs    r1, #0
     movs    r2, #0
@@ -31,14 +32,15 @@ Xoodoo_Initialize:
     stmia   r0!, { r1 - r3, r12 }
     stmia   r0!, { r1 - r3, r12 }
     bx      lr
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
 @
 @  void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-.global   Xoodoo_AddBytes
+.global Xoodoo_AddBytes
+.type	Xoodoo_AddBytes, %function;
 Xoodoo_AddBytes:
     push    {r4,lr}
     adds    r0, r0, r2                              @ state += offset
@@ -63,14 +65,15 @@ Xoodoo_AddBytes_BytesLoop:
     bcs     Xoodoo_AddBytes_BytesLoop
 Xoodoo_AddBytes_Exit:
     pop     {r4,pc}
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
 @
 @  void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-.global   Xoodoo_OverwriteBytes
+.global Xoodoo_OverwriteBytes
+.type	Xoodoo_OverwriteBytes, %function;
 Xoodoo_OverwriteBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
@@ -90,14 +93,15 @@ Xoodoo_OverwriteBytes_BytesLoop:
     bcs     Xoodoo_OverwriteBytes_BytesLoop
 Xoodoo_OverwriteBytes_Exit:
     bx      lr
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
 @
 @  void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
 @
-.global   Xoodoo_OverwriteWithZeroes
+.global Xoodoo_OverwriteWithZeroes
+.type	Xoodoo_OverwriteWithZeroes, %function;
 Xoodoo_OverwriteWithZeroes:
     movs    r3, #0
     lsrs    r2, r1, #2
@@ -115,14 +119,15 @@ Xoodoo_OverwriteWithZeroes_LoopBytes:
     bne     Xoodoo_OverwriteWithZeroes_LoopBytes
 Xoodoo_OverwriteWithZeroes_Exit:
     bx      lr
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
 @
 @  void Xoodoo_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-.global   Xoodoo_ExtractBytes
+.global Xoodoo_ExtractBytes
+.type	Xoodoo_ExtractBytes, %function;
 Xoodoo_ExtractBytes:
     adds    r0, r0, r2                              @ state += offset
     subs    r3, r3, #4                              @ .if length >= 4
@@ -142,14 +147,15 @@ Xoodoo_ExtractBytes_BytesLoop:
     bcs     Xoodoo_ExtractBytes_BytesLoop
 Xoodoo_ExtractBytes_Exit:
     bx      lr
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
 @
 @  void Xoodoo_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 @
-.global   Xoodoo_ExtractAndAddBytes
+.global Xoodoo_ExtractAndAddBytes
+.type	Xoodoo_ExtractAndAddBytes, %function;
 Xoodoo_ExtractAndAddBytes:
     push    {r4,r5}
     adds    r0, r0, r3                                  @ state += offset (offset register no longer needed, reuse for length)
@@ -176,7 +182,7 @@ Xoodoo_ExtractAndAddBytes_BytesLoop:
 Xoodoo_ExtractAndAddBytes_Exit:
     pop     {r4,r5}
     bx      lr
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
@@ -229,12 +235,12 @@ Xoodoo_ExtractAndAddBytes_Exit:
     .if ((\rho_e1)%32) == 0
     eors    \ro, \a0, \a1
     .else
-    eor     \ro, \a0, \a1, ROR #32-((\rho_e1)%32)
+    eor     \ro, \a0, \a1, ROR #(32-(\rho_e1))%32
     .endif
     .if ((\rho_e2)%32) == 0
     eors    \ro, \ro, \a2
     .else
-    eor     \ro, \ro, \a2, ROR #32-((\rho_e2)%32)
+    eor     \ro, \ro, \a2, ROR #(32-(\rho_e2))%32
     .endif
     .endm
 
@@ -242,7 +248,7 @@ Xoodoo_ExtractAndAddBytes_Exit:
     .if ((\rot)%32) == 0
     eors    \ro, \ro, \ri
     .else
-    eor     \ro, \ro, \ri, ROR #32-(\rot)%32
+    eor     \ro, \ro, \ri, ROR #(32-(\rot))%32
     .endif
     .endm
 
@@ -250,7 +256,7 @@ Xoodoo_ExtractAndAddBytes_Exit:
     .if ((\rot)%32) == 0
     eors    \ro, \ro, \ri
     .else
-    eor     \ro, \ri, \ro, ROR #32-(\rot)%32
+    eor     \ro, \ri, \ro, ROR #(32-(\rot))%32
     .endif
     .endm
 
@@ -311,7 +317,8 @@ Xoodoo_ExtractAndAddBytes_Exit:
 @
 @  void Xoodoo_Permute_6rounds( void *state )
 @
-.global   Xoodoo_Permute_6rounds
+.global Xoodoo_Permute_6rounds
+.type	Xoodoo_Permute_6rounds, %function;
 Xoodoo_Permute_6rounds:
     push    {r0,r4-r11,lr}
     ldmia   r0!, {r2-r5}
@@ -340,14 +347,15 @@ Xoodoo_Permute_6rounds:
     stmia   r0, {r2-r12,lr}
     mov     r4, r1
     pop     {r5-r11,pc}
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
 @
 @  void Xoodoo_Permute_12rounds( void *state )
 @
-.global   Xoodoo_Permute_12rounds
+.global Xoodoo_Permute_12rounds
+.type	Xoodoo_Permute_12rounds, %function;
 Xoodoo_Permute_12rounds:
     push    {r0,r4-r11,lr}
     ldmia   r0, {r2-r12,lr}
@@ -379,7 +387,7 @@ Xoodoo_Permute_12rounds:
     stmia   r0, {r2-r12,lr}
     mov     r4, r1
     pop     {r5-r11,pc}
-    align   4
+    .align  4
 
 
 .equ Xoofff_BlockSize   , 3*4*4
@@ -387,7 +395,8 @@ Xoodoo_Permute_12rounds:
 @ ----------------------------------------------------------------------------
 @
 @ void Xoofff_AddIs(BitSequence *output, const BitSequence *input, BitLength bitLen)
-.global   Xoofff_AddIs
+.global Xoofff_AddIs
+.type	Xoofff_AddIs, %function;
 Xoofff_AddIs:
     push    {r4-r10,lr}
 
@@ -508,7 +517,7 @@ Xoofff_AddIs_LessThan1:
     strb    r3, [r0]
 Xoofff_AddIs_Return:
     pop     {r4-r10,pc}
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
@@ -521,7 +530,8 @@ Xoofff_AddIs_Return:
 .equ Xoofff_Compress_iInput , 12
 .equ Xoofff_Compress_length , 16
 
-.global   Xoofff_CompressFastLoop
+.global Xoofff_CompressFastLoop
+.type	Xoofff_CompressFastLoop, %function;
 Xoofff_CompressFastLoop:
     subs    r3, #Xoofff_BlockSize       @ length must be greater than block size
     push    {r1-r12,lr}
@@ -602,8 +612,8 @@ Xoofff_CompressFastLoop_Loop:
     ldr     lr, [r0], #4
     ldmia   r0!, {r10-r12}
     ldmia   r0!, {r2-r9}
-    eors    lr, lr, LSL #13
-    eors    lr, r2, ROR #32-3
+    eors    lr, lr, lr, LSL #13
+    eors    lr, lr, r2, ROR #32-3
     sub     r0, #Xoofff_BlockSize
     stmia   r0, {r2-r12,lr}
     @ loop management
@@ -617,7 +627,7 @@ Xoofff_CompressFastLoop_Loop:
     sub     r0, r0, r1
     pop     {r1,r2}
     pop     {r1-r12,pc}
-    align   4
+    .align  4
 
 
 @ ----------------------------------------------------------------------------
@@ -630,7 +640,8 @@ Xoofff_CompressFastLoop_Loop:
 .equ Xoofff_Expand_iOutput  , 12
 .equ Xoofff_Expand_length   , 16
 
-.global   Xoofff_ExpandFastLoop
+.global Xoofff_ExpandFastLoop
+.type	Xoofff_ExpandFastLoop, %function;
 Xoofff_ExpandFastLoop:
     subs    r3, #Xoofff_BlockSize    @ length must be greater than block size
     push    {r1-r12,lr}
@@ -693,7 +704,7 @@ Xoofff_ExpandFastLoop_Loop:
     ldmia   r0!, {r2-r9}
     and     r1, r6, r2
     eor     lr, r1, lr, ROR #32-5
-    eor     lr, r2, ROR #32-13
+    eor     lr, lr, r2, ROR #32-13
     eor     lr, lr, #7
     sub     r0, #Xoofff_BlockSize
     stmia   r0, {r2-r12,lr}
@@ -708,6 +719,6 @@ Xoofff_ExpandFastLoop_Loop:
     sub     r0, r0, r1
     pop     {r1,r2}
     pop     {r1-r12,pc}
-    align   4
+    .align  4
 
 
