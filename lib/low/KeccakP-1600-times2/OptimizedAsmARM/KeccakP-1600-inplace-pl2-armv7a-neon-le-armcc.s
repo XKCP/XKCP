@@ -10,7 +10,7 @@
 ;
 ; ---
 ;
-; This file implements Keccak-p[1600]Ã—2 in a PlSnP-compatible way.
+; This file implements Keccak-p[1600]×2 in a PlSnP-compatible way.
 ; Please refer to PlSnP-documentation.h for more details.
 ;
 ; This implementation comes with KeccakP-1600-times2-SnP.h in the same folder.
@@ -96,12 +96,12 @@ _su     equ 24*16
     veor.64     q4,   q4,  q0
     vsri.64     q5,   q2,  #63
     vadd.u64    d7,    d1,   d1
-    veor.64     $argA2, $argA2,d8
+    veor.64     $argA2, $argA2,  d8
     veor.64     q5,   q5,  q1
 
     vsri.64     d7,    d1,   #63
-    vshl.u64    d1,    $argA2,#44
-    veor.64     $argA3, $argA3,d9
+    vshl.u64    d1,    $argA2, #44
+    veor.64     $argA3, $argA3,  d9
     veor.64     d7,    d7,   d4
 
     ; Ba = argA1^Da
@@ -122,18 +122,18 @@ _su     equ 24*16
     vsri.64     d2,    $argA3,   #64-43
     vshl.u64    d3,    $argA4,   #21
     veor.64     $argA5, $argA5,   d11
-    veor.64     d0,    d0,      d7
-    vsri.64     d3,    $argA4,   #64-21
-    vbic.64     d5,    d2,      d1
-    vshl.u64    d4,    $argA5,   #14
-    vbic.64     $argA2, d3,      d2
+    veor.64     d0,    d0,    d7
+    vsri.64     d3,    $argA4,  #64-21
+    vbic.64     d5,    d2,    d1
+    vshl.u64    d4,    $argA5,  #14
+    vbic.64     $argA2, d3,     d2
     vld1.64     d6,    [r1]!
     veor.64     d5,    d0
-    vsri.64     d4,    $argA5,   #64-14
+    vsri.64     d4,    $argA5,  #64-14
     veor.64     d5,    d6
-    vbic.64     $argA5, d1,      d0
-    vbic.64     $argA3, d4,      d3
-    vbic.64     $argA4, d0,      d4
+    vbic.64     $argA5, d1,     d0
+    vbic.64     $argA3, d4,     d3
+    vbic.64     $argA4, d0,     d4
     veor.64     $argA2, d1
     vstr.64     d5,    [r0, #$argA1]
     veor.64     $argA3, d2
@@ -155,28 +155,28 @@ _su     equ 24*16
     ; argA3 =   Bi ^((~Bo)&  Bu )
     ; argA4 =   Bo ^((~Bu)&  Ba )
     ; argA5 =   Bu ^((~Ba)&  Be )
-    veor.64     $argA2, $argA2,   d8
-    veor.64     $argA3, $argA3,   d9
+    veor.64     $argA2, $argA2,    d8
+    veor.64     $argA3, $argA3,    d9
     vshl.u64    d3,    $argA2,   #45
     vldr.64     d6,    [r0, #$argA1]
     vshl.u64    d4,    $argA3,   #61
-    veor.64     $argA4, $argA4,   d10
+    veor.64     $argA4, $argA4,    d10
     vsri.64     d3,    $argA2,   #64-45
-    veor.64     $argA5, $argA5,   d11
+    veor.64     $argA5, $argA5,    d11
     vsri.64     d4,    $argA3,   #64-61
     vshl.u64    d0,    $argA4,   #28
-    veor.64     d6,    d6,      d7
+    veor.64     d6,    d6,     d7
     vshl.u64    d1,    $argA5,   #20
     vbic.64     $argA3, d4,      d3
     vsri.64     d0,    $argA4,   #64-28
     vbic.64     $argA4, d0,      d4
-    vshl.u64    d2,    d6,      #3
+    vshl.u64    d2,    d6,     #3
     vsri.64     d1,    $argA5,   #64-20
     veor.64     $argA4, d3
-    vsri.64     d2,    d6,      #64-3
-    vbic.64     $argA5, d1,     d0
+    vsri.64     d2,    d6,     #64-3
+    vbic.64     $argA5, d1,      d0
     vbic.64     d6,    d2,     d1
-    vbic.64     $argA2, d3,     d2
+    vbic.64     $argA2, d3,      d2
     veor.64     d6,    d0
     veor.64     $argA2, d1
     vstr.64     d6,    [r0, #$argA1]
@@ -199,26 +199,26 @@ _su     equ 24*16
     ; argA3 =   Bi ^((~Bo)&  Bu )
     ; argA4 =   Bo ^((~Bu)&  Ba )
     ; argA5 =   Bu ^((~Ba)&  Be )
-    veor.64     $argA3, $argA3,   d9
-    veor.64     $argA4, $argA4,   d10
+    veor.64     $argA3, $argA3,    d9
+    veor.64     $argA4, $argA4,    d10
     vshl.u64    d1,    $argA3,   #6
     vldr.64     d6,    [r0, #$argA1]
     vshl.u64    d2,    $argA4,   #25
-    veor.64     $argA5, $argA5,   d11
+    veor.64     $argA5, $argA5,    d11
     vsri.64     d1,    $argA3,   #64-6
-    veor.64     $argA2, $argA2,   d8
+    veor.64     $argA2, $argA2,    d8
     vsri.64     d2,    $argA4,   #64-25
-    vext.8       d3,   $argA5,   $argA5, #7
-    veor.64     d6,    d6,      d7
+    vext.8      d3,   $argA5,    $argA5, #7
+    veor.64     d6,    d6,     d7
     vbic.64     $argA3, d2,      d1
     vadd.u64    d0,    $argA2,   $argA2
     vbic.64     $argA4, d3,      d2
     vsri.64     d0,    $argA2,   #64-1
-    vshl.u64    d4,    d6,      #18
+    vshl.u64    d4,    d6,     #18
     veor.64     $argA2, d1,      $argA4
     veor.64     $argA3, d0
-    vsri.64     d4,    d6,      #64-18
-    vstr.64     $argA3, [r0, #$argA1]
+    vsri.64     d4,    d6,     #64-18
+    vstr.64     $argA3, [r0,  #$argA1]
     veor.64     d5,    $argA3
     vbic.64     $argA5, d1,      d0
     vbic.64     $argA3, d4,      d3
@@ -242,27 +242,27 @@ _su     equ 24*16
     ; argA3 =   Bi ^((~Bo)&  Bu )
     ; argA4 =   Bo ^((~Bu)&  Ba )
     ; argA5 =   Bu ^((~Ba)&  Be )
-    veor.64     $argA2, $argA2,   d8
-    veor.64     $argA3, $argA3,   d9
+    veor.64     $argA2, $argA2,    d8
+    veor.64     $argA3, $argA3,    d9
     vshl.u64    d2,    $argA2,   #10
     vldr.64     d6,    [r0, #$argA1]
     vshl.u64    d3,    $argA3,   #15
-    veor.64     $argA4, $argA4,   d10
+    veor.64     $argA4, $argA4,    d10
     vsri.64     d2,    $argA2,   #64-10
     vsri.64     d3,    $argA3,   #64-15
-    veor.64     $argA5, $argA5,   d11
+    veor.64     $argA5, $argA5,    d11
     vext.8      d4,    $argA4,   $argA4, #1
     vbic.64     $argA2, d3,      d2
     vshl.u64    d0,    $argA5,   #27
-    veor.64     d6,    d6,      d7
+    veor.64     d6,    d6,     d7
     vbic.64     $argA3, d4,      d3
     vsri.64     d0,    $argA5,   #64-27
-    vshl.u64    d1,    d6,      #36
+    vshl.u64    d1,    d6,     #36
     veor.64     $argA3, d2
     vbic.64     $argA4, d0,      d4
-    vsri.64     d1,    d6,      #64-36
+    vsri.64     d1,    d6,     #64-36
     veor.64     $argA4, d3
-    vbic.64     d6,    d2,      d1
+    vbic.64     d6,    d2,     d1
     vbic.64     $argA5, d1,      d0
     veor.64     d6,    d0
     veor.64     $argA2, d1
@@ -285,27 +285,27 @@ _su     equ 24*16
     ; argA3 =   Bi ^((~Bo)&  Bu )
     ; argA4 =   Bo ^((~Bu)&  Ba )
     ; argA5 =   Bu ^((~Ba)&  Be )
-    veor.64     $argA2, $argA2,   d8
-    veor.64     $argA3, $argA3,   d9
+    veor.64     $argA2, $argA2,    d8
+    veor.64     $argA3, $argA3,    d9
     vshl.u64    d4,    $argA2,   #2
-    veor.64     $argA5, $argA5,   d11
+    veor.64     $argA5, $argA5,    d11
     vshl.u64    d0,    $argA3,   #62
     vldr.64     d6,    [r0, #$argA1]
     vsri.64     d4,    $argA2,   #64-2
-    veor.64     $argA4, $argA4,   d10
+    veor.64     $argA4, $argA4,    d10
     vsri.64     d0,    $argA3,   #64-62
     vshl.u64    d1,    $argA4,   #55
-    veor.64     d6,    d6,      d7
+    veor.64     d6,    d6,     d7
     vshl.u64    d2,    $argA5,   #39
     vsri.64     d1,    $argA4,   #64-55
     vbic.64     $argA4, d0,      d4
     vsri.64     d2,    $argA5,   #64-39
     vbic.64     $argA2, d1,      d0
-    vshl.u64    d3,    d6,      #41
+    vshl.u64    d3,    d6,     #41
     veor.64     $argA5, d4,      $argA2
     vbic.64     $argA2, d2,      d1
-    vsri.64     d3,    d6,      #64-41
-    veor.64     d6,    d0,      $argA2
+    vsri.64     d3,    d6,     #64-41
+    veor.64     d6,    d0,     $argA2
     vbic.64     $argA2, d3,      d2
     vbic.64     $argA3, d4,      d3
     veor.64     $argA2, d1
@@ -350,26 +350,26 @@ _su     equ 24*16
     ; Do = Ci ^ ROL64(Cu, 1)
     ; Du = Co ^ ROL64(Ca, 1)
     ; Da = Cu ^ ROL64(Ce, 1)
-    vadd.u64    q6, q2,  q2
-    vadd.u64    q7, q3,  q3
-    vadd.u64    q8, q4,  q4
-    vadd.u64    q9, q0,  q0
-    vadd.u64    q5, q1,  q1
+    vadd.u64    q6,  q2,  q2
+    vadd.u64    q7,  q3,  q3
+    vadd.u64    q8,  q4,  q4
+    vadd.u64    q9,  q0,  q0
+    vadd.u64    q5,  q1,  q1
 
-    vsri.64     q6, q2, #63
-    vsri.64     q7, q3, #63
-    vsri.64     q8, q4, #63
-    vsri.64     q9, q0, #63
-    vsri.64     q5, q1, #63
+    vsri.64     q6,  q2,  #63
+    vsri.64     q7,  q3,  #63
+    vsri.64     q8,  q4,  #63
+    vsri.64     q9,  q0,  #63
+    vsri.64     q5,  q1,  #63
 
-    veor.64     q6, q6,  q0
-    veor.64     q7, q7,  q1
-    veor.64     q8, q8,  q2
+    veor.64     q6,  q6,  q0
+    veor.64     q7,  q7,  q1
+    veor.64     q8,  q8,  q2
     if  $next != 16
     mov     r4, #$next
     endif
-    veor.64     q9, q9,  q3
-    veor.64     q5, q5,  q4
+    veor.64     q9,  q9,  q3
+    veor.64     q5,  q5,  q4
 
     ; Ba = argA1^Da
     ; Be = ROL64(argA2^De, 44)
@@ -380,57 +380,57 @@ _su     equ 24*16
     m_pls   $ofs2
     m_ld    q1, $next
     m_pls   $ofs3
-    veor.64 q10,    q10,    q5
+    veor.64 q10,  q10,  q5
     m_ld    q2, $next
     m_pls   $ofs4
-    veor.64 q1, q1, q6
+    veor.64 q1,  q1,  q6
     m_ld    q3, $next
     m_pls   $ofs5
-    veor.64 q2, q2, q7
+    veor.64 q2,  q2,  q7
     m_ld    q4, $next
-    veor.64 q3, q3, q8
+    veor.64 q3,  q3,  q8
     mov     r6, r5
-    veor.64 q4, q4, q9
+    veor.64 q4,  q4,  q9
 
     vst1.64 { q6 }, [r6:128]!
-    vshl.u64    q11,    q1, #44
-    vshl.u64    q12,    q2, #43
+    vshl.u64    q11,  q1,  #44
+    vshl.u64    q12,  q2,  #43
     vst1.64 { q7 }, [r6:128]!
-    vshl.u64    q13,    q3, #21
-    vshl.u64    q14,    q4, #14
+    vshl.u64    q13,  q3,  #21
+    vshl.u64    q14,  q4,  #14
     vst1.64 { q8 }, [r6:128]!
-    vsri.64 q11,    q1, #64-44
-    vsri.64 q12,    q2, #64-43
+    vsri.64 q11,  q1,  #64-44
+    vsri.64 q12,  q2,  #64-43
     vst1.64 { q9 }, [r6:128]!
-    vsri.64 q13,    q3, #64-21
-    vsri.64 q14,    q4, #64-14
+    vsri.64 q13,  q3,  #64-21
+    vsri.64 q14,  q4,  #64-14
 
     ; argA1 = Ba ^(~Be & Bi) ^ KeccakP1600RoundConstants[round]
     ; argA2 = Be ^(~Bi & Bo)
     ; argA3 = Bi ^(~Bo & Bu)
     ; argA4 = Bo ^(~Bu & Ba)
     ; argA5 = Bu ^(~Ba & Be)
-    vld1.64     { d30 },    [r1:64]
-    vbic.64     q0, q12,    q11
-    vbic.64     q1, q13,    q12
-    vld1.64     { d31 },    [r1:64]!
-    veor.64     q0, q10
-    vbic.64     q4, q11,    q10
-    veor.64     q0, q15
-    vbic.64     q2, q14,    q13
-    vbic.64     q3, q10,    q14
+    vld1.64     { d30 },  [r1:64]
+    vbic.64     q0,  q12,  q11
+    vbic.64     q1,  q13,  q12
+    vld1.64     { d31 },  [r1:64]!
+    veor.64     q0,  q10
+    vbic.64     q4,  q11,  q10
+    veor.64     q0,  q15
+    vbic.64     q2,  q14,  q13
+    vbic.64     q3,  q10,  q14
 
     m_pls   $ofs1
-    veor.64 q1, q11
+    veor.64 q1,  q11
     m_st    q0, $next
     m_pls   $ofs2
-    veor.64 q2, q12
+    veor.64 q2,  q12
     m_st    q1, $next
     m_pls   $ofs3
-    veor.64 q3, q13
+    veor.64 q3,  q13
     m_st    q2, $next
     m_pls   $ofs4
-    veor.64 q4, q14
+    veor.64 q4,  q14
     m_st    q3, $next
     m_pls   $ofs5
     m_st    q4, $next
@@ -450,18 +450,18 @@ _su     equ 24*16
     mov     r4, #$next
     endif
 
-    m_ld    $Bb1, $next
+    m_ld    $Bb1,   $next
     m_pls   $ofs2
-    m_ld    $Bb2, $next
+    m_ld    $Bb2,   $next
     m_pls   $ofs3
     veor.64 q15,   q5,  $Bb1
-    m_ld    $Bb3, $next
+    m_ld    $Bb3,   $next
     m_pls   $ofs4
     veor.64 q6,  q6,  $Bb2
-    m_ld    $Bb4, $next
+    m_ld    $Bb4,   $next
     m_pls   $ofs5
     veor.64 q7,  q7,  $Bb3
-    m_ld    $Bb5, $next
+    m_ld    $Bb5,   $next
     veor.64 q8,  q8,  $Bb4
     veor.64 q9,  q9,  $Bb5
 
@@ -608,11 +608,11 @@ _su     equ 24*16
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_Pl_StaticInitialize( void )
+; void KeccakP1600times2_StaticInitialize( void )
 ;
     ALIGN
-    EXPORT  KeccakP1600_Pl_StaticInitialize
-KeccakP1600_Pl_StaticInitialize   PROC
+    EXPORT  KeccakP1600times2_StaticInitialize
+KeccakP1600times2_StaticInitialize   PROC
     bx      lr
     ENDP
 
@@ -719,8 +719,8 @@ KeccakP1600times2_AddBytes_Exit
 ;
 ; void KeccakP1600times2_AddLanesAll( void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset )
 ;
-    EXPORT  KeccakP1600times2_AddLanesAll
     ALIGN
+    EXPORT  KeccakP1600times2_AddLanesAll
 KeccakP1600times2_AddLanesAll   PROC
     cmp     r2, #0
     beq     KeccakP1600times2_AddLanesAll_Exit
@@ -1098,26 +1098,132 @@ KeccakP1600times2_ExtractAndAddLanesAll_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_PermuteAll_24rounds( void *states )
+; void KeccakP1600times2_PermuteAll_6rounds( void *states )
 ;
     ALIGN
-    EXPORT  KeccakP1600times2_PermuteAll_24rounds
-KeccakP1600times2_PermuteAll_24rounds   PROC
-    adr     r1, KeccakP1600times2_Permute_RoundConstants24
-    movs    r2, #24
-    b       KeccakP1600times2_PermuteAll
-    ENDP
+    EXPORT  KeccakP1600times2_PermuteAll_6rounds
+KeccakP1600times2_PermuteAll_6rounds   PROC
+    adr     r1, KeccakP1600times2_Permute_RoundConstants6
+    movs    r2, #6+2
+    vpush   {q4-q7}
+    push    {r4-r7}
+    sub     sp, #4*2*8+8    ;allocate 4 D double lanes (plus 8bytes to allow alignment on 16 bytes)
+    add     r5, sp, #8
 
-;----------------------------------------------------------------------------
-;
-; void KeccakP1600times2_PermuteAll_12rounds( void *states )
-;
-    ALIGN
-    EXPORT  KeccakP1600times2_PermuteAll_12rounds
-KeccakP1600times2_PermuteAll_12rounds   PROC
-    adr     r1, KeccakP1600times2_Permute_RoundConstants12
-    movs    r2, #12
-    b       KeccakP1600times2_PermuteAll
+    ; ba
+    ; be = me, me = be
+    ; bi = gi, gi = bi
+    ; bo = so, so = bo
+    ; bu = ku, ku = bu
+
+    ; ga = sa, sa = ga
+    ; ge = ke, ke = ge
+    ; go = mo, mo = go
+    ; gu
+
+    ; ka = ma, ma = ka
+    ; ki = si, si = ki
+    ; ko
+
+    ; mu = su, su = mu
+    ; mi
+    ; se
+
+    ;PrepareTheta
+    ; Ca = ba ^ ga ^ ka ^ ma ^ sa
+    ; Ce = be ^ ge ^ ke ^ me ^ se
+    ; Ci = bi ^ gi ^ ki ^ mi ^ si
+    ; Co = bo ^ go ^ ko ^ mo ^ so
+    ; Cu = bu ^ gu ^ ku ^ mu ^ su
+    vldm    r0, { q0 - q4 }    ; ba be bi bo bu
+    bic     r5, #15
+    add     r3, r0, #_me
+    vldm    r3, { q6 }                ; me
+    vstm    r3, { q1 }
+    veor.64 q1, q1, q6
+    add     r4, r0, #_be
+    vstm    r4!, { q6 }               ; be
+
+    add     r3, r0, #_ga
+    vldm    r3, { q10 - q14 }        ; ga ge gi go gu
+    add     r3, r0, #_gi
+    vstm    r3, { q2 }
+    veor.64 q2, q2, q12
+    vstm    r4!, { q12 }               ; bi
+
+    add     r3, r0, #_so
+    vldm    r3, { q8 }                ; so
+    vstm    r3, { q3 }
+    veor.64 q3, q3, q8
+    vstm    r4!, { q8 }               ; bo
+
+    add     r3, r0, #_ku
+    vldm    r3, { q9 }                ; ku
+    vstm    r3, { q4 }
+    veor.64 q4, q4, q9
+    vstm    r4!, { q9 }               ; bu
+
+    add     r3, r0, #_sa
+    vldm    r3, { q5 }                ; sa
+    vstm    r3, { q10 }
+    add     r4, r0, #_ga
+    veor.64 q0, q0, q5
+    veor.64 q0, q0, q10
+    vstm    r4!, { q5 }               ; ga
+
+    add     r3, r0, #_ke
+    vldm    r3, { q6 }                ; ke
+    vstm    r3, { q11 }
+    veor.64 q1, q1, q6
+    veor.64 q1, q1, q11
+    vstm    r4!, { q6 }               ; ge
+
+    add     r3, r0, #_mo
+    vldm    r3, { q8 }                ; mo
+    vstm    r3, { q13 }
+    add     r4, r0, #_go
+    veor.64 q3, q3, q8
+    veor.64 q3, q3, q13
+    vstm    r4!, { q8 }               ; go
+    veor.64 q4, q4, q14           ; gu
+
+    add     r4, r0, #_ka             ; ka
+    vldm    r4, { q10 }
+    add     r3, r0, #_ma            
+    vldm    r3, { q5 }                ; ma
+    vstm    r3, { q10 }
+    veor.64 q0, q0, q5
+    veor.64 q0, q0, q10
+    vstm    r4!, { q5 }               ; ka
+
+    add     r4, r0, #_ki             ; ki ko
+    vldm    r4, { q12, q13 }
+    add     r3, r0, #_si
+    vldm    r3, { q7 }                ; si
+    vstm    r3, { q12 }
+    veor.64 q2, q2, q7
+    veor.64 q2, q2, q12
+    vstm    r4, { q7 }                ; ki
+    veor.64 q3, q3, q13           ; ko
+
+    add     r4, r0, #_mu             ; mu
+    vldm    r4, { q14 }
+    add     r3, r0, #_su
+    vldm    r3, { q9 }                ; su
+    vstm    r3, { q14 }
+    veor.64 q4, q4, q9
+    veor.64 q4, q4, q14
+    vstm    r4, { q9 }                ; mu
+
+    add     r4, r0, #_mi             ; mi
+    vldm    r4, { q12 }
+    veor.64 q2, q2, q12
+    add     r3, r0, #_se             ; se
+    vldm    r3, { q6 }
+    veor.64 q1, q1, q6
+
+    mov     r3, r0
+    b       KeccakP1600times2_PermuteAll_Round2
     ENDP
 
     ALIGN
@@ -1141,12 +1247,50 @@ KeccakP1600times2_Permute_RoundConstants12
     dcq     0x8000000000008003
     dcq     0x8000000000008002
     dcq     0x8000000000000080
+KeccakP1600times2_Permute_RoundConstants6
     dcq     0x000000000000800a
     dcq     0x800000008000000a
+KeccakP1600times2_Permute_RoundConstants4
     dcq     0x8000000080008081
     dcq     0x8000000000008080
     dcq     0x0000000080000001
     dcq     0x8000000080008008
+
+;----------------------------------------------------------------------------
+;
+; void KeccakP1600times2_PermuteAll_24rounds( void *states )
+;
+    ALIGN
+    EXPORT  KeccakP1600times2_PermuteAll_24rounds
+KeccakP1600times2_PermuteAll_24rounds   PROC
+    adr     r1, KeccakP1600times2_Permute_RoundConstants24
+    movs    r2, #24
+    b       KeccakP1600times2_PermuteAll
+    ENDP
+
+;----------------------------------------------------------------------------
+;
+; void KeccakP1600times2_PermuteAll_12rounds( void *states )
+;
+    ALIGN
+    EXPORT  KeccakP1600times2_PermuteAll_12rounds
+KeccakP1600times2_PermuteAll_12rounds   PROC
+    adr     r1, KeccakP1600times2_Permute_RoundConstants12
+    movs    r2, #12
+    b       KeccakP1600times2_PermuteAll
+    ENDP
+
+;----------------------------------------------------------------------------
+;
+; void KeccakP1600times2_PermuteAll_4rounds( void *states )
+;
+    ALIGN
+    EXPORT  KeccakP1600times2_PermuteAll_4rounds
+KeccakP1600times2_PermuteAll_4rounds   PROC
+    adr     r1, KeccakP1600times2_Permute_RoundConstants4
+    movs    r2, #4
+    b       KeccakP1600times2_PermuteAll
+    ENDP
 
 ;----------------------------------------------------------------------------
 ;
@@ -1166,47 +1310,47 @@ KeccakP1600times2_PermuteAll   PROC
     ; Ci = bi ^ gi ^ ki ^ mi ^ si
     ; Co = bo ^ go ^ ko ^ mo ^ so
     ; Cu = bu ^ gu ^ ku ^ mu ^ su
-    vld1.64 { d0, d1, d2, d3 }, [r3:256]!   ; _ba _be
+    vld1.64 { d0, d1, d2, d3 }, [r3:256]!    ; _ba _be
     bic     r5, #15
-    vld1.64 { d4, d5, d6, d7 }, [r3:256]!   ; _bi _bo
-    vld1.64 { d8, d9, d10, d11 }, [r3:256]! ; _bu _ga
-    vld1.64 { d12, d13 }, [r3:128]! ; _ge
+    vld1.64 { d4, d5, d6, d7 }, [r3:256]!    ; _bi _bo
+    vld1.64 { d8, d9, d10, d11 }, [r3:256]!    ; _bu _ga
+    vld1.64 { d12, d13 }, [r3:128]!    ; _ge
     veor.64 q0, q0, q5
-    vld1.64 { d14, d15 }, [r3:128]! ; _gi
+    vld1.64 { d14, d15 }, [r3:128]!    ; _gi
     veor.64 q1, q1, q6
-    vld1.64 { d16, d17 }, [r3:128]! ; _go
+    vld1.64 { d16, d17 }, [r3:128]!    ; _go
     veor.64 q2, q2, q7
-    vld1.64 { d18, d19 }, [r3:128]! ; _gu
+    vld1.64 { d18, d19 }, [r3:128]!    ; _gu
     veor.64 q3, q3, q8
-    vld1.64 { d10, d11 }, [r3:128]! ; _ka
+    vld1.64 { d10, d11 }, [r3:128]!    ; _ka
     veor.64 q4, q4, q9
-    vld1.64 { d12, d13 }, [r3:128]! ; _ke
+    vld1.64 { d12, d13 }, [r3:128]!    ; _ke
     veor.64 q0, q0, q5
-    vld1.64 { d14, d15 }, [r3:128]! ; _ki
+    vld1.64 { d14, d15 }, [r3:128]!    ; _ki
     veor.64 q1, q1, q6
-    vld1.64 { d16, d17 }, [r3:128]! ; _ko
+    vld1.64 { d16, d17 }, [r3:128]!    ; _ko
     veor.64 q2, q2, q7
-    vld1.64 { d18, d19 }, [r3:128]! ; _ku
+    vld1.64 { d18, d19 }, [r3:128]!    ; _ku
     veor.64 q3, q3, q8
-    vld1.64 { d10, d11 }, [r3:128]! ; _ma
+    vld1.64 { d10, d11 }, [r3:128]!    ; _ma
     veor.64 q4, q4, q9
-    vld1.64 { d12, d13 }, [r3:128]! ; _me
+    vld1.64 { d12, d13 }, [r3:128]!    ; _me
     veor.64 q0, q0, q5
-    vld1.64 { d14, d15 }, [r3:128]! ; _mi
+    vld1.64 { d14, d15 }, [r3:128]!    ; _mi
     veor.64 q1, q1, q6
-    vld1.64 { d16, d17 }, [r3:128]! ; _mo
+    vld1.64 { d16, d17 }, [r3:128]!    ; _mo
     veor.64 q2, q2, q7
-    vld1.64 { d18, d19 }, [r3:128]! ; _mu
+    vld1.64 { d18, d19 }, [r3:128]!    ; _mu
     veor.64 q3, q3, q8
-    vld1.64 { d10, d11 }, [r3:128]! ; _sa
+    vld1.64 { d10, d11 }, [r3:128]!    ; _sa
     veor.64 q4, q4, q9
-    vld1.64 { d12, d13 }, [r3:128]! ; _se
+    vld1.64 { d12, d13 }, [r3:128]!    ; _se
     veor.64 q0, q0, q5
-    vld1.64 { d14, d15 }, [r3:128]! ; _si
+    vld1.64 { d14, d15 }, [r3:128]!    ; _si
     veor.64 q1, q1, q6
-    vld1.64 { d16, d17 }, [r3:128]! ; _so
+    vld1.64 { d16, d17 }, [r3:128]!    ; _so
     veor.64 q2, q2, q7
-    vld1.64 { d18, d19 }, [r3:128]! ; _su
+    vld1.64 { d18, d19 }, [r3:128]!    ; _su
     mov     r3, r0
     veor.64 q3, q3, q8
     veor.64 q4, q4, q9
@@ -1223,7 +1367,7 @@ KeccakP1600times2_PermuteAll_RoundLoop
     KeccakP_ThetaRhoPiChi2     _ma, _ge,  -1, _ko, _bu, _si-_ge, _ka ; _ma, _ge, _si, _ko, _bu
     KeccakP_ThetaRhoPiChi3     _ka, _be,  -1, _go,  -1, _mi-_be, _ga ; _ka, _be, _mi, _go, _su
     KeccakP_ThetaRhoPiChi4     _ga,  -1, _ki, _bo,  -1, _se-_ga, _ba ; _ga, _se, _ki, _bo, _mu
-
+KeccakP1600times2_PermuteAll_Round2
     KeccakP_ThetaRhoPiChiIota  _ba,  -1,  -1, _go,  -1, _ke-_ba, _ma ; _ba, _ke, _si, _go, _mu
     KeccakP_ThetaRhoPiChi1     _ma, _be,  -1,  -1, _gu, _ki-_be, _ga ; _ma, _be, _ki, _so, _gu
     KeccakP_ThetaRhoPiChi2     _ga,  -1, _bi,  -1,  -1, _me-_ga, _sa ; _ga, _me, _bi, _ko, _su
