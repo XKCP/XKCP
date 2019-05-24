@@ -268,6 +268,7 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="optimized800ARMv8A" inherits="common optimized width800">
+        <gcc>-mfpu=neon</gcc>
       <c>lib/low/KeccakP-800/Optimized64AsmARM/KeccakP-800-armv8a-neon.s</c>
       <h>lib/low/KeccakP-800/Optimized64AsmARM/KeccakP-800-SnP.h</h>
     </fragment>
@@ -432,11 +433,13 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="optimized1600ARMv7A" inherits="width1600 optimized">
+        <gcc>-mfpu=neon</gcc>
         <c>lib/low/KeccakP-1600/OptimizedAsmARM/KeccakP-1600-armv7a-le-neon-gcc.s</c>
         <h>lib/low/KeccakP-1600/OptimizedAsmARM/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="optimized1600ARMv8A" inherits="width1600 optimized">
+        <gcc>-mfpu=neon</gcc>
         <c>lib/low/KeccakP-1600/Optimized64AsmARM/KeccakP-1600-armv8a-neon.s</c>
         <h>lib/low/KeccakP-1600/Optimized64AsmARM/KeccakP-1600-SnP.h</h>
     </fragment>
@@ -494,6 +497,7 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="1600times2ARMV7A">
+        <gcc>-mfpu=neon</gcc>
         <c>lib/low/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-inplace-pl2-armv7a-neon-le-gcc.s</c>
         <h>lib/low/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-times2-SnP.h</h>
     </fragment>
