@@ -622,6 +622,13 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
     </fragment>
 
+    <fragment name="XooOptimizedARMv7A" inherits="common optimized XooWidth384">
+        <gcc>-mfpu=neon</gcc>
+        <c>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-uf-armv7a-neon-le-gcc.s</c>
+        <c>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodyak-uf-armv7a-neon-le-gcc.s</c>
+        <h>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-SnP.h</h>
+    </fragment>
+
     <fragment name="XooOptimizedSIMD128" inherits="common optimized XooWidth384">
         <c>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SIMD128.c</c>
         <h>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SnP.h</h>

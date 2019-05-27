@@ -186,7 +186,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Implementations selected for ARMv7M -->
     <fragment name="ARMv7M" inherits="optimized200ARMv7M optimized400ARMv7M optimized800ARMv7Mu2 inplace1600ARMv7M serial-fallbacks Ket-ARMv7M XooOptimizedARMv7M XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
     <!-- Implementations selected for ARMv7A -->
-    <fragment name="ARMv7A" inherits="reference200 reference400 optimized800ARMv7Au2 optimized1600ARMv7A 1600times2ARMV7A 1600times4on2 1600times8on2 Ket-optimizedLE"/>
+    <fragment name="ARMv7A" inherits="reference200 reference400 optimized800ARMv7Au2 optimized1600ARMv7A 1600times2ARMV7A 1600times4on2 1600times8on2 Ket-optimizedLE XooOptimizedARMv7A XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
+
     <!-- Implementations selected for ARMv8A -->
     <fragment name="ARMv8A" inherits="reference200 reference400 optimized800ARMv8A optimized1600ARMv8A serial-fallbacks Ket-optimizedLE"/>
 
@@ -213,7 +214,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <group all="Xoodoo">
         <product delimiter="/">
-            <factor set="reference generic32 Nehalem Haswell SkylakeX ARMv6M ARMv7M "/>
+            <factor set="reference generic32 Nehalem Haswell SkylakeX ARMv6M ARMv7M ARMv7A"/>
             <factor set="XooTests libXoo.a libXoo.so"/>
         </product>
     </group>

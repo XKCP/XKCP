@@ -21,7 +21,7 @@
 @  void Xoodoo_Initialize(void *state)
 @
     .align  4
-.global   Xoodoo_Initialize
+.global Xoodoo_Initialize
 .type	Xoodoo_Initialize, %function;
 Xoodoo_Initialize:
     movs    r1, #0
