@@ -118,6 +118,8 @@ OBJECTS := $(OBJECTS) </xsl:text>
 <xsl:template match="target">
     <xsl:variable name="final" select="concat('bin/', @name)"/>
     <xsl:variable name="pack" select="concat('bin/', translate(@name, '/', '_'), '.tar.gz')"/>
+    <xsl:variable name="configfilepath" select="concat('bin/.build/', @name, '/')"/>
+    <xsl:variable name="configfile" select="concat($configfilepath, 'config.h')"/>
 
     <xsl:text>all: </xsl:text>
     <xsl:value-of select="@name"/>
@@ -150,6 +152,21 @@ AR = ar
         <xsl:text>CFLAGS := $(CFLAGS) -fpic
 </xsl:text>
     </xsl:if>
+
+    <xsl:text>HEADERS := $(HEADERS) </xsl:text>
+    <xsl:value-of select="$configfile"/>
+    <xsl:text>
+</xsl:text>
+
+    <xsl:text>SOURCES := $(SOURCES) </xsl:text>
+    <xsl:value-of select="$configfile"/>
+    <xsl:text>
+</xsl:text>
+
+    <xsl:text>CFLAGS := $(CFLAGS) -I</xsl:text>
+    <xsl:value-of select="$configfilepath"/>
+    <xsl:text>
+</xsl:text>
 
     <xsl:apply-templates select="gcc|define|I"/>
     <xsl:apply-templates select="h"/>
