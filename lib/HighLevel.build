@@ -35,6 +35,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     <!-- Keccak sponge functions -->
 
     <fragment name="KeccakSponge-common" inherits="common">
+        <config>XKCP_has_Sponge_Keccak</config>
         <h>lib/high/Keccak/KeccakSponge-common.h</h>
         <h>lib/high/Keccak/KeccakSponge.inc</h>
     </fragment>
@@ -64,6 +65,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     <!-- NIST standards -->
 
     <fragment name="FIPS202" inherits="KeccakSpongeWidth1600">
+        <config>XKCP_has_FIPS202</config>
         <c>lib/high/Keccak/FIPS202/SimpleFIPS202.c</c>
         <h>lib/high/Keccak/FIPS202/SimpleFIPS202.h</h>
         <c>lib/high/Keccak/FIPS202/KeccakHash.c</c>
@@ -71,6 +73,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     </fragment>
 
     <fragment name="SP800-185" inherits="KeccakSpongeWidth1600">
+        <config>XKCP_has_SP800_185</config>
         <c>lib/high/Keccak/SP800-185/SP800-185.c</c>
         <h>lib/high/Keccak/SP800-185/SP800-185.inc</h>
         <h>lib/high/Keccak/SP800-185/SP800-185.h</h>
@@ -80,6 +83,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     <!-- Keccak duplex objects -->
 
     <fragment name="KeccakDuplex-common" inherits="common">
+        <config>XKCP_has_Duplex_Keccak</config>
         <h>lib/high/Keccak/KeccakDuplex-common.h</h>
         <h>lib/high/Keccak/KeccakDuplex.inc</h>
     </fragment>
@@ -109,6 +113,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     <!-- Pseudo-random bit generation -->
 
     <fragment name="KeccakPRG-common" inherits="common">
+        <config>XKCP_has_PRG_Keccak</config>
         <h>lib/high/Keccak/PRG/KeccakPRG-common.h</h>
         <h>lib/high/Keccak/PRG/KeccakPRG.inc</h>
     </fragment>
@@ -138,6 +143,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     <!-- KangarooTwelve -->
 
     <fragment name="KangarooTwelve" inherits="KeccakSpongeWidth1600">
+        <config>XKCP_has_KangarooTwelve</config>
         <c>lib/high/KangarooTwelve/KangarooTwelve.c</c>
         <h>lib/high/KangarooTwelve/KangarooTwelve.h</h>
         <h>lib/high/common/Phases.h</h>
@@ -146,6 +152,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     <!-- Kravatte and modes on top of it -->
 
     <fragment name="Kravatte" inherits="common">
+        <config>XKCP_has_Kravatte</config>
         <c>lib/high/Kravatte/Kravatte.c</c>
         <h>lib/high/Kravatte/Kravatte.h</h>
         <c>lib/high/Kravatte/KravatteModes.c</c>
@@ -157,6 +164,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     <!-- Xoofff and modes on top of it -->
 
     <fragment name="Xoofff" inherits="common">
+        <config>XKCP_has_Xoofff</config>
         <c>lib/high/Xoofff/Xoofff.c</c>
         <h>lib/high/Xoofff/Xoofff.h</h>
         <c>lib/high/Xoofff/XoofffModes.c</c>
@@ -164,6 +172,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
     </fragment>
 
     <fragment name="Xoodyak" inherits="common">
+        <config>XKCP_has_Xoodyak</config>
         <c>lib/high/Xoodyak/Xoodyak.c</c>
         <h>lib/high/Xoodyak/Xoodyak.h</h>
         <h>lib/high/Xoodyak/Cyclist.h</h>

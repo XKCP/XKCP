@@ -148,6 +148,7 @@ The fragments below allow to select the desired implementation of the permutatio
     <!-- Keccak-p[200] -->
 
     <fragment name="width200">
+        <config>XKCP_has_KeccakP200</config>
     </fragment>
 
     <fragment name="reference200" inherits="common width200">
@@ -179,6 +180,7 @@ The fragments below allow to select the desired implementation of the permutatio
     <!-- Keccak-p[400] -->
 
     <fragment name="width400">
+        <config>XKCP_has_KeccakP400</config>
     </fragment>
 
     <fragment name="reference400" inherits="common width400">
@@ -205,6 +207,7 @@ The fragments below allow to select the desired implementation of the permutatio
     <!-- Keccak-p[800] -->
 
     <fragment name="width800">
+        <config>XKCP_has_KeccakP800</config>
     </fragment>
 
     <fragment name="reference800" inherits="common width800">
@@ -281,6 +284,7 @@ The fragments below allow to select the desired implementation of the permutatio
     <!-- Keccak-p[1600] -->
 
     <fragment name="width1600">
+        <config>XKCP_has_KeccakP1600</config>
     </fragment>
 
     <fragment name="reference1600" inherits="common width1600">
@@ -451,13 +455,17 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <!-- Keccak-p[1600]×2 -->
 
-    <fragment name="1600times2on1">
+    <fragment name="KeccakP1600times2">
+        <config>XKCP_has_KeccakP1600times2</config>
+    </fragment>
+
+    <fragment name="1600times2on1" inherits="KeccakP1600times2">
         <c>lib/low/KeccakP-1600-times2/FallbackOn1/KeccakP-1600-times2-on1.c</c>
         <h>lib/low/KeccakP-1600-times2/FallbackOn1/KeccakP-1600-times2-SnP.h</h>
         <h>lib/low/common/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="SIMD128">
+    <fragment name="SIMD128" inherits="optimized KeccakP1600times2">
         <c>lib/low/KeccakP-1600-times2/SIMD128/KeccakP-1600-times2-SIMD128.c</c>
         <h>lib/low/KeccakP-1600-times2/SIMD128/KeccakP-1600-times2-SnP.h</h>
         <h>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
@@ -479,7 +487,7 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/KeccakP-1600-times2/SIMD128/XOPufull/SIMD128-config.h</h>
     </fragment>
 
-    <fragment name="SIMD512-2">
+    <fragment name="SIMD512-2" inherits="optimized KeccakP1600times2">
         <c>lib/low/KeccakP-1600-times2/SIMD512/KeccakP-1600-times2-SIMD512.c</c>
         <h>lib/low/KeccakP-1600-times2/SIMD512/KeccakP-1600-times2-SnP.h</h>
     </fragment>
@@ -496,7 +504,7 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/KeccakP-1600-times2/SIMD512/AVX512ufull/SIMD512-2-config.h</h>
     </fragment>
 
-    <fragment name="1600times2ARMV7A">
+    <fragment name="1600times2ARMV7A" inherits="KeccakP1600times2">
         <gcc>-mfpu=neon</gcc>
         <c>lib/low/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-inplace-pl2-armv7a-neon-le-gcc.s</c>
         <h>lib/low/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-times2-SnP.h</h>
@@ -504,19 +512,23 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <!-- Keccak-p[1600]×4 -->
 
-    <fragment name="1600times4on1">
+    <fragment name="KeccakP1600times4">
+        <config>XKCP_has_KeccakP1600times4</config>
+    </fragment>
+
+    <fragment name="1600times4on1" inherits="KeccakP1600times4">
         <c>lib/low/KeccakP-1600-times4/FallbackOn1/KeccakP-1600-times4-on1.c</c>
         <h>lib/low/KeccakP-1600-times4/FallbackOn1/KeccakP-1600-times4-SnP.h</h>
         <h>lib/low/common/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="1600times4on2">
+    <fragment name="1600times4on2" inherits="KeccakP1600times4">
         <c>lib/low/KeccakP-1600-times4/FallbackOn2/KeccakP-1600-times4-on2.c</c>
         <h>lib/low/KeccakP-1600-times4/FallbackOn2/KeccakP-1600-times4-SnP.h</h>
         <h>lib/low/common/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="SIMD256">
+    <fragment name="SIMD256" inherits="optimized KeccakP1600times4">
         <c>lib/low/KeccakP-1600-times4/SIMD256/KeccakP-1600-times4-SIMD256.c</c>
         <h>lib/low/KeccakP-1600-times4/SIMD256/KeccakP-1600-times4-SnP.h</h>
         <h>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
@@ -534,7 +546,7 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/KeccakP-1600-times4/SIMD256/AVX2ufull/SIMD256-config.h</h>
     </fragment>
 
-    <fragment name="SIMD512-4">
+    <fragment name="SIMD512-4" inherits="optimized KeccakP1600times4">
         <c>lib/low/KeccakP-1600-times4/SIMD512/KeccakP-1600-times4-SIMD512.c</c>
         <h>lib/low/KeccakP-1600-times4/SIMD512/KeccakP-1600-times4-SnP.h</h>
     </fragment>
@@ -553,25 +565,29 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <!-- Keccak-p[1600]×8 -->
 
-    <fragment name="1600times8on1">
+    <fragment name="KeccakP1600times8">
+        <config>XKCP_has_KeccakP1600times8</config>
+    </fragment>
+
+    <fragment name="1600times8on1" inherits="KeccakP1600times8">
         <c>lib/low/KeccakP-1600-times8/FallbackOn1/KeccakP-1600-times8-on1.c</c>
         <h>lib/low/KeccakP-1600-times8/FallbackOn1/KeccakP-1600-times8-SnP.h</h>
         <h>lib/low/common/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="1600times8on2">
+    <fragment name="1600times8on2" inherits="KeccakP1600times8">
         <c>lib/low/KeccakP-1600-times8/FallbackOn2/KeccakP-1600-times8-on2.c</c>
         <h>lib/low/KeccakP-1600-times8/FallbackOn2/KeccakP-1600-times8-SnP.h</h>
         <h>lib/low/common/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="1600times8on4">
+    <fragment name="1600times8on4" inherits="KeccakP1600times8">
         <c>lib/low/KeccakP-1600-times8/FallbackOn4/KeccakP-1600-times8-on4.c</c>
         <h>lib/low/KeccakP-1600-times8/FallbackOn4/KeccakP-1600-times8-SnP.h</h>
         <h>lib/low/common/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="SIMD512-8">
+    <fragment name="SIMD512-8" inherits="optimized KeccakP1600times8">
         <c>lib/low/KeccakP-1600-times8/SIMD512/KeccakP-1600-times8-SIMD512.c</c>
         <h>lib/low/KeccakP-1600-times8/SIMD512/KeccakP-1600-times8-SnP.h</h>
     </fragment>
@@ -594,48 +610,49 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <!-- ++++++++++++++++++++++++ Xoodoo +++++++++++++++++++++ -->
 
-    <fragment name="XooWidth384">
+    <fragment name="Xoodoo">
+        <config>XKCP_has_Xoodoo</config>
         <h>lib/low/Xoodoo/Xoodoo.h</h>
         <h>lib/high/Xoodyak/Xoodyak-parameters.h</h>
     </fragment>
 
-    <fragment name="XooReference" inherits="common XooWidth384">
+    <fragment name="XooReference" inherits="common Xoodoo">
         <c>lib/low/Xoodoo/Reference/Xoodoo-reference.c</c>
         <h>lib/low/Xoodoo/Reference/Xoodoo-SnP.h</h>
     </fragment>
 
-    <fragment name="XooOptimized32" inherits="common optimized XooWidth384">
+    <fragment name="XooOptimized32" inherits="common optimized Xoodoo">
         <c>lib/low/Xoodoo/Optimized/Xoodoo-optimized.c</c>
         <c>lib/low/Xoodoo/Optimized/Xoodyak-full-blocks.c</c>
         <h>lib/low/Xoodoo/Optimized/Xoodoo-SnP.h</h>
     </fragment>
 
-    <fragment name="XooOptimizedARMv6M" inherits="common optimized XooWidth384">
+    <fragment name="XooOptimizedARMv6M" inherits="common optimized Xoodoo">
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-u1-armv6m-le-gcc.s</c>
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-u1-armv6m-le-gcc.s</c>
         <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
     </fragment>
 
-    <fragment name="XooOptimizedARMv7M" inherits="common optimized XooWidth384">
+    <fragment name="XooOptimizedARMv7M" inherits="common optimized Xoodoo">
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-uf-armv7m-le-gcc.s</c>
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-uf-armv7m-le-gcc.s</c>
         <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
     </fragment>
 
-    <fragment name="XooOptimizedARMv7A" inherits="common optimized XooWidth384">
+    <fragment name="XooOptimizedARMv7A" inherits="common optimized Xoodoo">
         <gcc>-mfpu=neon</gcc>
         <c>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-uf-armv7a-neon-le-gcc.s</c>
         <c>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodyak-uf-armv7a-neon-le-gcc.s</c>
         <h>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-SnP.h</h>
     </fragment>
 
-    <fragment name="XooOptimizedSIMD128" inherits="common optimized XooWidth384">
+    <fragment name="XooOptimizedSIMD128" inherits="common optimized Xoodoo">
         <c>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SIMD128.c</c>
         <h>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SnP.h</h>
         <c>lib/low/Xoodoo/OptimizedSIMD128/Xoodyak-full-block-SIMD128.c</c>
     </fragment>
 
-    <fragment name="XooOptimizedSIMD512" inherits="common optimized XooWidth384">
+    <fragment name="XooOptimizedSIMD512" inherits="common optimized Xoodoo">
         <c>lib/low/Xoodoo/OptimizedSIMD512/Xoodoo-SIMD512.c</c>
         <h>lib/low/Xoodoo/OptimizedSIMD512/Xoodoo-SnP.h</h>
         <c>lib/low/Xoodoo/OptimizedSIMD512/Xoodyak-full-block-SIMD512.c</c>
@@ -643,49 +660,61 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <!-- Xoodoo×4 -->
 
-    <fragment name="XooOptimizedTimes4_On1" inherits="common optimized XooWidth384">
+    <fragment name="Xoodootimes4">
+        <config>XKCP_has_Xoodootimes4</config>
+    </fragment>
+
+    <fragment name="XooOptimizedTimes4_On1" inherits="common optimized Xoodootimes4">
         <c>lib/low/Xoodoo-times4/FallbackOn1/Xoodoo-times4-on1.c</c>
         <h>lib/low/Xoodoo-times4/FallbackOn1/Xoodoo-times4-SnP.h</h>
         <h>lib/low/common/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="XooOptimizedTimes4_SIMD128" inherits="common optimized XooWidth384">
+    <fragment name="XooOptimizedTimes4_SIMD128" inherits="common optimized Xoodootimes4">
         <c>lib/low/Xoodoo-times4/SIMD128/Xoodoo-times4-SIMD128.c</c>
         <h>lib/low/Xoodoo-times4/SIMD128/Xoodoo-times4-SnP.h</h>
     </fragment>
 
-    <fragment name="XooOptimizedTimes4_AVX512" inherits="common optimized XooWidth384">>
+    <fragment name="XooOptimizedTimes4_AVX512" inherits="common optimized Xoodootimes4">
         <c>lib/low/Xoodoo-times4/SIMD512/Xoodoo-times4-SIMD512.c</c>
         <h>lib/low/Xoodoo-times4/SIMD512/Xoodoo-times4-SnP.h</h>
     </fragment>
 
     <!-- Xoodoo×8 -->
 
-    <fragment name="XooOptimizedTimes8_On1" inherits="common optimized XooWidth384">
+    <fragment name="Xoodootimes8">
+        <config>XKCP_has_Xoodootimes8</config>
+    </fragment>
+
+    <fragment name="XooOptimizedTimes8_On1" inherits="common optimized Xoodootimes8">
         <c>lib/low/Xoodoo-times8/FallbackOn1/Xoodoo-times8-on1.c</c>
         <h>lib/low/Xoodoo-times8/FallbackOn1/Xoodoo-times8-SnP.h</h>
         <h>lib/low/common/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="XooOptimizedTimes8_AVX2" inherits="common optimized XooWidth384">>
+    <fragment name="XooOptimizedTimes8_AVX2" inherits="common optimized Xoodootimes8">
         <c>lib/low/Xoodoo-times8/SIMD256/Xoodoo-times8-SIMD256.c</c>
         <h>lib/low/Xoodoo-times8/SIMD256/Xoodoo-times8-SnP.h</h>
     </fragment>
 
-    <fragment name="XooOptimizedTimes8_AVX512" inherits="common optimized XooWidth384">>
+    <fragment name="XooOptimizedTimes8_AVX512" inherits="common optimized Xoodootimes8">
         <c>lib/low/Xoodoo-times8/SIMD512/Xoodoo-times8-SIMD512.c</c>
         <h>lib/low/Xoodoo-times8/SIMD512/Xoodoo-times8-SnP.h</h>
     </fragment>
 
     <!-- Xoodoo×16 -->
 
-    <fragment name="XooOptimizedTimes16_On1" inherits="common optimized XooWidth384">
+    <fragment name="Xoodootimes16">
+        <config>XKCP_has_Xoodootimes16</config>
+    </fragment>
+
+    <fragment name="XooOptimizedTimes16_On1" inherits="common optimized Xoodootimes16">
         <c>lib/low/Xoodoo-times16/FallbackOn1/Xoodoo-times16-on1.c</c>
         <h>lib/low/Xoodoo-times16/FallbackOn1/Xoodoo-times16-SnP.h</h>
         <h>lib/low/common/PlSnP-Fallback.inc</h>
     </fragment>
 
-    <fragment name="XooOptimizedTimes16_AVX512" inherits="common optimized XooWidth384">>
+    <fragment name="XooOptimizedTimes16_AVX512" inherits="common optimized Xoodootimes16">
         <c>lib/low/Xoodoo-times16/SIMD512/Xoodoo-times16-SIMD512.c</c>
         <h>lib/low/Xoodoo-times16/SIMD512/Xoodoo-times16-SnP.h</h>
     </fragment>
