@@ -17,7 +17,7 @@
 ; Please refer to LowLevel.build for the exact list of other files it must be combined with.
 ;
 
-; WARNING: This implementation assumes a little endian CPU with ARMv6M architecture (e.g., Cortex-M0) and the ARMCC compiler.
+; WARNING: This implementation assumes a little endian CPU with ARMv6M architecture (e.g., Cortex-M0).
 
     PRESERVE8
     THUMB
@@ -199,7 +199,7 @@ _su equ 24
 ;
 ; void KeccakP200_StaticInitialize( void )
 ;
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_StaticInitialize
 KeccakP200_StaticInitialize   PROC
     bx      lr
@@ -209,7 +209,7 @@ KeccakP200_StaticInitialize   PROC
 ;
 ; void KeccakP200_Initialize(void *state)
 ;
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_Initialize
 KeccakP200_Initialize   PROC
     movs    r1, #0
@@ -225,7 +225,7 @@ KeccakP200_Initialize   PROC
 ; 
 ;  void KeccakP200_AddByte(void *state, unsigned char byte, unsigned int offset)
 ; 
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_AddByte
 KeccakP200_AddByte   PROC
     ldrb    r3, [r0, r2]
@@ -238,7 +238,7 @@ KeccakP200_AddByte   PROC
 ;
 ; void KeccakP200_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_AddBytes
 KeccakP200_AddBytes   PROC
     subs    r3, r3, #1
@@ -261,7 +261,7 @@ KeccakP200_AddBytes_Exit
 ; 
 ;  void KeccakP200_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ; 
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_OverwriteBytes
 KeccakP200_OverwriteBytes   PROC
     subs    r3, r3, #1
@@ -280,7 +280,7 @@ KeccakP200_OverwriteBytes_Exit
 ;
 ; void KeccakP200_OverwriteWithZeroes(void *state, unsigned int byteCount)
 ;
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_OverwriteWithZeroes
 KeccakP200_OverwriteWithZeroes  PROC
     movs    r3, #0
@@ -298,7 +298,7 @@ KeccakP200_OverwriteWithZeroes_Exit
 ; 
 ;  void KeccakP200_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ; 
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_ExtractBytes
 KeccakP200_ExtractBytes   PROC
     subs    r3, r3, #1
@@ -317,7 +317,7 @@ KeccakP200_ExtractBytes_Exit
 ; 
 ;  void KeccakP200_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 ; 
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_ExtractAndAddBytes
 KeccakP200_ExtractAndAddBytes   PROC
     push    {r4,r5}
@@ -341,7 +341,7 @@ KeccakP200_ExtractAndAddBytes_Exit
 ;
 ; void KeccakP200_Permute_Nrounds( void *state, unsigned int nr )
 ;
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_Permute_Nrounds
 KeccakP200_Permute_Nrounds   PROC
     push    { r4 - r6, lr }
@@ -357,8 +357,8 @@ KeccakP200_Permute_Nrounds   PROC
     adds    r7, r7, #18
     subs    r7, r7, r1
     lsls    r1, r1, #31
-    beq     KeccakP200_Permute_RoundLoop
-    ldm     r0!, { r1, r2, r3, r4, r5 } ; odd number of rounds: copy state to stack
+    beq     KeccakP200_Permute_Nrounds_GoRoundLoop
+    ldm     r0!, { r1, r2, r3, r4, r5 }  ; odd number of rounds: copy state to stack
     subs    r0, r0, #20
     stm     r6!, { r1, r2, r3, r4, r5 }
     subs    r6, r6, #20
@@ -369,14 +369,15 @@ KeccakP200_Permute_Nrounds   PROC
     subs    r7, r7, #1
     mov     r8, r7
     b       KeccakP200_Permute_RoundOdd
-    nop
+KeccakP200_Permute_Nrounds_GoRoundLoop
+    b       KeccakP200_Permute_RoundLoop
     ENDP
 
 ;----------------------------------------------------------------------------
 ;
 ; void KeccakP200_Permute_18rounds( void *state )
 ;
-    ALIGN
+    ALIGN   4
     EXPORT  KeccakP200_Permute_18rounds
 KeccakP200_Permute_18rounds   PROC
     push    { r4 - r6, lr }
@@ -412,7 +413,7 @@ KeccakP200_Permute_RoundConstants18
     dcb     0x02
     dcb     0x80
 
-    ALIGN
+    ALIGN   4
 KeccakP200_Permute_RoundLoop
     mov     r8, r7
     KeccakRound r6, r0, 0
