@@ -18,7 +18,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 /** For the documentation, see SnP-documentation.h.
  */
 
-#define Xoodoo_implementation      "32-bit optimized ARM Cortex-M0/3 assembler implementation"
+#define Xoodoo_implementation      "32-bit optimized ARM assembler implementation"
 #define Xoodoo_stateSizeInBytes    (3*4*4)
 #define Xoodoo_stateAlignment      4
 

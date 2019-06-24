@@ -610,6 +610,12 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/Xoodoo/Optimized/Xoodoo-SnP.h</h>
     </fragment>
 
+    <fragment name="XooOptimizedARMv6" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-uf-armv6-le-gcc.s</c>
+        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-uf-armv6-le-gcc.s</c>
+        <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
+    </fragment>
+
     <fragment name="XooOptimizedARMv6M" inherits="common optimized XooWidth384">
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-u1-armv6m-le-gcc.s</c>
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-u1-armv6m-le-gcc.s</c>
