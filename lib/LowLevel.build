@@ -629,6 +629,11 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-SnP.h</h>
     </fragment>
 
+    <fragment name="XooOptimizedAVR8" inherits="common optimized XooWidth384">
+        <c>lib/low/Xoodoo/OptimizedAsmAVR8/Xoodoo-avr8-u1.s</c>
+        <h>lib/low/Xoodoo/OptimizedAsmAVR8/Xoodoo-SnP.h</h>
+    </fragment>
+
     <fragment name="XooOptimizedSIMD128" inherits="common optimized XooWidth384">
         <c>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SIMD128.c</c>
         <h>lib/low/Xoodoo/OptimizedSIMD128/Xoodoo-SnP.h</h>

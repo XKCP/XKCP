@@ -192,7 +192,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="ARMv8A" inherits="reference200 reference400 optimized800ARMv8A optimized1600ARMv8A serial-fallbacks Ket-optimizedLE"/>
 
     <!-- Implementations selected for 8-bit AVR -->
-    <fragment name="AVR8" inherits="optimized200AVR8 optimized400AVR8 optimized800AVR8 optimized1600AVR8 serial-fallbacks Ket-SnP"/>
+    <fragment name="AVR8" inherits="optimized200AVR8 optimized400AVR8 optimized800AVR8 optimized1600AVR8 serial-fallbacks Ket-SnP XooOptimizedAVR8 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
 
     <!-- Target names are of the form x/y where x is taken from the first set and y from the second set. -->
     <group all="Keccak">
@@ -214,7 +214,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <group all="Xoodoo">
         <product delimiter="/">
-            <factor set="reference generic32 Nehalem Haswell SkylakeX ARMv6M ARMv7M ARMv7A"/>
+            <factor set="reference generic32 Nehalem Haswell SkylakeX ARMv6M ARMv7M ARMv7A AVR8"/>
             <factor set="XooTests libXoo.a libXoo.so"/>
         </product>
     </group>
