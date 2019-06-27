@@ -22,7 +22,9 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
 * SHA3-384
 * SHA3-512
 * KangarooTwelve
-* Xoodyak_hash
+* Keyak
+* Ketje
+* Xoodyak
 -->
 
     <!-- SUPERCOP packages -->
@@ -37,7 +39,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/test_crypto_aead.c</c>
     </fragment>
 
-    <fragment name="crypto_hash/shake128/kcp" inherits="KeccakSpongeWidth1600">
+    <fragment name="crypto_hash/shake128/kcp" inherits="KeccakSponge">
         <c>tests/SUPERCOP/SHAKE128/SHAKE128.c</c>
         <h>tests/SUPERCOP/SHAKE128/api.h</h>
     </fragment>
@@ -46,7 +48,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/SHAKE128/selftest.c</c>
     </fragment>
 
-    <fragment name="crypto_hash/shake256/kcp" inherits="KeccakSpongeWidth1600">
+    <fragment name="crypto_hash/shake256/kcp" inherits="KeccakSponge">
         <c>tests/SUPERCOP/SHAKE256/SHAKE256.c</c>
         <h>tests/SUPERCOP/SHAKE256/api.h</h>
     </fragment>
@@ -55,7 +57,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/SHAKE256/selftest.c</c>
     </fragment>
 
-    <fragment name="crypto_hash/sha3224/kcp" inherits="KeccakSpongeWidth1600">
+    <fragment name="crypto_hash/sha3224/kcp" inherits="KeccakSponge">
         <c>tests/SUPERCOP/SHA3-224/SHA3-224.c</c>
         <h>tests/SUPERCOP/SHA3-224/api.h</h>
     </fragment>
@@ -64,7 +66,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/SHA3-224/selftest.c</c>
     </fragment>
 
-    <fragment name="crypto_hash/sha3256/kcp" inherits="KeccakSpongeWidth1600">
+    <fragment name="crypto_hash/sha3256/kcp" inherits="KeccakSponge">
         <c>tests/SUPERCOP/SHA3-256/SHA3-256.c</c>
         <h>tests/SUPERCOP/SHA3-256/api.h</h>
     </fragment>
@@ -73,7 +75,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/SHA3-256/selftest.c</c>
     </fragment>
 
-    <fragment name="crypto_hash/sha3384/kcp" inherits="KeccakSpongeWidth1600">
+    <fragment name="crypto_hash/sha3384/kcp" inherits="KeccakSponge">
         <c>tests/SUPERCOP/SHA3-384/SHA3-384.c</c>
         <h>tests/SUPERCOP/SHA3-384/api.h</h>
     </fragment>
@@ -82,7 +84,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/SHA3-384/selftest.c</c>
     </fragment>
 
-    <fragment name="crypto_hash/sha3512/kcp" inherits="KeccakSpongeWidth1600">
+    <fragment name="crypto_hash/sha3512/kcp" inherits="KeccakSponge">
         <c>tests/SUPERCOP/SHA3-512/SHA3-512.c</c>
         <h>tests/SUPERCOP/SHA3-512/api.h</h>
     </fragment>
@@ -107,6 +109,163 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <product delimiter="/">
             <factor set="crypto_hash/shake128/kcp SHAKE128_SelfTest crypto_hash/shake256/kcp SHAKE256_SelfTest crypto_hash/sha3224/kcp SHA3-224_SelfTest crypto_hash/sha3256/kcp SHA3-256_SelfTest crypto_hash/sha3384/kcp SHA3-384_SelfTest crypto_hash/sha3512/kcp SHA3-512_SelfTest crypto_hash/k12/kcp KangarooTwelve_SelfTest"/>
             <factor set="reference1600 reference1600-32bits compact1600 compact1600AVR8 inplace1600bi inplace1600ARMv6M inplace1600ARMv7M inplace1600ARMv7A optimized1600u6 optimized1600ufull optimized1600lcu6 optimized1600lcufull optimized1600lcufullshld optimized1600AsmX86-64 optimized1600AsmX86-64shld optimized1600AsmX86-64Apple optimized1600AVX2 optimized1600AVX512 optimized1600XOPu6 optimized1600XOPufull optimized1600ARMv6Mu1 optimized1600ARMv6Mu2 optimized1600ARMv7A optimized1600ARMv8A optimized1600AVR8"/>
+        </product>
+    </group>
+
+    <!-- Keyak with CAESAR API and SUPERCOP packages -->
+
+    <fragment name="crypto_aead/riverkeyakv2" inherits="RiverKeyak">
+        <c>tests/SUPERCOP/RiverKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/RiverKeyak/api.h</h>
+    </fragment>
+
+    <fragment name="RiverKeyakSelfTest" inherits="crypto_aead/riverkeyakv2 crypto_aead_test">
+        <c>tests/SUPERCOP/RiverKeyak/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_aead/lakekeyakv2" inherits="LakeKeyak">
+        <c>tests/SUPERCOP/LakeKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/LakeKeyak/api.h</h>
+    </fragment>
+
+    <fragment name="LakeKeyakSelfTest" inherits="crypto_aead/lakekeyakv2 crypto_aead_test">
+        <c>tests/SUPERCOP/LakeKeyak/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_aead/seakeyakv2" inherits="SeaKeyak">
+        <c>tests/SUPERCOP/SeaKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/SeaKeyak/api.h</h>
+    </fragment>
+
+    <fragment name="SeaKeyakSelfTest" inherits="crypto_aead/seakeyakv2 crypto_aead_test">
+        <c>tests/SUPERCOP/SeaKeyak/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_aead/oceankeyakv2" inherits="OceanKeyak">
+        <c>tests/SUPERCOP/OceanKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/OceanKeyak/api.h</h>
+    </fragment>
+
+    <fragment name="OceanKeyakSelfTest" inherits="crypto_aead/oceankeyakv2 crypto_aead_test">
+        <c>tests/SUPERCOP/OceanKeyak/selftest.c</c>
+    </fragment>
+
+    <fragment name="crypto_aead/lunarkeyakv2" inherits="LunarKeyak">
+        <c>tests/SUPERCOP/LunarKeyak/encrypt.c</c>
+        <h>tests/SUPERCOP/LunarKeyak/api.h</h>
+    </fragment>
+
+    <fragment name="LunarKeyakSelfTest" inherits="crypto_aead/lunarkeyakv2 crypto_aead_test">
+        <c>tests/SUPERCOP/LunarKeyak/selftest.c</c>
+    </fragment>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_aead/riverkeyakv2 RiverKeyakSelfTest crypto_aead/lakekeyakv2 LakeKeyakSelfTest crypto_aead/seakeyakv2 SeaKeyakSelfTest crypto_aead/oceankeyakv2 OceanKeyakSelfTest crypto_aead/lunarkeyakv2 LunarKeyakSelfTest"/>
+            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell SkylakeX ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
+        </product>
+    </group>
+
+    <!-- Ketje with CAESAR API and SUPERCOP packages -->
+
+    <!-- Ketje Jr -->
+
+    <fragment name="crypto_aead/ketjejrv2" inherits="Ketje">
+        <c>tests/SUPERCOP/KetjeJr/encrypt.c</c>
+        <h>tests/SUPERCOP/KetjeJr/api.h</h>
+    </fragment>
+
+    <fragment name="KetjeJrSelfTest" inherits="crypto_aead/ketjejrv2 crypto_aead_test">
+        <c>tests/SUPERCOP/KetjeJr/selftest.c</c>
+    </fragment>
+
+    <fragment name="KetjeJr-compact" inherits="Ketje KetJr-SnP compact200"/>
+    <fragment name="KetjeJr-AVR8" inherits="Ketje KetJr-SnP optimized200AVR8"/>
+    <fragment name="KetjeJr-ARMv6M" inherits="Ketje KetJr-optimizedLE optimized200ARMv6M"/>
+    <fragment name="KetjeJr-ARMv7M" inherits="Ketje KetJr-ARMv7M"/>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_aead/ketjejrv2 KetjeJrSelfTest"/>
+            <factor set="KetjeJr-compact KetjeJr-AVR8 KetjeJr-ARMv6M KetjeJr-ARMv7M"/>
+        </product>
+    </group>
+
+    <!-- Ketje Sr -->
+
+    <fragment name="crypto_aead/ketjesrv2" inherits="Ketje">
+        <c>tests/SUPERCOP/KetjeSr/encrypt.c</c>
+        <h>tests/SUPERCOP/KetjeSr/api.h</h>
+    </fragment>
+
+    <fragment name="KetjeSrSelfTest" inherits="crypto_aead/ketjesrv2 crypto_aead_test">
+        <c>tests/SUPERCOP/KetjeSr/selftest.c</c>
+    </fragment>
+
+    <fragment name="KetjeSr-compact" inherits="Ketje KetSr-SnP reference400"/>
+    <fragment name="KetjeSr-AVR8" inherits="Ketje KetSr-SnP optimized400AVR8"/>
+    <fragment name="KetjeSr-ARMv6M" inherits="Ketje KetSr-optimizedLE  optimized400ARMv6M"/>
+    <fragment name="KetjeSr-ARMv7M" inherits="Ketje KetSr-ARMv7M"/>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_aead/ketjesrv2 KetjeSrSelfTest"/>
+            <factor set="KetjeSr-compact KetjeSr-AVR8 KetjeSr-ARMv6M KetjeSr-ARMv7M"/>
+        </product>
+    </group>
+
+    <!-- Ketje Minor -->
+
+    <fragment name="crypto_aead/ketjeminorv2" inherits="Ketje">
+        <c>tests/SUPERCOP/KetjeMn/encrypt.c</c>
+        <h>tests/SUPERCOP/KetjeMn/api.h</h>
+    </fragment>
+
+    <fragment name="KetjeMnSelfTest" inherits="crypto_aead/ketjeminorv2 crypto_aead_test">
+        <c>tests/SUPERCOP/KetjeMn/selftest.c</c>
+    </fragment>
+
+    <fragment name="KetjeMn-compact" inherits="Ketje KetMn-SnP compact800"/>
+    <fragment name="KetjeMn-AVR8" inherits="Ketje KetMn-SnP optimized800AVR8"/>
+    <fragment name="KetjeMn-generic32" inherits="Ketje KetMn-SnP optimized800u2"/>
+    <fragment name="KetjeMn-generic32lc" inherits="Ketje KetMn-SnP optimized800lcu2"/>
+    <fragment name="KetjeMn-ARMv6M" inherits="Ketje KetMn-optimizedLE optimized800ARMv6Mu2"/>
+    <fragment name="KetjeMn-ARMv7M" inherits="Ketje KetMn-SnP optimized800ARMv7Mu2"/>
+    <fragment name="KetjeMn-ARMv7A" inherits="Ketje KetMn-optimizedLE optimized800ARMv7Au2"/>
+    <fragment name="KetjeMn-ARMv8A" inherits="Ketje KetMn-optimizedLE optimized800ARMv8A"/>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_aead/ketjeminorv2 KetjeMnSelfTest"/>
+            <factor set="KetjeMn-compact KetjeMn-AVR8 KetjeMn-generic32 KetjeMn-generic32lc KetjeMn-ARMv6M KetjeMn-ARMv7M KetjeMn-ARMv7A KetjeMn-ARMv8A"/>
+        </product>
+    </group>
+
+    <!-- Ketje Major -->
+
+    <fragment name="crypto_aead/ketjemajorv2" inherits="Ketje">
+        <c>tests/SUPERCOP/KetjeMj/encrypt.c</c>
+        <h>tests/SUPERCOP/KetjeMj/api.h</h>
+    </fragment>
+
+    <fragment name="KetjeMjSelfTest" inherits="crypto_aead/ketjemajorv2 crypto_aead_test">
+        <c>tests/SUPERCOP/KetjeMj/selftest.c</c>
+    </fragment>
+
+    <fragment name="KetjeMj-compact" inherits="Ketje KetMj-SnP compact1600"/>
+    <fragment name="KetjeMj-AVR8" inherits="Ketje KetMj-SnP optimized1600AVR8"/>
+    <fragment name="KetjeMj-generic32" inherits="Ketje KetMj-SnP inplace1600bi"/>
+    <fragment name="KetjeMj-generic64" inherits="Ketje KetMj-SnP optimized1600ufull"/>
+    <fragment name="KetjeMj-generic64lc" inherits="Ketje KetMj-SnP optimized1600lcufull"/>
+    <fragment name="KetjeMj-ARMv6M" inherits="Ketje KetMj-optimizedLE optimized1600ARMv6Mu2"/>
+    <fragment name="KetjeMj-ARMv7M" inherits="Ketje KetMj-SnP inplace1600ARMv7M"/>
+    <fragment name="KetjeMj-ARMv7A" inherits="Ketje KetMj-optimizedLE optimized1600ARMv7A"/>
+    <fragment name="KetjeMj-ARMv8A" inherits="Ketje KetMj-optimizedLE optimized1600ARMv8A"/>
+
+    <group all="supercop">
+        <product delimiter="/">
+            <factor set="crypto_aead/ketjemajorv2 KetjeMjSelfTest"/>
+            <factor set="KetjeMj-compact KetjeMj-AVR8 KetjeMj-generic32 KetjeMj-generic64 KetjeMj-generic64lc KetjeMj-ARMv6M KetjeMj-ARMv7M KetjeMj-ARMv7A KetjeMj-ARMv8A"/>
         </product>
     </group>
 

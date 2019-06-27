@@ -138,7 +138,7 @@ static int Engine_Spark(Engine_Instance *instance, int EOMFlag, unsigned char le
 static int Engine_Spark(Engine_Instance *instance, int EOMFlag, unsigned char length, unsigned char lengthNext )
 {
     DeclarePistonIndex
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
     unsigned char   s[PlSnP_parallelism][SnP_width/8];
     #endif
 
@@ -158,7 +158,7 @@ static int Engine_Spark(Engine_Instance *instance, int EOMFlag, unsigned char le
             #endif
         }
     }
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
     if ( instance->pistons.file )
     {
         ForEveryPiston(0)
@@ -169,17 +169,17 @@ static int Engine_Spark(Engine_Instance *instance, int EOMFlag, unsigned char le
     }
     #endif
     State_Permute( instance->pistons.state );
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
     if ( instance->pistons.file )
     {
         memcpy( instance->pistons.stateShadow, instance->pistons.state, sizeof(instance->pistons.state) );
         ForEveryPiston(0)
         {
             fprintf( instance->pistons.file, "motWrap#%u XORed since last time", indexP );
-            displayByteString( instance->pistons.file, "", s[indexP], SnP_width/8 );
+            UT_displayByteString( instance->pistons.file, "", s[indexP], SnP_width/8 );
             State_ExtractBytes( instance->pistons.stateShadow, s[indexP], 0, SnP_width/8 );
             fprintf( instance->pistons.file, "motWrap#%u after f()", indexP );
-            displayByteString( instance->pistons.file, "", s[indexP], SnP_width/8 );
+            UT_displayByteString( instance->pistons.file, "", s[indexP], SnP_width/8 );
         }
     }
     #endif
@@ -193,7 +193,7 @@ static int Engine_Initialize(Engine_Instance *instance )
 {
     State_StaticInitialize();
     State_Initialize( instance->pistons.state );
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
     instance->pistons.file = 0;
     State_Initialize( instance->pistons.stateShadow );
     #endif

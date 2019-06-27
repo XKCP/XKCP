@@ -14,6 +14,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestSponge_h_
 #define _TestSponge_h_
 
+#include "config.h"
+#ifdef XKCP_has_Sponge_Keccak
 void testSponge(void);
+#endif
 
 #endif

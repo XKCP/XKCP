@@ -15,8 +15,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <xi:include href="lib/HighLevel.build"/>
     <xi:include href="lib/LowLevel.build"/>
-    <xi:include href="lib/Ketje.build"/>
-    <xi:include href="lib/Keyak.build"/>
     <xi:include href="tests/SUPERCOP/SUPERCOP.build"/>
     <xi:include href="tests/NIST_LWC/NIST_LWC.build"/>
     <xi:include href="doc/HOWTO-customize.build"/>
@@ -30,15 +28,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <!-- *** Utilities *** -->
 
-    <!-- To run many tests -->
-    <fragment name="KeccakTests" inherits="All">
+    <!-- The unit tests -->
+    <fragment name="UT" inherits="common">
         <c>tests/UnitTests/main.c</c>
-        <c>tests/UnitTests/testSnP.c</c>
+        <c>tests/UnitTests/UT.c</c>
+        <h>tests/UnitTests/UT.h</h>
+        <c>tests/UnitTests/testPermutations.c</c>
+        <h>tests/UnitTests/testPermutations.h</h>
         <h>tests/UnitTests/testSnP.inc</h>
-        <h>tests/UnitTests/testSnP.h</h>
-        <c>tests/UnitTests/testPlSnP.c</c>
         <h>tests/UnitTests/testPlSnP.inc</h>
-        <h>tests/UnitTests/testPlSnP.h</h>
         <c>tests/UnitTests/testSponge.c</c>
         <h>tests/UnitTests/testSponge.inc</h>
         <h>tests/UnitTests/testSponge.h</h>
@@ -56,16 +54,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>tests/UnitTests/testKetjev2.inc</h>
         <c>tests/UnitTests/genKAT.c</c>
         <h>tests/UnitTests/genKAT.h</h>
-        <c>tests/UnitTests/testPerformance.c</c>
-        <h>tests/UnitTests/timing.h</h>
-        <h>tests/UnitTests/testPerformance.h</h>
-        <h>tests/UnitTests/timingSnP.inc</h>
-        <h>tests/UnitTests/timingPlSnP.inc</h>
-        <h>tests/UnitTests/timingSponge.inc</h>
-        <h>tests/UnitTests/timingKeyak.inc</h>
-        <c>tests/UnitTests/testKeccakPRG.c</c>
-        <h>tests/UnitTests/testKeccakPRG.inc</h>
-        <h>tests/UnitTests/testKeccakPRG.h</h>
+        <c>tests/UnitTests/testPRG.c</c>
+        <h>tests/UnitTests/testPRG.inc</h>
+        <h>tests/UnitTests/testPRG.h</h>
         <c>tests/UnitTests/testKangarooTwelve.c</c>
         <h>tests/UnitTests/testKangarooTwelve.h</h>
         <c>tests/UnitTests/testKravatte.c</c>
@@ -74,8 +65,36 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>tests/UnitTests/testKravatteModes.h</h>
         <c>tests/UnitTests/testSP800-185.c</c>
         <h>tests/UnitTests/testSP800-185.h</h>
+        <c>tests/UnitTests/testXoofff.c</c>
+        <h>tests/UnitTests/testXoofff.h</h>
+        <c>tests/UnitTests/testXoofffModes.c</c>
+        <h>tests/UnitTests/testXoofffModes.h</h>
+        <c>tests/UnitTests/testXoodyak.c</c>
+        <h>tests/UnitTests/testXoodyak.h</h>
+    </fragment>
+
+    <fragment name="UnitTests" inherits="All UT"/>
+
+
+    <!-- The benchmarking tool -->
+
+    <fragment name="BM" inherits="common">
+        <c>tests/Benchmarks/main.c</c>
+        <c>tests/Benchmarks/testPerformance.c</c>
+        <h>tests/Benchmarks/timing.h</h>
+        <h>tests/Benchmarks/testPerformance.h</h>
+        <h>tests/Benchmarks/timingSnP.inc</h>
+        <h>tests/Benchmarks/timingPlSnP.inc</h>
+        <h>tests/Benchmarks/timingSponge.inc</h>
+        <h>tests/Benchmarks/timingKeyak.inc</h>
+        <c>tests/Benchmarks/testXooPerformance.c</c>
+        <h>tests/Benchmarks/testXooPerformance.h</h>
+        <h>tests/Benchmarks/timingXooSnP.inc</h>
+        <h>tests/Benchmarks/timingXooPlSnP.inc</h>
         <gcc>-lm</gcc>
     </fragment>
+
+    <fragment name="Benchmarks" inherits="All BM"/>
 
     <!-- To compute a hash of a file -->
     <fragment name="KeccakSum" inherits="FIPS202 SP800-185 KangarooTwelve">
@@ -85,8 +104,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <!-- To make a library -->
-    <fragment name="libkeccak.a" inherits="All"/>
-    <fragment name="libkeccak.so" inherits="All"/>
+    <fragment name="libXKCP.a" inherits="All"/>
+    <fragment name="libXKCP.so" inherits="All"/>
 
     <!-- *** CAESAR-related targets *** -->
 
@@ -94,39 +113,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>tests/SUPERCOP/test_crypto_aead.h</h>
         <c>tests/SUPERCOP/test_crypto_aead.c</c>
     </fragment>
-
-    <!-- *** Xoo *** -->
-
-    <fragment name="XooTests" inherits="XooAll">
-        <c>tests/UnitTests/testXooMain.c</c>
-        <c>tests/UnitTests/testXooSnP.c</c>
-        <h>tests/UnitTests/testXooSnP.inc</h>
-        <h>tests/UnitTests/testXooSnP.h</h>
-        <c>tests/UnitTests/testXooPlSnP.c</c>
-        <h>tests/UnitTests/testXooPlSnP.inc</h>
-        <h>tests/UnitTests/testXooPlSnP.h</h>
-        <c>tests/UnitTests/testXoofff.c</c>
-        <h>tests/UnitTests/testXoofff.h</h>
-        <c>tests/UnitTests/testXoofffModes.c</c>
-        <h>tests/UnitTests/testXoofffModes.h</h>
-        <c>tests/UnitTests/testXoodyak.c</c>
-        <h>tests/UnitTests/testXoodyak.h</h>
-
-        <c>tests/UnitTests/testXooPerformance.c</c>
-        <h>tests/UnitTests/testXooPerformance.h</h>
-        <h>tests/UnitTests/timing.h</h>
-        <h>tests/UnitTests/timingXooSnP.inc</h>
-        <h>tests/UnitTests/timingXooPlSnP.inc</h>
-
-        <h>lib/low/common/SnP-Relaned.h</h>
-        <c>lib/high/Keccak/KeccakSpongeWidth1600.c</c>
-        <h>lib/high/Keccak/KeccakSpongeWidth1600.h</h>
-        <gcc>-lm</gcc>
-    </fragment>
-
-    <!-- To make a library -->
-    <fragment name="libXoo.a" inherits="XooAll"/>
-    <fragment name="libXoo.so" inherits="XooAll"/>
 
     <!-- *** Targets *** -->
 
@@ -142,7 +128,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     <!-- Reference implementations dedicated to 32-bit platforms
         (i.e., featuring bit interleaving for Keccak-p[1600]) -->
-    <fragment name="reference32bits" inherits="reference200 reference400 reference800 reference1600-32bits serial-fallbacks Ket-SnP">
+    <fragment name="reference32bits" inherits="reference200 reference400 reference800 reference1600-32bits serial-fallbacks Ket-SnP XooReference XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1">
         <c>tests/UnitTests/displayIntermediateValues.c</c>
         <h>tests/UnitTests/displayIntermediateValues.h</h>
         <define>KeccakReference</define>
@@ -151,30 +137,30 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <!-- Compact implementations -->
-    <fragment name="compact" inherits="compact200 reference400 compact800 compact1600 serial-fallbacks Ket-SnP"/>
+    <fragment name="compact" inherits="compact200 reference400 compact800 compact1600 serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
 
     <!-- Generically optimized 32-bit implementations -->
-    <fragment name="generic32" inherits="no_parallel reference200 reference400 optimized800u2 inplace1600bi serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
+    <fragment name="generic32" inherits="reference200 reference400 optimized800u2 inplace1600bi serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
     <!-- Generically optimized 32-bit implementations, featuring lane complementing -->
-    <fragment name="generic32lc" inherits="reference200 reference400 optimized800lcu2 inplace1600bi serial-fallbacks Ket-SnP"/>
+    <fragment name="generic32lc" inherits="reference200 reference400 optimized800lcu2 inplace1600bi serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
 
     <!-- Generically optimized 64-bit implementations -->
-    <fragment name="generic64" inherits="reference200 reference400 optimized800ufull optimized1600ufull serial-fallbacks Ket-SnP"/>
+    <fragment name="generic64" inherits="reference200 reference400 optimized800ufull optimized1600ufull serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
     <!-- Generically optimized 64-bit implementations, featuring lane complementing -->
-    <fragment name="generic64lc" inherits="reference200 reference400 optimized800lcufull optimized1600lcufull serial-fallbacks Ket-SnP"/>
+    <fragment name="generic64lc" inherits="reference200 reference400 optimized800lcufull optimized1600lcufull serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
 
     <!-- Assembler optimized 64-bit implementations -->
-    <fragment name="asmX86-64" inherits="reference200 reference400 reference800 optimized1600AsmX86-64 serial-fallbacks Ket-SnP"/>
+    <fragment name="asmX86-64" inherits="reference200 reference400 reference800 optimized1600AsmX86-64 serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
     <!-- Assembler optimized 64-bit implementations -->
-    <fragment name="asmX86-64shld" inherits="reference200 reference400 reference800 optimized1600AsmX86-64shld serial-fallbacks Ket-SnP"/>
+    <fragment name="asmX86-64shld" inherits="reference200 reference400 reference800 optimized1600AsmX86-64shld serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
 
     <!-- Implementations selected for the Nehalem microarchitecture -->
     <fragment name="Nehalem" inherits="reference200 reference400 optimized800lcufull optimized1600lcufull SIMD128-SSE2u2 1600times4on2 1600times8on2 Ket-SnP XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
 
 	<!-- Implementations selected for the Sandy Bridge microarchitecture -->
-    <fragment name="SandyBridge" inherits="reference200 reference400 optimized800lcufull optimized1600lcufullshld SIMD128-SSE2ufull 1600times4on2 1600times8on2 Ket-SnP"/>
+    <fragment name="SandyBridge" inherits="reference200 reference400 optimized800lcufull optimized1600lcufullshld SIMD128-SSE2ufull 1600times4on2 1600times8on2 Ket-SnP XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
     <!-- Implementations selected for the Bulldozer microarchitecture -->
-    <fragment name="Bulldozer" inherits="reference200 reference400 optimized800lcufull optimized1600XOPufull SIMD128-XOPufull 1600times4on2 1600times8on2 Ket-SnP"/>
+    <fragment name="Bulldozer" inherits="reference200 reference400 optimized800lcufull optimized1600XOPufull SIMD128-XOPufull 1600times4on2 1600times8on2 Ket-SnP XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
     <!-- Implementations selected for the Haswell and Skylake microarchitectures -->
     <fragment name="Haswell" inherits="reference200 reference400 optimized800lcufull optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4 Ket-SnP XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_AVX2 XooOptimizedTimes16_On1"/>
 
@@ -189,35 +175,26 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="ARMv7A" inherits="reference200 reference400 optimized800ARMv7Au2 optimized1600ARMv7A 1600times2ARMV7A 1600times4on2 1600times8on2 Ket-optimizedLE XooOptimizedARMv7A XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
 
     <!-- Implementations selected for ARMv8A -->
-    <fragment name="ARMv8A" inherits="reference200 reference400 optimized800ARMv8A optimized1600ARMv8A serial-fallbacks Ket-optimizedLE"/>
+    <fragment name="ARMv8A" inherits="reference200 reference400 optimized800ARMv8A optimized1600ARMv8A serial-fallbacks Ket-optimizedLE XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
 
     <!-- Implementations selected for 8-bit AVR -->
-    <fragment name="AVR8" inherits="optimized200AVR8 optimized400AVR8 optimized800AVR8 optimized1600AVR8 serial-fallbacks Ket-SnP"/>
+    <fragment name="AVR8" inherits="optimized200AVR8 optimized400AVR8 optimized800AVR8 optimized1600AVR8 serial-fallbacks Ket-SnP XooOptimized32 XooOptimizedTimes4_On1 XooOptimizedTimes8_On1 XooOptimizedTimes16_On1"/>
 
     <!-- Target names are of the form x/y where x is taken from the first set and y from the second set. -->
-    <group all="Keccak">
+    <group all="XKCP">
         <product delimiter="/">
             <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell SkylakeX ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
-            <factor set="KeccakTests KeccakSum libkeccak.a libkeccak.so"/>
+            <factor set="UnitTests Benchmarks KeccakSum libXKCP.a libXKCP.so"/>
         </product>
     </group>
-
-    
     
     <!-- Reference implementations -->
-    <fragment name="Xreference" inherits="XooReference no_parallel">
+    <fragment name="Xreference" inherits="XooReference">
         <define>XooReference</define>
         <gcc>-O</gcc>
     </fragment>
 
-    <fragment name="Xoptimized32" inherits="XooOptimized32 no_parallel"/>
-
-    <group all="Xoodoo">
-        <product delimiter="/">
-            <factor set="reference generic32 Nehalem Haswell SkylakeX ARMv6M ARMv7M ARMv7A"/>
-            <factor set="XooTests libXoo.a libXoo.so"/>
-        </product>
-    </group>
+    <fragment name="Xoptimized32" inherits="XooOptimized32"/>
 
     <group all="Xoodyak">
         <product delimiter="/">

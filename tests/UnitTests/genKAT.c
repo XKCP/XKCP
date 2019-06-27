@@ -40,6 +40,9 @@ and related or neighboring rights to the contributed source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#include "config.h"
+#ifdef XKCP_has_FIPS202
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -66,7 +69,6 @@ void convertShortMsgToPureLSB(void);
 STATUS_CODES
 genKAT_main(void)
 {
-#ifndef KeccakP1600_excluded
     /* The following instances are from the FIPS 202 standard. */
     /* http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf */
     /*  */
@@ -91,7 +93,6 @@ genKAT_main(void)
     genShortMsgHash(576, 1024, 0x06, 512, 0,
         "ShortMsgKAT_SHA3-512.txt",
         "Keccak(input|01)[r=576, c=1024] truncated to 512 bits, or SHA3-512 as in FIPS 202 standard");
-#endif
     return KAT_SUCCESS;
 }
 
@@ -290,3 +291,4 @@ fprintBstr(FILE *fp, char *S, BitSequence *A, int L)
 
     fprintf(fp, "\n");
 }
+#endif /* XKCP_has_FIPS202 */

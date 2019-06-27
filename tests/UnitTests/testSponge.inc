@@ -96,7 +96,7 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
                     assert(result == 0);
                     for(i = offset + size; i<sizeof(output); i++)
                         if (output[i] != filler) {
-                            #ifndef EMBEDDED
+                            #ifndef UT_EMBEDDED
                             printf("Out of range data written!\n");
                             #endif
                             abort();
@@ -115,7 +115,7 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
             assert(result == 0);
         }
         
-#ifdef VERBOSE
+#ifdef UT_VERBOSE
         printf("Keccak[r=%d, c=%d]\n", rate, capacity);
         printf("Input of %d bits:", inputBitLength);
         for(i=0; i<inputByteLengthCeiling; i++)
@@ -130,7 +130,7 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
         SpongeAbsorb(&spongeChecksum, output, outputByteSize);
     }
     SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
-#ifdef VERBOSE
+#ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Keccak[r=%d, c=%d]\n", rate, capacity);
@@ -150,7 +150,7 @@ void selfTestSponge(unsigned int rate, unsigned int capacity, int flavor, const 
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestSponge(FILE *f, unsigned int rate, unsigned int capacity)
 {
     unsigned char checksum[checksumByteSize];

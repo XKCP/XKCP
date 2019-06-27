@@ -24,14 +24,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 void test( const char *file, const unsigned char *expected )
 {
     int Klen;
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
         FILE *f = fopen(file, "w");
     #endif
     Ketje_Instance checksum;
     unsigned char overallChecksum[16];
 
-#ifdef OUTPUT
-    assert(f != NULL, "Could not open log file");
+#ifdef UT_OUTPUT
+    UT_assert(f != NULL, "Could not open log file");
 #endif
 
     Ketje_Initialize(&checksum, 0, 0, 0, 0);
@@ -50,17 +50,17 @@ void test( const char *file, const unsigned char *expected )
             unsigned char nonce[SnP_width/8];
             unsigned int Alen;
 
-#ifdef OUTPUT
+#ifdef UT_VERBOSE
             #define kname(nnn) #nnn
             printf( "%s, key length is %u bits, nonce length is %u bits\n", kname(prefix), keySizeInBits, nonceSizeInBits );
             #undef kname
 #endif
-            generateSimpleRawMaterial(key, Klen, 0x12 + Nlen + Klen, 3);
-            generateSimpleRawMaterial(nonce, Nlen, 0x23 + Nlen + Klen, 6);
+            UT_generateSimpleRawMaterial(key, Klen, 0x12 + Nlen + Klen, 3);
+            UT_generateSimpleRawMaterial(nonce, Nlen, 0x23 + Nlen + Klen, 6);
 
 
-            assert( Ketje_Initialize( &ketje1, key, keySizeInBits, nonce, nonceSizeInBits) == 0, "Ketje_Initialize 1 did not return zero" );
-            assert( Ketje_Initialize( &ketje2, key, keySizeInBits, nonce, nonceSizeInBits) == 0, "Ketje_Initialize 2 did not return zero" );
+            UT_assert( Ketje_Initialize( &ketje1, key, keySizeInBits, nonce, nonceSizeInBits) == 0, "Ketje_Initialize 1 did not return zero" );
+            UT_assert( Ketje_Initialize( &ketje2, key, keySizeInBits, nonce, nonceSizeInBits) == 0, "Ketje_Initialize 2 did not return zero" );
 
             if ( (keySizeInBits % 8) != 0)
             {
@@ -71,11 +71,11 @@ void test( const char *file, const unsigned char *expected )
                 nonce[nonceSizeInBits / 8] &= (1 << (nonceSizeInBits % 8)) - 1;
             }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
             fprintf(f, "***\n");
             fprintf(f, "initialize with key of %u bits, nonce of %u bits:\n", keySizeInBits, nonceSizeInBits );
-            displayByteString(f, "> K (key)", key, (keySizeInBits+7)/8);
-            displayByteString(f, "> N (nonce)", nonce, (nonceSizeInBits+7)/8);
+            UT_displayByteString(f, "> K (key)", key, (keySizeInBits+7)/8);
+            UT_displayByteString(f, "> N (nonce)", nonce, (nonceSizeInBits+7)/8);
             fprintf(f, "\n");
 #endif
 
@@ -93,70 +93,70 @@ void test( const char *file, const unsigned char *expected )
                         unsigned char plaintextPrime[400];
                         unsigned char tag1[32], tag2[32];
                         /* printf("Alen %u, Blen %u\n", Alen, Blen); */
-                        generateSimpleRawMaterial(associatedData, Alen, 0x34+Alen+Blen+(ell/8), 4);
-                        generateSimpleRawMaterial(plaintext, Blen, 0x45+Alen+Blen+(ell/8), 7);
+                        UT_generateSimpleRawMaterial(associatedData, Alen, 0x34+Alen+Blen+(ell/8), 4);
+                        UT_generateSimpleRawMaterial(plaintext, Blen, 0x45+Alen+Blen+(ell/8), 7);
 
-#ifdef OUTPUT
-                        displayByteString(f, "> A (associated data)", associatedData, Alen);
-                        displayByteString(f, "> B (plaintext)", plaintext, Blen);
+#ifdef UT_OUTPUT
+                        UT_displayByteString(f, "> A (associated data)", associatedData, Alen);
+                        UT_displayByteString(f, "> B (plaintext)", plaintext, Blen);
 #endif
                         {
                             unsigned int split = myMin(Alen/4, (unsigned int)200);
                             unsigned int i;
 
                             for(i=0; i<split; i++)
-                                assert( Ketje_FeedAssociatedData( &ketje1, associatedData+i, 1) == 0, "Ketje_FeedAssociatedData 1a did not return zero" );
+                                UT_assert( Ketje_FeedAssociatedData( &ketje1, associatedData+i, 1) == 0, "Ketje_FeedAssociatedData 1a did not return zero" );
                             if (split < Alen)
-                                assert( Ketje_FeedAssociatedData( &ketje1, associatedData+split, Alen-split) == 0, "Ketje_FeedAssociatedData 1b did not return zero" );
+                                UT_assert( Ketje_FeedAssociatedData( &ketje1, associatedData+split, Alen-split) == 0, "Ketje_FeedAssociatedData 1b did not return zero" );
                         }
 
                         {
                             unsigned int split = Blen/3;
                             memcpy(ciphertext, plaintext, split);
-                            assert( Ketje_WrapPlaintext( &ketje1, ciphertext, ciphertext, split) == 0, "Ketje_WrapPlaintext 1a did not return zero" ); /* in place */
-                            assert( Ketje_WrapPlaintext( &ketje1, plaintext+split, ciphertext+split, Blen-split) == 0, "Ketje_WrapPlaintext 1b did not return zero" );
+                            UT_assert( Ketje_WrapPlaintext( &ketje1, ciphertext, ciphertext, split) == 0, "Ketje_WrapPlaintext 1a did not return zero" ); /* in place */
+                            UT_assert( Ketje_WrapPlaintext( &ketje1, plaintext+split, ciphertext+split, Blen-split) == 0, "Ketje_WrapPlaintext 1b did not return zero" );
                         }
-                        assert( Ketje_GetTag( &ketje1, tag1, ell/8) == 0, "Ketje_GetTag 1 did not return zero" );
+                        UT_assert( Ketje_GetTag( &ketje1, tag1, ell/8) == 0, "Ketje_GetTag 1 did not return zero" );
 
-#ifdef OUTPUT
-                        displayByteString(f, "< C (ciphertext)", ciphertext, Blen);
-                        displayByteString(f, "< T (tag)", tag1, ell/8);
+#ifdef UT_OUTPUT
+                        UT_displayByteString(f, "< C (ciphertext)", ciphertext, Blen);
+                        UT_displayByteString(f, "< T (tag)", tag1, ell/8);
 #endif
-                        assert( Ketje_FeedAssociatedData( &ketje2, associatedData, Alen) == 0, "Ketje_FeedAssociatedData 2 did not return zero" );
+                        UT_assert( Ketje_FeedAssociatedData( &ketje2, associatedData, Alen) == 0, "Ketje_FeedAssociatedData 2 did not return zero" );
                         {
                             unsigned int split = Blen/3*2;
                             memcpy(plaintextPrime, ciphertext, split);
-                            assert( Ketje_UnwrapCiphertext(&ketje2, plaintextPrime, plaintextPrime, split) == 0, "Ketje_UnwrapCiphertext 2a did not return zero" ); /* in place */
-                            assert( Ketje_UnwrapCiphertext(&ketje2, ciphertext+split, plaintextPrime+split, Blen-split) == 0, "Ketje_UnwrapCiphertext 2b did not return zero" );
+                            UT_assert( Ketje_UnwrapCiphertext(&ketje2, plaintextPrime, plaintextPrime, split) == 0, "Ketje_UnwrapCiphertext 2a did not return zero" ); /* in place */
+                            UT_assert( Ketje_UnwrapCiphertext(&ketje2, ciphertext+split, plaintextPrime+split, Blen-split) == 0, "Ketje_UnwrapCiphertext 2b did not return zero" );
                         }
-#ifdef OUTPUT
+#ifdef UT_VERBOSE
                         if (memcmp(plaintext, plaintextPrime, Blen) != 0) { /* !!! */
                             printf("keySizeInBits: %d\n", keySizeInBits);
                             printf("nonceSizeInBits: %d\n", nonceSizeInBits);
                             printf("Alen: %d\n", Alen);
                             printf("Blen: %d\n", Blen);
-                            displayByteString(stdout, "plaintext     ", plaintext, Blen);
-                            displayByteString(stdout, "plaintextPrime", plaintextPrime, Blen);
+                            UT_displayByteString(stdout, "plaintext     ", plaintext, Blen);
+                            UT_displayByteString(stdout, "plaintextPrime", plaintextPrime, Blen);
                         }
 #endif
-                        assert( !memcmp(plaintext, plaintextPrime, Blen), "Unwrapped plaintext does not match" );
-                        assert( Ketje_GetTag( &ketje2, tag2, ell/8) == 0, "Ketje_GetTag 2 did not return zero" );
-#ifdef OUTPUT
+                        UT_assert( !memcmp(plaintext, plaintextPrime, Blen), "Unwrapped plaintext does not match" );
+                        UT_assert( Ketje_GetTag( &ketje2, tag2, ell/8) == 0, "Ketje_GetTag 2 did not return zero" );
+#ifdef UT_VERBOSE
                         if (memcmp(tag1, tag2, ell/8) != 0) { /* !!! */
                             printf("keySizeInBits: %d\n", keySizeInBits);
                             printf("nonceSizeInBits: %d\n", nonceSizeInBits);
                             printf("Alen: %d\n", Alen);
                             printf("Blen: %d\n", Blen);
-                            displayByteString(stdout, "tag1", tag1, ell/8);
-                            displayByteString(stdout, "tag2", tag2, ell/8);
+                            UT_displayByteString(stdout, "tag1", tag1, ell/8);
+                            UT_displayByteString(stdout, "tag2", tag2, ell/8);
                         }
 #endif
-                        assert( !memcmp(tag1, tag2, ell/8), "Tags do not match" );
+                        UT_assert( !memcmp(tag1, tag2, ell/8), "Tags do not match" );
 
                         Ketje_FeedAssociatedData(&checksum, ciphertext, Blen);
                         Ketje_FeedAssociatedData(&checksum, tag1, ell/8);
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
                         fprintf(f, "\n");
 #endif
                     }
@@ -166,11 +166,11 @@ void test( const char *file, const unsigned char *expected )
     }
     Ketje_WrapPlaintext(&checksum, 0, 0, 0);
     Ketje_GetTag(&checksum, overallChecksum, 16);
-#ifdef OUTPUT
-    displayByteString(f, "+++ Global tag ", overallChecksum, 16);
+#ifdef UT_OUTPUT
+    UT_displayByteString(f, "+++ Global tag ", overallChecksum, 16);
     fclose(f);
 #endif
-    assert(memcmp(overallChecksum, expected, 16) == 0, "The global tag does not match.");
+    UT_assert(memcmp(overallChecksum, expected, 16) == 0, "The global tag does not match.");
 }
 
 #undef Ketje_Instance

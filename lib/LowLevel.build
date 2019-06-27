@@ -93,8 +93,8 @@ The fragments below allow to select the desired implementation of the permutatio
 * 1600times4on1: a stub that calls Keccak-p[1600] four times (requires an implementation of Keccak-p[1600])
 * 1600times4on2: a stub that calls Keccak-p[1600]×2 twice (requires an implementation of Keccak-p[1600]×2)
 * SIMD256-AVX2u6: an implementation taking advantage of the AVX2 instruction set, with 6 rounds unrolled
-* SIMD256-AVXu12: same as SIMD256-AVX2u6, but with 12 rounds unrolled
-* SIMD256-AVXufull: same as SIMD256-AVX2u6, but with all rounds unrolled
+* SIMD256-AVX2u12: same as SIMD256-AVX2u6, but with 12 rounds unrolled
+* SIMD256-AVX2ufull: same as SIMD256-AVX2u6, but with all rounds unrolled
 * SIMD512-4-AVX512u4: an implementation taking advantage of the AVX512 instruction set, with 4 rounds unrolled
 * SIMD512-4-AVX512u12: same as SIMD512-4-AVX512u4, but with 12 rounds unrolled
 * SIMD512-4-AVX512ufull: same as SIMD512-4-AVX512u4, but with all rounds unrolled
@@ -604,10 +604,6 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/KeccakP-1600-times8/SIMD512/AVX512ufull/SIMD512-config.h</h>
     </fragment>
 
-    <fragment name="no_parallel1600">
-        <define>KeccakP1600timesN_excluded</define>
-    </fragment>
-
     <!-- ++++++++++++++++++++++++ Xoodoo +++++++++++++++++++++ -->
 
     <fragment name="Xoodoo">
@@ -719,8 +715,32 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/Xoodoo-times16/SIMD512/Xoodoo-times16-SnP.h</h>
     </fragment>
 
-    <fragment name="no_parallel">
-        <define>XoodooMaxParallellism=1</define>
+<!--
+For Ketje, one of the following fragments is required:
+* Ket-SnP: to glue the Ketje implementation to an implementation of the permutation with SnP (default choice)
+* Ket-ARMv7M: same as Ket{Jr, Sr, Mn, Mj}-SnP, but with specific optimizations for ARMv7M
+* Ket-optimizedLE: same as Ket{Jr, Sr, Mn, Mj}-SnP, but with specific optimizations for other ARM plaforms (ARMv6M, ARMv7A, ARMv8A)
+-->
+
+    <!-- "Ket", the layer between SnP and Ketje services -->
+
+    <fragment name="Ket-SnP">
+        <h>lib/low/Ketje/SnP-compliant/Ket.inc</h>
+        <h>lib/low/Ketje/SnP-compliant/Ket.h</h>
+        <c>lib/low/Ketje/SnP-compliant/Ket.c</c>
+    </fragment>
+
+    <fragment name="Ket-optimizedLE">
+        <h>lib/low/Ketje/OptimizedLE/Ket.inc</h>
+        <h>lib/low/Ketje/OptimizedLE/Ket.h</h>
+        <c>lib/low/Ketje/OptimizedLE/Ket.c</c>
+    </fragment>
+
+    <fragment name="Ket-ARMv7M">
+        <h>lib/low/Ketje/OptimizedAsmARM/Ket.h</h>
+        <c>lib/low/Ketje/OptimizedAsmARM/KetjeJr-armv7m-le-gcc.s</c>
+        <c>lib/low/Ketje/OptimizedAsmARM/KetjeSr-armv7m-le-gcc.s</c>
+        <!-- TODO: <fragment name="Ket-ARMv7M" inherits="KetJr-ARMv7M KetSr-ARMv7M KetMn-optimizedLE KetMj-SnP"/> -->
     </fragment>
 
 </group>

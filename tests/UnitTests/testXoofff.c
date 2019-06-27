@@ -9,11 +9,21 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include "KeccakSpongeWidth1600.h"
-#include "Xoofff.h"
+#include "config.h"
+#ifdef XKCP_has_Xoofff
 
-/* #define OUTPUT */
-/* #define VERBOSE */
+#ifndef XKCP_has_Sponge_Keccak
+#error This test requires an implementation of the Keccak sponge
+#endif
+#include "KeccakSponge.h"
+#ifndef XKCP_has_Sponge_Keccak_width1600
+#error This test requires an implementation of the Keccak sponge with width 1600
+#endif
+
+#include <stdlib.h>
+#include <time.h>
+#include "Xoofff.h"
+#include "UT.h"
 
 #if defined(XoodooSmallRAM)
     #define    XoodooSizeMultiplier    2
@@ -31,23 +41,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define keyBitSize              (keyByteSize*8)
 #define checksumByteSize        16
 
-#if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
-#include <stdio.h>
-#endif
-#include <stdlib.h>
-#include <time.h>
-
-#if defined(EMBEDDED)
-void assert(int condition);
-uint8_t random8( void );
-#define rand    random8
-#else
-#include <assert.h>
-#endif
+static void assert(int condition)
+{
+    UT_assert(condition, "");
+}
 
 static void randomize( unsigned char* data, unsigned int length)
 {
-    #if !defined(EMBEDDED)
+    #if !defined(UT_EMBEDDED)
     srand((unsigned int)time(0));
     #endif
     while (length--)
@@ -93,7 +94,7 @@ static void performTestXoofffOneInput(BitLength keyLen, BitLength inputLen, BitL
     if (keyLen & 7)
         key[keyLen / 8] &= (1 << (keyLen & 7)) - 1;
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, outputLen %5u, inputLen %5u (in bits)\n", (unsigned int)keyLen, (unsigned int)outputLen, (unsigned int)inputLen);
     #endif
 
@@ -156,7 +157,7 @@ static void performTestXoofffOneInput(BitLength keyLen, BitLength inputLen, BitL
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (outputLen + 7) / 8);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
 
@@ -204,7 +205,7 @@ static void performTestXoofff(unsigned char *checksum, unsigned int mode)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width_sponge, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     outputLen = 128*8;
@@ -214,7 +215,7 @@ static void performTestXoofff(unsigned char *checksum, unsigned int mode)
         performTestXoofffOneInput(keyLen, inputLen, outputLen, flags, &spongeChecksum, mode);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("i ");
     #endif
     outputLen = 128*8;
@@ -223,7 +224,7 @@ static void performTestXoofff(unsigned char *checksum, unsigned int mode)
         performTestXoofffOneInput(keyLen, inputLen, outputLen, flags, &spongeChecksum, mode);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("o ");
     #endif
     inputLen = 64*8;
@@ -234,7 +235,7 @@ static void performTestXoofff(unsigned char *checksum, unsigned int mode)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Xoofff\n" );
@@ -251,23 +252,15 @@ void selfTestXoofff(const unsigned char *expected)
     unsigned char checksum[checksumByteSize];
     unsigned int mode;
 
+    UT_startTest("Xoofff", "");
     for(mode = 0; mode <= 2; ++mode) {
-        #ifdef OUTPUT
-        printf("Testing Xoofff %u ", mode);
-        fflush(stdout);
-        #endif
         performTestXoofff(checksum, mode);
-        #ifdef OUTPUT
-        fflush(stdout);
-        #endif
         assert(memcmp(expected, checksum, checksumByteSize) == 0);
-        #ifdef OUTPUT
-        printf(" - OK.\n");
-        #endif
     }
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestXoofffOne(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -342,8 +335,7 @@ void printXoofffTestVectors()
 
 void testXoofff(void)
 {
-#ifndef KeccakP1600_excluded
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 /*    printXoofffTestVectors(); */
     writeTestXoofff("Xoofff.txt");
 #endif
@@ -352,5 +344,5 @@ void testXoofff(void)
 #else
     selfTestXoofff((const unsigned char *)"\xca\x8e\x19\x14\xb6\xe2\x8f\xeb\x5f\xcb\xd2\x7d\xc2\x39\x2b\xd5");
 #endif
-#endif
 }
+#endif /* XKCP_has_Xoofff */

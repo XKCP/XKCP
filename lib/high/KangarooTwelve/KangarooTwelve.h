@@ -12,11 +12,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _KangarooTwelve_h_
 #define _KangarooTwelve_h_
 
-#ifndef KeccakP1600_excluded
+#include "config.h"
+#ifdef XKCP_has_KeccakP1600
 
 #include <stddef.h>
 #include "align.h"
-#include "KeccakSpongeWidth1600.h"
+#include "KeccakSponge.h"
 #include "Phases.h"
 
 typedef KCP_Phases KangarooTwelve_Phases;
@@ -84,6 +85,8 @@ int KangarooTwelve_Final(KangarooTwelve_Instance *ktInstance, unsigned char *out
   */
 int KangarooTwelve_Squeeze(KangarooTwelve_Instance *ktInstance, unsigned char *output, size_t outputByteLen);
 
+#else
+#error This requires an implementation of Keccak-p[1600]
 #endif
 
 #endif

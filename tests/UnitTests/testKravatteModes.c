@@ -9,22 +9,14 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#include "config.h"
+#ifdef XKCP_has_Kravatte
+
+#include <stdlib.h>
+#include <time.h>
 #include "KeccakSponge.h"
 #include "KravatteModes.h"
-
-#if !defined(EMBEDDED)
-#define OUTPUT
-/* #define VERBOSE_SANE */
-/* #define VERBOSE_SANSE */
-/* #define VERBOSE_WBC */
-/* #define VERBOSE_WBC_AE */
-#else
-#undef OUTPUT
-#undef VERBOSE_SANE
-#undef VERBOSE_SANSE
-#undef VERBOSE_WBC
-#undef VERBOSE_WBC_AE
-#endif
+#include "UT.h"
 
 #define SnP_width               1600
 #define dataByteSize            (16*SnP_widthInBytes)
@@ -41,27 +33,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define checksumByteSize        16
 
-#if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
-#include <stdio.h>
-#endif
-#include <stdlib.h>
-#include <time.h>
-
-#if defined(EMBEDDED)
 static void assert(int condition)
 {
-    if (!condition)
-    {
-        for ( ; ; ) ;
-    }
+    UT_assert(condition, "");
 }
-#else
-#include <assert.h>
-#endif
 
 static void randomize( unsigned char* data, unsigned int length)
 {
-    #if !defined(EMBEDDED)
+    #if !defined(UT_EMBEDDED)
     srand((unsigned int)time(0));
     while (length--)
     {
@@ -84,7 +63,7 @@ static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, 
     }
 }
 
-#if defined(OUTPUT)
+#if defined(UT_OUTPUT)
 static void outputHex(const unsigned char *data, unsigned char length)
 {
     unsigned int i;
@@ -137,7 +116,7 @@ static void performTestKravatte_SANE_OneInput(BitLength keyLen, BitLength nonceL
     if (ADLen & 7)
         AD[ADLen / 8] &= (1 << (ADLen & 7)) - 1;
 
-    #ifdef VERBOSE_SANE
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, nonceLen %5u, dataLen %5u, ADLen %5u (in bits)\n", (unsigned int)keyLen, (unsigned int)nonceLen, (unsigned int)dataLen, (unsigned int)ADLen);
     #endif
 
@@ -148,7 +127,7 @@ static void performTestKravatte_SANE_OneInput(BitLength keyLen, BitLength nonceL
     assert(!memcmp(tag, tagInit, Kravatte_SANE_TagLength));
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tagInit, Kravatte_SANE_TagLength);
 
-    #ifdef VERBOSE_SANE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         unsigned int len;
@@ -195,7 +174,7 @@ static void performTestKravatte_SANE_OneInput(BitLength keyLen, BitLength nonceL
         assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tag, Kravatte_SANE_TagLength);
-        #ifdef VERBOSE_SANE
+        #ifdef UT_VERBOSE
         {
             unsigned int i;
             unsigned int len;
@@ -234,7 +213,7 @@ static void performTestKravatte_SANE(unsigned char *checksum)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     dataLen = 128*8;
@@ -244,7 +223,7 @@ static void performTestKravatte_SANE(unsigned char *checksum)
         performTestKravatte_SANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("n ");
     #endif
     dataLen = 128*8;
@@ -254,7 +233,7 @@ static void performTestKravatte_SANE(unsigned char *checksum)
         performTestKravatte_SANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("d ");
     #endif
     ADLen = 64*8;
@@ -264,7 +243,7 @@ static void performTestKravatte_SANE(unsigned char *checksum)
         performTestKravatte_SANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("a ");
     #endif
     dataLen = 128*8;
@@ -276,7 +255,7 @@ static void performTestKravatte_SANE(unsigned char *checksum)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE_SANE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Kravatte_SANE\n" );
@@ -292,21 +271,13 @@ void selfTestKravatte_SANE(const unsigned char *expected)
 {
     unsigned char checksum[checksumByteSize];
 
-    #if defined(OUTPUT)
-    printf("Testing Kravatte_SANE ");
-    fflush(stdout);
-    #endif
+    UT_startTest("Kravatte-SANE", "");
     performTestKravatte_SANE(checksum);
-    #ifdef OUTPUT
-    fflush(stdout);
-    #endif
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
-    #if defined(OUTPUT)
-    printf(" - OK.\n");
-    #endif
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestKravatte_SANE_One(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -367,7 +338,7 @@ static void performTestKravatte_SANSE_OneInput(BitLength keyLen, BitLength dataL
     if (ADLen & 7)
         AD[(ADLen + 7) / 8 - 1] &= (1 << (ADLen & 7)) - 1;
 
-    #ifdef VERBOSE_SANSE
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, dataLen %5u, ADLen %5u (in bits)\n", (unsigned int)keyLen, (unsigned int)dataLen, (unsigned int)ADLen);
     #endif
 
@@ -376,7 +347,7 @@ static void performTestKravatte_SANSE_OneInput(BitLength keyLen, BitLength dataL
     result = Kravatte_SANSE_Initialize(&xpDec, key, keyLen);
     assert(result == 0);
 
-    #ifdef VERBOSE_SANSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         BitLength len;
@@ -416,7 +387,7 @@ static void performTestKravatte_SANSE_OneInput(BitLength keyLen, BitLength dataL
         assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tag, Kravatte_SANSE_TagLength);
-        #ifdef VERBOSE_SANSE
+        #ifdef UT_VERBOSE
         {
             unsigned int i;
             unsigned int len;
@@ -453,7 +424,7 @@ static void performTestKravatte_SANSE(unsigned char *checksum)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     dataLen = 128*8;
@@ -462,7 +433,7 @@ static void performTestKravatte_SANSE(unsigned char *checksum)
         performTestKravatte_SANSE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("d ");
     #endif
     ADLen = 64*8;
@@ -471,7 +442,7 @@ static void performTestKravatte_SANSE(unsigned char *checksum)
         performTestKravatte_SANSE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("a ");
     #endif
     dataLen = 128*8;
@@ -482,7 +453,7 @@ static void performTestKravatte_SANSE(unsigned char *checksum)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE_SANSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Kravatte_SANSE\n" );
@@ -498,18 +469,13 @@ void selfTestKravatte_SANSE(const unsigned char *expected)
 {
     unsigned char checksum[checksumByteSize];
 
-    #if defined(OUTPUT)
-    printf("Testing Kravatte_SANSE ");
-    fflush(stdout);
-    #endif
+    UT_startTest("Kravatte-SANSE", "");
     performTestKravatte_SANSE(checksum);
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
-    #if defined(OUTPUT)
-    printf(" - OK.\n");
-    #endif
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestKravatte_SANSE_One(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -565,7 +531,7 @@ static void performTestKravatte_WBC_OneInput(BitLength keyLen, BitLength dataLen
     if (dataLen & 7)
         input[dataLen / 8] &= (1 << (dataLen & 7)) - 1;
 
-    #ifdef VERBOSE_WBC
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, WLen %5u, dataLen %5u (in bits)\n", keyLen, WLen, dataLen);
     #endif
 
@@ -576,7 +542,7 @@ static void performTestKravatte_WBC_OneInput(BitLength keyLen, BitLength dataLen
     result = Kravatte_WBC_Decipher(&kvw, output, inputPrime, dataLen, W, WLen);
     assert(result == 0);
 
-    #ifdef VERBOSE_WBC
+    #ifdef UT_VERBOSE
     if (memcmp(input,inputPrime,(dataLen + 7) / 8) != 0)
     {
         size_t i;
@@ -596,7 +562,7 @@ static void performTestKravatte_WBC_OneInput(BitLength keyLen, BitLength dataLen
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
 
-    #ifdef VERBOSE_WBC
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         unsigned int dataByteLen;
@@ -652,7 +618,7 @@ static void performTestKravatte_WBC(unsigned char *checksum)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     dataLen = 128*8;
@@ -661,7 +627,7 @@ static void performTestKravatte_WBC(unsigned char *checksum)
         performTestKravatte_WBC_OneInput(keyLen, dataLen, WLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("d ");
     #endif
     WLen = 64*8;
@@ -670,7 +636,7 @@ static void performTestKravatte_WBC(unsigned char *checksum)
         performTestKravatte_WBC_OneInput(keyLen, dataLen, WLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("w ");
     #endif
     dataLen = 128*8;
@@ -681,7 +647,7 @@ static void performTestKravatte_WBC(unsigned char *checksum)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE_WBC
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Kravatte-WBC\n" );
@@ -697,18 +663,13 @@ void selfTestKravatte_WBC(const unsigned char *expected)
 {
     unsigned char checksum[checksumByteSize];
 
-#if defined(OUTPUT)
-    printf("Testing Kravatte-WBC ");
-    fflush(stdout);
-#endif
+    UT_startTest("Kravatte-WBC", "");
     performTestKravatte_WBC(checksum);
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
-#if defined(OUTPUT)
-    printf(" - OK.\n");
-#endif
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestKravatte_WBC_One(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -784,7 +745,7 @@ static void performTestKravatte_WBC_AE_OneInput(BitLength keyLen, BitLength data
     if (dataLen & 7)
         input[dataLen / 8] &= (1 << (dataLen & 7)) - 1;
 
-    #ifdef VERBOSE_WBC_AE
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, ADLen %5u, dataLen %5u (in bits)\n", keyLen, ADLen, dataLen);
     #endif
 
@@ -795,7 +756,7 @@ static void performTestKravatte_WBC_AE_OneInput(BitLength keyLen, BitLength data
     assert(result == 0);
     result = Kravatte_WBCAE_Decipher(&kvw, output, inputPrime, dataLen, AD, ADLen);
     assert(result == 0);
-    #ifdef VERBOSE_WBC
+    #ifdef UT_VERBOSE
     if (memcmp(input,inputPrime,(dataLen + 7) / 8) != 0)
     {
         size_t i;
@@ -815,7 +776,7 @@ static void performTestKravatte_WBC_AE_OneInput(BitLength keyLen, BitLength data
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 8 * expansionLenWBCAE + 7) / 8);
 
-    #ifdef VERBOSE_WBC_AE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         unsigned int dataByteLen;
@@ -874,7 +835,7 @@ static void performTestKravatte_WBC_AE(unsigned char *checksum)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     dataLen = 128*8;
@@ -883,7 +844,7 @@ static void performTestKravatte_WBC_AE(unsigned char *checksum)
         performTestKravatte_WBC_AE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("d ");
     #endif
     ADLen = 64*8;
@@ -892,7 +853,7 @@ static void performTestKravatte_WBC_AE(unsigned char *checksum)
         performTestKravatte_WBC_AE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("a ");
     #endif
     dataLen = 128*8;
@@ -903,7 +864,7 @@ static void performTestKravatte_WBC_AE(unsigned char *checksum)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE_WBC_AE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Kravatte-WBC-AE\n" );
@@ -919,18 +880,13 @@ void selfTestKravatte_WBC_AE(const char *expected)
 {
     unsigned char checksum[checksumByteSize];
 
-#if defined(OUTPUT)
-    printf("Testing Kravatte-WBC-AE ");
-    fflush(stdout);
-#endif
+    UT_startTest("Kravatte-WBC-AE ", "");
     performTestKravatte_WBC_AE(checksum);
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
-#if defined(OUTPUT)
-    printf(" - OK.\n");
-#endif
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestKravatte_WBC_AE_One(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -979,8 +935,7 @@ void writeTestKravatte_WBC_AE(const char *filename)
 
 void testKravatteModes(void)
 {
-#ifndef KeccakP1600_excluded
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 //    printKravatteTestVectors();
     writeTestKravatte_SANE("Kravatte_SANE.txt");
     writeTestKravatte_SANSE("Kravatte_SANSE.txt");
@@ -993,5 +948,5 @@ void testKravatteModes(void)
     selfTestKravatte_SANSE((const unsigned char *)"\x25\x15\x37\xb4\xc7\x1f\x14\x37\x22\x3d\x59\xa2\x92\xf6\x6d\x82");
     selfTestKravatte_WBC("\x42\xae\xe6\x1b\xcf\x8f\x06\x34\xc6\xb2\x11\x0a\xf4\xa0\xdd\xc1");
     selfTestKravatte_WBC_AE("\xda\xa6\x2c\xab\xa7\xe4\xe1\xef\xb5\x4c\x62\x78\x26\xf8\x72\x27");
-#endif
 }
+#endif /* XKCP_has_Kravatte */

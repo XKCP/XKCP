@@ -76,7 +76,7 @@ void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, uns
                     size = sigmaBitLength/8 - offset;
 
                 if (duplex.byteInputIndex != offset) {
-                    #ifdef OUTPUT
+                    #ifdef UT_VERBOSE
                     printf("duplex.byteInputIndex = %d, offset = %d\n", duplex.byteInputIndex, offset);
                     #endif
                     abort();
@@ -95,7 +95,7 @@ void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, uns
                     size = ZByteLen - offset;
 
                 if (duplex.byteOutputIndex != offset) {
-                    #ifdef OUTPUT
+                    #ifdef UT_VERBOSE
                     printf("duplex.byteOutputIndex = %d, offset = %d\n", duplex.byteOutputIndex, offset);
                     #endif
                     abort();
@@ -113,7 +113,7 @@ void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, uns
         SpongeAbsorb(&spongeChecksum, Z, ZByteLen);
         for(i=ZByteLen; i<sizeof(Z); i++)
             if (Z[i] != filler) {
-                #ifdef OUTPUT
+                #ifndef UT_EMBEDDED
                 printf("Out of range data written!\n");
                 #endif
                 abort();
@@ -151,7 +151,7 @@ void performTestDuplex(unsigned int rate, unsigned int capacity, int flavor, uns
         SpongeAbsorb(&spongeChecksum, Z, ZByteLen);
         for(i=ZByteLen; i<sizeof(Z); i++)
             if (Z[i] != filler) {
-                #ifdef OUTPUT
+                #ifndef UT_EMBEDDED
                 printf("Out of range data written!\n");
                 #endif
                 abort();
@@ -168,7 +168,7 @@ void selfTestDuplex(unsigned int rate, unsigned int capacity, int flavor, const 
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestDuplex(FILE *f, unsigned int rate, unsigned int capacity, int flavor)
 {
     unsigned char checksum[checksumByteSize];

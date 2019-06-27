@@ -12,12 +12,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _SP800_185_h_
 #define _SP800_185_h_
 
+#include "config.h"
+#ifdef XKCP_has_KeccakP1600
+
 #include <stddef.h>
 #include "align.h"
-#include "KeccakSpongeWidth1600.h"
+#include "KeccakSponge.h"
 #include "Phases.h"
-
-#ifndef KeccakP1600_excluded
 
 #ifndef _Keccak_BitTypes_
 #define _Keccak_BitTypes_
@@ -585,6 +586,8 @@ int TupleHash256_Final(TupleHash_Instance *TupleHashInstance, BitSequence * outp
   */
 int TupleHash256_Squeeze(TupleHash_Instance *TupleHashInstance, BitSequence *output, BitLength outputBitLen);
 
+#else
+#error This requires an implementation of Keccak-p[1600]
 #endif
 
 #endif

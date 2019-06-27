@@ -11,24 +11,21 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#if !defined(EMBEDDED)
-/* #define OUTPUT */
-/* #define VERBOSE */
-#endif
+#include "config.h"
+#ifdef XKCP_has_Sponge_Keccak
 
 #include <assert.h>
-#if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
-#include <stdio.h>
-#endif
 #include <stdlib.h>
 #include <string.h>
+#include "config.h"
 #include "KeccakSponge.h"
+#include "UT.h"
 
 #define flavor_OneCall          1
 #define flavor_IUF_AllAtOnce    2
 #define flavor_IUF_Pieces       3
 
-#ifndef KeccakP200_excluded
+#ifdef XKCP_has_Sponge_Keccak_width200
     #define prefix KeccakWidth200
     #define SnP_width 200
     #include "testSponge.inc"
@@ -36,7 +33,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_width
 #endif
 
-#ifndef KeccakP400_excluded
+#ifdef XKCP_has_Sponge_Keccak_width400
     #define prefix KeccakWidth400
     #define SnP_width 400
     #include "testSponge.inc"
@@ -44,7 +41,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_width
 #endif
 
-#ifndef KeccakP800_excluded
+#ifdef XKCP_has_Sponge_Keccak_width800
     #define prefix KeccakWidth800
     #define SnP_width 800
     #include "testSponge.inc"
@@ -52,7 +49,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_width
 #endif
 
-#ifndef KeccakP1600_excluded
+#ifdef XKCP_has_Sponge_Keccak_width1600
     #define prefix KeccakWidth1600
     #define SnP_width 1600
     #include "testSponge.inc"
@@ -60,7 +57,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_width
 #endif
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestSponge(void)
 {
     FILE *f;
@@ -68,19 +65,19 @@ void writeTestSponge(void)
 
     f = fopen("TestSponge.txt", "w");
     assert(f != NULL);
-#ifndef KeccakP200_excluded
+#ifdef XKCP_has_Sponge_Keccak_width200
     for(rate = 8; rate <= 200; rate += 8)
         KeccakWidth200_writeTestSponge(f, rate, 200-rate);
 #endif
-#ifndef KeccakP400_excluded
+#ifdef XKCP_has_Sponge_Keccak_width400
     for(rate = 16; rate <= 400; rate += (rate < 256) ? 16 : 8)
         KeccakWidth400_writeTestSponge(f, rate, 400-rate);
 #endif
-#ifndef KeccakP800_excluded
+#ifdef XKCP_has_Sponge_Keccak_width800
     for(rate = 32; rate <= 800; rate += (rate < 512) ? 32 : ((rate < 672) ? 16 : 8))
         KeccakWidth800_writeTestSponge(f, rate, 800-rate);
 #endif
-#ifndef KeccakP1600_excluded
+#ifdef XKCP_has_Sponge_Keccak_width1600
     for(rate = 64; rate <= 1600; rate += (rate < 1024) ? 64 : ((rate < 1344) ? 32 : 8))
         KeccakWidth1600_writeTestSponge(f, rate, 1600-rate);
 #endif
@@ -90,22 +87,22 @@ void writeTestSponge(void)
 
 void selfTestSponge(unsigned int rate, unsigned int capacity, int flavor, const unsigned char *expected)
 {
-#ifndef KeccakP200_excluded
+#ifdef XKCP_has_Sponge_Keccak_width200
     if (rate+capacity == 200)
         KeccakWidth200_selfTestSponge(rate, capacity, flavor, expected);
     else
 #endif
-#ifndef KeccakP400_excluded
+#ifdef XKCP_has_Sponge_Keccak_width400
     if (rate+capacity == 400)
         KeccakWidth400_selfTestSponge(rate, capacity, flavor, expected);
     else
 #endif
-#ifndef KeccakP800_excluded
+#ifdef XKCP_has_Sponge_Keccak_width800
     if (rate+capacity == 800)
         KeccakWidth800_selfTestSponge(rate, capacity, flavor, expected);
     else
 #endif
-#ifndef KeccakP1600_excluded
+#ifdef XKCP_has_Sponge_Keccak_width1600
     if (rate+capacity == 1600)
         KeccakWidth1600_selfTestSponge(rate, capacity, flavor, expected);
     else
@@ -116,26 +113,23 @@ void selfTestSponge(unsigned int rate, unsigned int capacity, int flavor, const 
 void testSponge()
 {
     unsigned int flavor;
+    const char *flavorString = 0;
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
     writeTestSponge();
 #endif
 
     for(flavor=1; flavor<=3; flavor++) {
-#if !defined(EMBEDDED)
+#if !defined(UT_EMBEDDED)
         if (flavor == flavor_OneCall)
-            printf("Testing Keccak sponge in one call");
+            flavorString = "Testing sponge in one call";
         else if (flavor == flavor_IUF_AllAtOnce)
-            printf("Testing Keccak sponge with queue all at once");
+            flavorString = "Testing sponge with queue all at once";
         else if (flavor == flavor_IUF_Pieces)
-            printf("Testing Keccak sponge with queue in pieces");
-        fflush(stdout);
+            flavorString = "Testing sponge with queue in pieces";
 #endif
-#ifndef KeccakP200_excluded
-#if !defined(EMBEDDED)
-    printf(" (width 200)");
-    fflush(stdout);
-#endif
+#ifdef XKCP_has_Sponge_Keccak_width200
+    UT_startTest("Keccak with width 200", flavorString);
     selfTestSponge(8, 192, flavor, "\x89\xa3\xbc\x59\xf1\x3d\xe6\x3c"); /* Keccak[r=8, c=192] */
     selfTestSponge(16, 184, flavor, "\xff\xfe\xa7\x51\x25\x17\xaa\x83"); /* Keccak[r=16, c=184] */
     selfTestSponge(24, 176, flavor, "\xbb\x95\x35\x88\xe7\xba\x72\x6b"); /* Keccak[r=24, c=176] */
@@ -161,12 +155,10 @@ void testSponge()
     selfTestSponge(184, 16, flavor, "\xae\x63\x9e\x64\x1b\x91\x14\x3a"); /* Keccak[r=184, c=16] */
     selfTestSponge(192, 8, flavor, "\xfa\x99\x62\x44\x5e\xf3\xca\xed"); /* Keccak[r=192, c=8] */
     selfTestSponge(200, 0, flavor, "\xeb\x35\x59\x76\xd0\x0c\x5b\x5e"); /* Keccak[r=200, c=0] */
+    UT_endTest();
 #endif
-#ifndef KeccakP400_excluded
-#if !defined(EMBEDDED)
-    printf(" (width 400)");
-    fflush(stdout);
-#endif
+#ifdef XKCP_has_Sponge_Keccak_width400
+    UT_startTest("Keccak with width 400", flavorString);
     selfTestSponge(16, 384, flavor, "\xdb\xc2\x15\x03\x90\x30\xd6\xc6"); /* Keccak[r=16, c=384] */
     selfTestSponge(32, 368, flavor, "\xae\x6d\x20\xdd\x20\x86\x91\xab"); /* Keccak[r=32, c=368] */
     selfTestSponge(48, 352, flavor, "\xe2\x43\x83\x3f\x35\x89\xf4\xfb"); /* Keccak[r=48, c=352] */
@@ -201,12 +193,10 @@ void testSponge()
     selfTestSponge(384, 16, flavor, "\xe8\x03\x8a\x89\x64\x5d\x18\xbf"); /* Keccak[r=384, c=16] */
     selfTestSponge(392, 8, flavor, "\xd5\xd4\x1d\x6e\x4e\x41\x60\x0e"); /* Keccak[r=392, c=8] */
     selfTestSponge(400, 0, flavor, "\xe3\x77\x7e\x01\x55\xf6\xe7\xc5"); /* Keccak[r=400, c=0] */
+    UT_endTest();
 #endif
-#ifndef KeccakP800_excluded
-#if !defined(EMBEDDED)
-    printf(" (width 800)");
-    fflush(stdout);
-#endif
+#ifdef XKCP_has_Sponge_Keccak_width800
+    UT_startTest("Keccak with width 800", flavorString);
     selfTestSponge(32, 768, flavor, "\xd6\x0a\x95\x77\xb8\x75\x75\xab"); /* Keccak[r=32, c=768] */
     selfTestSponge(64, 736, flavor, "\xb7\xb8\xeb\xe0\x28\xa8\x73\xca"); /* Keccak[r=64, c=736] */
     selfTestSponge(96, 704, flavor, "\x33\x42\x97\xb1\xa0\xe5\x67\x53"); /* Keccak[r=96, c=704] */
@@ -249,12 +239,10 @@ void testSponge()
     selfTestSponge(784, 16, flavor, "\x2b\xfb\xb8\x66\x0f\xc0\xca\xd0"); /* Keccak[r=784, c=16] */
     selfTestSponge(792, 8, flavor, "\x91\x09\x47\xe0\xe5\xc2\x83\xdd"); /* Keccak[r=792, c=8] */
     selfTestSponge(800, 0, flavor, "\xa2\xff\x58\x44\x7a\x90\xbe\x06"); /* Keccak[r=800, c=0] */
+    UT_endTest();
 #endif
-#ifndef KeccakP1600_excluded
-#if !defined(EMBEDDED)
-    printf(" (width 1600)");
-    fflush(stdout);
-#endif
+#ifdef XKCP_has_Sponge_Keccak_width1600
+    UT_startTest("Keccak with width 1600", flavorString);
     selfTestSponge(64, 1536, flavor, "\x54\x77\x74\x62\x25\x98\x8f\x9e"); /* Keccak[r=64, c=1536] */
     selfTestSponge(128, 1472, flavor, "\xcb\x2a\x3f\x46\x01\x03\xcd\xbb"); /* Keccak[r=128, c=1472] */
     selfTestSponge(192, 1408, flavor, "\x21\x08\x0f\x2e\x93\x2f\x13\xd2"); /* Keccak[r=192, c=1408] */
@@ -313,9 +301,8 @@ void testSponge()
     selfTestSponge(1584, 16, flavor, "\xca\x7a\xf0\xbd\x9a\x5d\xda\x4c"); /* Keccak[r=1584, c=16] */
     selfTestSponge(1592, 8, flavor, "\x61\xec\x09\x23\xcf\xc5\xe5\x29"); /* Keccak[r=1592, c=8] */
     selfTestSponge(1600, 0, flavor, "\x7a\x4d\x47\x73\xf2\xf6\xf8\xbc"); /* Keccak[r=1600, c=0] */
-#endif
-#if !defined(EMBEDDED)
-    printf("\n");
+    UT_endTest();
 #endif
     }
 }
+#endif /* XKCP_has_Sponge_Keccak */

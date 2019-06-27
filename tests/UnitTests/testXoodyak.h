@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestXoodyak_h_
 #define _TestXoodyak_h_
 
+#include "config.h"
+#ifdef XKCP_has_Xoodyak
 int testXoodyak( void );
+#endif
 
 #endif

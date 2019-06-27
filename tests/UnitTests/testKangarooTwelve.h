@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestKangarooTwelve_h_
 #define _TestKangarooTwelve_h_
 
+#include "config.h"
+#ifdef XKCP_has_KangarooTwelve
 void testKangarooTwelve(void);
+#endif
 
 #endif

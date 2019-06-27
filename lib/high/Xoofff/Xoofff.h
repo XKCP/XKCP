@@ -12,7 +12,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _Xoofff_h_
 #define _Xoofff_h_
 
-#ifndef Xoodoo_excluded
+#include "config.h"
+#ifdef XKCP_has_Xoodoo
 
 #include <stddef.h>
 #include <stdint.h>
@@ -43,23 +44,29 @@ typedef enum
     EXPANDED,
 } Xoofff_Phases;
 
+#ifdef XKCP_has_Xoodootimes16
 #include "Xoodoo-times16-SnP.h"
+#endif
+#ifdef XKCP_has_Xoodootimes8
 #include "Xoodoo-times8-SnP.h"
+#endif
+#ifdef XKCP_has_Xoodootimes4
 #include "Xoodoo-times4-SnP.h"
+#endif
 #include "Xoodoo-SnP.h"
-#if !defined(Xoodootimes16_isFallback)
+#if defined(XKCP_has_Xoodootimes16) && !defined(Xoodootimes16_isFallback)
     #define XoodooMaxParallellism   16
     #define Xoofff_Alignment        Xoodootimes16_statesAlignment
     #if defined(Xoodootimes16_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes16_AddIs
     #endif
-#elif !defined(Xoodootimes8_isFallback)
+#elif defined(XKCP_has_Xoodootimes8) && !defined(Xoodootimes8_isFallback)
     #define XoodooMaxParallellism   8
     #define Xoofff_Alignment        Xoodootimes8_statesAlignment
     #if defined(Xoodootimes8_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes8_AddIs
     #endif
-#elif !defined(Xoodootimes4_isFallback)
+#elif defined(XKCP_has_Xoodootimes4) && !defined(Xoodootimes4_isFallback)
     #define XoodooMaxParallellism   4
     #define Xoofff_Alignment        Xoodootimes4_statesAlignment
     #if defined(Xoodootimes4_FastXoofff_supported)
@@ -128,6 +135,8 @@ int Xoofff_Expand(Xoofff_Instance *xpInstance, BitSequence *output, BitLength ou
   */
 int Xoofff(Xoofff_Instance *xpInstance, const BitSequence *input, BitLength inputBitLen, BitSequence *output, BitLength outputBitLen, int flags);
 
+#else
+#error This requires an implementation of Xoodoo
 #endif
 
 #endif

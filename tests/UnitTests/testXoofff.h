@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestXoofff_h_
 #define _TestXoofff_h_
 
+#include "config.h"
+#ifdef XKCP_has_Xoofff
 void testXoofff(void);
+#endif
 
 #endif

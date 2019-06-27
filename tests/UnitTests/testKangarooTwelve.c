@@ -9,10 +9,12 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include "KangarooTwelve.h"
+#include "config.h"
+#ifdef XKCP_has_KangarooTwelve
 
-/* #define OUTPUT */
-/* #define VERBOSE */
+#include <stdlib.h>
+#include "KangarooTwelve.h"
+#include "UT.h"
 
 #define SnP_width               1600
 #define inputByteSize           (80*1024)
@@ -21,22 +23,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define checksumByteSize        16
 #define cChunkSize              8192
 
-#if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
-#include <stdio.h>
-#endif
-#include <stdlib.h>
-
-#if defined(EMBEDDED)
 static void assert(int condition)
 {
-    if (!condition)
-    {
-        for ( ; ; ) ;
-    }
+    UT_assert(condition, "");
 }
-#else
-#include <assert.h>
-#endif
 
 static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2)
 {
@@ -63,7 +53,7 @@ static void performTestKangarooTwelveOneInput(unsigned int inputLen, unsigned in
     generateSimpleRawMaterial(customization, customizationByteSize, customLen, 97);
     generateSimpleRawMaterial(input, inputLen, outputLen, inputLen + customLen);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     printf( "outputLen %5u, inputLen %5u, customLen %3u\n", outputLen, inputLen, customLen);
     #endif
     if (!useSqueeze)
@@ -157,7 +147,7 @@ static void performTestKangarooTwelveOneInput(unsigned int inputLen, unsigned in
         }
     }
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
 
@@ -204,7 +194,7 @@ static void performTestKangarooTwelve(unsigned char *checksum, unsigned int mode
     }
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("KangarooTwelve\n" );
@@ -221,21 +211,16 @@ void selfTestKangarooTwelve(const unsigned char *expected)
     unsigned char checksum[checksumByteSize];
     unsigned int mode, useSqueeze;
 
+    UT_startTest("KangarooTwelve", "");
     for(useSqueeze = 0; useSqueeze <= 1; ++useSqueeze)
     for(mode = 0; mode <= 2; ++mode) {
-        #ifndef EMBEDDED
-        printf("Testing KangarooTwelve %u %u...", useSqueeze, mode);
-        fflush(stdout);
-        #endif
         performTestKangarooTwelve(checksum, mode, useSqueeze);
         assert(memcmp(expected, checksum, checksumByteSize) == 0);
-        #ifndef EMBEDDED
-        printf(" - OK.\n");
-        #endif
     }
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestKangarooTwelveOne(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -259,7 +244,7 @@ void writeTestKangarooTwelve(const char *filename)
 
 static void outputHex(const unsigned char *data, unsigned char length)
 {
-    #ifndef EMBEDDED
+    #ifndef UT_EMBEDDED
     unsigned int i;
     for(i=0; i<length; i++)
         printf("%02x ", (int)data[i]);
@@ -308,13 +293,11 @@ void printKangarooTwelveTestVectors()
 
 void testKangarooTwelve(void)
 {
-#ifndef KeccakP1600_excluded
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
     printKangarooTwelveTestVectors();
     writeTestKangarooTwelve("KangarooTwelve.txt");
 #endif
 
     selfTestKangarooTwelve("\x22\xd7\x41\x70\x82\xb4\x41\xd7\xc5\xaa\x2f\x9b\x9d\xb2\xfa\x01");
-
-#endif
 }
+#endif /* XKCP_has_KangarooTwelve */

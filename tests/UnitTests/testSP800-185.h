@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestSP800_185_h_
 #define _TestSP800_185_h_
 
+#include "config.h"
+#ifdef XKCP_has_SP800_185
 void testSP800_185(void);
+#endif
 
 #endif

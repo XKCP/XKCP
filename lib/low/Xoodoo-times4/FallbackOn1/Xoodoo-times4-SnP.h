@@ -12,6 +12,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _Xoodoo_times4_SnP_h_
 #define _Xoodoo_times4_SnP_h_
 
+#include "Xoodoo-SnP.h"
+
 /** For the documentation, see PlSnP-documentation.h.
  */
 

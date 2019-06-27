@@ -11,9 +11,16 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <string.h>
 #include "KangarooTwelve.h"
-#ifndef KeccakP1600timesN_excluded
+
+#ifdef XKCP_has_KeccakP1600times2
     #include "KeccakP-1600-times2-SnP.h"
+#endif
+
+#ifdef XKCP_has_KeccakP1600times4
     #include "KeccakP-1600-times4-SnP.h"
+#endif
+
+#ifdef XKCP_has_KeccakP1600times8
     #include "KeccakP-1600-times8-SnP.h"
 #endif
 

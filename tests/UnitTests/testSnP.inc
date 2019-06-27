@@ -1,6 +1,5 @@
 /*
-Implementation by the Keccak Team, namely, Guido Bertoni, Joan Daemen,
-Michaël Peeters, Gilles Van Assche and Ronny Van Keer,
+Implementation by Gilles Van Assche and Ronny Van Keer,
 hereby denoted as "the implementer".
 
 For more information, feedback or questions, please refer to our website:
@@ -23,12 +22,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define checkBufferPadding              JOIN(prefix, _checkBufferPadding)
 #define checkStatePadding               JOIN(prefix, _checkStatePadding)
 #define elementarySnPtest               JOIN(prefix, _elementarySnPtest)
-#define nominalSnPtest               JOIN(prefix, _nominalSnPtest)
+#define nominalSnPtest                  JOIN(prefix, _nominalSnPtest)
 
 #define SnP_stateAlignment              JOIN(SnP, _stateAlignment)
 #define SnP_stateSizeInBytes            JOIN(SnP, _stateSizeInBytes)
-#define SnP_laneLengthInBytes           ((SnP_width)/200)
-#define SnP_laneCount                   25
+#define SnP_laneLengthInBytes           ((SnP_width)/(8*SnP_laneCount))
 #define SnP_StaticInitialize            JOIN(SnP, _StaticInitialize)
 #define SnP_Initialize                  JOIN(SnP, _Initialize)
 #define SnP_AddByte                     JOIN(SnP, _AddByte)
@@ -38,27 +36,24 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define SnP_ExtractBytes                JOIN(SnP, _ExtractBytes)
 #define SnP_ExtractAndAddBytes          JOIN(SnP, _ExtractAndAddBytes)
 
-#ifdef VERBOSE
+#ifdef UT_VERBOSE
     #define DUMP( argS, argT )  dumpState( argS, argT )
 
-typedef unsigned char UINT8;
-typedef unsigned short UINT16;
-typedef unsigned int UINT32;
 void dumpState(const unsigned char *state, char *message)
 {
     unsigned int i;
     unsigned char buffer[SnP_width/8];
 
     SnP_ExtractBytes(state, buffer, 0, SnP_width/8 );
-    printf( "\n%s\n", message );
+    printf( "\n%s @%p\n", message, state );
     state = buffer;
-    for ( i = 0; i < 25; ++i, state += SnP_width/200 )
+    for ( i = 0; i < SnP_laneCount; ++i, state += SnP_laneLengthInBytes )
     {
         #if defined(DUMP_BYTES)
 
         unsigned int j;
 
-        for ( j = 0; j < SnP_width/200; ++j )
+        for ( j = 0; j < SnP_laneLengthInBytes; ++j )
         {
             printf("0x%02X, ", state[j] );
         }
@@ -66,18 +61,23 @@ void dumpState(const unsigned char *state, char *message)
 
         #else
 
-        #if (SnP_width == 1600)
-        printf("%08X%08X ", ((UINT32*)state)[1], ((UINT32*)state)[0] );
-        #elif (SnP_width == 800)
-        printf("%08X ", ((UINT32*)state)[0] );
-        #elif (SnP_width == 400)
-        printf("%04X ", ((UINT16*)state)[0] );
-        #elif (SnP_width == 200)
-        printf("%02X ", ((UINT8*)state)[0] );
+        #if (SnP_laneLengthInBytes == 8)
+        printf("%08X%08X ", ((uint32_t*)state)[1], ((uint32_t*)state)[0] );
+        #elif (SnP_laneLengthInBytes == 4)
+        printf("%08X ", ((uint32_t*)state)[0] );
+        #elif (SnP_laneLengthInBytes == 2)
+        printf("%04X ", ((uint16_t*)state)[0] );
+        #elif (SnP_laneLengthInBytes == 1)
+        printf("%02X ", ((uint8_t*)state)[0] );
         #endif
 
+        #if (SnP_laneCount == 25)
         if ( (i % 5) == 4 )
             printf("\n" );
+        #else
+        if ( (i % 4) == 3 )
+            printf("\n" );
+        #endif
         #endif
     }
 }
@@ -120,16 +120,17 @@ void elementarySnPtest(void);
 
 void testSnP(const char *fileName, const char *synopsis, const unsigned char *expected)
 {
-#if !defined(EMBEDDED)
-    printf("Testing %s: %s\n", synopsis, JOIN(SnP, _implementation));
-#endif
-
+    UT_startTest(synopsis, JOIN(SnP, _implementation));
     elementarySnPtest();
-
     nominalSnPtest(fileName, synopsis, expected);
+    UT_endTest();
 }
 
-#define padding 64
+#if (SnP_stateAlignment > 32)
+#define padding SnP_stateAlignment
+#else
+#define padding 32
+#endif
 void checkStatePadding(const unsigned char *paddedState)
 {
     unsigned int i;
@@ -172,7 +173,7 @@ void elementarySnPtest()
     /* Testing SnP_AddByte() */
     {
         for(i=0; i<SnP_width/8; i++)
-            SnP_AddByte(state, i, i);
+            SnP_AddByte(state, (unsigned char)i, (unsigned char)i);
         SnP_ExtractBytes(state, buffer, 0, SnP_width/8);
         checkStatePadding(paddedState);
         checkBufferPadding(paddedBuffer);
@@ -288,7 +289,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
         unsigned offset;
 
         for(offset=0; offset<(SnP_width/8); offset += 13) {
-            unsigned char byte = 0xAB - offset*4;
+            unsigned char byte = 0xAB - (unsigned char)(offset*4);
             SnP_AddByte(stateTest, byte, offset);
             accumulateState(stateAccumulated, stateTest);
         }
@@ -303,7 +304,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
         unsigned i, offset, length, alignment;
 
         for(i=0; i<sizeof(buffer); i++)
-            buffer[i] = 0xF3 + 5*i;
+            buffer[i] = 0xF3 + (unsigned char)(5*i);
 
         for(offset=0; offset<(SnP_width/8); offset += (offset < 10) ? 1 : 7)
         for(length=(offset <= 1) ? 0 : ((SnP_width/8)-offset-2); length<=(SnP_width/8)-offset; length += ((SnP_width/8)-offset-length < 10) ? 1 : (5+offset)) {
@@ -325,7 +326,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
         for(length=(offset <= 1) ? 0 : ((SnP_width/8)-offset-2); length<=(SnP_width/8)-offset; length += ((SnP_width/8)-offset-length < 11) ? 1 : (9+4*offset)) {
             alignment = (offset+length+3)%8;
             for(i=0; i<sizeof(buffer); i++)
-                buffer[i] = 0xF3 + 5*i + alignment + offset + length;
+                buffer[i] = (unsigned char)(0xF3 + 5*i + alignment + offset + length);
             SnP_OverwriteBytes(stateTest, buffer+alignment, offset, length);
             accumulateState(stateAccumulated, stateTest);
         }
@@ -417,6 +418,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_Permute_12rounds()");
 #endif
 
+// #if defined(Xoodoo_HasNround)
 #ifdef SnP_Permute_Nrounds
     /* Testing SnP_Permute_Nrounds() */
     {
@@ -432,6 +434,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_Permute_Nrounds()");
 #endif
 
+#ifndef SnP_NoFastLoopAbsorb
     /* Testing SnP_FastLoop_Absorb() */
     {
         unsigned char buffer[SnP_laneLengthInBytes*100+10+8];
@@ -461,8 +464,9 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     }
     DUMP(stateTest, "stateTest after testing SnP_FastLoop_Absorb()");
     DUMP(stateAccumulated, "stateAccumulated after testing SnP_FastLoop_Absorb()");
+#endif
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
     /* Outputting the result */
     {
         unsigned char buffer[SnP_width/8];
@@ -500,7 +504,6 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
 #undef SnP_stateAlignment
 #undef SnP_stateSizeInBytes
 #undef SnP_laneLengthInBytes
-#undef SnP_laneCount
 #undef SnP_StaticInitialize
 #undef SnP_Initialize
 #undef SnP_AddByte

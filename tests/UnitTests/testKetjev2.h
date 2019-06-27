@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestKetje_h_
 #define _TestKetje_h_
 
+#include "config.h"
+#ifdef XKCP_has_Ketje
 int testKetje( void );
+#endif
 
 #endif

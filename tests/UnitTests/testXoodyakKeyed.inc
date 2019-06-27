@@ -41,13 +41,13 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
     uint8_t PPbuffer[Xoodyak_DataSize+3];
     uint8_t Cbuffer[Xoodyak_DataSize+3];
 
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
     fprintf( f, "*** Xoodyak( keyVariant %u, ratchet %u, SqueezeKey %u, nbrMessagesInSession %u ), with:\n", keyVariant, ratchet, squeezeKLen, nbrMessagesInSession );
-    displayByteString(f, "> K", K, Klen);
-    displayByteString(f, "> ID", ID, IDlen);
-    displayByteString(f, "> N", N, Nlen);
-    displayByteString(f, "> A (metadata)", AD, (unsigned int)ADlen);
-    displayByteString(f, "> I (plaintext)", P, (unsigned int)Plen);
+    UT_displayByteString(f, "> K", K, Klen);
+    UT_displayByteString(f, "> ID", ID, IDlen);
+    UT_displayByteString(f, "> N", N, Nlen);
+    UT_displayByteString(f, "> A (metadata)", AD, (unsigned int)ADlen);
+    UT_displayByteString(f, "> I (plaintext)", P, (unsigned int)Plen);
     #endif
 
 	switch (keyVariant)
@@ -87,11 +87,11 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
 			Xoodyak_Ratchet(&encrypt);
 		}
 
-	    #ifdef OUTPUT
-	    displayByteString(f, "< O (ciphertext)", Cbuffer + align, (unsigned int)Plen);
-	    displayByteString(f, "< T (tag)", tag + align, Xoodyak_TagLength);
+	    #ifdef UT_OUTPUT
+	    UT_displayByteString(f, "< O (ciphertext)", Cbuffer + align, (unsigned int)Plen);
+	    UT_displayByteString(f, "< T (tag)", tag + align, Xoodyak_TagLength);
 		if (squeezeKLen != 0) {
-		    displayByteString(f, "< K (new key)", newKey, squeezeKLen);
+		    UT_displayByteString(f, "< K (new key)", newKey, squeezeKLen);
 		}
 	    fprintf(f, "\n");
 	    #endif
@@ -109,9 +109,9 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
 			Xoodyak_Ratchet(&decrypt);
 		}
 
-	    assert(!memcmp( newKey, newKeyPrime, squeezeKLen ), "The new keys do not match.");
-	    assert(!memcmp( P, PPbuffer + align, Plen ), "The plaintexts do not match.");
-	    assert(!memcmp( tag + align, tagPrime + align, Xoodyak_TagLength ), "The tags do not match.");
+	    UT_assert(!memcmp( newKey, newKeyPrime, squeezeKLen ), "The new keys do not match.");
+	    UT_assert(!memcmp( P, PPbuffer + align, Plen ), "The plaintexts do not match.");
+	    UT_assert(!memcmp( tag + align, tagPrime + align, Xoodyak_TagLength ), "The tags do not match.");
 
 		if (squeezeKLen != 0) {
 		    Xoodyak_Absorb( global, newKey, squeezeKLen);
@@ -146,10 +146,9 @@ static int testXoodyakKeyed( const char *file, const uint8_t *expected )
     uint8_t c;
     FILE *f = NULL;
 
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
     f = fopen(file, "w");
-    assert(f != NULL, "Could not open file");
-    PRINTS("Xoodyak keyed ");
+    UT_assert(f != NULL, "Could not open file");
     #endif
 
 	for (align = 0; align < 4; ++align) {
@@ -218,16 +217,13 @@ static int testXoodyakKeyed( const char *file, const uint8_t *expected )
 
 	    {
 			Xoodyak_Squeeze(&global, checksum, sizeof(checksum));
-	        #ifdef OUTPUT
-	        displayByteString(f, "+++ Global checksum", checksum, sizeof(checksum));
+	        #ifdef UT_OUTPUT
+	        UT_displayByteString(f, "+++ Global checksum", checksum, sizeof(checksum));
 	        fclose(f);
 	        #endif
-	        assert(!memcmp(expected, checksum, sizeof(checksum)), "The global checksum is incorrect.");
+	        UT_assert(!memcmp(expected, checksum, sizeof(checksum)), "The global checksum is incorrect.");
 	    }
 
-	    #ifdef OUTPUT
-	    PRINTS("v\n");
-	    #endif
 	}
 
     return 0;

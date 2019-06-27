@@ -75,32 +75,6 @@ struct
 
 int main( void )
 {
-    
-    testXooSnP();
-    #if !defined(EMBEDDED)
-    printf( "\nSnP OK\n" );
-    #endif
-
-    testXooPlSnP();
-    #if !defined(EMBEDDED)
-    printf( "\nPlSnP OK\n" );
-    #endif
-
-    testXoofff();
-    #if !defined(EMBEDDED)
-    printf( "\nXoofff OK\n" );
-    #endif
-
-    testXoofffModes();
-    #if !defined(EMBEDDED)
-    printf( "\nXoofffModes OK\n" );
-    #endif
-
-    testXoodyak();
-    #if !defined(EMBEDDED)
-    printf( "\nXoodyak OK\n" );
-    #endif
-
     #if !defined(EMBEDDED)
     testXooPerformance();
     #endif

@@ -12,7 +12,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _XoofffModes_h_
 #define _XoofffModes_h_
 
-#ifndef Xoodoo_excluded
+#include "config.h"
+#ifdef XKCP_has_Xoodoo
 
 #include <stddef.h>
 #include <stdint.h>
@@ -228,6 +229,8 @@ int XoofffWBCAE_Encipher(Xoofff_Instance *xpInstance, BitSequence *plaintext, Bi
 int XoofffWBCAE_Decipher(Xoofff_Instance *xpInstance, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
                         const BitSequence *AD, BitLength ADBitLen);
 
+#else
+#error This requires an implementation of Xoodoo
 #endif
 
 #endif

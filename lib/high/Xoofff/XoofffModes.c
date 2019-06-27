@@ -9,8 +9,6 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef Xoodoo_excluded
-
 #include <string.h>
 #include <assert.h>
 #include "brg_endian.h"
@@ -479,5 +477,3 @@ int XoofffSANSE_Unwrap(XoofffSANSE_Instance *xp, const BitSequence *ciphertext, 
     /* else return P */
     return 0;
 }
-
-#endif

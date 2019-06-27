@@ -9,8 +9,6 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef KeccakP1600_excluded
-
 #include <string.h>
 #include <assert.h>
 #include "brg_endian.h"
@@ -553,5 +551,3 @@ int Kravatte_WBCAE_Decipher(Kravatte_Instance *kv, const BitSequence *ciphertext
 #undef  Rp
 #undef  Lc
 #undef  Rc
-
-#endif

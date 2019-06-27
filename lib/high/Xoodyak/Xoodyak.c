@@ -35,7 +35,7 @@ static void displayByteString(FILE *f, const char* synopsis, const uint8_t *data
 
 #define MyMin(a,b)  (((a) < (b)) ? (a) : (b))
 
-#ifndef Xoodoo_excluded
+#ifdef XKCP_has_Xoodoo
     #include "Xoodoo-SnP.h"
 
     #define SnP                         Xoodoo

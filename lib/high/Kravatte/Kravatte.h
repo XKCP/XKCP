@@ -12,7 +12,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _Kravatte_h_
 #define _Kravatte_h_
 
-#ifndef KeccakP1600_excluded
+#include "config.h"
+#ifdef XKCP_has_KeccakP1600
 
 #include <stddef.h>
 #include <stdint.h>
@@ -102,6 +103,8 @@ int Vatte(Kravatte_Instance *kvInstance, BitSequence *output, BitLength outputBi
   */
 int Kravatte(Kravatte_Instance *kvInstance, const BitSequence *input, BitLength inputBitLen, BitSequence *output, BitLength outputBitLen, int flags);
 
+#else
+#error This requires an implementation of Keccak-p[1600]
 #endif
 
 #endif

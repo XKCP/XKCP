@@ -12,7 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _SimpleFIPS202_h_
 #define _SimpleFIPS202_h_
 
-#include "KeccakSpongeWidth1600.h"
+#include "config.h"
+#ifdef XKCP_has_KeccakP1600
+
 #include <string.h>
 
 /** Implementation of the SHAKE128 extendable output function (XOF) [FIPS 202].
@@ -64,5 +66,9 @@ int SHA3_384(unsigned char *output, const unsigned char *input, size_t inputByte
   * @return 0 if successful, 1 otherwise.
   */
 int SHA3_512(unsigned char *output, const unsigned char *input, size_t inputByteLen);
+
+#else
+#error This requires an implementation of Keccak-p[1600]
+#endif
 
 #endif

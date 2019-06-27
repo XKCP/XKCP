@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestKravatte_h_
 #define _TestKravatte_h_
 
+#include "config.h"
+#ifdef XKCP_has_Kravatte
 void testKravatte(void);
+#endif
 
 #endif

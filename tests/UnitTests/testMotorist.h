@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestMotorist_h_
 #define _TestMotorist_h_
 
+#include "config.h"
+#ifdef XKCP_has_Keyak
 int testMotorist( void );
+#endif
 
 #endif

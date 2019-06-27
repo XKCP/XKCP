@@ -41,26 +41,26 @@ static void testKeyakInitialize(Keyak_Instance * global, Keyak_Instance * wrap, 
     unsigned char dummyTag[TagLength];
     int rv;
 
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
     fprintf( f, "*** Keyak[b=%u, nr=12, \316\240=%u, c=%u, \317\204=%u]\n", SnP_width, PlSnP_parallelism, Capacity*8, TagLength*8 );
     fprintf( f, "StartEngine(K, N, tagFlag=%s, T, unwrapFlag=false, forgetFlag=%s), with:\n", tagFlag?"true":"false", forgetFlag?"true":"false" );
-    displayByteString(f, "> K", K, Klen);
-    displayByteString(f, "> N", N, Nlen);
+    UT_displayByteString(f, "> K", K, Klen);
+    UT_displayByteString(f, "> N", N, Nlen);
     #endif
 
     rv = Keyak_Initialize( wrap, K, Klen, N, Nlen, tagFlag, tag, Atom_False, forgetFlag);
-    assert(rv == Atom_True, "wrap.Initialize() did not return true.");
+    UT_assert(rv == Atom_True, "wrap.Initialize() did not return true.");
     if (tagFlag)
     {
-        #ifdef OUTPUT
-        displayByteString(f, "< T (tag)", tag, TagLength);
+        #ifdef UT_OUTPUT
+        UT_displayByteString(f, "< T (tag)", tag, TagLength);
         #endif
         Keyak_Wrap( global, 0, 0, 0, tag, TagLength, dummyTag, 0, 0);
     }
 
     rv = Keyak_Initialize( unwrap, K, Klen, N, Nlen, tagFlag, tag, Atom_True, forgetFlag);
-    assert(rv == Atom_True, "unwrap.Initialize() did not return true.");
-    #ifdef OUTPUT
+    UT_assert(rv == Atom_True, "unwrap.Initialize() did not return true.");
+    #ifdef UT_OUTPUT
     fprintf( f, "\n" );
     #endif
 }
@@ -72,17 +72,17 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
     unsigned char dummyTag[TagLength];
     int rv;
 
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
     fprintf(f, "Wrap(I, O, A, T, unwrapFlag=false, forgetFlag=%s), with:\n", forgetFlag?"true":"false");
-    displayByteString(f, "> A (metadata)", ADcontent, (unsigned int)ADlen);
-    displayByteString(f, "> I (plaintext)", Pcontent, (unsigned int)Plen);
+    UT_displayByteString(f, "> A (metadata)", ADcontent, (unsigned int)ADlen);
+    UT_displayByteString(f, "> I (plaintext)", Pcontent, (unsigned int)Plen);
     #endif
 
     switch ( testmode )
     {
         case 0:
             rv = Keyak_Wrap( wrap, Pcontent, Cbuffer, Plen, ADcontent, ADlen, tag, 0, forgetFlag);
-            assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+            UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
             break;
 
         case 1:
@@ -136,9 +136,9 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                     if ( tempADlen == 0 )
                         lastFlag |= Motorist_Wrap_LastMetaData;
                     rv = Keyak_WrapPartial( wrap, I, O, partialPlen, AD, partialADlen, tag, 0, forgetFlag, lastFlag, &processedI, &processedMD);
-                    assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                    assert(processedI <= partialPlen, "wrap.Wrap() did process too much input.");
-                    assert(processedMD <= partialADlen, "wrap.Wrap() did process too much metadata.");
+                    UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                    UT_assert(processedI <= partialPlen, "wrap.Wrap() did process too much input.");
+                    UT_assert(processedMD <= partialADlen, "wrap.Wrap() did process too much metadata.");
                     I += processedI;
                     O += processedI;
                     AD += processedMD;
@@ -148,8 +148,8 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                     totalADlen  += processedMD;
                 }
                 while ( ((tempPlen | tempADlen) != 0) || (lastFlag != Motorist_Wrap_LastCryptAndMeta) );
-                assert(totalPlen == Plen, "wrap.Wrap() totalPlen != Plen.");
-                assert(totalADlen == ADlen, "wrap.Wrap() totalADlen != ADlen.");
+                UT_assert(totalPlen == Plen, "wrap.Wrap() totalPlen != Plen.");
+                UT_assert(totalADlen == ADlen, "wrap.Wrap() totalADlen != ADlen.");
             }
             break;
 
@@ -170,9 +170,9 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                 O = Cbuffer;
                 AD = ADcontent;
                 rv = Keyak_WrapPartial( wrap, I, O, partialPlen, AD, partialADlen, tag, 0, forgetFlag, 0, &processedI, &processedMD);
-                assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                assert(processedI <= partialPlen, "wrap.Wrap() did process too much input.");
-                assert(processedMD <= partialADlen, "wrap.Wrap() did process too much metadata.");
+                UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                UT_assert(processedI <= partialPlen, "wrap.Wrap() did process too much input.");
+                UT_assert(processedMD <= partialADlen, "wrap.Wrap() did process too much metadata.");
                 I  += processedI;
                 O  += processedI;
                 AD += processedMD;
@@ -183,16 +183,16 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
 
                 /*  blank run   */
                 rv = Keyak_WrapPartial( wrap, I, O, partialPlen, AD, partialADlen, tag, 0, forgetFlag, 0, &processedI, &processedMD);
-                assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                assert(processedI == 0, "wrap.Wrap() did process bad input length.");
-                assert(processedMD == 0, "wrap.Wrap() did process bad metadata length.");
+                UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                UT_assert(processedI == 0, "wrap.Wrap() did process bad input length.");
+                UT_assert(processedMD == 0, "wrap.Wrap() did process bad metadata length.");
 
                 if ( testmode == 4 )
                 {
                     rv = Keyak_WrapPartial( wrap, I, O, partialPlen, AD, partialADlen, tag, 0, forgetFlag, Motorist_Wrap_LastCryptData, &processedI, &processedMD);
-                    assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                    assert(processedI <= partialPlen, "wrap.Wrap() did process bad input length.");
-                    assert(processedMD <= partialADlen, "wrap.Wrap() did process bad metadata length.");
+                    UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                    UT_assert(processedI <= partialPlen, "wrap.Wrap() did process bad input length.");
+                    UT_assert(processedMD <= partialADlen, "wrap.Wrap() did process bad metadata length.");
                     I  += processedI;
                     O  += processedI;
                     AD += processedMD;
@@ -203,16 +203,16 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
 
                     /*  blank run   */
                     rv = Keyak_WrapPartial( wrap, I, O, partialPlen, AD, partialADlen, tag, 0, forgetFlag, Motorist_Wrap_LastCryptData, &processedI, &processedMD);
-                    assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                    assert(processedI == 0, "wrap.Wrap() did process bad input length.");
-                    assert(processedMD == 0, "wrap.Wrap() did process bad metadata length.");
+                    UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                    UT_assert(processedI == 0, "wrap.Wrap() did process bad input length.");
+                    UT_assert(processedMD == 0, "wrap.Wrap() did process bad metadata length.");
                 }
                 else if ( testmode == 5 )
                 {
                     rv = Keyak_WrapPartial( wrap, I, O, partialPlen, AD, partialADlen, tag, 0, forgetFlag, Motorist_Wrap_LastMetaData, &processedI, &processedMD);
-                    assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                    assert(processedI <= partialPlen, "wrap.Wrap() did process bad input length.");
-                    assert(processedMD <= partialADlen, "wrap.Wrap() did process bad metadata length.");
+                    UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                    UT_assert(processedI <= partialPlen, "wrap.Wrap() did process bad input length.");
+                    UT_assert(processedMD <= partialADlen, "wrap.Wrap() did process bad metadata length.");
                     I  += processedI;
                     O  += processedI;
                     AD += processedMD;
@@ -223,27 +223,27 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
 
                     /*  blank run   */
                     rv = Keyak_WrapPartial( wrap, I, O, partialPlen, AD, partialADlen, tag, 0, forgetFlag, Motorist_Wrap_LastMetaData, &processedI, &processedMD);
-                    assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                    assert(processedI == 0, "wrap.Wrap() did process bad input length.");
-                    assert(processedMD == 0, "wrap.Wrap() did process bad metadata length.");
+                    UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                    UT_assert(processedI == 0, "wrap.Wrap() did process bad input length.");
+                    UT_assert(processedMD == 0, "wrap.Wrap() did process bad metadata length.");
                 }
 
                 rv = Keyak_WrapPartial( wrap, I, O, partialPlen, AD, partialADlen, tag, 0, forgetFlag, Motorist_Wrap_LastCryptAndMeta, &processedI, &processedMD);
-                assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                assert(processedI == partialPlen, "wrap.Wrap() did process bad input length.");
-                assert(processedMD == partialADlen, "wrap.Wrap() did process bad metadata length.");
+                UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                UT_assert(processedI == partialPlen, "wrap.Wrap() did process bad input length.");
+                UT_assert(processedMD == partialADlen, "wrap.Wrap() did process bad metadata length.");
                 totalPlen  += processedI;
                 totalADlen += processedMD;
-                assert(totalPlen == Plen, "wrap.Wrap() totalPlen != Plen.");
-                assert(totalADlen == ADlen, "wrap.Wrap() totalADlen != ADlen.");
+                UT_assert(totalPlen == Plen, "wrap.Wrap() totalPlen != Plen.");
+                UT_assert(totalADlen == ADlen, "wrap.Wrap() totalADlen != ADlen.");
             }
             break;
     }
 
 
-    #ifdef OUTPUT
-    displayByteString(f, "< O (ciphertext)", Cbuffer, (unsigned int)Plen);
-    displayByteString(f, "< T (tag)", tag, TagLength);
+    #ifdef UT_OUTPUT
+    UT_displayByteString(f, "< O (ciphertext)", Cbuffer, (unsigned int)Plen);
+    UT_displayByteString(f, "< T (tag)", tag, TagLength);
     fprintf(f, "\n");
     #endif
 
@@ -251,8 +251,8 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
     {
         case 0:
             rv = Keyak_Wrap( unwrap, Cbuffer, PPbuffer, Plen, ADcontent, ADlen, tag, 1, forgetFlag);
-            assert(rv == Atom_True, "unwrap.Wrap() did not return true.");
-            assert(!memcmp( Pcontent, PPbuffer, Plen ), "The plaintexts do not match.");
+            UT_assert(rv == Atom_True, "unwrap.Wrap() did not return true.");
+            UT_assert(!memcmp( Pcontent, PPbuffer, Plen ), "The plaintexts do not match.");
             break;
 
         case 1:
@@ -313,9 +313,9 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                     }
                     toggle ^= 1;
                     rv = Keyak_WrapPartial( unwrap, I, O, partialPlen, AD, partialADlen, tag, 1, forgetFlag, lastFlag, &processedI, &processedMD);
-                    assert(rv == Atom_True, "unwrap.Wrap() did not return true.");
-                    assert(processedI <= partialPlen, "unwrap.Wrap() did process too much input.");
-                    assert(processedMD <= partialADlen, "unwrap.Wrap() did process too much metadata.");
+                    UT_assert(rv == Atom_True, "unwrap.Wrap() did not return true.");
+                    UT_assert(processedI <= partialPlen, "unwrap.Wrap() did process too much input.");
+                    UT_assert(processedMD <= partialADlen, "unwrap.Wrap() did process too much metadata.");
                     I += processedI;
                     O += processedI;
                     AD += processedMD;
@@ -325,9 +325,9 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                     totalADlen  += processedMD;
                 }
                 while ( ((tempPlen | tempADlen) != 0) || (lastFlag != Motorist_Wrap_LastCryptAndMeta) );
-                assert(totalPlen == Plen, "unwrap.Wrap() totalPlen != Plen.");
-                assert(totalADlen == ADlen, "unwrap.Wrap() totalADlen != ADlen.");
-                assert(!memcmp( Pcontent, PPbuffer, Plen ), "The plaintexts do not match.");
+                UT_assert(totalPlen == Plen, "unwrap.Wrap() totalPlen != Plen.");
+                UT_assert(totalADlen == ADlen, "unwrap.Wrap() totalADlen != ADlen.");
+                UT_assert(!memcmp( Pcontent, PPbuffer, Plen ), "The plaintexts do not match.");
                 break;
             }
 
@@ -348,9 +348,9 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                 O = PPbuffer;
                 AD = ADcontent;
                 rv = Keyak_WrapPartial( unwrap, I, O, partialPlen, AD, partialADlen, tag, 1, forgetFlag, 0, &processedI, &processedMD);
-                assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                assert(processedI <= partialPlen, "wrap.Wrap() did process too much input.");
-                assert(processedMD <= partialADlen, "wrap.Wrap() did process too much metadata.");
+                UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                UT_assert(processedI <= partialPlen, "wrap.Wrap() did process too much input.");
+                UT_assert(processedMD <= partialADlen, "wrap.Wrap() did process too much metadata.");
                 I  += processedI;
                 O  += processedI;
                 AD += processedMD;
@@ -361,16 +361,16 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
 
                 /*  blank run   */
                 rv = Keyak_WrapPartial( unwrap, I, O, partialPlen, AD, partialADlen, tag, 1, forgetFlag, 0, &processedI, &processedMD);
-                assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                assert(processedI == 0, "wrap.Wrap() did process too much input.");
-                assert(processedMD == 0, "wrap.Wrap() did process too much metadata.");
+                UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                UT_assert(processedI == 0, "wrap.Wrap() did process too much input.");
+                UT_assert(processedMD == 0, "wrap.Wrap() did process too much metadata.");
 
                 if ( testmode == 4 )
                 {
                     rv = Keyak_WrapPartial( unwrap, I, O, partialPlen, AD, partialADlen, tag, 1, forgetFlag, Motorist_Wrap_LastCryptData, &processedI, &processedMD);
-                    assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                    assert(processedI <= partialPlen, "wrap.Wrap() did process bad input length.");
-                    assert(processedMD <= partialADlen, "wrap.Wrap() did process bad metadata length.");
+                    UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                    UT_assert(processedI <= partialPlen, "wrap.Wrap() did process bad input length.");
+                    UT_assert(processedMD <= partialADlen, "wrap.Wrap() did process bad metadata length.");
                     I  += processedI;
                     O  += processedI;
                     AD += processedMD;
@@ -381,16 +381,16 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
 
                     /*  blank run   */
                     rv = Keyak_WrapPartial( unwrap, I, O, partialPlen, AD, partialADlen, tag, 1, forgetFlag, Motorist_Wrap_LastCryptData, &processedI, &processedMD);
-                    assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                    assert(processedI == 0, "wrap.Wrap() did process too much input.");
-                    assert(processedMD == 0, "wrap.Wrap() did process too much metadata.");
+                    UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                    UT_assert(processedI == 0, "wrap.Wrap() did process too much input.");
+                    UT_assert(processedMD == 0, "wrap.Wrap() did process too much metadata.");
                 }
                 else if ( testmode == 5 )
                 {
                     rv = Keyak_WrapPartial( unwrap, I, O, partialPlen, AD, partialADlen, tag, 1, forgetFlag, Motorist_Wrap_LastMetaData, &processedI, &processedMD);
-                    assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                    assert(processedI <= partialPlen, "wrap.Wrap() did process bad input length.");
-                    assert(processedMD <= partialADlen, "wrap.Wrap() did process bad metadata length.");
+                    UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                    UT_assert(processedI <= partialPlen, "wrap.Wrap() did process bad input length.");
+                    UT_assert(processedMD <= partialADlen, "wrap.Wrap() did process bad metadata length.");
                     I  += processedI;
                     O  += processedI;
                     AD += processedMD;
@@ -401,21 +401,21 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
 
                     /*  blank run   */
                     rv = Keyak_WrapPartial( unwrap, I, O, partialPlen, AD, partialADlen, tag, 1, forgetFlag, Motorist_Wrap_LastMetaData, &processedI, &processedMD);
-                    assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                    assert(processedI == 0, "wrap.Wrap() did process too much input.");
-                    assert(processedMD == 0, "wrap.Wrap() did process too much metadata.");
+                    UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                    UT_assert(processedI == 0, "wrap.Wrap() did process too much input.");
+                    UT_assert(processedMD == 0, "wrap.Wrap() did process too much metadata.");
                 }
 
                 rv = Keyak_WrapPartial( unwrap, I, O, partialPlen, AD, partialADlen, tag, 1, forgetFlag, Motorist_Wrap_LastCryptAndMeta, &processedI, &processedMD);
-                assert(rv == Atom_True, "wrap.Wrap() did not return true.");
-                assert(processedI == partialPlen, "wrap.Wrap() did process bad input length.");
-                assert(processedMD == partialADlen, "wrap.Wrap() did process bad metadata length.");
+                UT_assert(rv == Atom_True, "wrap.Wrap() did not return true.");
+                UT_assert(processedI == partialPlen, "wrap.Wrap() did process bad input length.");
+                UT_assert(processedMD == partialADlen, "wrap.Wrap() did process bad metadata length.");
                 totalPlen  += processedI;
                 totalADlen += processedMD;
-                assert(totalPlen == Plen, "wrap.Wrap() totalPlen != Plen.");
-                assert(totalADlen == ADlen, "wrap.Wrap() totalADlen != ADlen.");
+                UT_assert(totalPlen == Plen, "wrap.Wrap() totalPlen != Plen.");
+                UT_assert(totalADlen == ADlen, "wrap.Wrap() totalADlen != ADlen.");
 
-                assert(!memcmp( Pcontent, PPbuffer, Plen ), "The plaintexts do not match.");
+                UT_assert(!memcmp( Pcontent, PPbuffer, Plen ), "The plaintexts do not match.");
             }
             break;
     }
@@ -446,15 +446,15 @@ int testKeyakOneMode( int mode, const char *file, const unsigned char *expected 
     unsigned char Cbuffer[Rs*PlSnP_parallelism*2];
     unsigned char Abuffer[Ra*PlSnP_parallelism*2];
 
-    #ifdef OUTPUT
+    #ifdef UT_OUTPUT
     FILE *f = fopen(file, "w");
-    assert(f != NULL, "Could not open file");
+    UT_assert(f != NULL, "Could not open file");
     #else
     void *f = NULL;
     #endif
 
     rv = Keyak_Initialize( &global, 0, 0, 0, 0, Atom_False, 0, Atom_False, Atom_False);
-    assert(rv == Atom_True, "global.Initialize() did not return true.");
+    UT_assert(rv == Atom_True, "global.Initialize() did not return true.");
 
     for( Klen=16; Klen<=32; Klen++)
     for( Nlen=0; Nlen<=MaxNoncelength; Nlen += (Klen == 16) ? 1 : MaxNoncelength)
@@ -542,12 +542,12 @@ int testKeyakOneMode( int mode, const char *file, const unsigned char *expected 
 
     {
         rv = Keyak_Wrap( &global, 0, 0, 0, 0, 0, tag, 0, 0);
-        assert(rv == Atom_True, "global.Wrap(final tag) did not return true.");
-        #ifdef OUTPUT
-        displayByteString(f, "+++ Global tag", tag, TagLength);
+        UT_assert(rv == Atom_True, "global.Wrap(final tag) did not return true.");
+        #ifdef UT_OUTPUT
+        UT_displayByteString(f, "+++ Global tag", tag, TagLength);
         fclose(f);
         #endif
-        assert(!memcmp( expected, tag, TagLength ), "The global tag is incorrect.");
+        UT_assert(!memcmp( expected, tag, TagLength ), "The global tag is incorrect.");
     }
 
     return (0);
@@ -559,17 +559,8 @@ int testOneKeyak( const char *file, const unsigned char *expected )
 
     for ( testmode = 0; testmode <= 5; ++testmode )
     {
-        #ifdef OUTPUT
-        printf( "%u", testmode );
-        #endif
         testKeyakOneMode( testmode, file, expected );
-        #ifdef OUTPUT
-        printf( "v " );
-        #endif
     }
-    #ifdef OUTPUT
-    printf( "\n" );
-    #endif
     return (0);
 }
 

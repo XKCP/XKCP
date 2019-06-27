@@ -11,25 +11,26 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#if !defined(EMBEDDED)
-#define OUTPUT
-/* #define VERBOSE */
+#include "config.h"
+#ifdef XKCP_has_Duplex_Keccak
+
+#ifndef XKCP_has_Sponge_Keccak
+#error This test requires an implementation of the Keccak sponge
 #endif
 
 #include <assert.h>
-#if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
-#include <stdio.h>
-#endif
 #include <stdlib.h>
 #include <string.h>
+#include "config.h"
 #include "KeccakDuplex.h"
 #include "KeccakSponge.h"
+#include "UT.h"
 
 #define flavor_DuplexingOnly    1
 #define flavor_PartialIO        2
 #define flavor_OverwriteAndAdd  3
 
-#ifndef KeccakP200_excluded
+#ifdef XKCP_has_Duplex_Keccak_width200
     #define prefix KeccakWidth200
     #define SnP_width 200
     #include "testDuplex.inc"
@@ -37,7 +38,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_width
 #endif
 
-#ifndef KeccakP400_excluded
+#ifdef XKCP_has_Duplex_Keccak_width400
     #define prefix KeccakWidth400
     #define SnP_width 400
     #include "testDuplex.inc"
@@ -45,7 +46,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_width
 #endif
 
-#ifndef KeccakP800_excluded
+#ifdef XKCP_has_Duplex_Keccak_width800
     #define prefix KeccakWidth800
     #define SnP_width 800
     #include "testDuplex.inc"
@@ -53,7 +54,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_width
 #endif
 
-#ifndef KeccakP1600_excluded
+#ifdef XKCP_has_Duplex_Keccak_width1600
     #define prefix KeccakWidth1600
     #define SnP_width 1600
     #include "testDuplex.inc"
@@ -61,7 +62,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_width
 #endif
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestDuplex(void)
 {
     FILE *f;
@@ -69,19 +70,19 @@ void writeTestDuplex(void)
 
     f = fopen("TestDuplex.txt", "w");
     assert(f != NULL);
-#ifndef KeccakP200_excluded
+#ifdef XKCP_has_Duplex_Keccak_width200
     for(rate = 3; rate <= 200-2; rate += (rate < 68) ? 1 : ((rate < 220) ? 5 : 25))
         KeccakWidth200_writeTestDuplex(f, rate, 200-rate, flavor_DuplexingOnly);
 #endif
-#ifndef KeccakP400_excluded
+#ifdef XKCP_has_Duplex_Keccak_width400
     for(rate = 3; rate <= 400-2; rate += (rate < 68) ? 1 : ((rate < 220) ? 5 : 25))
         KeccakWidth400_writeTestDuplex(f, rate, 400-rate, flavor_DuplexingOnly);
 #endif
-#ifndef KeccakP800_excluded
+#ifdef XKCP_has_Duplex_Keccak_width800
     for(rate = 3; rate <= 800-2; rate += (rate < 68) ? 1 : ((rate < 220) ? 5 : 25))
         KeccakWidth800_writeTestDuplex(f, rate, 800-rate, flavor_DuplexingOnly);
 #endif
-#ifndef KeccakP1600_excluded
+#ifdef XKCP_has_Duplex_Keccak_width1600
     for(rate = 3; rate <= 1600-2; rate += (rate < 68) ? 1 : ((rate < 220) ? 5 : 25))
         KeccakWidth1600_writeTestDuplex(f, rate, 1600-rate, flavor_DuplexingOnly);
 #endif
@@ -91,22 +92,22 @@ void writeTestDuplex(void)
 
 void selfTestDuplex(unsigned int rate, unsigned int capacity, int flavor, const unsigned char *expected)
 {
-#ifndef KeccakP200_excluded
+#ifdef XKCP_has_Duplex_Keccak_width200
     if (rate+capacity == 200)
         KeccakWidth200_selfTestDuplex(rate, capacity, flavor, expected);
     else
 #endif
-#ifndef KeccakP400_excluded
+#ifdef XKCP_has_Duplex_Keccak_width400
     if (rate+capacity == 400)
         KeccakWidth400_selfTestDuplex(rate, capacity, flavor, expected);
     else
 #endif
-#ifndef KeccakP800_excluded
+#ifdef XKCP_has_Duplex_Keccak_width800
     if (rate+capacity == 800)
         KeccakWidth800_selfTestDuplex(rate, capacity, flavor, expected);
     else
 #endif
-#ifndef KeccakP1600_excluded
+#ifdef XKCP_has_Duplex_Keccak_width1600
     if (rate+capacity == 1600)
         KeccakWidth1600_selfTestDuplex(rate, capacity, flavor, expected);
     else
@@ -117,26 +118,23 @@ void selfTestDuplex(unsigned int rate, unsigned int capacity, int flavor, const 
 void testDuplex()
 {
     unsigned int flavor;
+    const char *flavorString = 0;
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
     writeTestDuplex();
 #endif
 
     for(flavor=1; flavor<=3; flavor++) {
-#if !defined(EMBEDDED)
+#if !defined(UT_EMBEDDED)
         if (flavor == flavor_DuplexingOnly)
-            printf("Testing Keccak duplexing in one call");
+            flavorString = "Testing duplexing in one call";
         else if (flavor == flavor_PartialIO)
-            printf("Testing Keccak duplexing with partial input/output");
+            flavorString = "Testing duplexing with partial input/output";
         else if (flavor == flavor_OverwriteAndAdd)
-            printf("Testing Keccak duplexing with overwrite and add");
-        fflush(stdout);
+            flavorString = "Testing duplexing with overwrite and add";
 #endif
-#ifndef KeccakP200_excluded
-#if !defined(EMBEDDED)
-    printf(" (width 200)");
-    fflush(stdout);
-#endif
+#ifdef XKCP_has_Duplex_Keccak_width200
+    UT_startTest("Keccak with width 200", flavorString);
     selfTestDuplex(3, 197, flavor, "\x5d\x7f\xfc\xa6\x5e\x89\xb1\x24"); /* Keccak[r=3, c=197] */
     selfTestDuplex(4, 196, flavor, "\x27\xee\x04\xc6\xac\x95\x6d\x23"); /* Keccak[r=4, c=196] */
     selfTestDuplex(5, 195, flavor, "\x28\x54\xa8\xbb\xc6\x9a\x51\xe3"); /* Keccak[r=5, c=195] */
@@ -229,12 +227,10 @@ void testDuplex()
     selfTestDuplex(188, 12, flavor, "\x1b\xa5\x04\xbe\x9e\xeb\xf6\xd6"); /* Keccak[r=188, c=12] */
     selfTestDuplex(193, 7, flavor, "\xf6\xd4\x3f\x8f\xe7\xb5\xeb\x76"); /* Keccak[r=193, c=7] */
     selfTestDuplex(198, 2, flavor, "\x1b\x28\xe6\x49\xd8\xdb\xca\xad"); /* Keccak[r=198, c=2] */
+    UT_endTest();
 #endif
-#ifndef KeccakP400_excluded
-#if !defined(EMBEDDED)
-    printf(" (width 400)");
-    fflush(stdout);
-#endif
+#ifdef XKCP_has_Duplex_Keccak_width400
+    UT_startTest("Keccak with width 400", flavorString);
     selfTestDuplex(3, 397, flavor, "\x40\x9c\x3c\x75\x90\x85\x72\x3a"); /* Keccak[r=3, c=397] */
     selfTestDuplex(4, 396, flavor, "\x92\xe4\x34\xe0\x30\x79\x14\xe3"); /* Keccak[r=4, c=396] */
     selfTestDuplex(5, 395, flavor, "\xed\x26\xdd\xba\x82\x74\x44\xe2"); /* Keccak[r=5, c=395] */
@@ -339,12 +335,10 @@ void testDuplex()
     selfTestDuplex(348, 52, flavor, "\x1e\x70\x89\xa5\xd2\x6e\xb9\x0a"); /* Keccak[r=348, c=52] */
     selfTestDuplex(373, 27, flavor, "\xb4\x74\xc6\x45\x6d\xd6\x15\x1f"); /* Keccak[r=373, c=27] */
     selfTestDuplex(398, 2, flavor, "\x43\x10\x51\x0d\xdf\xd1\x8d\x15"); /* Keccak[r=398, c=2] */
+    UT_endTest();
 #endif
-#ifndef KeccakP800_excluded
-#if !defined(EMBEDDED)
-    printf(" (width 800)");
-    fflush(stdout);
-#endif
+#ifdef XKCP_has_Duplex_Keccak_width800
+    UT_startTest("Keccak with width 800", flavorString);
     selfTestDuplex(3, 797, flavor, "\x45\xc6\x88\x66\xe4\x16\xd2\xcf"); /* Keccak[r=3, c=797] */
     selfTestDuplex(4, 796, flavor, "\x09\x64\xf1\x47\xf9\xfa\x41\xbe"); /* Keccak[r=4, c=796] */
     selfTestDuplex(5, 795, flavor, "\xe7\x87\xba\x89\x2a\xf0\x39\x26"); /* Keccak[r=5, c=795] */
@@ -465,12 +459,10 @@ void testDuplex()
     selfTestDuplex(748, 52, flavor, "\xde\x44\x22\x05\xd0\x11\x7d\xaf"); /* Keccak[r=748, c=52] */
     selfTestDuplex(773, 27, flavor, "\x39\x3f\xd0\x31\xcf\xbb\x53\xbf"); /* Keccak[r=773, c=27] */
     selfTestDuplex(798, 2, flavor, "\x06\x5c\x79\xb4\x37\x47\xe7\x68"); /* Keccak[r=798, c=2] */
+    UT_endTest();
 #endif
-#ifndef KeccakP1600_excluded
-#if !defined(EMBEDDED)
-    printf(" (width 1600)");
-    fflush(stdout);
-#endif
+#ifdef XKCP_has_Duplex_Keccak_width1600
+    UT_startTest("Keccak with width 1600", flavorString);
     selfTestDuplex(3, 1597, flavor, "\x0d\x85\xef\x10\xb7\x9f\x5e\xe0"); /* Keccak[r=3, c=1597] */
     selfTestDuplex(4, 1596, flavor, "\x0f\x9f\xf7\x73\x7d\x20\x3b\x64"); /* Keccak[r=4, c=1596] */
     selfTestDuplex(5, 1595, flavor, "\x50\x86\xe1\x23\xa3\x5e\xd2\xfa"); /* Keccak[r=5, c=1595] */
@@ -623,9 +615,8 @@ void testDuplex()
     selfTestDuplex(1548, 52, flavor, "\x0b\x24\x99\x0d\xd2\x05\x2c\x2d"); /* Keccak[r=1548, c=52] */
     selfTestDuplex(1573, 27, flavor, "\x7f\x3f\x68\xeb\x74\x29\x23\x4c"); /* Keccak[r=1573, c=27] */
     selfTestDuplex(1598, 2, flavor, "\xe0\x17\xcc\x63\x9f\xc5\x57\x5f"); /* Keccak[r=1598, c=2] */
-#endif
-#if !defined(EMBEDDED)
-    printf("\n");
+    UT_endTest();
 #endif
     }
 }
+#endif /* XKCP_has_Duplex_Keccak */

@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestKravatteModes_h_
 #define _TestKravatteModes_h_
 
+#include "config.h"
+#ifdef XKCP_has_Kravatte
 void testKravatteModes(void);
+#endif
 
 #endif

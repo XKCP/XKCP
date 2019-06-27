@@ -14,27 +14,29 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "genKAT.h"
-#include "KeccakDuplex.h"
-#include "SimpleFIPS202.h"
+#include <string.h>
+#include "config.h"
+
+#include "testPermutations.h"
+#include "testSponge.h"
 #include "testDuplex.h"
+#include "testPRG.h"
+#include "testSP800-185.h"
 #include "testKangarooTwelve.h"
 #include "testKetjev2.h"
-#include "testKeyakv2.h"
 #include "testMotorist.h"
-#include "testPerformance.h"
-#include "testPlSnP.h"
-#include "testSnP.h"
-#include "testSponge.h"
-#include "testKeccakPRG.h"
+#include "testKeyakv2.h"
 #include "testKravatte.h"
 #include "testKravatteModes.h"
-#include "testSP800-185.h"
+#include "testXoofff.h"
+#include "testXoofffModes.h"
+#include "testXoodyak.h"
 
 #ifdef KeccakReference
 #include "displayIntermediateValues.h"
 
-#ifndef KeccakP200_excluded
+#ifdef XKCP_has_KeccakP200
+#include "KeccakP-200-SnP.h"
 #include "KeccakP-200-reference.h"
 void displayKeccakF200IntermediateValues()
 {
@@ -73,7 +75,8 @@ void displayKeccakF200IntermediateValues()
 }
 #endif
 
-#ifndef KeccakP400_excluded
+#ifdef XKCP_has_KeccakP400
+#include "KeccakP-400-SnP.h"
 #include "KeccakP-400-reference.h"
 void displayKeccakF400IntermediateValues()
 {
@@ -112,7 +115,8 @@ void displayKeccakF400IntermediateValues()
 }
 #endif
 
-#ifndef KeccakP800_excluded
+#ifdef XKCP_has_KeccakP800
+#include "KeccakP-800-SnP.h"
 #include "KeccakP-800-reference.h"
 void displayKeccakF800IntermediateValues()
 {
@@ -151,7 +155,8 @@ void displayKeccakF800IntermediateValues()
 }
 #endif
 
-#ifndef KeccakP1600_excluded
+#ifdef XKCP_has_KeccakP1600
+#include "KeccakP-1600-SnP.h"
 #include "KeccakP-1600-reference.h"
 void displayKeccakF1600IntermediateValues()
 {
@@ -206,6 +211,8 @@ unsigned int appendSuffixToMessage(char *out, const char *in, unsigned int input
     }
     return inputLengthInBits;
 }
+
+#include "KeccakSponge.h"
 
 void displaySpongeIntermediateValuesOne(const unsigned char *message, unsigned int messageLength, unsigned char delimitedSuffix, unsigned int rate, unsigned int capacity, unsigned int outputLengthInBits)
 {
@@ -361,6 +368,8 @@ void displaySpongeIntermediateValues(void)
     displaySpongeIntermediateValuesFew("KeccakSpongeIntermediateValues_SHA3-512.txt", 0x06,  576, 1024,  512);
 }
 
+#include "KeccakDuplex.h"
+
 void displayDuplexIntermediateValuesOne(FILE *f, unsigned int rate, unsigned int capacity)
 {
     KeccakWidth1600_DuplexInstance duplex;
@@ -428,6 +437,9 @@ void displayDuplexIntermediateValues(void)
 #endif
 #endif /* defined KeccakReference */
 
+#ifdef XKCP_has_FIPS202
+#include "genKAT.h"
+#include "SimpleFIPS202.h"
 void testFIPS202()
 {
     const unsigned char *input = (const unsigned char *)"\x21\xF1\x34\xAC\x57";
@@ -471,27 +483,52 @@ void testFIPS202()
     assert(SHA3_512(buffer, input, 5) == 0);
     assert(memcmp(buffer, outputSHA3_512, 64) == 0);
 }
+#endif
 
 void printHelp()
 {
-        printf("Usage: KeccakTests command(s), where the commands can be\n");
+        printf("Usage: UnitTests command(s), where the commands can be\n");
         printf("  --help or -h              To display this page\n");
         printf("  --all or -a               All tests\n");
-        printf("  --SnP or -p               Tests on Keccak-p permutations\n");
+        printf("  --SnP or -p               Tests on all available permutations\n");
+#if defined (XKCP_has_Sponge_Keccak) || defined(XKCP_has_Duplex_Keccak)
         printf("  --Keccak or -c            Tests on Keccak sponge and duplex\n");
+#endif
+#ifdef XKCP_has_Sponge_Keccak
         printf("  --KeccakSponge            Tests on Keccak sponge\n");
+#endif
+#ifdef XKCP_has_Duplex_Keccak
         printf("  --KeccakDuplex            Tests on Keccak duplex\n");
+#endif
+#ifdef XKCP_has_PRG_Keccak
         printf("  --KeccakPRG               Tests on KeccakPRG\n");
+#endif
+#ifdef XKCP_has_FIPS202
         printf("  --FIPS202 or -f           Tests on FIPS202 and ShortMsgKAT generation\n");
+#endif
+#ifdef XKCP_has_SP800_185
         printf("  --SP800-185               Tests on SP800-185 functions\n");
+#endif
+#ifdef XKCP_has_Keyak
         printf("  --Keyak or -y             Tests on the Keyak authentication encryption scheme\n");
+#endif
+#ifdef XKCP_has_Ketje
         printf("  --Ketje or -t             Tests on the Ketje authentication encryption scheme\n");
+#endif
+#ifdef XKCP_has_KangarooTwelve
         printf("  --KangarooTwelve or -K12  Tests on KangarooTwelve\n");
+#endif
+#ifdef XKCP_has_Kravatte
         printf("  --Kravatte                Tests on Kravatte\n");
+#endif
+#ifdef XKCP_has_Xoofff
+        printf("  --Xoofff                  Tests on Xoofff\n");
+#endif
+#ifdef XKCP_has_Xoodyak
+        printf("  --Xoodyak                 Tests on Xoodyak\n");
+#endif
 #ifdef KeccakReference
         printf("  --examples or -e          Generation of example files\n");
-#else
-        printf("  --speed or -s             Speed measuresments\n");
 #endif
 }
 
@@ -509,8 +546,9 @@ int process(int argc, char* argv[])
     int KangarooTwelve = 0;
     int Kravatte = 0;
     int SP800_185 = 0;
+    int Xoofff = 0;
+    int Xoodyak = 0;
     int examples = 0;
-    int speed = 0;
 
     if (argc == 1)
         help = 1;
@@ -519,35 +557,58 @@ int process(int argc, char* argv[])
         if ((strcmp("--help", argv[i]) == 0) || (strcmp("-h", argv[i]) == 0))
             help = 1;
         else if ((strcmp("--all", argv[i]) == 0) || (strcmp("-a", argv[i]) == 0))
-            SnP = KeccakSponge = KeccakDuplex = KeccakPRG = FIPS202 = Keyak = Ketje = KangarooTwelve = Kravatte = SP800_185 = examples = speed = 1;
+            SnP = KeccakSponge = KeccakDuplex = KeccakPRG = FIPS202 = Keyak = Ketje = KangarooTwelve = Kravatte = SP800_185 = examples = Xoofff = Xoodyak = 1;
         else if ((strcmp("--SnP", argv[i]) == 0) || (strcmp("-p", argv[i]) == 0))
             SnP = 1;
+#if defined (XKCP_has_Sponge_Keccak) || defined(XKCP_has_Duplex_Keccak)
         else if ((strcmp("--Keccak", argv[i]) == 0) || (strcmp("-c", argv[i]) == 0))
             KeccakSponge = KeccakDuplex = 1;
+#endif
+#ifdef XKCP_has_Sponge_Keccak
         else if (strcmp("--KeccakSponge", argv[i]) == 0)
             KeccakSponge = 1;
+#endif
+#ifdef XKCP_has_Duplex_Keccak
         else if (strcmp("--KeccakDuplex", argv[i]) == 0)
             KeccakDuplex = 1;
+#endif
+#ifdef XKCP_has_PRG_Keccak
         else if (strcmp("--KeccakPRG", argv[i]) == 0)
             KeccakPRG = 1;
+#endif
+#ifdef XKCP_has_FIPS202
         else if ((strcmp("--FIPS202", argv[i]) == 0) || (strcmp("-f", argv[i]) == 0))
             FIPS202 = 1;
+#endif
+#ifdef XKCP_has_Keyak
         else if ((strcmp("--Keyak", argv[i]) == 0) || (strcmp("-y", argv[i]) == 0))
             Keyak = 1;
+#endif
+#ifdef XKCP_has_Ketje
         else if ((strcmp("--Ketje", argv[i]) == 0) || (strcmp("-t", argv[i]) == 0))
             Ketje = 1;
+#endif
         else if ((strcmp("--KangarooTwelve", argv[i]) == 0) || (strcmp("-K12", argv[i]) == 0))
             KangarooTwelve = 1;
+#ifdef XKCP_has_Kravatte
         else if (strcmp("--Kravatte", argv[i]) == 0)
             Kravatte = 1;
+#endif
+#ifdef XKCP_has_SP800_185
         else if (strcmp("--SP800-185", argv[i]) == 0)
             SP800_185 = 1;
+#endif
+#ifdef XKCP_has_Xoofff
+        else if (strcmp("--Xoofff", argv[i]) == 0)
+            Xoofff = 1;
+#endif
+#ifdef XKCP_has_Xoodyak
+        else if (strcmp("--Xoodyak", argv[i]) == 0)
+            Xoodyak = 1;
+#endif
 #ifdef KeccakReference
         else if ((strcmp("--examples", argv[i]) == 0) || (strcmp("-e", argv[i]) == 0))
             examples = 1;
-#else
-        else if ((strcmp("--speed", argv[i]) == 0) || (strcmp("-s", argv[i]) == 0))
-            speed = 1;
 #endif
         else {
             printf("Unrecognized command '%s'\n", argv[i]);
@@ -559,59 +620,83 @@ int process(int argc, char* argv[])
         return 0;
     }
     if (SnP) {
-        testSnP();
-        testPlSnP();
+        testPermutations();
     }
+#ifdef XKCP_has_Sponge_Keccak
     if (KeccakSponge) {
         testSponge();
     }
+#endif
+#ifdef XKCP_has_Duplex_Keccak
     if (KeccakDuplex) {
         testDuplex();
     }
+#endif
+#ifdef XKCP_has_KangarooTwelve
     if (KangarooTwelve) {
         testKangarooTwelve();
     }
+#endif
+#ifdef XKCP_has_SP800_185
     if (SP800_185) {
         testSP800_185();
     }
+#endif
+#ifdef XKCP_has_PRG_Keccak
     if (KeccakPRG) {
-        testKeccakPRG();
+        testPRG();
     }
+#endif
+#ifdef XKCP_has_FIPS202
     if (FIPS202) {
         testFIPS202();
         genKAT_main();
     }
+#endif
+#ifdef XKCP_has_Keyak
     if (Keyak) {
         testMotorist();
         testKeyak();
     }
+#endif
+#ifdef XKCP_has_Ketje
     if (Ketje) {
         testKetje();
     }
+#endif
+#ifdef XKCP_has_Kravatte
     if (Kravatte) {
         testKravatte();
         testKravatteModes();
     }
+#endif
 #ifdef KeccakReference
     if (examples) {
-#ifndef KeccakP200_excluded
+#ifdef XKCP_has_KeccakP200
         displayKeccakF200IntermediateValues();
 #endif
-#ifndef KeccakP400_excluded
+#ifdef XKCP_has_KeccakP400
         displayKeccakF400IntermediateValues();
 #endif
-#ifndef KeccakP800_excluded
+#ifdef XKCP_has_KeccakP800
         displayKeccakF800IntermediateValues();
 #endif
-#ifndef KeccakP1600_excluded
+#ifdef XKCP_has_KeccakP1600
         displayKeccakF1600IntermediateValues();
 #endif
         displaySpongeIntermediateValues();
         displayDuplexIntermediateValues();
     }
-#else
-    if (speed) {
-        testPerformance();
+#endif
+#ifdef XKCP_has_Xoofff
+    if (Xoofff) {
+        testXoofff();
+        testXoofffModes();
+    }
+#endif
+#ifdef XKCP_has_Xoodyak
+    if (Xoodyak) {
+        testXoodyak();
     }
 #endif
     return 0;

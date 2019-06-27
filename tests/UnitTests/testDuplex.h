@@ -14,6 +14,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestDuplex_h_
 #define _TestDuplex_h_
 
+#include "config.h"
+#ifdef XKCP_has_Duplex_Keccak
 void testDuplex(void);
+#endif
 
 #endif

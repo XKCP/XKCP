@@ -16,55 +16,34 @@ http://creativecommons.org/publicdomain/zero/1.0/
 <!--
 The fragments below allow to select the desired cryptographic functions (a.k.a. high-level services above the SnP or PlSnP interface).
 
-* KeccakSpongeWidth{200, 400, 800, 1600}: the Keccak[r, c] sponge function, where r+c equals the given permutation width (200, 400, 800 or 1600).
-* KeccakSponge: the Keccak sponge functions for all widths.
+* KeccakSponge: the Keccak sponge function on top of the supported Keccak-f permutations.
 * FIPS202: all the functions approved in the FIPS 202 standard, i.e., the extendable output functions (SHAKE{128, 256}) and hash functions (SHA3-{224, 256, 384, 512}). This includes also the Keccak hash functions without suffix (e.g., such as Keccak[r=1088, c=512] as used in Ethereum).
 * SP800-185: all the functions defined in the NIST SP 800-185 standard, i.e., cSHAKE, TupleHash, KMAC and ParallelHash.
-* KeccakDuplexWidth{200, 400, 800, 1600}: the Keccak[r, c] duplex objects, where r+c equals the given permutation width (200, 400, 800 or 1600).
-* KeccakDupex: the Keccak duplex objects for all widths.
-* KeccakPRGWidth{200, 400, 800, 1600}: a pseudo-random bit generator based on Keccak with the given permutation width.
-* KeccakPRG: the pseudo-random bit generators for all widths.
+* KeccakDuplex: the Keccak duplex object on top of the supported Keccak-f permutations.
+* KeccakPRG: a pseudo-random bit generator based on Keccak.
+* Ketje: Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major, depending on the supported permutations.
+* Keyak: River Keyak, Lake Keyak, Sea Keyak, Ocean Keyak and Lunar Keyak, depending on the supported permutations.
 * KangarooTwelve: the KangarooTwelve extendable output function.
 * Kravatte: the Kravatte pseudo-random function and its modes (Kravatte-SANE, -SANSE, -WBC and -WBC-AE).
 
 * Xoofff: the Xoofff pseudo-random function and its modes (Xoofff-SANE, Xoofff-SANSE, Xoofff-WBC and Xoofff-WBC-AE).
+* Xoodyak: the lightweight cryptographic scheme Xoodyak that can be used for hashing, encryption, MAC computation and authenticated encryption.
 -->
 
     <!-- *** High-level services *** -->
 
     <!-- Keccak sponge functions -->
 
-    <fragment name="KeccakSponge-common" inherits="common">
+    <fragment name="KeccakSponge" inherits="common">
         <config>XKCP_has_Sponge_Keccak</config>
-        <h>lib/high/Keccak/KeccakSponge-common.h</h>
+        <h>lib/high/Keccak/KeccakSponge.h</h>
         <h>lib/high/Keccak/KeccakSponge.inc</h>
+        <c>lib/high/Keccak/KeccakSponge.c</c>
     </fragment>
-
-    <fragment name="KeccakSpongeWidth200" inherits="KeccakSponge-common">
-        <c>lib/high/Keccak/KeccakSpongeWidth200.c</c>
-        <h>lib/high/Keccak/KeccakSpongeWidth200.h</h>
-    </fragment>
-
-    <fragment name="KeccakSpongeWidth400" inherits="KeccakSponge-common">
-        <c>lib/high/Keccak/KeccakSpongeWidth400.c</c>
-        <h>lib/high/Keccak/KeccakSpongeWidth400.h</h>
-    </fragment>
-
-    <fragment name="KeccakSpongeWidth800" inherits="KeccakSponge-common">
-        <c>lib/high/Keccak/KeccakSpongeWidth800.c</c>
-        <h>lib/high/Keccak/KeccakSpongeWidth800.h</h>
-    </fragment>
-
-    <fragment name="KeccakSpongeWidth1600" inherits="KeccakSponge-common">
-        <c>lib/high/Keccak/KeccakSpongeWidth1600.c</c>
-        <h>lib/high/Keccak/KeccakSpongeWidth1600.h</h>
-    </fragment>
-
-    <fragment name="KeccakSponge" inherits="KeccakSpongeWidth200 KeccakSpongeWidth400 KeccakSpongeWidth800 KeccakSpongeWidth1600"/>
 
     <!-- NIST standards -->
 
-    <fragment name="FIPS202" inherits="KeccakSpongeWidth1600">
+    <fragment name="FIPS202" inherits="KeccakSponge">
         <config>XKCP_has_FIPS202</config>
         <c>lib/high/Keccak/FIPS202/SimpleFIPS202.c</c>
         <h>lib/high/Keccak/FIPS202/SimpleFIPS202.h</h>
@@ -72,7 +51,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
         <h>lib/high/Keccak/FIPS202/KeccakHash.h</h>
     </fragment>
 
-    <fragment name="SP800-185" inherits="KeccakSpongeWidth1600">
+    <fragment name="SP800-185" inherits="KeccakSponge">
         <config>XKCP_has_SP800_185</config>
         <c>lib/high/Keccak/SP800-185/SP800-185.c</c>
         <h>lib/high/Keccak/SP800-185/SP800-185.inc</h>
@@ -82,67 +61,44 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
 
     <!-- Keccak duplex objects -->
 
-    <fragment name="KeccakDuplex-common" inherits="common">
+    <fragment name="KeccakDuplex" inherits="common">
         <config>XKCP_has_Duplex_Keccak</config>
-        <h>lib/high/Keccak/KeccakDuplex-common.h</h>
+        <h>lib/high/Keccak/KeccakDuplex.h</h>
         <h>lib/high/Keccak/KeccakDuplex.inc</h>
+        <c>lib/high/Keccak/KeccakDuplex.c</c>
     </fragment>
-
-    <fragment name="KeccakDuplexWidth200" inherits="KeccakDuplex-common">
-        <c>lib/high/Keccak/KeccakDuplexWidth200.c</c>
-        <h>lib/high/Keccak/KeccakDuplexWidth200.h</h>
-    </fragment>
-
-    <fragment name="KeccakDuplexWidth400" inherits="KeccakDuplex-common">
-        <c>lib/high/Keccak/KeccakDuplexWidth400.c</c>
-        <h>lib/high/Keccak/KeccakDuplexWidth400.h</h>
-    </fragment>
-
-    <fragment name="KeccakDuplexWidth800" inherits="KeccakDuplex-common">
-        <c>lib/high/Keccak/KeccakDuplexWidth800.c</c>
-        <h>lib/high/Keccak/KeccakDuplexWidth800.h</h>
-    </fragment>
-
-    <fragment name="KeccakDuplexWidth1600" inherits="KeccakDuplex-common">
-        <c>lib/high/Keccak/KeccakDuplexWidth1600.c</c>
-        <h>lib/high/Keccak/KeccakDuplexWidth1600.h</h>
-    </fragment>
-
-    <fragment name="KeccakDuplex" inherits="KeccakDuplexWidth200 KeccakDuplexWidth400 KeccakDuplexWidth800 KeccakDuplexWidth1600"/>
 
     <!-- Pseudo-random bit generation -->
 
-    <fragment name="KeccakPRG-common" inherits="common">
+    <fragment name="KeccakPRG" inherits="common KeccakDuplex">
         <config>XKCP_has_PRG_Keccak</config>
-        <h>lib/high/Keccak/PRG/KeccakPRG-common.h</h>
+        <h>lib/high/Keccak/PRG/KeccakPRG.h</h>
         <h>lib/high/Keccak/PRG/KeccakPRG.inc</h>
+        <c>lib/high/Keccak/PRG/KeccakPRG.c</c>
     </fragment>
 
-    <fragment name="KeccakPRGWidth200" inherits="KeccakPRG-common KeccakDuplexWidth200">
-        <c>lib/high/Keccak/PRG/KeccakPRGWidth200.c</c>
-        <h>lib/high/Keccak/PRG/KeccakPRGWidth200.h</h>
+    <!-- Ketje -->
+
+    <fragment name="Ketje" inherits="common">
+        <config>XKCP_has_Ketje</config>
+        <h>lib/high/Ketje/Ketjev2.h</h>
+        <h>lib/high/Ketje/Ketjev2.inc</h>
+        <c>lib/high/Ketje/Ketjev2.c</c>
     </fragment>
 
-    <fragment name="KeccakPRGWidth400" inherits="KeccakPRG-common KeccakDuplexWidth400">
-        <c>lib/high/Keccak/PRG/KeccakPRGWidth400.c</c>
-        <h>lib/high/Keccak/PRG/KeccakPRGWidth400.h</h>
-    </fragment>
+    <!-- Keyak -->
 
-    <fragment name="KeccakPRGWidth800" inherits="KeccakPRG-common KeccakDuplexWidth800">
-        <c>lib/high/Keccak/PRG/KeccakPRGWidth800.c</c>
-        <h>lib/high/Keccak/PRG/KeccakPRGWidth800.h</h>
+    <fragment name="Keyak" inherits="common">
+        <config>XKCP_has_Keyak</config>
+        <h>lib/high/Keyak/Motorist.inc</h>
+        <h>lib/high/Keyak/Keyakv2.h</h>
+        <h>lib/high/Keyak/Keyakv2.inc</h>
+        <c>lib/high/Keyak/Keyakv2.c</c>
     </fragment>
-
-    <fragment name="KeccakPRGWidth1600" inherits="KeccakPRG-common KeccakDuplexWidth1600">
-        <c>lib/high/Keccak/PRG/KeccakPRGWidth1600.c</c>
-        <h>lib/high/Keccak/PRG/KeccakPRGWidth1600.h</h>
-    </fragment>
-
-    <fragment name="KeccakPRG" inherits="KeccakPRGWidth200 KeccakPRGWidth400 KeccakPRGWidth800 KeccakPRGWidth1600"/>
 
     <!-- KangarooTwelve -->
 
-    <fragment name="KangarooTwelve" inherits="KeccakSpongeWidth1600">
+    <fragment name="KangarooTwelve" inherits="KeccakSponge">
         <config>XKCP_has_KangarooTwelve</config>
         <c>lib/high/KangarooTwelve/KangarooTwelve.c</c>
         <h>lib/high/KangarooTwelve/KangarooTwelve.h</h>
@@ -159,8 +115,6 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
         <h>lib/high/Kravatte/KravatteModes.h</h>
     </fragment>
 
-    <fragment name="All" inherits="common Ketje Keyak KeccakSponge KeccakDuplex KeccakPRG FIPS202 SP800-185 KangarooTwelve Kravatte"/>
-
     <!-- Xoofff and modes on top of it -->
 
     <fragment name="Xoofff" inherits="common">
@@ -171,6 +125,8 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
         <h>lib/high/Xoofff/XoofffModes.h</h>
     </fragment>
 
+    <!-- Xoodyak -->
+
     <fragment name="Xoodyak" inherits="common">
         <config>XKCP_has_Xoodyak</config>
         <c>lib/high/Xoodyak/Xoodyak.c</c>
@@ -179,6 +135,8 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
         <h>lib/high/Xoodyak/Cyclist.inc</h>
     </fragment>
 
-    <fragment name="XooAll" inherits="common Xoofff Xoodyak"/>
+    <!--- All high-level services -->
+
+    <fragment name="All" inherits="common Ketje Keyak KeccakSponge KeccakDuplex KeccakPRG FIPS202 SP800-185 KangarooTwelve Kravatte Xoofff Xoodyak"/>
 
 </group>

@@ -9,11 +9,17 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#include "config.h"
+#ifdef XKCP_has_SP800_185
+
+#ifndef XKCP_has_FIPS202
+#error This test requires an implementation of FIPS 202
+#endif
+
+#include <stdlib.h>
 #include "SP800-185.h"
 #include "KeccakHash.h"
-
-#define OUTPUT
-/* #define VERBOSE */
+#include "UT.h"
 
 #define SnP_width               1600
 #define inputByteSize           (1*1024)
@@ -25,22 +31,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define blockByteSizeMax        (8*1024)
 #define inputByteSizePH         (80*1024)
 
-#if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
-#include <stdio.h>
-#endif
-#include <stdlib.h>
-
-#if defined(EMBEDDED)
 static void assert(int condition)
 {
-    if (!condition)
-    {
-        for ( ; ; ) ;
-    }
+    UT_assert(condition, "");
 }
-#else
-#include <assert.h>
-#endif
 
 static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2)
 {
@@ -69,7 +63,7 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
     generateSimpleRawMaterial(name, nameByteSize, securityStrength/2, 91);
     generateSimpleRawMaterial(input, (inputLen + 7) / 8, outputLen, inputLen + customLen);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     printf( "securityStrength %u, outputLen %3u, inputLen %5u, nameLen %3u, customLen %3u\n", securityStrength, outputLen, inputLen, nameLen, customLen);
     #endif
     if (mode == 0)
@@ -182,7 +176,7 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
     }
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (outputLen + 7) / 8);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
 
@@ -211,7 +205,7 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
 
     generateSimpleRawMaterial(input, (inputLen + 7) / 8, outputLen, inputLen);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     printf( "securityStrength %u, outputLen %4u, inputLen %5u\n", securityStrength, outputLen, inputLen);
     #endif
     if (mode == 0)
@@ -328,7 +322,7 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
     }
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (outputLen + 7) / 8);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
 
@@ -377,7 +371,7 @@ static void performTestcSHAKE(unsigned int securityStrength, unsigned char *chec
     }
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("cSHAKE%d\n", securityStrength);
@@ -404,7 +398,7 @@ static void performTestcSHAKEXOF(unsigned int securityStrength, unsigned char *c
     }
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("cSHAKE%d-XOF\n", securityStrength);
@@ -421,13 +415,15 @@ void selfTestcSHAKE(unsigned int securityStrength, const unsigned char *expected
     unsigned char checksum[checksumByteSize];
     unsigned int mode;
 
+    if (securityStrength == 128)
+        UT_startTest("cSHAKE128", "");
+    else
+        UT_startTest("cSHAKE256", "");
     for(mode = 0; mode <= 2; ++mode) {
-        printf("Testing cSHAKE%d %u...", securityStrength, mode);
-        fflush(stdout);
         performTestcSHAKE(securityStrength, checksum, mode);
         assert(memcmp(expected, checksum, checksumByteSize) == 0);
-        printf(" - OK.\n");
     }
+    UT_endTest();
 }
 
 void selfTestcSHAKEXOF(unsigned int securityStrength, const unsigned char *expected)
@@ -435,16 +431,18 @@ void selfTestcSHAKEXOF(unsigned int securityStrength, const unsigned char *expec
     unsigned char checksum[checksumByteSize];
     unsigned int mode;
 
+    if (securityStrength == 128)
+        UT_startTest("cSHAKE128 (XOF)", "");
+    else
+        UT_startTest("cSHAKE256 (XOF)", "");
     for(mode = 0; mode <= 2; ++mode) {
-        printf("Testing cSHAKE%d-XOF %u...", securityStrength, mode);
-        fflush(stdout);
         performTestcSHAKEXOF(securityStrength, checksum, mode);
         assert(memcmp(expected, checksum, checksumByteSize) == 0);
-        printf(" - OK.\n");
     }
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestcSHAKEOne(FILE *f, unsigned int securityStrength)
 {
     unsigned char checksum[checksumByteSize];
@@ -492,7 +490,7 @@ static void performTestParallelHashOneInput(unsigned int securityStrength, unsig
     generateSimpleRawMaterial(customization, customizationByteSize, securityStrength/2, 97);
     generateSimpleRawMaterial(input, inputLen, blockSize / 256 + outputLen, inputLen + customLen);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     printf( "securityStrength %u, blockSize %5u, outputLen %3u, inputLen %5u, customLen % 3u\n", securityStrength, blockSize, outputLen, inputLen, customLen);
     #endif
     if (mode == 0)
@@ -570,7 +568,7 @@ static void performTestParallelHashOneInput(unsigned int securityStrength, unsig
         }
     }
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
 
@@ -600,7 +598,7 @@ static void performTestParallelHashXOFOneInput(unsigned int securityStrength, un
 
     generateSimpleRawMaterial(input, inputLen, blockSize / 256 + outputLen, inputLen);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     printf( "securityStrength %u, blockSize %5u, outputLen %3u, inputLen %5u\n", securityStrength, blockSize, outputLen, inputLen);
     #endif
     if (mode == 0)
@@ -705,7 +703,7 @@ static void performTestParallelHashXOFOneInput(unsigned int securityStrength, un
         }
     }
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
 
@@ -752,7 +750,7 @@ static void performTestParallelHash(unsigned int securityStrength, unsigned char
     }
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("ParallelHash%d\n", securityStrength);
@@ -782,7 +780,7 @@ static void performTestParallelHashXOF(unsigned int securityStrength, unsigned c
     }
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("ParallelHash%d-XOF\n", securityStrength);
@@ -799,13 +797,15 @@ void selfTestParallelHash(unsigned int securityStrength, const unsigned char *ex
     unsigned char checksum[checksumByteSize];
     unsigned int mode;
 
+    if (securityStrength == 128)
+        UT_startTest("ParallelHash128", "");
+    else
+        UT_startTest("ParallelHash256", "");
     for(mode = 0; mode <= 2; ++mode) {
-        printf("Testing ParallelHash%d %u...", securityStrength, mode);
-        fflush(stdout);
         performTestParallelHash(securityStrength, checksum, mode);
         assert(memcmp(expected, checksum, checksumByteSize) == 0);
-        printf(" - OK.\n");
     }
+    UT_endTest();
 }
 
 void selfTestParallelHashXOF(unsigned int securityStrength, const unsigned char *expected)
@@ -813,16 +813,18 @@ void selfTestParallelHashXOF(unsigned int securityStrength, const unsigned char 
     unsigned char checksum[checksumByteSize];
     unsigned int mode;
 
+    if (securityStrength == 128)
+        UT_startTest("ParallelHashXOF128", "");
+    else
+        UT_startTest("ParallelHashXOF256", "");
     for(mode = 0; mode <= 2; ++mode) {
-        printf("Testing ParallelHash%d-XOF %u...", securityStrength, mode);
-        fflush(stdout);
         performTestParallelHashXOF(securityStrength, checksum, mode);
         assert(memcmp(expected, checksum, checksumByteSize) == 0);
-        printf(" - OK.\n");
     }
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestParallelHashOne(FILE *f, unsigned int securityStrength)
 {
     unsigned char checksum[checksumByteSize];
@@ -873,7 +875,7 @@ static void performTestcSHAKE_NIST(void)
         result = cSHAKE128( data, 32, output, 256, N, strlen(N) * 8, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST cSHAKE128 test vector 1 OK\n");
         #endif
     }
@@ -893,7 +895,7 @@ static void performTestcSHAKE_NIST(void)
         result = cSHAKE128( data, 1600, output, 256, N, strlen(N) * 8, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST cSHAKE128 test vector 2 OK\n");
         #endif
     }
@@ -909,7 +911,7 @@ static void performTestcSHAKE_NIST(void)
         result = cSHAKE256( data, 32, output, 512, N, strlen(N) * 8, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST cSHAKE256 test vector 3 OK\n");
         #endif
     }
@@ -930,7 +932,7 @@ static void performTestcSHAKE_NIST(void)
         result = cSHAKE256( data, 1600, output, 512, N, strlen(N) * 8, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST cSHAKE256 test vector 4 OK\n");
         #endif
     }
@@ -950,7 +952,7 @@ static void performTestKMAC_NIST(void)
         result = KMAC128( K, 256, data, 32, output, 256, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC128 test vector 1 OK\n");
         #endif
     }
@@ -964,7 +966,7 @@ static void performTestKMAC_NIST(void)
         result = KMAC128( K, 256, data, 32, output, 256, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC128 test vector 2 OK\n");
         #endif
     }
@@ -984,7 +986,7 @@ static void performTestKMAC_NIST(void)
         result = KMAC128( K, 256, data, 1600, output, 256, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC128 test vector 3 OK\n");
         #endif
     }
@@ -1000,7 +1002,7 @@ static void performTestKMAC_NIST(void)
         result = KMAC256( K, 256, data, 32, output, 512, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC256 test vector 4 OK\n");
         #endif
     }
@@ -1022,7 +1024,7 @@ static void performTestKMAC_NIST(void)
         result = KMAC256( K, 256, data, 1600, output, 512, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC256 test vector 5 OK\n");
         #endif
     }
@@ -1044,7 +1046,7 @@ static void performTestKMAC_NIST(void)
         result = KMAC256( K, 256, data, 1600, output, 512, S, strlen(S) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC256 test vector 6 OK\n");
         #endif
     }
@@ -1071,7 +1073,7 @@ static void performTestKMACXOF_NIST(void)
         result = KMAC128_Squeeze(&km, output, 256);
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC128 XOF test vector 1 OK\n");
         #endif
     }
@@ -1091,7 +1093,7 @@ static void performTestKMACXOF_NIST(void)
         result = KMAC128_Squeeze(&km, output, 256);
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC128 XOF test vector 2 OK\n");
         #endif
     }
@@ -1117,7 +1119,7 @@ static void performTestKMACXOF_NIST(void)
         result = KMAC128_Squeeze(&km, output, 256);
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC128 XOF test vector 3 OK\n");
         #endif
     }
@@ -1138,7 +1140,7 @@ static void performTestKMACXOF_NIST(void)
         result = KMAC256_Squeeze(&km, output, 512);
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC256 XOF test vector 4 OK\n");
         #endif
     }
@@ -1165,7 +1167,7 @@ static void performTestKMACXOF_NIST(void)
         result = KMAC256_Squeeze(&km, output, 512);
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC256 XOF test vector 5 OK\n");
         #endif
     }
@@ -1192,7 +1194,7 @@ static void performTestKMACXOF_NIST(void)
         result = KMAC256_Squeeze(&km, output, 512);
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST KMAC256 XOF test vector 6 OK\n");
         #endif
     }
@@ -1213,7 +1215,7 @@ static void performTestParallelHash_NIST(void)
         result = ParallelHash128( X192, 192, 8, output, 256, S0, strlen(S0) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST ParallelHash128 test vector 1 OK\n");
         #endif
     }
@@ -1224,7 +1226,7 @@ static void performTestParallelHash_NIST(void)
         result = ParallelHash128( X192, 192, 8, output, 256, S1, strlen(S1) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST ParallelHash128 test vector 2 OK\n");
         #endif
     }
@@ -1236,7 +1238,7 @@ static void performTestParallelHash_NIST(void)
         result = ParallelHash256( X192, 192, 8, output, 512, S0, strlen(S0) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST ParallelHash256 test vector 1 OK\n");
         #endif
     }
@@ -1248,7 +1250,7 @@ static void performTestParallelHash_NIST(void)
         result = ParallelHash256( X192, 192, 8, output, 512, S1, strlen(S1) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST ParallelHash256 test vector 2 OK\n");
         #endif
     }
@@ -1277,7 +1279,7 @@ static void performTestParallelHashXOF_NIST(void)
         result = ParallelHash128_Squeeze(&ph, output, 256);
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST ParallelHash128 XOF test vector 1 OK\n");
         #endif
     }
@@ -1294,7 +1296,7 @@ static void performTestParallelHashXOF_NIST(void)
         result = ParallelHash128_Squeeze(&ph, output, 256);
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST ParallelHash128 XOF test vector 2 OK\n");
         #endif
     }
@@ -1312,7 +1314,7 @@ static void performTestParallelHashXOF_NIST(void)
         result = ParallelHash256_Squeeze(&ph, output, 512);
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST ParallelHash256 XOF test vector 1 OK\n");
         #endif
     }
@@ -1330,7 +1332,7 @@ static void performTestParallelHashXOF_NIST(void)
         result = ParallelHash256_Squeeze(&ph, output, 512);
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST ParallelHash256 XOF test vector 2 OK\n");
         #endif
     }
@@ -1359,7 +1361,7 @@ static void performTestTupleHash_NIST(void)
         result = TupleHash128( tuple, 2, output, 256, S0, strlen(S0) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash128 test vector 1 OK\n");
         #endif
     }
@@ -1374,7 +1376,7 @@ static void performTestTupleHash_NIST(void)
         result = TupleHash128( tuple, 2, output, 256, S1, strlen(S1) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash128 test vector 2 OK\n");
         #endif
     }
@@ -1392,7 +1394,7 @@ static void performTestTupleHash_NIST(void)
         result = TupleHash128( tuple, 3, output, 256, S1, strlen(S1) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash128 test vector 3 OK\n");
         #endif
     }
@@ -1408,7 +1410,7 @@ static void performTestTupleHash_NIST(void)
         result = TupleHash256( tuple, 2, output, 512, S0, strlen(S0) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash256 test vector 1 OK\n");
         #endif
     }
@@ -1424,7 +1426,7 @@ static void performTestTupleHash_NIST(void)
         result = TupleHash256( tuple, 2, output, 512, S1, strlen(S1) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash256 test vector 2 OK\n");
         #endif
     }
@@ -1443,7 +1445,7 @@ static void performTestTupleHash_NIST(void)
         result = TupleHash256( tuple, 3, output, 512, S1, strlen(S1) * 8 );
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash256 test vector 3 OK\n");
         #endif
     }
@@ -1478,7 +1480,7 @@ static void performTestTupleHashXOF_NIST(void)
         result = TupleHash128_Squeeze(&th, output, 256);
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash128 XOF test vector 1 OK\n");
         #endif
     }
@@ -1499,7 +1501,7 @@ static void performTestTupleHashXOF_NIST(void)
         result = TupleHash128_Squeeze(&th, output, 256);
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash128 XOF test vector 2 OK\n");
         #endif
     }
@@ -1522,7 +1524,7 @@ static void performTestTupleHashXOF_NIST(void)
         result = TupleHash128_Squeeze(&th, output, 256);
         assert(result == 0);
         assert(memcmp(O, output, 256/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash128 XOF test vector 3 OK\n");
         #endif
     }
@@ -1544,7 +1546,7 @@ static void performTestTupleHashXOF_NIST(void)
         result = TupleHash256_Squeeze(&th, output, 512);
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash256 XOF test vector 1 OK\n");
         #endif
     }
@@ -1566,7 +1568,7 @@ static void performTestTupleHashXOF_NIST(void)
         result = TupleHash256_Squeeze(&th, output, 512);
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash256 XOF test vector 2 OK\n");
         #endif
     }
@@ -1590,7 +1592,7 @@ static void performTestTupleHashXOF_NIST(void)
         result = TupleHash256_Squeeze(&th, output, 512);
         assert(result == 0);
         assert(memcmp(O, output, 512/8) == 0);
-        #ifdef OUTPUT
+        #ifdef UT_VERBOSE
         printf("NIST TupleHash256 XOF test vector 3 OK\n");
         #endif
     }
@@ -1598,8 +1600,7 @@ static void performTestTupleHashXOF_NIST(void)
 
 void testSP800_185(void)
 {
-#ifndef KeccakP1600_excluded
-
+    UT_startTest("SP800-185 NIST test vectors", "");
     performTestcSHAKE_NIST();
     performTestKMAC_NIST();
     performTestKMACXOF_NIST();
@@ -1607,8 +1608,9 @@ void testSP800_185(void)
     performTestParallelHashXOF_NIST();
     performTestTupleHash_NIST();
     performTestTupleHashXOF_NIST();
+    UT_endTest();
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
     writeTestcSHAKE("cSHAKE.txt");
     writeTestParallelHash("ParallelHash.txt");
 #endif
@@ -1622,5 +1624,5 @@ void testSP800_185(void)
     selfTestParallelHash(256, "\x9e\xd2\x25\x93\x93\x33\x60\x60\x74\x96\x96\xb7\x10\xe9\x99\x7a");
     selfTestParallelHashXOF(128, "\xa3\x49\xe7\x5a\xd6\xc6\x2f\x34\xbc\xbd\xb6\x00\xe4\xfb\xb0\x7f");
     selfTestParallelHashXOF(256, "\x2c\x8d\xe6\x5d\x50\xa8\x24\x19\xd4\xb6\x51\x5f\x85\xce\x41\x8d");
-#endif
 }
+#endif /* XKCP_has_SP800_185 */

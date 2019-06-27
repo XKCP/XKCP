@@ -40,4 +40,7 @@ and related or neighboring rights to the contributed source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#include "config.h"
+#ifdef XKCP_has_FIPS202
 int genKAT_main();
+#endif

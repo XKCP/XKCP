@@ -9,38 +9,17 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include "Keyakv2.h"
+#include "config.h"
+#ifdef XKCP_has_Keyak
 
-#if !defined(EMBEDDED)
-#define OUTPUT
-#define VERBOSE
-/* #define GENERATE */
-#endif
-
-#if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
 #include <stdio.h>
 #include <stdlib.h>
-#endif
 #include <string.h>
-
-#ifndef OUTPUT
-#define FILE    void
-#endif
-#include "testMotorist.h"
+#include "config.h"
+#include "Keyakv2.h"
+#include "UT.h"
 
 #define myMax(a, b) ((a) > (b)) ? (a) : (b)
-
-#ifdef OUTPUT
-static void displayByteString(FILE *f, const char* synopsis, const unsigned char *data, unsigned int length)
-{
-    unsigned int i;
-
-    fprintf(f, "%s:", synopsis);
-    for(i=0; i<length; i++)
-        fprintf(f, " %02x", (unsigned int)data[i]);
-    fprintf(f, "\n");
-}
-#endif
 
 static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2)
 {
@@ -53,22 +32,7 @@ static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, 
     }
 }
 
-static void assert(int condition, char * synopsis)
-{
-    if (!condition)
-    {
-        #ifdef OUTPUT
-        printf("%s", synopsis);
-        #endif
-        #ifdef EMBEDDED
-        for ( ; ; ) ;
-        #else
-        exit(1);
-        #endif
-    }
-}
-
-#ifndef KeccakP800_excluded
+#ifdef XKCP_has_KeccakP800
     #include "KeccakP-800-SnP.h"
 
     #define prefix                     KeyakWidth800
@@ -82,7 +46,7 @@ static void assert(int condition, char * synopsis)
     #undef PlSnP_parallelism
 #endif
 
-#ifndef KeccakP1600_excluded
+#ifdef XKCP_has_KeccakP1600
     #include "KeccakP-1600-SnP.h"
 
     #define prefix                     KeyakWidth1600
@@ -96,7 +60,7 @@ static void assert(int condition, char * synopsis)
     #undef PlSnP_parallelism
 #endif
 
-#ifndef KeccakP1600timesN_excluded
+#ifdef XKCP_has_KeccakP1600times2
     #include "KeccakP-1600-times2-SnP.h"
 
     #define prefix                      KeyakWidth1600times2
@@ -110,7 +74,7 @@ static void assert(int condition, char * synopsis)
     #undef SnP_width
 #endif
 
-#ifndef KeccakP1600timesN_excluded
+#ifdef XKCP_has_KeccakP1600times4
     #include "KeccakP-1600-times4-SnP.h"
 
     #define prefix                      KeyakWidth1600times4
@@ -124,7 +88,7 @@ static void assert(int condition, char * synopsis)
     #undef SnP_width
 #endif
 
-#ifndef KeccakP1600timesN_excluded
+#ifdef XKCP_has_KeccakP1600times8
     #include "KeccakP-1600-times8-SnP.h"
 
     #define prefix                      KeyakWidth1600times8
@@ -141,30 +105,36 @@ static void assert(int condition, char * synopsis)
 int testMotorist( void )
 {
 
-#ifndef KeccakP800_excluded
-    printf("Motorist Keccak-p[800] (" KeccakP800_implementation ")\n");
+#ifdef XKCP_has_KeccakP800
+    UT_startTest("Motorist on Keccak-p[800]", KeccakP800_implementation);
     KeyakWidth800_testOneMotorist("Motorist-Keccak-p[800].txt", "\x48\x62\xc7\x9b\x33\xb8\xd0\xea\x9d\x18\x55\xa0\x4a\xff\x61\xcf");
+    UT_endTest();
 #endif
 
-#ifndef KeccakP1600_excluded
-    printf("Motorist Keccak-p[1600] (" KeccakP1600_implementation ")\n");
+#ifdef XKCP_has_KeccakP1600
+    UT_startTest("Motorist on Keccak-p[1600]", KeccakP1600_implementation);
     KeyakWidth1600_testOneMotorist("Motorist-Keccak-p[1600].txt", "\xfb\x91\x63\x61\xd4\x9b\xa4\x0d\xd1\xe4\xa4\xd7\x58\xb9\x04\x61");
+    UT_endTest();
 #endif
 
-#ifndef KeccakP1600timesN_excluded
-    printf("Motorist Keccak-p[1600] times2 (" KeccakP1600times2_implementation ")\n");
+#ifdef XKCP_has_KeccakP1600times2
+    UT_startTest("Motorist on Keccak-p[1600]\303\2272", KeccakP1600times2_implementation);
     KeyakWidth1600times2_testOneMotorist("Motorist-Keccak-p[1600]-times2.txt", "\x8c\xb4\x28\x1e\x45\xef\x1e\xbc\x7e\x67\x16\xa8\xd1\x74\xc2\x43");
+    UT_endTest();
 #endif
 
-#ifndef KeccakP1600timesN_excluded
-    printf("Motorist Keccak-p[1600] times4 (" KeccakP1600times4_implementation ")\n");
+#ifdef XKCP_has_KeccakP1600times4
+    UT_startTest("Motorist on Keccak-p[1600]\303\2274", KeccakP1600times4_implementation);
     KeyakWidth1600times4_testOneMotorist("Motorist-Keccak-p[1600]-times4.txt", "\xc7\xa2\xf9\x5a\x77\x6d\x12\x6d\x3c\x1f\x18\x6f\x3f\x43\x1c\xef");
+    UT_endTest();
 #endif
 
-#ifndef KeccakP1600timesN_excluded
-    printf("Motorist Keccak-p[1600] times8 (" KeccakP1600times8_implementation ")\n");
+#ifdef XKCP_has_KeccakP1600times8
+    UT_startTest("Motorist on Keccak-p[1600]\303\2278", KeccakP1600times8_implementation);
     KeyakWidth1600times8_testOneMotorist("Motorist-Keccak-p[1600]-times8.txt", "\x2b\x6d\x17\x2a\x6b\x90\xff\x74\xb2\xc5\x6b\xd1\xaf\xf3\x9d\xb6");
+    UT_endTest();
 #endif
 
     return( 0 );
 }
+#endif /* XKCP_has_Keyak */

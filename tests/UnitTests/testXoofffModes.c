@@ -9,13 +9,14 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include "KeccakSpongeWidth1600.h"
-#include "XoofffModes.h"
+#include "config.h"
+#ifdef XKCP_has_Xoofff
 
-/* #define OUTPUT */
-/* #define VERBOSE_WBC */
-/* #define VERBOSE_SANE */
-/* #define VERBOSE_SANSE */
+#include <stdlib.h>
+#include <time.h>
+#include "KeccakSponge.h"
+#include "XoofffModes.h"
+#include "UT.h"
 
 #if defined(XoodooSmallRAM)
     #define    XoodooSizeMultiplier    2
@@ -41,23 +42,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define checksumByteSize        16
 
-#if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
-#include <stdio.h>
-#endif
-#include <stdlib.h>
-#include <time.h>
-
-#if defined(EMBEDDED)
-void assert(int condition);
-uint8_t random8( void );
-#define rand    random8
-#else
-#include <assert.h>
-#endif
+static void assert(int condition)
+{
+    UT_assert(condition, "");
+}
 
 static void randomize( unsigned char* data, unsigned int length)
 {
-    #if !defined(EMBEDDED)
+    #if !defined(UT_EMBEDDED)
     srand((unsigned int)time(0));
     #endif
     while (length--)
@@ -80,7 +72,7 @@ static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, 
     }
 }
 
-#if defined(OUTPUT)
+#if defined(UT_OUTPUT)
 static void outputHex(const unsigned char *data, unsigned char length)
 {
     unsigned int i;
@@ -122,7 +114,7 @@ static void performTestXoofffWBC_OneInput(BitLength keyLen, BitLength dataLen, B
     if (dataLen & 7)
         input[dataLen / 8] &= (1 << (dataLen & 7)) - 1;
 
-    #ifdef VERBOSE_WBC
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, WLen %5u, dataLen %5u (in bits)\n", (unsigned int)keyLen, (unsigned int)WLen, (unsigned int)dataLen);
     #endif
 
@@ -138,7 +130,7 @@ static void performTestXoofffWBC_OneInput(BitLength keyLen, BitLength dataLen, B
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
 
-    #ifdef VERBOSE_WBC
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         unsigned int dataByteLen;
@@ -194,7 +186,7 @@ static void performTestXoofffWBC(unsigned char *checksum)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width_sponge, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     dataLen = 128*8;
@@ -203,7 +195,7 @@ static void performTestXoofffWBC(unsigned char *checksum)
         performTestXoofffWBC_OneInput(keyLen, dataLen, WLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("d ");
     #endif
     WLen = 64*8;
@@ -212,7 +204,7 @@ static void performTestXoofffWBC(unsigned char *checksum)
         performTestXoofffWBC_OneInput(keyLen, dataLen, WLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("w ");
     #endif
     dataLen = 128*8;
@@ -223,7 +215,7 @@ static void performTestXoofffWBC(unsigned char *checksum)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE_WBC
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Xoofff-WBC\n" );
@@ -239,21 +231,13 @@ void selfTestXoofffWBC(const unsigned char *expected)
 {
     unsigned char checksum[checksumByteSize];
 
-    #if defined(OUTPUT)
-    printf("Testing Xoofff-WBC ");
-    fflush(stdout);
-    #endif
+    UT_startTest("Xoofff-WBC", "");
     performTestXoofffWBC(checksum);
-    #ifdef OUTPUT
-    fflush(stdout);
-    #endif
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
-    #if defined(OUTPUT)
-    printf(" - OK.\n");
-    #endif
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestXoofffWBC_One(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -329,7 +313,7 @@ static void performTestXoofffWBC_AE_OneInput(BitLength keyLen, BitLength dataLen
     if (dataLen & 7)
         input[dataLen / 8] &= (1 << (dataLen & 7)) - 1;
 
-    #ifdef VERBOSE_WBC_AE
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, ADLen %5u, dataLen %5u (in bits)\n", (unsigned int)keyLen, (unsigned int)ADLen, (unsigned int)dataLen);
     #endif
 
@@ -340,7 +324,7 @@ static void performTestXoofffWBC_AE_OneInput(BitLength keyLen, BitLength dataLen
     assert(result == 0);
     result = XoofffWBCAE_Decipher(&xp, output, inputPrime, dataLen, AD, ADLen);
     assert(result == 0);
-    #ifdef VERBOSE_WBC
+    #ifdef UT_VERBOSE
     if (memcmp(input,inputPrime,(dataLen + 7) / 8) != 0)
     {
         size_t i;
@@ -360,7 +344,7 @@ static void performTestXoofffWBC_AE_OneInput(BitLength keyLen, BitLength dataLen
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 8 * expansionLenWBCAE + 7) / 8);
 
-    #ifdef VERBOSE_WBC_AE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         unsigned int dataByteLen;
@@ -419,7 +403,7 @@ static void performTestXoofffWBC_AE(unsigned char *checksum)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width_sponge, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     dataLen = 128*8;
@@ -428,7 +412,7 @@ static void performTestXoofffWBC_AE(unsigned char *checksum)
         performTestXoofffWBC_AE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("d ");
     #endif
     ADLen = 64*8;
@@ -437,7 +421,7 @@ static void performTestXoofffWBC_AE(unsigned char *checksum)
         performTestXoofffWBC_AE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("a ");
     #endif
     dataLen = 128*8;
@@ -448,7 +432,7 @@ static void performTestXoofffWBC_AE(unsigned char *checksum)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE_WBC_AE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Xoofff-WBC-AE\n" );
@@ -464,21 +448,13 @@ void selfTestXoofffWBC_AE(const unsigned char *expected)
 {
     unsigned char checksum[checksumByteSize];
 
-    #if defined(OUTPUT)
-    printf("Testing Xoofff-WBC-AE ");
-    fflush(stdout);
-    #endif
+    UT_startTest("Xoofff-WBC-AE", "");
     performTestXoofffWBC_AE(checksum);
-    #ifdef OUTPUT
-    fflush(stdout);
-    #endif
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
-    #if defined(OUTPUT)
-    printf(" - OK.\n");
-    #endif
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestXoofffWBC_AE_One(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -565,7 +541,7 @@ static void performTestXoofffSANE_OneInput(BitLength keyLen, BitLength nonceLen,
     if (ADLen & 7)
         AD[ADLen / 8] &= (1 << (ADLen & 7)) - 1;
 
-    #ifdef VERBOSE_SANE
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, nonceLen %5u, dataLen %5u, ADLen %5u (in bits)\n", (unsigned int)keyLen, (unsigned int)nonceLen, (unsigned int)dataLen, (unsigned int)ADLen);
     #endif
 
@@ -576,7 +552,7 @@ static void performTestXoofffSANE_OneInput(BitLength keyLen, BitLength nonceLen,
     assert(!memcmp(tag, tagInit, tagLenSANE));
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tagInit, tagLenSANE);
 
-    #ifdef VERBOSE_SANE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         unsigned int len;
@@ -623,7 +599,7 @@ static void performTestXoofffSANE_OneInput(BitLength keyLen, BitLength nonceLen,
         assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tag, tagLenSANE);
-        #ifdef VERBOSE_SANE
+        #ifdef UT_VERBOSE
         {
             unsigned int i;
             unsigned int len;
@@ -662,7 +638,7 @@ static void performTestXoofffSANE(unsigned char *checksum)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width_sponge, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     dataLen = 128*8;
@@ -672,7 +648,7 @@ static void performTestXoofffSANE(unsigned char *checksum)
         performTestXoofffSANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("n ");
     #endif
     dataLen = 128*8;
@@ -682,7 +658,7 @@ static void performTestXoofffSANE(unsigned char *checksum)
         performTestXoofffSANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("d ");
     #endif
     ADLen = 64*8;
@@ -692,7 +668,7 @@ static void performTestXoofffSANE(unsigned char *checksum)
         performTestXoofffSANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("a ");
     #endif
     dataLen = 128*8;
@@ -704,7 +680,7 @@ static void performTestXoofffSANE(unsigned char *checksum)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE_SANE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Xoofff-SANE\n" );
@@ -720,21 +696,13 @@ void selfTestXoofffSANE(const unsigned char *expected)
 {
     unsigned char checksum[checksumByteSize];
 
-    #if defined(OUTPUT)
-    printf("Testing Xoofff-SANE ");
-    fflush(stdout);
-    #endif
+    UT_startTest("Xoofff-SANE", "");
     performTestXoofffSANE(checksum);
-    #ifdef OUTPUT
-    fflush(stdout);
-    #endif
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
-    #if defined(OUTPUT)
-    printf(" - OK.\n");
-    #endif
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestXoofffSANE_One(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -795,7 +763,7 @@ static void performTestXoofffSANSE_OneInput(BitLength keyLen, BitLength dataLen,
     if (ADLen & 7)
         AD[(ADLen + 7) / 8 - 1] &= (1 << (ADLen & 7)) - 1;
 
-    #ifdef VERBOSE_SANSE
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, dataLen %5u, ADLen %5u (in bits)\n", (unsigned int)keyLen, (unsigned int)dataLen, (unsigned int)ADLen);
     #endif
 
@@ -804,7 +772,7 @@ static void performTestXoofffSANSE_OneInput(BitLength keyLen, BitLength dataLen,
     result = XoofffSANSE_Initialize(&xpDec, key, keyLen);
     assert(result == 0);
 
-    #ifdef VERBOSE_SANSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         BitLength len;
@@ -844,7 +812,7 @@ static void performTestXoofffSANSE_OneInput(BitLength keyLen, BitLength dataLen,
         assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tag, tagLenSANSE);
-        #ifdef VERBOSE_SANSE
+        #ifdef UT_VERBOSE
         {
             unsigned int i;
             unsigned int len;
@@ -881,7 +849,7 @@ static void performTestXoofffSANSE(unsigned char *checksum)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width_sponge, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     dataLen = 128*8;
@@ -890,7 +858,7 @@ static void performTestXoofffSANSE(unsigned char *checksum)
         performTestXoofffSANSE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("d ");
     #endif
     ADLen = 64*8;
@@ -899,7 +867,7 @@ static void performTestXoofffSANSE(unsigned char *checksum)
         performTestXoofffSANSE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("a ");
     #endif
     dataLen = 128*8;
@@ -910,7 +878,7 @@ static void performTestXoofffSANSE(unsigned char *checksum)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE_SANSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Xoofff-SANSE\n" );
@@ -926,18 +894,13 @@ void selfTestXoofffSANSE(const unsigned char *expected)
 {
     unsigned char checksum[checksumByteSize];
 
-    #if defined(OUTPUT)
-    printf("Testing Xoofff-SANSE ");
-    fflush(stdout);
-    #endif
+    UT_startTest("Xoofff-SANSE", "");
     performTestXoofffSANSE(checksum);
     assert(memcmp(expected, checksum, checksumByteSize) == 0);
-    #if defined(OUTPUT)
-    printf(" - OK.\n");
-    #endif
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestXoofffSANSE_One(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -966,8 +929,7 @@ void writeTestXoofffSANSE(const char *filename)
 
 void testXoofffModes(void)
 {
-#ifndef KeccakP1600_excluded
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 /*    printXooTestVectors(); */
     writeTestXoofffSANE("Xoofff-SANE.txt");
     writeTestXoofffSANSE("Xoofff-SANSE.txt");
@@ -986,5 +948,5 @@ void testXoofffModes(void)
     selfTestXoofffWBC((const unsigned char *)"\x96\x09\x5c\xeb\x82\xa4\x7c\x94\xfc\x90\x42\xd8\xb0\xe3\xc8\xe1");
     selfTestXoofffWBC_AE((const unsigned char *)"\x45\x56\x9c\x96\x78\x20\x4b\xd4\xfb\xc0\xfe\xcb\x59\x6c\x85\x56");
 #endif
-#endif
 }
+#endif /* XKCP_has_Xoofff */

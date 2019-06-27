@@ -14,10 +14,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _KeccakHashInterface_h_
 #define _KeccakHashInterface_h_
 
-#ifndef KeccakP1600_excluded
+#include "config.h"
+#ifdef XKCP_has_KeccakP1600
 
-#include "KeccakSpongeWidth1600.h"
 #include <string.h>
+#include "KeccakSponge.h"
 
 #ifndef _Keccak_BitTypes_
 #define _Keccak_BitTypes_
@@ -113,6 +114,8 @@ HashReturn Keccak_HashFinal(Keccak_HashInstance *hashInstance, BitSequence *hash
   */
 HashReturn Keccak_HashSqueeze(Keccak_HashInstance *hashInstance, BitSequence *data, BitLength databitlen);
 
+#else
+#error This requires an implementation of Keccak-p[1600]
 #endif
 
 #endif

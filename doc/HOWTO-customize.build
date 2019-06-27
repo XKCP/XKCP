@@ -54,22 +54,22 @@ If Ketje is used, we still need to add an additional fragment keyword, see Ketje
 <!-- Examples -->
 
     <!-- Type "make PRG-AVR8.pack" to get a tarball with the sources needed to compile a pseudo-random number generator on top of Keccak-f[200] for AVR8. -->
-    <target name="PRG-AVR8" inherits="KeccakPRGWidth200 optimized200AVR8"/>
+    <target name="PRG-AVR8" inherits="KeccakPRG optimized200AVR8"/>
 
     <!-- Type "make KetjeJr-compact8.pack" to get a tarball with the sources needed to compile KetjeJr generically optimized for 8-bit platforms. -->
-    <target name="KetjeJr-compact8" inherits="KetjeJr KetJr-SnP compact200"/>
+    <target name="KetjeJr-compact8" inherits="Ketje KetJr-SnP compact200"/>
 
     <!-- Type "make libKeccak-16bits.a" to compile a library with Keccak sponge, duplex and PRG on top of Keccak-f[400], using plain reference code. Add ".pack" when invoking make to get a tarball with the source files instead. -->
-    <target name="libKeccak-16bits.a" inherits="KeccakSpongeWidth400 KeccakDuplexWidth400 KeccakPRG400 reference400"/>
+    <target name="libKeccak-16bits.a" inherits="KeccakSponge KeccakDuplex KeccakPRG reference400"/>
 
     <!-- Type "make RiverKeyak-ARMv7M.pack" to get a tarball with the sources needed to compile River Keyak on ARMv7M. -->
-    <target name="RiverKeyak-ARMv7M" inherits="RiverKeyak optimized800ARMv7Mu2"/>
+    <target name="RiverKeyak-ARMv7M" inherits="Keyak optimized800ARMv7Mu2"/>
 
     <!-- Type "make libRiverKeyak-generic32.a" to get a library with River Keyak generically optimized for 32-bit platforms. Add ".pack" when invoking make to get a tarball with the source files instead. -->
-    <target name="libRiverKeyak-generic32.a" inherits="RiverKeyak optimized800lcu2"/>
+    <target name="libRiverKeyak-generic32.a" inherits="Keyak optimized800lcu2"/>
 
     <!-- Same as above, but we add a PRG and we use a compact implementation instead. -->
-    <target name="libRiverKeyak-PRG-compact32.a" inherits="RiverKeyak KeccakPRGWidth800 compact800"/>
+    <target name="libRiverKeyak-PRG-compact32.a" inherits="RiverKeyak KeccakPRG compact800"/>
 
     <!-- Type "make libK12-AVX2.a" to build a library with KangarooTwelve with AVX2 code. Add ".pack" when invoking make to get a tarball with the source files instead. -->
     <target name="libK12-AVX2.a" inherits="KangarooTwelve optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4"/>
@@ -79,5 +79,9 @@ If Ketje is used, we still need to add an additional fragment keyword, see Ketje
 
     <!-- Type "make FIPS202-opt64.pack" to get a tarball with the sources needed to compile the FIPS 202 functions generically optimized for 64-bit platforms. -->
     <target name="FIPS202-opt64" inherits="FIPS202 optimized1600ufull"/>
+
+    <target name="MyUnitTests" inherits="KangarooTwelve optimized1600AVX2 SIMD256-AVX2u12 UT"/>
+
+    <target name="MyBenchmarks" inherits="Xoofff XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_AVX2 BM"/>
 
 </group>

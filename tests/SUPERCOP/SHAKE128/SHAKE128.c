@@ -15,7 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef crypto_hash_BYTES
     #define crypto_hash_BYTES 168
 #endif
-#include "KeccakSpongeWidth1600.h"
+#include "KeccakSponge.h"
 
 int crypto_hash( unsigned char *out, const unsigned char *in, unsigned long long inlen )
 {

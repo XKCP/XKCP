@@ -9,17 +9,18 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include "KeccakSponge.h"
-#include "Kravatte.h"
+#include "config.h"
+#ifdef XKCP_has_Kravatte
 
-#if !defined(EMBEDDED)
-#define OUTPUT
-/* #define VERBOSE */
-#else
-#undef OUTPUT
-#undef VERBOSE
+#ifndef XKCP_has_Sponge_Keccak
+#error This test requires an implementation of the Keccak sponge
 #endif
 
+#include <stdlib.h>
+#include <time.h>
+#include "KeccakSponge.h"
+#include "Kravatte.h"
+#include "UT.h"
 
 #define SnP_width               1600
 #define inputByteSize           (16*SnP_widthInBytes)
@@ -30,30 +31,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define keyBitSize              (keyByteSize*8)
 #define checksumByteSize        16
 
-#if (defined(OUTPUT) || defined(VERBOSE) || !defined(EMBEDDED))
-#include <stdio.h>
-#endif
-#include <stdlib.h>
-#include <time.h>
-
-#if defined(EMBEDDED)
 static void assert(int condition)
 {
-    if (!condition)
-    {
-        for ( ; ; ) ;
-    }
+    UT_assert(condition, "");
 }
-unsigned int random( void );
-#define rand    random
-#define srand(a)    
-#else
-#include <assert.h>
-#endif
 
 static void randomize( unsigned char* data, unsigned int length)
 {
-    #if !defined(EMBEDDED)
+    #if !defined(UT_EMBEDDED)
     srand((unsigned int)time(0));
     while (length--)
     {
@@ -99,7 +84,7 @@ static void performTestKravatteOneInput(BitLength keyLen, BitLength inputLen, Bi
     if (keyLen & 7)
         key[keyLen / 8] &= (1 << (keyLen & 7)) - 1;
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     printf( "keyLen %5u, outputLen %5u, inputLen %5u (in bits)\n", keyLen, outputLen, inputLen);
     #endif
 
@@ -162,7 +147,7 @@ static void performTestKravatteOneInput(BitLength keyLen, BitLength inputLen, Bi
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (outputLen + 7) / 8);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
 
@@ -211,7 +196,7 @@ static void performTestKravatte(unsigned char *checksum, unsigned int mode)
     KeccakWidth1600_SpongeInstance spongeChecksum;
     KeccakWidth1600_SpongeInitialize(&spongeChecksum, SnP_width, 0);
 
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("k ");
     #endif
     outputLen = 128*8;
@@ -221,7 +206,7 @@ static void performTestKravatte(unsigned char *checksum, unsigned int mode)
         performTestKravatteOneInput(keyLen, inputLen, outputLen, flags, &spongeChecksum, mode);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("i ");
     #endif
     outputLen = 128*8;
@@ -230,7 +215,7 @@ static void performTestKravatte(unsigned char *checksum, unsigned int mode)
         performTestKravatteOneInput(keyLen, inputLen, outputLen, flags, &spongeChecksum, mode);
     }
     
-    #ifdef OUTPUT
+    #ifdef UT_VERBOSE
     printf("o ");
     #endif
     inputLen = 64*8;
@@ -241,7 +226,7 @@ static void performTestKravatte(unsigned char *checksum, unsigned int mode)
     
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
-    #ifdef VERBOSE
+    #ifdef UT_VERBOSE
     {
         unsigned int i;
         printf("Kravatte\n" );
@@ -258,21 +243,16 @@ void selfTestKravatte(const unsigned char *expected)
     unsigned char checksum[checksumByteSize];
     unsigned int mode;
 
+    UT_startTest("Kravatte", "");
     for(mode = 0; mode <= 2; ++mode) {
-#ifdef OUTPUT
-        printf("Testing Kravatte %u ", mode);
-        fflush(stdout);
-#endif
         performTestKravatte(checksum, mode);
         fflush(stdout);
         assert(memcmp(expected, checksum, checksumByteSize) == 0);
-#ifdef OUTPUT
-        printf(" - OK.\n");
-#endif
     }
+    UT_endTest();
 }
 
-#ifdef OUTPUT
+#ifdef UT_OUTPUT
 void writeTestKravatteOne(FILE *f)
 {
     unsigned char checksum[checksumByteSize];
@@ -347,12 +327,9 @@ void printKravatteTestVectors()
 
 void testKravatte(void)
 {
-
-#ifndef KeccakP1600_excluded
-#ifdef OUTPUT
-//    printKravatteTestVectors();
+#ifdef UT_OUTPUT
     writeTestKravatte("Kravatte.txt");
 #endif
     selfTestKravatte("\xaa\xc1\xb7\x34\xff\x9b\xa3\x58\x6c\x7a\xc7\x57\x3a\x97\xdd\x13");
-#endif
 }
+#endif /* XKCP_has_Kravatte */

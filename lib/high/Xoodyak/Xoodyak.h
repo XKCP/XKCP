@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _Xoodyak_h_
 #define _Xoodyak_h_
 
+#include "config.h"
+#ifdef XKCP_has_Xoodoo
+
 #include <stddef.h>
 #include "Cyclist.h"
 #include "Xoodoo-SnP.h"
@@ -19,5 +22,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 KCP_DeclareCyclistStructure(Xoodyak, Xoodoo_stateSizeInBytes, Xoodoo_stateAlignment)
 KCP_DeclareCyclistFunctions(Xoodyak)
+
+#else
+#error This requires an implementation of Xoodoo
+#endif
 
 #endif

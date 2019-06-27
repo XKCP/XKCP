@@ -12,6 +12,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _TestKeyak_h_
 #define _TestKeyak_h_
 
+#include "config.h"
+#ifdef XKCP_has_Keyak
 int testKeyak( void );
+#endif
 
 #endif

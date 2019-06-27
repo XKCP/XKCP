@@ -9,16 +9,21 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#ifndef KeccakP1600_excluded
-
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "brg_endian.h"
 #include "Kravatte.h"
-#ifndef KeccakP1600timesN_excluded
+
+#ifdef XKCP_has_KeccakP1600times2
     #include "KeccakP-1600-times2-SnP.h"
+#endif
+
+#ifdef XKCP_has_KeccakP1600times4
     #include "KeccakP-1600-times4-SnP.h"
+#endif
+
+#ifdef XKCP_has_KeccakP1600times8
     #include "KeccakP-1600-times8-SnP.h"
 #endif
 
@@ -515,5 +520,3 @@ int Kravatte(Kravatte_Instance *kv, const BitSequence *input, BitLength inputBit
         return 1;
     return Vatte(kv, output, outputBitLen, flags);
 }
-
-#endif
