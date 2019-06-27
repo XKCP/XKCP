@@ -17,7 +17,7 @@
 @ Please refer to LowLevel.build for the exact list of other files it must be combined with.
 @
 
-@ WARNING: This implementation assumes a little endian CPU with ARMv6M architecture (e.g., Cortex-M0) and the GCC compiler.
+@ WARNING: This implementation assumes a little endian CPU with@ ARMv6M architecture (e.g., Cortex-M0).
 
 
     .thumb
@@ -50,7 +50,7 @@
 .equ _so, 23
 .equ _su, 24
 
-.macro  xor5        result,ptr,b,g,k,m,s
+.macro    xor5        result,ptr,b,g,k,m,s
     ldrb        \result, [\ptr, #\b]
     ldrb        r7, [\ptr, #\g]
     eors        \result, \result, r7
@@ -62,10 +62,10 @@
     eors        \result, \result, r7
     .endm
 
-.macro  xorrol      b, yy, rr
+.macro    xorrol      b, yy, rr
     mov         r7, \yy
     eors        \b, \b, r7
-    .if         \rr != 0
+    .if          \rr != 0
     lsls        r7, \b, #\rr
     lsrs        \b, \b, #8-\rr
     orrs        \b, \b, r7
@@ -73,7 +73,7 @@
     .endif
     .endm
 
-.macro  rolxor      d, a, b, rot
+.macro    rolxor      d, a, b, rot
     sxtb        r7, \b
     rors        r7, r7, \rot
     eors        r7, r7, \a
@@ -81,14 +81,14 @@
     mov         \d, r7
     .endm
 
-.macro  xandnot     resptr, resofs, aa, bb, cc, temp
+.macro    xandnot     resptr, resofs, aa, bb, cc, temp
     mov         \temp, \cc
     bics        \temp, \temp, \bb
     eors        \temp, \temp, \aa
     strb        \temp, [\resptr, #\resofs]
     .endm
 
-.macro  xandnotRC   resptr, resofs, aa, bb, cc, rco
+.macro    xandnotRC   resptr, resofs, aa, bb, cc, rco
     bics        \cc, \cc, \bb
     eors        \cc, \cc, \aa
     mov         r7, r8
@@ -97,7 +97,7 @@
     strb        \cc, [\resptr, #\resofs]
     .endm
 
-.macro  KeccakRound     sOut, sIn, rco
+.macro    KeccakRound     sOut, sIn, rco
     @prepTheta
     push        { \sOut }
     movs        \sOut, #31
@@ -194,8 +194,8 @@
 @
 @ void KeccakP200_StaticInitialize( void )
 @
-.align 8
-.global   KeccakP200_StaticInitialize
+    .align  4
+.global KeccakP200_StaticInitialize
 .type	KeccakP200_StaticInitialize, %function;
 KeccakP200_StaticInitialize:
     bx      lr
@@ -205,8 +205,8 @@ KeccakP200_StaticInitialize:
 @
 @ void KeccakP200_Initialize(void *state)
 @
-.align 8
-.global   KeccakP200_Initialize
+    .align  4
+.global KeccakP200_Initialize
 .type	KeccakP200_Initialize, %function;
 KeccakP200_Initialize:
     movs    r1, #0
@@ -222,8 +222,8 @@ KeccakP200_Initialize:
 @
 @  void KeccakP200_AddByte(void *state, unsigned char byte, unsigned int offset)
 @
-.align 8
-.global   KeccakP200_AddByte
+    .align  4
+.global KeccakP200_AddByte
 .type	KeccakP200_AddByte, %function;
 KeccakP200_AddByte:
     ldrb    r3, [r0, r2]
@@ -236,8 +236,8 @@ KeccakP200_AddByte:
 @
 @ void KeccakP200_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-.align 8
-.global   KeccakP200_AddBytes
+    .align  4
+.global KeccakP200_AddBytes
 .type	KeccakP200_AddBytes, %function;
 KeccakP200_AddBytes:
     subs    r3, r3, #1
@@ -260,8 +260,8 @@ KeccakP200_AddBytes_Exit:
 @
 @  void KeccakP200_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-.align 8
-.global   KeccakP200_OverwriteBytes
+    .align  4
+.global KeccakP200_OverwriteBytes
 .type	KeccakP200_OverwriteBytes, %function;
 KeccakP200_OverwriteBytes:
     subs    r3, r3, #1
@@ -280,8 +280,8 @@ KeccakP200_OverwriteBytes_Exit:
 @
 @ void KeccakP200_OverwriteWithZeroes(void *state, unsigned int byteCount)
 @
-.align 8
-.global   KeccakP200_OverwriteWithZeroes
+    .align  4
+.global KeccakP200_OverwriteWithZeroes
 .type	KeccakP200_OverwriteWithZeroes, %function;
 KeccakP200_OverwriteWithZeroes:
     movs    r3, #0
@@ -299,8 +299,8 @@ KeccakP200_OverwriteWithZeroes_Exit:
 @
 @  void KeccakP200_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-.align 8
-.global   KeccakP200_ExtractBytes
+    .align  4
+.global KeccakP200_ExtractBytes
 .type	KeccakP200_ExtractBytes, %function;
 KeccakP200_ExtractBytes:
     subs    r3, r3, #1
@@ -319,8 +319,8 @@ KeccakP200_ExtractBytes_Exit:
 @
 @  void KeccakP200_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 @
-.align 8
-.global   KeccakP200_ExtractAndAddBytes
+    .align  4
+.global KeccakP200_ExtractAndAddBytes
 .type	KeccakP200_ExtractAndAddBytes, %function;
 KeccakP200_ExtractAndAddBytes:
     push    {r4,r5}
@@ -344,8 +344,8 @@ KeccakP200_ExtractAndAddBytes_Exit:
 @
 @ void KeccakP200_Permute_Nrounds( void *state, unsigned int nr )
 @
-.align 8
-.global   KeccakP200_Permute_Nrounds
+    .align  4
+.global KeccakP200_Permute_Nrounds
 .type	KeccakP200_Permute_Nrounds, %function;
 KeccakP200_Permute_Nrounds:
     push    { r4 - r6, lr }
@@ -361,8 +361,8 @@ KeccakP200_Permute_Nrounds:
     adds    r7, r7, #18
     subs    r7, r7, r1
     lsls    r1, r1, #31
-    beq     KeccakP200_Permute_RoundLoop
-    ldm     r0!, { r1, r2, r3, r4, r5 } @ odd number of rounds: copy state to stack
+    beq     KeccakP200_Permute_Nrounds_GoRoundLoop
+    ldm     r0!, { r1, r2, r3, r4, r5 }  @ odd number of rounds: copy state to stack
     subs    r0, r0, #20
     stm     r6!, { r1, r2, r3, r4, r5 }
     subs    r6, r6, #20
@@ -373,15 +373,16 @@ KeccakP200_Permute_Nrounds:
     subs    r7, r7, #1
     mov     r8, r7
     b       KeccakP200_Permute_RoundOdd
-    nop
+KeccakP200_Permute_Nrounds_GoRoundLoop:
+    b       KeccakP200_Permute_RoundLoop
 
 
 @----------------------------------------------------------------------------
 @
 @ void KeccakP200_Permute_18rounds( void *state )
 @
-.align 8
-.global   KeccakP200_Permute_18rounds
+    .align  4
+.global KeccakP200_Permute_18rounds
 .type	KeccakP200_Permute_18rounds, %function;
 KeccakP200_Permute_18rounds:
     push    { r4 - r6, lr }
@@ -398,26 +399,26 @@ KeccakP200_Permute_18rounds:
     nop
 
 KeccakP200_Permute_RoundConstants18:
-        .byte       0x01
-        .byte       0x82
-        .byte       0x8a
-        .byte       0x00
-        .byte       0x8b
-        .byte       0x01
-        .byte       0x81
-        .byte       0x09
-        .byte       0x8a
-        .byte       0x88
-        .byte       0x09
-        .byte       0x0a
-        .byte       0x8b
-        .byte       0x8b
-        .byte       0x89
-        .byte       0x03
-        .byte       0x02
-        .byte       0x80
+    .byte      0x01
+    .byte      0x82
+    .byte      0x8a
+    .byte      0x00
+    .byte      0x8b
+    .byte      0x01
+    .byte      0x81
+    .byte      0x09
+    .byte      0x8a
+    .byte      0x88
+    .byte      0x09
+    .byte      0x0a
+    .byte      0x8b
+    .byte      0x8b
+    .byte      0x89
+    .byte      0x03
+    .byte      0x02
+    .byte      0x80
 
-.align 8
+    .align  4
 KeccakP200_Permute_RoundLoop:
     mov     r8, r7
     KeccakRound r6, r0, 0

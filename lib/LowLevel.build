@@ -623,6 +623,12 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/Xoodoo/Optimized/Xoodoo-SnP.h</h>
     </fragment>
 
+    <fragment name="XooOptimizedARMv6" inherits="common optimized Xoodoo">
+        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-uf-armv6-le-gcc.s</c>
+        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-uf-armv6-le-gcc.s</c>
+        <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
+    </fragment>
+
     <fragment name="XooOptimizedARMv6M" inherits="common optimized Xoodoo">
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-u1-armv6m-le-gcc.s</c>
         <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-u1-armv6m-le-gcc.s</c>
@@ -640,6 +646,11 @@ The fragments below allow to select the desired implementation of the permutatio
         <c>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-uf-armv7a-neon-le-gcc.s</c>
         <c>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodyak-uf-armv7a-neon-le-gcc.s</c>
         <h>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-SnP.h</h>
+    </fragment>
+
+    <fragment name="XooOptimizedAVR8" inherits="common optimized Xoodoo">
+        <c>lib/low/Xoodoo/OptimizedAsmAVR8/Xoodoo-avr8-u1.s</c>
+        <h>lib/low/Xoodoo/OptimizedAsmAVR8/Xoodoo-SnP.h</h>
     </fragment>
 
     <fragment name="XooOptimizedSIMD128" inherits="common optimized Xoodoo">

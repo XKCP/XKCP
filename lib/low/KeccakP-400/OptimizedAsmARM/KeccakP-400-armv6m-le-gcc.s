@@ -17,7 +17,7 @@
 @ Please refer to LowLevel.build for the exact list of other files it must be combined with.
 @
 
-@ WARNING: This implementation assumes a little endian CPU with ARMv6M architecture (e.g., Cortex-M0) and the GCC compiler.
+@ WARNING: This implementation assumes a little endian CPU with@ ARMv6M architecture (e.g., Cortex-M0).
 
 
     .thumb
@@ -50,7 +50,7 @@
 .equ _so    , 23*2
 .equ _su    , 24*2
 
-.macro  xor5        result,ptr,b,g,k,m,s
+.macro    xor5        result,ptr,b,g,k,m,s
     ldrh        \result, [\ptr, #\b]
     ldrh        r7, [\ptr, #\g]
     eors        \result, \result, r7
@@ -62,10 +62,10 @@
     eors        \result, \result, r7
     .endm
 
-.macro  xorrol      b, yy, rr
+.macro    xorrol      b, yy, rr
     mov         r7, \yy
     eors        \b, \b, r7
-    .if         \rr != 0
+    .if          \rr != 0
     lsls        r7, \b, #\rr
     lsrs        \b, \b, #16-\rr
     orrs        \b, \b, r7
@@ -73,7 +73,7 @@
     .endif
     .endm
 
-.macro  rolxor      d, a, b, rot
+.macro    rolxor      d, a, b, rot
     sxth        r7, \b
     rors        r7, r7, \rot
     eors        r7, r7, \a
@@ -81,14 +81,14 @@
     mov         \d, r7
     .endm
 
-.macro  xandnot     resptr, resofs, aa, bb, cc, temp
+.macro    xandnot     resptr, resofs, aa, bb, cc, temp
     mov         \temp, \cc
     bics        \temp, \temp, \bb
     eors        \temp, \temp, \aa
     strh        \temp, [\resptr, #\resofs]
     .endm
 
-.macro  xandnotRC   resptr, resofs, aa, bb, cc, rco
+.macro    xandnotRC   resptr, resofs, aa, bb, cc, rco
     bics        \cc, \cc, \bb
     eors        \cc, \cc, \aa
     mov         r7, r8
@@ -97,7 +97,7 @@
     strh        \cc, [\resptr, #\resofs]
     .endm
 
-.macro  KeccakRound     sOut, sIn, rco
+.macro    KeccakRound     sOut, sIn, rco
 
     @prepTheta
     push        { \sOut }
@@ -200,8 +200,8 @@
 @
 @ void KeccakP400_StaticInitialize( void )
 @
-.align 8
-.global   KeccakP400_StaticInitialize
+    .align  4
+.global KeccakP400_StaticInitialize
 .type	KeccakP400_StaticInitialize, %function;
 KeccakP400_StaticInitialize:
     bx      lr
@@ -211,8 +211,8 @@ KeccakP400_StaticInitialize:
 @
 @ void KeccakP400_Initialize(void *state)
 @
-.align 8
-.global   KeccakP400_Initialize
+    .align  4
+.global KeccakP400_Initialize
 .type	KeccakP400_Initialize, %function;
 KeccakP400_Initialize:
     movs    r1, #0
@@ -230,8 +230,8 @@ KeccakP400_Initialize:
 @
 @  void KeccakP400_AddByte(void *state, unsigned char byte, unsigned int offset)
 @
-.align 8
-.global   KeccakP400_AddByte
+    .align  4
+.global KeccakP400_AddByte
 .type	KeccakP400_AddByte, %function;
 KeccakP400_AddByte:
     ldrb    r3, [r0, r2]
@@ -244,8 +244,8 @@ KeccakP400_AddByte:
 @
 @ void KeccakP400_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-.align 8
-.global   KeccakP400_AddBytes
+    .align  4
+.global KeccakP400_AddBytes
 .type	KeccakP400_AddBytes, %function;
 KeccakP400_AddBytes:
     subs    r3, r3, #1
@@ -268,8 +268,8 @@ KeccakP400_AddBytes_Exit:
 @
 @  void KeccakP400_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-.align 8
-.global   KeccakP400_OverwriteBytes
+    .align  4
+.global KeccakP400_OverwriteBytes
 .type	KeccakP400_OverwriteBytes, %function;
 KeccakP400_OverwriteBytes:
     subs    r3, r3, #1
@@ -288,8 +288,8 @@ KeccakP400_OverwriteBytes_Exit:
 @
 @ void KeccakP400_OverwriteWithZeroes(void *state, unsigned int byteCount)
 @
-.align 8
-.global   KeccakP400_OverwriteWithZeroes
+    .align  4
+.global KeccakP400_OverwriteWithZeroes
 .type	KeccakP400_OverwriteWithZeroes, %function;
 KeccakP400_OverwriteWithZeroes:
     movs    r3, #0
@@ -307,8 +307,8 @@ KeccakP400_OverwriteWithZeroes_Exit:
 @
 @  void KeccakP400_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
-.align 8
-.global   KeccakP400_ExtractBytes
+    .align  4
+.global KeccakP400_ExtractBytes
 .type	KeccakP400_ExtractBytes, %function;
 KeccakP400_ExtractBytes:
     subs    r3, r3, #1
@@ -327,8 +327,8 @@ KeccakP400_ExtractBytes_Exit:
 @
 @  void KeccakP400_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 @
-.align 8
-.global   KeccakP400_ExtractAndAddBytes
+    .align  4
+.global KeccakP400_ExtractAndAddBytes
 .type	KeccakP400_ExtractAndAddBytes, %function;
 KeccakP400_ExtractAndAddBytes:
     push    {r4,r5}
@@ -352,8 +352,8 @@ KeccakP400_ExtractAndAddBytes_Exit:
 @
 @ void KeccakP400_Permute_Nrounds( void *state, unsigned int nr )
 @
-.align 8
-.global   KeccakP400_Permute_Nrounds
+    .align  4
+.global KeccakP400_Permute_Nrounds
 .type	KeccakP400_Permute_Nrounds, %function;
 KeccakP400_Permute_Nrounds:
     push    { r4 - r6, lr }
@@ -369,8 +369,8 @@ KeccakP400_Permute_Nrounds:
     subs    r7, r7, r1
     subs    r7, r7, r1
     lsls    r1, r1, #31
-    beq     KeccakP400_Permute_RoundLoop
-    subs    r7, r7, #2                              @ odd number of rounds
+    beq     KeccakP400_Permute_Nrounds_GoRoundLoop
+    subs    r7, r7, #2                                @ odd number of rounds
     mov     r8, r7
     ldm     r0!, { r1, r2, r3, r4, r5, r7 } @ copy state to stack
     stm     r6!, { r1, r2, r3, r4, r5, r7 }
@@ -381,6 +381,8 @@ KeccakP400_Permute_Nrounds:
     ldrh    r1, [r0, #_su]
     strh    r1, [r6, #_su]
     b       KeccakP400_Permute_RoundOdd
+KeccakP400_Permute_Nrounds_GoRoundLoop:
+    b       KeccakP400_Permute_RoundLoop
     nop
 
 
@@ -388,8 +390,8 @@ KeccakP400_Permute_Nrounds:
 @
 @ void KeccakP400_Permute_20rounds( void *state )
 @
-.align 8
-.global   KeccakP400_Permute_20rounds
+    .align  4
+.global KeccakP400_Permute_20rounds
 .type	KeccakP400_Permute_20rounds, %function;
 KeccakP400_Permute_20rounds:
     push        { r4 - r6, lr }
@@ -403,30 +405,30 @@ KeccakP400_Permute_20rounds:
     mov         r6, sp
     adr         r7, KeccakP400_Permute_RoundConstants20
     b           KeccakP400_Permute_RoundLoop
-.align 8
+    .align  4
 KeccakP400_Permute_RoundConstants20:
-        .short          0x0001
-        .short          0x8082
-        .short          0x808a
-        .short          0x8000
-        .short          0x808b
-        .short          0x0001
-        .short          0x8081
-        .short          0x8009
-        .short          0x008a
-        .short          0x0088
-        .short          0x8009
-        .short          0x000a
-        .short          0x808b
-        .short          0x008b
-        .short          0x8089
-        .short          0x8003
-        .short          0x8002
-        .short          0x0080
-        .short          0x800a
-        .short          0x000a
+    .short          0x0001
+    .short          0x8082
+    .short          0x808a
+    .short          0x8000
+    .short          0x808b
+    .short          0x0001
+    .short          0x8081
+    .short          0x8009
+    .short          0x008a
+    .short          0x0088
+    .short          0x8009
+    .short          0x000a
+    .short          0x808b
+    .short          0x008b
+    .short          0x8089
+    .short          0x8003
+    .short          0x8002
+    .short          0x0080
+    .short          0x800a
+    .short          0x000a
 KeccakP400_Permute_RoundConstants:
-        .short          0xFF            @terminator
+    .short          0xFF            @terminator
 
 KeccakP400_Permute_RoundLoop:
     mov         r8, r7

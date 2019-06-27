@@ -9,7 +9,7 @@
 ; http://creativecommons.org/publicdomain/zero/1.0/
 ;
 
-; WARNING: These functions work only on little endian CPU with ARMv6m architecture (Cortex-M0, ...).
+; WARNING: These functions work only on little endian CPU with ARMv6m architecture (e.g., Cortex-M0).
 
         PRESERVE8
         THUMB
@@ -253,6 +253,7 @@ Xoodoo_Permute_12rounds_offsetRC     equ 4
 Xoodoo_Permute_12rounds_offsetReturn equ 8
 Xoodoo_Permute_12rounds_SAS          equ 12
 
+    align   4
 Xoodoo_Permute_12roundsAsm   PROC
     adr     r2, Xoodoo_Permute_RoundConstants12
     str     r2, [sp, #Xoodoo_Permute_12rounds_offsetRC]
@@ -281,7 +282,6 @@ Xoodoo_Permute_RoundConstants12
     dcd     0x000001A0
     dcd     0x00000012
     dcd     0
-    align   4
     ENDP
 
 ; ----------------------------------------------------------------------------
@@ -307,6 +307,7 @@ XoodyakAbsorb_offsetInitialLen      equ (Xoodoo_Permute_12rounds_SAS+12)
 
 XoodyakAbsorb_SAS                   equ (Xoodoo_Permute_12rounds_SAS+20)
 
+    align   4
     EXPORT  Xoodyak_AbsorbKeyedFullBlocks
 Xoodyak_AbsorbKeyedFullBlocks   PROC
     push    {r3-r7,lr}
@@ -336,7 +337,8 @@ Xoodyak_AbsorbKeyedFullBlocks   PROC
     mov     lr, r7
     ldm     r0!, {r4,r5,r6,r7}
 Xoodyak_AbsorbKeyedFullBlocks_Loop
-    b       Xoodoo_Permute_12roundsAsm
+    ldr     r0, =Xoodoo_Permute_12roundsAsm
+    bx      r0
     align   4
     ltorg
 Xoodyak_AbsorbKeyedFullBlocks_Ret
@@ -463,7 +465,6 @@ Xoodyak_AbsorbKeyedFullBlocks_Unaligned
     eors    r6, r6, r1
     adds    r0, r0, #12
     b       Xoodyak_AbsorbKeyedFullBlocks_EndLoop
-    align   4
     ENDP
 
 ; ----------------------------------------------------------------------------
@@ -482,6 +483,7 @@ Xoodyak_AbsorbKeyedFullBlocks_Unaligned
 ;     return initialLength - XLen;
 ; }
 ;
+    align   4
     EXPORT  Xoodyak_AbsorbHashFullBlocks
 Xoodyak_AbsorbHashFullBlocks   PROC
     push    {r3-r7,lr}
@@ -511,7 +513,8 @@ Xoodyak_AbsorbHashFullBlocks   PROC
     mov     lr, r7
     ldm     r0!, {r4,r5,r6,r7}
 Xoodyak_AbsorbHashFullBlocks_Loop
-    b       Xoodoo_Permute_12roundsAsm
+    ldr     r0, =Xoodoo_Permute_12roundsAsm
+    bx      r0
     align   4
     ltorg
 Xoodyak_AbsorbHashFullBlocks_Ret
@@ -586,7 +589,6 @@ Xoodyak_AbsorbHashFullBlocks_Unaligned
     str     r2, [sp, #Xoodoo_Permute_12rounds_offsetA03]
     adds    r0, r0, #16
     b       Xoodyak_AbsorbHashFullBlocks_EndLoop
-    align   4
     ENDP
 
 ; ----------------------------------------------------------------------------
@@ -612,6 +614,7 @@ XoodyakSqueeze_offsetInitialLen        equ    (Xoodoo_Permute_12rounds_SAS+12)
 
 XoodyakSqueeze_SAS                      equ (Xoodoo_Permute_12rounds_SAS+20)
 
+    align   4
     EXPORT  Xoodyak_SqueezeKeyedFullBlocks
 Xoodyak_SqueezeKeyedFullBlocks   PROC
     push    {r3-r7,lr}
@@ -643,7 +646,8 @@ Xoodyak_SqueezeKeyedFullBlocks   PROC
 Xoodyak_SqueezeKeyedFullBlocks_Loop
     movs    r0, #1
     eors    r3, r3, r0
-    b       Xoodoo_Permute_12roundsAsm
+    ldr     r0, =Xoodoo_Permute_12roundsAsm
+    bx      r0
     align   4
     ltorg
 Xoodyak_SqueezeKeyedFullBlocks_Ret
@@ -699,7 +703,6 @@ Xoodyak_SqueezeKeyedFullBlocks_Unaligned
     mStoreU r0, 20, r11, r2, locRegH
     adds    r0, r0, #24
     b       Xoodyak_SqueezeKeyedFullBlocks_EndLoop
-    align   4
     ENDP
 
 ; ----------------------------------------------------------------------------
@@ -718,6 +721,7 @@ Xoodyak_SqueezeKeyedFullBlocks_Unaligned
 ;     return initialLength - YLen;
 ; }
 ;
+    align   4
     EXPORT  Xoodyak_SqueezeHashFullBlocks
 Xoodyak_SqueezeHashFullBlocks   PROC
     push    {r3-r7,lr}
@@ -749,7 +753,8 @@ Xoodyak_SqueezeHashFullBlocks   PROC
 Xoodyak_SqueezeHashFullBlocks_Loop
     movs    r0, #1
     eors    r3, r3, r0
-    b       Xoodoo_Permute_12roundsAsm
+    ldr     r0, =Xoodoo_Permute_12roundsAsm
+    bx      r0
     align   4
     ltorg
 Xoodyak_SqueezeHashFullBlocks_Ret
@@ -800,7 +805,6 @@ Xoodyak_SqueezeHashFullBlocks_Unaligned
     mStoreU r0, 12, r1, r2, locRegL
     adds    r0, r0, #16
     b       Xoodyak_SqueezeHashFullBlocks_EndLoop
-    align   4
     ENDP
 
 ; ----------------------------------------------------------------------------
@@ -828,6 +832,7 @@ XoodyakCrypt_offsetIOLen            equ (Xoodoo_Permute_12rounds_SAS+12)
 XoodyakCrypt_offsetInitialLen       equ (Xoodoo_Permute_12rounds_SAS+16)
 XoodyakCrypt_SAS                    equ (Xoodoo_Permute_12rounds_SAS+20)
 
+    align   4
     EXPORT  Xoodyak_EncryptFullBlocks
 Xoodyak_EncryptFullBlocks   PROC
     push    {r3-r7,lr}
@@ -858,7 +863,8 @@ Xoodyak_EncryptFullBlocks   PROC
     mov     lr, r7
     ldm     r0!, {r4,r5,r6,r7}
 Xoodyak_EncryptFullBlocks_Loop
-    b       Xoodoo_Permute_12roundsAsm
+    ldr     r0, =Xoodoo_Permute_12roundsAsm
+    bx      r0
     align   4
     ltorg
 Xoodyak_EncryptFullBlocks_Ret
@@ -976,7 +982,6 @@ Xoodyak_EncryptFullBlocks_Unaligned
     adds    r4, r4, #24
     adds    r5, r5, #24
     b       Xoodyak_EncryptFullBlocks_EndLoop
-    align   4
     ENDP
 
 ; ----------------------------------------------------------------------------
@@ -997,6 +1002,7 @@ Xoodyak_EncryptFullBlocks_Unaligned
 ;     return initialLength - IOLen;
 ; }
 ;
+    align   4
     EXPORT  Xoodyak_DecryptFullBlocks
 Xoodyak_DecryptFullBlocks   PROC
     push    {r3-r7,lr}
@@ -1027,7 +1033,8 @@ Xoodyak_DecryptFullBlocks   PROC
     mov     lr, r7
     ldm     r0!, {r4,r5,r6,r7}
 Xoodyak_DecryptFullBlocks_Loop
-    b       Xoodoo_Permute_12roundsAsm
+    ldr     r0, =Xoodoo_Permute_12roundsAsm
+    bx      r0
     align   4
     ltorg
 Xoodyak_DecryptFullBlocks_Ret
@@ -1147,7 +1154,6 @@ Xoodyak_DecryptFullBlocks_Unaligned
     adds    r4, r4, #24
     adds    r5, r5, #24
     b       Xoodyak_DecryptFullBlocks_EndLoop
-    align   4
     ENDP
 
     END
