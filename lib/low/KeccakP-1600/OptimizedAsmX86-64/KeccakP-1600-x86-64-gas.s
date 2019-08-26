@@ -474,7 +474,7 @@
     .if     InlinePerm == 1
     mKeccakPermutation24
     .else
-    callq   KeccakP1600_Permute_24rounds
+    callq   KeccakP1600_Permute_24rounds@PLT
     .endif
     .endm
 
@@ -749,7 +749,7 @@ KeccakLaneComplementTable:
     .type   KeccakP1600_OverwriteBytes, %function
 KeccakP1600_OverwriteBytes:
     addq    arg3, arg1
-    leaq    KeccakLaneComplementTable, arg5
+    leaq    KeccakLaneComplementTable(%rip), arg5
     addq    arg3, arg5
     subq    $8, arg4
     jc      KeccakP1600_OverwriteBytes_Bytes
@@ -786,7 +786,7 @@ KeccakP1600_OverwriteBytes_Exit:
     .global KeccakP1600_OverwriteWithZeroes
     .type   KeccakP1600_OverwriteWithZeroes, %function
 KeccakP1600_OverwriteWithZeroes:
-    leaq    KeccakLaneComplementTable, arg5
+    leaq    KeccakLaneComplementTable(%rip), arg5
     subq    $8, arg2
     jc      KeccakP1600_OverwriteWithZeroes_Bytes
 KeccakP1600_OverwriteWithZeroes_LanesLoop:
@@ -821,7 +821,7 @@ KeccakP1600_OverwriteWithZeroes_Exit:
     .type   KeccakP1600_ExtractBytes, %function
 KeccakP1600_ExtractBytes:
     addq    arg3, arg1
-    leaq    KeccakLaneComplementTable, arg5
+    leaq    KeccakLaneComplementTable(%rip), arg5
     addq    arg3, arg5
     subq    $8, arg4
     jc      KeccakP1600_ExtractBytes_Bytes
@@ -859,7 +859,7 @@ KeccakP1600_ExtractBytes_Exit:
     .type   KeccakP1600_ExtractAndAddBytes, %function
 KeccakP1600_ExtractAndAddBytes:
     addq    arg4, arg1
-    leaq    KeccakLaneComplementTable, arg6
+    leaq    KeccakLaneComplementTable(%rip), arg6
     addq    arg4, arg6
     subq    $8, arg5
     jc      KeccakP1600_ExtractAndAddBytes_Bytes
@@ -980,7 +980,8 @@ KeccakP1600_Permute_Nrounds:
     movq    rT2a, _su(rpStack)
 KeccakP1600_Permute_Nrounds_Dispatch:
     shlq    $3, rT1
-    jmp     *KeccakP1600_Permute_NroundsTable-8(rT1)
+    leaq    KeccakP1600_Permute_NroundsTable-8(%rip), rT2a
+    jmp     *(rT1, rT2a)
 
 KeccakP1600_Permute_Nrounds24:
     mKeccakRound    rpState, rpStack, 0x0000000000000001, 0
@@ -1174,13 +1175,13 @@ KeccakF1600_FastLoop_Absorb_VariableLaneCountLoop:
     shlq    $3, arg4
     movq    arg3, arg2                  # data pointer
     xorq    arg3, arg3                  # offset = 0
-    callq   KeccakP1600_AddBytes   #  (void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+    callq   KeccakP1600_AddBytes@PLT    #  (void *state, const unsigned char *data, unsigned int offset, unsigned int length)
     movq    arg2, arg3                  # updated data pointer
     movq    24(%rsp), rT1a              # xor trailingBits
     xorq    rT1a, (arg1)
     popq    arg1
     pushq   arg3
-    callq   KeccakP1600_Permute_24rounds
+    callq   KeccakP1600_Permute_24rounds@PLT
     popq    arg3
     popq    arg2
     popq    arg4
