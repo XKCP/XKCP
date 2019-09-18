@@ -224,7 +224,7 @@ Xoodoo_ExtractAndAddBytes_Exit
 Xoodoo_Permute_6rounds   PROC
     vpush       {q4-q5}
     vldmia      r0, {q0-q2}
-    ldr         r1, = _rc6
+    adr         r1, _rc6
     mRound
     mRound
     mRound
@@ -260,7 +260,7 @@ _rc6
 Xoodoo_Permute_12rounds   PROC
     vpush       {q4-q5}
     vldmia      r0, {q0-q2}
-    ldr         r1, = _rc12
+    adr         r1, _rc12
     mRound
     mRound
     mRound
@@ -371,7 +371,7 @@ Xoofff_CompressFastLoop   PROC
     vld1.32     {q11}, [r1]
 Xoofff_CompressFastLoop_Loop
     vld1.32     {q0,q1}, [r2]!            ; get input
-    ldr         r1, = _rc6
+    adr         r1, _rc6b
     vld1.32     {q2}, [r2]!
     veor.32     q0, q0, q6
     veor.32     q1, q1, q7
@@ -403,7 +403,15 @@ Xoofff_CompressFastLoop_Loop
     sub         r0, r2, r6                  ; return number of bytes processed
     vpop        {q4-q7}
     pop         {r4,r5,r6,pc}
+    LTORG
     align       8
+_rc6b
+    dcq         0x00000060
+    dcq         0x0000002C
+    dcq         0x00000380
+    dcq         0x000000F0
+    dcq         0x000001A0
+    dcq         0x00000012
     ENDP
 
 ; ----------------------------------------------------------------------------
@@ -425,7 +433,7 @@ Xoofff_ExpandFastLoop_Loop
     vmov        q0, q9
     vmov        q1, q10
     vmov        q2, q11
-    ldr         r1, = _rc6
+    adr         r1, _rc6b
     mRound                                  ; permutation
     mRound
     mRound
