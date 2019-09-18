@@ -80,7 +80,7 @@ static uint_32t HiResTime(void)           /* return the current value of time st
         uint32_t cycle_count;
         asm volatile("MRS %0, pmevcntr0_el0" : "=r" (cycle_count));
         return cycle_count;
-    #elif  defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A_)
+    #elif  defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__)
     /* Implement Aarch32 bits on PMU : Tested on Cortex a-53 */
         uint32_t cycle_count;
         asm volatile("MRC p15, 0, %0, c9, c13, 0 \t\n" : "=r"(cycle_count));
@@ -115,10 +115,10 @@ static uint_32t calibrate()
             uint32_t r = 0;
             asm volatile("mrs %0, pmcntenset_el0" : "=r" (r));
             asm volatile("msr pmcntenset_el0, %0" : : "r" (r|1));
-        #elif  defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A_)
+        #elif  defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__)
         /* Implement Aarch32 bits on PMU : Tested on Cortex a-53 */
             /* Enable counters in Control Register and reset cycle count and event count */
-            printf("PMU32 Enable.. \n");
+            printf("PMU32 Enabled... \n");
             asm volatile("MCR   p15, 0, %0, c9, c12, 0" : : "r"(0x00000007));
             /* Event counter selection register, which counter to access */
             asm volatile("MCR   p15, 0, %0, c9, c12, 5" : : "r"(0x0));
