@@ -27,7 +27,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testXoofffModes.h"
 #include "testXoodyak.h"
 #include "testXooPerformance.h"
-
 #define MEASURE_PERF
 
 #if defined(EMBEDDED)
@@ -75,7 +74,7 @@ struct
 
 int main( void )
 {
-    
+
     testXooSnP();
     #if !defined(EMBEDDED)
     printf( "\nSnP OK\n" );

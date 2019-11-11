@@ -665,9 +665,15 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/Xoodoo-times4/SIMD128/Xoodoo-times4-SnP.h</h>
     </fragment>
 
-    <fragment name="XooOptimizedTimes4_AVX512" inherits="common optimized XooWidth384">>
+    <fragment name="XooOptimizedTimes4_AVX512" inherits="common optimized XooWidth384">
         <c>lib/low/Xoodoo-times4/SIMD512/Xoodoo-times4-SIMD512.c</c>
         <h>lib/low/Xoodoo-times4/SIMD512/Xoodoo-times4-SnP.h</h>
+    </fragment>
+
+    <fragment name="XooOptimizedTimes4_ARMv7A" inherits="common optimized XooWidth384">
+        <gcc>-mfpu=neon</gcc>
+        <c>lib/low/Xoodoo-times4/AsmARMv7A/Xoodoo-times4-ARMv7A.s</c>
+        <h>lib/low/Xoodoo-times4/AsmARMv7A/Xoodoo-times4-SnP.h</h>
     </fragment>
 
     <!-- Xoodoo×8 -->

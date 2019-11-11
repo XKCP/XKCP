@@ -12,7 +12,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if !defined(EMBEDDED)
 
 /* #define OUTPUT */
-/* #define VERBOSE */
+#define VERBOSE
 #endif
 
 #if defined(EMBEDDED)
@@ -83,9 +83,18 @@ void assert(int condition);
     #undef PlSnP_PermuteAll
     #undef SnP_width
 
+void printStates(uint8_t * states) {
+  size_t st = 0, i;
+  for(i = 0; i < 192; i++){
+    st++;
+    if(states[i] < 16) { printf(" ");}
+    printf("%x ", (uint8_t) states[i]);
+    if(st % 16 == 0){ printf("\n"); } else if(st % 4  == 0){ printf(" | "); }
+  } printf("\n");
+}
+
 void testXooPlSnP(void)
 {
-
     Xoodootimes4_testPlSnP("Xoodoo-times4.txt", "Xoodoo\303\2274",
         "\xb9\x5e\x54\xf5\x66\x51\xb5\x4b\x12\x42\x7b\x29\xbd\x2c\x31\x46\x8a\x50\x41\xe4\xee\x72\x04\xf5\x61\xcf\xf2\xde\xf2\x9d\x8d\x89\xaa\xa4\xc3\x09\x36\x71\x8c\x29\x8a\xa7\x1a\x14\x52\x38\xc5\x06"
     );

@@ -338,7 +338,7 @@ void Xoodootimes4_ExtractAndAddLanesAll(const void *states, const unsigned char 
 
     #define ExtrXOR( argIndex )    curOutput0[argIndex] = curInput0[argIndex] ^ stateAsLanes[4*(argIndex)+0], curOutput1[argIndex] = curInput1[argIndex] ^ stateAsLanes[4*(argIndex)+1], \
                                 curOutput2[argIndex] = curInput2[argIndex] ^ stateAsLanes[4*(argIndex)+2], curOutput3[argIndex] = curInput3[argIndex] ^ stateAsLanes[4*(argIndex)+3]
-    
+
     if ( laneCount == 12 )  {
         ExtrXOR( 0 );
         ExtrXOR( 1 );

@@ -100,7 +100,6 @@ void accumulateBufferParallel(void *stateAccumulated, const unsigned char *buffe
 void accumulateStateParallel(void *stateAccumulated, const void *stateTest)
 {
     unsigned char buffer[PlSnP_P*(SnP_width/8)];
-
     PlSnP_ExtractLanesAll(stateTest, buffer, SnP_laneCount, SnP_laneCount);
     accumulateBufferParallel(stateAccumulated, buffer);
 }
@@ -148,7 +147,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
     /* Testing PlSnP_AddBytes() */
     {
         unsigned char buffer[PlSnP_P*(SnP_width/8)+8];
-        unsigned i, offset, length, alignment, instanceIndex;
+        unsigned i, offset, length, alignment, instanceIndex=0;
 
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++) {
             for(i=0; i<sizeof(buffer); i++)
@@ -176,6 +175,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             alignment = (laneCount+2)%8;
             for(i=0; i<sizeof(buffer)-8; i++)
                 buffer[i+alignment] = (uint8_t)(0x75 + 3*i - 8*alignment);
+            // Alignment should go times 8 if you used it as a byte offset.
             PlSnP_AddLanesAll(stateTest, buffer+alignment, laneCount, laneOffset);
             accumulateStateParallel(stateAccumulated, stateTest);
         }

@@ -79,6 +79,7 @@ Xoodoo_Permute_12roundsAsm:
     mRound
     bx          lr
     .ltorg
+    .align 0
 _rc12:
     .quad          0x00000058
     .quad          0x00000038
