@@ -12,7 +12,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if !defined(EMBEDDED)
 
 /* #define OUTPUT */
-#define VERBOSE
+// #define VERBOSE
 #endif
 
 #if defined(EMBEDDED)
