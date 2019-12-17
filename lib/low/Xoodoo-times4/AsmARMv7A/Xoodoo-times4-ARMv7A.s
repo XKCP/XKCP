@@ -1,14 +1,14 @@
 @
 @ Implementation by Conno Boel, hereby denoted as "the implementer".
 @
-@ Not an official member of the Keccak Team (https://keccak.team/)
+@ *NOT* an official member of the Keccak Team (https://keccak.team/)
 @
 @ To the extent possible under law, the implementer has waived all copyright
 @ and related or neighboring rights to the source code in this file.
 @ http://creativecommons.org/publicdomain/zero/1.0/
 @
 
-@ WARNING: These functions work only on little endian CPU with@ ARMv7a + NEON architecture (Cortex-A8, ...).
+@ WARNING: These functions work only on little endian CPU with@ ARMv7A + NEON architecture (Cortex-A8, ...).
 
 .text
 
@@ -89,7 +89,14 @@ Xt4_AddBytes_Loop:
 .global Xoodootimes4_AddLanesAll
 .type Xoodootimes4_AddLanesAll, %function
 Xoodootimes4_AddLanesAll:
+  cmp       r2, r3
+  cmpeq     r2, #12
+  tsteq     r1, #3
+  moveq     r3, lr
+  beq       Xt4_AddLanesAll_Full
+
   push      {r4-r7,lr}
+
   add       r4, r1, r3, lsl #2
   add       r5, r4, r3, lsl #2
   add       r6, r5, r3, lsl #2
@@ -160,29 +167,69 @@ Xt4_AddLanesAll_Unaligned_Loop:
   subs      r2, r2, #1
   bcs       Xt4_AddLanesAll_Unaligned_Loop
   pop       {r4-r7,pc}
+Xt4_AddLanesAll_Full:
+  vldm      r1!, {d0-d15}
+  vuzp.32   q0, q6
+  vldm      r1, {d16-d23}
+  vuzp.32   q3, q9
+  vtrn.32   q0, q3
+  vtrn.32   q6, q9
 
+  vuzp.32   q1, q7
+  vuzp.32   q4, q10
+  vtrn.32   q1, q4
+  vtrn.32   q7, q10
+
+  vuzp.32   q2, q8
+  vuzp.32   q5, q11
+  vtrn.32   q2, q5
+  vtrn.32   q8, q11
+
+  vldm      r0, {d24-d31}
+  veor      q12, q0, q12
+  veor      q13, q6, q13
+  veor      q14, q3, q14
+  veor      q15, q9, q15
+  vstm      r0!, {d24-d31}
+  vldm      r0, {d24-d31}
+  veor      q12, q1, q12
+  veor      q13, q7, q13
+  veor      q14, q4, q14
+  veor      q15, q10, q15
+  vstm      r0!, {d24-d31}
+  vldm      r0, {d24-d31}
+  veor      q12, q2, q12
+  veor      q13, q8, q13
+  veor      q14, q5, q14
+  veor      q15, q11, q15
+  vstm      r0, {d24-d31}
+  mov       pc, r3
 
 @ Xoodootimes4_OverwriteBytes: void * states -> uint instanceIndex -> const uchar * data -> uint offset -> uint length -> void
 .align 8
 .global Xoodootimes4_OverwriteBytes
 .type Xoodootimes4_OverwriteBytes, %function
 Xoodootimes4_OverwriteBytes:
+  push      {r4, lr}
+  ldr       r4, [sp, #8]
+  cmp       r4, #48
+  tsteq     r2, #3
+  beq       Xt4_OverwriteBytes_Full
+
   add       r1, r1, r3
   and       r3, r3, #3
   sub       r1, r1, r3
   add       r0, r0, r1, lsl #2 @ states+(WORD instanceIndex)
   add       r0, r0, r3
 
-  ldr       r1, [sp]
-  subs      r1, r1, #1
-  bxcc      lr
+  subs      r1, r4, #1
+  popcc     {r4, pc}
 
   @ r0 start
   @ r1 lenght > 0
   @ r2 data
   @ r3 byte offset {0,1,2,3}
 
-  push      {r4, lr}
 Xt4_OverwriteBytes_Loop:
   ldrb      r4, [r2], #1
   strb      r4, [r0], #1
@@ -191,6 +238,24 @@ Xt4_OverwriteBytes_Loop:
   addeq     r0, r0, #12 @ Skip state
   subs      r1, r1, #1
   bcs       Xt4_OverwriteBytes_Loop
+  pop       {r4, pc}
+Xt4_OverwriteBytes_Full:
+  add       r0, r0, r1, lsl #2
+  ldmia     r2!, {r1, r3, r4, r14}
+  str       r1, [r0], #16
+  str       r3, [r0], #16
+  str       r4, [r0], #16
+  str       r14, [r0], #16
+  ldmia     r2!, {r1, r3, r4, r14}
+  str       r1, [r0], #16
+  str       r3, [r0], #16
+  str       r4, [r0], #16
+  str       r14, [r0], #16
+  ldmia     r2, {r1, r3, r4, r14}
+  str       r1, [r0], #16
+  str       r3, [r0], #16
+  str       r4, [r0], #16
+  str       r14, [r0], #16
   pop       {r4, pc}
 
 @ Xoodootimes4_OverwriteLanesAll: void * states -> uchar * data -> uint lanecount -> uint laneOffset -> void
@@ -399,6 +464,11 @@ Xt4_ExtractLanesAll_Unaligned_Loop:
 Xoodootimes4_ExtractAndAddBytes:
   push      {r4, r5, lr}
   ldr       r4, [sp, #12]
+  ldr       r5, [sp, #16]
+  cmp       r5, #48
+  tsteq     r2, #3
+  tsteq     r3, #3
+  beq       Xt4_ExtractAndAddBytes_Full
 
   add       r1, r1, r4
   and       r4, r4, #3
@@ -406,8 +476,7 @@ Xoodootimes4_ExtractAndAddBytes:
   add       r0, r0, r1, lsl #2 @ states+(WORD instanceIndex)
   add       r0, r0, r4
 
-  ldr       r1, [sp, #16]
-  subs      r1, r1, #1
+  subs      r1, r5, #1
   popcc     {r4, r5, pc}
 
 Xt4_ExtractAndAddBytes_Loop:
@@ -420,6 +489,41 @@ Xt4_ExtractAndAddBytes_Loop:
   addeq     r0, r0, #12 @ Skip state
   subs      r1, r1, #1
   bcs       Xt4_ExtractAndAddBytes_Loop
+  pop       {r4, r5, pc}
+Xt4_ExtractAndAddBytes_Full:
+  add       r0, r0, r1, lsl #2
+  ldmia     r2!, {r1, r4, r5}
+  ldr       r14, [r0], #16
+  eor       r1, r1, r14
+  ldr       r14, [r0], #16
+  eor       r4, r4, r14
+  ldr       r14, [r0], #16
+  eor       r5, r5, r14
+  stmia     r3!, {r1, r4, r5}
+  ldmia     r2!, {r1, r4, r5}
+  ldr       r14, [r0], #16
+  eor       r1, r1, r14
+  ldr       r14, [r0], #16
+  eor       r4, r4, r14
+  ldr       r14, [r0], #16
+  eor       r5, r5, r14
+  stmia     r3!, {r1, r4, r5}
+  ldmia     r2!, {r1, r4, r5}
+  ldr       r14, [r0], #16
+  eor       r1, r1, r14
+  ldr       r14, [r0], #16
+  eor       r4, r4, r14
+  ldr       r14, [r0], #16
+  eor       r5, r5, r14
+  stmia     r3!, {r1, r4, r5}
+  ldmia     r2, {r1, r4, r5}
+  ldr       r14, [r0], #16
+  eor       r1, r1, r14
+  ldr       r14, [r0], #16
+  eor       r4, r4, r14
+  ldr       r14, [r0], #16
+  eor       r5, r5, r14
+  stmia     r3, {r1, r4, r5}
   pop       {r4, r5, pc}
 
 
@@ -526,312 +630,315 @@ Xt4_ExtractAndAddLanesAll_Unaligned_Loop:
 @ Xoodootimes4_Permute_once:
 @ q0: a00 -> q1: a01 -> q2:  a02 -> q3:  a03 ->
 @ q4: a10 -> q5: a11 -> q6:  a12 -> q7:  a13 ->
-@ q8: a20 -> q9: a21 -> q10: a22 -> q11: a23 ->
+@ q8: a20 -> q9: a21 -> q10: a22 -> q11: a23
+
 .macro round
   theta
   rho_w
-  iota
   chi
   rho_e
 .endm
 
 .macro theta
-  veor      q12, q0, q4
-  veor      q12, q12, q8
-  veor      q13, q1, q5
-  veor      q13, q13, q9
-  veor      q14, q2, q6
-  veor      q14, q14, q10
   veor      q15, q3, q7
   veor      q15, q15, q11
-  @ P: q12-q15
-  vmov      r1, r2, d24
-  vmov      r3, r4, d25
+
+  vmov.32   r3, r4, d30
+  vmov.32   r1, r2, d31
+  ror       r3, r3, #27
+  veor      q14, q0, q4
+  ror       r4, r4, #27
+  veor      q14, q14, q8
   ror       r1, r1, #27
   ror       r2, r2, #27
+  eor       r3, r3, r3, ror #23
+  eor       r4, r4, r4, ror #23
+  eor       r1, r1, r1, ror #23
+  vmov.32   d30, r3, r4
+  eor       r2, r2, r2, ror #23
+  vmov.32   d31, r1, r2
+
+  vmov.32   r3, r4, d28
+  vmov.32   r1, r2, d29
   ror       r3, r3, #27
-  ror       r4, r4, #27
-  eor       r1, r1, ror #23
-  eor       r2, r2, ror #23
-  eor       r3, r3, ror #23
-  eor       r4, r4, ror #23
-  vmov      d24, r1, r2
-  vmov      d25, r3, r4
-  vmov      r1, r2, d26
-  vmov      r3, r4, d27
-  ror       r1, r1, #27
-  ror       r2, r2, #27
-  ror       r3, r3, #27
-  ror       r4, r4, #27
-  eor       r1, r1, ror #23
-  eor       r2, r2, ror #23
-  eor       r3, r3, ror #23
-  eor       r4, r4, ror #23
-  vmov      d26, r1, r2
-  vmov      d27, r3, r4
-  vmov      r1, r2, d28
-  vmov      r3, r4, d29
-  ror       r1, r1, #27
-  ror       r2, r2, #27
-  ror       r3, r3, #27
-  ror       r4, r4, #27
-  eor       r1, r1, ror #23
-  eor       r2, r2, ror #23
-  eor       r3, r3, ror #23
-  eor       r4, r4, ror #23
-  vmov      d28, r1, r2
-  vmov      d29, r3, r4
-  vmov      r1, r2, d30
-  vmov      r3, r4, d31
-  ror       r1, r1, #27
-  ror       r2, r2, #27
-  ror       r3, r3, #27
-  ror       r4, r4, #27
-  eor       r1, r1, ror #23
-  eor       r2, r2, ror #23
-  eor       r3, r3, ror #23
-  eor       r4, r4, ror #23
-  vmov      d30, r1, r2
-  vmov      d31, r3, r4
-  @ E: q15, q12, q13, q14 (One plane)
   veor      q0, q0, q15
-  veor      q1, q1, q12
-  veor      q2, q2, q13
-  veor      q3, q3, q14
+  ror       r4, r4, #27
   veor      q4, q4, q15
-  veor      q5, q5, q12
-  veor      q6, q6, q13
-  veor      q7, q7, q14
+  ror       r1, r1, #27
   veor      q8, q8, q15
-  veor      q9, q9, q12
-  veor      q10, q10, q13
+  ror       r2, r2, #27
+  veor      q15, q1, q5
+  eor       r3, r3, r3, ror #23
+  veor      q15, q15, q9
+  eor       r4, r4, r4, ror #23
+  eor       r1, r1, r1, ror #23
+  vmov.32   d28, r3, r4
+  eor       r2, r2, r2, ror #23
+  vmov.32   d29, r1, r2
+
+  vmov.32   r3, r4, d30
+  vmov.32   r1, r2, d31
+  ror       r3, r3, #27
+  veor      q1, q1, q14
+  ror       r4, r4, #27
+  veor      q5, q5, q14
+  ror       r1, r1, #27
+  veor      q9, q9, q14
+  ror       r2, r2, #27
+  veor      q14, q2, q6
+  eor       r3, r3, r3, ror #23
+  veor      q14, q14, q10
+  eor       r4, r4, r4, ror #23
+  eor       r1, r1, r1, ror #23
+  vmov.32   d30, r3, r4
+  eor       r2, r2, r2, ror #23
+  vmov.32   d31, r1, r2
+
+  vmov.32   r3, r4, d28
+  vmov.32   r1, r2, d29
+  ror       r3, r3, #27
+  veor      q2, q2, q15
+  ror       r4, r4, #27
+  veor      q6, q6, q15
+  ror       r1, r1, #27
+  veor      q10, q10, q15
+  ror       r2, r2, #27
+  eor       r3, r3, r3, ror #23
+  eor       r4, r4, r4, ror #23
+  eor       r1, r1, r1, ror #23
+  vmov.32   d28, r3, r4
+  eor       r2, r2, r2, ror #23
+  vmov.32   d29, r1, r2
+  veor      q3, q3, q14
+  veor      q7, q7, q14
   veor      q11, q11, q14
 .endm
 
 .macro rho_w
-  vswp      q7, q6
-  vswp      q6, q5
-  vswp      q5, q4
-  vmov      r1, r2, d16
-  vmov      r3, r4, d17
+  @ vshl.U32  q12, q8, #11
+  @ vsri.U32  q12, q8, #21
+  vmov.32   r1, r2, d16
+  vshl.U32  q13, q9, #11
+  vmov.32   r3, r4, d17
+  vsri.U32  q13, q9, #21
   ror       r1, r1, #21
+  vshl.U32  q14, q10, #11
   ror       r2, r2, #21
+  vsri.U32  q14, q10, #21
   ror       r3, r3, #21
+  vshl.U32  q15, q11, #11
   ror       r4, r4, #21
-  vmov      d16, r1, r2
-  vmov      d17, r3, r4
-  vmov      r1, r2, d18
-  vmov      r3, r4, d19
-  ror       r1, r1, #21
-  ror       r2, r2, #21
-  ror       r3, r3, #21
-  ror       r4, r4, #21
-  vmov      d18, r1, r2
-  vmov      d19, r3, r4
-  vmov      r1, r2, d20
-  vmov      r3, r4, d21
-  ror       r1, r1, #21
-  ror       r2, r2, #21
-  ror       r3, r3, #21
-  ror       r4, r4, #21
-  vmov      d20, r1, r2
-  vmov      d21, r3, r4
-  vmov      r1, r2, d22
-  vmov      r3, r4, d23
-  ror       r1, r1, #21
-  ror       r2, r2, #21
-  ror       r3, r3, #21
-  ror       r4, r4, #21
-  vmov      d22, r1, r2
-  vmov      d23, r3, r4
-.endm
-
-.macro iota $rc
-  vdup.32   q12, r5
-  veor      q0, q0, q12
+  vsri.U32  q15, q11, #21
+  vmov.32   d24, r1, r2
+  vmov.32   d25, r3, r4
+  @ NOTE: Here we are hiding in the shadows. What happens is that the ROR action is interleaved with the vector actions so that they get executed for free instead of a NOP .
 .endm
 
 .macro chi
-  @a1: q4-q7
-  vmvn      q12, q4
-  vmvn      q13, q5
-  vmvn      q14, q6
-  vmvn      q15, q7
-  vand      q12, q12, q8
-  vand      q13, q13, q9
-  vand      q14, q14, q10
-  vand      q15, q15, q11
-  vpush     {q12-q15}
+  @ NOTE: Iota
+  vdup.32   q8, r3
+  veor      q0, q0, q8
 
-  vmvn      q12, q8
-  vmvn      q13, q9
-  vmvn      q14, q10
-  vmvn      q15, q11
-  vand      q12, q12, q0
-  vand      q13, q13, q1
-  vand      q14, q14, q2
-  vand      q15, q15, q3
-  vpush     {q12-q15}
+  @ NOTE: Probably this is optimal.  (Prove?)
+  vbic      q11, q12, q7
+  vbic      q9, q0, q12
+  vbic      q10, q7, q0
+  veor      q8, q10, q12
+  veor      q12, q7, q9
+  veor      q0, q0, q11
 
-  vmvn      q12, q0
-  vmvn      q13, q1
-  vmvn      q14, q2
-  vmvn      q15, q3
-  vand      q12, q12, q4
-  vand      q13, q13, q5
-  vand      q14, q14, q6
-  vand      q15, q15, q7
+  vbic      q7, q13, q4
+  vbic      q10, q1, q13
+  vbic      q11, q4, q1
+  veor      q9, q11, q13
+  veor      q13, q4, q10
+  veor      q1, q1, q7
 
-  veor      q8, q8, q12
-  veor      q9, q9, q13
-  veor      q10, q10, q14
-  veor      q11, q11, q15
+  vbic      q4, q14, q5
+  vbic      q11, q2, q14
+  vbic      q7, q5, q2
+  veor      q10, q7, q14
+  veor      q14, q5, q11
+  veor      q2, q2, q4
 
-  vpop      {q12-q15}
-  veor      q4, q4, q12
-  veor      q5, q5, q13
-  veor      q6, q6, q14
-  veor      q7, q7, q15
-
-  vpop      {q12-q15}
-  veor      q0, q0, q12
-  veor      q1, q1, q13
-  veor      q2, q2, q14
-  veor      q3, q3, q15
+  vbic      q5, q15, q6
+  vbic      q7, q3, q15
+  vbic      q4, q6, q3
+  veor      q4, q4, q15
+  veor      q15, q6, q7
+  veor      q3, q3, q5
 .endm
 
 .macro rho_e
-  vmov      r1, r2, d8
-  vmov      r3, r4, d9
-  ror       r1, r1, #31
-  ror       r2, r2, #31
-  ror       r3, r3, #31
-  ror       r4, r4, #31
-  vmov      d8, r1, r2
-  vmov      d9, r3, r4
-  vmov      r1, r2, d10
-  vmov      r3, r4, d11
-  ror       r1, r1, #31
-  ror       r2, r2, #31
-  ror       r3, r3, #31
-  ror       r4, r4, #31
-  vmov      d10, r1, r2
-  vmov      d11, r3, r4
-  vmov      r1, r2, d12
-  vmov      r3, r4, d13
-  ror       r1, r1, #31
-  ror       r2, r2, #31
-  ror       r3, r3, #31
-  ror       r4, r4, #31
-  vmov      d12, r1, r2
-  vmov      d13, r3, r4
-  vmov      r1, r2, d14
-  vmov      r3, r4, d15
-  ror       r1, r1, #31
-  ror       r2, r2, #31
-  ror       r3, r3, #31
-  ror       r4, r4, #31
-  vmov      d14, r1, r2
-  vmov      d15, r3, r4
-  @ a2: q8-q11 (Interleaved MOV)
-  vmov      q12, q11
-  vmov      r1, r2, d18
-  vmov      r3, r4, d19
+  vshl.U32  q11, q9, #8
+  vsri.U32  q11, q9, #24
+
+  vshl.U32  q9, q4, #8
+  vsri.U32  q9, q4, #24
+
+  vmov.32   r1, r2, d16
+  vmov.32   r3, r4, d17
   ror       r1, r1, #24
+  vshl.U32  q8, q10, #8
   ror       r2, r2, #24
+  vsri.U32  q8, q10, #24
   ror       r3, r3, #24
+  vmov.32   d20, r1, r2
   ror       r4, r4, #24
-  vmov      d22, r1, r2
-  vmov      d23, r3, r4
-  vmov      q13, q10
-  vmov      r1, r2, d16
-  vmov      r3, r4, d17
-  ror       r1, r1, #24
-  ror       r2, r2, #24
-  ror       r3, r3, #24
-  ror       r4, r4, #24
-  vmov      d20, r1, r2
-  vmov      d21, r3, r4
-  vmov      r1, r2, d26
-  vmov      r3, r4, d27
-  ror       r1, r1, #24
-  ror       r2, r2, #24
-  ror       r3, r3, #24
-  ror       r4, r4, #24
-  vmov      d16, r1, r2
-  vmov      d17, r3, r4
-  vmov      r1, r2, d24
-  vmov      r3, r4, d25
-  ror       r1, r1, #24
-  ror       r2, r2, #24
-  ror       r3, r3, #24
-  ror       r4, r4, #24
-  vmov      d18, r1, r2
-  vmov      d19, r3, r4
+  vmov.32   d21, r3, r4
+
+  vshl.U32  q4, q12, #1
+  vsri.U32  q4, q12, #31
+
+  vshl.U32  q5, q13, #1
+  vsri.U32  q5, q13, #31
+
+  vshl.U32  q6, q14, #1
+  vsri.U32  q6, q14, #31
+
+  vshl.U32  q7, q15, #1
+  vsri.U32  q7, q15, #31
 .endm
+
+@ NOTE: The idea was to maybe merge rho_e and theta partially, however because P depends on the registers it also XORs into, we do not save cycles by stepping to core registers. Because at no point can we use the barrel shifter, which is the only reason we should want to choose the core registers over the vector registers.
 
 @ Xoodootimes4_PermuteAll_6rounds: void * argStates -> void
 .align 8
 .global Xoodootimes4_PermuteAll_6rounds
 .type Xoodootimes4_PermuteAll_6rounds, %function
 Xoodootimes4_PermuteAll_6rounds:
-  push      {r4, r5, lr}
   vpush     {d8-d15}
+  push      {r4}
   vldm      r0!, {d0-d15}
   vldm      r0, {d16-d23}
   sub       r0, r0, #128 @ (16*64)/8
-  mov       r5, #0x00000060
-  round
-  mov       r5, #0x0000002C
-  round
-  mov       r5, #0x00000380
-  round
-  mov       r5, #0x000000F0
-  round
-  mov       r5, #0x000001A0
-  round
-  mov       r5, #0x00000012
-  round
+
+  theta
+  rho_w
+  mov       r3, #0x00000060
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x0000002C
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x00000380
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x000000F0
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x000001A0
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x00000012
+  chi
+  rho_e
+
   vstm      r0!, {d0-d15}
   vstm      r0, {d16-d23}
+  pop       {r4}
   vpop      {d8-d15}
-  pop       {r4, r5, pc}
+  bx        lr
 
 @ Xoodootimes4_PermuteAll_12rounds:
 .align 8
 .global Xoodootimes4_PermuteAll_12rounds
 .type Xoodootimes4_PermuteAll_12rounds, %function
 Xoodootimes4_PermuteAll_12rounds:
-  push      {r4, r5, lr}
   vpush     {d8-d15}
+  push      {r4-r5}
   vldm      r0!, {d0-d15}
   vldm      r0, {d16-d23}
   sub       r0, r0, #128
-  mov       r5, #0x00000058
-  round
-  mov       r5, #0x00000038
-  round
-  mov       r5, #0x000003C0
-  round
-  mov       r5, #0x000000D0
-  round
-  mov       r5, #0x00000120
-  round
-  mov       r5, #0x00000014
-  round
-  mov       r5, #0x00000060
-  round
-  mov       r5, #0x0000002C
-  round
-  mov       r5, #0x00000380
-  round
-  mov       r5, #0x000000F0
-  round
-  mov       r5, #0x000001A0
-  round
-  mov       r5, #0x00000012
-  round
+
+  theta
+  rho_w
+  mov       r3, #0x00000058
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x00000038
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x000003C0
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x000000D0
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x00000120
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x00000014
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x00000060
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x0000002C
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x00000380
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x000000F0
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x000001A0
+  chi
+  rho_e
+
+  theta
+  rho_w
+  mov       r3, #0x00000012
+  chi
+  rho_e
   vstm      r0!, {d0-d15}
   vstm      r0, {d16-d23}
+  pop       {r4-r5}
   vpop      {d8-d15}
-  pop       {r4, r5, pc}
+  bx        lr
