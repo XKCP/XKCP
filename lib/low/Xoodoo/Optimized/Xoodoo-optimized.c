@@ -165,7 +165,7 @@ void Xoodoo_ExtractAndAddBytes(const void *argState, const unsigned char *input,
         uint32_t *state = (uint32_t *)argState;
         const uint32_t *ii = (const uint32_t *)input;
         uint32_t *oo = (uint32_t *)output;
-        
+
         oo[0] = state[0] ^ ii[0];
         oo[1] = state[1] ^ ii[1];
         oo[2] = state[2] ^ ii[2];

@@ -17,18 +17,18 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "Xoofff.h"
 #include "Xoodoo.h"
 
-/* 
-** Uncomment this define if calls to Xoodoo_Initialize() and 
+/*
+** Uncomment this define if calls to Xoodoo_Initialize() and
 ** Xoodootimes##Parallellism##_InitializeAll() are mandatory to make it work,
 ** mostly not needed.
 **
 #define    NEED_INITIALIZE
 */
 
-/* 
+/*
 ** Uncomment this define for more debugging dumps.
 **
-#define    DEBUG_DUMP 
+#define    DEBUG_DUMP
 */
 
 /*
@@ -211,7 +211,7 @@ static void Xoofff_Rollc( uint32_t *a, unsigned char *encbuf, unsigned int paral
         a[8+1] = b[1];
         a[8+2] = b[2];
         a[8+3] = b[3];
-    } while(--parallellism != 0); 
+    } while(--parallellism != 0);
     DUMP("Roll-c next", a, Xoofff_RollSizeInBytes);
 }
 
@@ -478,7 +478,7 @@ int Xoofff_Compress(Xoofff_Instance *xp, const BitSequence *input, BitLength inp
         if ( xp->queueOffset == SnP_width ) { /* queue full */
             Xoodoo_CompressBlocks(xp->kRoll.a, xp->xAccu.a, xp->queue.a, &xp->queueOffset, 0);
             xp->queueOffset = 0;
-        } 
+        }
         else if ( finalFlag != 0 ) {
             Xoodoo_CompressBlocks(xp->kRoll.a, xp->xAccu.a, xp->queue.a, &xp->queueOffset, 1);
             return 0;

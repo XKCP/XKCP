@@ -64,7 +64,7 @@
     .align  8
 .type	Xoodoo_Permute_12roundsAsm, %function;
 Xoodoo_Permute_12roundsAsm:
-    ldr         r1, =_rc12
+    adr         r1, _rc12
     mRound
     mRound
     mRound
@@ -79,7 +79,7 @@ Xoodoo_Permute_12roundsAsm:
     mRound
     bx          lr
     .ltorg
-    .align  8
+    .align 0
 _rc12:
     .quad          0x00000058
     .quad          0x00000038

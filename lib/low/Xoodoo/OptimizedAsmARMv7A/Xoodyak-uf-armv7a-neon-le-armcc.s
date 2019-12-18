@@ -64,7 +64,7 @@ Xoodyak_Rhash   equ     16
 ;
     align   8
 Xoodoo_Permute_12roundsAsm   PROC
-    ldr         r1, =_rc12
+    adr         r1, _rc12
     mRound
     mRound
     mRound
