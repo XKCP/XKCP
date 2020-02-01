@@ -338,7 +338,6 @@ The fragments below allow to select the desired implementation of the permutatio
         <h>lib/low/KeccakP-1600/Optimized/KeccakP-1600-64.macros</h>
         <h>lib/low/KeccakP-1600/Optimized64/KeccakP-1600-SnP.h</h>
         <h>lib/low/common/SnP-Relaned.h</h>
-        <gcc>-m64</gcc>
     </fragment>
 
     <fragment name="optimized1600u6" inherits="optimized1600">
