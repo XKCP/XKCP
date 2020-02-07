@@ -1,3 +1,5 @@
+[![Build Status](http://img.shields.io/travis/XKCP/XKCP.svg)](https://travis-ci.org/XKCP/XKCP)
+
 # What is the XKCP?
 
 The **eXtended Keccak Code Package** (or the **Xoodoo and Keccak Code Package**, in both cases abbreviated as **XKCP**) gathers different free and open-source implementations of the [Keccak sponge function family](https://keccak.team/keccak.html)

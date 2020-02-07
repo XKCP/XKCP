@@ -121,9 +121,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>lib/low/common/SnP-Relaned.h</h>
         <c>lib/high/Keccak/KeccakSpongeWidth1600.c</c>
         <h>lib/high/Keccak/KeccakSpongeWidth1600.h</h>
-
-        <!-- Extra Ducttape include -->
-        <!-- <h>lib/low/Xoodoo-times4/AsmARMv7A/Xoodoo-times4-SnP.h</h> -->
         <gcc>-lm</gcc>
     </fragment>
 
