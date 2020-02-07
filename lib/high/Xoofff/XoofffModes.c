@@ -251,7 +251,7 @@ int XoofffWBCAE_Decipher(Xoofff_Instance *xp, const BitSequence *ciphertext, Bit
 
 /* ------------------------------------------------------------------------- */
 
-int XoofffSANE_Initialize(XoofffSANE_Instance *xp, const BitSequence *Key, BitLength KeyBitLen, 
+int XoofffSANE_Initialize(XoofffSANE_Instance *xp, const BitSequence *Key, BitLength KeyBitLen,
                             const BitSequence *Nonce, BitLength NonceBitLen, unsigned char *tag)
 {
     xp->e = 0;
@@ -290,7 +290,7 @@ static int XoofffSANE_AddToHistory(XoofffSANE_Instance *xp, const BitSequence *d
        return Xoofff_Compress(&xp->xoofff, lastByte, dataBitLen, Xoofff_FlagLastPart);
 }
 
-int XoofffSANE_Wrap(XoofffSANE_Instance *xp, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
+int XoofffSANE_Wrap(XoofffSANE_Instance *xp, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen,
                         const BitSequence *AD, BitLength ADBitLen, unsigned char *tag)
 {
 
@@ -316,7 +316,7 @@ int XoofffSANE_Wrap(XoofffSANE_Instance *xp, const BitSequence *plaintext, BitSe
     return Xoofff_Expand(&xp->xoofff, tag, XoofffSANE_TagLength * 8, Xoofff_FlagNone);
 }
 
-int XoofffSANE_Unwrap(XoofffSANE_Instance *xp, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
+int XoofffSANE_Unwrap(XoofffSANE_Instance *xp, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen,
                             const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag)
 {
     unsigned char tagPrime[XoofffSANE_TagLength];
@@ -390,7 +390,7 @@ int XoofffSANSE_Initialize(XoofffSANSE_Instance *xp, const BitSequence *Key, Bit
     return Xoofff_MaskDerivation(&xp->xoofff, Key, KeyBitLen);
 }
 
-int XoofffSANSE_Wrap(XoofffSANSE_Instance *xp, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen, 
+int XoofffSANSE_Wrap(XoofffSANSE_Instance *xp, const BitSequence *plaintext, BitSequence *ciphertext, BitLength dataBitLen,
                         const BitSequence *AD, BitLength ADBitLen, unsigned char *tag)
 {
 
@@ -434,7 +434,7 @@ int XoofffSANSE_Wrap(XoofffSANSE_Instance *xp, const BitSequence *plaintext, Bit
     return 0;
 }
 
-int XoofffSANSE_Unwrap(XoofffSANSE_Instance *xp, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen, 
+int XoofffSANSE_Unwrap(XoofffSANSE_Instance *xp, const BitSequence *ciphertext, BitSequence *plaintext, BitLength dataBitLen,
                             const BitSequence *AD, BitLength ADBitLen, const unsigned char *tag)
 {
     unsigned char tagPrime[XoofffSANSE_TagLength];

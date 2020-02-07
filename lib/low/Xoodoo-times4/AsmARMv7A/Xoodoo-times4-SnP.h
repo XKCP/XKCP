@@ -26,7 +26,7 @@ void Xoodootimes4_AddBytes(void *states, unsigned int instanceIndex, const unsig
 void Xoodootimes4_AddLanesAll(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset);
 void Xoodootimes4_OverwriteBytes(void *states, unsigned int instanceIndex, const unsigned char *data, unsigned int offset, unsigned int length);
 void Xoodootimes4_OverwriteLanesAll(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset);
-void Xoodootimes4_OverwriteWithZeroes(void *states, unsigned int instanceIndex, unsigned int byteCount);
+void Xoodootimes4_OverwriteWithZeroes(void *sstates, unsigned int instanceIndex, unsigned int byteCount);
 //void Xoodootimes4_PermuteAll_Nrounds(void *states, unsigned int nr);
 void Xoodootimes4_PermuteAll_6rounds(void *states);
 void Xoodootimes4_PermuteAll_12rounds(void *states);
@@ -35,9 +35,9 @@ void Xoodootimes4_ExtractLanesAll(const void *states, unsigned char *data, unsig
 void Xoodootimes4_ExtractAndAddBytes(const void *states, unsigned int instanceIndex,  const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
 void Xoodootimes4_ExtractAndAddLanesAll(const void *states, const unsigned char *input, unsigned char *output, unsigned int laneCount, unsigned int laneOffset);
 
-// #define Xoodootimes4_FastXoofff_supported
-// void Xooffftimes4_AddIs(unsigned char *output, const unsigned char *input, size_t bitLen);
-// size_t Xooffftimes4_CompressFastLoop(unsigned char *k, unsigned char *x, const unsigned char *input, size_t length);
-// size_t Xooffftimes4_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, unsigned char *output, size_t length);
+#define Xoodootimes4_FastXoofff_supported
+void Xooffftimes4_AddIs(unsigned char *output, const unsigned char *input, size_t bitLen);
+size_t Xooffftimes4_CompressFastLoop(unsigned char *k, unsigned char *x, const unsigned char *input, size_t length);
+size_t Xooffftimes4_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, unsigned char *output, size_t length);
 
 #endif
