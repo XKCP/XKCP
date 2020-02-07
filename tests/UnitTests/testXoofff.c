@@ -129,7 +129,7 @@ static void performTestXoofffOneInput(BitLength keyLen, BitLength inputLen, BitL
         BitSequence *pInput = input;
         BitSequence *pOutput = output;
         BitLength ilen = inputLen, olen = outputLen;
-        
+
         do
         {
             unsigned int len = ((rand() << 15) ^ rand()) % (ilen + 1);
@@ -213,7 +213,7 @@ static void performTestXoofff(unsigned char *checksum, unsigned int mode)
     for(keyLen=0; keyLen<keyBitSize; keyLen = (keyLen < 2*SnP_width) ? (keyLen+1) : (keyLen+8)) {
         performTestXoofffOneInput(keyLen, inputLen, outputLen, flags, &spongeChecksum, mode);
     }
-    
+
     #ifdef OUTPUT
     printf("i ");
     #endif
@@ -222,7 +222,7 @@ static void performTestXoofff(unsigned char *checksum, unsigned int mode)
     for(inputLen=0; inputLen<=inputBitSize; inputLen = (inputLen < 2*SnP_width) ? (inputLen+1) : (inputLen+8)) {
         performTestXoofffOneInput(keyLen, inputLen, outputLen, flags, &spongeChecksum, mode);
     }
-    
+
     #ifdef OUTPUT
     printf("o ");
     #endif
@@ -231,7 +231,7 @@ static void performTestXoofff(unsigned char *checksum, unsigned int mode)
     for(outputLen=0; outputLen<=outputBitSize; outputLen = (outputLen < 2*SnP_width) ? (outputLen+1) : (outputLen+8)) {
         performTestXoofffOneInput(keyLen, inputLen, outputLen, flags, &spongeChecksum, mode);
     }
-    
+
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
     #ifdef VERBOSE
@@ -250,6 +250,8 @@ void selfTestXoofff(const unsigned char *expected)
 {
     unsigned char checksum[checksumByteSize];
     unsigned int mode;
+
+    //Temporary testing function for silly output.
 
     for(mode = 0; mode <= 2; ++mode) {
         #ifdef OUTPUT

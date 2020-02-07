@@ -202,7 +202,7 @@ static void performTestXoofffWBC(unsigned char *checksum)
     for(keyLen=0; keyLen<keyBitSize; keyLen = (keyLen < 2*SnP_width) ? (keyLen+1) : (keyLen+8)) {
         performTestXoofffWBC_OneInput(keyLen, dataLen, WLen, &spongeChecksum);
     }
-    
+
     #ifdef OUTPUT
     printf("d ");
     #endif
@@ -211,7 +211,7 @@ static void performTestXoofffWBC(unsigned char *checksum)
     for(dataLen=0; dataLen<=dataBitSize; dataLen = (dataLen < 2*SnP_width) ? (dataLen+1) : (dataLen+7)) {
         performTestXoofffWBC_OneInput(keyLen, dataLen, WLen, &spongeChecksum);
     }
-    
+
     #ifdef OUTPUT
     printf("w ");
     #endif
@@ -220,7 +220,7 @@ static void performTestXoofffWBC(unsigned char *checksum)
     for(WLen=0; WLen<=WBitSize; WLen = (WLen < 2*SnP_width) ? (WLen+1) : (WLen+8)) {
         performTestXoofffWBC_OneInput(keyLen, dataLen, WLen, &spongeChecksum);
     }
-    
+
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
     #ifdef VERBOSE_WBC
@@ -427,7 +427,7 @@ static void performTestXoofffWBC_AE(unsigned char *checksum)
     for(keyLen=0; keyLen<keyBitSize; keyLen = (keyLen < 2*SnP_width) ? (keyLen+1) : (keyLen+8)) {
         performTestXoofffWBC_AE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     #ifdef OUTPUT
     printf("d ");
     #endif
@@ -436,7 +436,7 @@ static void performTestXoofffWBC_AE(unsigned char *checksum)
     for(dataLen=0; dataLen<=dataBitSize-8*expansionLenWBCAE; dataLen = (dataLen < 2*SnP_width) ? (dataLen+1) : (dataLen+7)) {
         performTestXoofffWBC_AE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     #ifdef OUTPUT
     printf("a ");
     #endif
@@ -445,7 +445,7 @@ static void performTestXoofffWBC_AE(unsigned char *checksum)
     for(ADLen=0; ADLen<=ADBitSize; ADLen = (ADLen < 2*SnP_width) ? (ADLen+1) : (ADLen+8)) {
         performTestXoofffWBC_AE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
     #ifdef VERBOSE_WBC_AE
@@ -671,7 +671,7 @@ static void performTestXoofffSANE(unsigned char *checksum)
     for(keyLen=0; keyLen<keyBitSize; keyLen = (keyLen < 2*SnP_width) ? (keyLen+1) : (keyLen+8)) {
         performTestXoofffSANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     #ifdef OUTPUT
     printf("n ");
     #endif
@@ -681,7 +681,7 @@ static void performTestXoofffSANE(unsigned char *checksum)
     for(nonceLen=0; nonceLen<=nonceBitSize; nonceLen = (nonceLen < 2*SnP_width) ? (nonceLen+1) : (nonceLen+8)) {
         performTestXoofffSANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     #ifdef OUTPUT
     printf("d ");
     #endif
@@ -691,7 +691,7 @@ static void performTestXoofffSANE(unsigned char *checksum)
     for(dataLen=0; dataLen<=dataBitSize; dataLen = (dataLen < 2*SnP_width) ? (dataLen+1) : (dataLen+8)) {
         performTestXoofffSANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     #ifdef OUTPUT
     printf("a ");
     #endif
@@ -701,7 +701,7 @@ static void performTestXoofffSANE(unsigned char *checksum)
     for(ADLen=0; ADLen<=ADBitSize; ADLen = (ADLen < 2*SnP_width) ? (ADLen+1) : (ADLen+8)) {
         performTestXoofffSANE_OneInput(keyLen, nonceLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
     #ifdef VERBOSE_SANE
@@ -889,7 +889,7 @@ static void performTestXoofffSANSE(unsigned char *checksum)
     for(keyLen=0; keyLen<keyBitSize; keyLen = (keyLen < 2*SnP_width) ? (keyLen+1) : (keyLen+8)) {
         performTestXoofffSANSE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     #ifdef OUTPUT
     printf("d ");
     #endif
@@ -898,7 +898,7 @@ static void performTestXoofffSANSE(unsigned char *checksum)
     for(dataLen=0; dataLen<=dataBitSize; dataLen = (dataLen < 2*SnP_width) ? (dataLen+1) : (dataLen+8)) {
         performTestXoofffSANSE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     #ifdef OUTPUT
     printf("a ");
     #endif
@@ -907,7 +907,7 @@ static void performTestXoofffSANSE(unsigned char *checksum)
     for(ADLen=0; ADLen<=ADBitSize; ADLen = (ADLen < 2*SnP_width) ? (ADLen+1) : (ADLen+8)) {
         performTestXoofffSANSE_OneInput(keyLen, dataLen, ADLen, &spongeChecksum);
     }
-    
+
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
 
     #ifdef VERBOSE_SANSE
