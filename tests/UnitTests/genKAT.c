@@ -176,7 +176,7 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
         fprintf(fp_out, "\nLen = %d\n", msglen);
         fprintBstr(fp_out, "Msg = ", Msg, msgbytelen);
 
-        if (Keccak_HashInitialize(&hash, rate, capacity, hashbitlen, delimitedSuffix) != SUCCESS) {
+        if (Keccak_HashInitialize(&hash, rate, capacity, hashbitlen, delimitedSuffix) != KECCAK_SUCCESS) {
             printf("Keccak[r=%d, c=%d] is not supported.\n", rate, capacity);
             return KAT_HASH_ERROR;
         }
