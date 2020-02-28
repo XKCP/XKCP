@@ -47,7 +47,7 @@ typedef struct {
   *                         formatted like the @a delimitedData parameter of
   *                         the Keccak_SpongeAbsorbLastFewBits() function.
   * @pre    One must have r+c=1600 and the rate a multiple of 8 bits in this implementation.
-  * @return KECCAK_SUCCESS if KECCAK_successful, KECCAK_FAIL otherwise.
+  * @return KECCAK_SUCCESS if successful, KECCAK_FAIL otherwise.
   */
 HashReturn Keccak_HashInitialize(Keccak_HashInstance *hashInstance, unsigned int rate, unsigned int capacity, unsigned int hashbitlen, unsigned char delimitedSuffix);
 
@@ -85,7 +85,7 @@ HashReturn Keccak_HashInitialize(Keccak_HashInstance *hashInstance, unsigned int
   *                     of the last byte are ignored.
   * @param  databitLen  The number of input bits provided in the input data.
   * @pre    In the previous call to Keccak_HashUpdate(), databitlen was a multiple of 8.
-  * @return KECCAK_SUCCESS if KECCAK_successful, KECCAK_FAIL otherwise.
+  * @return KECCAK_SUCCESS if successful, KECCAK_FAIL otherwise.
   */
 HashReturn Keccak_HashUpdate(Keccak_HashInstance *hashInstance, const BitSequence *data, BitLength databitlen);
 
@@ -98,7 +98,7 @@ HashReturn Keccak_HashUpdate(Keccak_HashInstance *hashInstance, const BitSequenc
   * If @a hashbitlen was 0 in the call to Keccak_HashInitialize(), the output bits
   *     must be extracted using the Keccak_HashSqueeze() function.
   * @param  hashval     Pointer to the buffer where to store the output data.
-  * @return KECCAK_SUCCESS if KECCAK_successful, KECCAK_FAIL otherwise.
+  * @return KECCAK_SUCCESS if successful, KECCAK_FAIL otherwise.
   */
 HashReturn Keccak_HashFinal(Keccak_HashInstance *hashInstance, BitSequence *hashval);
 
@@ -109,7 +109,7 @@ HashReturn Keccak_HashFinal(Keccak_HashInstance *hashInstance, BitSequence *hash
   * @param  databitlen  The number of output bits desired (must be a multiple of 8).
   * @pre    Keccak_HashFinal() must have been already called.
   * @pre    @a databitlen is a multiple of 8.
-  * @return KECCAK_SUCCESS if KECCAK_successful, KECCAK_FAIL otherwise.
+  * @return KECCAK_SUCCESS if successful, KECCAK_FAIL otherwise.
   */
 HashReturn Keccak_HashSqueeze(Keccak_HashInstance *hashInstance, BitSequence *data, BitLength databitlen);
 
