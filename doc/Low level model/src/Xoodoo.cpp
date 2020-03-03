@@ -66,15 +66,22 @@ void Xoodoo::apply(std::vector<std::uint8_t>& state, unsigned int roundCount) co
 {
     XoodooState xoodoostate(*this);
     vector<LaneValue>& lanes = xoodoostate.getLanes();
-    for(unsigned int i=0; i<lanes.size(); i++) {
-        lanes[i] = 0;
+    for(unsigned int y=0; y<sizeY; y++)
+    for(unsigned int x=0; x<sizeX; x++) {
+        unsigned int iprime = sizeY*x + y;
+        unsigned int i = sizeX*y + x;
+        lanes[iprime] = 0;
         for(unsigned int j=0; j<(sizeZ/8); j++)
-            lanes[i] |= LaneValue((uint8_t)(state[i*sizeZ/8+j])) << (8*j);
+            lanes[iprime] |= LaneValue((uint8_t)(state[i*sizeZ/8+j])) << (8*j);
     }
     permute(xoodoostate, roundCount);
-    for(unsigned int i=0; i<lanes.size(); i++)
+    for(unsigned int y=0; y<sizeY; y++)
+    for(unsigned int x=0; x<sizeX; x++) {
+        unsigned int iprime = sizeY*x + y;
+        unsigned int i = sizeX*y + x;
         for(unsigned int j=0; j<(sizeZ/8); j++)
-            state[i*(sizeZ/8)+j] = (uint8_t)((lanes[i] >> (8*j)) & 0xFF);
+            state[i*(sizeZ/8)+j] = (uint8_t)((lanes[iprime] >> (8*j)) & 0xFF);
+    }
 }
 
 string Xoodoo::getDescription() const

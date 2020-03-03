@@ -200,7 +200,7 @@ void PlSnP_ExtractLanesAll(const void *states, unsigned char *data, unsigned int
   * @pre    0 ≤ @a offset < (width in bytes)
   * @pre    0 ≤ @a offset + @a length ≤ (width in bytes)
   */
-void PlSnP_ExtractAndAddBytes(const void *states, unsigned int instanceIndex,  const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
+void PlSnP_ExtractAndAddBytes(const void *states, unsigned int instanceIndex, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
 
 /** Function to retrieve data from all the parallel states in an interleaved fashion
   * to add  (in GF(2), using bitwise exclusive-or) them to the input buffer,

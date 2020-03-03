@@ -16,8 +16,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include "Exception.h"
 #include "SnP.h"
+#include "Xoodoo.h"
 
-bool UT_VERBOSE = true;
+bool UT_VERBOSE = false;
 
 using namespace std;
 
@@ -171,8 +172,99 @@ void nominalTest_KeccakP_narrow(unsigned int width, const string& synopsis)
     }
 }
 
+void nominalTest_Xoodoo(const string& synopsis)
+{
+    try {
+        const unsigned int width = 384;
+        SnP_Xoodoo stateAccumulated;
+        SnP_Xoodoo stateTest;
+        const unsigned int SnP_Permute_maxRounds = 12;
+        const unsigned int SnP_width = width;
+
+#define SnP_StaticInitialize()
+#define SnP_Initialize(snp)                                         snp.Initialize()
+#define SnP_AddByte(snp, data, offset)                              snp.AddByte(data, offset)
+#define SnP_AddBytes(snp, data, offset, length)                     snp.AddBytes(data, offset, length)
+#define SnP_OverwriteBytes(snp, data, offset, length)               snp.OverwriteBytes(data, offset, length)
+#define SnP_OverwriteWithZeroes(snp, byteCount)                     snp.OverwriteWithZeroes(byteCount)
+#define SnP_Permute(snp)                                            snp.Permute()
+#define SnP_Permute_6rounds(snp)                                    snp.Permute_Nrounds(6)
+#define SnP_Permute_12rounds(snp)                                   snp.Permute_Nrounds(12)
+#define SnP_Permute_Nrounds(snp, nr)                                snp.Permute_Nrounds(nr)
+#define SnP_ExtractBytes(snp, data, offset, length)                 snp.ExtractBytes(data, offset, length)
+#define SnP_ExtractAndAddBytes(snp, input, output, offset, length)  snp.ExtractAndAddBytes(input, output, offset, length)
+#define SnP_NoFastLoopAbsorb
+#define DUMP(state, message)                                        if (UT_VERBOSE) dumpState(state, message)
+#include "testSnPnominal.inc"
+#undef SnP_StaticInitialize
+#undef SnP_Initialize
+#undef SnP_AddByte
+#undef SnP_AddBytes
+#undef SnP_OverwriteBytes
+#undef SnP_OverwriteWithZeroes
+#undef SnP_Permute
+#undef SnP_Permute_6rounds
+#undef SnP_Permute_12rounds
+#undef SnP_Permute_Nrounds
+#undef SnP_ExtractBytes
+#undef SnP_ExtractAndAddBytes
+#undef SnP_NoFastLoopAbsorb
+#undef DUMP
+
+        displayAccumulated(synopsis, stateAccumulated);
+    }
+    catch(Exception e) {
+        cout << e.reason << endl;
+    }
+}
+
+void nominalTest_Xoodoo_noNrounds(const string& synopsis)
+{
+    try {
+        const unsigned int width = 384;
+        SnP_Xoodoo stateAccumulated;
+        SnP_Xoodoo stateTest;
+        const unsigned int SnP_width = width;
+
+#define SnP_StaticInitialize()
+#define SnP_Initialize(snp)                                         snp.Initialize()
+#define SnP_AddByte(snp, data, offset)                              snp.AddByte(data, offset)
+#define SnP_AddBytes(snp, data, offset, length)                     snp.AddBytes(data, offset, length)
+#define SnP_OverwriteBytes(snp, data, offset, length)               snp.OverwriteBytes(data, offset, length)
+#define SnP_OverwriteWithZeroes(snp, byteCount)                     snp.OverwriteWithZeroes(byteCount)
+#define SnP_Permute(snp)                                            snp.Permute()
+#define SnP_Permute_6rounds(snp)                                    snp.Permute_Nrounds(6)
+#define SnP_Permute_12rounds(snp)                                   snp.Permute_Nrounds(12)
+#define SnP_ExtractBytes(snp, data, offset, length)                 snp.ExtractBytes(data, offset, length)
+#define SnP_ExtractAndAddBytes(snp, input, output, offset, length)  snp.ExtractAndAddBytes(input, output, offset, length)
+#define SnP_NoFastLoopAbsorb
+#define DUMP(state, message)                                        if (UT_VERBOSE) dumpState(state, message)
+#include "testSnPnominal.inc"
+#undef SnP_StaticInitialize
+#undef SnP_Initialize
+#undef SnP_AddByte
+#undef SnP_AddBytes
+#undef SnP_OverwriteBytes
+#undef SnP_OverwriteWithZeroes
+#undef SnP_Permute
+#undef SnP_Permute_6rounds
+#undef SnP_Permute_12rounds
+#undef SnP_ExtractBytes
+#undef SnP_ExtractAndAddBytes
+#undef SnP_NoFastLoopAbsorb
+#undef DUMP
+
+        displayAccumulated(synopsis, stateAccumulated);
+    }
+    catch(Exception e) {
+        cout << e.reason << endl;
+    }
+}
+
 int test()
 {
+    nominalTest_Xoodoo("Xoodoo");
+    nominalTest_Xoodoo_noNrounds("Xoodoo (without Nrounds)");
     nominalTest_KeccakP_narrow( 200, "Keccak-p[200]");
     nominalTest_KeccakP_narrow( 400, "Keccak-p[400]");
     nominalTest_KeccakP_wide( 800, "Keccak-p[800]");

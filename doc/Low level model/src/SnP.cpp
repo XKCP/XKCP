@@ -160,8 +160,8 @@ SnP_KeccakP::SnP_KeccakP(unsigned int width, const std::set<unsigned int>& aSupp
 }
 
 SnP_Xoodoo::SnP_Xoodoo()
-    : SnP(new Xoodoo(), 4, {}, 12)
+    : SnP(new Xoodoo(), 4, {}, 6)
 {
-    for(unsigned int i=1; i<=defaultRoundCount; i++)
+    for(unsigned int i=1; i<=12; i++)
         supportedRoundCounts.insert(i);
 }
