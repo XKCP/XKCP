@@ -33,9 +33,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define Cu Bu
 
 #define declareBCDE \
-    UINT32 Ba, Be, Bi, Bo, Bu; \
-    UINT32 Da, De, Di, Do, Du; \
-    UINT32 Estate[25]; \
+    uint32_t Ba, Be, Bi, Bo, Bu; \
+    uint32_t Da, De, Di, Do, Du; \
+    uint32_t Estate[25]; \
 
 #ifdef UseBebigokimisa
 /* --- Code for round (lane complementing pattern 'bebigokimisa') */

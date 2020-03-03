@@ -22,6 +22,7 @@ This implementation comes with KeccakP-200-SnP.h in the same folder.
 Please refer to LowLevel.build for the exact list of other files it must be combined with.
 */
 
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include "KeccakP-200-SnP.h"
@@ -29,18 +30,17 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 /* #define DIVISION_INSTRUCTION    /* comment if no division instruction or more compact when not using division */
 #define UNROLL_CHILOOP        /* comment if more compact using for loop */
 
-typedef unsigned char UINT8;
-typedef unsigned int tSmallUInt; /*INFO It could be more optimized to use "unsigned char" on an 8-bit CPU    */
-typedef UINT8 tKeccakLane;
+typedef uint_fast8_t tSmallUInt;
+typedef uint8_t tKeccakLane;
 
-#define ROL8(a, offset) (UINT8)((((UINT8)a) << (offset&7)) ^ (((UINT8)a) >> (8-(offset&7))))
+#define ROL8(a, offset) (uint8_t)((((uint8_t)a) << (offset&7)) ^ (((uint8_t)a) >> (8-(offset&7))))
 
-const UINT8 KeccakP200_RotationConstants[25] =
+const uint8_t KeccakP200_RotationConstants[25] =
 {
      1,  3,  6, 10, 15, 21, 28, 36, 45, 55,  2, 14, 27, 41, 56,  8, 25, 43, 62, 18, 39, 61, 20, 44
 };
 
-const UINT8 KeccakP200_PiLane[25] =
+const uint8_t KeccakP200_PiLane[25] =
 {
     10,  7, 11, 17, 18,  3,  5, 16,  8, 21, 24,  4, 15, 23, 19, 13, 12,  2, 20, 14, 22,  9,  6,  1
 };
@@ -48,14 +48,14 @@ const UINT8 KeccakP200_PiLane[25] =
 #if    defined(DIVISION_INSTRUCTION)
 #define MOD5(argValue)    ((argValue) % 5)
 #else
-const UINT8 KeccakP200_Mod5[10] =
+const uint8_t KeccakP200_Mod5[10] =
 {
     0, 1, 2, 3, 4, 0, 1, 2, 3, 4
 };
 #define MOD5(argValue)    KeccakP200_Mod5[argValue]
 #endif
 
-const UINT8 KeccakF200_RoundConstants[] =
+const uint8_t KeccakF200_RoundConstants[] =
 {
     0x01, 0x82, 0x8a, 0x00, 0x8b, 0x01, 0x81, 0x09, 0x8a, 0x88, 0x09, 0x0a, 0x8b, 0x8b, 0x89, 0x03, 0x02, 0x80
 };
@@ -174,7 +174,7 @@ void KeccakP200_Permute_18rounds(void *argState)
 
 void KeccakP200_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
-    memcpy(data, (UINT8*)state+offset, length);
+    memcpy(data, (uint8_t*)state+offset, length);
 }
 
 /* ---------------------------------------------------------------- */

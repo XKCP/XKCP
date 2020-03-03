@@ -50,7 +50,7 @@ static void testMotoristStartEngine(Motorist_Instance * motWrap, Motorist_Instan
 }
 
 static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motorist_Instance * motUnwrap, Motorist_Instance * motWitness, FILE * f, 
-    unsigned char * ADcontent, size_t ADlen, unsigned char *Pcontent, size_t Plen, int forgetFlag, unsigned char *Cbuffer, unsigned char *PPbuffer)
+    const unsigned char * ADcontent, size_t ADlen, const unsigned char *Pcontent, size_t Plen, int forgetFlag, unsigned char *Cbuffer, unsigned char *PPbuffer)
 {
     unsigned char tag[TagLength];
     int rv;
@@ -77,7 +77,8 @@ static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motori
                 size_t partialPlen, partialADlen, t;
                 size_t totalPlen, totalADlen;
                 int lastFlag;
-                unsigned char *I, *O, *AD;
+                const unsigned char *I, *AD;
+                unsigned char *O;
 
                 totalPlen = totalADlen = 0;
                 partialPlen = partialADlen = 0;
@@ -162,7 +163,8 @@ static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motori
                 size_t partialPlen, partialADlen, t;
                 size_t totalPlen, totalADlen;
                 int toggle = 0, lastFlag;
-                unsigned char *I, *O, *AD;
+                const unsigned char *I, *AD;
+                unsigned char *O;
 
                 totalPlen = totalADlen = 0;
                 partialPlen = partialADlen = 0;
@@ -282,7 +284,7 @@ static int testMotoristOneMode( int mode, const char *file, const unsigned char 
 
             generateSimpleRawMaterial( SUVcontent, SUVlen, SUVlen+0x21, 3);
             testMotoristStartEngine(&motWrap, &motUnwrap, f, SUVcontent, SUVlen, forgetFlag, tagFlag);
-            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, f, "ABC", 3, "DEF", 3, 0, Cbuffer, PPbuffer );
+            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, f, (const uint8_t*)"ABC", 3, (const uint8_t*)"DEF", 3, 0, Cbuffer, PPbuffer );
         }
     }
 

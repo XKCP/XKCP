@@ -20,12 +20,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "config.h"
 #ifdef XKCP_has_KeccakP1600
 
+#include <stdint.h>
 #include <string.h>
 #include "KeccakSponge.h"
 
 #ifndef _Keccak_BitTypes_
 #define _Keccak_BitTypes_
-typedef unsigned char BitSequence;
+typedef uint8_t BitSequence;
 
 typedef size_t BitLength;
 #endif

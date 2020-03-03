@@ -21,13 +21,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifdef XKCP_has_KeccakP1600
 
 #include <stddef.h>
+#include <stdint.h>
 #include "align.h"
 #include "KeccakSponge.h"
 #include "Phases.h"
 
 #ifndef _Keccak_BitTypes_
 #define _Keccak_BitTypes_
-typedef unsigned char BitSequence;
+typedef uint8_t BitSequence;
 
 typedef size_t BitLength;
 #endif
@@ -463,7 +464,7 @@ typedef struct {
 
 typedef struct {
     /** Pointer to the tuple element data (Xn). */
-    BitSequence *input;
+    const BitSequence *input;
 
     /** The number of input bits provided in this tuple element.
      *  Only full bytes are supported, length must be a multiple of 8.

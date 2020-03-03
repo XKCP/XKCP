@@ -879,7 +879,7 @@ static void performTestKravatte_WBC_AE(unsigned char *checksum)
     #endif
 }
 
-void selfTestKravatte_WBC_AE(const char *expected)
+void selfTestKravatte_WBC_AE(const unsigned char *expected)
 {
     unsigned char checksum[checksumByteSize];
 
@@ -947,9 +947,9 @@ void testKravatteModes(void)
     writeTestKravatte_WBC_AE("Kravatte_WBC_AE.txt");
 #endif
 
-    selfTestKravatte_SANE((const unsigned char *)"\x99\x93\x6b\x93\x37\xcb\x88\xb1\xe0\x97\xf6\x79\x98\xc4\xa6\x75");
-    selfTestKravatte_SANSE((const unsigned char *)"\x25\x15\x37\xb4\xc7\x1f\x14\x37\x22\x3d\x59\xa2\x92\xf6\x6d\x82");
-    selfTestKravatte_WBC("\x42\xae\xe6\x1b\xcf\x8f\x06\x34\xc6\xb2\x11\x0a\xf4\xa0\xdd\xc1");
-    selfTestKravatte_WBC_AE("\xda\xa6\x2c\xab\xa7\xe4\xe1\xef\xb5\x4c\x62\x78\x26\xf8\x72\x27");
+    selfTestKravatte_SANE((const uint8_t*)"\x99\x93\x6b\x93\x37\xcb\x88\xb1\xe0\x97\xf6\x79\x98\xc4\xa6\x75");
+    selfTestKravatte_SANSE((const uint8_t*)"\x25\x15\x37\xb4\xc7\x1f\x14\x37\x22\x3d\x59\xa2\x92\xf6\x6d\x82");
+    selfTestKravatte_WBC((const uint8_t*)"\x42\xae\xe6\x1b\xcf\x8f\x06\x34\xc6\xb2\x11\x0a\xf4\xa0\xdd\xc1");
+    selfTestKravatte_WBC_AE((const uint8_t*)"\xda\xa6\x2c\xab\xa7\xe4\xe1\xef\xb5\x4c\x62\x78\x26\xf8\x72\x27");
 }
 #endif /* XKCP_has_Kravatte */

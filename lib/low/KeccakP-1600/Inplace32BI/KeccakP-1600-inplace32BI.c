@@ -22,17 +22,13 @@ This implementation comes with KeccakP-1600-SnP.h in the same folder.
 Please refer to LowLevel.build for the exact list of other files it must be combined with.
 */
 
-#include    <string.h>
+#include <stdint.h>
+#include <string.h>
 #include "brg_endian.h"
 #include "KeccakP-1600-SnP.h"
 #include "SnP-Relaned.h"
 
-typedef unsigned char UINT8;
-typedef unsigned int UINT32;
-/* WARNING: on 8-bit and 16-bit platforms, this should be replaced by: */
-/* typedef unsigned long       UINT32; */
-
-#define ROL32(a, offset) ((((UINT32)a) << (offset)) ^ (((UINT32)a) >> (32-(offset))))
+#define ROL32(a, offset) ((((uint32_t)a) << (offset)) ^ (((uint32_t)a) >> (32-(offset))))
 
 /* Credit to Henry S. Warren, Hacker's Delight, Addison-Wesley, 2002 */
 #define prepareToBitInterleaving(low, high, temp, temp0, temp1) \
@@ -90,26 +86,26 @@ typedef unsigned int UINT32;
 
 void KeccakP1600_SetBytesInLaneToZero(void *state, unsigned int lanePosition, unsigned int offset, unsigned int length)
 {
-    UINT8 laneAsBytes[8];
-    UINT32 low, high;
-    UINT32 temp, temp0, temp1;
-    UINT32 *stateAsHalfLanes = (UINT32*)state;
+    uint8_t laneAsBytes[8];
+    uint32_t low, high;
+    uint32_t temp, temp0, temp1;
+    uint32_t *stateAsHalfLanes = (uint32_t*)state;
 
     memset(laneAsBytes, 0xFF, offset);
     memset(laneAsBytes+offset, 0x00, length);
     memset(laneAsBytes+offset+length, 0xFF, 8-offset-length);
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    low = *((UINT32*)(laneAsBytes+0));
-    high = *((UINT32*)(laneAsBytes+4));
+    low = *((uint32_t*)(laneAsBytes+0));
+    high = *((uint32_t*)(laneAsBytes+4));
 #else
     low = laneAsBytes[0]
-        | ((UINT32)(laneAsBytes[1]) << 8)
-        | ((UINT32)(laneAsBytes[2]) << 16)
-        | ((UINT32)(laneAsBytes[3]) << 24);
+        | ((uint32_t)(laneAsBytes[1]) << 8)
+        | ((uint32_t)(laneAsBytes[2]) << 16)
+        | ((uint32_t)(laneAsBytes[3]) << 24);
     high = laneAsBytes[4]
-        | ((UINT32)(laneAsBytes[5]) << 8)
-        | ((UINT32)(laneAsBytes[6]) << 16)
-        | ((UINT32)(laneAsBytes[7]) << 24);
+        | ((uint32_t)(laneAsBytes[5]) << 8)
+        | ((uint32_t)(laneAsBytes[6]) << 16)
+        | ((uint32_t)(laneAsBytes[7]) << 24);
 #endif
     toBitInterleavingAndAND(low, high, stateAsHalfLanes[lanePosition*2+0], stateAsHalfLanes[lanePosition*2+1], temp, temp0, temp1);
 }
@@ -127,17 +123,17 @@ void KeccakP1600_AddByte(void *state, unsigned char byte, unsigned int offset)
 {
     unsigned int lanePosition = offset/8;
     unsigned int offsetInLane = offset%8;
-    UINT32 low, high;
-    UINT32 temp, temp0, temp1;
-    UINT32 *stateAsHalfLanes = (UINT32*)state;
+    uint32_t low, high;
+    uint32_t temp, temp0, temp1;
+    uint32_t *stateAsHalfLanes = (uint32_t*)state;
 
     if (offsetInLane < 4) {
-        low = (UINT32)byte << (offsetInLane*8);
+        low = (uint32_t)byte << (offsetInLane*8);
         high = 0;
     }
     else {
         low = 0;
-        high = (UINT32)byte << ((offsetInLane-4)*8);
+        high = (uint32_t)byte << ((offsetInLane-4)*8);
     }
     toBitInterleavingAndXOR(low, high, stateAsHalfLanes[lanePosition*2+0], stateAsHalfLanes[lanePosition*2+1], temp, temp0, temp1);
 }
@@ -146,25 +142,25 @@ void KeccakP1600_AddByte(void *state, unsigned char byte, unsigned int offset)
 
 void KeccakP1600_AddBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
 {
-    UINT8 laneAsBytes[8];
-    UINT32 low, high;
-    UINT32 temp, temp0, temp1;
-    UINT32 *stateAsHalfLanes = (UINT32*)state;
+    uint8_t laneAsBytes[8];
+    uint32_t low, high;
+    uint32_t temp, temp0, temp1;
+    uint32_t *stateAsHalfLanes = (uint32_t*)state;
 
     memset(laneAsBytes, 0, 8);
     memcpy(laneAsBytes+offset, data, length);
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    low = *((UINT32*)(laneAsBytes+0));
-    high = *((UINT32*)(laneAsBytes+4));
+    low = *((uint32_t*)(laneAsBytes+0));
+    high = *((uint32_t*)(laneAsBytes+4));
 #else
     low = laneAsBytes[0]
-        | ((UINT32)(laneAsBytes[1]) << 8)
-        | ((UINT32)(laneAsBytes[2]) << 16)
-        | ((UINT32)(laneAsBytes[3]) << 24);
+        | ((uint32_t)(laneAsBytes[1]) << 8)
+        | ((uint32_t)(laneAsBytes[2]) << 16)
+        | ((uint32_t)(laneAsBytes[3]) << 24);
     high = laneAsBytes[4]
-        | ((UINT32)(laneAsBytes[5]) << 8)
-        | ((UINT32)(laneAsBytes[6]) << 16)
-        | ((UINT32)(laneAsBytes[7]) << 24);
+        | ((uint32_t)(laneAsBytes[5]) << 8)
+        | ((uint32_t)(laneAsBytes[6]) << 16)
+        | ((uint32_t)(laneAsBytes[7]) << 24);
 #endif
     toBitInterleavingAndXOR(low, high, stateAsHalfLanes[lanePosition*2+0], stateAsHalfLanes[lanePosition*2+1], temp, temp0, temp1);
 }
@@ -174,14 +170,14 @@ void KeccakP1600_AddBytesInLane(void *state, unsigned int lanePosition, const un
 void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int laneCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    const UINT32 * pI = (const UINT32 *)data;
-    UINT32 * pS = (UINT32*)state;
-    UINT32 t, x0, x1;
+    const uint32_t * pI = (const uint32_t *)data;
+    uint32_t * pS = (uint32_t*)state;
+    uint32_t t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
 #ifdef NO_MISALIGNED_ACCESSES
-        UINT32 low;
-        UINT32 high;
+        uint32_t low;
+        uint32_t high;
         memcpy(&low, pI++, 4);
         memcpy(&high, pI++, 4);
         toBitInterleavingAndXOR(low, high, *(pS++), *(pS++), t, x0, x1);
@@ -192,18 +188,18 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
 #else
     unsigned int lanePosition;
     for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
-        UINT8 laneAsBytes[8];
+        uint8_t laneAsBytes[8];
         memcpy(laneAsBytes, data+lanePosition*8, 8);
-        UINT32 low = laneAsBytes[0]
-            | ((UINT32)(laneAsBytes[1]) << 8)
-            | ((UINT32)(laneAsBytes[2]) << 16)
-            | ((UINT32)(laneAsBytes[3]) << 24);
-        UINT32 high = laneAsBytes[4]
-            | ((UINT32)(laneAsBytes[5]) << 8)
-            | ((UINT32)(laneAsBytes[6]) << 16)
-            | ((UINT32)(laneAsBytes[7]) << 24);
-        UINT32 even, odd, temp, temp0, temp1;
-        UINT32 *stateAsHalfLanes = (UINT32*)state;
+        uint32_t low = laneAsBytes[0]
+            | ((uint32_t)(laneAsBytes[1]) << 8)
+            | ((uint32_t)(laneAsBytes[2]) << 16)
+            | ((uint32_t)(laneAsBytes[3]) << 24);
+        uint32_t high = laneAsBytes[4]
+            | ((uint32_t)(laneAsBytes[5]) << 8)
+            | ((uint32_t)(laneAsBytes[6]) << 16)
+            | ((uint32_t)(laneAsBytes[7]) << 24);
+        uint32_t even, odd, temp, temp0, temp1;
+        uint32_t *stateAsHalfLanes = (uint32_t*)state;
         toBitInterleavingAndXOR(low, high, stateAsHalfLanes[lanePosition*2+0], stateAsHalfLanes[lanePosition*2+1], temp, temp0, temp1);
     }
 #endif
@@ -229,14 +225,14 @@ void KeccakP1600_OverwriteBytesInLane(void *state, unsigned int lanePosition, co
 void KeccakP1600_OverwriteLanes(void *state, const unsigned char *data, unsigned int laneCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    const UINT32 * pI = (const UINT32 *)data;
-    UINT32 * pS = (UINT32 *)state;
-    UINT32 t, x0, x1;
+    const uint32_t * pI = (const uint32_t *)data;
+    uint32_t * pS = (uint32_t *)state;
+    uint32_t t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
 #ifdef NO_MISALIGNED_ACCESSES
-        UINT32 low;
-        UINT32 high;
+        uint32_t low;
+        uint32_t high;
         memcpy(&low, pI++, 4);
         memcpy(&high, pI++, 4);
         toBitInterleavingAndSet(low, high, *(pS++), *(pS++), t, x0, x1);
@@ -247,18 +243,18 @@ void KeccakP1600_OverwriteLanes(void *state, const unsigned char *data, unsigned
 #else
     unsigned int lanePosition;
     for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
-        UINT8 laneAsBytes[8];
+        uint8_t laneAsBytes[8];
         memcpy(laneAsBytes, data+lanePosition*8, 8);
-        UINT32 low = laneAsBytes[0]
-            | ((UINT32)(laneAsBytes[1]) << 8)
-            | ((UINT32)(laneAsBytes[2]) << 16)
-            | ((UINT32)(laneAsBytes[3]) << 24);
-        UINT32 high = laneAsBytes[4]
-            | ((UINT32)(laneAsBytes[5]) << 8)
-            | ((UINT32)(laneAsBytes[6]) << 16)
-            | ((UINT32)(laneAsBytes[7]) << 24);
-        UINT32 even, odd, temp, temp0, temp1;
-        UINT32 *stateAsHalfLanes = (UINT32*)state;
+        uint32_t low = laneAsBytes[0]
+            | ((uint32_t)(laneAsBytes[1]) << 8)
+            | ((uint32_t)(laneAsBytes[2]) << 16)
+            | ((uint32_t)(laneAsBytes[3]) << 24);
+        uint32_t high = laneAsBytes[4]
+            | ((uint32_t)(laneAsBytes[5]) << 8)
+            | ((uint32_t)(laneAsBytes[6]) << 16)
+            | ((uint32_t)(laneAsBytes[7]) << 24);
+        uint32_t even, odd, temp, temp0, temp1;
+        uint32_t *stateAsHalfLanes = (uint32_t*)state;
         toBitInterleavingAndSet(low, high, stateAsHalfLanes[lanePosition*2+0], stateAsHalfLanes[lanePosition*2+1], temp, temp0, temp1);
     }
 #endif
@@ -275,7 +271,7 @@ void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned
 
 void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
 {
-    UINT32 *stateAsHalfLanes = (UINT32*)state;
+    uint32_t *stateAsHalfLanes = (uint32_t*)state;
     unsigned int i;
 
     for(i=0; i<byteCount/8; i++) {
@@ -290,14 +286,14 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
 
 void KeccakP1600_ExtractBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
 {
-    UINT32 *stateAsHalfLanes = (UINT32*)state;
-    UINT32 low, high, temp, temp0, temp1;
-    UINT8 laneAsBytes[8];
+    uint32_t *stateAsHalfLanes = (uint32_t*)state;
+    uint32_t low, high, temp, temp0, temp1;
+    uint8_t laneAsBytes[8];
 
     fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], low, high, temp, temp0, temp1);
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    *((UINT32*)(laneAsBytes+0)) = low;
-    *((UINT32*)(laneAsBytes+4)) = high;
+    *((uint32_t*)(laneAsBytes+0)) = low;
+    *((uint32_t*)(laneAsBytes+4)) = high;
 #else
     laneAsBytes[0] = low & 0xFF;
     laneAsBytes[1] = (low >> 8) & 0xFF;
@@ -316,14 +312,14 @@ void KeccakP1600_ExtractBytesInLane(const void *state, unsigned int lanePosition
 void KeccakP1600_ExtractLanes(const void *state, unsigned char *data, unsigned int laneCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    UINT32 * pI = (UINT32 *)data;
-    const UINT32 * pS = ( const UINT32 *)state;
-    UINT32 t, x0, x1;
+    uint32_t * pI = (uint32_t *)data;
+    const uint32_t * pS = ( const uint32_t *)state;
+    uint32_t t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
 #ifdef NO_MISALIGNED_ACCESSES
-        UINT32 low;
-        UINT32 high;
+        uint32_t low;
+        uint32_t high;
         fromBitInterleaving(*(pS++), *(pS++), low, high, t, x0, x1);
         memcpy(pI++, &low, 4);
         memcpy(pI++, &high, 4);
@@ -334,10 +330,10 @@ void KeccakP1600_ExtractLanes(const void *state, unsigned char *data, unsigned i
 #else
     unsigned int lanePosition;
     for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
-        UINT32 *stateAsHalfLanes = (UINT32*)state;
-        UINT32 low, high, temp, temp0, temp1;
+        uint32_t *stateAsHalfLanes = (uint32_t*)state;
+        uint32_t low, high, temp, temp0, temp1;
         fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], low, high, temp, temp0, temp1);
-        UINT8 laneAsBytes[8];
+        uint8_t laneAsBytes[8];
         laneAsBytes[0] = low & 0xFF;
         laneAsBytes[1] = (low >> 8) & 0xFF;
         laneAsBytes[2] = (low >> 16) & 0xFF;
@@ -362,15 +358,15 @@ void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned i
 
 void KeccakP1600_ExtractAndAddBytesInLane(const void *state, unsigned int lanePosition, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
-    UINT32 *stateAsHalfLanes = (UINT32*)state;
-    UINT32 low, high, temp, temp0, temp1;
-    UINT8 laneAsBytes[8];
+    uint32_t *stateAsHalfLanes = (uint32_t*)state;
+    uint32_t low, high, temp, temp0, temp1;
+    uint8_t laneAsBytes[8];
     unsigned int i;
 
     fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], low, high, temp, temp0, temp1);
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    *((UINT32*)(laneAsBytes+0)) = low;
-    *((UINT32*)(laneAsBytes+4)) = high;
+    *((uint32_t*)(laneAsBytes+0)) = low;
+    *((uint32_t*)(laneAsBytes+4)) = high;
 #else
     laneAsBytes[0] = low & 0xFF;
     laneAsBytes[1] = (low >> 8) & 0xFF;
@@ -390,15 +386,15 @@ void KeccakP1600_ExtractAndAddBytesInLane(const void *state, unsigned int lanePo
 void KeccakP1600_ExtractAndAddLanes(const void *state, const unsigned char *input, unsigned char *output, unsigned int laneCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    const UINT32 * pI = (const UINT32 *)input;
-    UINT32 * pO = (UINT32 *)output;
-    const UINT32 * pS = (const UINT32 *)state;
-    UINT32 t, x0, x1;
+    const uint32_t * pI = (const uint32_t *)input;
+    uint32_t * pO = (uint32_t *)output;
+    const uint32_t * pS = (const uint32_t *)state;
+    uint32_t t, x0, x1;
     int i;
     for (i = laneCount-1; i >= 0; --i) {
 #ifdef NO_MISALIGNED_ACCESSES
-        UINT32 low;
-        UINT32 high;
+        uint32_t low;
+        uint32_t high;
         fromBitInterleaving(*(pS++), *(pS++), low, high, t, x0, x1);
         *(pO++) = *(pI++) ^ low;
         *(pO++) = *(pI++) ^ high;
@@ -409,10 +405,10 @@ void KeccakP1600_ExtractAndAddLanes(const void *state, const unsigned char *inpu
 #else
     unsigned int lanePosition;
     for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
-        UINT32 *stateAsHalfLanes = (UINT32*)state;
-        UINT32 low, high, temp, temp0, temp1;
+        uint32_t *stateAsHalfLanes = (uint32_t*)state;
+        uint32_t low, high, temp, temp0, temp1;
         fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], low, high, temp, temp0, temp1);
-        UINT8 laneAsBytes[8];
+        uint8_t laneAsBytes[8];
         laneAsBytes[0] = low & 0xFF;
         laneAsBytes[1] = (low >> 8) & 0xFF;
         laneAsBytes[2] = (low >> 16) & 0xFF;
@@ -421,8 +417,8 @@ void KeccakP1600_ExtractAndAddLanes(const void *state, const unsigned char *inpu
         laneAsBytes[5] = (high >> 8) & 0xFF;
         laneAsBytes[6] = (high >> 16) & 0xFF;
         laneAsBytes[7] = (high >> 24) & 0xFF;
-        ((UINT32*)(output+lanePosition*8))[0] = ((UINT32*)(input+lanePosition*8))[0] ^ (*(const UINT32*)(laneAsBytes+0));
-        ((UINT32*)(output+lanePosition*8))[1] = ((UINT32*)(input+lanePosition*8))[0] ^ (*(const UINT32*)(laneAsBytes+4));
+        ((uint32_t*)(output+lanePosition*8))[0] = ((uint32_t*)(input+lanePosition*8))[0] ^ (*(const uint32_t*)(laneAsBytes+0));
+        ((uint32_t*)(output+lanePosition*8))[1] = ((uint32_t*)(input+lanePosition*8))[0] ^ (*(const uint32_t*)(laneAsBytes+4));
     }
 #endif
 }
@@ -435,7 +431,7 @@ void KeccakP1600_ExtractAndAddBytes(const void *state, const unsigned char *inpu
 
 /* ---------------------------------------------------------------- */
 
-static const UINT32 KeccakF1600RoundConstants_int2[2*24+1] =
+static const uint32_t KeccakF1600RoundConstants_int2[2*24+1] =
 {
     0x00000001UL,    0x00000000UL,
     0x00000000UL,    0x00000089UL,
@@ -966,12 +962,12 @@ static const UINT32 KeccakF1600RoundConstants_int2[2*24+1] =
 
 void KeccakP1600_Permute_Nrounds(void *state, unsigned int nRounds)
 {
-    UINT32 Da0, De0, Di0, Do0, Du0;
-    UINT32 Da1, De1, Di1, Do1, Du1;
-    UINT32 Ba, Be, Bi, Bo, Bu;
-    UINT32 Cx, Cy, Cz, Cw;
-    const UINT32 *pRoundConstants = KeccakF1600RoundConstants_int2+(24-nRounds)*2;
-    UINT32 *stateAsHalfLanes = (UINT32*)state;
+    uint32_t Da0, De0, Di0, Do0, Du0;
+    uint32_t Da1, De1, Di1, Do1, Du1;
+    uint32_t Ba, Be, Bi, Bo, Bu;
+    uint32_t Cx, Cy, Cz, Cw;
+    const uint32_t *pRoundConstants = KeccakF1600RoundConstants_int2+(24-nRounds)*2;
+    uint32_t *stateAsHalfLanes = (uint32_t*)state;
     #define Aba0 stateAsHalfLanes[ 0]
     #define Aba1 stateAsHalfLanes[ 1]
     #define Abe0 stateAsHalfLanes[ 2]

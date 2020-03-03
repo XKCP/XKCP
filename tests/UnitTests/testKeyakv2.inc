@@ -69,7 +69,7 @@ static void testKeyakInitialize(Keyak_Instance * global, Keyak_Instance * wrap, 
 }
 
 static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Instance * wrap, Keyak_Instance * unwrap, FILE * f, 
-    unsigned char * ADcontent, size_t ADlen, unsigned char *Pcontent, size_t Plen, int forgetFlag, unsigned char *Cbuffer, unsigned char *PPbuffer)
+    const unsigned char * ADcontent, size_t ADlen, const unsigned char *Pcontent, size_t Plen, int forgetFlag, unsigned char *Cbuffer, unsigned char *PPbuffer)
 {
     unsigned char tag[TagLength];
     unsigned char dummyTag[TagLength];
@@ -96,7 +96,8 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                 size_t totalPlen, totalADlen;
                 size_t processedI, processedMD;
                 int lastFlag;
-                unsigned char *I, *O, *AD;
+                const unsigned char *I, *AD;
+                unsigned char *O;
 
                 totalPlen = totalADlen = 0;
                 partialPlen = partialADlen = 0;
@@ -164,7 +165,8 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                 size_t partialPlen, partialADlen;
                 size_t totalPlen, totalADlen;
                 size_t processedI, processedMD;
-                unsigned char *I, *O, *AD;
+                const unsigned char *I, *AD;
+                unsigned char *O;
 
                 totalPlen = totalADlen = 0;
                 partialPlen = Plen;
@@ -266,7 +268,8 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                 size_t totalPlen, totalADlen;
                 size_t processedI, processedMD;
                 int toggle = 0, lastFlag;
-                unsigned char *I, *O, *AD;
+                const unsigned char *I, *AD;
+                unsigned char *O;
 
                 totalPlen = totalADlen = 0;
                 partialPlen = partialADlen = 0;
@@ -342,7 +345,8 @@ static void testKeyakWrapUnwrap(int testmode, Keyak_Instance * global, Keyak_Ins
                 size_t partialPlen, partialADlen;
                 size_t totalPlen, totalADlen;
                 size_t processedI, processedMD;
-                unsigned char *I, *O, *AD;
+                const unsigned char *I, *AD;
+                unsigned char *O;
 
                 totalPlen = totalADlen = 0;
                 partialPlen = Plen;
@@ -467,7 +471,7 @@ int testKeyakOneMode( int mode, const char *file, const unsigned char *expected 
         generateSimpleRawMaterial(K, Klen, Klen+Nlen+0x12, 3),
         generateSimpleRawMaterial(N, Nlen, Klen+Nlen+0x45, 6),
         testKeyakInitialize(&global, &wrap, &unwrap, f, K, Klen, N, Nlen, forgetFlag, tagFlag);
-        testKeyakWrapUnwrap( mode, &global, &wrap, &unwrap, f, "ABC", 3, "DEF", 3, 0, Cbuffer, PPbuffer);
+        testKeyakWrapUnwrap( mode, &global, &wrap, &unwrap, f, (const uint8_t*)"ABC", 3, (const uint8_t*)"DEF", 3, 0, Cbuffer, PPbuffer);
     }
 
     {

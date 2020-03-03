@@ -23,6 +23,7 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 */
 
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,9 +32,7 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #include "displayIntermediateValues.h"
 #endif
 
-typedef unsigned char UINT8;
-typedef unsigned int UINT32;
-typedef UINT32 tKeccakLane;
+typedef uint32_t tKeccakLane;
 
 #define maxNrRounds 22
 #define nrLanes 25
@@ -48,7 +47,7 @@ static unsigned int KeccakRhoOffsets[nrLanes];
 
 void KeccakP800_InitializeRoundConstants(void);
 void KeccakP800_InitializeRhoOffsets(void);
-static int LFSR86540(UINT8 *LFSR);
+static int LFSR86540(uint8_t *LFSR);
 
 void KeccakP800_StaticInitialize(void)
 {
@@ -62,7 +61,7 @@ void KeccakP800_StaticInitialize(void)
 
 void KeccakP800_InitializeRoundConstants(void)
 {
-    UINT8 LFSRstate = 0x01;
+    uint8_t LFSRstate = 0x01;
     unsigned int i, j, bitPosition;
 
     for(i=0; i<maxNrRounds; i++) {
@@ -91,7 +90,7 @@ void KeccakP800_InitializeRhoOffsets(void)
     }
 }
 
-static int LFSR86540(UINT8 *LFSR)
+static int LFSR86540(uint8_t *LFSR)
 {
     int result = ((*LFSR) & 0x01) != 0;
     if (((*LFSR) & 0x80) != 0)

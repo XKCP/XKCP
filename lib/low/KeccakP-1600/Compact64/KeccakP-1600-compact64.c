@@ -22,6 +22,7 @@ This implementation comes with KeccakP-1600-SnP.h in the same folder.
 Please refer to LowLevel.build for the exact list of other files it must be combined with.
 */
 
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include "brg_endian.h"
@@ -32,32 +33,30 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 /* #define DIVISION_INSTRUCTION */ /* comment if no division instruction or more compact when not using division */
 #define UNROLL_CHILOOP        /* comment more compact using for loop */
 
-typedef unsigned char UINT8;
-typedef unsigned long long int UINT64;
-typedef unsigned int tSmallUInt; /*INFO It could be more optimized to use "unsigned char" on an 8-bit CPU    */
-typedef UINT64 tKeccakLane;
+typedef uint_fast8_t tSmallUInt;
+typedef uint64_t tKeccakLane;
 
 #if defined(_MSC_VER)
 #define ROL64(a, offset) _rotl64(a, offset)
 #elif defined(UseSHLD)
     #define ROL64(x,N) ({ \
-    register UINT64 __out; \
-    register UINT64 __in = x; \
+    register uint64_t __out; \
+    register uint64_t __in = x; \
     __asm__ ("shld %2,%0,%0" : "=r"(__out) : "0"(__in), "i"(N)); \
     __out; \
     })
 #else
-#define ROL64(a, offset) ((((UINT64)a) << offset) ^ (((UINT64)a) >> (64-offset)))
+#define ROL64(a, offset) ((((uint64_t)a) << offset) ^ (((uint64_t)a) >> (64-offset)))
 #endif
 
 #define    cKeccakNumberOfRounds    24
 
-const UINT8 KeccakP1600_RotationConstants[25] =
+const uint8_t KeccakP1600_RotationConstants[25] =
 {
      1,  3,  6, 10, 15, 21, 28, 36, 45, 55,  2, 14, 27, 41, 56,  8, 25, 43, 62, 18, 39, 61, 20, 44
 };
 
-const UINT8 KeccakP1600_PiLane[25] =
+const uint8_t KeccakP1600_PiLane[25] =
 {
     10,  7, 11, 17, 18,  3,  5, 16,  8, 21, 24,  4, 15, 23, 19, 13, 12,  2, 20, 14, 22,  9,  6,  1
 };
@@ -65,7 +64,7 @@ const UINT8 KeccakP1600_PiLane[25] =
 #if    defined(DIVISION_INSTRUCTION)
 #define    MOD5(argValue)    ((argValue) % 5)
 #else
-const UINT8 KeccakP1600_Mod5[10] =
+const uint8_t KeccakP1600_Mod5[10] =
 {
     0, 1, 2, 3, 4, 0, 1, 2, 3, 4
 };
@@ -74,8 +73,8 @@ const UINT8 KeccakP1600_Mod5[10] =
 
 /* ---------------------------------------------------------------- */
 
-static tKeccakLane KeccakF1600_GetNextRoundConstant( UINT8 *LFSR );
-static tKeccakLane KeccakF1600_GetNextRoundConstant( UINT8 *LFSR )
+static tKeccakLane KeccakF1600_GetNextRoundConstant( uint8_t *LFSR );
+static tKeccakLane KeccakF1600_GetNextRoundConstant( uint8_t *LFSR )
 {
     tSmallUInt i;
     tKeccakLane    roundConstant;
@@ -96,7 +95,7 @@ static tKeccakLane KeccakF1600_GetNextRoundConstant( UINT8 *LFSR )
         if ( doXOR != 0 )
             roundConstant ^= (tKeccakLane)1ULL << (i - 1);
     }
-    *LFSR = (UINT8)tempLSFR;
+    *LFSR = (uint8_t)tempLSFR;
     return ( roundConstant );
 }
 
@@ -149,7 +148,7 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
     }
 #else
     tSmallUInt i;
-    const UINT8 *curData = data;
+    const uint8_t *curData = data;
     for(i=0; i<laneCount; i++, curData+=8) {
         tKeccakLane lane = (tKeccakLane)curData[0]
             | ((tKeccakLane)curData[1] << 8)
@@ -168,9 +167,9 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
 
 void KeccakP1600_AddByte(void *state, unsigned char byte, unsigned int offset)
 {
-    UINT64 lane = byte;
+    uint64_t lane = byte;
     lane <<= (offset%8)*8;
-    ((UINT64*)state)[offset/8] ^= lane;
+    ((uint64_t*)state)[offset/8] ^= lane;
 }
 
 /* ---------------------------------------------------------------- */
@@ -206,7 +205,7 @@ void KeccakP1600_OverwriteLanes(void *state, const unsigned char *data, unsigned
     memcpy((unsigned char*)state, data, laneCount*8);
 #else
     tSmallUInt i;
-    const UINT8 *curData = data;
+    const uint8_t *curData = data;
     for(i=0; i<laneCount; i++, curData+=8) {
         tKeccakLane lane = (tKeccakLane)curData[0]
             | ((tKeccakLane)curData[1] << 8)
@@ -246,13 +245,13 @@ void KeccakP1600_OverwriteWithZeroes(void *argState, unsigned int byteCount)
 
 /* ---------------------------------------------------------------- */
 
-static void KeccakP1600_Permute_NroundsLFSR(void *argState, UINT8 rounds, UINT8 LFSRinitialState)
+static void KeccakP1600_Permute_NroundsLFSR(void *argState, uint8_t rounds, uint8_t LFSRinitialState)
 {
     tSmallUInt x, y, round;
     tKeccakLane        temp;
     tKeccakLane        BC[5];
     tKeccakLane     *state;
-    UINT8           LFSRstate;
+    uint8_t           LFSRstate;
 
     state = (tKeccakLane*)argState;
     LFSRstate = LFSRinitialState;
@@ -313,8 +312,8 @@ static void KeccakP1600_Permute_NroundsLFSR(void *argState, UINT8 rounds, UINT8 
 
 void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
 {
-	UINT8 LFSRstate;
-	UINT8 nr;
+	uint8_t LFSRstate;
+	uint8_t nr;
 
 	LFSRstate = 0x01;
 	for ( nr = 24 - nrounds; nr != 0; --nr )
@@ -341,7 +340,7 @@ void KeccakP1600_Permute_24rounds(void *state)
 void KeccakP1600_ExtractBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    memcpy(data, ((UINT8*)&((tKeccakLane*)state)[lanePosition])+offset, length);
+    memcpy(data, ((uint8_t*)&((tKeccakLane*)state)[lanePosition])+offset, length);
 #else
     tSmallUInt i;
     tKeccakLane lane = ((tKeccakLane*)state)[lanePosition];

@@ -333,6 +333,6 @@ void testKravatte(void)
 #ifdef UT_OUTPUT
     writeTestKravatte("Kravatte.txt");
 #endif
-    selfTestKravatte("\xaa\xc1\xb7\x34\xff\x9b\xa3\x58\x6c\x7a\xc7\x57\x3a\x97\xdd\x13");
+    selfTestKravatte((const uint8_t*)"\xaa\xc1\xb7\x34\xff\x9b\xa3\x58\x6c\x7a\xc7\x57\x3a\x97\xdd\x13");
 }
 #endif /* XKCP_has_Kravatte */

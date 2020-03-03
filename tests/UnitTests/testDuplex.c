@@ -20,6 +20,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 
 #include <assert.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include "config.h"
@@ -91,26 +92,26 @@ void writeTestDuplex(void)
 }
 #endif
 
-void selfTestDuplex(unsigned int rate, unsigned int capacity, int flavor, const unsigned char *expected)
+void selfTestDuplex(unsigned int rate, unsigned int capacity, int flavor, const char *expected)
 {
 #ifdef XKCP_has_Duplex_Keccak_width200
     if (rate+capacity == 200)
-        KeccakWidth200_selfTestDuplex(rate, capacity, flavor, expected);
+        KeccakWidth200_selfTestDuplex(rate, capacity, flavor, (const uint8_t*)expected);
     else
 #endif
 #ifdef XKCP_has_Duplex_Keccak_width400
     if (rate+capacity == 400)
-        KeccakWidth400_selfTestDuplex(rate, capacity, flavor, expected);
+        KeccakWidth400_selfTestDuplex(rate, capacity, flavor, (const uint8_t*)expected);
     else
 #endif
 #ifdef XKCP_has_Duplex_Keccak_width800
     if (rate+capacity == 800)
-        KeccakWidth800_selfTestDuplex(rate, capacity, flavor, expected);
+        KeccakWidth800_selfTestDuplex(rate, capacity, flavor, (const uint8_t*)expected);
     else
 #endif
 #ifdef XKCP_has_Duplex_Keccak_width1600
     if (rate+capacity == 1600)
-        KeccakWidth1600_selfTestDuplex(rate, capacity, flavor, expected);
+        KeccakWidth1600_selfTestDuplex(rate, capacity, flavor, (const uint8_t*)expected);
     else
 #endif
         abort();

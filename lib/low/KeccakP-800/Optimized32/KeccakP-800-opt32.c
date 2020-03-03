@@ -22,29 +22,26 @@ This implementation comes with KeccakP-800-SnP.h in the same folder.
 Please refer to LowLevel.build for the exact list of other files it must be combined with.
 */
 
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include "brg_endian.h"
 #include "KeccakP-800-opt32-config.h"
 #include "KeccakP-800-SnP.h"
 
-typedef unsigned char UINT8;
-typedef unsigned int UINT32;    /* Uncomment if 32-bit and 64-bit oriented compiler */
-/* typedef unsigned long UINT32; */ /* Uncomment if  8-bit and 16-bit oriented compiler */
-
 /* Change READ32/WRITE macros if your target does not support unaligned 32-bit accesses. */
 #if defined (__arm__) && !defined(__GNUC__)
     #define ROL32(a, offset) __ror(a, 32-(offset))
-    #define READ32_UNALIGNED(argAddress)            (*((const __packed UINT32*)(argAddress)))
-    #define WRITE32_UNALIGNED(argAddress, argData)  (*((__packed UINT32*)(argAddress)) = (argData))
+    #define READ32_UNALIGNED(argAddress)            (*((const __packed uint32_t*)(argAddress)))
+    #define WRITE32_UNALIGNED(argAddress, argData)  (*((__packed uint32_t*)(argAddress)) = (argData))
 #elif defined(_MSC_VER)
     #define ROL32(a, offset) _rotl(a, offset)
-    #define READ32_UNALIGNED(argAddress)            (*((const UINT32*)(argAddress)))
-    #define WRITE32_UNALIGNED(argAddress, argData)  (*((UINT32*)(argAddress)) = (argData))
+    #define READ32_UNALIGNED(argAddress)            (*((const uint32_t*)(argAddress)))
+    #define WRITE32_UNALIGNED(argAddress, argData)  (*((uint32_t*)(argAddress)) = (argData))
 #else
-    #define ROL32(a, offset) ((((UINT32)a) << offset) ^ (((UINT32)a) >> (32-offset)))
-    #define READ32_UNALIGNED(argAddress)            (*((const UINT32*)(argAddress)))
-    #define WRITE32_UNALIGNED(argAddress, argData)  (*((UINT32*)(argAddress)) = (argData))
+    #define ROL32(a, offset) ((((uint32_t)a) << offset) ^ (((uint32_t)a) >> (32-offset)))
+    #define READ32_UNALIGNED(argAddress)            (*((const uint32_t*)(argAddress)))
+    #define WRITE32_UNALIGNED(argAddress, argData)  (*((uint32_t*)(argAddress)) = (argData))
 #endif
 
 #if defined(KeccakP800_useLaneComplementing)
@@ -61,7 +58,7 @@ typedef unsigned int UINT32;    /* Uncomment if 32-bit and 64-bit oriented compi
 
 #ifdef KeccakP800_useLaneComplementing
 
-const UINT32 KeccakP800LaneComplement[25] = {
+const uint32_t KeccakP800LaneComplement[25] = {
     0,
     0xFFFFFFFF,
     0xFFFFFFFF,
@@ -90,7 +87,7 @@ const UINT32 KeccakP800LaneComplement[25] = {
 
 #endif
 
-const UINT32 KeccakF800RoundConstants[24] = {
+const uint32_t KeccakF800RoundConstants[24] = {
     0x00000001ULL,
     0x00008082ULL,
     0x0000808aULL,
@@ -120,12 +117,12 @@ void KeccakP800_Initialize(void *state)
 {
     memset(state, 0, 100);
 #ifdef KeccakP800_useLaneComplementing
-    ((UINT32*)state)[ 1] = ~(UINT32)0;
-    ((UINT32*)state)[ 2] = ~(UINT32)0;
-    ((UINT32*)state)[ 8] = ~(UINT32)0;
-    ((UINT32*)state)[12] = ~(UINT32)0;
-    ((UINT32*)state)[17] = ~(UINT32)0;
-    ((UINT32*)state)[20] = ~(UINT32)0;
+    ((uint32_t*)state)[ 1] = ~(uint32_t)0;
+    ((uint32_t*)state)[ 2] = ~(uint32_t)0;
+    ((uint32_t*)state)[ 8] = ~(uint32_t)0;
+    ((uint32_t*)state)[12] = ~(uint32_t)0;
+    ((uint32_t*)state)[17] = ~(uint32_t)0;
+    ((uint32_t*)state)[20] = ~(uint32_t)0;
 #endif
 }
 
@@ -136,8 +133,8 @@ void KeccakP800_AddByte(void *argState, unsigned char data, unsigned int offset)
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     unsigned int lanePosition = offset/4;
     unsigned int offsetInLane = offset%4;
-    UINT32 lane = (UINT32)data << (8*offsetInLane);
-    ((UINT32*)argState)[lanePosition] ^= lane;
+    uint32_t lane = (uint32_t)data << (8*offsetInLane);
+    ((uint32_t*)argState)[lanePosition] ^= lane;
 #else
 #error "Not yet implemented"
 #endif
@@ -152,12 +149,12 @@ void KeccakP800_AddBytes(void *argState, const unsigned char *data, unsigned int
     unsigned int lanePosition = offset/4;
     unsigned int offsetInLane = offset%4;
     const unsigned char *curData = data;
-    UINT32 *state = (UINT32*)argState;
+    uint32_t *state = (uint32_t*)argState;
 
     state += lanePosition;
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = 4 - offsetInLane;
-        UINT32 lane = 0;
+        uint32_t lane = 0;
         if (bytesInLane > sizeLeft)
             bytesInLane = sizeLeft;
         memcpy((unsigned char*)&lane + offsetInLane, curData, bytesInLane);
@@ -173,7 +170,7 @@ void KeccakP800_AddBytes(void *argState, const unsigned char *data, unsigned int
     }
 
     if (sizeLeft > 0) {
-        UINT32 lane = 0;
+        uint32_t lane = 0;
         memcpy(&lane, curData, sizeLeft);
         *state ^= lane;
     }
@@ -192,7 +189,7 @@ void KeccakP800_OverwriteBytes(void *argState, const unsigned char *data, unsign
     unsigned int lanePosition = offset/4;
     unsigned int offsetInLane = offset%4;
     const unsigned char *curData = data;
-    UINT32 *state = (UINT32*)argState;
+    uint32_t *state = (uint32_t*)argState;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = 4 - offsetInLane;
@@ -251,7 +248,7 @@ void KeccakP800_Permute_Nrounds(void *state, unsigned int nr)
 {
     declareBCDE
     unsigned int i;
-    UINT32 *Astate = (UINT32*)state;
+    uint32_t *Astate = (uint32_t*)state;
 
     roundsN(A,E,nr)
 }
@@ -264,7 +261,7 @@ void KeccakP800_Permute_12rounds(void *state)
     #ifndef KeccakP800_fullUnrolling
     unsigned int i;
     #endif
-    UINT32 *Astate = (UINT32*)state;
+    uint32_t *Astate = (uint32_t*)state;
 
     rounds12
 }
@@ -277,7 +274,7 @@ void KeccakP800_Permute_22rounds(void *state)
     #ifndef KeccakP800_fullUnrolling
     unsigned int i;
     #endif
-    UINT32 *Astate = (UINT32*)state;
+    uint32_t *Astate = (uint32_t*)state;
 
     rounds22
 }
@@ -292,14 +289,14 @@ void KeccakP800_ExtractBytes(const void *argState, unsigned char *data, unsigned
     unsigned int lanePosition = offset/4;
     unsigned int offsetInLane = offset%4;
     unsigned char *curData = data;
-    const UINT32 *state = (const UINT32*)argState;
-    const UINT32 *pLaneComplement;
+    const uint32_t *state = (const uint32_t*)argState;
+    const uint32_t *pLaneComplement;
 
     state += lanePosition;
     pLaneComplement = KeccakP800LaneComplement + lanePosition;
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = 4 - offsetInLane;
-        UINT32  lane = (*state++ ^ *pLaneComplement++) >> (offsetInLane * 8);
+        uint32_t  lane = (*state++ ^ *pLaneComplement++) >> (offsetInLane * 8);
         if (bytesInLane > sizeLeft)
             bytesInLane = sizeLeft;
         sizeLeft -= bytesInLane;
@@ -318,7 +315,7 @@ void KeccakP800_ExtractBytes(const void *argState, unsigned char *data, unsigned
     }
 
     if (sizeLeft > 0) {
-        UINT32  lane = *state ^ *pLaneComplement;
+        uint32_t  lane = *state ^ *pLaneComplement;
         unsigned int i;
         for ( i = 0; i < sizeLeft; ++i ) {
             *curData++ = (unsigned char)lane;
@@ -344,14 +341,14 @@ void KeccakP800_ExtractAndAddBytes(const void *argState, const unsigned char *in
     unsigned int offsetInLane = offset%4;
     const unsigned char *curInput = input;
     unsigned char *curOutput = output;
-    const UINT32 *state = (const UINT32*)argState;
-    const UINT32 *pLaneComplement;
+    const uint32_t *state = (const uint32_t*)argState;
+    const uint32_t *pLaneComplement;
 
     state += lanePosition;
     pLaneComplement = KeccakP800LaneComplement + lanePosition;
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = 4 - offsetInLane;
-        UINT32  lane = (*state++ ^ *pLaneComplement++) >> (offsetInLane * 8);
+        uint32_t  lane = (*state++ ^ *pLaneComplement++) >> (offsetInLane * 8);
         if (bytesInLane > sizeLeft)
             bytesInLane = sizeLeft;
         sizeLeft -= bytesInLane;
@@ -370,7 +367,7 @@ void KeccakP800_ExtractAndAddBytes(const void *argState, const unsigned char *in
     }
 
     if (sizeLeft > 0) {
-        UINT32  lane = *state ^ *pLaneComplement;
+        uint32_t  lane = *state ^ *pLaneComplement;
         do {
             *curOutput++ = (*curInput++) ^ (unsigned char)lane;
             lane >>= 8;
@@ -383,12 +380,12 @@ void KeccakP800_ExtractAndAddBytes(const void *argState, const unsigned char *in
     unsigned int offsetInLane = offset%4;
     const unsigned char *curInput = input;
     unsigned char *curOutput = output;
-    const UINT32 *state = (const UINT32*)argState;
+    const uint32_t *state = (const uint32_t*)argState;
 
     state += lanePosition;
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = 4 - offsetInLane;
-        UINT32  lane = *state++ >> (offsetInLane * 8);
+        uint32_t  lane = *state++ >> (offsetInLane * 8);
         if (bytesInLane > sizeLeft)
             bytesInLane = sizeLeft;
         sizeLeft -= bytesInLane;
@@ -407,7 +404,7 @@ void KeccakP800_ExtractAndAddBytes(const void *argState, const unsigned char *in
     }
 
     if (sizeLeft > 0) {
-        UINT32  lane = *state;
+        uint32_t  lane = *state;
         do {
             *curOutput++ = (*curInput++) ^ (unsigned char)lane;
             lane >>= 8;
@@ -429,7 +426,7 @@ size_t KeccakF800_FastLoop_Absorb(void *state, unsigned int laneCount, const uns
 
     while(dataByteLen >= laneCountInBytes) {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-        UINT32 * pState  = (UINT32*)state;
+        uint32_t * pState  = (uint32_t*)state;
         unsigned int lc;
 
         for ( lc = laneCount; lc >= 4; lc -= 4 ) {

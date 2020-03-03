@@ -15,6 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "config.h"
 #ifdef XKCP_has_Ketje
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include "config.h"
@@ -72,25 +73,25 @@ int testKetje( void )
 {
 #ifdef XKCP_has_KetjeJr
     UT_startTest("KetjeJr", KeccakP200_implementation);
-    KetjeJr_test("KetjeJr.txt", "\x6b\x2d\xb5\xc5\x76\x51\x36\x6c\xf8\x3e\x42\xdc\xb3\x69\x0e\x51");
+    KetjeJr_test("KetjeJr.txt", (const uint8_t*)"\x6b\x2d\xb5\xc5\x76\x51\x36\x6c\xf8\x3e\x42\xdc\xb3\x69\x0e\x51");
     UT_endTest();
 #endif
 
 #ifdef XKCP_has_KetjeSr
     UT_startTest("KetjeSr", KeccakP400_implementation);
-    KetjeSr_test("KetjeSr.txt", "\x92\xaf\x55\x88\x48\xdf\x0a\x4e\x9b\x94\xf6\x33\xee\x2f\xe9\x71");
+    KetjeSr_test("KetjeSr.txt", (const uint8_t*)"\x92\xaf\x55\x88\x48\xdf\x0a\x4e\x9b\x94\xf6\x33\xee\x2f\xe9\x71");
     UT_endTest();
 #endif
 
 #ifdef XKCP_has_KetjeMn
     UT_startTest("KetjeMn", KeccakP800_implementation);
-    KetjeMn_test("KetjeMn.txt", "\xae\x36\xc9\xe0\xea\xbc\x11\x92\xf6\x7a\x9f\xb6\x93\x8a\xe3\x58");
+    KetjeMn_test("KetjeMn.txt", (const uint8_t*)"\xae\x36\xc9\xe0\xea\xbc\x11\x92\xf6\x7a\x9f\xb6\x93\x8a\xe3\x58");
     UT_endTest();
 #endif
 
 #ifdef XKCP_has_KetjeMj
     UT_startTest("KetjeMj", KeccakP1600_implementation);
-    KetjeMj_test("KetjeMj.txt", "\x1e\x7c\x6c\x56\x42\x4f\x8c\x1f\xe0\xbd\x04\x2d\x03\xda\x3a\x1e");
+    KetjeMj_test("KetjeMj.txt", (const uint8_t*)"\x1e\x7c\x6c\x56\x42\x4f\x8c\x1f\xe0\xbd\x04\x2d\x03\xda\x3a\x1e");
     UT_endTest();
 #endif
 

@@ -56,14 +56,11 @@ We would like to thank Vladimir Sedach, we have used parts of his Keccak AVX-512
  */
 /* #define SIMULATE_AVX512 */
 
-typedef uint8_t     UINT8;
-typedef uint64_t    UINT64;
-
 #if defined(SIMULATE_AVX512)
 
 typedef struct
 {
-    UINT64 x[8];
+    uint64_t x[8];
 } __m512i;
 
 static __m512i _mm512_xor_si512( __m512i a, __m512i b)
@@ -114,7 +111,7 @@ static __m512i _mm512_rolv_epi64(__m512i a, __m512i offset)
     return(r);
 }
 
-static __m512i _mm512_setr_epi64(UINT64 a, UINT64 b, UINT64 c, UINT64 d, UINT64 e, UINT64 f, UINT64 g, UINT64 h)
+static __m512i _mm512_setr_epi64(uint64_t a, uint64_t b, uint64_t c, uint64_t d, uint64_t e, uint64_t f, uint64_t g, uint64_t h)
 {
     __m512i r;
 
@@ -190,7 +187,7 @@ static __m512i _mm512_maskz_loadu_epi64( unsigned char mask, const void * a)
 {
     __m512i r;
     unsigned int i;
-    const UINT64 *p = a;
+    const uint64_t *p = a;
 
     for ( i = 0; i < 8; ++i, mask >>= 1 )
         r.x[i] = (mask & 1) ? p[i] : 0;
@@ -200,7 +197,7 @@ static __m512i _mm512_maskz_loadu_epi64( unsigned char mask, const void * a)
 static void _mm512_mask_storeu_epi64( void * a, unsigned char mask, __m512i v)
 {
     unsigned int i;
-    UINT64 *p = a;
+    uint64_t *p = a;
 
     for ( i = 0; i < 8; ++i, mask >>= 1 )
         if ( mask & 1 )
@@ -238,16 +235,16 @@ void KeccakP1600_Initialize(void *state)
 
 void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
-    UINT8  *stateAsBytes;
-    UINT64 *stateAsLanes;
+    uint8_t  *stateAsBytes;
+    uint64_t *stateAsLanes;
 
-    for( stateAsBytes = (UINT8*)state; ((offset % 8) != 0) && (length != 0); ++offset, --length)
+    for( stateAsBytes = (uint8_t*)state; ((offset % 8) != 0) && (length != 0); ++offset, --length)
         stateAsBytes[offset] ^= *(data++);
-    for (stateAsLanes = (UINT64*)(stateAsBytes + offset); length >= 8*8; stateAsLanes += 8, data += 8*8, length -= 8*8)
-        STORE_8Lanes( stateAsLanes, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes((const UINT64*)data)));
+    for (stateAsLanes = (uint64_t*)(stateAsBytes + offset); length >= 8*8; stateAsLanes += 8, data += 8*8, length -= 8*8)
+        STORE_8Lanes( stateAsLanes, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes((const uint64_t*)data)));
     for (/* empty */; length >= 8; ++stateAsLanes, data += 8, length -= 8)
-        STORE_Lane( stateAsLanes, XOR(LOAD_Lane(stateAsLanes), LOAD_Lane((const UINT64*)data)));
-    for ( stateAsBytes = (UINT8*)stateAsLanes; length != 0; --length)
+        STORE_Lane( stateAsLanes, XOR(LOAD_Lane(stateAsLanes), LOAD_Lane((const uint64_t*)data)));
+    for ( stateAsBytes = (uint8_t*)stateAsLanes; length != 0; --length)
         *(stateAsBytes++) ^= *(data++);
 }
 
@@ -276,20 +273,20 @@ void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned i
 
 void KeccakP1600_ExtractAndAddBytes(const void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
-    UINT8  *stateAsBytes;
-    UINT64 *stateAsLanes;
+    uint8_t  *stateAsBytes;
+    uint64_t *stateAsLanes;
 
-    for( stateAsBytes = (UINT8*)state; ((offset % 8) != 0) && (length != 0); ++offset, --length)
+    for( stateAsBytes = (uint8_t*)state; ((offset % 8) != 0) && (length != 0); ++offset, --length)
         *(output++) = stateAsBytes[offset] ^ *(input++);
-    for (stateAsLanes = (UINT64*)(stateAsBytes + offset); length >= 8*8; stateAsLanes += 8, input += 8*8, output += 8*8, length -= 8*8)
-        STORE_8Lanes( (UINT64*)output, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes((const UINT64*)input)));
+    for (stateAsLanes = (uint64_t*)(stateAsBytes + offset); length >= 8*8; stateAsLanes += 8, input += 8*8, output += 8*8, length -= 8*8)
+        STORE_8Lanes( (uint64_t*)output, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes((const uint64_t*)input)));
     for (/* empty */; length >= 8; ++stateAsLanes, input += 8, output += 8, length -= 8)
-        STORE_Lane( (UINT64*)output, XOR(LOAD_Lane(stateAsLanes), LOAD_Lane((const UINT64*)input)));
-    for ( stateAsBytes = (UINT8*)stateAsLanes; length != 0; --length)
+        STORE_Lane( (uint64_t*)output, XOR(LOAD_Lane(stateAsLanes), LOAD_Lane((const uint64_t*)input)));
+    for ( stateAsBytes = (uint8_t*)stateAsLanes; length != 0; --length)
         *(output++) = *(stateAsBytes++) ^ *(input++);
 }
 
-const UINT64 KeccakP1600RoundConstants[24] = {
+const uint64_t KeccakP1600RoundConstants[24] = {
     0x0000000000000001ULL,
     0x0000000000008082ULL,
     0x800000000000808aULL,
@@ -502,7 +499,7 @@ void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
 {
     KeccakP_DeclareVars
     unsigned int i;
-    UINT64 *stateAsLanes = (UINT64*)state;
+    uint64_t *stateAsLanes = (uint64_t*)state;
 
     copyFromState(stateAsLanes);
     if ((nrounds & 1) != 0) {
@@ -531,7 +528,7 @@ void KeccakP1600_Permute_12rounds(void *state)
     #ifndef KeccakP1600_fullUnrolling
     unsigned int i;
     #endif
-    UINT64 *stateAsLanes = (UINT64*)state;
+    uint64_t *stateAsLanes = (uint64_t*)state;
 
     copyFromState(stateAsLanes);
     rounds12;
@@ -546,7 +543,7 @@ void KeccakP1600_Permute_24rounds(void *state)
     #ifndef KeccakP1600_fullUnrolling
     unsigned int i;
     #endif
-    UINT64 *stateAsLanes = (UINT64*)state;
+    uint64_t *stateAsLanes = (uint64_t*)state;
 
     copyFromState(stateAsLanes);
     rounds24;
@@ -562,8 +559,8 @@ size_t KeccakF1600_FastLoop_Absorb(void *state, unsigned int laneCount, const un
         #ifndef KeccakP1600_fullUnrolling
         unsigned int i;
         #endif
-        UINT64 *stateAsLanes = (UINT64*)state;
-        UINT64 *inDataAsLanes = (UINT64*)data;
+        uint64_t *stateAsLanes = (uint64_t*)state;
+        uint64_t *inDataAsLanes = (uint64_t*)data;
 
         copyFromState(stateAsLanes);
         while(dataByteLen >= 21*8) {
@@ -598,8 +595,8 @@ size_t KeccakP1600_12rounds_FastLoop_Absorb(void *state, unsigned int laneCount,
         #if !defined(KeccakP1600_fullUnrolling) && (KeccakP1600_unrolling < 12)
         unsigned int i;
         #endif
-        UINT64 *stateAsLanes = (UINT64*)state;
-        UINT64 *inDataAsLanes = (UINT64*)data;
+        uint64_t *stateAsLanes = (uint64_t*)state;
+        uint64_t *inDataAsLanes = (uint64_t*)data;
 
         copyFromState(stateAsLanes);
         while(dataByteLen >= 21*8) {

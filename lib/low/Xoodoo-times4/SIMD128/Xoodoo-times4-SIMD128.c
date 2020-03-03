@@ -43,7 +43,7 @@ typedef __m128i V128;
 #else
     #define ROL32in128(a, o)        _mm_or_si128(_mm_slli_epi32(a, o), _mm_srli_epi32(a, 32-(o)))
 //        #define ROL32in128_8(a)     _mm_shuffle_epi8(a, CONST128(rho8))
-//static const UINT64 rho8[2] = {0x0605040302010007, 0x0E0D0C0B0A09080F};
+//static const uint64_t rho8[2] = {0x0605040302010007, 0x0E0D0C0B0A09080F};
 #endif
 #define STORE128(a, b)              _mm_store_si128((V128 *)&(a), b)
 #define STORE4_32(r, a, b, c, d)    a = _mm_extract_epi32(r, 0), b = _mm_extract_epi32(r, 1), c = _mm_extract_epi32(r, 2), d = _mm_extract_epi32(r, 3)

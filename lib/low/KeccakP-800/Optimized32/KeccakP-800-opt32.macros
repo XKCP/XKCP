@@ -27,10 +27,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _u  4
 
 #define declareBCDE \
-    UINT32 Ba, Be, Bi, Bo, Bu; \
-    UINT32 Ca, Ce, Ci, Co, Cu; \
-    UINT32 Da, De, Di, Do, Du; \
-    UINT32 Estate[25]; \
+    uint32_t Ba, Be, Bi, Bo, Bu; \
+    uint32_t Ca, Ce, Ci, Co, Cu; \
+    uint32_t Da, De, Di, Do, Du; \
+    uint32_t Estate[25]; \
 
 #define prepareTheta \
     Ca = Astate[_b+_a]^Astate[_g+_a]^Astate[_k+_a]^Astate[_m+_a]^Astate[_s+_a]; \

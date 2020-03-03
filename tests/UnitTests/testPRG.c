@@ -16,6 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifdef XKCP_has_PRG_Keccak
 
 #include <assert.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include "config.h"
@@ -89,26 +90,26 @@ void writeTestSpongePRG(void)
 }
 #endif
 
-void selfTestSpongePRG(unsigned int rho, unsigned int width, int flavor, const unsigned char *expected)
+void selfTestSpongePRG(unsigned int rho, unsigned int width, int flavor, const char *expected)
 {
 #ifdef XKCP_has_PRG_Keccak_width200
     if (width == 200)
-        KeccakWidth200_selfTestSpongePRG(rho, flavor, expected);
+        KeccakWidth200_selfTestSpongePRG(rho, flavor, (const uint8_t*)expected);
     else
 #endif
 #ifdef XKCP_has_PRG_Keccak_width400
     if (width == 400)
-        KeccakWidth400_selfTestSpongePRG(rho, flavor, expected);
+        KeccakWidth400_selfTestSpongePRG(rho, flavor, (const uint8_t*)expected);
     else
 #endif
 #ifdef XKCP_has_PRG_Keccak_width800
     if (width == 800)
-        KeccakWidth800_selfTestSpongePRG(rho, flavor, expected);
+        KeccakWidth800_selfTestSpongePRG(rho, flavor, (const uint8_t*)expected);
     else
 #endif
 #ifdef XKCP_has_PRG_Keccak_width1600
     if (width == 1600)
-        KeccakWidth1600_selfTestSpongePRG(rho, flavor, expected);
+        KeccakWidth1600_selfTestSpongePRG(rho, flavor, (const uint8_t*)expected);
     else
 #endif
         abort();

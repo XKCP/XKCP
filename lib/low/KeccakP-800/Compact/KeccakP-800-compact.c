@@ -36,27 +36,25 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 /* #define DIVISION_INSTRUCTION    /* comment if no division instruction or more compact when not using division */
 #define UNROLL_CHILOOP        /* comment more compact using for loop */
 
-typedef unsigned char UINT8;
-typedef uint32_t UINT32;
-typedef unsigned int tSmallUInt; /*INFO It could be more optimized to use "unsigned char" on an 8-bit CPU    */
-typedef UINT32 tKeccakLane;
+typedef uint_fast8_t tSmallUInt;
+typedef uint32_t tKeccakLane;
 
 #if defined (__arm__) && !defined(__GNUC__)
 #define ROL32(a, offset) __ror(a, 32-(offset))
 #elif defined(_MSC_VER)
 #define ROL32(a, offset) _rotl(a, offset)
 #else
-#define ROL32(a, offset) ((((UINT32)a) << offset) ^ (((UINT32)a) >> (32-offset)))
+#define ROL32(a, offset) ((((uint32_t)a) << offset) ^ (((uint32_t)a) >> (32-offset)))
 #endif
 
 #define    cKeccakNumberOfRounds    22
 
-const UINT8 KeccakP800_RotationConstants[25] =
+const uint8_t KeccakP800_RotationConstants[25] =
 {
      1,  3,  6, 10, 15, 21, 28, 4, 13, 23,  2, 14, 27, 9, 24,  8, 25, 11, 30, 18, 7, 29, 20, 12
 };
 
-const UINT8 KeccakP800_PiLane[25] =
+const uint8_t KeccakP800_PiLane[25] =
 {
     10,  7, 11, 17, 18,  3,  5, 16,  8, 21, 24,  4, 15, 23, 19, 13, 12,  2, 20, 14, 22,  9,  6,  1
 };
@@ -64,7 +62,7 @@ const UINT8 KeccakP800_PiLane[25] =
 #if    defined(DIVISION_INSTRUCTION)
 #define MOD5(argValue)    ((argValue) % 5)
 #else
-const UINT8 KeccakP800_Mod5[10] =
+const uint8_t KeccakP800_Mod5[10] =
 {
     0, 1, 2, 3, 4, 0, 1, 2, 3, 4
 };
@@ -131,7 +129,7 @@ void KeccakP800_Permute_Nrounds(void *argState, unsigned int nr)
     tKeccakLane temp;
     tKeccakLane BC[5];
     tKeccakLane *state;
-    UINT8       LFSRstate;
+    uint8_t       LFSRstate;
 
     state = (tKeccakLane*)argState;
     LFSRstate = 0x01;
@@ -229,7 +227,7 @@ void KeccakP800_Permute_22rounds(void *argState)
 
 void KeccakP800_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
-    memcpy(data, (const UINT8*)state+offset, length);
+    memcpy(data, (const uint8_t*)state+offset, length);
 }
 
 /* ---------------------------------------------------------------- */

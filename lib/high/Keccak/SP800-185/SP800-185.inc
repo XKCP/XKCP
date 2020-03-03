@@ -165,7 +165,7 @@ int KMAC_Initialize(KMAC_Instance *km, const BitSequence *key, BitLength keyBitL
     BitLength   keyByteLen;
     BitSequence buffer[rateInBytes];
 
-    if (cSHAKE_Initialize(&km->csi, outputBitLen, "KMAC", 4*8, customization, customBitLen) != 0)
+    if (cSHAKE_Initialize(&km->csi, outputBitLen, (const BitSequence*)"KMAC", 4*8, customization, customBitLen) != 0)
         return 1;
     km->outputBitLen = outputBitLen;
 
@@ -314,7 +314,7 @@ int ParallelHash_Initialize(ParallelHash_Instance *phi, unsigned int blockByteLe
         return 1;
 
     /* Absorb string_encode("ParallelHash") */
-    if (KeccakWidth1600_SpongeAbsorb(&phi->finalNode, "\x01\x60" "ParallelHash", 14) != 0)
+    if (KeccakWidth1600_SpongeAbsorb(&phi->finalNode, (const BitSequence*)"\x01\x60" "ParallelHash", 14) != 0)
         return 1;
 
     /* Absorb string_encode(customization) */
@@ -498,7 +498,7 @@ int ParallelHash( const BitSequence *input, BitLength inputBitLen, unsigned int 
 int TupleHash_Initialize(TupleHash_Instance *thi, BitLength outputBitLen,
         const BitSequence *customization, BitLength customBitLen)
 {
-    if (cSHAKE_Initialize(&thi->csi, outputBitLen, "TupleHash", 9*8, customization, customBitLen) != 0)
+    if (cSHAKE_Initialize(&thi->csi, outputBitLen, (const BitSequence*)"TupleHash", 9*8, customization, customBitLen) != 0)
         return 1;
     thi->outputBitLen = outputBitLen;
     return 0;

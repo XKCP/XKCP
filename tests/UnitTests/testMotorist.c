@@ -16,6 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifdef XKCP_has_Keyak
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include "config.h"
@@ -110,31 +111,31 @@ int testMotorist( void )
 
 #ifdef XKCP_has_KeccakP800
     UT_startTest("Motorist on Keccak-p[800]", KeccakP800_implementation);
-    KeyakWidth800_testOneMotorist("Motorist-Keccak-p[800].txt", "\x48\x62\xc7\x9b\x33\xb8\xd0\xea\x9d\x18\x55\xa0\x4a\xff\x61\xcf");
+    KeyakWidth800_testOneMotorist("Motorist-Keccak-p[800].txt", (const uint8_t*)"\x48\x62\xc7\x9b\x33\xb8\xd0\xea\x9d\x18\x55\xa0\x4a\xff\x61\xcf");
     UT_endTest();
 #endif
 
 #ifdef XKCP_has_KeccakP1600
     UT_startTest("Motorist on Keccak-p[1600]", KeccakP1600_implementation);
-    KeyakWidth1600_testOneMotorist("Motorist-Keccak-p[1600].txt", "\xfb\x91\x63\x61\xd4\x9b\xa4\x0d\xd1\xe4\xa4\xd7\x58\xb9\x04\x61");
+    KeyakWidth1600_testOneMotorist("Motorist-Keccak-p[1600].txt", (const uint8_t*)"\xfb\x91\x63\x61\xd4\x9b\xa4\x0d\xd1\xe4\xa4\xd7\x58\xb9\x04\x61");
     UT_endTest();
 #endif
 
 #ifdef XKCP_has_KeccakP1600times2
     UT_startTest("Motorist on Keccak-p[1600]\303\2272", KeccakP1600times2_implementation);
-    KeyakWidth1600times2_testOneMotorist("Motorist-Keccak-p[1600]-times2.txt", "\x8c\xb4\x28\x1e\x45\xef\x1e\xbc\x7e\x67\x16\xa8\xd1\x74\xc2\x43");
+    KeyakWidth1600times2_testOneMotorist("Motorist-Keccak-p[1600]-times2.txt", (const uint8_t*)"\x8c\xb4\x28\x1e\x45\xef\x1e\xbc\x7e\x67\x16\xa8\xd1\x74\xc2\x43");
     UT_endTest();
 #endif
 
 #ifdef XKCP_has_KeccakP1600times4
     UT_startTest("Motorist on Keccak-p[1600]\303\2274", KeccakP1600times4_implementation);
-    KeyakWidth1600times4_testOneMotorist("Motorist-Keccak-p[1600]-times4.txt", "\xc7\xa2\xf9\x5a\x77\x6d\x12\x6d\x3c\x1f\x18\x6f\x3f\x43\x1c\xef");
+    KeyakWidth1600times4_testOneMotorist("Motorist-Keccak-p[1600]-times4.txt", (const uint8_t*)"\xc7\xa2\xf9\x5a\x77\x6d\x12\x6d\x3c\x1f\x18\x6f\x3f\x43\x1c\xef");
     UT_endTest();
 #endif
 
 #ifdef XKCP_has_KeccakP1600times8
     UT_startTest("Motorist on Keccak-p[1600]\303\2278", KeccakP1600times8_implementation);
-    KeyakWidth1600times8_testOneMotorist("Motorist-Keccak-p[1600]-times8.txt", "\x2b\x6d\x17\x2a\x6b\x90\xff\x74\xb2\xc5\x6b\xd1\xaf\xf3\x9d\xb6");
+    KeyakWidth1600times8_testOneMotorist("Motorist-Keccak-p[1600]-times8.txt", (const uint8_t*)"\x2b\x6d\x17\x2a\x6b\x90\xff\x74\xb2\xc5\x6b\xd1\xaf\xf3\x9d\xb6");
     UT_endTest();
 #endif
 

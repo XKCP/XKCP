@@ -15,6 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "config.h"
 #ifdef XKCP_has_KangarooTwelve
 
+#include <stdint.h>
 #include <stdlib.h>
 #include "KangarooTwelve.h"
 #include "UT.h"
@@ -301,6 +302,6 @@ void testKangarooTwelve(void)
     writeTestKangarooTwelve("KangarooTwelve.txt");
 #endif
 
-    selfTestKangarooTwelve("\x22\xd7\x41\x70\x82\xb4\x41\xd7\xc5\xaa\x2f\x9b\x9d\xb2\xfa\x01");
+    selfTestKangarooTwelve((const uint8_t*)"\x22\xd7\x41\x70\x82\xb4\x41\xd7\xc5\xaa\x2f\x9b\x9d\xb2\xfa\x01");
 }
 #endif /* XKCP_has_KangarooTwelve */

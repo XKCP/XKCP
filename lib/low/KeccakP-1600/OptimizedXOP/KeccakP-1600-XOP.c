@@ -22,12 +22,10 @@ This implementation comes with KeccakP-1600-SnP.h in the same folder.
 Please refer to LowLevel.build for the exact list of other files it must be combined with.
 */
 
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include "KeccakP-1600-XOP-config.h"
-
-typedef unsigned char UINT8;
-typedef unsigned long long int UINT64;
 
 #include "align.h"
 #ifdef KeccakP1600_fullUnrolling
@@ -68,18 +66,18 @@ typedef __m128i V128;
 
 #define ROL6464same(a, o)   _mm_roti_epi64(a, o)
 #define ROL6464(a, r1, r2)  _mm_rot_epi64(a, CONST128( rot_##r1##_##r2 ))
-ALIGN(16) const UINT64 rot_0_20[2]  = { 0, 20};
-ALIGN(16) const UINT64 rot_44_3[2]  = {44,  3};
-ALIGN(16) const UINT64 rot_43_45[2] = {43, 45};
-ALIGN(16) const UINT64 rot_21_61[2] = {21, 61};
-ALIGN(16) const UINT64 rot_14_28[2] = {14, 28};
-ALIGN(16) const UINT64 rot_1_36[2]  = { 1, 36};
-ALIGN(16) const UINT64 rot_6_10[2]  = { 6, 10};
-ALIGN(16) const UINT64 rot_25_15[2] = {25, 15};
-ALIGN(16) const UINT64 rot_8_56[2]  = { 8, 56};
-ALIGN(16) const UINT64 rot_18_27[2] = {18, 27};
-ALIGN(16) const UINT64 rot_62_55[2] = {62, 55};
-ALIGN(16) const UINT64 rot_39_41[2] = {39, 41};
+ALIGN(16) const uint64_t rot_0_20[2]  = { 0, 20};
+ALIGN(16) const uint64_t rot_44_3[2]  = {44,  3};
+ALIGN(16) const uint64_t rot_43_45[2] = {43, 45};
+ALIGN(16) const uint64_t rot_21_61[2] = {21, 61};
+ALIGN(16) const uint64_t rot_14_28[2] = {14, 28};
+ALIGN(16) const uint64_t rot_1_36[2]  = { 1, 36};
+ALIGN(16) const uint64_t rot_6_10[2]  = { 6, 10};
+ALIGN(16) const uint64_t rot_25_15[2] = {25, 15};
+ALIGN(16) const uint64_t rot_8_56[2]  = { 8, 56};
+ALIGN(16) const uint64_t rot_18_27[2] = {18, 27};
+ALIGN(16) const uint64_t rot_62_55[2] = {62, 55};
+ALIGN(16) const uint64_t rot_39_41[2] = {39, 41};
 
 /* ---------------------------------------------------------------- */
 
@@ -94,7 +92,7 @@ void KeccakP1600_AddBytesInLane(void *state, unsigned int lanePosition, const un
 {
     if (length == 0)
         return;
-    UINT64 lane;
+    uint64_t lane;
     if (length == 1)
         lane = data[0];
     else {
@@ -102,7 +100,7 @@ void KeccakP1600_AddBytesInLane(void *state, unsigned int lanePosition, const un
         memcpy(&lane, data, length);
     }
     lane <<= offset*8;
-    ((UINT64*)state)[lanePosition] ^= lane;
+    ((uint64_t*)state)[lanePosition] ^= lane;
 }
 
 /* ---------------------------------------------------------------- */
@@ -111,27 +109,27 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
 {
     unsigned int i = 0;
     for( ; (i+8)<=laneCount; i+=8) {
-        ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
-        ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
-        ((UINT64*)state)[i+2] ^= ((UINT64*)data)[i+2];
-        ((UINT64*)state)[i+3] ^= ((UINT64*)data)[i+3];
-        ((UINT64*)state)[i+4] ^= ((UINT64*)data)[i+4];
-        ((UINT64*)state)[i+5] ^= ((UINT64*)data)[i+5];
-        ((UINT64*)state)[i+6] ^= ((UINT64*)data)[i+6];
-        ((UINT64*)state)[i+7] ^= ((UINT64*)data)[i+7];
+        ((uint64_t*)state)[i+0] ^= ((uint64_t*)data)[i+0];
+        ((uint64_t*)state)[i+1] ^= ((uint64_t*)data)[i+1];
+        ((uint64_t*)state)[i+2] ^= ((uint64_t*)data)[i+2];
+        ((uint64_t*)state)[i+3] ^= ((uint64_t*)data)[i+3];
+        ((uint64_t*)state)[i+4] ^= ((uint64_t*)data)[i+4];
+        ((uint64_t*)state)[i+5] ^= ((uint64_t*)data)[i+5];
+        ((uint64_t*)state)[i+6] ^= ((uint64_t*)data)[i+6];
+        ((uint64_t*)state)[i+7] ^= ((uint64_t*)data)[i+7];
     }
     for( ; (i+4)<=laneCount; i+=4) {
-        ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
-        ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
-        ((UINT64*)state)[i+2] ^= ((UINT64*)data)[i+2];
-        ((UINT64*)state)[i+3] ^= ((UINT64*)data)[i+3];
+        ((uint64_t*)state)[i+0] ^= ((uint64_t*)data)[i+0];
+        ((uint64_t*)state)[i+1] ^= ((uint64_t*)data)[i+1];
+        ((uint64_t*)state)[i+2] ^= ((uint64_t*)data)[i+2];
+        ((uint64_t*)state)[i+3] ^= ((uint64_t*)data)[i+3];
     }
     for( ; (i+2)<=laneCount; i+=2) {
-        ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
-        ((UINT64*)state)[i+1] ^= ((UINT64*)data)[i+1];
+        ((uint64_t*)state)[i+0] ^= ((uint64_t*)data)[i+0];
+        ((uint64_t*)state)[i+1] ^= ((uint64_t*)data)[i+1];
     }
     if (i<laneCount) {
-        ((UINT64*)state)[i+0] ^= ((UINT64*)data)[i+0];
+        ((uint64_t*)state)[i+0] ^= ((uint64_t*)data)[i+0];
     }
 }
 
@@ -139,9 +137,9 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
 
 void KeccakP1600_AddByte(void *state, unsigned char byte, unsigned int offset)
 {
-    UINT64 lane = byte;
+    uint64_t lane = byte;
     lane <<= (offset%8)*8;
-    ((UINT64*)state)[offset/8] ^= lane;
+    ((uint64_t*)state)[offset/8] ^= lane;
 }
 
 /* ---------------------------------------------------------------- */
@@ -278,7 +276,7 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
 /* --- 64-bit lanes mapped to 64-bit and 128-bit words */
 #define thetaRhoPiChiIota(i, A, E) thetaRhoPiChiIotaPrepareTheta(i, A, E)
 
-const UINT64 KeccakF1600RoundConstants[24] = {
+const uint64_t KeccakF1600RoundConstants[24] = {
     0x0000000000000001ULL,
     0x0000000000008082ULL,
     0x800000000000808aULL,
@@ -403,7 +401,7 @@ void KeccakP1600_Permute_Nrounds(void *state, unsigned int nr)
 {
     declareABCDE
     unsigned int i;
-    UINT64 *stateAsLanes = (UINT64*)state;
+    uint64_t *stateAsLanes = (uint64_t*)state;
 
     copyFromState(A, stateAsLanes)
     roundsN(nr)
@@ -418,7 +416,7 @@ void KeccakP1600_Permute_12rounds(void *state)
     #ifndef KeccakP1600_fullUnrolling
     unsigned int i;
     #endif
-    UINT64 *stateAsLanes = (UINT64*)state;
+    uint64_t *stateAsLanes = (uint64_t*)state;
 
     copyFromState(A, stateAsLanes)
     rounds12
@@ -433,7 +431,7 @@ void KeccakP1600_Permute_24rounds(void *state)
     #ifndef KeccakP1600_fullUnrolling
     unsigned int i;
     #endif
-    UINT64 *stateAsLanes = (UINT64*)state;
+    uint64_t *stateAsLanes = (uint64_t*)state;
 
     copyFromState(A, stateAsLanes)
     rounds24
@@ -451,12 +449,12 @@ void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned i
 
 void KeccakP1600_ExtractAndAddBytesInLane(const void *state, unsigned int lanePosition, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
-    UINT64 lane = ((UINT64*)state)[lanePosition];
+    uint64_t lane = ((uint64_t*)state)[lanePosition];
     unsigned int i;
-    UINT64 lane1[1];
+    uint64_t lane1[1];
     lane1[0] = lane;
     for(i=0; i<length; i++)
-        output[i] = input[i] ^ ((UINT8*)lane1)[offset+i];
+        output[i] = input[i] ^ ((uint8_t*)lane1)[offset+i];
 }
 
 /* ---------------------------------------------------------------- */
@@ -466,7 +464,7 @@ void KeccakP1600_ExtractAndAddLanes(const void *state, const unsigned char *inpu
     unsigned int i;
 
     for(i=0; i<laneCount; i++) {
-        ((UINT64*)output)[i] = ((UINT64*)input)[i] ^ ((const UINT64*)state)[i];
+        ((uint64_t*)output)[i] = ((uint64_t*)input)[i] ^ ((const uint64_t*)state)[i];
     }
 }
 
