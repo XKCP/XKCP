@@ -16,8 +16,6 @@ jobs:
   allow_failures:
     - script: make generic64/UnitTests && bin/generic64/UnitTests -a
     - script: make ARMv8A/UnitTests && bin/ARMv8A/UnitTests -a
-    - script: make asmX86-64/UnitTests && bin/asmX86-64/UnitTests -a
-    - script: make asmX86-64shld/UnitTests && bin/asmX86-64shld/UnitTests -a
   include:
     - stage: "Tests on ARM64 (linux)"
       script: make generic64/UnitTests && bin/generic64/UnitTests -a
@@ -57,21 +55,11 @@ jobs:
       arch: amd64
       compiler: gcc
       name: "asmX86-64 (gcc)"
-    - script: make asmX86-64/UnitTests && bin/asmX86-64/UnitTests -a
-      os: linux
-      arch: amd64
-      compiler: clang
-      name: "asmX86-64 (clang)"
     - script: make asmX86-64shld/UnitTests && bin/asmX86-64shld/UnitTests -a
       os: linux
       arch: amd64
       compiler: gcc
       name: "asmX86-64shld (gcc)"
-    - script: make asmX86-64shld/UnitTests && bin/asmX86-64shld/UnitTests -a
-      os: linux
-      arch: amd64
-      compiler: clang
-      name: "asmX86-64shld (clang)"
     - script: make Nehalem/UnitTests && bin/Nehalem/UnitTests -a
       os: linux
       arch: amd64
@@ -114,26 +102,6 @@ jobs:
       arch: amd64
       compiler: clang
       name: "generic64 (clang)"
-    - script: make asmX86-64/UnitTests && bin/asmX86-64/UnitTests -a
-      os: osx
-      arch: amd64
-      compiler: gcc
-      name: "asmX86-64 (gcc)"
-    - script: make asmX86-64/UnitTests && bin/asmX86-64/UnitTests -a
-      os: osx
-      arch: amd64
-      compiler: clang
-      name: "asmX86-64 (clang)"
-    - script: make asmX86-64shld/UnitTests && bin/asmX86-64shld/UnitTests -a
-      os: osx
-      arch: amd64
-      compiler: gcc
-      name: "asmX86-64shld (gcc)"
-    - script: make asmX86-64shld/UnitTests && bin/asmX86-64shld/UnitTests -a
-      os: osx
-      arch: amd64
-      compiler: clang
-      name: "asmX86-64shld (clang)"
     - script: make Nehalem/UnitTests && bin/Nehalem/UnitTests -a
       os: osx
       arch: amd64
