@@ -24,13 +24,13 @@ HashReturn Keccak_HashInitialize(Keccak_HashInstance *instance, unsigned int rat
     HashReturn result;
 
     if (delimitedSuffix == 0)
-        return FAIL;
+        return KECCAK_FAIL;
     result = (HashReturn)KeccakWidth1600_SpongeInitialize(&instance->sponge, rate, capacity);
-    if (result != SUCCESS)
+    if (result != KECCAK_SUCCESS)
         return result;
     instance->fixedOutputLength = hashbitlen;
     instance->delimitedSuffix = delimitedSuffix;
-    return SUCCESS;
+    return KECCAK_SUCCESS;
 }
 
 /* ---------------------------------------------------------------- */
@@ -41,7 +41,7 @@ HashReturn Keccak_HashUpdate(Keccak_HashInstance *instance, const BitSequence *d
         return (HashReturn)KeccakWidth1600_SpongeAbsorb(&instance->sponge, data, databitlen/8);
     else {
         HashReturn ret = (HashReturn)KeccakWidth1600_SpongeAbsorb(&instance->sponge, data, databitlen/8);
-        if (ret == SUCCESS) {
+        if (ret == KECCAK_SUCCESS) {
             /* The last partial byte is assumed to be aligned on the least significant bits */
             unsigned char lastByte = data[databitlen/8];
             /* Concatenate the last few bits provided here with those of the suffix */
@@ -65,7 +65,7 @@ HashReturn Keccak_HashUpdate(Keccak_HashInstance *instance, const BitSequence *d
 HashReturn Keccak_HashFinal(Keccak_HashInstance *instance, BitSequence *hashval)
 {
     HashReturn ret = (HashReturn)KeccakWidth1600_SpongeAbsorbLastFewBits(&instance->sponge, instance->delimitedSuffix);
-    if (ret == SUCCESS)
+    if (ret == KECCAK_SUCCESS)
         return (HashReturn)KeccakWidth1600_SpongeSqueeze(&instance->sponge, hashval, instance->fixedOutputLength/8);
     else
         return ret;
@@ -76,6 +76,6 @@ HashReturn Keccak_HashFinal(Keccak_HashInstance *instance, BitSequence *hashval)
 HashReturn Keccak_HashSqueeze(Keccak_HashInstance *instance, BitSequence *data, BitLength databitlen)
 {
     if ((databitlen % 8) != 0)
-        return FAIL;
+        return KECCAK_FAIL;
     return (HashReturn)KeccakWidth1600_SpongeSqueeze(&instance->sponge, data, databitlen/8);
 }
