@@ -1,4 +1,7 @@
 /*
+The eXtended Keccak Code Package (XKCP)
+https://github.com/XKCP/XKCP
+
 Implementation by Andre Moraes
 
 ---

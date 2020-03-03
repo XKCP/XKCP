@@ -1,3 +1,6 @@
+// The eXtended Keccak Code Package (XKCP)
+// https://github.com/XKCP/XKCP
+//
 // Implementation by Andre Moraes
 //
 // This file implements Keccak-p[800] in a SnP-compatible way.

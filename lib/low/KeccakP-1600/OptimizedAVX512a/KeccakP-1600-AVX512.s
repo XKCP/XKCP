@@ -1,3 +1,6 @@
+# The eXtended Keccak Code Package (XKCP)
+# https://github.com/XKCP/XKCP
+#
 # Copyright (c) 2006-2017, CRYPTOGAMS by <appro@openssl.org>
 # Copyright (c) 2018 Ronny Van Keer
 # All rights reserved.

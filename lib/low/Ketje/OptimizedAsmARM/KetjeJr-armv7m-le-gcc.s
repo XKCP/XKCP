@@ -1,7 +1,12 @@
 @
+@ The eXtended Keccak Code Package (XKCP)
+@ https://github.com/XKCP/XKCP
+@
+@ Ketje, designed by Guido Bertoni, Joan Daemen, Michaël Peeters, Gilles Van Assche and Ronny Van Keer.
+@
 @ Implementation by Ronny Van Keer, hereby denoted as "the implementer".
 @
-@ For more information, feedback or questions, please refer to our website:
+@ For more information, feedback or questions, please refer to the Keccak Team website:
 @ https://keccak.team/
 @
 @ To the extent possible under law, the implementer has waived all copyright
