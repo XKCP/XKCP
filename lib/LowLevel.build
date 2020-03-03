@@ -224,11 +224,11 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="optimized800" inherits="width800 optimized">
         <h>lib/low/KeccakP-800/Optimized32/KeccakP-800-SnP.h</h>
-        <h>lib/low/KeccakP-800/Optimized32/KeccakP-800-opt32-bis.macros</h>
+        <inc>lib/low/KeccakP-800/Optimized32/KeccakP-800-opt32-bis.macros</inc>
         <c>lib/low/KeccakP-800/Optimized32/KeccakP-800-opt32.c</c>
-        <h>lib/low/KeccakP-800/Optimized32/KeccakP-800-opt32.macros</h>
-        <h>lib/low/KeccakP-800/Optimized32/KeccakP-800-unrolling-bis.macros</h>
-        <h>lib/low/KeccakP-800/Optimized32/KeccakP-800-unrolling.macros</h>
+        <inc>lib/low/KeccakP-800/Optimized32/KeccakP-800-opt32.macros</inc>
+        <inc>lib/low/KeccakP-800/Optimized32/KeccakP-800-unrolling-bis.macros</inc>
+        <inc>lib/low/KeccakP-800/Optimized32/KeccakP-800-unrolling.macros</inc>
     </fragment>
 
     <fragment name="optimized800u2" inherits="optimized800">
@@ -335,8 +335,8 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="optimized1600" inherits="width1600 optimized">
         <c>lib/low/KeccakP-1600/Optimized64/KeccakP-1600-opt64.c</c>
-        <h>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
-        <h>lib/low/KeccakP-1600/Optimized/KeccakP-1600-64.macros</h>
+        <inc>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</inc>
+        <inc>lib/low/KeccakP-1600/Optimized/KeccakP-1600-64.macros</inc>
         <h>lib/low/KeccakP-1600/Optimized64/KeccakP-1600-SnP.h</h>
         <h>lib/low/common/SnP-Relaned.h</h>
     </fragment>
@@ -412,7 +412,7 @@ The fragments below allow to select the desired implementation of the permutatio
     <fragment name="optimized1600XOP" inherits="width1600 optimized">
         <c>lib/low/KeccakP-1600/OptimizedXOP/KeccakP-1600-XOP.c</c>
         <h>lib/low/KeccakP-1600/OptimizedXOP/KeccakP-1600-SnP.h</h>
-        <h>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
+        <inc>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</inc>
         <h>lib/low/common/SnP-Relaned.h</h>
     </fragment>
 
@@ -462,13 +462,13 @@ The fragments below allow to select the desired implementation of the permutatio
     <fragment name="1600times2on1" inherits="KeccakP1600times2">
         <c>lib/low/KeccakP-1600-times2/FallbackOn1/KeccakP-1600-times2-on1.c</c>
         <h>lib/low/KeccakP-1600-times2/FallbackOn1/KeccakP-1600-times2-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
+        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="SIMD128" inherits="optimized KeccakP1600times2">
         <c>lib/low/KeccakP-1600-times2/SIMD128/KeccakP-1600-times2-SIMD128.c</c>
         <h>lib/low/KeccakP-1600-times2/SIMD128/KeccakP-1600-times2-SnP.h</h>
-        <h>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
+        <inc>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</inc>
     </fragment>
 
     <fragment name="SIMD128-SSE2u2" inherits="SIMD128">
@@ -519,19 +519,19 @@ The fragments below allow to select the desired implementation of the permutatio
     <fragment name="1600times4on1" inherits="KeccakP1600times4">
         <c>lib/low/KeccakP-1600-times4/FallbackOn1/KeccakP-1600-times4-on1.c</c>
         <h>lib/low/KeccakP-1600-times4/FallbackOn1/KeccakP-1600-times4-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
+        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="1600times4on2" inherits="KeccakP1600times4">
         <c>lib/low/KeccakP-1600-times4/FallbackOn2/KeccakP-1600-times4-on2.c</c>
         <h>lib/low/KeccakP-1600-times4/FallbackOn2/KeccakP-1600-times4-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
+        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="SIMD256" inherits="optimized KeccakP1600times4">
         <c>lib/low/KeccakP-1600-times4/SIMD256/KeccakP-1600-times4-SIMD256.c</c>
         <h>lib/low/KeccakP-1600-times4/SIMD256/KeccakP-1600-times4-SnP.h</h>
-        <h>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</h>
+        <inc>lib/low/KeccakP-1600/Optimized/KeccakP-1600-unrolling.macros</inc>
     </fragment>
 
     <fragment name="SIMD256-AVX2u6" inherits="SIMD256">
@@ -572,19 +572,19 @@ The fragments below allow to select the desired implementation of the permutatio
     <fragment name="1600times8on1" inherits="KeccakP1600times8">
         <c>lib/low/KeccakP-1600-times8/FallbackOn1/KeccakP-1600-times8-on1.c</c>
         <h>lib/low/KeccakP-1600-times8/FallbackOn1/KeccakP-1600-times8-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
+        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="1600times8on2" inherits="KeccakP1600times8">
         <c>lib/low/KeccakP-1600-times8/FallbackOn2/KeccakP-1600-times8-on2.c</c>
         <h>lib/low/KeccakP-1600-times8/FallbackOn2/KeccakP-1600-times8-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
+        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="1600times8on4" inherits="KeccakP1600times8">
         <c>lib/low/KeccakP-1600-times8/FallbackOn4/KeccakP-1600-times8-on4.c</c>
         <h>lib/low/KeccakP-1600-times8/FallbackOn4/KeccakP-1600-times8-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
+        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="SIMD512-8" inherits="optimized KeccakP1600times8">
@@ -674,7 +674,7 @@ The fragments below allow to select the desired implementation of the permutatio
     <fragment name="XooOptimizedTimes4_On1" inherits="common optimized Xoodootimes4">
         <c>lib/low/Xoodoo-times4/FallbackOn1/Xoodoo-times4-on1.c</c>
         <h>lib/low/Xoodoo-times4/FallbackOn1/Xoodoo-times4-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
+        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="XooOptimizedTimes4_SIMD128" inherits="common optimized Xoodootimes4">
@@ -702,7 +702,7 @@ The fragments below allow to select the desired implementation of the permutatio
     <fragment name="XooOptimizedTimes8_On1" inherits="common optimized Xoodootimes8">
         <c>lib/low/Xoodoo-times8/FallbackOn1/Xoodoo-times8-on1.c</c>
         <h>lib/low/Xoodoo-times8/FallbackOn1/Xoodoo-times8-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
+        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="XooOptimizedTimes8_AVX2" inherits="common optimized Xoodootimes8">
@@ -724,7 +724,7 @@ The fragments below allow to select the desired implementation of the permutatio
     <fragment name="XooOptimizedTimes16_On1" inherits="common optimized Xoodootimes16">
         <c>lib/low/Xoodoo-times16/FallbackOn1/Xoodoo-times16-on1.c</c>
         <h>lib/low/Xoodoo-times16/FallbackOn1/Xoodoo-times16-SnP.h</h>
-        <h>lib/low/common/PlSnP-Fallback.inc</h>
+        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="XooOptimizedTimes16_AVX512" inherits="common optimized Xoodootimes16">
@@ -742,13 +742,13 @@ For Ketje, one of the following fragments is required:
     <!-- "Ket", the layer between SnP and Ketje services -->
 
     <fragment name="Ket-SnP">
-        <h>lib/low/Ketje/SnP-compliant/Ket.inc</h>
+        <inc>lib/low/Ketje/SnP-compliant/Ket.inc</inc>
         <h>lib/low/Ketje/SnP-compliant/Ket.h</h>
         <c>lib/low/Ketje/SnP-compliant/Ket.c</c>
     </fragment>
 
     <fragment name="Ket-optimizedLE">
-        <h>lib/low/Ketje/OptimizedLE/Ket.inc</h>
+        <inc>lib/low/Ketje/OptimizedLE/Ket.inc</inc>
         <h>lib/low/Ketje/OptimizedLE/Ket.h</h>
         <c>lib/low/Ketje/OptimizedLE/Ket.c</c>
     </fragment>

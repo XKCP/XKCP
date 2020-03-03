@@ -36,27 +36,27 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>tests/UnitTests/UT.h</h>
         <c>tests/UnitTests/testPermutations.c</c>
         <h>tests/UnitTests/testPermutations.h</h>
-        <h>tests/UnitTests/testSnP.inc</h>
-        <h>tests/UnitTests/testPlSnP.inc</h>
+        <inc>tests/UnitTests/testSnP.inc</inc>
+        <inc>tests/UnitTests/testPlSnP.inc</inc>
         <c>tests/UnitTests/testSponge.c</c>
-        <h>tests/UnitTests/testSponge.inc</h>
+        <inc>tests/UnitTests/testSponge.inc</inc>
         <h>tests/UnitTests/testSponge.h</h>
         <c>tests/UnitTests/testDuplex.c</c>
-        <h>tests/UnitTests/testDuplex.inc</h>
+        <inc>tests/UnitTests/testDuplex.inc</inc>
         <h>tests/UnitTests/testDuplex.h</h>
         <c>tests/UnitTests/testMotorist.c</c>
-        <h>tests/UnitTests/testMotorist.inc</h>
+        <inc>tests/UnitTests/testMotorist.inc</inc>
         <h>tests/UnitTests/testMotorist.h</h>
         <c>tests/UnitTests/testKeyakv2.c</c>
-        <h>tests/UnitTests/testKeyakv2.inc</h>
+        <inc>tests/UnitTests/testKeyakv2.inc</inc>
         <h>tests/UnitTests/testKeyakv2.h</h>
         <c>tests/UnitTests/testKetjev2.c</c>
         <h>tests/UnitTests/testKetjev2.h</h>
-        <h>tests/UnitTests/testKetjev2.inc</h>
+        <inc>tests/UnitTests/testKetjev2.inc</inc>
         <c>tests/UnitTests/genKAT.c</c>
         <h>tests/UnitTests/genKAT.h</h>
         <c>tests/UnitTests/testPRG.c</c>
-        <h>tests/UnitTests/testPRG.inc</h>
+        <inc>tests/UnitTests/testPRG.inc</inc>
         <h>tests/UnitTests/testPRG.h</h>
         <c>tests/UnitTests/testKangarooTwelve.c</c>
         <h>tests/UnitTests/testKangarooTwelve.h</h>
@@ -84,14 +84,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>tests/Benchmarks/testPerformance.c</c>
         <h>tests/Benchmarks/timing.h</h>
         <h>tests/Benchmarks/testPerformance.h</h>
-        <h>tests/Benchmarks/timingSnP.inc</h>
-        <h>tests/Benchmarks/timingPlSnP.inc</h>
-        <h>tests/Benchmarks/timingSponge.inc</h>
-        <h>tests/Benchmarks/timingKeyak.inc</h>
+        <inc>tests/Benchmarks/timingSnP.inc</inc>
+        <inc>tests/Benchmarks/timingPlSnP.inc</inc>
+        <inc>tests/Benchmarks/timingSponge.inc</inc>
+        <inc>tests/Benchmarks/timingKeyak.inc</inc>
         <c>tests/Benchmarks/testXooPerformance.c</c>
         <h>tests/Benchmarks/testXooPerformance.h</h>
-        <h>tests/Benchmarks/timingXooSnP.inc</h>
-        <h>tests/Benchmarks/timingXooPlSnP.inc</h>
+        <inc>tests/Benchmarks/timingXooSnP.inc</inc>
+        <inc>tests/Benchmarks/timingXooPlSnP.inc</inc>
         <gcc>-lm</gcc>
     </fragment>
 
@@ -105,8 +105,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <!-- To make a library -->
-    <fragment name="libXKCP.a" inherits="All"/>
-    <fragment name="libXKCP.so" inherits="All"/>
+    <fragment name="libXKCP.a" inherits="All">
+        <interface>high</interface>
+    </fragment>
+
+    <fragment name="libXKCP.so" inherits="All">
+        <interface>high</interface>
+    </fragment>
 
     <!-- *** CAESAR-related targets *** -->
 

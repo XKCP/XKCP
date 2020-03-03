@@ -19,6 +19,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 <xsl:key name="I" match="I" use="."/>
 <xsl:key name="h" match="h" use="."/>
 <xsl:key name="c" match="c" use="."/>
+<xsl:key name="inc" match="inc" use="."/>
 
 <xsl:output method="text" indent="no" encoding="UTF-8"/>
 
@@ -82,12 +83,42 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <xsl:value-of select="."/>
         <xsl:text>
 </xsl:text>
+        <xsl:if test="@interface != ''">
+            <xsl:text>HEADERS_</xsl:text>
+            <xsl:value-of select="@interface"/>
+            <xsl:text> := $(HEADERS_</xsl:text>
+            <xsl:value-of select="@interface"/>
+            <xsl:text>) </xsl:text>
+            <xsl:value-of select="."/>
+            <xsl:text>
+</xsl:text>
+        </xsl:if>
         <xsl:text>SOURCES := $(SOURCES) </xsl:text>
         <xsl:value-of select="."/>
         <xsl:text>
 
 </xsl:text>
     </xsl:if>
+</xsl:template>
+
+<xsl:template match="inc">
+    <xsl:if test="generate-id()=generate-id(key('inc', .)[1])">
+        <xsl:text>INCLUDES := $(INCLUDES) </xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>
+</xsl:text>
+        <xsl:text>SOURCES := $(SOURCES) </xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>
+
+</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="interface">
+    <xsl:text>$(HEADERS_</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>) </xsl:text>
 </xsl:template>
 
 <xsl:template match="c">
@@ -106,8 +137,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <xsl:value-of select="$object"/>
         <xsl:text>: </xsl:text>
         <xsl:value-of select="."/>
-        <xsl:text> $(HEADERS)
-&#9;$(CC) $(INCLUDES) $(CFLAGS) -c $&lt; -o $@
+        <xsl:text> $(HEADERS) $(INCLUDES)
+&#9;$(CC) $(CFLAGS) </xsl:text>
+        <xsl:value-of select="@gcc"/>
+        <xsl:text> -c $&lt; -o $@
 OBJECTS := $(OBJECTS) </xsl:text>
         <xsl:value-of select="$object"/>
         <xsl:text>
@@ -173,6 +206,7 @@ AR = ar
 
     <xsl:apply-templates select="gcc|define|I"/>
     <xsl:apply-templates select="h"/>
+    <xsl:apply-templates select="inc"/>
     <xsl:apply-templates select="c"/>
 
     <xsl:text>bin/</xsl:text>
@@ -184,13 +218,19 @@ AR = ar
     <xsl:choose>
         <xsl:when test="substring(@name, string-length(@name)-1, 2)='.a'">
             <xsl:text>&#9;mkdir -p $@.headers
-&#9;cp -f $(HEADERS) $@.headers/
+&#9;cp -f </xsl:text>
+            <xsl:apply-templates select="interface"/>
+            <xsl:value-of select="$configfile"/>
+            <xsl:text> $@.headers/
 &#9;$(AR) rcsv $@ $(OBJECTS)
 </xsl:text>
         </xsl:when>
         <xsl:when test="substring(@name, string-length(@name)-2, 3)='.so'">
             <xsl:text>&#9;mkdir -p $@.headers
-&#9;cp -f $(HEADERS) $@.headers/
+&#9;cp -f </xsl:text>
+            <xsl:apply-templates select="interface"/>
+            <xsl:value-of select="$configfile"/>
+            <xsl:text> $@.headers/
 &#9;$(CC) -shared -o $@ $(OBJECTS) $(CFLAGS)
 </xsl:text>
         </xsl:when>

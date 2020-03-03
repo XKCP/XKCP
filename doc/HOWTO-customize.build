@@ -85,7 +85,9 @@ If Ketje is used, we still need to add an additional fragment keyword, see Ketje
     <target name="libRiverKeyak-PRG-compact32.a" inherits="RiverKeyak KeccakPRG compact800"/>
 
     <!-- Type "make libK12-AVX2.a" to build a library with KangarooTwelve with AVX2 code. Add ".pack" when invoking make to get a tarball with the source files instead. -->
-    <target name="libK12-AVX2.a" inherits="KangarooTwelve optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4"/>
+    <target name="libK12-AVX2.a" inherits="KangarooTwelve optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4">
+        <interface>high</interface>
+    </target>
 
     <!-- Same as above, but using a 32-bit implementation and not exploiting any parallelism. -->
     <target name="libK12-32bits.a" inherits="KangarooTwelve inplace1600bi no_parallel1600"/>

@@ -75,7 +75,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="h">
+<xsl:template match="h|inc">
     <xsl:copy-of select="."/>
     <I><xsl:call-template name="getFilePrefix">
         <xsl:with-param name="fullPath" select="."/>
