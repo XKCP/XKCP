@@ -39,14 +39,14 @@ static void testXoodyakHashOne(Xoodyak_Instance * global, FILE *f, size_t messag
     Xoodyak_Initialize(&instance, NULL, 0, NULL, 0, NULL, 0);
 	for (i = 0; i < numberOfMessages; ++i)	{
         generateSimpleRawMaterial(messageBuffer + align, messageLen, (uint8_t)(messageLen+hashLen+0x12), 3);
-	    #ifdef UT_OUTPUT
+	    #if defined(UT_OUTPUT) || defined(UT_VERBOSE)
 	    fprintf( f, "Absorb" );
 	    UT_displayByteString(f, "> M", messageBuffer + align, messageLen);
 	    #endif
 	    Xoodyak_Absorb(&instance, messageBuffer + align, messageLen);
 	}
     Xoodyak_Squeeze(&instance, hashBuffer + align, hashLen);
-    #ifdef UT_OUTPUT
+    #if defined(UT_OUTPUT) || defined(UT_VERBOSE)
     fprintf( f, "Squeeze" );
     UT_displayByteString(f, "> H", hashBuffer + align, hashLen);
     #endif
@@ -64,9 +64,11 @@ static void testXoodyakHash( const char *file, const uint8_t *expected )
 	unsigned int        numberOfMessages;
 	unsigned int        align;
 
-    #ifdef UT_OUTPUT
+    #if defined(UT_OUTPUT)
     f = fopen(file, "w");
     UT_assert(f != NULL, "Could not open file");
+    #elif defined(UT_VERBOSE)
+    f = stdout;
     #endif
 
 	for (align = 0; align < 4; ++align) {
@@ -87,9 +89,11 @@ static void testXoodyakHash( const char *file, const uint8_t *expected )
 		}
 
 	    Xoodyak_Squeeze(&global, checksum, sizeof(checksum));
-	    #ifdef UT_OUTPUT
+	    #if defined(UT_OUTPUT) || defined(UT_VERBOSE)
 	    UT_displayByteString(f, "+++ Global checksum", checksum, sizeof(checksum));
+	    #if defined(UT_OUTPUT)
 	    fclose(f);
+	    #endif
 	    #endif
 	    UT_assert(!memcmp(expected, checksum, sizeof(checksum)), "The global checksum is incorrect.");
 
