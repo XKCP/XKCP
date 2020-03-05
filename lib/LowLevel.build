@@ -164,7 +164,7 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="optimized200ARMv6M" inherits="common optimized width200">
-        <c>lib/low/KeccakP-200/OptimizedAsmARM/KeccakP-200-armv6m-le-gcc.s</c>
+        <s>lib/low/KeccakP-200/OptimizedAsmARM/KeccakP-200-armv6m-le-gcc.s</s>
         <h>lib/low/KeccakP-200/OptimizedAsmARM/KeccakP-200-SnP.h</h>
     </fragment>
 
@@ -174,7 +174,7 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="optimized200AVR8" inherits="common optimized width200">
-        <c>lib/low/KeccakP-200/OptimizedAsmAVR8/KeccakP-200-avr8-fast.s</c>
+        <s>lib/low/KeccakP-200/OptimizedAsmAVR8/KeccakP-200-avr8-fast.s</s>
         <h>lib/low/KeccakP-200/OptimizedAsmAVR8/KeccakP-200-SnP.h</h>
     </fragment>
 
@@ -191,17 +191,17 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="optimized400ARMv6M" inherits="common optimized width400">
-        <c>lib/low/KeccakP-400/OptimizedAsmARM/KeccakP-400-armv6m-le-gcc.s</c>
+        <s>lib/low/KeccakP-400/OptimizedAsmARM/KeccakP-400-armv6m-le-gcc.s</s>
         <h>lib/low/KeccakP-400/OptimizedAsmARM/KeccakP-400-SnP.h</h>
     </fragment>
 
     <fragment name="optimized400ARMv7M" inherits="common optimized width400">
-        <c>lib/low/KeccakP-400/OptimizedAsmARM/KeccakP-400-armv7m-le-gcc.s</c>
+        <s>lib/low/KeccakP-400/OptimizedAsmARM/KeccakP-400-armv7m-le-gcc.s</s>
         <h>lib/low/KeccakP-400/OptimizedAsmARM/KeccakP-400-SnP.h</h>
     </fragment>
 
     <fragment name="optimized400AVR8" inherits="common optimized width400">
-        <c>lib/low/KeccakP-400/OptimizedAsmAVR8/KeccakP-400-avr8-fast.s</c>
+        <s>lib/low/KeccakP-400/OptimizedAsmAVR8/KeccakP-400-avr8-fast.s</s>
         <h>lib/low/KeccakP-400/OptimizedAsmAVR8/KeccakP-400-SnP.h</h>
     </fragment>
 
@@ -252,33 +252,33 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="optimized800ARMv6Mu1" inherits="optimized800ARM">
-        <c>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-u1-armv6m-le-gcc.s</c>
+        <s>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-u1-armv6m-le-gcc.s</s>
     </fragment>
 
     <fragment name="optimized800ARMv6Mu2" inherits="optimized800ARM">
-        <c>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-u2-armv6m-le-gcc.s</c>
+        <s>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-u2-armv6m-le-gcc.s</s>
     </fragment>
 
     <fragment name="optimized800ARMv7Mu2" inherits="optimized800ARM">
-        <c>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-u2-armv7m-le-gcc.s</c>
+        <s>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-u2-armv7m-le-gcc.s</s>
     </fragment>
 
     <fragment name="optimized800ARMv7Mufull" inherits="optimized800ARM">
-        <c>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-uf-armv7m-le-gcc.s</c>
+        <s>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-uf-armv7m-le-gcc.s</s>
     </fragment>
 
     <fragment name="optimized800ARMv7Au2" inherits="optimized800ARM">
-        <c>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-u2-armv7a-le-gcc.s</c>
+        <s>lib/low/KeccakP-800/OptimizedAsmARM/KeccakP-800-u2-armv7a-le-gcc.s</s>
     </fragment>
 
     <fragment name="optimized800ARMv8A" inherits="common optimized width800">
         <gcc>-mfpu=neon</gcc>
-      <c>lib/low/KeccakP-800/Optimized64AsmARM/KeccakP-800-armv8a-neon.s</c>
+      <s>lib/low/KeccakP-800/Optimized64AsmARM/KeccakP-800-armv8a-neon.s</s>
       <h>lib/low/KeccakP-800/Optimized64AsmARM/KeccakP-800-SnP.h</h>
     </fragment>
 
     <fragment name="optimized800AVR8" inherits="common optimized width800">
-        <c>lib/low/KeccakP-800/OptimizedAsmAVR8/KeccakP-800-avr8-fast.s</c>
+        <s>lib/low/KeccakP-800/OptimizedAsmAVR8/KeccakP-800-avr8-fast.s</s>
         <h>lib/low/KeccakP-800/OptimizedAsmAVR8/KeccakP-800-SnP.h</h>
     </fragment>
 
@@ -307,7 +307,7 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="compact1600AVR8" inherits="common optimized width1600">
-        <c>lib/low/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-avr8-compact.s</c>
+        <s>lib/low/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-avr8-compact.s</s>
         <h>lib/low/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-SnP.h</h>
     </fragment>
 
@@ -322,15 +322,15 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="inplace1600ARMv6M" inherits="inplace1600ARM">
-        <c>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-inplace-32bi-armv6m-le-gcc.s</c>
+        <s>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-inplace-32bi-armv6m-le-gcc.s</s>
     </fragment>
 
     <fragment name="inplace1600ARMv7M" inherits="inplace1600ARM">
-        <c>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-inplace-32bi-armv7m-le-gcc.s</c>
+        <s>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-inplace-32bi-armv7m-le-gcc.s</s>
     </fragment>
 
     <fragment name="inplace1600ARMv7A" inherits="inplace1600ARM">
-        <c>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-inplace-32bi-armv7a-le-gcc.s</c>
+        <s>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-inplace-32bi-armv7a-le-gcc.s</s>
     </fragment>
 
     <fragment name="optimized1600" inherits="width1600 optimized">
@@ -362,39 +362,39 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="optimized1600AsmX86-64" inherits="width1600 optimized">
-        <c>lib/low/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-gas.s</c>
+        <s>lib/low/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-gas.s</s>
         <h>lib/low/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="optimized1600AsmX86-64shld" inherits="width1600 optimized">
-        <c>lib/low/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-shld-gas.s</c>
+        <s>lib/low/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-shld-gas.s</s>
         <h>lib/low/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="optimized1600AsmX86-64Apple" inherits="width1600 optimized">
-        <c>lib/low/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-gas_Apple.s</c>
+        <s>lib/low/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-x86-64-gas_Apple.s</s>
         <h>lib/low/KeccakP-1600/OptimizedAsmX86-64/KeccakP-1600-SnP.h</h>
     </fragment>
 
 <!-- Not yet updated with Permute_Nrounds
     <fragment name="optimized1600Haswell" inherits="width1600 optimized">
-        <c>lib/low/KeccakP-1600/Optimized64/CompiledByGCC474forHaswell/KeccakP-1600-opt64.s</c>
+        <s>lib/low/KeccakP-1600/Optimized64/CompiledByGCC474forHaswell/KeccakP-1600-opt64.s</s>
         <h>lib/low/KeccakP-1600/Optimized64/CompiledByGCC474forHaswell/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="optimized1600SandyBridge" inherits="width1600 optimized">
-        <c>lib/low/KeccakP-1600/Optimized64/CompiledByGCC474forSandyBridge/KeccakP-1600-opt64.s</c>
+        <s>lib/low/KeccakP-1600/Optimized64/CompiledByGCC474forSandyBridge/KeccakP-1600-opt64.s</s>
         <h>lib/low/KeccakP-1600/Optimized64/CompiledByGCC474forSandyBridge/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="optimized1600Nehalem" inherits="width1600 optimized">
-        <c>lib/low/KeccakP-1600/Optimized64/CompiledByGCC474forNehalem/KeccakP-1600-opt64.s</c>
+        <s>lib/low/KeccakP-1600/Optimized64/CompiledByGCC474forNehalem/KeccakP-1600-opt64.s</s>
         <h>lib/low/KeccakP-1600/Optimized64/CompiledByGCC474forNehalem/KeccakP-1600-SnP.h</h>
     </fragment>
 -->
 
     <fragment name="optimized1600AVX2" inherits="width1600 optimized">
-        <c>lib/low/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.s</c>
+        <s>lib/low/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.s</s>
         <h>lib/low/KeccakP-1600/OptimizedAVX2/KeccakP-1600-SnP.h</h>
     </fragment>
 
@@ -405,7 +405,7 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="optimized1600AVX512a" inherits="width1600 optimized">
-        <c>lib/low/KeccakP-1600/OptimizedAVX512a/KeccakP-1600-AVX512.s</c>
+        <s>lib/low/KeccakP-1600/OptimizedAVX512a/KeccakP-1600-AVX512.s</s>
         <h>lib/low/KeccakP-1600/OptimizedAVX512a/KeccakP-1600-SnP.h</h>
     </fragment>
 
@@ -429,27 +429,27 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="optimized1600ARMv6Mu1" inherits="optimized1600ARM">
-        <c>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-u1-32bi-armv6m-le-gcc.s</c>
+        <s>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-u1-32bi-armv6m-le-gcc.s</s>
     </fragment>
 
     <fragment name="optimized1600ARMv6Mu2" inherits="optimized1600ARM">
-        <c>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-u2-32bi-armv6m-le-gcc.s</c>
+        <s>lib/low/KeccakP-1600/Optimized32biAsmARM/KeccakP-1600-u2-32bi-armv6m-le-gcc.s</s>
     </fragment>
 
     <fragment name="optimized1600ARMv7A" inherits="width1600 optimized">
         <gcc>-mfpu=neon</gcc>
-        <c>lib/low/KeccakP-1600/OptimizedAsmARM/KeccakP-1600-armv7a-le-neon-gcc.s</c>
+        <s>lib/low/KeccakP-1600/OptimizedAsmARM/KeccakP-1600-armv7a-le-neon-gcc.s</s>
         <h>lib/low/KeccakP-1600/OptimizedAsmARM/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="optimized1600ARMv8A" inherits="width1600 optimized">
         <gcc>-mfpu=neon</gcc>
-        <c>lib/low/KeccakP-1600/Optimized64AsmARM/KeccakP-1600-armv8a-neon.s</c>
+        <s>lib/low/KeccakP-1600/Optimized64AsmARM/KeccakP-1600-armv8a-neon.s</s>
         <h>lib/low/KeccakP-1600/Optimized64AsmARM/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="optimized1600AVR8" inherits="common optimized width1600">
-        <c>lib/low/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-avr8-fast.s</c>
+        <s>lib/low/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-avr8-fast.s</s>
         <h>lib/low/KeccakP-1600/OptimizedAsmAVR8/KeccakP-1600-SnP.h</h>
     </fragment>
 
@@ -506,7 +506,7 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="1600times2ARMV7A" inherits="KeccakP1600times2">
         <gcc>-mfpu=neon</gcc>
-        <c>lib/low/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-inplace-pl2-armv7a-neon-le-gcc.s</c>
+        <s>lib/low/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-inplace-pl2-armv7a-neon-le-gcc.s</s>
         <h>lib/low/KeccakP-1600-times2/OptimizedAsmARM/KeccakP-1600-times2-SnP.h</h>
     </fragment>
 
@@ -624,32 +624,32 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="XooOptimizedARMv6" inherits="common optimized Xoodoo">
-        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-uf-armv6-le-gcc.s</c>
-        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-uf-armv6-le-gcc.s</c>
+        <s>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-uf-armv6-le-gcc.s</s>
+        <s>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-uf-armv6-le-gcc.s</s>
         <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
     </fragment>
 
     <fragment name="XooOptimizedARMv6M" inherits="common optimized Xoodoo">
-        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-u1-armv6m-le-gcc.s</c>
-        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-u1-armv6m-le-gcc.s</c>
+        <s>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-u1-armv6m-le-gcc.s</s>
+        <s>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-u1-armv6m-le-gcc.s</s>
         <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
     </fragment>
 
     <fragment name="XooOptimizedARMv7M" inherits="common optimized Xoodoo">
-        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-uf-armv7m-le-gcc.s</c>
-        <c>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-uf-armv7m-le-gcc.s</c>
+        <s>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-uf-armv7m-le-gcc.s</s>
+        <s>lib/low/Xoodoo/OptimizedAsmARM/Xoodyak-uf-armv7m-le-gcc.s</s>
         <h>lib/low/Xoodoo/OptimizedAsmARM/Xoodoo-SnP.h</h>
     </fragment>
 
     <fragment name="XooOptimizedARMv7A" inherits="common optimized Xoodoo">
         <gcc>-mfpu=neon</gcc>
-        <c>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-uf-armv7a-neon-le-gcc.s</c>
-        <c>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodyak-uf-armv7a-neon-le-gcc.s</c>
+        <s>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-uf-armv7a-neon-le-gcc.s</s>
+        <s>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodyak-uf-armv7a-neon-le-gcc.s</s>
         <h>lib/low/Xoodoo/OptimizedAsmARMv7A/Xoodoo-SnP.h</h>
     </fragment>
 
     <fragment name="XooOptimizedAVR8" inherits="common optimized Xoodoo">
-        <c>lib/low/Xoodoo/OptimizedAsmAVR8/Xoodoo-avr8-u1.s</c>
+        <s>lib/low/Xoodoo/OptimizedAsmAVR8/Xoodoo-avr8-u1.s</s>
         <h>lib/low/Xoodoo/OptimizedAsmAVR8/Xoodoo-SnP.h</h>
     </fragment>
 
@@ -689,7 +689,7 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="XooOptimizedTimes4_ARMv7A" inherits="common optimized XooWidth384">
         <gcc>-mfpu=neon</gcc>
-        <c>lib/low/Xoodoo-times4/AsmARMv7A/Xoodoo-times4-ARMv7A.s</c>
+        <s>lib/low/Xoodoo-times4/AsmARMv7A/Xoodoo-times4-ARMv7A.s</s>
         <h>lib/low/Xoodoo-times4/AsmARMv7A/Xoodoo-times4-SnP.h</h>
     </fragment>
 
@@ -755,8 +755,8 @@ For Ketje, one of the following fragments is required:
 
     <fragment name="Ket-ARMv7M">
         <h>lib/low/Ketje/OptimizedAsmARM/Ket.h</h>
-        <c>lib/low/Ketje/OptimizedAsmARM/KetjeJr-armv7m-le-gcc.s</c>
-        <c>lib/low/Ketje/OptimizedAsmARM/KetjeSr-armv7m-le-gcc.s</c>
+        <s>lib/low/Ketje/OptimizedAsmARM/KetjeJr-armv7m-le-gcc.s</s>
+        <s>lib/low/Ketje/OptimizedAsmARM/KetjeSr-armv7m-le-gcc.s</s>
         <!-- TODO: <fragment name="Ket-ARMv7M" inherits="KetJr-ARMv7M KetSr-ARMv7M KetMn-optimizedLE KetMj-SnP"/> -->
     </fragment>
 
