@@ -13,7 +13,7 @@
 # Andy Polyakov's keccak1600-avx2.pl from the CRYPTOGAMS project
 # (https://github.com/dot-asm/cryptogams/blob/master/x86_64/keccak1600-avx2.pl).
 # The rest of the code was written by Ronny Van Keer.
-# Adaptations for OSX by Stéphane Léon.
+# Adaptations for macOS by Stéphane Léon.
 
 .text
 
@@ -21,7 +21,7 @@
 #
 # void KeccakP1600_Initialize(void *state);
 #
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_Initialize
 .balign  32
 _KeccakP1600_Initialize:
@@ -40,7 +40,7 @@ KeccakP1600_Initialize:
     vmovdqa     %ymm0,5*32(%rdi)
     movq        $0,6*32(%rdi)
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_Initialize,.-KeccakP1600_Initialize
 .endif
@@ -50,7 +50,7 @@ KeccakP1600_Initialize:
 # void KeccakP1600_AddByte(void *state, unsigned char data, unsigned int offset);
 #                                %rdi                 %rsi               %rdx
 #
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_AddByte
 .balign 32
 _KeccakP1600_AddByte:
@@ -69,7 +69,7 @@ KeccakP1600_AddByte:
     add         %rax, %rdi
     xorb        %sil, (%rdi)
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_AddByte,.-KeccakP1600_AddByte
 .endif
@@ -79,7 +79,7 @@ KeccakP1600_AddByte:
 # void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
 #                                %rdi                         %rsi               %rdx                 %rcx
 #
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_AddBytes
 .balign 32
 _KeccakP1600_AddBytes:
@@ -137,7 +137,7 @@ KeccakP1600_AddBytes_LastIncompleteLaneLoop:
     jnz         KeccakP1600_AddBytes_LastIncompleteLaneLoop
 KeccakP1600_AddBytes_Exit:
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_AddBytes,.-KeccakP1600_AddBytes
 .endif
@@ -147,7 +147,7 @@ KeccakP1600_AddBytes_Exit:
 # void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
 #                                       %rdi                        %rsi               %rdx                 %rcx
 #
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_OverwriteBytes
 .balign  32
 _KeccakP1600_OverwriteBytes:
@@ -205,7 +205,7 @@ KeccakP1600_OverwriteBytes_LastIncompleteLaneLoop:
     jnz         KeccakP1600_OverwriteBytes_LastIncompleteLaneLoop
 KeccakP1600_OverwriteBytes_Exit:
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_OverwriteBytes,.-KeccakP1600_OverwriteBytes
 .endif
@@ -215,7 +215,7 @@ KeccakP1600_OverwriteBytes_Exit:
 # void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount);
 #                                            %rdi                %rsi
 #
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_OverwriteWithZeroes
 .balign  32
 _KeccakP1600_OverwriteWithZeroes:
@@ -249,7 +249,7 @@ KeccakP1600_OverwriteWithZeroes_LastIncompleteLaneLoop:
     jnz         KeccakP1600_OverwriteWithZeroes_LastIncompleteLaneLoop
 KeccakP1600_OverwriteWithZeroes_Exit:
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_OverwriteWithZeroes,.-KeccakP1600_OverwriteWithZeroes
 .endif
@@ -259,7 +259,7 @@ KeccakP1600_OverwriteWithZeroes_Exit:
 # void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length);
 #                                           %rdi                  %rsi               %rdx                 %rcx
 #
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_ExtractBytes
 .balign  32
 _KeccakP1600_ExtractBytes:
@@ -320,7 +320,7 @@ KeccakP1600_ExtractBytes_LastIncompleteLaneLoop:
 KeccakP1600_ExtractBytes_Exit:
     pop         %rbx
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_ExtractBytes,.-KeccakP1600_ExtractBytes
 .endif
@@ -330,7 +330,7 @@ KeccakP1600_ExtractBytes_Exit:
 # void KeccakP1600_ExtractAndAddBytes(const void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
 #                                                 %rdi                        %rsi                  %rdx                 %rcx                  %r8
 #
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_ExtractAndAddBytes
 .balign  32
 _KeccakP1600_ExtractAndAddBytes:
@@ -399,7 +399,7 @@ KeccakP1600_ExtractAndAddBytes_Exit:
     pop         %r10
     pop         %rbx
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_ExtractAndAddBytes,.-KeccakP1600_ExtractAndAddBytes
 .endif
@@ -408,7 +408,7 @@ KeccakP1600_ExtractAndAddBytes_Exit:
 #
 # internal    
 #
-.ifdef OSX
+.ifdef macOS
 .balign  32
 .else
 .type    __KeccakF1600,@function
@@ -552,14 +552,14 @@ __KeccakF1600:
     dec         %eax
     jnz         .Loop_avx2
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   __KeccakF1600,.-__KeccakF1600
 .endif
 
 
 
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_Permute_24rounds
 .balign  32
 _KeccakP1600_Permute_24rounds:
@@ -592,12 +592,12 @@ KeccakP1600_Permute_24rounds:
     vmovdqu         %ymm6,8+32*5-96(%rdi)
     vzeroupper
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_Permute_24rounds,.-KeccakP1600_Permute_24rounds
 .endif
 
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_Permute_12rounds
 .balign  32
 _KeccakP1600_Permute_12rounds:
@@ -630,12 +630,12 @@ KeccakP1600_Permute_12rounds:
     vmovdqu         %ymm6,8+32*5-96(%rdi)
     vzeroupper
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_Permute_12rounds,.-KeccakP1600_Permute_12rounds
 .endif
 
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_Permute_Nrounds
 .balign  32
 _KeccakP1600_Permute_Nrounds:
@@ -670,7 +670,7 @@ KeccakP1600_Permute_Nrounds:
     vmovdqu         %ymm6,8+32*5-96(%rdi)
     vzeroupper
     ret
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_Permute_Nrounds,.-KeccakP1600_Permute_Nrounds
 .endif
@@ -680,7 +680,7 @@ KeccakP1600_Permute_Nrounds:
 # size_t KeccakF1600_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
 #                                          %rdi                %rsi                            %rdx         %rcx
 #
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakF1600_FastLoop_Absorb
 .balign  32
 _KeccakF1600_FastLoop_Absorb:
@@ -840,7 +840,7 @@ KeccakF1600_FastLoop_Absorb_LanesAddLoop:
     push            %rsi
     push            %rdx
     push            %rcx
-    .ifdef OSX
+    .ifdef macOS
     call            _KeccakP1600_Permute_24rounds
     .else
     call            KeccakP1600_Permute_24rounds@PLT
@@ -852,7 +852,7 @@ KeccakF1600_FastLoop_Absorb_LanesAddLoop:
     cmp             %rsi, %rcx
     jae             KeccakF1600_FastLoop_Absorb_Not17Lanes
     jmp             KeccakF1600_FastLoop_Absorb_Exit
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakF1600_FastLoop_Absorb,.-KeccakF1600_FastLoop_Absorb
 .endif
@@ -862,7 +862,7 @@ KeccakF1600_FastLoop_Absorb_LanesAddLoop:
 # size_t KeccakP1600_12rounds_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
 #                                          %rdi                %rsi                            %rdx         %rcx
 #
-.ifdef OSX
+.ifdef macOS
 .globl  _KeccakP1600_12rounds_FastLoop_Absorb
 .balign  32
 _KeccakP1600_12rounds_FastLoop_Absorb:
@@ -1022,7 +1022,7 @@ KeccakP1600_12rounds_FastLoop_Absorb_LanesAddLoop:
     push            %rsi
     push            %rdx
     push            %rcx
-.ifdef OSX
+.ifdef macOS
     call            _KeccakP1600_Permute_12rounds
 .else
     call            KeccakP1600_Permute_12rounds@PLT
@@ -1034,14 +1034,14 @@ KeccakP1600_12rounds_FastLoop_Absorb_LanesAddLoop:
     cmp             %rsi, %rcx
     jae             KeccakP1600_12rounds_FastLoop_Absorb_Not17Lanes
     jmp             KeccakP1600_12rounds_FastLoop_Absorb_Exit
-.ifdef OSX
+.ifdef macOS
 .else
 .size   KeccakP1600_12rounds_FastLoop_Absorb,.-KeccakP1600_12rounds_FastLoop_Absorb
 .endif
 
 .equ    ALLON,        0xFFFFFFFFFFFFFFFF
 
-.ifdef OSX
+.ifdef macOS
 .balign  64
 .else
 .align    64
@@ -1093,7 +1093,7 @@ mapState:
     .quad     8*8,  9*8, 18*8, 23*8, 16*8
     .quad     6*8, 17*8, 14*8, 11*8, 24*8
 
-.ifdef OSX
+.ifdef macOS
     .balign   16
 .else
     .align   16
@@ -1109,7 +1109,7 @@ map5:
 map6:
     .long     6*8, 12*8, 18*8, 24*8
 
-.ifdef OSX
+.ifdef macOS
     .balign   32
 .else
     .align   32

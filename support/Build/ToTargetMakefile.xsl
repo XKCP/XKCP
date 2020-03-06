@@ -191,7 +191,7 @@ ifeq ($(UNAME_S),Linux)
     ASMFLAGS :=
 endif
 ifeq ($(UNAME_S),Darwin)
-    ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,OSX=1
+    ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,macOS=1
 endif
 </xsl:text>
 
