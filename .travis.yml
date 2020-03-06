@@ -15,7 +15,10 @@ before_install:
 jobs:
   allow_failures:
     - script: make generic64/UnitTests && bin/generic64/UnitTests -a
+      arch: arm64
+      compiler: clang
     - script: make ARMv8A/UnitTests && bin/ARMv8A/UnitTests -a
+      arch: arm64
   include:
     - stage: "Tests on ARM64 (linux)"
       script: make generic64/UnitTests && bin/generic64/UnitTests -a
@@ -122,13 +125,3 @@ jobs:
       arch: amd64
       compiler: clang
       name: "SandyBridge (clang)"
-    - script: make Haswell/UnitTests && bin/Haswell/UnitTests -a
-      os: osx
-      arch: amd64
-      compiler: gcc
-      name: "Haswell (gcc)"
-    - script: make Haswell/UnitTests && bin/Haswell/UnitTests -a
-      os: osx
-      arch: amd64
-      compiler: clang
-      name: "Haswell (clang)"
