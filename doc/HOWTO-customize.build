@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 <!--
 # Introduction
 
-We here explain how to create a custom build target in the Keccak Code Package. Some examples, which can be found below, illustrate the process.
+We here explain how to create a custom build target in the XKCP. Some examples, which can be found below, illustrate the process.
 
 Note that this file is included from Makefile.build, so the examples and anything tried here are accessible "for real" from make.
 
@@ -27,40 +27,42 @@ Note that this file is included from Makefile.build, so the examples and anythin
 First, choose a target name and add the corresponding XML tag. For the moment, we leave the inherits attribute empty:
     <target name="chosenName" inherits=""/>
 
-The name can be anything. If it ends with .a, make will attempt to build a static library with that name. Otherwise, it will build a standalone executable. In both cases, however, one can add ".pack" when invoking make (but not in the target name) to get a tarball with the source files, instead of building it.
+The name can be anything. If it ends with .a, make will attempt to build a static library with that name. If it ends with .so, make will build a dynamic library. Otherwise, it will build a standalone executable. In all cases, one can add ".pack" when invoking make (but not in the target name) to get a tarball with the source files, instead of building it.
 
 
 # Step 2: select the high-level services
 
 In a second step, select the desired cryptographic functions and add the corresponding fragment keywords to the inherits attribute (separated by a space).
 
-Please refer to the following files for the list of supported cryptographic functions:
-* Ketje/Ketje.build for the Ketje instances;
-* Keyak/Keyak.build for the Keyak instances;
-* HighLevel.build for everything else.
+Please refer to lib/HighLevel.build for the list of supported cryptographic functions.
 
 
 # Step 3: identify the required low-level services
 
 Then, identify the permutations that the chosen cryptographic functions need.
 
-Each cryptographic function implemented in the KCP depends on a given permutation. It interacts with the permutation through an interface called SnP. Some functions further can take advantage of a parallel implementation of the permutation, in which case the interface is called PlSnP. The choice of high-level services therefore determines what we need as low-level services:
-* Those that require Keccak-p[200]: KetjeJr, Keccak{Sponge, Duplex, PRG}Width200
-* Those that require Keccak-p[400]: KetjeSr, Keccak{Sponge, Duplex, PRG}Width400
-* Those that require Keccak-p[800]: KetjeMn, RiverKeyak, Keccak{Sponge, Duplex, PRG}Width800
-* Those that require Keccak-p[1600]: all others
+Each cryptographic function implemented in the XKCP depends on a given permutation. It interacts with the permutation through an interface called SnP. Some functions further can take advantage of a parallel implementation of the permutation, in which case the interface is called PlSnP. The choice of high-level services therefore determines what we need as low-level services:
+* Those that require Keccak-p[200]: Ketje Jr, Keccak{Sponge, Duplex, PRG} with rate + capacity = 200
+* Those that require Keccak-p[400]: Ketje Sr, Keccak{Sponge, Duplex, PRG} with rate + capacity = 400
+* Those that require Keccak-p[800]: Ketje Minor, River Keyak, Keccak{Sponge, Duplex, PRG} with rate + capacity = 800
+* Those that require Keccak-p[1600]: Ketje Major, {Lake, Sea, Ocean} Keyak, Kravatte, KangarooTwelve, FIPS202, SP800-185, Keccak{Sponge, Duplex, PRG} with rate + capacity = 1600
+* Those that require Xoodoo: Xoofff, Xoodyak
 
-The following targets additionally require an implementation of parallel instances of Keccak-p[1600]: SeaKeyak, OceanKeyak, LunarKeyak, KangarooTwelve, SP800-185. Instead, for KangarooTwelve and SP800-185, one can add the fragment keyword no_parallel1600 to disable the use of parallel implementations.
+The following targets additionally require an implementation of parallel instances of Keccak-p[1600]. The parallel implementation may be a fall-back stub (i.e., 1600timesXonY).
+* SeaKeyak requires Keccak-p[1600]×2
+* OceanKeyak requires Keccak-p[1600]×4
+* LunarKeyak requires Keccak-p[1600]×8.
+
+For KangarooTwelve, SP800-185, Kravatte and Xoofff, the use of parallel implementations is recommended for best performances, but they can work without these.
 
 
 # Step 4: select the implementation of the low-level services
 
-Finally, select the implementation(s) of the required permutation(s) identified in the previous step and add the corresponding fragment keywords to the inherits attribute (separated by a space).
+Finally, for each of the required permutation (or parallel implementation thereof) identified in the previous step, select one implementation and add the corresponding fragment keywords to the inherits attribute (separated by a space).
 
-Please refer to the file LowLevel.build for the list of supported implementations.
+Please refer to the file lib/LowLevel.build for the list of supported implementations.
 
-If Ketje is used, we still need to add an additional fragment keyword, see Ketje/Ketje.build for more details.
-
+If Ketje is used, we still need to add an additional fragment keyword, see lib/LowLevel.build for more details.
 
 -->
 
@@ -70,33 +72,37 @@ If Ketje is used, we still need to add an additional fragment keyword, see Ketje
     <target name="PRG-AVR8" inherits="KeccakPRG optimized200AVR8"/>
 
     <!-- Type "make KetjeJr-compact8.pack" to get a tarball with the sources needed to compile KetjeJr generically optimized for 8-bit platforms. -->
-    <target name="KetjeJr-compact8" inherits="Ketje KetJr-SnP compact200"/>
+    <target name="KetjeJr-compact8" inherits="Ketje Ket-SnP compact200"/>
 
     <!-- Type "make libKeccak-16bits.a" to compile a library with Keccak sponge, duplex and PRG on top of Keccak-f[400], using plain reference code. Add ".pack" when invoking make to get a tarball with the source files instead. -->
     <target name="libKeccak-16bits.a" inherits="KeccakSponge KeccakDuplex KeccakPRG reference400"/>
 
-    <!-- Type "make RiverKeyak-ARMv7M.pack" to get a tarball with the sources needed to compile River Keyak on ARMv7M. -->
-    <target name="RiverKeyak-ARMv7M" inherits="Keyak optimized800ARMv7Mu2"/>
+    <!-- Type "make Xoodyak-ARMv7M.pack" to get a tarball with the sources needed to compile Xoodyak on ARMv7M. -->
+    <target name="Xoodyak-ARMv7M" inherits="Xoodyak XooOptimizedARMv7M"/>
 
     <!-- Type "make libRiverKeyak-generic32.a" to get a library with River Keyak generically optimized for 32-bit platforms. Add ".pack" when invoking make to get a tarball with the source files instead. -->
     <target name="libRiverKeyak-generic32.a" inherits="Keyak optimized800lcu2"/>
 
     <!-- Same as above, but we add a PRG and we use a compact implementation instead. -->
-    <target name="libRiverKeyak-PRG-compact32.a" inherits="RiverKeyak KeccakPRG compact800"/>
+    <target name="libRiverKeyak-PRG-compact32.a" inherits="Keyak KeccakPRG compact800"/>
 
     <!-- Type "make libK12-AVX2.a" to build a library with KangarooTwelve with AVX2 code. Add ".pack" when invoking make to get a tarball with the source files instead. -->
-    <target name="libK12-AVX2.a" inherits="KangarooTwelve optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 1600times8on4">
-        <interface>high</interface>
-    </target>
+    <target name="libK12-AVX2.a" inherits="KangarooTwelve optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12"/>
 
     <!-- Same as above, but using a 32-bit implementation and not exploiting any parallelism. -->
-    <target name="libK12-32bits.a" inherits="KangarooTwelve inplace1600bi no_parallel1600"/>
+    <target name="libK12-32bits.a" inherits="KangarooTwelve inplace1600bi"/>
 
     <!-- Type "make FIPS202-opt64.pack" to get a tarball with the sources needed to compile the FIPS 202 functions generically optimized for 64-bit platforms. -->
     <target name="FIPS202-opt64" inherits="FIPS202 optimized1600ufull"/>
 
-    <target name="MyUnitTests" inherits="KangarooTwelve optimized1600AVX2 SIMD256-AVX2u12 UT"/>
+    <!-- Type "make MyUnitTests" to build an executable that runs the unit tests on a restricted set of functionality.
+    In this example, the functionality is KangarooTwelve, with AVX2 code.
+    -->
+    <target name="MyUnitTests" inherits="KangarooTwelve optimized1600AVX2 SIMD128-SSE2u2 SIMD256-AVX2u12 UT"/>
 
+    <!-- Type "make MyBenchmarks" to build an executable that benchmarks a restricted set of functionality.
+    In this example, the functionality is Xoofff, with AVX2 code.
+    -->
     <target name="MyBenchmarks" inherits="Xoofff XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_AVX2 BM"/>
 
 </group>
