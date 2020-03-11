@@ -81,16 +81,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <xsl:value-of select="."/>
         <xsl:text>
 </xsl:text>
-        <xsl:if test="@interface != ''">
-            <xsl:text>HEADERS_</xsl:text>
-            <xsl:value-of select="@interface"/>
-            <xsl:text> := $(HEADERS_</xsl:text>
-            <xsl:value-of select="@interface"/>
-            <xsl:text>) </xsl:text>
-            <xsl:value-of select="."/>
-            <xsl:text>
-</xsl:text>
-        </xsl:if>
         <xsl:text>SOURCES := $(SOURCES) </xsl:text>
         <xsl:value-of select="."/>
         <xsl:text>
@@ -109,12 +99,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <xsl:text>
 </xsl:text>
     </xsl:if>
-</xsl:template>
-
-<xsl:template match="interface">
-    <xsl:text>$(HEADERS_</xsl:text>
-    <xsl:value-of select="."/>
-    <xsl:text>) </xsl:text>
 </xsl:template>
 
 <xsl:template match="c|s">
@@ -230,19 +214,13 @@ bin/</xsl:text>
     <xsl:choose>
         <xsl:when test="substring(@name, string-length(@name)-1, 2)='.a'">
             <xsl:text>&#9;mkdir -p $@.headers
-&#9;cp -f </xsl:text>
-            <xsl:apply-templates select="interface"/>
-            <xsl:value-of select="$configfile"/>
-            <xsl:text> $@.headers/
+&#9;cp -f $(HEADERS) $@.headers/
 &#9;$(AR) rcsv $@ $(OBJECTS)
 </xsl:text>
         </xsl:when>
         <xsl:when test="substring(@name, string-length(@name)-2, 3)='.so'">
             <xsl:text>&#9;mkdir -p $@.headers
-&#9;cp -f </xsl:text>
-            <xsl:apply-templates select="interface"/>
-            <xsl:value-of select="$configfile"/>
-            <xsl:text> $@.headers/
+&#9;cp -f $(HEADERS) $@.headers/
 &#9;$(CC) -shared -o $@ $(OBJECTS) $(CFLAGS)
 </xsl:text>
         </xsl:when>

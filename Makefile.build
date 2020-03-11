@@ -105,13 +105,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <!-- To make a library -->
-    <fragment name="libXKCP.a" inherits="All">
-        <interface>high</interface>
-    </fragment>
-
-    <fragment name="libXKCP.so" inherits="All">
-        <interface>high</interface>
-    </fragment>
+    <fragment name="libXKCP.a" inherits="All"/>
+    <fragment name="libXKCP.so" inherits="All"/>
 
     <!-- *** CAESAR-related targets *** -->
 
