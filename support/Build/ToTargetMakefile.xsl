@@ -224,6 +224,14 @@ bin/</xsl:text>
 &#9;$(CC) -shared -o $@ $(OBJECTS) $(CFLAGS)
 </xsl:text>
         </xsl:when>
+        <xsl:when test="substring(@name, string-length(@name)-5, 6)='.dylib'">
+            <xsl:text>&#9;mkdir -p $@.headers
+&#9;cp -f $(HEADERS) $@.headers/
+&#9;$(CC) -dynamiclib -install_name @rpath/</xsl:text>
+        <xsl:value-of select="@name"/>
+        <xsl:text> $(OBJECTS) -o $@
+</xsl:text>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:text>&#9;$(CC) -o $@ $(OBJECTS) $(CFLAGS)
 </xsl:text>

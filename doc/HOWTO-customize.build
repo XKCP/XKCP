@@ -27,7 +27,7 @@ Note that this file is included from Makefile.build, so the examples and anythin
 First, choose a target name and add the corresponding XML tag. For the moment, we leave the inherits attribute empty:
     <target name="chosenName" inherits=""/>
 
-The name can be anything. If it ends with .a, make will attempt to build a static library with that name. If it ends with .so, make will build a dynamic library. Otherwise, it will build a standalone executable. In all cases, one can add ".pack" when invoking make (but not in the target name) to get a tarball with the source files, instead of building it.
+The name can be anything. If it ends with .a, make will attempt to build a static library with that name. If it ends with .so (resp. with .dylib), make will build a dynamic library for Linux (resp. macOS). Otherwise, it will build a standalone executable. In all cases, one can add ".pack" when invoking make (but not in the target name) to get a tarball with the source files, instead of building it.
 
 
 # Step 2: select the high-level services
@@ -104,5 +104,8 @@ If Ketje is used, we still need to add an additional fragment keyword, see lib/L
     In this example, the functionality is Xoofff, with AVX2 code.
     -->
     <target name="MyBenchmarks" inherits="Xoofff XooOptimizedSIMD128 XooOptimizedTimes4_SIMD128 XooOptimizedTimes8_AVX2 BM"/>
+
+    <!-- Type "make libK12-AVX512.dylib" to build a dynamic library for macOS with KangarooTwelve with AVX512 code. -->
+    <target name="libK12-AVX512.dylib" inherits="KangarooTwelve optimized1600AVX512a SIMD512-2-AVX512u12 SIMD512-4-AVX512u12 SIMD512-8-AVX512u12"/>
 
 </group>
