@@ -15,6 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include <string.h>
+#include <stdint.h>
 #include "KangarooTwelve.h"
 
 #ifdef XKCP_has_KeccakP1600times2
@@ -97,6 +98,17 @@ http://creativecommons.org/publicdomain/zero/1.0/
         if (KeccakWidth1600_12rounds_SpongeAbsorb(&ktInstance->finalNode, intermediate, Parallellism * capacityInBytes) != 0) return 1; \
     }
 
+#define ProcessLeaves( Parallellism ) \
+    while ( inLen >= Parallellism * chunkSize ) { \
+        unsigned char intermediate[Parallellism*capacityInBytes]; \
+        \
+        KeccakP1600times##Parallellism##_K12ProcessLeaves(input, intermediate); \
+        input += Parallellism * chunkSize; \
+        inLen -= Parallellism * chunkSize; \
+        ktInstance->blockNumber += Parallellism; \
+        if (KeccakWidth1600_12rounds_SpongeAbsorb(&ktInstance->finalNode, intermediate, Parallellism * capacityInBytes) != 0) return 1; \
+    }
+
 static unsigned int right_encode( unsigned char * encbuf, size_t value )
 {
     unsigned int n, i;
@@ -164,7 +176,9 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
     }
 
     #if defined(KeccakP1600times8_implementation) && !defined(KeccakP1600times8_isFallback)
-    #if defined(KeccakP1600times8_12rounds_FastLoop_supported)
+    #if defined(KeccakP1600times8_K12ProcessLeaves_supported)
+    ProcessLeaves( 8 )
+    #elif defined(KeccakP1600times8_12rounds_FastLoop_supported)
     ParallelSpongeFastLoop( 8 )
     #else
     ParallelSpongeLoop( 8 )
@@ -172,7 +186,9 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
     #endif
 
     #if defined(KeccakP1600times4_implementation) && !defined(KeccakP1600times4_isFallback)
-    #if defined(KeccakP1600times4_12rounds_FastLoop_supported)
+    #if defined(KeccakP1600times4_K12ProcessLeaves_supported)
+    ProcessLeaves( 4 )
+    #elif defined(KeccakP1600times4_12rounds_FastLoop_supported)
     ParallelSpongeFastLoop( 4 )
     #else
     ParallelSpongeLoop( 4 )
@@ -180,7 +196,9 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
     #endif
 
     #if defined(KeccakP1600times2_implementation) && !defined(KeccakP1600times2_isFallback)
-    #if defined(KeccakP1600times2_12rounds_FastLoop_supported)
+    #if defined(KeccakP1600times2_K12ProcessLeaves_supported)
+    ProcessLeaves( 2 )
+    #elif defined(KeccakP1600times2_12rounds_FastLoop_supported)
     ParallelSpongeFastLoop( 2 )
     #else
     ParallelSpongeLoop( 2 )

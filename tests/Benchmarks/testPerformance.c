@@ -36,6 +36,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "timing.h"
 #include "testPerformance.h"
 
+#define ALIGN_DEFAULT ALIGN(64)
+
 void displayMeasurements1101001000(uint_32t *measurements, uint_32t *laneCounts, unsigned int numberOfColumns, unsigned int laneLengthInBytes);
 
 #define xstr(s) str(s)
@@ -494,8 +496,8 @@ void printParallelImplementations(
 #ifdef XKCP_has_SP800_185
 uint_32t measureParallelHash(uint_32t dtMin, unsigned int securityStrength, unsigned int blockByteLen, unsigned int inputLen)
 {
-    ALIGN(32) unsigned char input[1024*1024];
-    ALIGN(32) unsigned char output[32];
+    ALIGN_DEFAULT unsigned char input[1024*1024];
+    ALIGN_DEFAULT unsigned char output[32];
     measureTimingDeclare
 
     assert(inputLen <= 1024*1024);
@@ -567,11 +569,11 @@ void testParallelHashPerformance()
 #ifdef XKCP_has_KangarooTwelve
 uint_32t measureKangarooTwelve(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN(32) unsigned char input[1024*1024];
-    ALIGN(32) unsigned char output[32];
+    ALIGN_DEFAULT unsigned char input[2*1024*1024];
+    ALIGN_DEFAULT unsigned char output[32];
     measureTimingDeclare
 
-    assert(inputLen <= 1024*1024);
+    assert(inputLen <= 2*1024*1024);
 
     memset(input, 0xA5, 16);
 
@@ -596,11 +598,12 @@ void testKangarooTwelvePerformanceOne( void )
     unsigned int chunkSizeLog = (unsigned int)floor(log(chunkSize)/log(2.0)+0.5);
     int displaySlope = 0;
 
+    measureKangarooTwelve(calibration, 500000);
     for(halfTones=chunkSizeLog*12-28; halfTones<=13*12; halfTones+=4) {
         double I = pow(2.0, halfTones/12.0);
         unsigned int i  = (unsigned int)floor(I+0.5);
         uint_32t time, timePlus1Block, timePlus2Blocks, timePlus4Blocks, timePlus8Blocks;
-        uint_32t timePlus84Blocks;
+        uint_32t timePlus84Blocks, timePlus168Blocks;
         time = measureKangarooTwelve(calibration, i);
         if (i == chunkSize) {
             displaySlope = 1;
@@ -609,6 +612,7 @@ void testKangarooTwelvePerformanceOne( void )
             timePlus4Blocks = measureKangarooTwelve(calibration, i+4*chunkSize);
             timePlus8Blocks = measureKangarooTwelve(calibration, i+8*chunkSize);
             timePlus84Blocks = measureKangarooTwelve(calibration, i+84*chunkSize);
+            timePlus168Blocks = measureKangarooTwelve(calibration, i+168*chunkSize);
         }
         printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
         if (displaySlope) {
@@ -617,10 +621,11 @@ void testKangarooTwelvePerformanceOne( void )
             printf("     +4 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus4Blocks, (timePlus4Blocks-(double)(time))*1.0/chunkSize/4.0);
             printf("     +8 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus8Blocks, (timePlus8Blocks-(double)(time))*1.0/chunkSize/8.0);
             printf("    +84 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus84Blocks, (timePlus84Blocks-(double)(time))*1.0/chunkSize/84.0);
+            printf("   +168 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus168Blocks, (timePlus168Blocks-(double)(time))*1.0/chunkSize/168.0);
             displaySlope = 0;
         }
     }
-    for(halfTones=12*12; halfTones<=19*12; halfTones+=4) {
+    for(halfTones=12*12; halfTones<=20*12; halfTones+=4) {
         double I = chunkSize + pow(2.0, halfTones/12.0);
         unsigned int i  = (unsigned int)floor(I+0.5);
         uint_32t time;
@@ -644,7 +649,7 @@ void testKangarooTwelvePerformance()
 
 uint_32t measureKravatte_MaskDerivation(uint_32t dtMin)
 {
-    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     Kravatte_Instance kv;
     measureTimingDeclare
  
@@ -657,8 +662,8 @@ uint_32t measureKravatte_MaskDerivation(uint_32t dtMin)
 
 uint_32t measureKra(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN(32) unsigned char input[1024*1024];
-    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    ALIGN_DEFAULT unsigned char input[1024*1024];
+    ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     Kravatte_Instance kv;
     measureTimingDeclare
  
@@ -675,8 +680,8 @@ uint_32t measureKra(uint_32t dtMin, unsigned int inputLen)
 
 uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
 {
-    ALIGN(32) unsigned char output[1024*1024];
-    ALIGN(32) unsigned char key[Kravatte_KeyLen];
+    ALIGN_DEFAULT unsigned char output[1024*1024];
+    ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     Kravatte_Instance kv;
     measureTimingDeclare
 
@@ -695,11 +700,11 @@ uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
 
 uint_32t measureKravatte_SANSE(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN(32) unsigned char input[1024*1024];
-    ALIGN(32) unsigned char output[1024*1024];
-    ALIGN(32) unsigned char key[Kravatte_KeyLen];
-    ALIGN(32) unsigned char AD[16];
-    ALIGN(32) unsigned char tag[Kravatte_SANSE_TagLength];
+    ALIGN_DEFAULT unsigned char input[1024*1024];
+    ALIGN_DEFAULT unsigned char output[1024*1024];
+    ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
+    ALIGN_DEFAULT unsigned char AD[16];
+    ALIGN_DEFAULT unsigned char tag[Kravatte_SANSE_TagLength];
     Kravatte_SANSE_Instance kv;
     measureTimingDeclare
 
@@ -717,12 +722,12 @@ uint_32t measureKravatte_SANSE(uint_32t dtMin, unsigned int inputLen)
 
 uint_32t measureKravatte_SANE_Wrap(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN(32) unsigned char input[1024*1024];
-    ALIGN(32) unsigned char output[1024*1024];
-    ALIGN(32) unsigned char key[Kravatte_KeyLen];
-    ALIGN(32) unsigned char nonce[16];
-    ALIGN(32) unsigned char AD[16];
-    ALIGN(32) unsigned char tag[Kravatte_SANE_TagLength];
+    ALIGN_DEFAULT unsigned char input[1024*1024];
+    ALIGN_DEFAULT unsigned char output[1024*1024];
+    ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
+    ALIGN_DEFAULT unsigned char nonce[16];
+    ALIGN_DEFAULT unsigned char AD[16];
+    ALIGN_DEFAULT unsigned char tag[Kravatte_SANE_TagLength];
     Kravatte_SANE_Instance kv;
     measureTimingDeclare
 
@@ -741,12 +746,12 @@ uint_32t measureKravatte_SANE_Wrap(uint_32t dtMin, unsigned int inputLen)
 
 uint_32t measureKravatte_SANE_MAC(uint_32t dtMin, unsigned int ADLen)
 {
-    ALIGN(32) unsigned char input[1];
-    ALIGN(32) unsigned char output[1];
-    ALIGN(32) unsigned char key[Kravatte_KeyLen];
-    ALIGN(32) unsigned char nonce[16];
-    ALIGN(32) unsigned char AD[1024*1024];
-    ALIGN(32) unsigned char tag[Kravatte_SANE_TagLength];
+    ALIGN_DEFAULT unsigned char input[1];
+    ALIGN_DEFAULT unsigned char output[1];
+    ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
+    ALIGN_DEFAULT unsigned char nonce[16];
+    ALIGN_DEFAULT unsigned char AD[1024*1024];
+    ALIGN_DEFAULT unsigned char tag[Kravatte_SANE_TagLength];
     Kravatte_SANE_Instance kv;
     measureTimingDeclare
 
@@ -765,10 +770,10 @@ uint_32t measureKravatte_SANE_MAC(uint_32t dtMin, unsigned int ADLen)
 
 uint_32t measureKravatte_WBC(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN(32) unsigned char input[1024*1024];
-    ALIGN(32) unsigned char output[1024*1024];
-    ALIGN(32) unsigned char key[Kravatte_KeyLen];
-    ALIGN(32) unsigned char W[16];
+    ALIGN_DEFAULT unsigned char input[1024*1024];
+    ALIGN_DEFAULT unsigned char output[1024*1024];
+    ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
+    ALIGN_DEFAULT unsigned char W[16];
     Kravatte_Instance kvw;
     measureTimingDeclare
 

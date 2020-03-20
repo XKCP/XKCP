@@ -1101,6 +1101,142 @@ size_t KeccakP1600times8_12rounds_FastLoop_Absorb(void *states, unsigned int lan
 
 /* ------------------------------------------------------------------------- */
 
+#define LOAD(p)                     _mm512_loadu_si512(p)
+#define XOReq(a,b)                  a = _mm512_xor_si512(a,b)
+#define ZERO()                      _mm512_setzero_si512()
+#define CONST_64(a)                 _mm512_set1_epi64(a)
+
+#define chunkSize 8192
+#define rateInBytes 168
+
+#define initializeState(X) \
+    X##ba = ZERO(); \
+    X##be = ZERO(); \
+    X##bi = ZERO(); \
+    X##bo = ZERO(); \
+    X##bu = ZERO(); \
+    X##ga = ZERO(); \
+    X##ge = ZERO(); \
+    X##gi = ZERO(); \
+    X##go = ZERO(); \
+    X##gu = ZERO(); \
+    X##ka = ZERO(); \
+    X##ke = ZERO(); \
+    X##ki = ZERO(); \
+    X##ko = ZERO(); \
+    X##ku = ZERO(); \
+    X##ma = ZERO(); \
+    X##me = ZERO(); \
+    X##mi = ZERO(); \
+    X##mo = ZERO(); \
+    X##mu = ZERO(); \
+    X##sa = ZERO(); \
+    X##se = ZERO(); \
+    X##si = ZERO(); \
+    X##so = ZERO(); \
+    X##su = ZERO(); \
+
+#define LoadAndTranspose8(dataAsLanes, offset) \
+    t0 = LOAD((dataAsLanes) + (offset) + 0*chunkSize/8); \
+    t1 = LOAD((dataAsLanes) + (offset) + 1*chunkSize/8); \
+    t2 = LOAD((dataAsLanes) + (offset) + 2*chunkSize/8); \
+    t3 = LOAD((dataAsLanes) + (offset) + 3*chunkSize/8); \
+    t4 = LOAD((dataAsLanes) + (offset) + 4*chunkSize/8); \
+    t5 = LOAD((dataAsLanes) + (offset) + 5*chunkSize/8); \
+    t6 = LOAD((dataAsLanes) + (offset) + 6*chunkSize/8); \
+    t7 = LOAD((dataAsLanes) + (offset) + 7*chunkSize/8); \
+    r0 = _mm512_unpacklo_epi64(t0, t1); \
+    r1 = _mm512_unpackhi_epi64(t0, t1); \
+    r2 = _mm512_unpacklo_epi64(t2, t3); \
+    r3 = _mm512_unpackhi_epi64(t2, t3); \
+    r4 = _mm512_unpacklo_epi64(t4, t5); \
+    r5 = _mm512_unpackhi_epi64(t4, t5); \
+    r6 = _mm512_unpacklo_epi64(t6, t7); \
+    r7 = _mm512_unpackhi_epi64(t6, t7); \
+    t0 = _mm512_shuffle_i32x4(r0, r2, 0x88); \
+    t1 = _mm512_shuffle_i32x4(r1, r3, 0x88); \
+    t2 = _mm512_shuffle_i32x4(r0, r2, 0xdd); \
+    t3 = _mm512_shuffle_i32x4(r1, r3, 0xdd); \
+    t4 = _mm512_shuffle_i32x4(r4, r6, 0x88); \
+    t5 = _mm512_shuffle_i32x4(r5, r7, 0x88); \
+    t6 = _mm512_shuffle_i32x4(r4, r6, 0xdd); \
+    t7 = _mm512_shuffle_i32x4(r5, r7, 0xdd); \
+    r0 = _mm512_shuffle_i32x4(t0, t4, 0x88); \
+    r1 = _mm512_shuffle_i32x4(t1, t5, 0x88); \
+    r2 = _mm512_shuffle_i32x4(t2, t6, 0x88); \
+    r3 = _mm512_shuffle_i32x4(t3, t7, 0x88); \
+    r4 = _mm512_shuffle_i32x4(t0, t4, 0xdd); \
+    r5 = _mm512_shuffle_i32x4(t1, t5, 0xdd); \
+    r6 = _mm512_shuffle_i32x4(t2, t6, 0xdd); \
+    r7 = _mm512_shuffle_i32x4(t3, t7, 0xdd); \
+
+#define XORdata16(X, index, dataAsLanes) \
+    LoadAndTranspose8(dataAsLanes, 0) \
+    XOReq(X##ba, r0); \
+    XOReq(X##be, r1); \
+    XOReq(X##bi, r2); \
+    XOReq(X##bo, r3); \
+    XOReq(X##bu, r4); \
+    XOReq(X##ga, r5); \
+    XOReq(X##ge, r6); \
+    XOReq(X##gi, r7); \
+    LoadAndTranspose8(dataAsLanes, 8) \
+    XOReq(X##go, r0); \
+    XOReq(X##gu, r1); \
+    XOReq(X##ka, r2); \
+    XOReq(X##ke, r3); \
+    XOReq(X##ki, r4); \
+    XOReq(X##ko, r5); \
+    XOReq(X##ku, r6); \
+    XOReq(X##ma, r7); \
+
+#define XORdata21(X, index, dataAsLanes) \
+    XORdata16(X, index, dataAsLanes) \
+    XOReq(X##me, LOAD_GATHER8_64(index, (dataAsLanes) + 16)); \
+    XOReq(X##mi, LOAD_GATHER8_64(index, (dataAsLanes) + 17)); \
+    XOReq(X##mo, LOAD_GATHER8_64(index, (dataAsLanes) + 18)); \
+    XOReq(X##mu, LOAD_GATHER8_64(index, (dataAsLanes) + 19)); \
+    XOReq(X##sa, LOAD_GATHER8_64(index, (dataAsLanes) + 20)); \
+
+void KeccakP1600times8_K12ProcessLeaves(const unsigned char *input, unsigned char *output)
+{
+    KeccakP_DeclareVars;
+    unsigned int j;
+    const uint64_t *outputAsLanes = (const uint64_t *)output;
+    __m256i index;
+    __m512i t0, t1, t2, t3, t4, t5, t6, t7;
+    __m512i r0, r1, r2, r3, r4, r5, r6, r7;
+
+    initializeState(_);
+
+    index = LOAD8_32(7*(chunkSize / 8), 6*(chunkSize / 8), 5*(chunkSize / 8), 4*(chunkSize / 8), 3*(chunkSize / 8), 2*(chunkSize / 8), 1*(chunkSize / 8), 0*(chunkSize / 8));
+    for(j = 0; j < (chunkSize - rateInBytes); j += rateInBytes) {
+        XORdata21(_, index, (const uint64_t *)input);
+        rounds12
+        input += rateInBytes;
+    }
+
+    XORdata16(_, index, (const uint64_t *)input);
+    XOReq(_me, CONST_64(0x0BULL));
+    XOReq(_sa, CONST_64(0x8000000000000000ULL));
+    rounds12
+
+    index = LOAD8_32(7*4, 6*4, 5*4, 4*4, 3*4, 2*4, 1*4, 0*4);
+    STORE_SCATTER8_64(outputAsLanes+0, index, _ba);
+    STORE_SCATTER8_64(outputAsLanes+1, index, _be);
+    STORE_SCATTER8_64(outputAsLanes+2, index, _bi);
+    STORE_SCATTER8_64(outputAsLanes+3, index, _bo);
+}
+
+#undef LOAD
+#undef XOReq
+#undef ZERO
+#undef CONST_64
+#undef chunkSize
+#undef rateInBytes
+
+/* ------------------------------------------------------------------------- */
+
 /* Remap lanes to start after two rounds */
 #define Iba _ba
 #define Ibe _me
