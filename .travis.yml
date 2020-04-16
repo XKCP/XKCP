@@ -53,16 +53,6 @@ jobs:
       arch: amd64
       compiler: clang
       name: "generic64 (clang)"
-    - script: make asmX86-64/UnitTests && bin/asmX86-64/UnitTests -a
-      os: linux
-      arch: amd64
-      compiler: gcc
-      name: "asmX86-64 (gcc)"
-    - script: make asmX86-64shld/UnitTests && bin/asmX86-64shld/UnitTests -a
-      os: linux
-      arch: amd64
-      compiler: gcc
-      name: "asmX86-64shld (gcc)"
     - script: make SSSE3/UnitTests && bin/SSSE3/UnitTests -a
       os: linux
       arch: amd64
