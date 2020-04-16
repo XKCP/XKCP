@@ -109,7 +109,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
     <group all="supercop">
         <product delimiter="/">
             <factor set="crypto_hash/shake128/kcp SHAKE128_SelfTest crypto_hash/shake256/kcp SHAKE256_SelfTest crypto_hash/sha3224/kcp SHA3-224_SelfTest crypto_hash/sha3256/kcp SHA3-256_SelfTest crypto_hash/sha3384/kcp SHA3-384_SelfTest crypto_hash/sha3512/kcp SHA3-512_SelfTest crypto_hash/k12/kcp KangarooTwelve_SelfTest"/>
-            <factor set="reference1600 reference1600-32bits compact1600 compact1600AVR8 inplace1600bi inplace1600ARMv6M inplace1600ARMv7M inplace1600ARMv7A optimized1600u6 optimized1600ufull optimized1600lcu6 optimized1600lcufull optimized1600lcufullshld optimized1600AsmX86-64 optimized1600AsmX86-64shld optimized1600AsmX86-64Apple optimized1600AVX2 optimized1600AVX512 optimized1600XOPu6 optimized1600XOPufull optimized1600ARMv6Mu1 optimized1600ARMv6Mu2 optimized1600ARMv7A optimized1600ARMv8A optimized1600AVR8"/>
+            <factor set="K1600-ref-64bits K1600-ref-32bits K1600-compact K1600-AVR8-compact K1600-plain-32bits-inplace K1600-ARMv6M-inplace K1600-ARMv7M-inplace K1600-ARMv7A-inplace K1600-plain-64bits-u6 K1600-plain-64bits-ua K1600-plain-64bits-lcu6 K1600-plain-64bits-lcua K1600-plain-64bits-lcua-shld K1600-x86-64 K1600-x86-64-shld K1600-x86-64-Apple K1600-AVX2 K1600-AVX512 K1600-XOP-u6 K1600-XOP-ua K1600-ARMv6M-u1 K1600-ARMv6M-u2 K1600-ARMv7A-NEON K1600-ARMv8A K1600-AVR8"/>
         </product>
     </group>
 
@@ -163,7 +163,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
     <group all="supercop">
         <product delimiter="/">
             <factor set="crypto_aead/riverkeyakv2 RiverKeyakSelfTest crypto_aead/lakekeyakv2 LakeKeyakSelfTest crypto_aead/seakeyakv2 SeaKeyakSelfTest crypto_aead/oceankeyakv2 OceanKeyakSelfTest crypto_aead/lunarkeyakv2 LunarKeyakSelfTest"/>
-            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld Nehalem SandyBridge Bulldozer Haswell SkylakeX ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
+            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc asmX86-64 asmX86-64shld SSSE3 AVX XOP AVX2 AVX512 ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
         </product>
     </group>
 
@@ -180,9 +180,9 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/KetjeJr/selftest.c</c>
     </fragment>
 
-    <fragment name="KetjeJr-compact" inherits="Ketje KetJr-SnP compact200"/>
-    <fragment name="KetjeJr-AVR8" inherits="Ketje KetJr-SnP optimized200AVR8"/>
-    <fragment name="KetjeJr-ARMv6M" inherits="Ketje KetJr-optimizedLE optimized200ARMv6M"/>
+    <fragment name="KetjeJr-compact" inherits="Ketje KetJr-SnP K200-compact"/>
+    <fragment name="KetjeJr-AVR8" inherits="Ketje KetJr-SnP K200-AVR8"/>
+    <fragment name="KetjeJr-ARMv6M" inherits="Ketje KetJr-optimizedLE K200-ARMv6M"/>
     <fragment name="KetjeJr-ARMv7M" inherits="Ketje KetJr-ARMv7M"/>
 
     <group all="supercop">
@@ -203,9 +203,9 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/KetjeSr/selftest.c</c>
     </fragment>
 
-    <fragment name="KetjeSr-compact" inherits="Ketje KetSr-SnP reference400"/>
-    <fragment name="KetjeSr-AVR8" inherits="Ketje KetSr-SnP optimized400AVR8"/>
-    <fragment name="KetjeSr-ARMv6M" inherits="Ketje KetSr-optimizedLE  optimized400ARMv6M"/>
+    <fragment name="KetjeSr-compact" inherits="Ketje KetSr-SnP K400-ref"/>
+    <fragment name="KetjeSr-AVR8" inherits="Ketje KetSr-SnP K400-AVR8"/>
+    <fragment name="KetjeSr-ARMv6M" inherits="Ketje KetSr-optimizedLE  K400-ARMv6M"/>
     <fragment name="KetjeSr-ARMv7M" inherits="Ketje KetSr-ARMv7M"/>
 
     <group all="supercop">
@@ -226,14 +226,14 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/KetjeMn/selftest.c</c>
     </fragment>
 
-    <fragment name="KetjeMn-compact" inherits="Ketje KetMn-SnP compact800"/>
-    <fragment name="KetjeMn-AVR8" inherits="Ketje KetMn-SnP optimized800AVR8"/>
-    <fragment name="KetjeMn-generic32" inherits="Ketje KetMn-SnP optimized800u2"/>
-    <fragment name="KetjeMn-generic32lc" inherits="Ketje KetMn-SnP optimized800lcu2"/>
-    <fragment name="KetjeMn-ARMv6M" inherits="Ketje KetMn-optimizedLE optimized800ARMv6Mu2"/>
-    <fragment name="KetjeMn-ARMv7M" inherits="Ketje KetMn-SnP optimized800ARMv7Mu2"/>
-    <fragment name="KetjeMn-ARMv7A" inherits="Ketje KetMn-optimizedLE optimized800ARMv7Au2"/>
-    <fragment name="KetjeMn-ARMv8A" inherits="Ketje KetMn-optimizedLE optimized800ARMv8A"/>
+    <fragment name="KetjeMn-compact" inherits="Ketje KetMn-SnP K800-compact"/>
+    <fragment name="KetjeMn-AVR8" inherits="Ketje KetMn-SnP K800-AVR8"/>
+    <fragment name="KetjeMn-generic32" inherits="Ketje KetMn-SnP K800-plain-u2"/>
+    <fragment name="KetjeMn-generic32lc" inherits="Ketje KetMn-SnP K800-plain-lcu2"/>
+    <fragment name="KetjeMn-ARMv6M" inherits="Ketje KetMn-optimizedLE K800-ARMv6M-u2"/>
+    <fragment name="KetjeMn-ARMv7M" inherits="Ketje KetMn-SnP K800-ARMv7M-u2"/>
+    <fragment name="KetjeMn-ARMv7A" inherits="Ketje KetMn-optimizedLE K800-ARMv7A-u2"/>
+    <fragment name="KetjeMn-ARMv8A" inherits="Ketje KetMn-optimizedLE K800-ARMv8A"/>
 
     <group all="supercop">
         <product delimiter="/">
@@ -253,15 +253,15 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
         <c>tests/SUPERCOP/KetjeMj/selftest.c</c>
     </fragment>
 
-    <fragment name="KetjeMj-compact" inherits="Ketje KetMj-SnP compact1600"/>
-    <fragment name="KetjeMj-AVR8" inherits="Ketje KetMj-SnP optimized1600AVR8"/>
-    <fragment name="KetjeMj-generic32" inherits="Ketje KetMj-SnP inplace1600bi"/>
-    <fragment name="KetjeMj-generic64" inherits="Ketje KetMj-SnP optimized1600ufull"/>
-    <fragment name="KetjeMj-generic64lc" inherits="Ketje KetMj-SnP optimized1600lcufull"/>
-    <fragment name="KetjeMj-ARMv6M" inherits="Ketje KetMj-optimizedLE optimized1600ARMv6Mu2"/>
-    <fragment name="KetjeMj-ARMv7M" inherits="Ketje KetMj-SnP inplace1600ARMv7M"/>
-    <fragment name="KetjeMj-ARMv7A" inherits="Ketje KetMj-optimizedLE optimized1600ARMv7A"/>
-    <fragment name="KetjeMj-ARMv8A" inherits="Ketje KetMj-optimizedLE optimized1600ARMv8A"/>
+    <fragment name="KetjeMj-compact" inherits="Ketje KetMj-SnP K1600-compact"/>
+    <fragment name="KetjeMj-AVR8" inherits="Ketje KetMj-SnP K1600-AVR8"/>
+    <fragment name="KetjeMj-generic32" inherits="Ketje KetMj-SnP K1600-plain-32bits-inplace"/>
+    <fragment name="KetjeMj-generic64" inherits="Ketje KetMj-SnP K1600-plain-64bits-ua"/>
+    <fragment name="KetjeMj-generic64lc" inherits="Ketje KetMj-SnP K1600-plain-64bits-lcua"/>
+    <fragment name="KetjeMj-ARMv6M" inherits="Ketje KetMj-optimizedLE K1600-ARMv6M-u2"/>
+    <fragment name="KetjeMj-ARMv7M" inherits="Ketje KetMj-SnP K1600-ARMv7M-inplace"/>
+    <fragment name="KetjeMj-ARMv7A" inherits="Ketje KetMj-optimizedLE K1600-ARMv7A-NEON"/>
+    <fragment name="KetjeMj-ARMv8A" inherits="Ketje KetMj-optimizedLE K1600-ARMv8A"/>
 
     <group all="supercop">
         <product delimiter="/">
@@ -293,7 +293,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
     <group all="supercopXoodyak">
         <product delimiter="/">
             <factor set="crypto_hash/Xoodyak_hash/kcp Xoodyak_hash_SelfTest crypto_aead/Xoodyak_aead/kcp Xoodyak_aead_SelfTest"/>
-            <factor set="XooReference XooOptimized32 XooOptimizedARMv6M XooOptimizedARMv7M XooOptimizedSIMD128 XooOptimizedSIMD512"/>
+            <factor set="Xoodoo-ref Xoodoo-plain-ua Xoodoo-ARMv6M Xoodoo-ARMv7M Xoodoo-SSE2 Xoodoo-AVX512"/>
         </product>
     </group>
 

@@ -63,36 +63,36 @@ jobs:
       arch: amd64
       compiler: gcc
       name: "asmX86-64shld (gcc)"
-    - script: make Nehalem/UnitTests && bin/Nehalem/UnitTests -a
+    - script: make SSSE3/UnitTests && bin/SSSE3/UnitTests -a
       os: linux
       arch: amd64
       compiler: gcc
-      name: "Nehalem (gcc)"
-    - script: make Nehalem/UnitTests && bin/Nehalem/UnitTests -a
+      name: "SSSE3 (gcc)"
+    - script: make SSSE3/UnitTests && bin/SSSE3/UnitTests -a
       os: linux
       arch: amd64
       compiler: clang
-      name: "Nehalem (clang)"
-    - script: make SandyBridge/UnitTests && bin/SandyBridge/UnitTests -a
+      name: "SSSE3 (clang)"
+    - script: make AVX/UnitTests && bin/AVX/UnitTests -a
       os: linux
       arch: amd64
       compiler: gcc
-      name: "SandyBridge (gcc)"
-    - script: make SandyBridge/UnitTests && bin/SandyBridge/UnitTests -a
+      name: "AVX (gcc)"
+    - script: make AVX/UnitTests && bin/AVX/UnitTests -a
       os: linux
       arch: amd64
       compiler: clang
-      name: "SandyBridge (clang)"
-    - script: make Haswell/UnitTests && bin/Haswell/UnitTests -a
+      name: "AVX (clang)"
+    - script: make AVX2/UnitTests && bin/AVX2/UnitTests -a
       os: linux
       arch: amd64
       compiler: gcc
-      name: "Haswell (gcc)"
-    - script: make Haswell/UnitTests && bin/Haswell/UnitTests -a
+      name: "AVX2 (gcc)"
+    - script: make AVX2/UnitTests && bin/AVX2/UnitTests -a
       os: linux
       arch: amd64
       compiler: clang
-      name: "Haswell (clang)"
+      name: "AVX2 (clang)"
  
     - stage: "Tests on AMD64 (osx)"
       script: make generic64/UnitTests && bin/generic64/UnitTests -a
@@ -105,23 +105,23 @@ jobs:
       arch: amd64
       compiler: clang
       name: "generic64 (clang)"
-    - script: make Nehalem/UnitTests && bin/Nehalem/UnitTests -a
+    - script: make SSSE3/UnitTests && bin/SSSE3/UnitTests -a
       os: osx
       arch: amd64
       compiler: gcc
-      name: "Nehalem (gcc)"
-    - script: make Nehalem/UnitTests && bin/Nehalem/UnitTests -a
+      name: "SSSE3 (gcc)"
+    - script: make SSSE3/UnitTests && bin/SSSE3/UnitTests -a
       os: osx
       arch: amd64
       compiler: clang
-      name: "Nehalem (clang)"
-    - script: make SandyBridge/UnitTests && bin/SandyBridge/UnitTests -a
+      name: "SSSE3 (clang)"
+    - script: make AVX/UnitTests && bin/AVX/UnitTests -a
       os: osx
       arch: amd64
       compiler: gcc
-      name: "SandyBridge (gcc)"
-    - script: make SandyBridge/UnitTests && bin/SandyBridge/UnitTests -a
+      name: "AVX (gcc)"
+    - script: make AVX/UnitTests && bin/AVX/UnitTests -a
       os: osx
       arch: amd64
       compiler: clang
-      name: "SandyBridge (clang)"
+      name: "AVX (clang)"

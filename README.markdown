@@ -59,7 +59,7 @@ The low-level services provide an opaque representation of the state together wi
 
 * In addition, one can find the implementation of parallelized permutations. There are both implementations based on SIMD instructions and "fallback" implementations relying on a parallelized with a lower degree implementation or on a serial one.
 
-In both cases, the hierarchy first selects a permutation (or a permutation and a degree of parallelism) and then a given implementation. E.g., one finds in [`lib/low/KeccakP-1600-times4/`](lib/low/KeccakP-1600-times4/) the implementations of 4 parallel instances of Keccak-_p_[1600] and in [`lib/low/KeccakP-1600-times4/SIMD256/`](lib/low/KeccakP-1600-times4/SIMD256/) a 256-bit SIMD implementation.
+In both cases, the hierarchy first selects a permutation (or a permutation and a degree of parallelism) and then a given implementation. E.g., one finds in [`lib/low/KeccakP-1600-times4/`](lib/low/KeccakP-1600-times4/) the implementations of 4 parallel instances of Keccak-_p_[1600] and in [`lib/low/KeccakP-1600-times4/AVX2/`](lib/low/KeccakP-1600-times4/AVX2/) a 256-bit SIMD implementation for AVX2.
 
 The documentation of the low-level services can be found in [`SnP-documentation.h`](doc/SnP-documentation.h) and [`PlSnP-documentation.h`](doc/PlSnP-documentation.h).
 
@@ -93,7 +93,7 @@ Most of the source and header files in the XKCP are released to the **public dom
 * [`lib/common/brg_endian.h`](lib/common/brg_endian.h) is copyrighted by Brian Gladman and comes with a BSD 3-clause license;
 * [`tests/UnitTests/genKAT.c`](tests/UnitTests/genKAT.c) is based on [SHA-3 contest's code by Larry Bassham, NIST](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/KAT1.zip), which he licensed under a BSD 3-clause license;
 * [`tests/UnitTests/timing.h`](tests/UnitTests/timing.h) is based on code by Doug Whiting, which he released to the public domain;
-* [`KeccakP-1600-AVX2.s`](lib/low/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.s) is licensed under the [CRYPTOGAMS license](http://www.openssl.org/~appro/cryptogams/) (BSD-like);
+* [`KeccakP-1600-AVX2.s`](lib/low/KeccakP-1600/AVX2/KeccakP-1600-AVX2.s) is licensed under the [CRYPTOGAMS license](http://www.openssl.org/~appro/cryptogams/) (BSD-like);
 * [`support/Kernel-PMU/enable_arm_pmu.c`](support/Kernel-PMU/enable_arm_pmu.c) is licensed under the GNU General Public License by Bruno Pairault.
 
 
@@ -215,9 +215,9 @@ When they refer to the functions in the [FIPS 202 standard][fips202_standard], t
 - `genKAT.c` based on the SHA-3 contest's genKAT.c by Larry Bassham, NIST
 - `brg_endian.h` by Brian Gladman
 - `timing.h` based on code by Doug Whiting
-- `lib/low/KeccakP-1600/OptimizedAVX2/KeccakP-1600-AVX2.s` by Andy Polyakov and Ronny Van Keer
+- `lib/low/KeccakP-1600/AVX2/KeccakP-1600-AVX2.s` by Andy Polyakov and Ronny Van Keer
 - `TweetableFIPS202.c` by D. J. Bernstein, Peter Schwabe and Gilles Van Assche
-- `lib/low/KeccakP-800/Optimized64AsmARM/*` by Andre C. de Moraes
+- `lib/low/KeccakP-800/ARMv8A/*` by Andre C. de Moraes
 
 And thanks to all contributors!
 
