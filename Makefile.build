@@ -186,18 +186,4 @@ http://creativecommons.org/publicdomain/zero/1.0/
         </product>
     </group>
 
-    <!-- Reference implementations -->
-    <fragment name="Xreference" inherits="Xoodoo-ref">
-        <define>XooReference</define>
-        <gcc>-O</gcc>
-    </fragment>
-
-    <fragment name="Xoptimized32" inherits="Xoodoo-plain-ua"/>
-
-    <group all="Xoodyak">
-        <product delimiter="/">
-            <factor set="Xreference Xoptimized32 XSIMD128 XSIMD512 XARMv6M XARMv7M"/>
-            <factor set="Xoodyak_aead_kat Xoodyak_hash_kat Xoodyak_aead_pack Xoodyak_hash_pack"/>
-        </product>
-    </group>
 </build>

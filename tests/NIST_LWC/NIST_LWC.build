@@ -38,4 +38,17 @@ The fragments below allow to generate the KAT files for NIST LWC contest
     <fragment name="Xoodyak_hash_pack" inherits="crypto_hash/Xoodyak_hash/kcp">
     </fragment>
 
+    <!-- Reference implementations -->
+    <fragment name="Xoodoo-reference" inherits="Xoodoo-ref">
+        <define>XooReference</define>
+        <gcc>-O</gcc>
+    </fragment>
+
+    <group all="las3Xoodyak">
+        <product delimiter="/">
+            <factor set="Xoodoo-reference Xoodoo-plain-ua Xoodoo-ARMv6 Xoodoo-ARMv6M Xoodoo-ARMv7M Xoodoo-ARMv7A-NEON Xoodoo-AVR8 Xoodoo-SSE2 Xoodoo-AVX512"/>
+            <factor set="Xoodyak_aead_kat Xoodyak_hash_kat Xoodyak_aead_pack Xoodyak_hash_pack"/>
+        </product>
+    </group>
+
 </group>
