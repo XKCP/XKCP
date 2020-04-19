@@ -180,7 +180,9 @@ If you wish to make a custom target that integrates the cryptographic functions 
 
 The code is organized as illustrated in the following figure:
 
-![Layers](doc/figures/Layers.svg)
+<p align="center">
+<img src="doc/figures/Layers.svg" width="80%" />
+</p>
 
 At the top, the high-level cryptographic services are implemented in plain C, without any specific optimizations. At the bottom, the low-level services implement the permutations and the state input/output functions, which can be optimized for a given platform. The interface between the two layers is called **SnP**.
 
@@ -190,7 +192,9 @@ The modes and constructions can be found in [`lib/high/`](lib/high/), while the 
 
 The situation is similar for parallelized services, as illustrated on the following figure. The interface is adapated to the parallelism and is called **PlSnP**, with the implementations in [`lib/low/`](lib/low/).
 
-![Parallel layers](doc/figures/ParallelLayers.svg)
+<p align="center">
+<img src="doc/figures/ParallelLayers.svg" width="80%" />
+</p>
 
 *Disclaimer*: the above figures aim at illustrative purposes only, as not all modes, constructions or permutations are currently implemented in the XKCP or represented on the figures.
 
