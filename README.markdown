@@ -2,28 +2,33 @@
 
 # What is the XKCP?
 
-The **eXtended Keccak Code Package** (or the **Xoodoo and Keccak Code Package**, in both cases abbreviated as **XKCP**) gathers different free and open-source implementations of the [Keccak sponge function family](https://keccak.team/keccak.html)
+The **eXtended Keccak Code Package** (or the **Xoodoo and Keccak Code Package**, in both cases abbreviated as **XKCP**) gathers different free and open-source implementations of the different cryptographic schemes defined by the *Keccak team*.
+This includes the [Keccak sponge function family](https://keccak.team/keccak.html)
 and closely related variants, such as
 
 * the SHAKE extendable-output functions and SHA-3 hash functions from [FIPS 202][fips202_standard],
 * the cSHAKE, KMAC, ParallelHash and TupleHash functions from [NIST SP 800-185][sp800_185_standard],
-* the [Ketje v2][caesar_ketje] and [Keyak v2][caesar_keyak] authenticated encryption schemes,
+* the [Ketje][caesar_ketje] and [Keyak][caesar_keyak] authenticated encryption schemes,
 * the fast [KangarooTwelve][k12] extendable-output function,
 * the [Kravatte](https://keccak.team/kravatte.html) pseudo-random function and its modes,
 
-as well as the [Xoodoo][XoodooCookbook] permutation and
+as well as the [Xoodoo](https://keccak.team/xoodoo.html) permutation and
 
-* the [Xoofff][XoodooCookbook] pseudo-random function and its modes (experimental),
-* the [Xoodyak][XoodooCookbook] scheme (submission to the NIST lightweight crypto standardization process).
+* the [Xoofff](https://keccak.team/xoofff.html) pseudo-random function and its modes (experimental),
+* the [Xoodyak](https://keccak.team/xoodyak.html) scheme (submission to the NIST lightweight crypto standardization process).
+
+The code in this repository can be built as a library called **libXKCP**.
 
 
 # What does the XKCP contain?
 
 First, the services available in this package are divided into high-level and low-level services. In a nutshell, the low level corresponds to Keccak-_f_[1600] and basic state manipulation, while the high level contains the constructions and the modes for, e.g., sponge functions, hashing or authenticated encryption. For more details, please see the section "_How is the code organized?_" below.
 
-Then, the XKCP also contains some utilities for testing and illustration purposes.
+Second, these high-level and low-level services can be compiled as the **libXKCP** library.
 
-Finally, the project contains some standalone implementations.
+Then, the XKCP also contains some utilities for testing, benchmarking and illustration purposes.
+
+Finally, the repository contains some standalone implementations.
 
 
 ## High-level services
@@ -36,8 +41,8 @@ When used as a library or directly from the sources, the XKCP offers the high-le
 * [`KeccakSponge`](doc/KeccakSponge-documentation.h), all Keccak sponge functions, with or without a message queue.
 * [`KeccakDuplex`](doc/KeccakDuplex-documentation.h), all Keccak duplex objects.
 * [`KeccakPRG`](doc/KeccakPRG-documentation.h), a pseudo-random number generator based on Keccak duplex objects.
-* [`Keyakv2`](doc/Keyak-documentation.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
-* [`Ketjev2`](doc/Ketje-documentation.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
+* [`Keyak`](doc/Keyak-documentation.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
+* [`Ketje`](doc/Ketje-documentation.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
 * [`KangarooTwelve`](lib/high/KangarooTwelve/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
 * [`Kravatte`](lib/high/Kravatte/Kravatte.h) and [`KravatteModes`](lib/high/Kravatte/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
 * [`Xoofff`](lib/high/Xoofff/Xoofff.h) and [`XoofffModes`](lib/high/Xoofff/XoofffModes.h), the pseudo-random function Xoofff, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
@@ -68,17 +73,17 @@ The documentation of the low-level services can be found in [`SnP-documentation.
 
 The package contains:
 
-* The possibility to create a static library **`libkeccak.a`** or a dynamic library **`libkeccak.so`**;
+* The **libXKCP** library;
 * [**Self-tests**](tests/UnitTests/main.c) that ensure that the implementation is working properly;
+* [**A benchmarking tool**](tests/Benchmarks/main.c) to measure the timing of the various schemes;
 * [**KeccakSum**](util/KeccakSum/KeccakSum.c) that computes a hash of the file (or multiple files) given in parameter.
 
-The self-tests contain also benchmarking code to measure the performance of the different functions. This is invoked with `KeccakTests -s`.
-Note that on ARM processors, you may need to include the Kernel-PMU module, see [`Kernel-pmu.md`](support/Kernel-PMU/Kernel-pmu.md) for more details.
+Note that, to run the benchmarks on ARM processors, you may need to include the Kernel-PMU module, see [`Kernel-pmu.md`](support/Kernel-PMU/Kernel-pmu.md) for more details.
 
 
 ## Standalone implementations
 
-The XKCP also provides a number of standalone implementations, including:
+The XKCP also provides some standalone implementations, including:
 
 * a very [compact](https://keccak.team/2015/tweetfips202.html) C code of the FIPS 202 (SHA-3) standard in [`Standalone/CompactFIPS202/C/`](Standalone/CompactFIPS202/C/);
 * a compact implementation in Python in [`Standalone/CompactFIPS202/Python/`](Standalone/CompactFIPS202/Python/);
@@ -103,19 +108,48 @@ Most of the source and header files in the XKCP are released to the **public dom
 
 To build, the following tools are needed:
 
-* *GCC*
+* *GCC* or *clang*
 * *GNU make*
 * *xsltproc*
 
 The different targets are defined in [`Makefile.build`](Makefile.build). This file is expanded into a regular makefile using *xsltproc*. To use it, simply type, e.g.,
 
-> `make generic64/KeccakTests`
+```
+make generic64/UnitTests
+```
 
-to build KeccakTests generically optimized for 64-bit platforms. The name before the slash indicates the platform, while the part after the slash is the executable to build. As another example, the static (resp. dynamic) library is built by typing `make generic64/libkeccak.a` (resp. `.so`) or similarly with `generic64` replaced with the appropriate platform name.  An alternate C compiler can be specified via the `CC` environment variable.
+or
+
+```
+make AVX512/Benchmarks
+```
+
+to build UnitTests using plain 64-bit code or to build the Benchmarks tool with AVX-512 code. The name before the slash indicates the platform or instruction set used, while the part after the slash is the executable or library to build. As another example, the static (resp. dynamic) library is built by typing `make ARMv7M/libXKCP.a` (resp. `.so`) or similarly with `ARMv7M` replaced with the appropriate platform or instruction set name.  An alternate C compiler can be specified via the `CC` environment variable.
+
+At the time of this writing, the possible platform or instruction set names before the slash are:
+
+* `compact`: plain C compact implementations;
+* `generic32`: plain C implementation, generically optimized for 32-bit platforms;
+* `generic32lc`: same as `generic32` but featuring the lane complementing technique for platforms without a "and not" instruction;
+* `generic64`: plain C implementation, generically optimized for 64-bit platforms;
+* `generic64lc`: same as `generic64` but featuring the lane complementing technique for platforms without a "and not" instruction;
+* `SSSE3`: implementations selected for the processors that support the SSSE3 instruction set;
+* `AVX`: implementations selected for processors that support the AVX instruction set (e.g., Sandy Bridge microarchitectures);
+* `XOP`: implementations selected for processors that support the XOP instruction set (e.g., Bulldozer microarchitecture);
+* `AVX2`: implementations selected for processors that support the AVX2 instruction set (e.g., Haswell and Skylake microarchitectures);
+* `AVX512`: implementations selected for the processors that support the AVX-512 instruction set (e.g., SkylakeX microarchitecture);
+* `ARMv6`: implementations selected for processors with the ARMv6 architecture;
+* `ARMv6M`: implementations selected for processors with the ARMv6-M architecture;
+* `ARMv7M`: implementations selected for processors with the ARMv7-M architecture;
+* `ARMv7A`: implementations selected for processors with the ARMv7-A architecture;
+* `ARMv8A`: implementations selected for processors with the ARMv8-A architecture;
+* `AVR8`: implementations selected for processors with the 8-bit AVR architecture.
 
 Instead of building an executable with *GCC*, one can choose to select the files needed and make a package. For this, simply append `.pack` to the target name, e.g.,
 
-> `make generic64/KeccakTests.pack`
+```
+make generic64/libXKCP.a.pack
+```
 
 This creates a `.tar.gz` archive with all the necessary files to build the given target.
 
@@ -126,7 +160,9 @@ The list of targets can be found at the end of [`Makefile.build`](Makefile.build
 
 The XKCP offers support for the creation of Microsoft Visual Studio (VS) project files. To get a project file for a given target, simply append `.vcxproj` to the target name, e.g.,
 
-> `make generic32/KeccakTests.vcxproj`
+```
+make generic32/KeccakTests.vcxproj
+```
 
 This is still somehow experimental, but it should be easy to extend/adapt by someone with more experience with VS. (*Help welcome!*) In particular, please note the current limitations:
 
@@ -144,7 +180,7 @@ If you wish to make a custom target that integrates the cryptographic functions 
 
 The code is organized as illustrated in the following figure:
 
-![Layers](doc/figures/Layers.png)
+![Layers](doc/figures/Layers.svg)
 
 At the top, the high-level cryptographic services are implemented in plain C, without any specific optimizations. At the bottom, the low-level services implement the permutations and the state input/output functions, which can be optimized for a given platform. The interface between the two layers is called **SnP**.
 
@@ -154,7 +190,7 @@ The modes and constructions can be found in [`lib/high/`](lib/high/), while the 
 
 The situation is similar for parallelized services, as illustrated on the following figure. The interface is adapated to the parallelism and is called **PlSnP**, with the implementations in [`lib/low/`](lib/low/).
 
-![Parallel layers](doc/figures/ParallelLayers.png)
+![Parallel layers](doc/figures/ParallelLayers.svg)
 
 *Disclaimer*: the above figures aim at illustrative purposes only, as not all modes, constructions or permutations are currently implemented in the XKCP or represented on the figures.
 
@@ -212,14 +248,16 @@ When they refer to the functions in the [FIPS 202 standard][fips202_standard], t
 
 # Acknowledgments
 
-- `genKAT.c` based on the SHA-3 contest's genKAT.c by Larry Bassham, NIST
-- `brg_endian.h` by Brian Gladman
-- `timing.h` based on code by Doug Whiting
-- `lib/low/KeccakP-1600/AVX2/KeccakP-1600-AVX2.s` by Andy Polyakov and Ronny Van Keer
-- `TweetableFIPS202.c` by D. J. Bernstein, Peter Schwabe and Gilles Van Assche
-- `lib/low/KeccakP-800/ARMv8A/*` by Andre C. de Moraes
+We wish to thank all the contributors, and in particular:
 
-And thanks to all contributors!
+- Andre C. de Moraes for ARMv8-A assembly code
+- Andy Polyakov and Ronny Van Keer for the AVX2 and AVX-512 assembly implementations of Keccak-_p_[1600]
+- Brian Gladman's `brg_endian.h`
+- Doug Whiting for the code in `timing.h`
+- D.J. Bernstein, Peter Schwabe and Gilles Van Assche for the tweetable FIPS 202 implementation `TweetableFIPS202.c`
+- Hussama Ismail for setting up the continuous integration with Travis
+- Larry Bassham, NIST for the original `genKAT.c` developed during the SHA-3 contest
+
 
 ***
 
