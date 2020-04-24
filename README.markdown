@@ -2,7 +2,7 @@
 
 # What is the XKCP?
 
-The **eXtended Keccak Code Package** (or the **Xoodoo and Keccak Code Package**, in both cases abbreviated as **XKCP**) gathers different free and open-source implementations of the different cryptographic schemes defined by the *Keccak team*.
+The **eXtended Keccak Code Package** (or the **Xoodoo and Keccak Code Package**, in both cases abbreviated as **XKCP**) is a repository that gathers different free and open-source implementations of the cryptographic schemes defined by the Keccak team.
 This includes the [Keccak sponge function family](https://keccak.team/keccak.html)
 and closely related variants, such as
 
@@ -17,14 +17,30 @@ as well as the [Xoodoo](https://keccak.team/xoodoo.html) permutation and
 * the [Xoofff](https://keccak.team/xoofff.html) pseudo-random function and its modes (experimental),
 * the [Xoodyak](https://keccak.team/xoodyak.html) scheme (submission to the NIST lightweight crypto standardization process).
 
-The code in this repository can be built as a library called **libXKCP**.
+The code in this repository can be built as a library called libXKCP.
 
 
-# What does the XKCP contain?
+
+# What is libXKCP?
+
+**libXKCP** is a library that contains all the Keccak and Xoodoo-based cryptographic schemes mentioned above.
+
+To build it, the quick answer is to launch:
+
+```
+make <target>/libXKCP.so
+```
+
+where `<target>` is to be replaced with the actual target (e.g., `ARMv6M` or `AVX512`), and where `.so` can be replaced with `.a` for a static library or with `.dylib` for a dynamic library on macOS.
+More details, and in particular the list of targets, can be found in the section on how to build the XKCP below.
+
+
+
+# More precisely, what does the XKCP contain?
 
 First, the services available in this package are divided into high-level and low-level services. In a nutshell, the low level corresponds to Keccak-_f_[1600] and basic state manipulation, while the high level contains the constructions and the modes for, e.g., sponge functions, hashing or authenticated encryption. For more details, please see the section "_How is the code organized?_" below.
 
-Second, these high-level and low-level services can be compiled as the **libXKCP** library.
+Second, these high-level and low-level services can be compiled as the libXKCP library.
 
 Then, the XKCP also contains some utilities for testing, benchmarking and illustration purposes.
 
@@ -106,7 +122,7 @@ Most of the source and header files in the XKCP are released to the **public dom
 
 # How can I build the XKCP?
 
-To build, the following tools are needed:
+To build on Linux or macOS, the following tools are needed:
 
 * *GCC* or *clang*
 * *GNU make*
@@ -124,9 +140,9 @@ or
 make AVX512/Benchmarks
 ```
 
-to build UnitTests using plain 64-bit code or to build the Benchmarks tool with AVX-512 code. The name before the slash indicates the platform or instruction set used, while the part after the slash is the executable or library to build. As another example, the static (resp. dynamic) library is built by typing `make ARMv7M/libXKCP.a` (resp. `.so`) or similarly with `ARMv7M` replaced with the appropriate platform or instruction set name.  An alternate C compiler can be specified via the `CC` environment variable.
+to build UnitTests using plain 64-bit code or to build the Benchmarks tool with AVX-512 code. The name before the slash indicates the target, i.e., the platform or instruction set used, while the part after the slash is the executable or library to build. As another example, the static (resp. dynamic) library is built by typing `make ARMv7M/libXKCP.a` (resp. `.so`) or similarly with `ARMv7M` replaced with the appropriate platform or instruction set name.  An alternate C compiler can be specified via the `CC` environment variable.
 
-At the time of this writing, the possible platform or instruction set names before the slash are:
+At the time of this writing, the possible target names before the slash are:
 
 * `compact`: plain C compact implementations;
 * `generic32`: plain C implementation, generically optimized for 32-bit platforms;
@@ -148,7 +164,7 @@ At the time of this writing, the possible platform or instruction set names befo
 Instead of building an executable with *GCC*, one can choose to select the files needed and make a package. For this, simply append `.pack` to the target name, e.g.,
 
 ```
-make generic64/libXKCP.a.pack
+make generic64/UnitTests.pack
 ```
 
 This creates a `.tar.gz` archive with all the necessary files to build the given target.
@@ -200,6 +216,15 @@ The situation is similar for parallelized services, as illustrated on the follow
 
 
 
+# How fast is the code in the XKCP?
+
+Whenever possible, we try to integerate the fastest available open-source code into the repository.
+Should you find better implementations, do not hesitate to inform us.
+
+Benchmarks using the XKCP and comparisons with other functions can be found on [this page](https://keccak.team/sw_performance.html).
+
+
+
 # Where can I find more information?
 
 About the XKCP, we gave some presentations on its motivation and structure, e.g.,
@@ -231,25 +256,6 @@ We welcome contributions in various forms, e.g., general feedback, bug reports, 
 
 
 
-# How can I use the standard FIPS 202 functions?
-
-If you need to implement the standard FIPS 202 functions, the functions in [`SimpleFIPS202.h`](lib/high/Keccak/FIPS202/SimpleFIPS202.h) provide an easy way to get started. If a message queue and/or bit-level inputs are needed, then the macros in [`KeccakHash.h`](lib/high/Keccak/FIPS202/KeccakHash.h) can be helpful.
-
-## Differences between Keccak and the standard FIPS 202 functions
-
-Compared to the (plain) Keccak sponge function, the [FIPS 202 standard][fips202_standard] adds suffixes to ensure that the hash functions (SHA-3) and the XOFs (SHAKE) are domain separated (i.e., so that their outputs are unrelated even with equal inputs), as well as to make the SHAKE functions compatible with the [Sakura][sakura] tree hashing coding.
-
-[sakura]: https://keccak.team/files/Sakura.pdf "Sakura: a flexible coding for tree hashing"
-
-A brief summary:
-
-* For the SHA-3 functions, append the bits "01" to the message prior to  applying the pad10*1 rule.
-* For the SHAKE functions, append the bits "1111" to the message prior to applying the pad10*1 rule.
-
-When they refer to the functions in the [FIPS 202 standard][fips202_standard], the test cases in [`tests/TestVectors/`](tests/TestVectors/) include these suffixes.
-
-
-
 # Acknowledgments
 
 We wish to thank all the contributors, and in particular:
@@ -257,10 +263,13 @@ We wish to thank all the contributors, and in particular:
 - Andre C. de Moraes for ARMv8-A assembly code
 - Andy Polyakov and Ronny Van Keer for the AVX2 and AVX-512 assembly implementations of Keccak-_p_[1600]
 - Brian Gladman's `brg_endian.h`
+- Bruno Pairault for testing and benchmarking on ARM platforms
+- Conno Boel for the NEON implementations of Xoodoo
 - Doug Whiting for the code in `timing.h`
 - D.J. Bernstein, Peter Schwabe and Gilles Van Assche for the tweetable FIPS 202 implementation `TweetableFIPS202.c`
 - Hussama Ismail for setting up the continuous integration with Travis
 - Larry Bassham, NIST for the original `genKAT.c` developed during the SHA-3 contest
+- Stéphane Léon for helping support macOS
 
 
 ***
