@@ -52,16 +52,16 @@ static void randomize( unsigned char* data, unsigned int length)
     #endif
 }
 
-static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2)
+static void generateSimpleRawMaterial(unsigned char* data, size_t length, unsigned char seed1, unsigned int seed2)
 {
-    unsigned int i;
+    size_t i;
 
     for(i=0; i<length; i++) {
         unsigned char iRolled;
         unsigned char byte;
         seed2 = seed2 % 8;
         iRolled = ((unsigned char)i << seed2) | ((unsigned char)i >> (8-seed2));
-        byte = seed1 + 161*length - iRolled + i;
+        byte = seed1 + 161*(unsigned char)length - iRolled + (unsigned char)i;
         data[i] = byte;
     }
 }
@@ -104,7 +104,7 @@ static void performTestKravatte_SANE_OneInput(BitLength keyLen, BitLength nonceL
     randomize(AD, ADByteSize);
     randomize(tag, Kravatte_SANE_TagLength);
 
-    seed = keyLen + nonceLen + dataLen + ADLen;
+    seed = (unsigned int)keyLen + (unsigned int)nonceLen + (unsigned int)dataLen + (unsigned int)ADLen;
     seed ^= seed >> 3;
     generateSimpleRawMaterial(key, (keyLen + 7) / 8, (unsigned char)(0x4371 - seed), 0x59 + seed);
     if (keyLen & 7)
@@ -329,7 +329,7 @@ static void performTestKravatte_SANSE_OneInput(BitLength keyLen, BitLength dataL
     randomize(AD, ADByteSize);
     randomize(tag, Kravatte_SANSE_TagLength);
 
-    seed = keyLen + dataLen + ADLen;
+    seed = (unsigned int)keyLen + (unsigned int)dataLen + (unsigned int)ADLen;
     seed ^= seed >> 3;
     generateSimpleRawMaterial(key, (keyLen + 7) / 8, (unsigned char)(0x4321 - seed), 0x89 + seed);
     if (keyLen & 7)
@@ -522,7 +522,7 @@ static void performTestKravatte_WBC_OneInput(BitLength keyLen, BitLength dataLen
     randomize(inputPrime, dataByteSize);
     randomize(output, dataByteSize);
 
-    seed = keyLen + WLen + dataLen;
+    seed = (unsigned int)keyLen + (unsigned int)WLen + (unsigned int)dataLen;
     seed ^= seed >> 3;
     generateSimpleRawMaterial(key, (keyLen + 7) / 8, 0x43C1 - seed, 0xB9 + seed);
     if (keyLen & 7)
@@ -736,7 +736,7 @@ static void performTestKravatte_WBC_AE_OneInput(BitLength keyLen, BitLength data
     randomize(inputPrime, dataByteSize);
     randomize(output, dataByteSize);
 
-    seed = keyLen + ADLen + dataLen;
+    seed = (unsigned int)keyLen + (unsigned int)ADLen + (unsigned int)dataLen;
     seed ^= seed >> 3;
     generateSimpleRawMaterial(key, (keyLen + 7) / 8, 0x91FC - seed, 0x5A + seed);
     if (keyLen & 7)

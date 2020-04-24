@@ -212,7 +212,7 @@ static int Engine_Initialize(Engine_Instance *instance )
     return ( Atom_Success );
 }
 
-static int Engine_FastWrapCryptOnly(Engine_Instance *instance, const unsigned char *I, size_t Ilen, unsigned char *O, int unwrapFlag)
+static size_t Engine_FastWrapCryptOnly(Engine_Instance *instance, const unsigned char *I, size_t Ilen, unsigned char *O, int unwrapFlag)
 {
     size_t initialIlen = Ilen;
 
@@ -277,7 +277,7 @@ static size_t Engine_FastWrapInjectOnly(Engine_Instance *instance, const unsigne
     return (initialAlen - Alen); /* number of bytes processed */
 }
 
-static int Engine_FastWrapCryptAndInject(Engine_Instance *instance, const unsigned char *I, size_t Ilen, size_t *ptrIprocessed, unsigned char *O, const unsigned char *A, size_t Alen, int unwrapFlag)
+static size_t Engine_FastWrapCryptAndInject(Engine_Instance *instance, const unsigned char *I, size_t Ilen, size_t *ptrIprocessed, unsigned char *O, const unsigned char *A, size_t Alen, int unwrapFlag)
 {
     size_t initialIlen = Ilen;
     size_t initialAlen = Alen;

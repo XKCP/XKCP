@@ -247,7 +247,7 @@ int KMAC(const BitSequence *key, BitLength keyBitLen, const BitSequence *input, 
         \
         KeccakP1600times##Parallellism##_StaticInitialize(); \
         KeccakP1600times##Parallellism##_InitializeAll(states); \
-        fastLoopOffset = KeccakF1600times##Parallellism##_FastLoop_Absorb(states, rateInLanes, phi->blockLen / laneSize, rateInLanes, localInput, Parallellism * phi->blockLen); \
+        fastLoopOffset = (unsigned int)KeccakF1600times##Parallellism##_FastLoop_Absorb(states, rateInLanes, phi->blockLen / laneSize, rateInLanes, localInput, Parallellism * phi->blockLen); \
         localBlockLen -= fastLoopOffset; \
         localInput += fastLoopOffset; \
         for ( i = 0; i < Parallellism; ++i, localInput += phi->blockLen ) { \
@@ -349,7 +349,7 @@ int ParallelHash_Update(ParallelHash_Instance *phi, const BitSequence *input, Bi
     inputByteLen = inputBitLen / 8;
     if ( phi->queueAbsorbedLen != 0 ) {
         /* There is data in the queue, absorb further in queue until full */
-        unsigned int len = (inputByteLen < (phi->blockLen - phi->queueAbsorbedLen)) ? inputByteLen : (phi->blockLen - phi->queueAbsorbedLen);
+        unsigned int len = (inputByteLen < (phi->blockLen - phi->queueAbsorbedLen)) ? (unsigned int)inputByteLen : (phi->blockLen - phi->queueAbsorbedLen);
         if (KeccakWidth1600_SpongeAbsorb(&phi->queueNode, input, len) != 0)
             return 1;
         input += len;
@@ -392,7 +392,7 @@ int ParallelHash_Update(ParallelHash_Instance *phi, const BitSequence *input, Bi
     #endif
 
     while ( inputByteLen > 0 ) {
-        unsigned int len = (inputByteLen < phi->blockLen) ? inputByteLen : phi->blockLen;
+        unsigned int len = (inputByteLen < phi->blockLen) ? (unsigned int)inputByteLen : phi->blockLen;
         if (KeccakWidth1600_SpongeInitialize(&phi->queueNode, rate, capacity) != 0)
             return 1;
         if (KeccakWidth1600_SpongeAbsorb(&phi->queueNode, input, len) != 0)

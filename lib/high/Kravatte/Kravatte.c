@@ -319,14 +319,14 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
         mInitialize(state);
         KeccakP1600_OverwriteBytes(state, k, 0, SnP_widthInBytes); /* write k */
         Kravatte_Rollc((uint64_t*)k, encbuf, 1);
-        KeccakP1600_AddBytes(state, message, 0, messageByteLen); /* add message */
+        KeccakP1600_AddBytes(state, message, 0, (unsigned int)messageByteLen); /* add message */
         DUMP("msg pL", state, SnP_widthInBytes);
         message += messageByteLen;
         *messageBitLen %= 8;
         if (*messageBitLen != 0) /* padding */
-            KeccakP1600_AddByte(state, *message++ | (1 << *messageBitLen), messageByteLen);
+            KeccakP1600_AddByte(state, *message++ | (1 << *messageBitLen), (unsigned int)messageByteLen);
         else
-            KeccakP1600_AddByte(state, 1, messageByteLen);
+            KeccakP1600_AddByte(state, 1, (unsigned int)messageByteLen);
         KeccakP1600_Permute_Nrounds(state, 6);
         KeccakP1600_ExtractAndAddBytes(state, x, x, 0, SnP_widthInBytes);
         DUMP("xAc pL", x, SnP_widthInBytes);
@@ -385,7 +385,7 @@ int Kra(Kravatte_Instance *kv, const BitSequence *input, BitLength inputBitLen, 
         kv->queueOffset = 0;
     }
     else if ( kv->queueOffset != 0 ) { /* we have already some data queued */
-        BitLength bitlen = MyMin(inputBitLen, SnP_width - kv->queueOffset);
+        unsigned int bitlen = (unsigned int)MyMin(inputBitLen, SnP_width - kv->queueOffset);
         unsigned int bytelen = (bitlen + 7) / 8;
 
         memcpy(kv->queue.a + kv->queueOffset / 8, input, bytelen);
@@ -443,7 +443,7 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
     else if (kv->phase != EXPANDING)
         return 1;
     if ( kv->queueOffset != 0 ) { /* we have already some data for output in stock */
-        unsigned int bitlen = MyMin(outputBitLen, SnP_widthInBytes*8 - kv->queueOffset);
+        unsigned int bitlen = (unsigned int)MyMin(outputBitLen, SnP_widthInBytes*8 - kv->queueOffset);
         unsigned int bytelen = (bitlen + 7) / 8;
 
         memcpy(output, kv->queue.a + kv->queueOffset / 8, bytelen);
@@ -490,7 +490,7 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
         KeccakP1600_StaticInitialize();
         mInitialize(state);
         do {
-            len = MyMin(outputByteLen, SnP_widthInBytes);
+            len = (unsigned int)MyMin(outputByteLen, SnP_widthInBytes);
             KeccakP1600_OverwriteBytes(state, kv->yAccu.a, 0, SnP_widthInBytes);
             Kravatte_Rolle((uint64_t*)kv->yAccu.a, encbuf, 1);
             KeccakP1600_Permute_Nrounds(state, 6);

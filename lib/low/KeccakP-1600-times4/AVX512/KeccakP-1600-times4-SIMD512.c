@@ -126,7 +126,7 @@ typedef __m512i     V512;
 #define ROL(a,offset)               _mm256_rol_epi64(a,offset)
 #define Chi(a,b,c)                  _mm256_ternarylogic_epi64(a,b,c,0xD2)
 
-#define CONST256_64(a)              (V256)_mm256_broadcast_sd((const double*)(&a))
+#define CONST256_64(a)              _mm256_set1_epi64x(a)
 #define LOAD4_32(a,b,c,d)           _mm_set_epi32((uint64_t)(a), (uint32_t)(b), (uint32_t)(c), (uint32_t)(d))
 #define LOAD8_32(a,b,c,d,e,f,g,h)   _mm256_set_epi32((uint64_t)(a), (uint32_t)(b), (uint32_t)(c), (uint32_t)(d), (uint32_t)(e), (uint32_t)(f), (uint32_t)(g), (uint32_t)(h))
 #define LOAD_GATHER4_64(idx,p)      _mm256_i32gather_epi64( (const void*)(p), idx, 8)

@@ -260,7 +260,7 @@ typedef __m512i     V512;
 #define ROL(a,offset)               _mm512_rol_epi64(a,offset)
 #define Chi(a,b,c)                  _mm512_ternarylogic_epi64(a,b,c,0xD2)
 
-#define CONST8_64(a)                (V512)_mm512_broadcast_f64x4(_mm256_broadcast_sd((const double*)(&a)))
+#define CONST8_64(a)                _mm512_set1_epi64(a)
 
 #define LOAD512(a)                  _mm512_load_si512((const V512 *)&(a))
 #define LOAD512u(a)                 _mm512_loadu_si512((const V512 *)&(a))
@@ -1301,7 +1301,7 @@ size_t KeccakP1600times8_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
     V512    Xka, Xke, Xki, Xko, Xku;
     V512    Xma, Xme, Xmi, Xmo, Xmu;
     V512    Xsa, Xse, Xsi, Xso, Xsu;
-    V256    v1, v2;
+    V256    v1;
     V512    p1, p2;
     V256    gather = *(V256*)oGatherScatter;
 

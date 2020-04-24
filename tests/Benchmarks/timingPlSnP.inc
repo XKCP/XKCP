@@ -60,13 +60,12 @@ uint_32t measurePlSnP_PermuteAll_12rounds(uint_32t dtMin)
 uint_32t measurePlSnP_FastLoop_Absorb_interleaved(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
-    ALIGN(PlSnP_statesAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes*PlSnP_P];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes*PlSnP_P;
     measureTimingDeclare
-    assert(dataSize <= sizeof(data));
+    assert(dataSize <= sizeof(bigBuffer1));
 
     measureTimingBeginDeclared
-    PlSnP_FastLoop_Absorb(&states, laneCount, laneCount, laneCount*PlSnP_P, data, dataSize);
+    PlSnP_FastLoop_Absorb(&states, laneCount, laneCount, laneCount*PlSnP_P, bigBuffer1, dataSize);
     measureTimingEnd
 }
 
@@ -92,13 +91,12 @@ void gatherPlSnP_FastLoop_Absorb_interleaved(uint_32t dtMin, uint_32t *measureme
 uint_32t measurePlSnP_FastLoop_Absorb_segmented(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
-    ALIGN(PlSnP_statesAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes*PlSnP_P];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes*PlSnP_P;
     measureTimingDeclare
-    assert(dataSize <= sizeof(data));
+    assert(dataSize <= sizeof(bigBuffer1));
 
     measureTimingBeginDeclared
-    PlSnP_FastLoop_Absorb(&states, laneCount, laneCount*blockCount, laneCount, data, dataSize);
+    PlSnP_FastLoop_Absorb(&states, laneCount, laneCount*blockCount, laneCount, bigBuffer1, dataSize);
     measureTimingEnd
 }
 
@@ -125,14 +123,13 @@ void gatherPlSnP_FastLoop_Absorb_segmented(uint_32t dtMin, uint_32t *measurement
 uint_32t measurePlSnP_GenericLoop_Absorb_interleaved(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
-    ALIGN(PlSnP_statesAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes*PlSnP_P];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes*PlSnP_P;
     measureTimingDeclare
-    assert(dataSize <= sizeof(data));
+    assert(dataSize <= sizeof(bigBuffer1));
 
     measureTimingBeginDeclared
     {
-        const unsigned char *curData = data;
+        const unsigned char *curData = bigBuffer1;
         unsigned int rateInBytes = laneCount*SnP_laneLengthInBytes*PlSnP_P;
         unsigned int i;
 

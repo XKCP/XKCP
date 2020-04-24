@@ -279,7 +279,9 @@ typedef __m512i V512;
 #define XOR128(a, b)                _mm_xor_si128(a, b)
 
 
+#ifndef _mm256_storeu2_m128i
 #define _mm256_storeu2_m128i(hi, lo, a)    _mm_storeu_si128((V128*)(lo), _mm256_castsi256_si128(a)), _mm_storeu_si128((V128*)(hi), _mm256_extracti128_si256(a, 1))
+#endif
 
 #if (VERBOSE > 0)
     #define    DumpOne(__b,__v,__i) STORE512(__b, __v##__i); \

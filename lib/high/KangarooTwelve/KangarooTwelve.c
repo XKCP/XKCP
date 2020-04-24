@@ -53,7 +53,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         \
         KeccakP1600times##Parallellism##_StaticInitialize(); \
         KeccakP1600times##Parallellism##_InitializeAll(states); \
-        fastLoopOffset = KeccakP1600times##Parallellism##_12rounds_FastLoop_Absorb(states, rateInLanes, chunkSize / laneSize, rateInLanes, localInput, Parallellism * chunkSize); \
+        fastLoopOffset = (unsigned int)KeccakP1600times##Parallellism##_12rounds_FastLoop_Absorb(states, rateInLanes, chunkSize / laneSize, rateInLanes, localInput, Parallellism * chunkSize); \
         localBlockLen -= fastLoopOffset; \
         localInput += fastLoopOffset; \
         for ( i = 0; i < Parallellism; ++i, localInput += chunkSize ) { \
@@ -138,7 +138,7 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
 
     if ( ktInstance->blockNumber == 0 ) {
         /* First block, absorb in final node */
-        unsigned int len = (inLen < (chunkSize - ktInstance->queueAbsorbedLen)) ? inLen : (chunkSize - ktInstance->queueAbsorbedLen);
+        unsigned int len = (inLen < (chunkSize - ktInstance->queueAbsorbedLen)) ? (unsigned int)inLen : (chunkSize - ktInstance->queueAbsorbedLen);
         if (KeccakWidth1600_12rounds_SpongeAbsorb(&ktInstance->finalNode, input, len) != 0)
             return 1;
         input += len;
@@ -156,7 +156,7 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
     }
     else if ( ktInstance->queueAbsorbedLen != 0 ) {
         /* There is data in the queue, absorb further in queue until block complete */
-        unsigned int len = (inLen < (chunkSize - ktInstance->queueAbsorbedLen)) ? inLen : (chunkSize - ktInstance->queueAbsorbedLen);
+        unsigned int len = (inLen < (chunkSize - ktInstance->queueAbsorbedLen)) ? (unsigned int)inLen : (chunkSize - ktInstance->queueAbsorbedLen);
         if (KeccakWidth1600_12rounds_SpongeAbsorb(&ktInstance->queueNode, input, len) != 0)
             return 1;
         input += len;
@@ -206,7 +206,7 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
     #endif
 
     while ( inLen > 0 ) {
-        unsigned int len = (inLen < chunkSize) ? inLen : chunkSize;
+        unsigned int len = (inLen < chunkSize) ? (unsigned int)inLen : chunkSize;
         if (KeccakWidth1600_12rounds_SpongeInitialize(&ktInstance->queueNode, rate, capacity) != 0)
             return 1;
         if (KeccakWidth1600_12rounds_SpongeAbsorb(&ktInstance->queueNode, input, len) != 0)

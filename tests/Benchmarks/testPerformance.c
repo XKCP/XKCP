@@ -36,7 +36,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "timing.h"
 #include "testPerformance.h"
 
-#define ALIGN_DEFAULT ALIGN(64)
+ALIGN_DEFAULT uint8_t bigBuffer1[BIG_BUFFER_SIZE];
+ALIGN_DEFAULT uint8_t bigBuffer2[BIG_BUFFER_SIZE];
 
 void displayMeasurements1101001000(uint_32t *measurements, uint_32t *laneCounts, unsigned int numberOfColumns, unsigned int laneLengthInBytes);
 
@@ -496,11 +497,11 @@ void printParallelImplementations(
 #ifdef XKCP_has_SP800_185
 uint_32t measureParallelHash(uint_32t dtMin, unsigned int securityStrength, unsigned int blockByteLen, unsigned int inputLen)
 {
-    ALIGN_DEFAULT unsigned char input[1024*1024];
+    unsigned char *input = bigBuffer1;
     ALIGN_DEFAULT unsigned char output[32];
     measureTimingDeclare
 
-    assert(inputLen <= 1024*1024);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(input, 0xA5, 16);
 
@@ -569,11 +570,11 @@ void testParallelHashPerformance()
 #ifdef XKCP_has_KangarooTwelve
 uint_32t measureKangarooTwelve(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN_DEFAULT unsigned char input[2*1024*1024];
+    unsigned char *input = bigBuffer1;
     ALIGN_DEFAULT unsigned char output[32];
     measureTimingDeclare
 
-    assert(inputLen <= 2*1024*1024);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(input, 0xA5, 16);
 
@@ -662,12 +663,12 @@ uint_32t measureKravatte_MaskDerivation(uint_32t dtMin)
 
 uint_32t measureKra(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN_DEFAULT unsigned char input[1024*1024];
+    unsigned char* input = bigBuffer1;
     ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     Kravatte_Instance kv;
     measureTimingDeclare
  
-    assert(inputLen <= 1024*1024);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Kravatte_KeyLen);
     Kravatte_MaskDerivation(&kv, key, Kravatte_KeyLen*8);
@@ -680,12 +681,12 @@ uint_32t measureKra(uint_32t dtMin, unsigned int inputLen)
 
 uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
 {
-    ALIGN_DEFAULT unsigned char output[1024*1024];
+    unsigned char* output = bigBuffer1;
     ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     Kravatte_Instance kv;
     measureTimingDeclare
 
-    assert(outputLen <= 1024*1024);
+    assert(outputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Kravatte_KeyLen);
     Kravatte_MaskDerivation(&kv, key, Kravatte_KeyLen*8);
@@ -700,15 +701,15 @@ uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
 
 uint_32t measureKravatte_SANSE(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN_DEFAULT unsigned char input[1024*1024];
-    ALIGN_DEFAULT unsigned char output[1024*1024];
+    unsigned char* input = bigBuffer1;
+    unsigned char* output = bigBuffer2;
     ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     ALIGN_DEFAULT unsigned char AD[16];
     ALIGN_DEFAULT unsigned char tag[Kravatte_SANSE_TagLength];
     Kravatte_SANSE_Instance kv;
     measureTimingDeclare
 
-    assert(inputLen <= 1024*1024);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Kravatte_KeyLen);
     Kravatte_SANSE_Initialize(&kv, key, Kravatte_KeyLen*8);
@@ -722,8 +723,8 @@ uint_32t measureKravatte_SANSE(uint_32t dtMin, unsigned int inputLen)
 
 uint_32t measureKravatte_SANE_Wrap(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN_DEFAULT unsigned char input[1024*1024];
-    ALIGN_DEFAULT unsigned char output[1024*1024];
+    unsigned char* input = bigBuffer1;
+    unsigned char* output = bigBuffer2;
     ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     ALIGN_DEFAULT unsigned char nonce[16];
     ALIGN_DEFAULT unsigned char AD[16];
@@ -731,7 +732,7 @@ uint_32t measureKravatte_SANE_Wrap(uint_32t dtMin, unsigned int inputLen)
     Kravatte_SANE_Instance kv;
     measureTimingDeclare
 
-    assert(inputLen <= 1024*1024);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Kravatte_KeyLen);
     memset(nonce, 0x55, sizeof(nonce));
@@ -750,12 +751,12 @@ uint_32t measureKravatte_SANE_MAC(uint_32t dtMin, unsigned int ADLen)
     ALIGN_DEFAULT unsigned char output[1];
     ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     ALIGN_DEFAULT unsigned char nonce[16];
-    ALIGN_DEFAULT unsigned char AD[1024*1024];
+    unsigned char* AD = bigBuffer1;
     ALIGN_DEFAULT unsigned char tag[Kravatte_SANE_TagLength];
     Kravatte_SANE_Instance kv;
     measureTimingDeclare
 
-    assert(ADLen <= 1024*1024);
+    assert(ADLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Kravatte_KeyLen);
     memset(nonce, 0x55, sizeof(nonce));
@@ -770,14 +771,14 @@ uint_32t measureKravatte_SANE_MAC(uint_32t dtMin, unsigned int ADLen)
 
 uint_32t measureKravatte_WBC(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN_DEFAULT unsigned char input[1024*1024];
-    ALIGN_DEFAULT unsigned char output[1024*1024];
+    unsigned char* input = bigBuffer1;
+    unsigned char* output = bigBuffer2;
     ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     ALIGN_DEFAULT unsigned char W[16];
     Kravatte_Instance kvw;
     measureTimingDeclare
 
-    assert(inputLen <= 1024*1024);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Kravatte_KeyLen);
     Kravatte_WBC_Initialize(&kvw, key, Kravatte_KeyLen*8);

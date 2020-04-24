@@ -25,6 +25,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "Xoodyak.h"
 #endif
 #include "timing.h"
+#include "testPerformance.h"
 #include "testXooPerformance.h"
 
 typedef uint_32t (* measurePerf)(uint_32t, unsigned int);
@@ -132,11 +133,11 @@ uint_32t measureXoofff_MaskDerivation(uint_32t dtMin)
 
 uint_32t measureXoofff_Compress(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN(64) unsigned char input[256*Xoofff_rate];
+    unsigned char* input = bigBuffer1;
     ALIGN(64) unsigned char key[Xoofff_KeyLen];
     Xoofff_Instance xp;
  
-    assert(inputLen <= 256*Xoofff_rate);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Xoofff_KeyLen);
     Xoofff_MaskDerivation(&xp, key, Xoofff_KeyLen*8);
@@ -151,11 +152,11 @@ uint_32t measureXoofff_Compress(uint_32t dtMin, unsigned int inputLen)
 
 uint_32t measureXoofff_Expand(uint_32t dtMin, unsigned int outputLen)
 {
-    ALIGN(64) unsigned char output[256*Xoofff_rate];
+    unsigned char* output = bigBuffer1;
     ALIGN(64) unsigned char key[Xoofff_KeyLen];
     Xoofff_Instance xp;
 
-    assert(outputLen <= 256*Xoofff_rate);
+    assert(outputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Xoofff_KeyLen);
     Xoofff_MaskDerivation(&xp, key, Xoofff_KeyLen*8);
@@ -172,15 +173,15 @@ uint_32t measureXoofff_Expand(uint_32t dtMin, unsigned int outputLen)
 
 uint_32t measureXoofffSANE_Wrap(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN(64) unsigned char input[256*Xoofff_rate];
-    ALIGN(64) unsigned char output[256*Xoofff_rate];
+    unsigned char* input = bigBuffer1;
+    unsigned char* output = bigBuffer2;
     ALIGN(64) unsigned char key[Xoofff_KeyLen];
     ALIGN(64) unsigned char nonce[16];
     ALIGN(64) unsigned char AD[16];
     ALIGN(64) unsigned char tag[XoofffSANE_TagLength];
     XoofffSANE_Instance xp;
 
-    assert(inputLen <= 256*Xoofff_rate);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Xoofff_KeyLen);
     memset(nonce, 0x55, sizeof(nonce));
@@ -201,11 +202,11 @@ uint_32t measureXoofffSANE_MAC(uint_32t dtMin, unsigned int ADLen)
     ALIGN(64) unsigned char output[1];
     ALIGN(64) unsigned char key[Xoofff_KeyLen];
     ALIGN(64) unsigned char nonce[16];
-    ALIGN(64) unsigned char AD[256*Xoofff_rate];
+    unsigned char* AD = bigBuffer1;
     ALIGN(64) unsigned char tag[XoofffSANE_TagLength];
     XoofffSANE_Instance xp;
 
-    assert(ADLen <= 256*Xoofff_rate);
+    assert(ADLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Xoofff_KeyLen);
     memset(nonce, 0x55, sizeof(nonce));
@@ -222,14 +223,14 @@ uint_32t measureXoofffSANE_MAC(uint_32t dtMin, unsigned int ADLen)
 
 uint_32t measureXoofffSANSE(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN(64) unsigned char input[256*Xoofff_rate];
-    ALIGN(64) unsigned char output[256*Xoofff_rate];
+    unsigned char* input = bigBuffer1;
+    unsigned char* output = bigBuffer2;
     ALIGN(64) unsigned char key[Xoofff_KeyLen];
     ALIGN(64) unsigned char AD[16];
     ALIGN(64) unsigned char tag[XoofffSANSE_TagLength];
     XoofffSANSE_Instance xp;
 
-    assert(inputLen <= 256*Xoofff_rate);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Xoofff_KeyLen);
     XoofffSANSE_Initialize(&xp, key, Xoofff_KeyLen*8);
@@ -246,13 +247,13 @@ uint_32t measureXoofffSANSE(uint_32t dtMin, unsigned int inputLen)
 
 uint_32t measureXoofffWBC(uint_32t dtMin, unsigned int inputLen)
 {
-    ALIGN(64) unsigned char input[256*Xoofff_rate];
-    ALIGN(64) unsigned char output[256*Xoofff_rate];
+    unsigned char* input = bigBuffer1;
+    unsigned char* output = bigBuffer2;
     ALIGN(64) unsigned char key[Xoofff_KeyLen];
     ALIGN(64) unsigned char W[16];
     Xoofff_Instance xp;
 
-    assert(inputLen <= 256*Xoofff_rate);
+    assert(inputLen <= sizeof(bigBuffer1));
 
     memset(key, 0xA5, Xoofff_KeyLen);
     XoofffWBC_Initialize(&xp, key, Xoofff_KeyLen*8);

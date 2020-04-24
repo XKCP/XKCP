@@ -57,13 +57,12 @@ uint_32t measureSnP_Permute_12rounds(uint_32t dtMin)
 uint_32t measureSnP_FastLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
-    ALIGN(SnP_stateAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
     measureTimingDeclare
-    assert(dataSize <= sizeof(data));
+    assert(dataSize <= sizeof(bigBuffer1));
 
     measureTimingBeginDeclared
-    SnP_FastLoop_Absorb(&state, laneCount, data, dataSize);
+    SnP_FastLoop_Absorb(&state, laneCount, bigBuffer1, dataSize);
     measureTimingEnd
 }
 
@@ -73,14 +72,13 @@ void gatherSnP_FastLoop_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t 
 uint_32t measureSnP_GenericLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
-    ALIGN(SnP_stateAlignment) unsigned char data[1000*25*SnP_laneLengthInBytes];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
     measureTimingDeclare
-    assert(dataSize <= sizeof(data));
+    assert(dataSize <= sizeof(bigBuffer1));
 
     measureTimingBeginDeclared
     {
-        const unsigned char *curData = data;
+        const unsigned char *curData = bigBuffer1;
         unsigned int rateInBytes = laneCount*SnP_laneLengthInBytes;
         unsigned int i;
 

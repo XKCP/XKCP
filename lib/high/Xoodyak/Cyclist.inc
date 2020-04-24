@@ -105,7 +105,7 @@ static void Cyclist_AbsorbAny(Cyclist_Instance *instance, const uint8_t *X, size
         if (instance->phase != Cyclist_PhaseUp) {
             Cyclist_Up(instance, NULL, 0, 0);
         }
-        splitLen = MyMin(XLen, r);
+        splitLen = (unsigned int)MyMin(XLen, r);
         Cyclist_Down(instance, X, splitLen, Cd);
         Cd = 0;
         X       += splitLen;
@@ -150,7 +150,7 @@ static void Cyclist_SqueezeAny(Cyclist_Instance *instance, uint8_t *Y, size_t YL
 {
     unsigned int    len;
 
-    len = MyMin(YLen, instance->Rsqueeze );
+    len = (unsigned int)MyMin(YLen, instance->Rsqueeze );
     Cyclist_Up(instance, Y, len, Cu);
     Y += len;
     YLen -= len;
@@ -170,7 +170,7 @@ static void Cyclist_SqueezeAny(Cyclist_Instance *instance, uint8_t *Y, size_t YL
         #endif
         {
             Cyclist_Down(instance, NULL, 0, 0);
-            len = MyMin(YLen, instance->Rsqueeze );
+            len = (unsigned int)MyMin(YLen, instance->Rsqueeze );
             Cyclist_Up(instance, Y, len, 0);
             Y += len;
             YLen -= len;
@@ -196,7 +196,7 @@ static void Cyclist_Crypt(Cyclist_Instance *instance, const uint8_t *I, uint8_t 
             else
             #endif
             {
-                splitLen = MyMin(IOLen, Cyclist_Rkout); /* use Rkout instead of Rsqueeze, this function is only called in keyed mode */
+                splitLen = (unsigned int)MyMin(IOLen, Cyclist_Rkout); /* use Rkout instead of Rsqueeze, this function is only called in keyed mode */
                 Cyclist_Up(instance, NULL, 0, Cu); /* Up without extract */
                 Xoodoo_ExtractAndAddBytes(instance->state, I, O, 0, splitLen); /* Extract from Up and Add */
                 Cyclist_Down(instance, O, splitLen, 0x00);
@@ -216,7 +216,7 @@ static void Cyclist_Crypt(Cyclist_Instance *instance, const uint8_t *I, uint8_t 
             else
             #endif
             {
-                splitLen = MyMin(IOLen, Cyclist_Rkout); /* use Rkout instead of Rsqueeze, this function is only called in keyed mode */
+                splitLen = (unsigned int)MyMin(IOLen, Cyclist_Rkout); /* use Rkout instead of Rsqueeze, this function is only called in keyed mode */
                 memcpy(P, I, splitLen);
                 Cyclist_Up(instance, NULL, 0, Cu); /* Up without extract */
                 Xoodoo_ExtractAndAddBytes(instance->state, I, O, 0, splitLen); /* Extract from Up and Add */

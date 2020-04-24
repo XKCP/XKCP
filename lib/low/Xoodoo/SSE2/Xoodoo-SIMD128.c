@@ -19,7 +19,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <x86intrin.h>
+#include <emmintrin.h>
+#include <pmmintrin.h>
+#include <tmmintrin.h>
 #include "align.h"
 #include "Xoodoo.h"
 

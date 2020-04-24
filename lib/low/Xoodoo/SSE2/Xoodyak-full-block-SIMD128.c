@@ -19,7 +19,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <x86intrin.h>
+#include <emmintrin.h>
+#include <pmmintrin.h>
+#include <smmintrin.h>
+#include <tmmintrin.h>
 #include "align.h"
 #include "Xoodoo.h"
 #include "Xoodyak-parameters.h"
@@ -311,7 +314,7 @@ size_t Xoodyak_EncryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size
 size_t Xoodyak_DecryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size_t IOLen)
 {
     size_t  initialLength = IOLen;
-    V128    o0, o1; 
+    V128    o0;
     V128    one = _mm_set_epi32(0, 1, 0, 0); 
     DeclareVars;
 

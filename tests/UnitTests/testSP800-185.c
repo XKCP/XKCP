@@ -40,7 +40,7 @@ static void assert(int condition)
     UT_assert(condition, "");
 }
 
-static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2)
+static void generateSimpleRawMaterial(unsigned char* data, size_t length, unsigned char seed1, unsigned int seed2)
 {
     unsigned int i;
 
@@ -49,7 +49,7 @@ static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, 
         unsigned char byte;
         seed2 = seed2 % 8;
         iRolled = ((unsigned char)i << seed2) | ((unsigned char)i >> (8-seed2));
-        byte = seed1 + 161*length - iRolled + i;
+        byte = seed1 + 161*(unsigned char)length - iRolled + i;
         data[i] = byte;
     }
 }
@@ -61,11 +61,11 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
     unsigned char name[nameByteSize];
     unsigned char customization[customizationByteSize];
     int result;
-    unsigned int i;
+    size_t i;
 
     generateSimpleRawMaterial(customization, customizationByteSize, securityStrength/2, 97);
     generateSimpleRawMaterial(name, nameByteSize, securityStrength/2, 91);
-    generateSimpleRawMaterial(input, (inputLen + 7) / 8, outputLen, inputLen + customLen);
+    generateSimpleRawMaterial(input, (inputLen + 7) / 8, (unsigned char)outputLen, (unsigned int)(inputLen + customLen));
 
     #ifdef UT_VERBOSE
     printf( "securityStrength %u, outputLen %3u, inputLen %5u, nameLen %3u, customLen %3u\n", securityStrength, outputLen, inputLen, nameLen, customLen);
@@ -205,7 +205,7 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
     unsigned char input[inputByteSizePH];
     unsigned char output[outputByteSize];
     int result;
-    unsigned int i;
+    size_t i;
 
     generateSimpleRawMaterial(input, (inputLen + 7) / 8, outputLen, inputLen);
 

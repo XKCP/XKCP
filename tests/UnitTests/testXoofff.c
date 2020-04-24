@@ -60,16 +60,16 @@ static void randomize( unsigned char* data, unsigned int length)
     }
 }
 
-static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2)
+static void generateSimpleRawMaterial(unsigned char* data, size_t length, unsigned char seed1, unsigned int seed2)
 {
-    unsigned int i;
+    size_t i;
 
     for(i=0; i<length; i++) {
         unsigned char iRolled;
         unsigned char byte;
         seed2 = seed2 % 8;
         iRolled = ((unsigned char)i << seed2) | ((unsigned char)i >> (8-seed2));
-        byte = (unsigned char)(seed1 + 161*length - iRolled + i);
+        byte = seed1 + 161* (unsigned char)length - iRolled + (unsigned char)i;
         data[i] = byte;
     }
 }
@@ -84,7 +84,7 @@ static void performTestXoofffOneInput(BitLength keyLen, BitLength inputLen, BitL
     unsigned int i;
     unsigned int seed;
 
-    seed = keyLen + outputLen + inputLen;
+    seed = (unsigned int)keyLen + (unsigned int)outputLen + (unsigned int)inputLen;
     seed ^= seed >> 3;
     randomize((unsigned char *)&xp, sizeof(Xoofff_Instance));
     randomize(key, keyByteSize);

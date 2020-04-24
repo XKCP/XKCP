@@ -316,7 +316,7 @@ int KMAC256_Squeeze(KMAC_Instance *kmkInstance, BitSequence *output, BitLength o
 typedef struct {
     KeccakWidth1600_SpongeInstance queueNode;
     KeccakWidth1600_SpongeInstance finalNode;
-    unsigned int fixedOutputLength;
+    size_t fixedOutputLength;
     unsigned int blockLen;
     unsigned int queueAbsorbedLen;
     size_t totalInputSize;

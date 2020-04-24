@@ -20,13 +20,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "Xoodyak.h"
 #include "UT.h"
 
-static void generateSimpleRawMaterial(uint8_t* data, unsigned int length, uint8_t seed1, unsigned int seed2)
+static void generateSimpleRawMaterial(uint8_t* data, size_t length, uint8_t seed1, unsigned int seed2)
 {
-    unsigned int i;
+    size_t i;
 
     for(i=0; i<length; i++) {
         uint8_t iRolled = ((uint8_t)i << seed2) | ((uint8_t)i >> (8-seed2));
-        uint8_t byte = (uint8_t)(seed1 + 161*length - iRolled + i);
+        uint8_t byte = seed1 + 161* (uint8_t)length - iRolled + (uint8_t)i;
         data[i] = byte;
     }
 }

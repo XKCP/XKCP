@@ -64,7 +64,7 @@ static BitLength XoofffWBC_Split(BitLength n)
         for (x = 1; (BitLength)(1 << x) < q; ++x)
             ; /* empty */
         --x;
-        nL = (q - (1 << x)) * XoofffWBC_b - XoofffWBC_l;
+        nL = (q - (BitLength)(1 << x)) * XoofffWBC_b - XoofffWBC_l;
     }
     return nL;
 }
@@ -373,7 +373,7 @@ static int XoofffSANSE_AddToHistory(XoofffSANSE_Instance *xp, const BitSequence 
     else { /* dataBitLen too big to hold everything in last byte */
         unsigned int bitsLeft;
 
-        bitsLeft = 8 - dataBitLen;
+        bitsLeft = 8 - (unsigned int)dataBitLen;
         lastByte[0] = (BitSequence)((*data & ((1 << dataBitLen) - 1)) | ((appendix & ((1 << bitsLeft) - 1)) << dataBitLen));
         appendixLen -= bitsLeft;
         appendix >>= bitsLeft;

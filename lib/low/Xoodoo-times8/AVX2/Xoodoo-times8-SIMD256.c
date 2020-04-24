@@ -65,7 +65,9 @@ typedef __m256i V256;
 #define XOR128(a, b)                _mm_xor_si128(a, b)
 #define XOReq128(a, b)              a = XOR128(a, b)
 
+#ifndef _mm256_storeu2_m128i
 #define _mm256_storeu2_m128i(hi, lo, a)    _mm_storeu_si128((V128*)(lo), _mm256_castsi256_si128(a)), _mm_storeu_si128((V128*)(hi), _mm256_extracti128_si256(a, 1))
+#endif
 
 #define VERBOSE         0
 
@@ -907,10 +909,10 @@ size_t Xooffftimes8_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kR
         a21 = UNPACKH64( lanesL01, lanesL23 );
         a22 = UNPACKL64( lanesH01, lanesH23 );
         a23 = UNPACKH64( lanesH01, lanesH23 );
-        _mm256_storeu2_m128i(o32+4*12+8, o32+0*12+8, a20);
-        _mm256_storeu2_m128i(o32+5*12+8, o32+1*12+8, a21);
-        _mm256_storeu2_m128i(o32+6*12+8, o32+2*12+8, a22);
-        _mm256_storeu2_m128i(o32+7*12+8, o32+3*12+8, a23);
+        _mm256_storeu2_m128i((__m128i*)(o32+4*12+8), (__m128i*)(o32+0*12+8), a20);
+        _mm256_storeu2_m128i((__m128i*)(o32+5*12+8), (__m128i*)(o32+1*12+8), a21);
+        _mm256_storeu2_m128i((__m128i*)(o32+6*12+8), (__m128i*)(o32+2*12+8), a22);
+        _mm256_storeu2_m128i((__m128i*)(o32+7*12+8), (__m128i*)(o32+3*12+8), a23);
         Dump("shuffle", a);
 
         o32 += NLANES*8;

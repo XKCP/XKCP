@@ -23,7 +23,9 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <x86intrin.h>
+#include <emmintrin.h>
+#include <pmmintrin.h>
+#include <tmmintrin.h>
 #include "align.h"
 #include "KeccakP-1600-times2-SnP.h"
 #include "SIMD128-config.h"
@@ -42,8 +44,8 @@ typedef __m128i V128;
     #define CONST128(a)         _mm_load_si128((const V128 *)&(a))
     #define LOAD128(a)          _mm_load_si128((const V128 *)&(a))
     #define LOAD128u(a)         _mm_loadu_si128((const V128 *)&(a))
-    #define LOAD6464(a, b)      _mm_set_epi64((__m64)(a), (__m64)(b))
-    #define CONST128_64(a)      _mm_set1_epi64((__m64)(a))
+    #define LOAD6464(a, b)      _mm_set_epi64x(a, b)
+    #define CONST128_64(a)      _mm_set1_epi64x(a)
     #if defined(KeccakP1600times2_useXOP)
         #define ROL64in128(a, o)    _mm_roti_epi64(a, o)
         #define ROL64in128_8(a)     ROL64in128(a, 8)
@@ -57,8 +59,8 @@ static const uint64_t rho56[2] = {0x0007060504030201, 0x080F0E0D0C0B0A09};
     #endif
     #define STORE128(a, b)      _mm_store_si128((V128 *)&(a), b)
     #define STORE128u(a, b)     _mm_storeu_si128((V128 *)&(a), b)
-    #define STORE64L(a, b)      _mm_storel_pi((__m64 *)&(a), (__m128)b)
-    #define STORE64H(a, b)      _mm_storeh_pi((__m64 *)&(a), (__m128)b)
+    #define STORE64L(a, b)      _mm_storel_epi64((__m128i *)&(a), b)
+    #define STORE64H(a, b)      _mm_storeh_pi((__m64 *)&(a), _mm_castsi128_ps(b))
     #define XOR128(a, b)        _mm_xor_si128(a, b)
     #define XOReq128(a, b)      a = _mm_xor_si128(a, b)
     #define ZERO128()           _mm_setzero_si128()
@@ -862,12 +864,10 @@ size_t KeccakF1600times2_FastLoop_Absorb(void *states, unsigned int laneCount, u
 {
     if (laneCount == 21) {
 #if 1
-        unsigned int i;
         const unsigned char *dataStart = data;
 
         while(dataByteLen >= (laneOffsetParallel + laneCount)*8) {
             V128 *stateAsLanes = (V128 *)states;
-            unsigned int i;
             const uint64_t *curData0 = (const uint64_t *)data;
             const uint64_t *curData1 = (const uint64_t *)(data+laneOffsetParallel*SnP_laneLengthInBytes);
             #define XOR_In( argIndex )  XOReq128( stateAsLanes[argIndex], LOAD6464(curData1[argIndex], curData0[argIndex]))
@@ -941,7 +941,6 @@ size_t KeccakF1600times2_FastLoop_Absorb(void *states, unsigned int laneCount, u
 #endif
     }
     else {
-        unsigned int i;
         const unsigned char *dataStart = data;
 
         while(dataByteLen >= (laneOffsetParallel + laneCount)*8) {
