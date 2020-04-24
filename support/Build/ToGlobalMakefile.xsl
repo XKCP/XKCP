@@ -25,6 +25,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:variable name="object" select="concat('bin/', @name)"/>
     <xsl:variable name="pack" select="concat(@name, '.pack')"/>
     <xsl:variable name="vcxprojname" select="concat(@name, '.vcxproj')"/>
+    <xsl:variable name="vcxprojdir" select="concat('bin/VC/', @name, '/')"/>
     <xsl:variable name="vcxprojfile" select="concat('bin/VC/', translate(@name, '/', '_'), '.vcxproj')"/>
     <xsl:variable name="all" select="../@all"/>
 
@@ -96,7 +97,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <xsl:text> </xsl:text>
     <xsl:value-of select="$configfile"/>
     <xsl:text>
-&#9;mkdir -p $(dir $@)
+&#9;mkdir -p </xsl:text>
+	<xsl:value-of select="$vcxprojdir"/>/config<xsl:text>
+&#9;cp </xsl:text>
+	<xsl:value-of select="$configfile"/>
+	<xsl:text> </xsl:text>
+	<xsl:value-of select="$vcxprojdir"/><xsl:text>/config
 &#9;xsltproc -o $@ support/Build/ToVCXProj.xsl </xsl:text>
     <xsl:value-of select="$targetfile"/>
     <xsl:text>

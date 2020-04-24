@@ -154,14 +154,24 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="SSSE3" inherits="K200-ref K400-ref K800-plain-lcua K1600-plain-64bits-lcua K1600x2-SSSE3-u2 K1600x4-on2 K1600x8-on2 Ket-SnP Xoodoo-SSE2 Xoodoox4-SSSE3 Xoodoox8-on1 Xoodoox16-on1"/>
 
 	<!-- Implementations selected for processors that support the AVX instruction set (e.g., Sandy Bridge microarchitectures) -->
-    <fragment name="AVX" inherits="K200-ref K400-ref K800-plain-lcua K1600-plain-64bits-lcua-shld K1600x2-SSSE3-ua K1600x4-on2 K1600x8-on2 Ket-SnP Xoodoo-SSE2 Xoodoox4-SSSE3 Xoodoox8-on1 Xoodoox16-on1"/>
+    <fragment name="AVX" inherits="K200-ref K400-ref K800-plain-lcua K1600-plain-64bits-lcua-shld K1600x2-SSSE3-ua K1600x4-on2 K1600x8-on2 Ket-SnP Xoodoo-SSE2 Xoodoox4-SSSE3 Xoodoox8-on1 Xoodoox16-on1">
+        <msvc>/arch:AVX</msvc>
+    </fragment>
     <!-- Implementations selected for processors that support the XOP instruction set (e.g., Bulldozer microarchitecture) -->
     <fragment name="XOP" inherits="K200-ref K400-ref K800-plain-lcua K1600-XOP-ua K1600x2-XOP-ua K1600x4-on2 K1600x8-on2 Ket-SnP Xoodoo-SSE2 Xoodoox4-SSSE3 Xoodoox8-on1 Xoodoox16-on1"/>
     <!-- Implementations selected for processors that support the AVX2 instruction set (e.g., Haswell and Skylake microarchitectures) -->
-    <fragment name="AVX2" inherits="K200-ref K400-ref K800-plain-lcua K1600-AVX2 K1600x2-SSSE3-u2 K1600x4-AVX2-u12 K1600x8-on4 Ket-SnP Xoodoo-SSE2 Xoodoox4-SSSE3 Xoodoox8-AVX2 Xoodoox16-on1"/>
+    <fragment name="AVX2" inherits="K200-ref K400-ref K800-plain-ua K1600-AVX2 K1600x2-SSSE3-u2 K1600x4-AVX2-u12 K1600x8-on4 Ket-SnP Xoodoo-SSE2 Xoodoox4-SSSE3 Xoodoox8-AVX2 Xoodoox16-on1"/>
+    <!-- Same, but without the assembly file (for MS Visual Studio) -->
+    <fragment name="AVX2noAsm" inherits="K200-ref K400-ref K800-plain-ua K1600-plain-64bits-ua K1600x2-SSSE3-u2 K1600x4-AVX2-u12 K1600x8-on4 Ket-SnP Xoodoo-SSE2 Xoodoox4-SSSE3 Xoodoox8-AVX2 Xoodoox16-on1">
+        <msvc>/arch:AVX2</msvc>
+    </fragment>
 
     <!-- Implementations selected for the processors that support the AVX-512 instruction set (e.g., SkylakeX microarchitecture) -->
-    <fragment name="AVX512"  inherits="K200-ref K400-ref K800-plain-lcua K1600-AVX512 K1600x2-AVX512-u12 K1600x4-AVX512-u12 K1600x8-AVX512-u12 Ket-SnP Xoodoo-AVX512 Xoodoox4-AVX512 Xoodoox8-AVX512 Xoodoox16-AVX512"/>
+    <fragment name="AVX512"  inherits="K200-ref K400-ref K800-plain-ua K1600-AVX512 K1600x2-AVX512-u12 K1600x4-AVX512-u12 K1600x8-AVX512-u12 Ket-SnP Xoodoo-AVX512 Xoodoox4-AVX512 Xoodoox8-AVX512 Xoodoox16-AVX512"/>
+    <!-- Same, but without the assembly file (for MS Visual Studio) -->
+    <fragment name="AVX512noAsm"  inherits="K200-ref K400-ref K800-plain-ua K1600-AVX512-C K1600x2-AVX512-u12 K1600x4-AVX512-u12 K1600x8-AVX512-u12 Ket-SnP Xoodoo-AVX512 Xoodoox4-AVX512 Xoodoox8-AVX512 Xoodoox16-AVX512">
+        <msvc>/arch:AVX512</msvc>
+    </fragment>
 
     <!-- Implementations selected for ARMv6 -->
     <fragment name="ARMv6" inherits="K200-ARMv6M K400-ARMv6M K800-ARMv6M-u2 K1600-ARMv6M-u2 serial-fallbacks Ket-optimizedLE Xoodoo-ARMv6"/>
@@ -181,7 +191,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- Target names are of the form x/y where x is taken from the first set and y from the second set. -->
     <group all="XKCP">
         <product delimiter="/">
-            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc SSSE3 AVX XOP AVX2 AVX512 ARMv6 ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
+            <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc SSSE3 AVX XOP AVX2 AVX2noAsm AVX512 AVX512noAsm ARMv6 ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
             <factor set="UnitTests Benchmarks KeccakSum libXKCP.a libXKCP.so"/>
         </product>
     </group>

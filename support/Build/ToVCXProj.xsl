@@ -19,18 +19,28 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 <xsl:key name="I" match="I" use="."/>
 <xsl:key name="h" match="h" use="."/>
-<xsl:key name="c" match="c" use="."/>
+<xsl:key name="c" match="c|s" use="."/>
+<xsl:key name="inc" match="inc" use="."/>
 
 <xsl:template match="target">
+	<xsl:variable name="name" select="translate(@name, '/', '\')"/>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -41,13 +51,26 @@ http://creativecommons.org/publicdomain/zero/1.0/
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -62,18 +85,40 @@ http://creativecommons.org/publicdomain/zero/1.0/
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(ProjectName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(ProjectName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories><xsl:apply-templates select="I"/></AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\<xsl:value-of select="$name"/>\config;<xsl:apply-templates select="I"/></AdditionalIncludeDirectories>
+	  <PreprocessorDefinitions><xsl:apply-templates select="define"/>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+	  <xsl:apply-templates select="msvc"/>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)\<xsl:value-of select="$name"/>\config;<xsl:apply-templates select="I"/></AdditionalIncludeDirectories>
+	  <PreprocessorDefinitions><xsl:apply-templates select="define"/>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+	  <xsl:apply-templates select="msvc"/>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -85,7 +130,25 @@ http://creativecommons.org/publicdomain/zero/1.0/
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories><xsl:apply-templates select="I"/></AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\<xsl:value-of select="$name"/>\config;<xsl:apply-templates select="I"/></AdditionalIncludeDirectories>
+	  <PreprocessorDefinitions><xsl:apply-templates select="define"/>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+	  <xsl:apply-templates select="msvc"/>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\<xsl:value-of select="$name"/>\config;<xsl:apply-templates select="I"/></AdditionalIncludeDirectories>
+	  <PreprocessorDefinitions><xsl:apply-templates select="define"/>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+	  <xsl:apply-templates select="msvc"/>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -94,10 +157,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <xsl:apply-templates select="h"/>
+    <xsl:apply-templates select="h|inc"/>
   </ItemGroup>
   <ItemGroup>
-    <xsl:apply-templates select="c"/>
+    <xsl:apply-templates select="c|s"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
@@ -121,12 +184,33 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="inc">
+    <xsl:if test="generate-id()=generate-id(key('inc', .)[1])">
+        <ClInclude Include="{concat('..\..\', translate(., '/', '\'))}"/>
+        <xsl:text>
+</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="c">
     <xsl:if test="generate-id()=generate-id(key('c', .)[1])">
         <ClCompile Include="{concat('..\..\', translate(., '/', '\'))}"/>
         <xsl:text>
 </xsl:text>
     </xsl:if>
+</xsl:template>
+
+<xsl:template match="s">
+    <xsl:message terminate="yes">The file '<xsl:value-of select="."/>' is a GCC assembly file and cannot be included in a Microsoft Visual Studio project.</xsl:message>
+</xsl:template>
+
+<xsl:template match="msvc">
+	<AdditionalOptions><xsl:value-of select="."/></AdditionalOptions>
+</xsl:template>
+
+<xsl:template match="define">
+	<xsl:value-of select="."/>
+	<xsl:text>;</xsl:text>
 </xsl:template>
 
 <xsl:template match="*|text()"/>

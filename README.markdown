@@ -156,18 +156,18 @@ This creates a `.tar.gz` archive with all the necessary files to build the given
 The list of targets can be found at the end of [`Makefile.build`](Makefile.build) or by running `make` without parameters.
 
 
-## Microsoft Visual Studio support (experimental)
+## Microsoft Visual Studio support
 
-The XKCP offers support for the creation of Microsoft Visual Studio (VS) project files. To get a project file for a given target, simply append `.vcxproj` to the target name, e.g.,
+The XKCP can be compiled with Microsoft Visual Studio (MSVC). The XKCP build system offers support for the creation of project files. To get a project file for a given target, simply append `.vcxproj` to the target name, e.g.,
 
 ```
-make generic32/KeccakTests.vcxproj
+make AVX512noAsm/KeccakSum.vcxproj
 ```
 
-This is still somehow experimental, but it should be easy to extend/adapt by someone with more experience with VS. (*Help welcome!*) In particular, please note the current limitations:
+As of today, please note the current limitations:
 
-- The generated project files current target Win32 only, but this should be easy to adapt for 64-bit support. See the file [`ToVCXProj.xsl`](support/Build/ToVCXProj.xsl).
-- The assembly code, as used in some targets, follows the GCC syntax and at this point cannot be used directly with VS.
+- The assembly code, as used in some targets, follows the GCC syntax and at this point cannot be used directly with MSVC. Note that the `AVX2noAsm` and `AVX512noAsm` targets provide alternatives to `AVX2` and `AVX512`, respectively, without assembly implementations.
+- There is no support yet to build a dynamic library like `libXKCP.dll`. However, we are not far: `make <target>/libXKCP.so.vcxproj` gives you a project that compiles correctly (but does not link).
 
 
 # How do I build/extract just the part I need?
