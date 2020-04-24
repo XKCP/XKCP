@@ -105,7 +105,7 @@ static void performTestXoofffWBC_OneInput(BitLength keyLen, BitLength dataLen, B
     randomize(inputPrime, dataByteSize);
     randomize(output, dataByteSize);
 
-    seed = (unsigned char)keyLen + (unsigned char)WLen + (unsigned char)dataLen;
+    seed = (unsigned int)keyLen + (unsigned int)WLen + (unsigned int)dataLen;
     seed ^= seed >> 3;
     generateSimpleRawMaterial(key, (keyLen + 7) / 8, (unsigned char)(0x43C1 - seed), 0xB9 + seed);
     if (keyLen & 7)
