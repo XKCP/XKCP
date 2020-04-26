@@ -1,5 +1,7 @@
 [![Build Status](http://img.shields.io/travis/XKCP/XKCP.svg)](https://travis-ci.org/XKCP/XKCP)
 
+<img src="doc/logo/XKCP-Anna-banner.svg" width="60%" />
+
 # What is the XKCP?
 
 The **eXtended Keccak Code Package** (or the **Xoodoo and Keccak Code Package**, in both cases abbreviated as **XKCP**) is a repository that gathers different free and open-source implementations of the cryptographic schemes defined by the Keccak team.
@@ -262,6 +264,7 @@ We wish to thank all the contributors, and in particular:
 
 - Andre C. de Moraes for ARMv8-A assembly code
 - Andy Polyakov and Ronny Van Keer for the AVX2 and AVX-512 assembly implementations of Keccak-_p_[1600]
+- Anna Guinet for the hummingbird logo design
 - Brian Gladman's `brg_endian.h`
 - Bruno Pairault for testing and benchmarking on ARM platforms
 - Conno Boel for the NEON implementations of Xoodoo
