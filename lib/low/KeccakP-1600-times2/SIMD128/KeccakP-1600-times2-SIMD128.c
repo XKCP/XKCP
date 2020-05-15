@@ -26,6 +26,9 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #include <emmintrin.h>
 #include <pmmintrin.h>
 #include <tmmintrin.h>
+#if define(KeccakP1600times2_useXOP)
+#include <x86intrin.h>
+#endif
 #include "align.h"
 #include "KeccakP-1600-times2-SnP.h"
 #include "SIMD128-config.h"

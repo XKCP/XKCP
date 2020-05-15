@@ -262,10 +262,10 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
     XOReq128(Cae, E##sase); \
     E##siso = XOR128(Bsiso, ANDnu128(Bsosu, Bsusa)); \
     XOReq128(Cio, E##siso); \
+    Zero = ZERO128(); \
     E##su = GET64LOLO(XOR128(Bsusa, ANDnu128(Bsase, Bsesi)), Zero); \
     XOReq128(Cua, E##su); \
 \
-    Zero = ZERO128(); \
     XOReq128(Cae, GET64HIHI(Cua, Zero)); \
     XOReq128(Cae, GET64LOLO(Zero, Cei)); \
     XOReq128(Cio, GET64HIHI(Cei, Zero)); \
