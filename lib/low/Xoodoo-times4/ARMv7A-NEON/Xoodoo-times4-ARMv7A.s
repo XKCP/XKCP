@@ -640,8 +640,8 @@ Xt4_ExtractAndAddLanesAll_Unaligned_Loop:
   veor      q15, q3, q7
   veor      q15, q15, q11
 
-  vmov.32   r3, r4, d30
-  vmov.32   r1, r2, d31
+  vmov      r3, r4, d30
+  vmov      r1, r2, d31
   ror       r3, r3, #27
   veor      q14, q0, q4
   ror       r4, r4, #27
@@ -651,12 +651,12 @@ Xt4_ExtractAndAddLanesAll_Unaligned_Loop:
   eor       r3, r3, r3, ror #23
   eor       r4, r4, r4, ror #23
   eor       r1, r1, r1, ror #23
-  vmov.32   d30, r3, r4
+  vmov      d30, r3, r4
   eor       r2, r2, r2, ror #23
-  vmov.32   d31, r1, r2
+  vmov      d31, r1, r2
 
-  vmov.32   r3, r4, d28
-  vmov.32   r1, r2, d29
+  vmov      r3, r4, d28
+  vmov      r1, r2, d29
   ror       r3, r3, #27
   veor      q0, q0, q15
   ror       r4, r4, #27
@@ -669,12 +669,12 @@ Xt4_ExtractAndAddLanesAll_Unaligned_Loop:
   veor      q15, q15, q9
   eor       r4, r4, r4, ror #23
   eor       r1, r1, r1, ror #23
-  vmov.32   d28, r3, r4
+  vmov      d28, r3, r4
   eor       r2, r2, r2, ror #23
-  vmov.32   d29, r1, r2
+  vmov      d29, r1, r2
 
-  vmov.32   r3, r4, d30
-  vmov.32   r1, r2, d31
+  vmov      r3, r4, d30
+  vmov      r1, r2, d31
   ror       r3, r3, #27
   veor      q1, q1, q14
   ror       r4, r4, #27
@@ -687,12 +687,12 @@ Xt4_ExtractAndAddLanesAll_Unaligned_Loop:
   veor      q14, q14, q10
   eor       r4, r4, r4, ror #23
   eor       r1, r1, r1, ror #23
-  vmov.32   d30, r3, r4
+  vmov      d30, r3, r4
   eor       r2, r2, r2, ror #23
-  vmov.32   d31, r1, r2
+  vmov      d31, r1, r2
 
-  vmov.32   r3, r4, d28
-  vmov.32   r1, r2, d29
+  vmov      r3, r4, d28
+  vmov      r1, r2, d29
   ror       r3, r3, #27
   veor      q2, q2, q15
   ror       r4, r4, #27
@@ -703,9 +703,9 @@ Xt4_ExtractAndAddLanesAll_Unaligned_Loop:
   eor       r3, r3, r3, ror #23
   eor       r4, r4, r4, ror #23
   eor       r1, r1, r1, ror #23
-  vmov.32   d28, r3, r4
+  vmov      d28, r3, r4
   eor       r2, r2, r2, ror #23
-  vmov.32   d29, r1, r2
+  vmov      d29, r1, r2
   veor      q3, q3, q14
   veor      q7, q7, q14
   veor      q11, q11, q14
@@ -714,9 +714,9 @@ Xt4_ExtractAndAddLanesAll_Unaligned_Loop:
 .macro rho_w
   @ vshl.U32  q12, q8, #11
   @ vsri.U32  q12, q8, #21
-  vmov.32   r1, r2, d16
+  vmov      r1, r2, d16
   vshl.U32  q13, q9, #11
-  vmov.32   r3, r4, d17
+  vmov      r3, r4, d17
   vsri.U32  q13, q9, #21
   ror       r1, r1, #21
   vshl.U32  q14, q10, #11
@@ -726,8 +726,8 @@ Xt4_ExtractAndAddLanesAll_Unaligned_Loop:
   vshl.U32  q15, q11, #11
   ror       r4, r4, #21
   vsri.U32  q15, q11, #21
-  vmov.32   d24, r1, r2
-  vmov.32   d25, r3, r4
+  vmov      d24, r1, r2
+  vmov      d25, r3, r4
   @ NOTE: Here we are hiding in the shadows. What happens is that the ROR action is interleaved with the vector actions so that they get executed for free instead of a NOP .
 .endm
 
@@ -773,16 +773,16 @@ Xt4_ExtractAndAddLanesAll_Unaligned_Loop:
   vshl.U32  q9, q4, #8
   vsri.U32  q9, q4, #24
 
-  vmov.32   r1, r2, d16
-  vmov.32   r3, r4, d17
+  vmov      r1, r2, d16
+  vmov      r3, r4, d17
   ror       r1, r1, #24
   vshl.U32  q8, q10, #8
   ror       r2, r2, #24
   vsri.U32  q8, q10, #24
   ror       r3, r3, #24
-  vmov.32   d20, r1, r2
+  vmov      d20, r1, r2
   ror       r4, r4, #24
-  vmov.32   d21, r3, r4
+  vmov      d21, r3, r4
 
   vshl.U32  q4, q12, #1
   vsri.U32  q4, q12, #31
@@ -1014,8 +1014,8 @@ Xft4_AddIs_0:
   veor      q15, q3, q7
   veor      q15, q15, q11
 
-  vmov.32   r7, r8, d30
-  vmov.32   r5, r6, d31
+  vmov      r7, r8, d30
+  vmov      r5, r6, d31
   ror       r7, r7, #27
   veor      q14, q0, q4
   ror       r8, r8, #27
@@ -1025,12 +1025,12 @@ Xft4_AddIs_0:
   eor       r7, r7, r7, ror #23
   eor       r8, r8, r8, ror #23
   eor       r5, r5, r5, ror #23
-  vmov.32   d30, r7, r8
+  vmov      d30, r7, r8
   eor       r6, r6, r6, ror #23
-  vmov.32   d31, r5, r6
+  vmov      d31, r5, r6
 
-  vmov.32   r7, r8, d28
-  vmov.32   r5, r6, d29
+  vmov      r7, r8, d28
+  vmov      r5, r6, d29
   ror       r7, r7, #27
   veor      q0, q0, q15
   ror       r8, r8, #27
@@ -1043,12 +1043,12 @@ Xft4_AddIs_0:
   veor      q15, q15, q9
   eor       r8, r8, r8, ror #23
   eor       r5, r5, r5, ror #23
-  vmov.32   d28, r7, r8
+  vmov      d28, r7, r8
   eor       r6, r6, r6, ror #23
-  vmov.32   d29, r5, r6
+  vmov      d29, r5, r6
 
-  vmov.32   r7, r8, d30
-  vmov.32   r5, r6, d31
+  vmov      r7, r8, d30
+  vmov      r5, r6, d31
   ror       r7, r7, #27
   veor      q1, q1, q14
   ror       r8, r8, #27
@@ -1061,12 +1061,12 @@ Xft4_AddIs_0:
   veor      q14, q14, q10
   eor       r8, r8, r8, ror #23
   eor       r5, r5, r5, ror #23
-  vmov.32   d30, r7, r8
+  vmov      d30, r7, r8
   eor       r6, r6, r6, ror #23
-  vmov.32   d31, r5, r6
+  vmov      d31, r5, r6
 
-  vmov.32   r7, r8, d28
-  vmov.32   r5, r6, d29
+  vmov      r7, r8, d28
+  vmov      r5, r6, d29
   ror       r7, r7, #27
   veor      q2, q2, q15
   ror       r8, r8, #27
@@ -1077,18 +1077,18 @@ Xft4_AddIs_0:
   eor       r7, r7, r7, ror #23
   eor       r8, r8, r8, ror #23
   eor       r5, r5, r5, ror #23
-  vmov.32   d28, r7, r8
+  vmov      d28, r7, r8
   eor       r6, r6, r6, ror #23
-  vmov.32   d29, r5, r6
+  vmov      d29, r5, r6
   veor      q3, q3, q14
   veor      q7, q7, q14
   veor      q11, q11, q14
 .endm
 
 .macro rho_w_star
-  vmov.32   r5, r6, d16
+  vmov      r5, r6, d16
   vshl.U32  q13, q9, #11
-  vmov.32   r7, r8, d17
+  vmov      r7, r8, d17
   vsri.U32  q13, q9, #21
   ror       r5, r5, #21
   vshl.U32  q14, q10, #11
@@ -1098,8 +1098,8 @@ Xft4_AddIs_0:
   vshl.U32  q15, q11, #11
   ror       r8, r8, #21
   vsri.U32  q15, q11, #21
-  vmov.32   d24, r5, r6
-  vmov.32   d25, r7, r8
+  vmov      d24, r5, r6
+  vmov      d25, r7, r8
 .endm
 
 .macro chi_star
@@ -1143,16 +1143,16 @@ Xft4_AddIs_0:
   vshl.U32  q9, q4, #8
   vsri.U32  q9, q4, #24
 
-  vmov.32   r5, r6, d16
-  vmov.32   r7, r8, d17
+  vmov      r5, r6, d16
+  vmov      r7, r8, d17
   ror       r5, r5, #24
   vshl.U32  q8, q10, #8
   ror       r6, r6, #24
   vsri.U32  q8, q10, #24
   ror       r7, r7, #24
-  vmov.32   d20, r5, r6
+  vmov      d20, r5, r6
   ror       r8, r8, #24
-  vmov.32   d21, r7, r8
+  vmov      d21, r7, r8
 
   vshl.U32  q4, q12, #1
   vsri.U32  q4, q12, #31

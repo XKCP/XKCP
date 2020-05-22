@@ -174,16 +174,16 @@ http://creativecommons.org/publicdomain/zero/1.0/
     </fragment>
 
     <!-- Implementations selected for ARMv6 -->
-    <fragment name="ARMv6" inherits="K200-ARMv6M K400-ARMv6M K800-ARMv6M-u2 K1600-ARMv6M-u2 serial-fallbacks Ket-optimizedLE Xoodoo-ARMv6"/>
+    <fragment name="ARMv6" inherits="K200-ARMv6M K400-ARMv6M K800-ARMv6M-u2 K1600-ARMv6M-u2 serial-fallbacks Ket-SnP Xoodoo-ARMv6"/>
     <!-- Implementations selected for ARMv6M -->
-    <fragment name="ARMv6M" inherits="K200-ARMv6M K400-ARMv6M K800-ARMv6M-u2 K1600-ARMv6M-u2 serial-fallbacks Ket-optimizedLE Xoodoo-ARMv6M"/>
+    <fragment name="ARMv6M" inherits="K200-ARMv6M K400-ARMv6M K800-ARMv6M-u2 K1600-ARMv6M-u2 serial-fallbacks Ket-SnP Xoodoo-ARMv6M"/>
     <!-- Implementations selected for ARMv7M -->
     <fragment name="ARMv7M" inherits="K200-ARMv7M K400-ARMv7M K800-ARMv7M-u2 K1600-ARMv7M-inplace serial-fallbacks Ket-ARMv7M Xoodoo-ARMv7M"/>
     <!-- Implementations selected for ARMv7A -->
     <fragment name="ARMv7A" inherits="K200-ref K400-ref K800-ARMv7A-u2 K1600-ARMv7A-NEON K1600x2-ARMv7A-NEON K1600x4-on2 K1600x8-on2 Ket-optimizedLE Xoodoo-ARMv7A-NEON Xoodoox4-ARMv7A-NEON Xoodoox8-on1 Xoodoox16-on1"/>
 
     <!-- Implementations selected for ARMv8A -->
-    <fragment name="ARMv8A" inherits="K200-ref K400-ref K800-ARMv8A K1600-ARMv8A serial-fallbacks Ket-optimizedLE Xoodoo-plain-ua"/>
+    <fragment name="ARMv8A" inherits="K200-ref K400-ref K800-plain-ua K1600-plain-64bits-ua serial-fallbacks Ket-optimizedLE Xoodoo-plain-ua"/>
 
     <!-- Implementations selected for 8-bit AVR -->
     <fragment name="AVR8" inherits="K200-AVR8 K400-AVR8 K800-AVR8 K1600-AVR8 serial-fallbacks Ket-SnP Xoodoo-AVR8"/>

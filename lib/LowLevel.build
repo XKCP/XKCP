@@ -45,7 +45,7 @@ The fragments below allow to select the desired implementation of the permutatio
 * K800-ARMv7M-u2: an assembly-optimized implementation for ARMv7M with 2 rounds unrolled
 * K800-ARMv7M-ua: same as K800-ARMv7M-u2 but with all rounds unrolled
 * K800-ARMv7A-u2: an assembly-optimized implementation for ARMv7A with 2 rounds unrolled
-* K800-ARMv8A: an assembly-optimized implementation for ARMv8A
+* K800-ARMv8A: an assembly-optimized implementation for ARMv8A [obsolete: a plain C implementation is much faster]
 * K800-AVR8: an assembly-optimized implementation for AVR8
 
 # For Keccak-p[1600]:
@@ -74,7 +74,7 @@ The fragments below allow to select the desired implementation of the permutatio
 * K1600-ARMv6M-u1: an assembly-optimized implementation for ARMv6M (no round unrolling)
 * K1600-ARMv6M-u2: same as K1600-ARMv6M-u1 but with 2 rounds unrolled
 * K1600-ARMv7A-NEON: an assembly-optimized implementation for ARMv7A
-* K1600-ARMv8A: an assembly-optimized implementation for ARMv8A
+* K1600-ARMv8A: an assembly-optimized implementation for ARMv8A [obsolete: a plain C implementation is much faster]
 * K1600-AVR8: an assembly-optimized implementation for AVR8
 
 # For Keccak-p[1600]×2:
@@ -279,7 +279,6 @@ The fragments below allow to select the desired implementation of the permutatio
     </fragment>
 
     <fragment name="K800-ARMv8A" inherits="common optimized K800">
-        <gcc>-mfpu=neon</gcc>
         <s>lib/low/KeccakP-800/ARMv8A/KeccakP-800-armv8a-neon.s</s>
         <h>lib/low/KeccakP-800/ARMv8A/KeccakP-800-SnP.h</h>
     </fragment>
@@ -428,12 +427,12 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="K1600-ARMv7A-NEON" inherits="K1600 optimized">
         <gcc>-mfpu=neon</gcc>
+        <gas>-mfpu=neon</gas>
         <s>lib/low/KeccakP-1600/ARMv7A-NEON/KeccakP-1600-armv7a-le-neon-gcc.s</s>
         <h>lib/low/KeccakP-1600/ARMv7A-NEON/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="K1600-ARMv8A" inherits="K1600 optimized">
-        <gcc>-mfpu=neon</gcc>
         <s>lib/low/KeccakP-1600/ARMv8A/KeccakP-1600-armv8a-neon.s</s>
         <h>lib/low/KeccakP-1600/ARMv8A/KeccakP-1600-SnP.h</h>
     </fragment>
@@ -496,6 +495,7 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="K1600x2-ARMv7A-NEON" inherits="K1600x2">
         <gcc>-mfpu=neon</gcc>
+        <gas>-mfpu=neon</gas>
         <s>lib/low/KeccakP-1600-times2/ARMv7A-NEON/KeccakP-1600-inplace-pl2-armv7a-neon-le-gcc.s</s>
         <h>lib/low/KeccakP-1600-times2/ARMv7A-NEON/KeccakP-1600-times2-SnP.h</h>
     </fragment>
@@ -633,6 +633,7 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="Xoodoo-ARMv7A-NEON" inherits="common optimized Xoodoo">
         <gcc>-mfpu=neon</gcc>
+        <gas>-mfpu=neon</gas>
         <s>lib/low/Xoodoo/ARMv7A-NEON/Xoodoo-uf-armv7a-neon-le-gcc.s</s>
         <s>lib/low/Xoodoo/ARMv7A-NEON/Xoodyak-uf-armv7a-neon-le-gcc.s</s>
         <h>lib/low/Xoodoo/ARMv7A-NEON/Xoodoo-SnP.h</h>
@@ -679,6 +680,7 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="Xoodoox4-ARMv7A-NEON" inherits="common optimized Xoodoox4">
         <gcc>-mfpu=neon</gcc>
+        <gas>-mfpu=neon</gas>
         <s>lib/low/Xoodoo-times4/ARMv7A-NEON/Xoodoo-times4-ARMv7A.s</s>
         <h>lib/low/Xoodoo-times4/ARMv7A-NEON/Xoodoo-times4-SnP.h</h>
     </fragment>
@@ -726,10 +728,12 @@ The fragments below allow to select the desired implementation of the permutatio
 For Ketje, one of the following fragments is required:
 * Ket-SnP: to glue the Ketje implementation to an implementation of the permutation with SnP (default choice)
 * Ket-ARMv7M: same as Ket{Jr, Sr, Mn, Mj}-SnP, but with specific optimizations for ARMv7M
-* Ket-optimizedLE: same as Ket{Jr, Sr, Mn, Mj}-SnP, but with specific optimizations for other ARM plaforms (ARMv6M, ARMv7A, ARMv8A)
+* Ket-optimizedLE: same as Ket{Jr, Sr, Mn, Mj}-SnP, but with specific optimizations for platforms that are little-endian and such that the state representation is pure
 -->
 
     <!-- "Ket", the layer between SnP and Ketje services -->
+
+    <!-- TODO Some day, it would be good to blend Ket-SnP and Ket-optimizedLE, and automate the selection based on the reprensentation of the state and the endianness of the platform. -->
 
     <fragment name="Ket-SnP">
         <inc>lib/low/Ketje/SnP-compliant/Ket.inc</inc>

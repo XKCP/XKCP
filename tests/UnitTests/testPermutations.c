@@ -218,7 +218,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #define SnP_Permute          Xoodoo_Permute_6rounds
     #define SnP_Permute_6rounds  Xoodoo_Permute_6rounds
     #define SnP_Permute_12rounds Xoodoo_Permute_12rounds
-    #define SnP_Permute_Nrounds  Xoodoo_Permute_Nrounds
+    #ifdef Xoodoo_HasNround
+        #define SnP_Permute_Nrounds  Xoodoo_Permute_Nrounds
+    #endif
     #define SnP_Permute_maxRounds 12
     #define SnP_NoFastLoopAbsorb
         #include "testSnP.inc"
