@@ -27,7 +27,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define Many 100
 #define bufferSize 20000
 
-uint_32t measureSponge(uint_32t dtMin, unsigned int r, unsigned int c, unsigned int lenIn, unsigned int lenOut)
+cycles_t measureSponge(cycles_t dtMin, unsigned int r, unsigned int c, unsigned int lenIn, unsigned int lenOut)
 {
     ALIGN(32) unsigned char I[bufferSize];
     ALIGN(32) unsigned char O[bufferSize];
@@ -44,18 +44,18 @@ uint_32t measureSponge(uint_32t dtMin, unsigned int r, unsigned int c, unsigned 
     measureTimingEnd
 }
 
-void timingRC(uint_32t calibration, unsigned int r, unsigned int c)
+void timingRC(cycles_t calibration, unsigned int r, unsigned int c)
 {
     unsigned int block = r/8;
-    uint_32t oneBlockI = measureSponge(calibration, r, c, block-1, block);
-    uint_32t twoBlocksI = measureSponge(calibration, r, c, 2*block-1, block);
-    uint_32t manyBlocksI = measureSponge(calibration, r, c, Many*block-1, block);
-    printf("Keccak[r=%4d, c=%4d]  %8d %9d %11d %6.2f %6.2f\n", r, c, oneBlockI, twoBlocksI, manyBlocksI, manyBlocksI/(1.0*Many*block-1), (manyBlocksI-twoBlocksI)/(1.0*(Many-2)*block));
+    cycles_t oneBlockI = measureSponge(calibration, r, c, block-1, block);
+    cycles_t twoBlocksI = measureSponge(calibration, r, c, 2*block-1, block);
+    cycles_t manyBlocksI = measureSponge(calibration, r, c, Many*block-1, block);
+    printf("Keccak[r=%4d, c=%4d]  %8"PRId64" %9"PRId64" %11"PRId64" %6.2f %6.2f\n", r, c, oneBlockI, twoBlocksI, manyBlocksI, manyBlocksI/(1.0*Many*block-1), (manyBlocksI-twoBlocksI)/(1.0*(Many-2)*block));
 }
 
-uint_32t start(const char *synopsis, const char *implementation)
+cycles_t start(const char *synopsis, const char *implementation)
 {
-    uint_32t calibration = calibrate();
+    cycles_t calibration = CalibrateTimer();
     printf("*** %s ***\nImplementation: %s\n\n", synopsis, implementation);
     printf("Cycles for " xstr(Sponge) "() with varying input sizes:\n");
     printf("                         1 block  2 blocks  100 blocks  ratio  slope\n");

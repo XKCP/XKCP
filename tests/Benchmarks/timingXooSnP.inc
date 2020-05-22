@@ -29,7 +29,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define SnP_Initialize                  JOIN(SnP, _Initialize)
 #define SnP_AddBytes                    JOIN(SnP, _AddBytes)
 
-uint_32t measureSnP_Permute_6rounds(uint_32t dtMin)
+cycles_t measureSnP_Permute_6rounds(cycles_t dtMin)
 {
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
 
@@ -38,7 +38,7 @@ uint_32t measureSnP_Permute_6rounds(uint_32t dtMin)
     measureTimingEnd
 }
 
-uint_32t measureSnP_Permute_12rounds(uint_32t dtMin)
+cycles_t measureSnP_Permute_12rounds(cycles_t dtMin)
 {
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
 
@@ -49,21 +49,18 @@ uint_32t measureSnP_Permute_12rounds(uint_32t dtMin)
 
 void doTimingSnP(const char *module, const char *implementation)
 {
-    uint_32t calibration;
-    uint_32t measurement;
-    //!!uint_32t measurements[16];
-    //uint_32t laneCounts[4];
-//    unsigned int numberOfColumns;
+    cycles_t calibration;
+    cycles_t measurement;
 
     printf("*** %s ***\n", module);
     printf("Implementation: %s\n\n", implementation);
-    calibration = calibrate();
+    calibration = CalibrateTimer();
 
     measurement = measureSnP_Permute_6rounds(calibration);
-    printf("Cycles for " xstr(SnP_Permute_6rounds) "(state): %d\n\n", measurement);
+    printf("Cycles for " xstr(SnP_Permute_6rounds) "(state): %"PRId64"\n\n", measurement);
 
     measurement = measureSnP_Permute_12rounds(calibration);
-    printf("Cycles for " xstr(SnP_Permute_12rounds) "(state): %d\n\n", measurement);
+    printf("Cycles for " xstr(SnP_Permute_12rounds) "(state): %"PRId64"\n\n", measurement);
 
     printf("\n");
 }

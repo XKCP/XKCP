@@ -13,7 +13,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include <assert.h>
+#include <inttypes.h>
 #include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include "config.h"
@@ -39,7 +41,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 ALIGN_DEFAULT uint8_t bigBuffer1[BIG_BUFFER_SIZE];
 ALIGN_DEFAULT uint8_t bigBuffer2[BIG_BUFFER_SIZE];
 
-void displayMeasurements1101001000(uint_32t *measurements, uint_32t *laneCounts, unsigned int numberOfColumns, unsigned int laneLengthInBytes);
+void displayMeasurements1101001000(cycles_t *measurements, uint32_t *laneCounts, unsigned int numberOfColumns, unsigned int laneLengthInBytes);
 
 #define xstr(s) str(s)
 #define str(s) #s
@@ -125,9 +127,9 @@ void displayMeasurements1101001000(uint_32t *measurements, uint_32t *laneCounts,
 #endif
 
 #ifdef KeccakF800_FastLoop_supported
-uint_32t KeccakP800_measureSnP_FastLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount);
+cycles_t KeccakP800_measureSnP_FastLoop_Absorb(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount);
 
-void KeccakP800_gatherSnP_FastLoop_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
+void KeccakP800_gatherSnP_FastLoop_Absorb(cycles_t dtMin, cycles_t *measurements, uint32_t *laneCounts)
 {
     measurements[ 0] = KeccakP800_measureSnP_FastLoop_Absorb(dtMin, 16, 1);
     measurements[ 1] = KeccakP800_measureSnP_FastLoop_Absorb(dtMin, 16, 10);
@@ -148,9 +150,9 @@ void KeccakP800_gatherSnP_FastLoop_Absorb(uint_32t dtMin, uint_32t *measurements
 #endif
 
 #ifdef KeccakF1600_FastLoop_supported
-uint_32t KeccakP1600_measureSnP_FastLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount);
+cycles_t KeccakP1600_measureSnP_FastLoop_Absorb(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount);
 
-void KeccakP1600_gatherSnP_FastLoop_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
+void KeccakP1600_gatherSnP_FastLoop_Absorb(cycles_t dtMin, cycles_t *measurements, uint32_t *laneCounts)
 {
     measurements[ 0] = KeccakP1600_measureSnP_FastLoop_Absorb(dtMin, 16, 1);
     measurements[ 1] = KeccakP1600_measureSnP_FastLoop_Absorb(dtMin, 16, 10);
@@ -171,9 +173,9 @@ void KeccakP1600_gatherSnP_FastLoop_Absorb(uint_32t dtMin, uint_32t *measurement
 #endif
 
 #ifdef XKCP_has_KeccakP200
-uint_32t KeccakP200_measureSnP_GenericLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount);
+cycles_t KeccakP200_measureSnP_GenericLoop_Absorb(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount);
 
-unsigned int KeccakP200_gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
+unsigned int KeccakP200_gatherSnP_GenericLoop_Absorb(cycles_t dtMin, cycles_t *measurements, uint32_t *laneCounts)
 {
     measurements[ 0] = KeccakP200_measureSnP_GenericLoop_Absorb(dtMin,  5, 1);
     measurements[ 1] = KeccakP200_measureSnP_GenericLoop_Absorb(dtMin,  5, 10);
@@ -185,9 +187,9 @@ unsigned int KeccakP200_gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *m
 #endif
 
 #ifdef XKCP_has_KeccakP400
-uint_32t KeccakP400_measureSnP_GenericLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount);
+cycles_t KeccakP400_measureSnP_GenericLoop_Absorb(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount);
 
-unsigned int KeccakP400_gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
+unsigned int KeccakP400_gatherSnP_GenericLoop_Absorb(cycles_t dtMin, cycles_t *measurements, uint32_t *laneCounts)
 {
     measurements[ 0] = KeccakP400_measureSnP_GenericLoop_Absorb(dtMin,  9, 1);
     measurements[ 1] = KeccakP400_measureSnP_GenericLoop_Absorb(dtMin,  9, 10);
@@ -209,9 +211,9 @@ unsigned int KeccakP400_gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *m
 #endif
 
 #ifdef XKCP_has_KeccakP800
-uint_32t KeccakP800_measureSnP_GenericLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount);
+cycles_t KeccakP800_measureSnP_GenericLoop_Absorb(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount);
 
-unsigned int KeccakP800_gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
+unsigned int KeccakP800_gatherSnP_GenericLoop_Absorb(cycles_t dtMin, cycles_t *measurements, uint32_t *laneCounts)
 {
     measurements[ 0] = KeccakP800_measureSnP_GenericLoop_Absorb(dtMin, 16, 1);
     measurements[ 1] = KeccakP800_measureSnP_GenericLoop_Absorb(dtMin, 16, 10);
@@ -233,9 +235,9 @@ unsigned int KeccakP800_gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *m
 #endif
 
 #ifdef XKCP_has_KeccakP1600
-uint_32t KeccakP1600_measureSnP_GenericLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount);
+cycles_t KeccakP1600_measureSnP_GenericLoop_Absorb(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount);
 
-unsigned int KeccakP1600_gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts)
+unsigned int KeccakP1600_gatherSnP_GenericLoop_Absorb(cycles_t dtMin, cycles_t *measurements, uint32_t *laneCounts)
 {
     measurements[ 0] = KeccakP1600_measureSnP_GenericLoop_Absorb(dtMin, 16, 1);
     measurements[ 1] = KeccakP1600_measureSnP_GenericLoop_Absorb(dtMin, 16, 10);
@@ -329,7 +331,7 @@ unsigned int KeccakP1600_gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *
 
 void KeccakWidth800_timing()
 {
-    uint_32t calibartion = KeccakWidth800_start("Keccak sponge functions using Keccak-f[800]", KeccakP800_implementation);
+    cycles_t calibartion = KeccakWidth800_start("Keccak sponge functions using Keccak-f[800]", KeccakP800_implementation);
     KeccakWidth800_timingRC(calibartion, 544, 256);
     KeccakWidth800_timingRC(calibartion, 608, 192);
     printf("\n\n");
@@ -343,7 +345,7 @@ void KeccakWidth800_timing()
 
 void KeccakWidth1600_timing()
 {
-    uint_32t calibartion = KeccakWidth1600_start("Keccak sponge functions using Keccak-f[1600]", KeccakP1600_implementation);
+    cycles_t calibartion = KeccakWidth1600_start("Keccak sponge functions using Keccak-f[1600]", KeccakP1600_implementation);
     KeccakWidth1600_timingRC(calibartion, 576, 1024);
     KeccakWidth1600_timingRC(calibartion, 832,  768);
     KeccakWidth1600_timingRC(calibartion, 1088, 512);
@@ -495,7 +497,7 @@ void printParallelImplementations(
 }
 
 #ifdef XKCP_has_SP800_185
-uint_32t measureParallelHash(uint_32t dtMin, unsigned int securityStrength, unsigned int blockByteLen, unsigned int inputLen)
+cycles_t measureParallelHash(cycles_t dtMin, unsigned int securityStrength, unsigned int blockByteLen, unsigned int inputLen)
 {
     unsigned char *input = bigBuffer1;
     ALIGN_DEFAULT unsigned char output[32];
@@ -507,12 +509,12 @@ uint_32t measureParallelHash(uint_32t dtMin, unsigned int securityStrength, unsi
 
     if(securityStrength == 128) {
         measureTimingBeginDeclared
-        ParallelHash128(input, inputLen*8, blockByteLen, output, 256, "", 0);
+        ParallelHash128(input, inputLen*8, blockByteLen, output, 256, (const BitSequence *)"", 0);
         measureTimingEnd
     }
     else if(securityStrength == 256) {
         measureTimingBeginDeclared
-        ParallelHash256(input, inputLen*8, blockByteLen, output, 256, "", 0);
+        ParallelHash256(input, inputLen*8, blockByteLen, output, 256, (const BitSequence *)"", 0);
         measureTimingEnd
     }
     else
@@ -530,7 +532,7 @@ void printParallelHashPerformanceHeader(unsigned int securityStrength)
 void testParallelHashPerformanceOne(unsigned int securityStrength, unsigned int blockByteLen)
 {
     unsigned halfTones;
-    uint_32t calibration = calibrate();
+    cycles_t calibration = CalibrateTimer();
     unsigned int blockByteLenLog = (unsigned int)floor(log(blockByteLen)/log(2.0)+0.5);
     int displaySlope = 1;
 
@@ -538,7 +540,7 @@ void testParallelHashPerformanceOne(unsigned int securityStrength, unsigned int 
     for(halfTones=blockByteLenLog*12-28; halfTones<=19*12; halfTones+=4) {
         double I = pow(2.0, halfTones/12.0);
         unsigned int i  = (unsigned int)floor(I+0.5);
-        uint_32t time, timePlus1Block, timePlus2Blocks, timePlus4Blocks, timePlus8Blocks;
+        cycles_t time, timePlus1Block, timePlus2Blocks, timePlus4Blocks, timePlus8Blocks;
         time = measureParallelHash(calibration, securityStrength, blockByteLen, i);
         if (displaySlope) {
             timePlus1Block = measureParallelHash(calibration, securityStrength, blockByteLen, i+1*blockByteLen);
@@ -546,12 +548,12 @@ void testParallelHashPerformanceOne(unsigned int securityStrength, unsigned int 
             timePlus4Blocks = measureParallelHash(calibration, securityStrength, blockByteLen, i+4*blockByteLen);
             timePlus8Blocks = measureParallelHash(calibration, securityStrength, blockByteLen, i+8*blockByteLen);
         }
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
         if (displaySlope) {
-            printf("     +1 block:  %9d cycles, %6.3f cycles/byte (slope)\n", timePlus1Block, (timePlus1Block-(double)(time))*1.0/blockByteLen/1.0);
-            printf("     +2 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus2Blocks, (timePlus2Blocks-(double)(time))*1.0/blockByteLen/2.0);
-            printf("     +4 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus4Blocks, (timePlus4Blocks-(double)(time))*1.0/blockByteLen/4.0);
-            printf("     +8 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus8Blocks, (timePlus8Blocks-(double)(time))*1.0/blockByteLen/8.0);
+            printf("     +1 block:  %9"PRId64" cycles, %6.3f cycles/byte (slope)\n", timePlus1Block, (timePlus1Block-(double)(time))*1.0/blockByteLen/1.0);
+            printf("     +2 blocks: %9"PRId64" cycles, %6.3f cycles/byte (slope)\n", timePlus2Blocks, (timePlus2Blocks-(double)(time))*1.0/blockByteLen/2.0);
+            printf("     +4 blocks: %9"PRId64" cycles, %6.3f cycles/byte (slope)\n", timePlus4Blocks, (timePlus4Blocks-(double)(time))*1.0/blockByteLen/4.0);
+            printf("     +8 blocks: %9"PRId64" cycles, %6.3f cycles/byte (slope)\n", timePlus8Blocks, (timePlus8Blocks-(double)(time))*1.0/blockByteLen/8.0);
         }
         displaySlope = 0;
     }
@@ -568,7 +570,7 @@ void testParallelHashPerformance()
 #endif
 
 #ifdef XKCP_has_KangarooTwelve
-uint_32t measureKangarooTwelve(uint_32t dtMin, unsigned int inputLen)
+cycles_t measureKangarooTwelve(cycles_t dtMin, unsigned int inputLen)
 {
     unsigned char *input = bigBuffer1;
     ALIGN_DEFAULT unsigned char output[32];
@@ -579,7 +581,7 @@ uint_32t measureKangarooTwelve(uint_32t dtMin, unsigned int inputLen)
     memset(input, 0xA5, 16);
 
     measureTimingBeginDeclared
-    KangarooTwelve(input, inputLen, output, 32, "", 0);
+    KangarooTwelve(input, inputLen, output, 32, (const BitSequence *)"", 0);
     measureTimingEnd
 }
 
@@ -595,7 +597,7 @@ void testKangarooTwelvePerformanceOne( void )
 {
     const unsigned int chunkSize = 8192;
     unsigned halfTones;
-    uint_32t calibration = calibrate();
+    cycles_t calibration = CalibrateTimer();
     unsigned int chunkSizeLog = (unsigned int)floor(log(chunkSize)/log(2.0)+0.5);
     int displaySlope = 0;
 
@@ -603,8 +605,8 @@ void testKangarooTwelvePerformanceOne( void )
     for(halfTones=chunkSizeLog*12-28; halfTones<=13*12; halfTones+=4) {
         double I = pow(2.0, halfTones/12.0);
         unsigned int i  = (unsigned int)floor(I+0.5);
-        uint_32t time, timePlus1Block, timePlus2Blocks, timePlus4Blocks, timePlus8Blocks;
-        uint_32t timePlus84Blocks, timePlus168Blocks;
+        cycles_t time, timePlus1Block, timePlus2Blocks, timePlus4Blocks, timePlus8Blocks;
+        cycles_t timePlus168Blocks;
         time = measureKangarooTwelve(calibration, i);
         if (i == chunkSize) {
             displaySlope = 1;
@@ -612,26 +614,24 @@ void testKangarooTwelvePerformanceOne( void )
             timePlus2Blocks = measureKangarooTwelve(calibration, i+2*chunkSize);
             timePlus4Blocks = measureKangarooTwelve(calibration, i+4*chunkSize);
             timePlus8Blocks = measureKangarooTwelve(calibration, i+8*chunkSize);
-            timePlus84Blocks = measureKangarooTwelve(calibration, i+84*chunkSize);
             timePlus168Blocks = measureKangarooTwelve(calibration, i+168*chunkSize);
         }
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
+        printf("%8u bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
         if (displaySlope) {
-            printf("     +1 block:  %9d cycles, %6.3f cycles/byte (slope)\n", timePlus1Block, (timePlus1Block-(double)(time))*1.0/chunkSize/1.0);
-            printf("     +2 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus2Blocks, (timePlus2Blocks-(double)(time))*1.0/chunkSize/2.0);
-            printf("     +4 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus4Blocks, (timePlus4Blocks-(double)(time))*1.0/chunkSize/4.0);
-            printf("     +8 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus8Blocks, (timePlus8Blocks-(double)(time))*1.0/chunkSize/8.0);
-            printf("    +84 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus84Blocks, (timePlus84Blocks-(double)(time))*1.0/chunkSize/84.0);
-            printf("   +168 blocks: %9d cycles, %6.3f cycles/byte (slope)\n", timePlus168Blocks, (timePlus168Blocks-(double)(time))*1.0/chunkSize/168.0);
+            printf("     +1 block:  %9"PRId64" cycles, %6.3f cycles/byte (slope)\n", timePlus1Block, (timePlus1Block-(double)(time))*1.0/chunkSize/1.0);
+            printf("     +2 blocks: %9"PRId64" cycles, %6.3f cycles/byte (slope)\n", timePlus2Blocks, (timePlus2Blocks-(double)(time))*1.0/chunkSize/2.0);
+            printf("     +4 blocks: %9"PRId64" cycles, %6.3f cycles/byte (slope)\n", timePlus4Blocks, (timePlus4Blocks-(double)(time))*1.0/chunkSize/4.0);
+            printf("     +8 blocks: %9"PRId64" cycles, %6.3f cycles/byte (slope)\n", timePlus8Blocks, (timePlus8Blocks-(double)(time))*1.0/chunkSize/8.0);
+            printf("   +168 blocks: %9"PRId64" cycles, %6.3f cycles/byte (slope)\n", timePlus168Blocks, (timePlus168Blocks-(double)(time))*1.0/chunkSize/168.0);
             displaySlope = 0;
         }
     }
     for(halfTones=12*12; halfTones<=20*12; halfTones+=4) {
         double I = chunkSize + pow(2.0, halfTones/12.0);
         unsigned int i  = (unsigned int)floor(I+0.5);
-        uint_32t time;
+        cycles_t time;
         time = measureKangarooTwelve(calibration, i);
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
+        printf("%8u bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", i, time, time*1.0/i);
     }
     printf("\n\n");
 }
@@ -648,7 +648,7 @@ void testKangarooTwelvePerformance()
 #define Kravatte_KeyLen 16
 #define Kravatte_rate   1600
 
-uint_32t measureKravatte_MaskDerivation(uint_32t dtMin)
+cycles_t measureKravatte_MaskDerivation(cycles_t dtMin)
 {
     ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
     Kravatte_Instance kv;
@@ -661,7 +661,7 @@ uint_32t measureKravatte_MaskDerivation(uint_32t dtMin)
     measureTimingEnd
 }
 
-uint_32t measureKra(uint_32t dtMin, unsigned int inputLen)
+cycles_t measureKra(cycles_t dtMin, unsigned int inputLen)
 {
     unsigned char* input = bigBuffer1;
     ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
@@ -679,7 +679,7 @@ uint_32t measureKra(uint_32t dtMin, unsigned int inputLen)
     measureTimingEnd
 }
 
-uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
+cycles_t measureVatte(cycles_t dtMin, unsigned int outputLen)
 {
     unsigned char* output = bigBuffer1;
     ALIGN_DEFAULT unsigned char key[Kravatte_KeyLen];
@@ -699,7 +699,7 @@ uint_32t measureVatte(uint_32t dtMin, unsigned int outputLen)
     measureTimingEnd
 }
 
-uint_32t measureKravatte_SANSE(uint_32t dtMin, unsigned int inputLen)
+cycles_t measureKravatte_SANSE(cycles_t dtMin, unsigned int inputLen)
 {
     unsigned char* input = bigBuffer1;
     unsigned char* output = bigBuffer2;
@@ -721,7 +721,7 @@ uint_32t measureKravatte_SANSE(uint_32t dtMin, unsigned int inputLen)
     measureTimingEnd
 }
 
-uint_32t measureKravatte_SANE_Wrap(uint_32t dtMin, unsigned int inputLen)
+cycles_t measureKravatte_SANE_Wrap(cycles_t dtMin, unsigned int inputLen)
 {
     unsigned char* input = bigBuffer1;
     unsigned char* output = bigBuffer2;
@@ -745,7 +745,7 @@ uint_32t measureKravatte_SANE_Wrap(uint_32t dtMin, unsigned int inputLen)
     measureTimingEnd
 }
 
-uint_32t measureKravatte_SANE_MAC(uint_32t dtMin, unsigned int ADLen)
+cycles_t measureKravatte_SANE_MAC(cycles_t dtMin, unsigned int ADLen)
 {
     ALIGN_DEFAULT unsigned char input[1];
     ALIGN_DEFAULT unsigned char output[1];
@@ -769,7 +769,7 @@ uint_32t measureKravatte_SANE_MAC(uint_32t dtMin, unsigned int ADLen)
     measureTimingEnd
 }
 
-uint_32t measureKravatte_WBC(uint_32t dtMin, unsigned int inputLen)
+cycles_t measureKravatte_WBC(cycles_t dtMin, unsigned int inputLen)
 {
     unsigned char* input = bigBuffer1;
     unsigned char* output = bigBuffer2;
@@ -798,7 +798,7 @@ void printKravattePerformanceHeader( void )
     printf("\n");
 }
 
-uint_32t testKravatteNextLen( uint_32t len )
+uint32_t testKravatteNextLen( uint32_t len )
 {
     if (len < Kravatte_rate) {
         len <<= 1;
@@ -813,71 +813,71 @@ uint_32t testKravatteNextLen( uint_32t len )
 	return len;
 }
 
-uint_32t testKravatteAdaptLen( uint_32t len )
+uint32_t testKravatteAdaptLen( uint32_t len )
 {
     return (len < Kravatte_rate) ? len : (len-8);
 }
 
-uint_32t testKravatteWBCAdaptLen( uint_32t len )
+uint32_t testKravatteWBCAdaptLen( uint32_t len )
 {
     return (len < Kravatte_rate) ? len : (len-16);
 }
 
-typedef uint_32t (* measurePerf)(uint_32t, unsigned int);
+typedef cycles_t (* measurePerf)(cycles_t, unsigned int);
 
-static void testKravattePerfSlope(measurePerf pFunc, uint_32t calibration)
+static void testKravattePerfSlope(measurePerf pFunc, cycles_t calibration)
 {
-	uint_32t len;
-    uint_32t count;
-    uint_32t time;
-    uint_32t time128;
-    uint_32t time256;
+	uint32_t len;
+    uint32_t count;
+    cycles_t time;
+    cycles_t time128;
+    cycles_t time256;
+    const uint32_t stabilityCount = 10;
 
-    time128 = 0xFFFFFFFF;
+    time128 = CYCLES_MAX;
     len = 128*Kravatte_rate;
-	count = 100;
+	count = stabilityCount;
     do {
         time = pFunc(calibration, len);
 		if (time < time128) {
 			time128 = time;
-			count = 100;
+			count = stabilityCount;
 		}
     } while( --count != 0);
-    time256 = 0xFFFFFFFF;
+    time256 = CYCLES_MAX;
     len = 256*Kravatte_rate;
-	count = 100;
+	count = stabilityCount;
     do {
         time = pFunc(calibration, len);
 		if (time < time256) {
 			time256 = time;
-			count = 100;
+			count = stabilityCount;
 		}
     } while( --count != 0);
 
     time = time256-time128;
 	len = 128*Kravatte_rate;
-    printf("%8u %8u\n", time128, time256);
-    printf("Slope %8d bytes (%u blocks): %9d cycles, %6.3f cycles/byte\n", len/8, len/Kravatte_rate, time, time*1.0/(len/8));
+    printf("Slope %8d bytes (%u blocks): %9"PRId64" cycles, %6.3f cycles/byte\n", len/8, len/Kravatte_rate, time, time*1.0/(len/8));
 }
 
 void testKravattePerformanceOne( void )
 {
-    uint_32t calibration = calibrate();
-    uint_32t len;
-    uint_32t time;
+    cycles_t calibration = CalibrateTimer();
+    uint32_t len;
+    cycles_t time;
 
     time = measureKravatte_MaskDerivation(calibration);
-    printf("Kravatte Mask Derivation %9d cycles\n\n", time);
+    printf("Kravatte Mask Derivation %9"PRId64" cycles\n\n", time);
 
     printf("Kra\n");
     {
         len = 4096*8;
         time = measureKra(calibration, len);
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureKra(calibration, testKravatteAdaptLen(len));
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
     }
 	testKravattePerfSlope(measureKra, calibration);
 
@@ -885,11 +885,11 @@ void testKravattePerformanceOne( void )
     {
         len = 4096*8;
         time = measureVatte(calibration, len);
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureVatte(calibration, testKravatteAdaptLen(len));
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
     }
 	testKravattePerfSlope(measureVatte, calibration);
 
@@ -897,11 +897,11 @@ void testKravattePerformanceOne( void )
     {
         len = 4096*8;
         time = measureKravatte_SANE_Wrap(calibration, len);
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureKravatte_SANE_Wrap(calibration, testKravatteAdaptLen(len));
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
     }
 	testKravattePerfSlope(measureKravatte_SANE_Wrap, calibration);
 
@@ -909,11 +909,11 @@ void testKravattePerformanceOne( void )
     {
         len = 4096*8;
         time = measureKravatte_SANE_MAC(calibration, len);
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureKravatte_SANE_MAC(calibration, testKravatteAdaptLen(len));
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
     }
 	testKravattePerfSlope(measureKravatte_SANE_MAC, calibration);
 
@@ -921,22 +921,22 @@ void testKravattePerformanceOne( void )
     {
         len = 4096*8;
         time = measureKravatte_SANSE(calibration, len);
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureKravatte_SANSE(calibration, testKravatteAdaptLen(len));
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", testKravatteAdaptLen(len)/8, time, time*1.0/(len/8));
     }
 	testKravattePerfSlope(measureKravatte_SANSE, calibration);
 
     printf("\nKravatte_WBC (Tweak 128 bits)\n");
     for(len=2048*8; len<=16384*8; len*=2) {
         time = measureKravatte_WBC(calibration, len);
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", len/8, time, time*1.0/(len/8));
     }
     for(len=8; len <= 256*Kravatte_rate; len = testKravatteNextLen(len)) {
         time = measureKravatte_WBC(calibration, testKravatteWBCAdaptLen(len));
-        printf("%8d bytes: %9d cycles, %6.3f cycles/byte\n", testKravatteWBCAdaptLen(len)/8, time, time*1.0/(len/8));
+        printf("%8d bytes: %9"PRId64" cycles, %6.3f cycles/byte\n", testKravatteWBCAdaptLen(len)/8, time, time*1.0/(len/8));
     }
 	testKravattePerfSlope(measureKravatte_WBC, calibration);
 
@@ -1048,46 +1048,46 @@ static double med4(double x0, double x1, double x2, double x3)
         return 0.125*list[0]+0.25*list[1]+0.375*list[2]+0.25*list[3];
 }
 
-void displayMeasurements1101001000(uint_32t *measurements, uint_32t *laneCounts, unsigned int numberOfColumns, unsigned int laneLengthInBytes)
+void displayMeasurements1101001000(cycles_t *measurements, uint32_t *laneCounts, unsigned int numberOfColumns, unsigned int laneLengthInBytes)
 {
     double cpb[4];
     unsigned int i;
 
     for(i=0; i<numberOfColumns; i++) {
-        uint_32t bytes = laneCounts[i]*laneLengthInBytes;
+        uint32_t bytes = laneCounts[i]*laneLengthInBytes;
         double x = med4(measurements[i*4+0]*1.0, measurements[i*4+1]/10.0, measurements[i*4+2]/100.0, measurements[i*4+3]/1000.0);
         cpb[i] = x/bytes;
     }
     if (numberOfColumns == 1) {
-        printf("     laneCount:  %5d\n", laneCounts[0]);
-        printf("       1 block:  %5d\n", measurements[0]);
-        printf("      10 blocks: %6d\n", measurements[1]);
-        printf("     100 blocks: %7d\n", measurements[2]);
-        printf("    1000 blocks: %8d\n", measurements[3]);
+        printf("     laneCount:  %5u\n", laneCounts[0]);
+        printf("       1 block:  %5"PRId64"\n", measurements[0]);
+        printf("      10 blocks: %6"PRId64"\n", measurements[1]);
+        printf("     100 blocks: %7"PRId64"\n", measurements[2]);
+        printf("    1000 blocks: %8"PRId64"\n", measurements[3]);
         printf("    cycles/byte: %7.2f\n", cpb[0]);
     }
     else if (numberOfColumns == 2) {
-        printf("     laneCount:  %5d       %5d\n", laneCounts[0], laneCounts[1]);
-        printf("       1 block:  %5d       %5d\n", measurements[0], measurements[4]);
-        printf("      10 blocks: %6d      %6d\n", measurements[1], measurements[5]);
-        printf("     100 blocks: %7d     %7d\n", measurements[2], measurements[6]);
-        printf("    1000 blocks: %8d    %8d\n", measurements[3], measurements[7]);
+        printf("     laneCount:  %5u       %5u\n", laneCounts[0], laneCounts[1]);
+        printf("       1 block:  %5"PRId64"       %5"PRId64"\n", measurements[0], measurements[4]);
+        printf("      10 blocks: %6"PRId64"      %6"PRId64"\n", measurements[1], measurements[5]);
+        printf("     100 blocks: %7"PRId64"     %7"PRId64"\n", measurements[2], measurements[6]);
+        printf("    1000 blocks: %8"PRId64"    %8"PRId64"\n", measurements[3], measurements[7]);
         printf("    cycles/byte: %7.2f     %7.2f\n", cpb[0], cpb[1]);
     }
     else if (numberOfColumns == 3) {
-        printf("     laneCount:  %5d       %5d       %5d\n", laneCounts[0], laneCounts[1], laneCounts[2]);
-        printf("       1 block:  %5d       %5d       %5d\n", measurements[0], measurements[4], measurements[8]);
-        printf("      10 blocks: %6d      %6d      %6d\n", measurements[1], measurements[5], measurements[9]);
-        printf("     100 blocks: %7d     %7d     %7d\n", measurements[2], measurements[6], measurements[10]);
-        printf("    1000 blocks: %8d    %8d    %8d\n", measurements[3], measurements[7], measurements[11]);
+        printf("     laneCount:  %5u       %5u       %5u\n", laneCounts[0], laneCounts[1], laneCounts[2]);
+        printf("       1 block:  %5"PRId64"       %5"PRId64"       %5"PRId64"\n", measurements[0], measurements[4], measurements[8]);
+        printf("      10 blocks: %6"PRId64"      %6"PRId64"      %6"PRId64"\n", measurements[1], measurements[5], measurements[9]);
+        printf("     100 blocks: %7"PRId64"     %7"PRId64"     %7"PRId64"\n", measurements[2], measurements[6], measurements[10]);
+        printf("    1000 blocks: %8"PRId64"    %8"PRId64"    %8"PRId64"\n", measurements[3], measurements[7], measurements[11]);
         printf("    cycles/byte: %7.2f     %7.2f     %7.2f\n", cpb[0], cpb[1], cpb[2]);
     }
     else if (numberOfColumns == 4) {
-        printf("     laneCount:  %5d       %5d       %5d       %5d\n", laneCounts[0], laneCounts[1], laneCounts[2], laneCounts[3]);
-        printf("       1 block:  %5d       %5d       %5d       %5d\n", measurements[0], measurements[4], measurements[8], measurements[12]);
-        printf("      10 blocks: %6d      %6d      %6d      %6d\n", measurements[1], measurements[5], measurements[9], measurements[13]);
-        printf("     100 blocks: %7d     %7d     %7d     %7d\n", measurements[2], measurements[6], measurements[10], measurements[14]);
-        printf("    1000 blocks: %8d    %8d    %8d    %8d\n", measurements[3], measurements[7], measurements[11], measurements[15]);
+        printf("     laneCount:  %5u       %5u       %5u       %5u\n", laneCounts[0], laneCounts[1], laneCounts[2], laneCounts[3]);
+        printf("       1 block:  %5"PRId64"       %5"PRId64"       %5"PRId64"       %5"PRId64"\n", measurements[0], measurements[4], measurements[8], measurements[12]);
+        printf("      10 blocks: %6"PRId64"      %6"PRId64"      %6"PRId64"      %6"PRId64"\n", measurements[1], measurements[5], measurements[9], measurements[13]);
+        printf("     100 blocks: %7"PRId64"     %7"PRId64"     %7"PRId64"     %7"PRId64"\n", measurements[2], measurements[6], measurements[10], measurements[14]);
+        printf("    1000 blocks: %8"PRId64"    %8"PRId64"    %8"PRId64"    %8"PRId64"\n", measurements[3], measurements[7], measurements[11], measurements[15]);
         printf("    cycles/byte: %7.2f     %7.2f     %7.2f     %7.2f\n", cpb[0], cpb[1], cpb[2], cpb[3]);
     }
     printf("\n");

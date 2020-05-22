@@ -1,139 +1,284 @@
-/*
--------- Forwarded Message --------
-Subject:    RE: Time Trouble
-Date:   Mon, 28 Jul 2008 08:07:47 -0400
-From:   Doug Whiting <DWhiting at hifn.com>
-Reply-To:   hash-forum at nist.gov
-To:     Multiple recipients of list <hash-forum at nist.gov>
+// Adapted from Google Benchmark (https://github.com/google/benchmark).
+//
+// Copyright 2020 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-Sorry for the earlier empty email. I pushed send by mistake while starting my message.
+#ifndef _XKCP_timing_h_
+#define _XKCP_timing_h_
 
-Yes, it's a real shame that C doesn't have a standard way to do this. Below is some code that you are free to copy if you wish I have used variants of this function for years, all the way back to AES days, and the code is entirely mine, so I hereby release it to the public domain. If you keep reading below, I also give some concrete suggestions on how to use it.
+#include <stdint.h>
 
-This code works on x86 family CPUs (32-big and 64-bit), under MSVC, gcc, and BorlandC, including older compiler versions where the __rdtsc() function is not defined. It also checks for ANSI compiles (i.e., -ansi using gcc, /Za using MSVC, and -A using Borland) and disables the call, to avoid compile-time warnings/errors. The function HiResTime() currently returns only 32 bits, mostly for historical reasons. However, that's enough to do most timing measurements, and you could easily enhance it to return 64 bits if desired. I normally compile with multiple compilers -- e.g., three versions of MSVC (v4.2, v6.0 and v9.0), at least two versions of gcc, plus Borland -- and take performance measurements on all of them.
-
-[…]
-
-*/
-
-/************** Timing routine (for performance measurements) ***********/
-/* By Doug Whiting */
-/* unfortunately, this is generally assembly code and not very portable */
-
-/* 2019-01-01 Bruno Pairault : ARM CYCLE COUNT IS BASED on PMU assuming Linux Kernel allow User Access to the PMU.
-   The method checks on GCC if the Architecture is Aarch64 for PMU Aarch64 or ARM version 7-A to implement PMU 32.
-   It's very likely that you have to check all the parameters depending on your OS, GCC native parameters.
-   Example : 2019/01/01 : Raspbian OS 9- Kernel 4.14.79 is an Aarch32 OS and declared as ARMv7l.
-                          it uses gcc version 6.3.0 20170516 (Raspbian 6.3.0-18+rpi1+deb9u1) with -arch=armv6 as target=native.
-                          There's only few OS that support Aarch64 as OpenSuse on RPI3B+.
-                          it will then provide performance and Aarch64 PMU.
-*/
-
-
-#if defined(_M_IX86) || defined(__i386) || defined(_i386) || defined(__i386__) || defined(i386) || \
-    defined(_X86_)   || defined(__x86_64__) || defined(_M_X64) || defined(__x86_64)
-#define _Is_X86_    1
+#if defined(__GNUC__)
+#define BENCHMARK_ALWAYS_INLINE __attribute__((always_inline))
+#elif defined(_MSC_VER) && !defined(__clang__)
+#define BENCHMARK_ALWAYS_INLINE __forceinline
+#if _MSC_VER >= 1900
+#else
+#endif
+#define __func__ __FUNCTION__
+#else
+#define BENCHMARK_ALWAYS_INLINE
 #endif
 
-#if  defined(_Is_X86_) && (!defined(__STRICT_ANSI__)) && (defined(__GNUC__) || !defined(__STDC__)) && \
-    (defined(__BORLANDC__) || defined(_MSC_VER) || defined(__MINGW_H) || defined(__GNUC__))
-#define HI_RES_CLK_OK         1          /* it's ok to use RDTSC opcode */
-
-#if defined(_MSC_VER) /* && defined(_M_X64) */
-#include <intrin.h>
-#pragma intrinsic(__rdtsc)         /* use MSVC rdtsc call where defined */
+#ifndef __has_feature
+#define __has_feature(x) 0
 #endif
 
-#endif
-
-typedef unsigned int uint_32t;
-
-static uint_32t HiResTime(void)           /* return the current value of time stamp counter */
-    {
-#if defined(HI_RES_CLK_OK)
-    uint_32t x[2];
-#if   defined(__BORLANDC__)
-#define COMPILER_ID "BCC"
-    __emit__(0x0F,0x31);           /* RDTSC instruction */
-    _asm { mov x[0],eax };
+#if defined(__clang__)
+  #if !defined(COMPILER_CLANG)
+    #define COMPILER_CLANG
+  #endif
 #elif defined(_MSC_VER)
-#define COMPILER_ID "MSC"
-#if defined(_MSC_VER) /* && defined(_M_X64) */
-    x[0] = (uint_32t) __rdtsc();
-#else
-    _asm { _emit 0fh }; _asm { _emit 031h };
-    _asm { mov x[0],eax };
+  #if !defined(COMPILER_MSVC)
+    #define COMPILER_MSVC
+  #endif
+#elif defined(__GNUC__)
+  #if !defined(COMPILER_GCC)
+    #define COMPILER_GCC
+  #endif
 #endif
-#elif defined(__MINGW_H) || defined(__GNUC__)
-#define COMPILER_ID "GCC"
-    asm volatile("rdtsc" : "=a"(x[0]), "=d"(x[1]));
-#else
-#error  "HI_RES_CLK_OK -- but no assembler code for this platform (?)"
-#endif
-    return x[0];
-#else
-    /* avoid annoying MSVC 9.0 compiler warning #4720 in ANSI mode! */
-#if (!defined(_MSC_VER)) || (!defined(__STDC__)) || (_MSC_VER < 1300)
-    /* Detecting ARM ARCHITECTURE on GCC */
-    #ifdef __aarch64__
-    /* Implement Aarch64 bits on PMU : Tested on Cortex a-53 */
-        uint32_t cycle_count;
-        asm volatile("MRS %0, pmevcntr0_el0" : "=r" (cycle_count));
-        return cycle_count;
-    #elif  defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__)
-    /* Implement Aarch32 bits on PMU : Tested on Cortex a-53 */
-        uint32_t cycle_count;
-        asm volatile("MRC p15, 0, %0, c9, c13, 0 \t\n" : "=r"(cycle_count));
-        return cycle_count;
-    #elif defined(__ARM_ARCH_6__)
-        #error "Unsupported ARM. Check the option -march and your CPU. Alternatively you can return 0. "
-        #error "RPI3 B+ running 32 bits OS will support to force ARCH_7A until these OS updates with there native Arch 6 GCC implementation."
+
+#if defined(__CYGWIN__)
+  #define BENCHMARK_OS_CYGWIN 1
+#elif defined(_WIN32)
+  #define BENCHMARK_OS_WINDOWS 1
+  #if defined(__MINGW32__)
+    #define BENCHMARK_OS_MINGW 1
+  #endif
+#elif defined(__APPLE__)
+  #define BENCHMARK_OS_APPLE 1
+  #include "TargetConditionals.h"
+  #if defined(TARGET_OS_MAC)
+    #define BENCHMARK_OS_MACOSX 1
+    #if defined(TARGET_OS_IPHONE)
+      #define BENCHMARK_OS_IOS 1
     #endif
+  #endif
+#elif defined(__FreeBSD__)
+  #define BENCHMARK_OS_FREEBSD 1
+#elif defined(__NetBSD__)
+  #define BENCHMARK_OS_NETBSD 1
+#elif defined(__OpenBSD__)
+  #define BENCHMARK_OS_OPENBSD 1
+#elif defined(__linux__)
+  #define BENCHMARK_OS_LINUX 1
+#elif defined(__native_client__)
+  #define BENCHMARK_OS_NACL 1
+#elif defined(__EMSCRIPTEN__)
+  #define BENCHMARK_OS_EMSCRIPTEN 1
+#elif defined(__rtems__)
+  #define BENCHMARK_OS_RTEMS 1
+#elif defined(__Fuchsia__)
+#define BENCHMARK_OS_FUCHSIA 1
+#elif defined (__SVR4) && defined (__sun)
+#define BENCHMARK_OS_SOLARIS 1
+#elif defined(__QNX__)
+#define BENCHMARK_OS_QNX 1
 #endif
-    return 0;
-#endif /* defined(HI_RES_CLK_OK) */
+
+#if defined(BENCHMARK_OS_MACOSX)
+#include <mach/mach_time.h>
+#endif
+// For MSVC, we want to use '_asm rdtsc' when possible (since it works
+// with even ancient MSVC compilers), and when not possible the
+// __rdtsc intrinsic, declared in <intrin.h>.  Unfortunately, in some
+// environments, <windows.h> and <intrin.h> have conflicting
+// declarations of some other intrinsics, breaking compilation.
+// Therefore, we simply declare __rdtsc ourselves. See also
+// http://connect.microsoft.com/VisualStudio/feedback/details/262047
+#if defined(COMPILER_MSVC) && !defined(_M_IX86)
+extern "C" uint64_t __rdtsc();
+#pragma intrinsic(__rdtsc)
+#endif
+
+#if !defined(BENCHMARK_OS_WINDOWS) || defined(BENCHMARK_OS_MINGW)
+#include <sys/time.h>
+#include <time.h>
+#endif
+
+#ifdef BENCHMARK_OS_EMSCRIPTEN
+#include <emscripten.h>
+#endif
+
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t CycleTimer() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of "mach time units" that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return (int64_t)(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile("rdtsc" : "=A"(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile("rdtsc" : "=a"(low), "=d"(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+#if defined(__powerpc64__) || defined(__ppc64__)
+  int64_t tb;
+  asm volatile("mfspr %0, 268" : "=r"(tb));
+  return tb;
+#else
+  uint32_t tbl, tbu0, tbu1;
+  asm volatile(
+      "mftbu %0\n"
+      "mftbl %1\n"
+      "mftbu %2"
+      : "=r"(tbu0), "=r"(tbl), "=r"(tbu1));
+  tbl &= -(int32_t)(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is no longer needed)
+  return ((uint64_t)(tbu1) << 32) | tbl;
+#endif
+#elif defined(__sparc__)
+  int64_t tick;
+  asm(".byte 0x83, 0x41, 0x00, 0x00");
+  asm("mov   %%g1, %0" : "=r"(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm("mov %0 = ar.itc" : "=r"(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+
+  // Native Client does not provide any API to access cycle counter.
+  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
+  // because is provides nanosecond resolution (which is noticable at
+  // least for PNaCl modules running on x86 Mac & Linux).
+  // Initialize to always return 0 if clock_gettime fails.
+  struct timespec ts = {0, 0};
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return (int64_t)(ts.tv_sec) * 1000000000 + ts.tv_nsec;
+#elif defined(__aarch64__)
+  // System timer of ARMv8 runs at a different frequency than the CPU's.
+  // The frequency is fixed, typically in the range 1-50MHz.  It can be
+  // read at CNTFRQ special register.  We assume the OS has set up
+  // the virtual timer properly.
+  int64_t virtual_timer_value;
+  asm volatile("mrs %0, cntvct_el0" : "=r"(virtual_timer_value));
+  return virtual_timer_value;
+#elif defined(__ARM_ARCH)
+  // V6 is the earliest arch that has a standard cyclecount
+  // Native Client validator doesn't allow MRC instructions.
+#if (__ARM_ARCH >= 6)
+  uint32_t pmccntr;
+  uint32_t pmuseren;
+  uint32_t pmcntenset;
+  // Read the user mode perf monitor counter access permissions.
+  asm volatile("mrc p15, 0, %0, c9, c14, 0" : "=r"(pmuseren));
+  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
+    asm volatile("mrc p15, 0, %0, c9, c12, 1" : "=r"(pmcntenset));
+    if (pmcntenset & 0x80000000ul) {  // Is it counting?
+      asm volatile("mrc p15, 0, %0, c9, c13, 0" : "=r"(pmccntr));
+      // The counter is set up to count every 64th cycle
+      return (int64_t)(pmccntr) * 64;  // Should optimize to << 6
     }
+  }
+#endif
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return (int64_t)(tv.tv_sec) * 1000000 + tv.tv_usec;
+#elif defined(__mips__)
+  // mips apparently only allows rdtsc for superusers, so we fall
+  // back to gettimeofday.  It's possible clock_gettime would be better.
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return (int64_t)(tv.tv_sec) * 1000000 + tv.tv_usec;
+#elif defined(__s390__)  // Covers both s390 and s390x.
+  // Return the CPU clock.
+  uint64_t tsc;
+  asm("stck %0" : "=Q"(tsc) : : "cc");
+  return tsc;
+#elif defined(__riscv) // RISC-V
+  // Use RDCYCLE (and RDCYCLEH on riscv32)
+#if __riscv_xlen == 32
+  uint32_t cycles_lo, cycles_hi0, cycles_hi1;
+  // This asm also includes the PowerPC overflow handling strategy, as above.
+  // Implemented in assembly because Clang insisted on branching.
+  asm volatile(
+      "rdcycleh %0\n"
+      "rdcycle %1\n"
+      "rdcycleh %2\n"
+      "sub %0, %0, %2\n"
+      "seqz %0, %0\n"
+      "sub %0, zero, %0\n"
+      "and %1, %1, %0\n"
+      : "=r"(cycles_hi0), "=r"(cycles_lo), "=r"(cycles_hi1));
+  return ((uint64_t)(cycles_hi1) << 32) | cycles_lo;
+#else
+  uint64_t cycles;
+  asm volatile("rdcycle %0" : "=r"(cycles));
+  return cycles;
+#endif
+#else
+// The soft failover to a generic implementation is automatic only for ARM.
+// For other platforms the developer is expected to make an attempt to create
+// a fast implementation and use generic version if nothing better is available.
+#error You need to define CycleTimer for your OS and CPU
+#endif
+}
+
+/* ---------------------------------------------------------------- */
+/*           XKCP-specific definitions follow.                      */
+/* ---------------------------------------------------------------- */
+
+typedef int64_t cycles_t;
+#define CYCLES_MAX INT64_MAX
 
 #define TIMER_SAMPLE_CNT (100)
 
-static uint_32t calibrate()
+static cycles_t CalibrateTimer()
 {
-    uint_32t dtMin = 0xFFFFFFFF;        /* big number to start */
-    uint_32t t0,t1,i;
-    /* if GCC and ARM then Initialize PMU. Theoretically applied once but choosen to be set for Code Simplication */
-    #if (!defined(_MSC_VER)) || (!defined(__STDC__)) || (_MSC_VER < 1300)
-        #ifdef __aarch64__
-        /* Implement Aarch64 bits on PMU : Tested on Cortex a-53 */
-            uint32_t evtCount;
-            evtCount= 0x008;
-            #define ARMV8_PMEVTYPER_EVTCOUNT_MASK  0x3ff
-            evtCount &= ARMV8_PMEVTYPER_EVTCOUNT_MASK;
-            asm volatile("isb");
-            /* Just use counter 0 */
-            asm volatile("msr pmevtyper0_el0, %0" : : "r" (evtCount));
-            /*   Performance Monitors Count Enable Set register bit 30:1 disable, 31,1 enable */
-            uint32_t r = 0;
-            asm volatile("mrs %0, pmcntenset_el0" : "=r" (r));
-            asm volatile("msr pmcntenset_el0, %0" : : "r" (r|1));
-        #elif  defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__)
-        /* Implement Aarch32 bits on PMU : Tested on Cortex a-53 */
-            /* Enable counters in Control Register and reset cycle count and event count */
-            printf("PMU32 Enabled... \n");
-            asm volatile("MCR   p15, 0, %0, c9, c12, 0" : : "r"(0x00000007));
-            /* Event counter selection register, which counter to access */
-            asm volatile("MCR   p15, 0, %0, c9, c12, 5" : : "r"(0x0));
-            /* selected event type to record, instructions executed */
-            asm volatile("MCR   p15, 0, %0, c9, c13, 1" : : "r"(0x00000008));
-            /* count enable set register, bit 31 enables the cycle counter,and bit 0 enables the first counter */
-            asm volatile("MCR   p15, 0, %0, c9, c12, 1" : : "r"(0x8000000f));
-        #elif defined(__ARM_ARCH_6__)
-            printf("Do nothing.. Check the configuration. Unsupported ARM\n");
-        #endif
-    #endif
+    cycles_t dtMin = CYCLES_MAX;        /* big number to start */
+    cycles_t t0,t1,i;
+
     for (i=0;i < TIMER_SAMPLE_CNT;i++)  /* calibrate the overhead for measuring time */
         {
-        t0 = HiResTime();
-        t1 = HiResTime();
+        t0 = CycleTimer();
+        t1 = CycleTimer();
         if (dtMin > t1-t0)              /* keep only the minimum time */
             dtMin = t1-t0;
         }
@@ -141,24 +286,26 @@ static uint_32t calibrate()
 }
 
 #define measureTimingDeclare \
-    uint_32t tMin = 0xFFFFFFFF; \
-    uint_32t t0,t1,i;
+    cycles_t tMin = CYCLES_MAX; \
+    cycles_t t0,t1,i;
 
 #define measureTimingBeginDeclared \
     for (i=0;i < TIMER_SAMPLE_CNT;i++) \
         { \
-        t0 = HiResTime();
+        t0 = CycleTimer();
 
 #define measureTimingBegin \
-    uint_32t tMin = 0xFFFFFFFF; \
-    uint_32t t0,t1,i; \
+    cycles_t tMin = CYCLES_MAX; \
+    cycles_t t0,t1,i; \
     for (i=0;i < TIMER_SAMPLE_CNT;i++) \
         { \
-        t0 = HiResTime();
+        t0 = CycleTimer();
 
 #define measureTimingEnd \
-        t1 = HiResTime(); \
+        t1 = CycleTimer(); \
         if (tMin > t1-t0 - dtMin) \
             tMin = t1-t0 - dtMin; \
         } \
     return tMin;
+
+#endif  // _XKCP_timing_h_

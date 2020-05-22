@@ -27,7 +27,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define Many 100
 #define bufferSize (25000*P)
 
-uint_32t measureWrap(uint_32t dtMin, unsigned int lenI, unsigned int lenA)
+cycles_t measureWrap(cycles_t dtMin, unsigned int lenI, unsigned int lenA)
 {
     Keyak_Instance keyak;
     ALIGN(32) unsigned char key[16];
@@ -56,22 +56,22 @@ uint_32t measureWrap(uint_32t dtMin, unsigned int lenI, unsigned int lenA)
 
 void timing(const char *synopsis, const char *implementation)
 {
-    uint_32t calibration = calibrate();
-    uint_32t oneBlockIA = measureWrap(calibration, BlockRs, BlockRsRa);
-    uint_32t twoBlocksIA = measureWrap(calibration, 2*BlockRs, 2*BlockRsRa);
-    uint_32t manyBlocksIA = measureWrap(calibration, Many*BlockRs, Many*BlockRsRa);
-    uint_32t oneBlockI = measureWrap(calibration, BlockRs, 0);
-    uint_32t twoBlocksI = measureWrap(calibration, 2*BlockRs, 0);
-    uint_32t manyBlocksI = measureWrap(calibration, Many*BlockRs, 0);
-    uint_32t oneBlockA = measureWrap(calibration, 0, BlockRa);
-    uint_32t twoBlocksA = measureWrap(calibration, 0, 2*BlockRa);
-    uint_32t manyBlocksA = measureWrap(calibration, 0, Many*BlockRa);
+    cycles_t calibration = CalibrateTimer();
+    cycles_t oneBlockIA = measureWrap(calibration, BlockRs, BlockRsRa);
+    cycles_t twoBlocksIA = measureWrap(calibration, 2*BlockRs, 2*BlockRsRa);
+    cycles_t manyBlocksIA = measureWrap(calibration, Many*BlockRs, Many*BlockRsRa);
+    cycles_t oneBlockI = measureWrap(calibration, BlockRs, 0);
+    cycles_t twoBlocksI = measureWrap(calibration, 2*BlockRs, 0);
+    cycles_t manyBlocksI = measureWrap(calibration, Many*BlockRs, 0);
+    cycles_t oneBlockA = measureWrap(calibration, 0, BlockRa);
+    cycles_t twoBlocksA = measureWrap(calibration, 0, 2*BlockRa);
+    cycles_t manyBlocksA = measureWrap(calibration, 0, Many*BlockRa);
     printf("*** %s ***\nImplementation: %s\n\n", synopsis, implementation);
     printf("Cycles for " xstr(Keyak_Initialize) "() + " xstr(Keyak_Wrap) "():\n");
     printf("          I    A    1 block  2 blocks  100 blocks  ratio  slope\n");
-    printf("I/A:   %4d %4d   %8d %9d %11d %6.2f %6.2f\n", BlockRs, BlockRsRa, oneBlockIA, twoBlocksIA, manyBlocksIA, manyBlocksIA/(1.0*Many*BlockRa), (manyBlocksIA-twoBlocksIA)/(1.0*(Many-2)*BlockRa));
-    printf("I/.:   %4d %4d   %8d %9d %11d %6.2f %6.2f\n", BlockRs, 0, oneBlockI, twoBlocksI, manyBlocksI, manyBlocksI/(1.0*Many*BlockRs), (manyBlocksI-twoBlocksI)/(1.0*(Many-2)*BlockRs));
-    printf("A/A:   %4d %4d   %8d %9d %11d %6.2f %6.2f\n", 0, BlockRa, oneBlockA, twoBlocksA, manyBlocksA, manyBlocksA/(1.0*Many*BlockRa), (manyBlocksA-twoBlocksA)/(1.0*(Many-2)*BlockRa));
+    printf("I/A:   %4d %4d   %8"PRId64" %9"PRId64" %11"PRId64" %6.2f %6.2f\n", BlockRs, BlockRsRa, oneBlockIA, twoBlocksIA, manyBlocksIA, manyBlocksIA/(1.0*Many*BlockRa), (manyBlocksIA-twoBlocksIA)/(1.0*(Many-2)*BlockRa));
+    printf("I/.:   %4d %4d   %8"PRId64" %9"PRId64" %11"PRId64" %6.2f %6.2f\n", BlockRs, 0, oneBlockI, twoBlocksI, manyBlocksI, manyBlocksI/(1.0*Many*BlockRs), (manyBlocksI-twoBlocksI)/(1.0*(Many-2)*BlockRs));
+    printf("A/A:   %4d %4d   %8"PRId64" %9"PRId64" %11"PRId64" %6.2f %6.2f\n", 0, BlockRa, oneBlockA, twoBlocksA, manyBlocksA, manyBlocksA/(1.0*Many*BlockRa), (manyBlocksA-twoBlocksA)/(1.0*(Many-2)*BlockRa));
     printf("\n\n");
 }
 

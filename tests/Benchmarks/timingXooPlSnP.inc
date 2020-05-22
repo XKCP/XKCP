@@ -28,7 +28,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define PlSnP_InitializeAll                         JOIN(PlSnP, _InitializeAll)
 #define PlSnP_AddLanesAll                           JOIN(PlSnP, _AddLanesAll)
 
-uint_32t measurePlSnP_PermuteAll_6rounds(uint_32t dtMin)
+cycles_t measurePlSnP_PermuteAll_6rounds(cycles_t dtMin)
 {
     ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
 
@@ -37,7 +37,7 @@ uint_32t measurePlSnP_PermuteAll_6rounds(uint_32t dtMin)
     measureTimingEnd
 }
 
-uint_32t measurePlSnP_PermuteAll_12rounds(uint_32t dtMin)
+cycles_t measurePlSnP_PermuteAll_12rounds(cycles_t dtMin)
 {
     ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
 
@@ -49,18 +49,18 @@ uint_32t measurePlSnP_PermuteAll_12rounds(uint_32t dtMin)
 
 void doTimingPlSnP(const char *module, const char *implementation)
 {
-    uint_32t calibration;
-    uint_32t measurement;
+    cycles_t calibration;
+    cycles_t measurement;
 
     printf("*** %s ***\n", module);
     printf("Implementation: %s\n\n", implementation);
-    calibration = calibrate();
+    calibration = CalibrateTimer();
 
     measurement = measurePlSnP_PermuteAll_6rounds(calibration);
-    printf("Cycles for " xstr(PlSnP_PermuteAll_6rounds) "(state): %d\n\n", measurement);
+    printf("Cycles for " xstr(PlSnP_PermuteAll_6rounds) "(state): %"PRId64"\n\n", measurement);
 
     measurement = measurePlSnP_PermuteAll_12rounds(calibration);
-    printf("Cycles for " xstr(PlSnP_PermuteAll_12rounds) "(state): %d\n\n", measurement);
+    printf("Cycles for " xstr(PlSnP_PermuteAll_12rounds) "(state): %"PRId64"\n\n", measurement);
 
     printf("\n");
 }

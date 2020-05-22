@@ -115,7 +115,7 @@ Most of the source and header files in the XKCP are released to the **public dom
 
 * [`lib/common/brg_endian.h`](lib/common/brg_endian.h) is copyrighted by Brian Gladman and comes with a BSD 3-clause license;
 * [`tests/UnitTests/genKAT.c`](tests/UnitTests/genKAT.c) is based on [SHA-3 contest's code by Larry Bassham, NIST](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/KAT1.zip), which he licensed under a BSD 3-clause license;
-* [`tests/UnitTests/timing.h`](tests/UnitTests/timing.h) is based on code by Doug Whiting, which he released to the public domain;
+* [`tests/UnitTests/timing.h`](tests/UnitTests/timing.h) is adapted from Google Benchmark and is licensed under the Apache License, Version 2.0;
 * [`KeccakP-1600-AVX2.s`](lib/low/KeccakP-1600/AVX2/KeccakP-1600-AVX2.s) is licensed under the [CRYPTOGAMS license](http://www.openssl.org/~appro/cryptogams/) (BSD-like);
 * [`support/Kernel-PMU/enable_arm_pmu.c`](support/Kernel-PMU/enable_arm_pmu.c) is licensed under the GNU General Public License by Bruno Pairault.
 
@@ -268,9 +268,9 @@ We wish to thank all the contributors, and in particular:
 - Brian Gladman's `brg_endian.h`
 - Bruno Pairault for testing and benchmarking on ARM platforms
 - Conno Boel for the NEON implementations of Xoodoo
-- Doug Whiting for the code in `timing.h`
 - D.J. Bernstein, Peter Schwabe and Gilles Van Assche for the tweetable FIPS 202 implementation `TweetableFIPS202.c`
 - Hussama Ismail for setting up the continuous integration with Travis
+- Kent Ross for various improvements in [XKCP/K12](https://github.com/XKCP/K12) imported here
 - Larry Bassham, NIST for the original `genKAT.c` developed during the SHA-3 contest
 - Stéphane Léon for helping support macOS
 

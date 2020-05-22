@@ -33,7 +33,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define SnP_Initialize                  JOIN(SnP, _Initialize)
 #define SnP_AddBytes                    JOIN(SnP, _AddBytes)
 
-uint_32t measureSnP_Permute(uint_32t dtMin)
+cycles_t measureSnP_Permute(cycles_t dtMin)
 {
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
 
@@ -43,7 +43,7 @@ uint_32t measureSnP_Permute(uint_32t dtMin)
 }
 
 #ifdef SnP_Permute_12rounds
-uint_32t measureSnP_Permute_12rounds(uint_32t dtMin)
+cycles_t measureSnP_Permute_12rounds(cycles_t dtMin)
 {
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
 
@@ -54,7 +54,7 @@ uint_32t measureSnP_Permute_12rounds(uint_32t dtMin)
 #endif
 
 #ifdef SnP_FastLoop_Absorb
-uint_32t measureSnP_FastLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
+cycles_t measureSnP_FastLoop_Absorb(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
@@ -66,10 +66,10 @@ uint_32t measureSnP_FastLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsi
     measureTimingEnd
 }
 
-void gatherSnP_FastLoop_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts);
+void gatherSnP_FastLoop_Absorb(cycles_t dtMin, cycles_t *measurements, uint32_t *laneCounts);
 #endif
 
-uint_32t measureSnP_GenericLoop_Absorb(uint_32t dtMin, unsigned int laneCount, unsigned int blockCount)
+cycles_t measureSnP_GenericLoop_Absorb(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
     ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes;
@@ -91,14 +91,14 @@ uint_32t measureSnP_GenericLoop_Absorb(uint_32t dtMin, unsigned int laneCount, u
     measureTimingEnd
 }
 
-unsigned int gatherSnP_GenericLoop_Absorb(uint_32t dtMin, uint_32t *measurements, uint_32t *laneCounts);
+unsigned int gatherSnP_GenericLoop_Absorb(cycles_t dtMin, cycles_t *measurements, uint32_t *laneCounts);
 
 void doTimingSnP(const char *module, const char *implementation)
 {
-    uint_32t calibration;
-    uint_32t measurement;
-    uint_32t measurements[16];
-    uint_32t laneCounts[4];
+    cycles_t calibration;
+    cycles_t measurement;
+    cycles_t measurements[16];
+    uint32_t laneCounts[4];
     unsigned int numberOfColumns;
 
     printf("*** %s ***\n", module);
@@ -106,14 +106,14 @@ void doTimingSnP(const char *module, const char *implementation)
 #ifdef SnP_FastLoop_Absorb
     measureSnP_FastLoop_Absorb(0, 16, 1000);
 #endif
-    calibration = calibrate();
+    calibration = CalibrateTimer();
 
     measurement = measureSnP_Permute(calibration);
-    printf("Cycles for " xstr(SnP_Permute) "(state): %d\n\n", measurement);
+    printf("Cycles for " xstr(SnP_Permute) "(state): %"PRId64"\n\n", measurement);
 
 #ifdef SnP_Permute_12rounds
     measurement = measureSnP_Permute_12rounds(calibration);
-    printf("Cycles for " xstr(SnP_Permute_12rounds) "(state): %d\n\n", measurement);
+    printf("Cycles for " xstr(SnP_Permute_12rounds) "(state): %"PRId64"\n\n", measurement);
 #endif
 
     numberOfColumns = gatherSnP_GenericLoop_Absorb(calibration, measurements, laneCounts);
