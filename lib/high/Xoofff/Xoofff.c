@@ -14,10 +14,12 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#if DEBUG
+#include <assert.h>
+#endif
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include "brg_endian.h"
 #include "Xoofff.h"
 #include "Xoodoo.h"
@@ -316,7 +318,9 @@ size_t Xoofff_CompressFastLoop(unsigned char *k, unsigned char *x, const unsigne
     ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
     size_t    initialLength = length;
 
+    #if DEBUG
     assert(length >= SnP_widthInBytes);
+    #endif
     Xoodoo_StaticInitialize();
     mInitialize(state);
     do {
@@ -341,7 +345,9 @@ size_t Xoofff_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, u
     ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
     size_t    initialLength = length;
 
+    #if DEBUG
     assert(length >= SnP_widthInBytes);
+    #endif
     Xoodoo_StaticInitialize();
     mInitialize(state);
     do {
@@ -402,7 +408,9 @@ static const unsigned char * Xoodoo_CompressBlocks( unsigned char *k, unsigned c
     if ( lastFlag != 0 ) {
         ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
 
+        #if DEBUG
         assert(messageByteLen < SnP_widthInBytes);
+        #endif
         Xoodoo_StaticInitialize();
         mInitialize(state);
         Xoodoo_OverwriteBytes(state, k, 0, SnP_widthInBytes); /* write k */
@@ -493,8 +501,10 @@ int Xoofff_Compress(Xoofff_Instance *xp, const BitSequence *input, BitLength inp
         input = Xoodoo_CompressBlocks(xp->kRoll.a, xp->xAccu.a, input, &inputBitLen, finalFlag);
     }
     if ( inputBitLen != 0 ) { /* Queue eventual residual message bytes */
+        #if DEBUG
         assert( inputBitLen < SnP_width );
         assert( finalFlag == 0 );
+        #endif
         memcpy(xp->queue.a, input, inputBitLen/8);
         xp->queueOffset = inputBitLen;
     }
@@ -586,7 +596,9 @@ int Xoofff_Expand(Xoofff_Instance *xp, BitSequence *output, BitLength outputBitL
     if ( outputByteLen != 0 ) {    /* Last incomplete block */
         ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
 
+        #if DEBUG
         assert(outputByteLen <= SnP_widthInBytes);
+        #endif
         Xoodoo_StaticInitialize();
         mInitialize(state);
         Xoodoo_OverwriteBytes(state, xp->yAccu.a, 0, SnP_widthInBytes);

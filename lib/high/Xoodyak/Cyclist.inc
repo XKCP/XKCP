@@ -129,9 +129,10 @@ static void Cyclist_AbsorbKey(Cyclist_Instance *instance, const uint8_t *K, size
 {
     uint8_t KID[Cyclist_Rkin];
 
+    #if DEBUG
     assert(instance->mode == Cyclist_ModeHash);
     assert((KLen + IDLen) <= (Cyclist_Rkin - 1));
-
+    #endif
     instance->mode      = Cyclist_ModeKeyed;
     instance->Rabsorb   = Cyclist_Rkin;
     instance->Rsqueeze  = Cyclist_Rkout;
@@ -256,13 +257,17 @@ void Cyclist_Absorb(Cyclist_Instance *instance, const uint8_t *X, size_t XLen)
 
 void Cyclist_Encrypt(Cyclist_Instance *instance, const uint8_t *P, uint8_t *C, size_t PLen)
 {
+    #if DEBUG
     assert(instance->mode == Cyclist_ModeKeyed);
+    #endif
     Cyclist_Crypt(instance, P, C, PLen, 0);
 }
 
 void Cyclist_Decrypt(Cyclist_Instance *instance, const uint8_t *C, uint8_t *P, size_t CLen)
 {
+    #if DEBUG
     assert(instance->mode == Cyclist_ModeKeyed);
+    #endif
     Cyclist_Crypt(instance, C, P, CLen, 1);
 }
 
@@ -273,7 +278,9 @@ void Cyclist_Squeeze(Cyclist_Instance *instance, uint8_t *Y, size_t YLen)
 
 void Cyclist_SqueezeKey(Cyclist_Instance *instance, uint8_t *K, size_t KLen)
 {
+    #if DEBUG
     assert(instance->mode == Cyclist_ModeKeyed);
+    #endif
     Cyclist_SqueezeAny(instance, K, KLen, 0x20);
 }
 
@@ -281,7 +288,9 @@ void Cyclist_Ratchet(Cyclist_Instance *instance)
 {
     uint8_t buffer[Cyclist_lRatchet];
 
+    #if DEBUG
     assert(instance->mode == Cyclist_ModeKeyed);
+    #endif
     /* Squeeze then absorb is the same as overwriting with zeros */
     Cyclist_SqueezeAny(instance, buffer, sizeof(buffer), 0x10);
     Cyclist_AbsorbAny(instance, buffer, sizeof(buffer), instance->Rabsorb, 0x00);

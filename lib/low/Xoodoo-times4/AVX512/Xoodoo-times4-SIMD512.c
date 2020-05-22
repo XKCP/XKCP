@@ -16,7 +16,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <stdio.h>
 #include <string.h>
-#include <assert.h>
 #include <smmintrin.h>
 #include <wmmintrin.h>
 #include <immintrin.h>

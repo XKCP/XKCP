@@ -22,7 +22,9 @@ This implementation comes with KeccakP-200-SnP.h in the same folder.
 Please refer to LowLevel.build for the exact list of other files it must be combined with.
 */
 
+#if DEBUG
 #include <assert.h>
+#endif
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -143,7 +145,9 @@ void KeccakP200_Initialize(void *state)
 
 void KeccakP200_AddByte(void *state, unsigned char byte, unsigned int offset)
 {
+    #if DEBUG
     assert(offset < 25);
+    #endif
     ((unsigned char *)state)[offset] ^= byte;
 }
 
@@ -153,8 +157,10 @@ void KeccakP200_AddBytes(void *state, const unsigned char *data, unsigned int of
 {
     unsigned int i;
 
+    #if DEBUG
     assert(offset < 25);
     assert(offset+length <= 25);
+    #endif
     for(i=0; i<length; i++)
         ((unsigned char *)state)[offset+i] ^= data[i];
 }
@@ -163,8 +169,10 @@ void KeccakP200_AddBytes(void *state, const unsigned char *data, unsigned int of
 
 void KeccakP200_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
+    #if DEBUG
     assert(offset < 25);
     assert(offset+length <= 25);
+    #endif
     memcpy((unsigned char*)state+offset, data, length);
 }
 
@@ -172,7 +180,9 @@ void KeccakP200_OverwriteBytes(void *state, const unsigned char *data, unsigned 
 
 void KeccakP200_OverwriteWithZeroes(void *state, unsigned int byteCount)
 {
+    #if DEBUG
     assert(byteCount <= 25);
+    #endif
     memset(state, 0, byteCount);
 }
 
@@ -354,8 +364,10 @@ static void iota(tKeccakLane *A, unsigned int indexRound)
 
 void KeccakP200_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
+    #if DEBUG
     assert(offset < 25);
     assert(offset+length <= 25);
+    #endif
     memcpy(data, (unsigned char*)state+offset, length);
 }
 
@@ -365,8 +377,10 @@ void KeccakP200_ExtractAndAddBytes(const void *state, const unsigned char *input
 {
     unsigned int i;
 
+    #if DEBUG
     assert(offset < 25);
     assert(offset+length <= 25);
+    #endif
     for(i=0; i<length; i++)
         output[i] = input[i] ^ ((unsigned char *)state)[offset+i];
 }

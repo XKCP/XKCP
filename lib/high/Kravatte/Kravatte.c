@@ -14,9 +14,11 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#if DEBUG
+#include <assert.h>
+#endif
 #include <string.h>
 #include <stdlib.h>
-#include <assert.h>
 #include "brg_endian.h"
 #include "Kravatte.h"
 
@@ -314,7 +316,9 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
     if ( lastFlag != 0 ) {
         ALIGN(KeccakP1600_stateAlignment) unsigned char state[KeccakP1600_stateSizeInBytes];
 
+        #if DEBUG
         assert(messageByteLen < SnP_widthInBytes);
+        #endif
         KeccakP1600_StaticInitialize();
         mInitialize(state);
         KeccakP1600_OverwriteBytes(state, k, 0, SnP_widthInBytes); /* write k */
@@ -405,8 +409,10 @@ int Kra(Kravatte_Instance *kv, const BitSequence *input, BitLength inputBitLen, 
         input = Kra_Compress(kv->kRoll.a, kv->xAccu.a, input, &inputBitLen, finalFlag);
     }
     if ( inputBitLen != 0 ) { /* Queue eventual residual message bytes */
+        #if DEBUG
         assert( inputBitLen < SnP_width );
         assert( finalFlag == 0 );
+        #endif
         memcpy(kv->queue.a, input, inputBitLen/8);
         kv->queueOffset = inputBitLen;
     }

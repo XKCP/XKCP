@@ -22,7 +22,9 @@ This implementation comes with KeccakP-1600-SnP.h in the same folder.
 Please refer to LowLevel.build for the exact list of other files it must be combined with.
 */
 
+#if DEBUG
 #include <assert.h>
+#endif
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -198,7 +200,9 @@ void KeccakP1600_AddByte(void *state, unsigned char byte, unsigned int offset)
 {
     unsigned char data[1];
 
+    #if DEBUG
     assert(offset < 200);
+    #endif
     data[0] = byte;
     KeccakP1600_AddBytes(state, data, offset, 1);
 }
@@ -235,8 +239,10 @@ void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int o
     unsigned int lanePosition = offset/8;
     unsigned int offsetInLane = offset%8;
 
+    #if DEBUG
     assert(offset < 200);
     assert(offset+length <= 200);
+    #endif
     while(length > 0) {
         unsigned int bytesInLane = 8 - offsetInLane;
         if (bytesInLane > length)
@@ -283,8 +289,10 @@ void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned
     unsigned int lanePosition = offset/8;
     unsigned int offsetInLane = offset%8;
 
+    #if DEBUG
     assert(offset < 200);
     assert(offset+length <= 200);
+    #endif
     while(length > 0) {
         unsigned int bytesInLane = 8 - offsetInLane;
         if (bytesInLane > length)
@@ -304,7 +312,9 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
     uint8_t laneAsBytes[8];
     unsigned int lanePosition = 0;
 
+    #if DEBUG
     assert(byteCount <= 200);
+    #endif
     memset(laneAsBytes, 0, 8);
     while(byteCount > 0) {
         if (byteCount < 8) {
@@ -536,8 +546,10 @@ void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned i
     unsigned int lanePosition = offset/8;
     unsigned int offsetInLane = offset%8;
 
+    #if DEBUG
     assert(offset < 200);
     assert(offset+length <= 200);
+    #endif
     while(length > 0) {
         unsigned int bytesInLane = 8 - offsetInLane;
         if (bytesInLane > length)
@@ -569,8 +581,10 @@ void KeccakP1600_ExtractAndAddBytes(const void *state, const unsigned char *inpu
     unsigned int lanePosition = offset/8;
     unsigned int offsetInLane = offset%8;
 
+    #if DEBUG
     assert(offset < 200);
     assert(offset+length <= 200);
+    #endif
     while(length > 0) {
         unsigned int bytesInLane = 8 - offsetInLane;
         if (bytesInLane > length)

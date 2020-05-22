@@ -18,7 +18,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #include "displayIntermediateValues.h"
 #endif
 
+#if DEBUG
 #include <assert.h>
+#endif
 #include <string.h>
 #include "Xoodyak.h"
 

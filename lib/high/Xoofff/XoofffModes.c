@@ -15,7 +15,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include <string.h>
-#include <assert.h>
 #include "brg_endian.h"
 #include "Xoofff.h"
 #include "XoofffModes.h"

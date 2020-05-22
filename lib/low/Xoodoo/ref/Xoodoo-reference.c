@@ -16,10 +16,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 /* #define VERBOSE_LEVEL    0 */
 
+#if DEBUG
+#include <assert.h>
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <assert.h>
 #include "Xoodoo.h"
 
 /* ---------------------------------------------------------------- */
@@ -39,7 +41,9 @@ void Xoodoo_Initialize(void *state)
 
 void Xoodoo_AddByte(void *state, unsigned char byte, unsigned int offset)
 {
+    #if DEBUG
     assert(offset < NLANES*sizeof(tXoodooLane));
+    #endif
     ((unsigned char *)state)[offset] ^= byte;
 }
 
@@ -49,8 +53,10 @@ void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset
 {
     unsigned int i;
 
+    #if DEBUG
     assert(offset < NLANES*sizeof(tXoodooLane));
     assert(offset+length <= NLANES*sizeof(tXoodooLane));
+    #endif
     for(i=0; i<length; i++)
         ((unsigned char *)state)[offset+i] ^= data[i];
 }
@@ -59,8 +65,10 @@ void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset
 
 void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
+    #if DEBUG
     assert(offset < NLANES*sizeof(tXoodooLane));
     assert(offset+length <= NLANES*sizeof(tXoodooLane));
+    #endif
     memcpy((unsigned char*)state+offset, data, length);
 }
 
@@ -68,7 +76,9 @@ void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int 
 
 void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
 {
+    #if DEBUG
     assert(byteCount <= NLANES*sizeof(tXoodooLane));
+    #endif
     memset(state, 0, byteCount);
 }
 
@@ -76,8 +86,10 @@ void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
 
 void Xoodoo_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
+    #if DEBUG
     assert(offset < NLANES*sizeof(tXoodooLane));
     assert(offset+length <= NLANES*sizeof(tXoodooLane));
+    #endif
     memcpy(data, (unsigned char*)state+offset, length);
 }
 
@@ -87,8 +99,10 @@ void Xoodoo_ExtractAndAddBytes(const void *state, const unsigned char *input, un
 {
     unsigned int i;
 
+    #if DEBUG
     assert(offset < NLANES*sizeof(tXoodooLane));
     assert(offset+length <= NLANES*sizeof(tXoodooLane));
+    #endif
     for(i=0; i<length; i++)
         output[i] = input[i] ^ ((unsigned char *)state)[offset+i];
 }

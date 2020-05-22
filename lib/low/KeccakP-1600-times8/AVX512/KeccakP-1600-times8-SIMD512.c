@@ -23,7 +23,6 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-#include <assert.h>
 #include <smmintrin.h>
 #include <wmmintrin.h>
 #include <immintrin.h>
