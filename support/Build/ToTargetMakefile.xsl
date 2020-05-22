@@ -52,10 +52,35 @@ http://creativecommons.org/publicdomain/zero/1.0/
 </xsl:template>
 
 <xsl:template match="gcc">
+    <!-- What follows is a shameless hack to avoid -march=native on aarch64 with clang -->
+    <xsl:if test=".= '-march=native'">
+        <xsl:text>ifneq ($(UNAME_M)$(findstring clang,$(CC)),aarch64clang)
+</xsl:text>
+    </xsl:if>
     <xsl:text>CFLAGS := $(CFLAGS) </xsl:text>
     <xsl:value-of select="."/>
     <xsl:text>
 </xsl:text>
+    <xsl:if test=".= '-march=native'">
+        <xsl:text>endif
+</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="gas">
+    <!-- What follows is a shameless hack to avoid -march=native on aarch64 with clang -->
+    <xsl:if test=".= '-march=native'">
+        <xsl:text>ifneq ($(UNAME_M)$(findstring clang,$(CC)),aarch64clang)
+</xsl:text>
+    </xsl:if>
+    <xsl:text>ASMFLAGS := $(ASMFLAGS) </xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>
+</xsl:text>
+    <xsl:if test=".= '-march=native'">
+        <xsl:text>endif
+</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="define">
@@ -177,6 +202,9 @@ endif
 ifeq ($(UNAME_S),Darwin)
     ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,macOS=1
 endif
+
+UNAME_M := $(shell uname -m)
+
 </xsl:text>
 
     <xsl:if test="substring(@name, string-length(@name)-2, 3)='.so'">
@@ -199,7 +227,7 @@ endif
     <xsl:text>
 </xsl:text>
 
-    <xsl:apply-templates select="gcc|define|I"/>
+    <xsl:apply-templates select="gcc|gas|define|I"/>
     <xsl:apply-templates select="h"/>
     <xsl:apply-templates select="inc"/>
     <xsl:apply-templates select="c|s"/>
