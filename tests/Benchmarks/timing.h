@@ -98,7 +98,7 @@
 // Therefore, we simply declare __rdtsc ourselves. See also
 // http://connect.microsoft.com/VisualStudio/feedback/details/262047
 #if defined(COMPILER_MSVC) && !defined(_M_IX86)
-extern "C" uint64_t __rdtsc();
+uint64_t __rdtsc();
 #pragma intrinsic(__rdtsc)
 #endif
 
@@ -119,18 +119,7 @@ extern "C" uint64_t __rdtsc();
 
 // This should return the number of cycles since power-on.  Thread-safe.
 inline BENCHMARK_ALWAYS_INLINE int64_t CycleTimer() {
-#if defined(BENCHMARK_OS_MACOSX)
-  // this goes at the top because we need ALL Macs, regardless of
-  // architecture, to return the number of "mach time units" that
-  // have passed since startup.  See sysinfo.cc where
-  // InitializeSystemInfo() sets the supposed cpu clock frequency of
-  // macs to the number of mach time units per second, not actual
-  // CPU clock frequency (which can change in the face of CPU
-  // frequency scaling).  Also note that when the Mac sleeps, this
-  // counter pauses; it does not continue counting, nor does it
-  // reset to zero.
-  return mach_absolute_time();
-#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+#if defined(BENCHMARK_OS_EMSCRIPTEN)
   // this goes above x86-specific code because old versions of Emscripten
   // define __x86_64__, although they have nothing to do with it.
   return (int64_t)(emscripten_get_now() * 1e+6);
@@ -142,6 +131,18 @@ inline BENCHMARK_ALWAYS_INLINE int64_t CycleTimer() {
   uint64_t low, high;
   __asm__ volatile("rdtsc" : "=a"(low), "=d"(high));
   return (high << 32) | low;
+#elif defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of "mach time units" that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  // XKCP-specific: moved this below i386 and x86_64 tests to favor real CPU cycles when available
+  return mach_absolute_time();
 #elif defined(__powerpc__) || defined(__ppc__)
   // This returns a time-base, which is not always precisely a cycle-count.
 #if defined(__powerpc64__) || defined(__ppc64__)
