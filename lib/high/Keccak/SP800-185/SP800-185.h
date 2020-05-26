@@ -317,8 +317,8 @@ typedef struct {
     KeccakWidth1600_SpongeInstance queueNode;
     KeccakWidth1600_SpongeInstance finalNode;
     size_t fixedOutputLength;
-    unsigned int blockLen;
-    unsigned int queueAbsorbedLen;
+    size_t blockLen;
+    size_t queueAbsorbedLen;
     size_t totalInputSize;
     KCP_Phases phase;
 } ParallelHash_Instance;
@@ -336,7 +336,7 @@ typedef struct {
   * @param  customBitLen    The length of the customization string in bits.
   * @return 0 if successful, 1 otherwise.
   */
-int ParallelHash128( const BitSequence *input, BitLength inputBitLen, unsigned int blockByteLen,
+int ParallelHash128( const BitSequence *input, BitLength inputBitLen, size_t blockByteLen,
         BitSequence *output, BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
 
 /**
@@ -350,7 +350,7 @@ int ParallelHash128( const BitSequence *input, BitLength inputBitLen, unsigned i
   * @param  customBitLen    The length of the customization string in bits.
   * @return 0 if successful, 1 otherwise.
   */
-int ParallelHash128_Initialize(ParallelHash_Instance *ParallelHashInstance, unsigned int blockByteLen,
+int ParallelHash128_Initialize(ParallelHash_Instance *ParallelHashInstance, size_t blockByteLen,
         BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
 
 /**
@@ -403,7 +403,7 @@ int ParallelHash128_Squeeze(ParallelHash_Instance *ParallelHashInstance, BitSequ
   * @param  customBitLen    The length of the customization string in bits.
   * @return 0 if successful, 1 otherwise.
   */
-int ParallelHash256( const BitSequence *input, BitLength inputBitLen, unsigned int blockByteLen,
+int ParallelHash256( const BitSequence *input, BitLength inputBitLen, size_t blockByteLen,
         BitSequence *output, BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
 
 /**
@@ -417,7 +417,7 @@ int ParallelHash256( const BitSequence *input, BitLength inputBitLen, unsigned i
   * @param  customBitLen    The length of the customization string in bits.
   * @return 0 if successful, 1 otherwise.
   */
-int ParallelHash256_Initialize(ParallelHash_Instance *ParallelHashInstance, unsigned int blockByteLen,
+int ParallelHash256_Initialize(ParallelHash_Instance *ParallelHashInstance, size_t blockByteLen,
         BitLength outputBitLen, const BitSequence *customization, BitLength customBitLen);
 
 /**
