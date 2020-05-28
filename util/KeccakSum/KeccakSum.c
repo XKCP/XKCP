@@ -138,10 +138,15 @@ int processFile(const char *fileName, const Specifications *specs, int base64)
         printf("The requested digest length (%d bits) does not fit in the buffer.\n", specs->hashbitlen);
         return -1;
     }
-    fp = fopen(fileName, "rb");
-    if (fp == NULL) {
-        printf("File '%s' could not be opened.\n", fileName);
-        return -1;
+    if (strcmp("-", fileName) == 0) {
+        fp = stdin;
+    }
+    else {
+        fp = fopen(fileName, "rb");
+        if (fp == NULL) {
+            printf("File '%s' could not be opened.\n", fileName);
+            return -1;
+        }
     }
     if (hashInitialize(&instance, specs)) {
         fclose(fp);
@@ -152,7 +157,9 @@ int processFile(const char *fileName, const Specifications *specs, int base64)
         if (read > 0)
             hashUpdate(&instance, specs, buffer, read);
     } while(read>0);
-    fclose(fp);
+    if (fp != stdin) {
+        fclose(fp);
+    }
     hashFinal(&instance, specs, buffer);
     if (base64) {
         if (base64encode(buffer, (specs->hashbitlen+7)/8, display, bufferSize*2)) {
@@ -225,6 +232,7 @@ void printHelp()
     printf("  --string <string>           String to hash\n");
     printf("  <file name>                 File to hash\n\n");
     printf("The options are processed in order.\nBy default, it uses SHAKE128 and base64 display.\n");
+    printf("With no file names, or when file name is -, it reads standard input.\n"); 
 }
 
 int process(int argc, char* argv[])
@@ -232,6 +240,7 @@ int process(int argc, char* argv[])
     Specifications specs;
     int base64 = 1;
     int i, r;
+    int was_filename = 0;
     specs.algorithm = algorithm_Keccak;
     specs.rate = 1344;
     specs.capacity = 256;
@@ -365,10 +374,16 @@ int process(int argc, char* argv[])
                     return -1;
                 }
             }
+            was_filename = 1;
             r = processFile(argv[i], &specs, base64);
             if (r)
                 return r;
         }
+    }
+    if (was_filename == 0) {
+        r = processFile("-", &specs, base64);
+        if (r)
+            return r;
     }
     return 0;
 }
