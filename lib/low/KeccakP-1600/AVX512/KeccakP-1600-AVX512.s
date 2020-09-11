@@ -23,14 +23,13 @@
 #
 .ifdef macOS
 .globl  _KeccakP1600_Initialize
-.balign  32
 _KeccakP1600_Initialize:
 .else
 .globl  KeccakP1600_Initialize
 .type   KeccakP1600_Initialize,@function
-.align  32
 KeccakP1600_Initialize:
 .endif
+.balign 32
     vpxorq      %zmm0,%zmm0,%zmm0
     vmovdqa64   %zmm0,0*64(%rdi)
     vmovdqa64   %zmm0,1*64(%rdi)
@@ -68,14 +67,13 @@ KeccakP1600_Initialize:
 #
 .ifdef macOS
 .globl  _KeccakP1600_AddBytes
-.balign 32
 _KeccakP1600_AddBytes:
 .else
 .globl  KeccakP1600_AddBytes
 .type   KeccakP1600_AddBytes,@function
-.align  32
 KeccakP1600_AddBytes:
 .endif
+.balign 32
     cmp         $0, %rcx
     jz          KeccakP1600_AddBytes_Exit
     add            %rdx, %rdi                                # state += offset
@@ -126,14 +124,13 @@ KeccakP1600_AddBytes_Exit:
 #
 .ifdef macOS
 .globl  _KeccakP1600_OverwriteBytes
-.balign  32
 _KeccakP1600_OverwriteBytes:
 .else
 .globl  KeccakP1600_OverwriteBytes
 .type   KeccakP1600_OverwriteBytes,@function
-.align  32
 KeccakP1600_OverwriteBytes:
 .endif
+.balign 32
     cmp         $0, %rcx
     jz          KeccakP1600_OverwriteBytes_Exit
     add         %rdx, %rdi                              # state += offset
@@ -184,14 +181,13 @@ KeccakP1600_OverwriteBytes_Exit:
 #
 .ifdef macOS
 .globl  _KeccakP1600_OverwriteWithZeroes
-.balign  32
 _KeccakP1600_OverwriteWithZeroes:
 .else
 .globl  KeccakP1600_OverwriteWithZeroes
 .type   KeccakP1600_OverwriteWithZeroes,@function
-.align  32
 KeccakP1600_OverwriteWithZeroes:
 .endif
+.balign 32
     cmp         $0, %rsi
     jz          KeccakP1600_OverwriteWithZeroes_Exit
     jmp         KeccakP1600_OverwriteWithZeroes_LaneAlignedCheck
@@ -223,14 +219,13 @@ KeccakP1600_OverwriteWithZeroes_Exit:
 #
 .ifdef macOS
 .globl  _KeccakP1600_ExtractBytes
-.balign  32
 _KeccakP1600_ExtractBytes:
 .else
 .globl  KeccakP1600_ExtractBytes
 .type   KeccakP1600_ExtractBytes,@function
-.align  32
 KeccakP1600_ExtractBytes:
 .endif
+.balign 32
     cmp         $0, %rcx
     jz          KeccakP1600_ExtractBytes_Exit
     add         %rdx, %rdi                              # state += offset
@@ -281,14 +276,13 @@ KeccakP1600_ExtractBytes_Exit:
 #
 .ifdef macOS
 .globl  _KeccakP1600_ExtractAndAddBytes
-.balign  32
 _KeccakP1600_ExtractAndAddBytes:
 .else
 .globl  KeccakP1600_ExtractAndAddBytes
 .type   KeccakP1600_ExtractAndAddBytes,@function
-.align  32
 KeccakP1600_ExtractAndAddBytes:
 .endif
+.balign 32
     push        %rbx
     cmp         $0, %r8
     jz          KeccakP1600_ExtractAndAddBytes_Exit
@@ -346,11 +340,10 @@ KeccakP1600_ExtractAndAddBytes_Exit:
 #
 .text
 .ifdef macOS
-.balign  32
 .else
 .type    __KeccakF1600,@function
-.align    32
 .endif
+.balign 32
 __KeccakF1600:
 .Loop_avx512:
     ######################################### Theta, even round
@@ -470,14 +463,13 @@ __KeccakF1600:
 #
 .ifdef macOS
 .globl  _KeccakP1600_Permute_24rounds
-.balign  32
 _KeccakP1600_Permute_24rounds:
 .else
 .globl  KeccakP1600_Permute_24rounds
 .type   KeccakP1600_Permute_24rounds,@function
-.align  32
 KeccakP1600_Permute_24rounds:
 .endif
+.balign 32
     lea         96(%rdi),%rdi
     lea         theta_perm(%rip),%r8
     kxnorw      %k6,%k6,%k6
@@ -535,14 +527,13 @@ KeccakP1600_Permute_24rounds:
 #
 .ifdef macOS
 .globl  _KeccakP1600_Permute_12rounds
-.balign  32
 _KeccakP1600_Permute_12rounds:
 .else
 .globl  KeccakP1600_Permute_12rounds
 .type   KeccakP1600_Permute_12rounds,@function
-.align  32
 KeccakP1600_Permute_12rounds:
 .endif
+.balign 32
     lea         96(%rdi),%rdi
     lea         theta_perm(%rip),%r8
     kxnorw      %k6,%k6,%k6
@@ -600,14 +591,13 @@ KeccakP1600_Permute_12rounds:
 #
 .ifdef macOS
 .globl  _KeccakP1600_Permute_Nrounds
-.balign  32
 _KeccakP1600_Permute_Nrounds:
 .else
 .globl  KeccakP1600_Permute_Nrounds
 .type   KeccakP1600_Permute_Nrounds,@function
-.align  32
 KeccakP1600_Permute_Nrounds:
 .endif
+.balign 32
     lea         96(%rdi),%rdi
     lea         theta_perm(%rip),%r8
     kxnorw      %k6,%k6,%k6
@@ -736,14 +726,13 @@ KeccakP1600_Permute_Nrounds:
 #
 .ifdef macOS
 .globl  _KeccakF1600_FastLoop_Absorb
-.balign  32
 _KeccakF1600_FastLoop_Absorb:
 .else
 .globl  KeccakF1600_FastLoop_Absorb
 .type   KeccakF1600_FastLoop_Absorb,@function
-.align  32
 KeccakF1600_FastLoop_Absorb:
 .endif
+.balign 32
     push            %rbx
     push            %r10
     shr             $3, %rcx                # rcx = data length in lanes
@@ -878,14 +867,13 @@ KeccakF1600_FastLoop_Absorb_LanesAddLoop:
 #
 .ifdef macOS
 .globl  _KeccakP1600_12rounds_FastLoop_Absorb
-.balign  32
 _KeccakP1600_12rounds_FastLoop_Absorb:
 .else
 .globl  KeccakP1600_12rounds_FastLoop_Absorb
 .type   KeccakP1600_12rounds_FastLoop_Absorb,@function
-.align  32
 KeccakP1600_12rounds_FastLoop_Absorb:
 .endif
+.balign 32
     push            %rbx
     push            %r10
     shr             $3, %rcx                # rcx = data length in lanes
@@ -1009,12 +997,10 @@ KeccakP1600_FastLoop_Absorb_LanesAddLoop:
     jae             KeccakP1600_FastLoop_Absorb_LanesLoop
     jmp             KeccakP1600_FastLoop_Absorb_Exit
 .ifdef macOS
-.balign  64
 .else
 .size   KeccakP1600_12rounds_FastLoop_Absorb,.-KeccakP1600_12rounds_FastLoop_Absorb
-
-.align    64
 .endif
+.balign 64
 theta_perm:
     .quad    0, 1, 2, 3, 4, 5, 6, 7        # [not used]
     .quad    4, 0, 1, 2, 3, 5, 6, 7
