@@ -199,7 +199,7 @@ static void Cyclist_Crypt(Cyclist_Instance *instance, const uint8_t *I, uint8_t 
             {
                 splitLen = (unsigned int)MyMin(IOLen, Cyclist_Rkout); /* use Rkout instead of Rsqueeze, this function is only called in keyed mode */
                 Cyclist_Up(instance, NULL, 0, Cu); /* Up without extract */
-                Xoodoo_ExtractAndAddBytes(instance->state, I, O, 0, splitLen); /* Extract from Up and Add */
+                SnP_ExtractAndAddBytes(instance->state, I, O, 0, splitLen); /* Extract from Up and Add */
                 Cyclist_Down(instance, O, splitLen, 0x00);
                 I       += splitLen;
                 O       += splitLen;
@@ -220,7 +220,7 @@ static void Cyclist_Crypt(Cyclist_Instance *instance, const uint8_t *I, uint8_t 
                 splitLen = (unsigned int)MyMin(IOLen, Cyclist_Rkout); /* use Rkout instead of Rsqueeze, this function is only called in keyed mode */
                 memcpy(P, I, splitLen);
                 Cyclist_Up(instance, NULL, 0, Cu); /* Up without extract */
-                Xoodoo_ExtractAndAddBytes(instance->state, I, O, 0, splitLen); /* Extract from Up and Add */
+                SnP_ExtractAndAddBytes(instance->state, I, O, 0, splitLen); /* Extract from Up and Add */
                 Cyclist_Down(instance, P, splitLen, 0x00);
                 I       += splitLen;
                 O       += splitLen;
