@@ -22,6 +22,21 @@ http://creativecommons.org/publicdomain/zero/1.0/
 <xsl:key name="c" match="c|s" use="."/>
 <xsl:key name="inc" match="inc" use="."/>
 
+<xsl:template name="ConfigurationType">
+    <xsl:param name="name"/>
+    <xsl:choose>
+        <xsl:when test="substring($name, string-length($name)-1, 2)='.a'">
+            <ConfigurationType>StaticLibrary</ConfigurationType>
+        </xsl:when>
+        <xsl:when test="substring($name, string-length($name)-2, 3)='.so'">
+            <ConfigurationType>DynamicLibrary</ConfigurationType>
+        </xsl:when>
+        <xsl:otherwise>
+            <ConfigurationType>Application</ConfigurationType>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template match="target">
 	<xsl:variable name="name" select="translate(@name, '/', '\')"/>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -34,6 +49,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -42,33 +61,28 @@ http://creativecommons.org/publicdomain/zero/1.0/
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6F1C9407-7A01-444D-A07B-7DAE147F22A1}</ProjectGuid>
     <RootNamespace>XKCP</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+  <PropertyGroup Condition="'$(RuntimeLibrary)'==''">
+    <RuntimeLibrary Condition="'$(Configuration)'=='Debug'">MultiThreadedDebugDll</RuntimeLibrary>
+    <RuntimeLibrary Condition="'$(Configuration)'=='Release'">MultiThreadedDll</RuntimeLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <xsl:call-template name="ConfigurationType"><xsl:with-param name="name" select="$name"/></xsl:call-template>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <xsl:call-template name="ConfigurationType"><xsl:with-param name="name" select="$name"/></xsl:call-template>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -84,24 +98,17 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <OutDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <OutDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(ProjectDir)\<xsl:value-of select="$name"/>\$(Configuration)_$(Platform)\</IntDir>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
+      <RuntimeLibrary>$(RuntimeLibrary)</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)\<xsl:value-of select="$name"/>\config;<xsl:apply-templates select="I"/></AdditionalIncludeDirectories>
@@ -112,36 +119,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)\<xsl:value-of select="$name"/>\config;<xsl:apply-templates select="I"/></AdditionalIncludeDirectories>
-	  <PreprocessorDefinitions><xsl:apply-templates select="define"/>%(PreprocessorDefinitions)</PreprocessorDefinitions>
-	  <xsl:apply-templates select="msvc"/>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\<xsl:value-of select="$name"/>\config;<xsl:apply-templates select="I"/></AdditionalIncludeDirectories>
-	  <PreprocessorDefinitions><xsl:apply-templates select="define"/>%(PreprocessorDefinitions)</PreprocessorDefinitions>
-	  <xsl:apply-templates select="msvc"/>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
+      <RuntimeLibrary>$(RuntimeLibrary)</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
