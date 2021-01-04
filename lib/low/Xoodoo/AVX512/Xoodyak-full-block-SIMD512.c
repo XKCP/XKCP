@@ -310,8 +310,15 @@ size_t Xoodyak_DecryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size
         Round(_rc2);
         Round(_rc1);
         o0 = XOR(a0, LOAD128u(I[0]));
+#if defined(__i386__) || defined(_M_IX86)
+        *((uint32_t*)(O+16)) = *((uint32_t*)(I+16)) ^ _mm_extract_epi32(a1, 0);
+        *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_extract_epi32(a1, 1);
+        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+16)), 0);
+        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+20)), 1);
+#else
         *((uint64_t*)(O+16)) = *((uint64_t*)(I+16)) ^ _mm_extract_epi64(a1, 0);
         a1 = _mm_insert_epi64(a1, *((uint64_t*)(I+16)), 0);
+#endif
         STORE128u(O[0], o0);
         a0 = XOR(a0, o0); 
         a1 = XOR(a1, one); 

@@ -1286,6 +1286,11 @@ ALIGN(64) static const uint64_t     o34567_456[]    = {   3,   4,   5,   6,   7,
 
 ALIGN(32) static const uint32_t     oGatherScatter[]= {0*25, 1*25, 2*25, 3*25, 4*25, 5*25, 6*25, 7*25};
 
+#if defined(__i386__) || defined(_M_IX86)
+#define _mm256_extract_epi64(a, index) \
+    ((uint64_t)_mm256_extract_epi32((a), (index)*2) || ((uint64_t)_mm256_extract_epi32((a), (index)*2+1) << 32))
+#endif
+
 size_t KeccakP1600times8_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, const unsigned char *input, size_t inputByteLen)
 {
     #if    !defined(KeccakP1600times4_fullUnrolling)
