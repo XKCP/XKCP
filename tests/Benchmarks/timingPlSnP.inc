@@ -173,24 +173,24 @@ void doTimingPlSnP(const char *module, const char *implementation)
     calibration = CalibrateTimer();
 
     measurement = measurePlSnP_PermuteAll(calibration);
-    printf("Cycles for " xstr(PlSnP_PermuteAll) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(PlSnP_PermuteAll) "(state): %"PRId64"\n\n", measurement);
 
 #ifdef PlSnP_PermuteAll_12rounds
     measurement = measurePlSnP_PermuteAll_12rounds(calibration);
-    printf("Cycles for " xstr(PlSnP_PermuteAll_12rounds) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(PlSnP_PermuteAll_12rounds) "(state): %"PRId64"\n\n", measurement);
 #endif
 
     gatherPlSnP_GenericLoop_Absorb_interleaved(calibration, measurements, laneCounts);
-    printf("Cycles for loop of " xstr(PlSnP_AddLanesAll) "() and " xstr(PlSnP_PermuteAll) "(): \n");
+    printf("Time for loop of " xstr(PlSnP_AddLanesAll) "() and " xstr(PlSnP_PermuteAll) "(): \n");
     displayMeasurements1101001000(measurements, laneCounts, 3, SnP_laneLengthInBytes*PlSnP_P);
 
 #ifdef PlSnP_FastLoop_Absorb
     gatherPlSnP_FastLoop_Absorb_interleaved(calibration, measurements, laneCounts);
-    printf("Cycles for PlSnP_FastLoop_Absorb(state, 16, 17 and 21 lanes) interleaved: \n");
+    printf("Time for PlSnP_FastLoop_Absorb(state, 16, 17 and 21 lanes) interleaved: \n");
     displayMeasurements1101001000(measurements, laneCounts, 3, SnP_laneLengthInBytes*PlSnP_P);
 
     gatherPlSnP_FastLoop_Absorb_segmented(calibration, measurements, laneCounts);
-    printf("Cycles for PlSnP_FastLoop_Absorb(state, 16, 17 and 21 lanes) segmented: \n");
+    printf("Time for PlSnP_FastLoop_Absorb(state, 16, 17 and 21 lanes) segmented: \n");
     displayMeasurements1101001000(measurements, laneCounts, 3, SnP_laneLengthInBytes*PlSnP_P);
 #endif
 

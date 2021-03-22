@@ -109,20 +109,20 @@ void doTimingSnP(const char *module, const char *implementation)
     calibration = CalibrateTimer();
 
     measurement = measureSnP_Permute(calibration);
-    printf("Cycles for " xstr(SnP_Permute) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(SnP_Permute) "(state): %"PRId64"\n\n", measurement);
 
 #ifdef SnP_Permute_12rounds
     measurement = measureSnP_Permute_12rounds(calibration);
-    printf("Cycles for " xstr(SnP_Permute_12rounds) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(SnP_Permute_12rounds) "(state): %"PRId64"\n\n", measurement);
 #endif
 
     numberOfColumns = gatherSnP_GenericLoop_Absorb(calibration, measurements, laneCounts);
-    printf("Cycles for loop of " xstr(SnP_AddBytes) "() and " xstr(SnP_Permute) "(): \n");
+    printf("Time for loop of " xstr(SnP_AddBytes) "() and " xstr(SnP_Permute) "(): \n");
     displayMeasurements1101001000(measurements, laneCounts, numberOfColumns, SnP_laneLengthInBytes);
 
 #ifdef SnP_FastLoop_Absorb
     gatherSnP_FastLoop_Absorb(calibration, measurements, laneCounts);
-    printf("Cycles for " xstr(SnP_FastLoop_Absorb) "(state, laneCount): \n");
+    printf("Time for " xstr(SnP_FastLoop_Absorb) "(state, laneCount): \n");
     displayMeasurements1101001000(measurements, laneCounts, 3, SnP_laneLengthInBytes);
 #else
     printf("SnP_FastLoop_Absorb() is not supported.\n");

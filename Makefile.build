@@ -82,6 +82,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="BM" inherits="common">
         <c>tests/Benchmarks/main.c</c>
         <c>tests/Benchmarks/testPerformance.c</c>
+        <c>tests/Benchmarks/timing.c</c>
         <h>tests/Benchmarks/timing.h</h>
         <h>tests/Benchmarks/testPerformance.h</h>
         <inc>tests/Benchmarks/timingSnP.inc</inc>

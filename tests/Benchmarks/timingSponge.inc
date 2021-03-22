@@ -57,7 +57,7 @@ cycles_t start(const char *synopsis, const char *implementation)
 {
     cycles_t calibration = CalibrateTimer();
     printf("*** %s ***\nImplementation: %s\n\n", synopsis, implementation);
-    printf("Cycles for " xstr(Sponge) "() with varying input sizes:\n");
+    printf("Time for " xstr(Sponge) "() with varying input sizes:\n");
     printf("                         1 block  2 blocks  100 blocks  ratio  slope\n");
     return calibration;
 }

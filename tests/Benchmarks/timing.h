@@ -36,7 +36,11 @@
 #endif
 
 #if defined(__clang__)
-  #if !defined(COMPILER_CLANG)
+  #if defined(__ibmxl__)
+    #if !defined(COMPILER_IBMXL)
+      #define COMPILER_IBMXL
+    #endif
+  #elif !defined(COMPILER_CLANG)
     #define COMPILER_CLANG
   #endif
 #elif defined(_MSC_VER)
@@ -71,6 +75,8 @@
   #define BENCHMARK_OS_NETBSD 1
 #elif defined(__OpenBSD__)
   #define BENCHMARK_OS_OPENBSD 1
+#elif defined(__DragonFly__)
+  #define BENCHMARK_OS_DRAGONFLY 1
 #elif defined(__linux__)
   #define BENCHMARK_OS_LINUX 1
 #elif defined(__native_client__)
@@ -85,6 +91,8 @@
 #define BENCHMARK_OS_SOLARIS 1
 #elif defined(__QNX__)
 #define BENCHMARK_OS_QNX 1
+#elif defined(__MVS__)
+#define BENCHMARK_OS_ZOS 1
 #endif
 
 #if defined(BENCHMARK_OS_MACOSX)
@@ -153,7 +161,7 @@ inline BENCHMARK_ALWAYS_INLINE int64_t CycleTimer() {
   uint32_t tbl, tbu0, tbu1;
   asm volatile(
       "mftbu %0\n"
-      "mftbl %1\n"
+      "mftb %1\n"
       "mftbu %2"
       : "=r"(tbu0), "=r"(tbl), "=r"(tbu1));
   tbl &= -(int32_t)(tbu0 == tbu1);
@@ -222,7 +230,7 @@ inline BENCHMARK_ALWAYS_INLINE int64_t CycleTimer() {
   struct timeval tv;
   gettimeofday(&tv, NULL);
   return (int64_t)(tv.tv_sec) * 1000000 + tv.tv_usec;
-#elif defined(__mips__)
+#elif defined(__mips__) || defined(__m68k__)
   // mips apparently only allows rdtsc for superusers, so we fall
   // back to gettimeofday.  It's possible clock_gettime would be better.
   struct timeval tv;
@@ -231,7 +239,12 @@ inline BENCHMARK_ALWAYS_INLINE int64_t CycleTimer() {
 #elif defined(__s390__)  // Covers both s390 and s390x.
   // Return the CPU clock.
   uint64_t tsc;
+#if defined(BENCHMARK_OS_ZOS) && defined(COMPILER_IBMXL)
+  // z/OS XL compiler HLASM syntax.
+  asm(" stck %0" : "=m"(tsc) : : "cc");
+#else
   asm("stck %0" : "=Q"(tsc) : : "cc");
+#endif
   return tsc;
 #elif defined(__riscv) // RISC-V
   // Use RDCYCLE (and RDCYCLEH on riscv32)
@@ -266,25 +279,15 @@ inline BENCHMARK_ALWAYS_INLINE int64_t CycleTimer() {
 /*           XKCP-specific definitions follow.                      */
 /* ---------------------------------------------------------------- */
 
+
 typedef int64_t cycles_t;
 #define CYCLES_MAX INT64_MAX
 
 #define TIMER_SAMPLE_CNT (100)
 
-static cycles_t CalibrateTimer()
-{
-    cycles_t dtMin = CYCLES_MAX;        /* big number to start */
-    cycles_t t0,t1,i;
-
-    for (i=0;i < TIMER_SAMPLE_CNT;i++)  /* calibrate the overhead for measuring time */
-        {
-        t0 = CycleTimer();
-        t1 = CycleTimer();
-        if (dtMin > t1-t0)              /* keep only the minimum time */
-            dtMin = t1-t0;
-        }
-    return dtMin;
-}
+const char * getTimerUnit();
+extern double timerCorrectionFactor;
+cycles_t CalibrateTimer();
 
 #define measureTimingDeclare \
     cycles_t tMin = CYCLES_MAX; \
@@ -307,6 +310,6 @@ static cycles_t CalibrateTimer()
         if (tMin > t1-t0 - dtMin) \
             tMin = t1-t0 - dtMin; \
         } \
-    return tMin;
+    return (cycles_t)(tMin * timerCorrectionFactor + 0.5);
 
 #endif  // _XKCP_timing_h_

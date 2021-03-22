@@ -57,10 +57,10 @@ void doTimingSnP(const char *module, const char *implementation)
     calibration = CalibrateTimer();
 
     measurement = measureSnP_Permute_6rounds(calibration);
-    printf("Cycles for " xstr(SnP_Permute_6rounds) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(SnP_Permute_6rounds) "(state): %"PRId64"\n\n", measurement);
 
     measurement = measureSnP_Permute_12rounds(calibration);
-    printf("Cycles for " xstr(SnP_Permute_12rounds) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(SnP_Permute_12rounds) "(state): %"PRId64"\n\n", measurement);
 
     printf("\n");
 }

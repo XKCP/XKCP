@@ -67,7 +67,7 @@ void timing(const char *synopsis, const char *implementation)
     cycles_t twoBlocksA = measureWrap(calibration, 0, 2*BlockRa);
     cycles_t manyBlocksA = measureWrap(calibration, 0, Many*BlockRa);
     printf("*** %s ***\nImplementation: %s\n\n", synopsis, implementation);
-    printf("Cycles for " xstr(Keyak_Initialize) "() + " xstr(Keyak_Wrap) "():\n");
+    printf("Time for " xstr(Keyak_Initialize) "() + " xstr(Keyak_Wrap) "():\n");
     printf("          I    A    1 block  2 blocks  100 blocks  ratio  slope\n");
     printf("I/A:   %4d %4d   %8"PRId64" %9"PRId64" %11"PRId64" %6.2f %6.2f\n", BlockRs, BlockRsRa, oneBlockIA, twoBlocksIA, manyBlocksIA, manyBlocksIA/(1.0*Many*BlockRa), (manyBlocksIA-twoBlocksIA)/(1.0*(Many-2)*BlockRa));
     printf("I/.:   %4d %4d   %8"PRId64" %9"PRId64" %11"PRId64" %6.2f %6.2f\n", BlockRs, 0, oneBlockI, twoBlocksI, manyBlocksI, manyBlocksI/(1.0*Many*BlockRs), (manyBlocksI-twoBlocksI)/(1.0*(Many-2)*BlockRs));
