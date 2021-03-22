@@ -31,12 +31,12 @@ KeccakP1600_Initialize:
 .endif
 .balign 32
     vpxor       %ymm0,%ymm0,%ymm0
-    vmovdqa     %ymm0,0*32(%rdi)
-    vmovdqa     %ymm0,1*32(%rdi)
-    vmovdqa     %ymm0,2*32(%rdi)
-    vmovdqa     %ymm0,3*32(%rdi)
-    vmovdqa     %ymm0,4*32(%rdi)
-    vmovdqa     %ymm0,5*32(%rdi)
+    vmovdqu     %ymm0,0*32(%rdi)
+    vmovdqu     %ymm0,1*32(%rdi)
+    vmovdqu     %ymm0,2*32(%rdi)
+    vmovdqu     %ymm0,3*32(%rdi)
+    vmovdqu     %ymm0,4*32(%rdi)
+    vmovdqu     %ymm0,5*32(%rdi)
     movq        $0,6*32(%rdi)
     ret
 .ifdef macOS

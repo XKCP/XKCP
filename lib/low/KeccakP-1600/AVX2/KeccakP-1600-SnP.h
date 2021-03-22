@@ -25,7 +25,7 @@ Please refer to SnP-documentation.h for more details.
 
 #define KeccakP1600_implementation      "AVX2 optimized implementation"
 #define KeccakP1600_stateSizeInBytes    200
-#define KeccakP1600_stateAlignment      32
+#define KeccakP1600_stateAlignment      8
 #define KeccakF1600_FastLoop_supported
 #define KeccakP1600_12rounds_FastLoop_supported
 
