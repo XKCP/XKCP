@@ -1464,12 +1464,12 @@ size_t KeccakP1600times8_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
     Xme = XOR(_mm512_permutex2var_epi64(Xme, p1, Xmi), _mm512_permutex2var_epi64(Xme, p2, Xmi));
 
     /* Add and store in xAccu */
-    Xba = XOR( Xba, *(V512*)&xAccu[0]);
-    Xgo = XOR( Xgo, *(V512*)&xAccu[8]);
-    Xme = XOR( Xme, *(V512*)&xAccu[16]);
-    _mm512_store_si512((V512*)&xAccu[0], Xba);
-    _mm512_store_si512((V512*)&xAccu[8], Xgo);
-    _mm512_store_si512((V512*)&xAccu[16], Xme);
+    Xba = XOR( Xba, LOAD512u(xAccu[0]));
+    Xgo = XOR( Xgo, LOAD512u(xAccu[8]));
+    Xme = XOR( Xme, LOAD512u(xAccu[16]));
+    _mm512_storeu_si512((V512*)&xAccu[0], Xba);
+    _mm512_storeu_si512((V512*)&xAccu[8], Xgo);
+    _mm512_storeu_si512((V512*)&xAccu[16], Xme);
 
     /* Add horizontally Xsu */
     v1 = _mm256_xor_si256( _mm512_extracti64x4_epi64(Xsu, 0), _mm512_extracti64x4_epi64(Xsu, 1));
