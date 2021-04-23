@@ -193,7 +193,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <group all="XKCP">
         <product delimiter="/">
             <factor set="reference reference32bits compact generic32 generic32lc generic64 generic64lc SSSE3 AVX XOP AVX2 AVX2noAsm AVX512 AVX512noAsm ARMv6 ARMv6M ARMv7M ARMv7A ARMv8A AVR8"/>
-            <factor set="UnitTests Benchmarks KeccakSum libXKCP.a libXKCP.so"/>
+            <factor set="UnitTests Benchmarks KeccakSum libXKCP.a libXKCP.so libXKCP.dylib"/>
         </product>
     </group>
 
