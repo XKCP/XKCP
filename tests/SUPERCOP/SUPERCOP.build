@@ -282,12 +282,12 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
     </fragment>
 
     <fragment name="crypto_aead/Xoodyak_aead/kcp" inherits="Xoodyak">
-        <c>tests/SUPERCOP/Xoodyak_aead/encrypt.c</c>
-        <h>tests/SUPERCOP/Xoodyak_aead/api.h</h>
+        <c>tests/SUPERCOP/Xoodyak_aead_round3/encrypt.c</c>
+        <h>tests/SUPERCOP/Xoodyak_aead_round3/api.h</h>
     </fragment>
 
     <fragment name="Xoodyak_aead_SelfTest" inherits="crypto_aead/Xoodyak_aead/kcp crypto_aead_test">
-        <c>tests/SUPERCOP/Xoodyak_aead/selftest.c</c>
+        <c>tests/SUPERCOP/Xoodyak_aead_round3/selftest.c</c>
     </fragment>
 
     <group all="supercopXoodyak">
