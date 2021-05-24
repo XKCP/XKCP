@@ -1128,10 +1128,10 @@ size_t KeccakP1600times4_12rounds_FastLoop_Absorb(void *states, unsigned int lan
                                     UNINTLEAVEa(lanes0, lanes1, lanes2, lanes3),            \
                                     XOReq256( lanes0, lanes1 ),                             \
                                     XOReq256( lanes2, lanes3 ),                             \
-                                    lanes1 = LOAD256( p[argIndex]),                         \
+                                    lanes1 = LOAD256u( p[argIndex]),                         \
                                     XOReq256( lanes0, lanes2 ),                             \
                                     XOReq256( lanes0, lanes1 ),                             \
-                                    STORE256( p[argIndex], lanes0 )
+                                    STORE256u( p[argIndex], lanes0 )
 
 #define Kravatte_Rollc()                                                                                            \
     Asa = x0x1x2x3,                                                                                                 \
@@ -1158,7 +1158,7 @@ size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
     V128    gather = _mm_setr_epi32(0*25*8, 1*25*8, 2*25*8, 3*25*8);
     #endif
 
-    x0x1x2x3 = LOAD256(kRoll[20]);
+    x0x1x2x3 = LOAD256u(kRoll[20]);
     x1x2x3x4 = LOAD256u(kRoll[21]);
     do {
         AddOverWr4( Aba, Abe, Abi, Abo, kRoll, in64,  0 );
@@ -1183,7 +1183,7 @@ size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
         in64 += 4 * 25;
     }
     while(--nBlocks != 0);
-    STORE256(kRoll[20], x0x1x2x3);
+    STORE256u(kRoll[20], x0x1x2x3);
     kRoll[24] = _mm256_extract_epi64(x1x2x3x4, 3);
 
     return (size_t)in64 - (size_t)input;
@@ -1263,7 +1263,7 @@ size_t KeccakP1600times4_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, 
         Aku = CONST256_64(yAccu[14]);
 
         Ama = LOAD256u(yAccu[15]);
-        Ame = LOAD256 (yAccu[16]);
+        Ame = LOAD256u(yAccu[16]);
         Ami = LOAD256u(yAccu[17]);
         Amo = LOAD256u(yAccu[18]);
         Amu = LOAD256u(yAccu[19]);
@@ -1274,7 +1274,7 @@ size_t KeccakP1600times4_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, 
         lanesH01 = _mm256_and_si256(Ami, _mm256_srli_epi64(Ame, 1));
         lanesL01 = XOR256(lanesL01, lanesH01);
 
-        Asa = LOAD256 (yAccu[20]);
+        Asa = LOAD256u(yAccu[20]);
         Ase = LOAD256u(yAccu[21]);
 #if defined(__i386__) || defined(_M_IX86)
         Asi = _mm256_permute4x64_epi64(Ase, 0x39);
