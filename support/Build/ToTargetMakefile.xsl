@@ -52,33 +52,37 @@ http://creativecommons.org/publicdomain/zero/1.0/
 </xsl:template>
 
 <xsl:template match="gcc">
-    <!-- What follows is a shameless hack to avoid -march=native on aarch64 with clang -->
-    <xsl:if test=".= '-march=native'">
-        <xsl:text>ifneq ($(UNAME_M)$(findstring clang,$(CC)),aarch64clang)
+    <!-- What follows is a shameless hack to avoid -march/-mtune=native on arm64/aarch64 with clang -->
+    <xsl:if test=".= '-march=native' or .= '-mtune=native'">
+        <xsl:text>ifneq ($(UNAME_M),aarch64)
+ifneq ($(UNAME_M),arm64)
 </xsl:text>
     </xsl:if>
     <xsl:text>CFLAGS := $(CFLAGS) </xsl:text>
     <xsl:value-of select="."/>
     <xsl:text>
 </xsl:text>
-    <xsl:if test=".= '-march=native'">
+    <xsl:if test=".= '-march=native' or .= '-mtune=native'">
         <xsl:text>endif
+endif
 </xsl:text>
     </xsl:if>
 </xsl:template>
 
 <xsl:template match="gas">
-    <!-- What follows is a shameless hack to avoid -march=native on aarch64 with clang -->
-    <xsl:if test=".= '-march=native'">
-        <xsl:text>ifneq ($(UNAME_M)$(findstring clang,$(CC)),aarch64clang)
+    <!-- What follows is a shameless hack to avoid -march/-mtune=native on arm64/aarch64 with clang -->
+    <xsl:if test=".= '-march=native' or .= '-mtune=native'">
+        <xsl:text>ifneq ($(UNAME_M),aarch64)
+ifneq ($(UNAME_M),arm64)
 </xsl:text>
     </xsl:if>
     <xsl:text>ASMFLAGS := $(ASMFLAGS) </xsl:text>
     <xsl:value-of select="."/>
     <xsl:text>
 </xsl:text>
-    <xsl:if test=".= '-march=native'">
+    <xsl:if test=".= '-march=native' or .= '-mtune=native'">
         <xsl:text>endif
+endif
 </xsl:text>
     </xsl:if>
 </xsl:template>
