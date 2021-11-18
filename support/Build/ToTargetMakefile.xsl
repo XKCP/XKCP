@@ -204,10 +204,10 @@ ifeq ($(UNAME_S),Linux)
     ASMFLAGS :=
 endif
 ifeq ($(UNAME_S),Darwin)
-    ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,add_underscore=1 -Wa,-defsym,no_type=1 -Wa,-defsym,no_size=1 -Wa,-defsym,no_plt=1
+    ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,old_gas_syntax=1 -Wa,-defsym,no_plt=1
 endif
 ifneq (,$(findstring mingw32,$(CC)))
-    ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,no_type=1 -Wa,-defsym,no_size=1 -Wa,-defsym,no_plt=1
+    ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,old_gas_syntax=1 -Wa,-defsym,no_plt=1
 endif
 UNAME_M := $(shell uname -m)
 
