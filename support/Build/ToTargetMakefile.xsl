@@ -55,7 +55,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- What follows is a shameless hack to avoid -march/-mtune=native on arm64/aarch64 with clang -->
     <xsl:if test=".= '-march=native' or .= '-mtune=native'">
         <xsl:text>ifneq ($(UNAME_M),aarch64)
-ifneq ($(UNAME_M),arm64)
+ifneq ($(UNAME_S),Darwin)
 </xsl:text>
     </xsl:if>
     <xsl:text>CFLAGS := $(CFLAGS) </xsl:text>
@@ -73,7 +73,7 @@ endif
     <!-- What follows is a shameless hack to avoid -march/-mtune=native on arm64/aarch64 with clang -->
     <xsl:if test=".= '-march=native' or .= '-mtune=native'">
         <xsl:text>ifneq ($(UNAME_M),aarch64)
-ifneq ($(UNAME_M),arm64)
+ifneq ($(UNAME_S),Darwin)
 </xsl:text>
     </xsl:if>
     <xsl:text>ASMFLAGS := $(ASMFLAGS) </xsl:text>
