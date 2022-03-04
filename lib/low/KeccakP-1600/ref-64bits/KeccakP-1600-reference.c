@@ -194,8 +194,10 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
 
 /* ---------------------------------------------------------------- */
 
+#if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
 static void fromBytesToWords(tKeccakLane *stateAsWords, const unsigned char *state);
 static void fromWordsToBytes(unsigned char *state, const tKeccakLane *stateAsWords);
+#endif
 void KeccakP1600OnWords(tKeccakLane *state, unsigned int nrRounds);
 void KeccakP1600Round(tKeccakLane *state, unsigned int indexRound);
 static void theta(tKeccakLane *A);
@@ -267,6 +269,7 @@ void KeccakP1600_Permute_24rounds(void *state)
 #endif
 }
 
+#if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
 static void fromBytesToWords(tKeccakLane *stateAsWords, const unsigned char *state)
 {
     unsigned int i, j;
@@ -286,6 +289,7 @@ static void fromWordsToBytes(unsigned char *state, const tKeccakLane *stateAsWor
         for(j=0; j<(64/8); j++)
             state[i*(64/8)+j] = (unsigned char)((stateAsWords[i] >> (8*j)) & 0xFF);
 }
+#endif
 
 void KeccakP1600OnWords(tKeccakLane *state, unsigned int nrRounds)
 {
