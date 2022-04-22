@@ -55,7 +55,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <!-- What follows is a shameless hack to avoid -march/-mtune=native on arm64/aarch64 with clang -->
     <xsl:if test=".= '-march=native' or .= '-mtune=native'">
         <xsl:text>ifneq ($(UNAME_M),aarch64)
-ifneq ($(UNAME_S),Darwin)
+            ifneq ($(UNAME_S),Darwin)
+            ifneq ($(UNAME_M),riscv64)
+            ifneq ($(UNAME_M),riscv32)
 </xsl:text>
     </xsl:if>
     <xsl:text>CFLAGS := $(CFLAGS) </xsl:text>
@@ -64,7 +66,9 @@ ifneq ($(UNAME_S),Darwin)
 </xsl:text>
     <xsl:if test=".= '-march=native' or .= '-mtune=native'">
         <xsl:text>endif
-endif
+            endif
+            endif
+            endif
 </xsl:text>
     </xsl:if>
 </xsl:template>
@@ -73,7 +77,9 @@ endif
     <!-- What follows is a shameless hack to avoid -march/-mtune=native on arm64/aarch64 with clang -->
     <xsl:if test=".= '-march=native' or .= '-mtune=native'">
         <xsl:text>ifneq ($(UNAME_M),aarch64)
-ifneq ($(UNAME_S),Darwin)
+            ifneq ($(UNAME_S),Darwin)
+            ifneq ($(UNAME_M),riscv64)
+            ifneq ($(UNAME_M),riscv32)
 </xsl:text>
     </xsl:if>
     <xsl:text>ASMFLAGS := $(ASMFLAGS) </xsl:text>
@@ -82,7 +88,9 @@ ifneq ($(UNAME_S),Darwin)
 </xsl:text>
     <xsl:if test=".= '-march=native' or .= '-mtune=native'">
         <xsl:text>endif
-endif
+            endif
+            endif
+            endif
 </xsl:text>
     </xsl:if>
 </xsl:template>
