@@ -25,7 +25,7 @@ Please refer to SnP-documentation.h for more details.
 
 #define KeccakP1600_implementation      "implementation optimized for XOP (" KeccakP1600_implementation_config ")"
 #define KeccakP1600_stateSizeInBytes    200
-#define KeccakP1600_stateAlignment      8
+#define KeccakP1600_stateAlignment      16
 
 #include <stddef.h>
 
