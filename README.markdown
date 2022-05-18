@@ -111,14 +111,8 @@ The XKCP also provides some standalone implementations, including:
 
 # Under which license is the XKCP distributed?
 
-Most of the source and header files in the XKCP are released to the **public domain** and associated to the [CC0](http://creativecommons.org/publicdomain/zero/1.0/) deed. The exceptions are the following:
-
-* [`lib/common/brg_endian.h`](lib/common/brg_endian.h) is copyrighted by Brian Gladman and comes with a BSD 3-clause license;
-* [`tests/UnitTests/genKAT.c`](tests/UnitTests/genKAT.c) is based on [SHA-3 contest's code by Larry Bassham, NIST](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/KAT1.zip), which he licensed under a BSD 3-clause license;
-* [`tests/UnitTests/timing.h`](tests/UnitTests/timing.h) is adapted from Google Benchmark and is licensed under the Apache License, Version 2.0;
-* [`KeccakP-1600-AVX2.s`](lib/low/KeccakP-1600/AVX2/KeccakP-1600-AVX2.s) is licensed under the [CRYPTOGAMS license](http://www.openssl.org/~appro/cryptogams/) (BSD-like);
-* [`support/Kernel-PMU/enable_arm_pmu.c`](support/Kernel-PMU/enable_arm_pmu.c) is licensed under the GNU General Public License by Bruno Pairault.
-
+Most of the source and header files in the XKCP are released to the **public domain** and associated to the [CC0](http://creativecommons.org/publicdomain/zero/1.0/) deed, but there are exceptions.
+Please refer to the [LICENSE](LICENSE) file for more information.
 
 
 
