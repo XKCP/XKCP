@@ -271,7 +271,7 @@ bin/</xsl:text>
 &#9;cp -f $(HEADERS) $@.headers/
 &#9;$(CC) -dynamiclib -install_name @rpath/</xsl:text>
         <xsl:value-of select="@name"/>
-        <xsl:text> $(OBJECTS) -o $@
+        <xsl:text> $(CFLAGS) $(OBJECTS) -o $@
 </xsl:text>
         </xsl:when>
         <xsl:otherwise>
