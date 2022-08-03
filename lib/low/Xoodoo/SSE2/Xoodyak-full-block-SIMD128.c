@@ -333,6 +333,7 @@ size_t Xoodyak_DecryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size
         Round(_rc2);
         Round(_rc1);
         o0 = XOR128(a0, LOAD128u(I[0]));
+#if defined(__SSE41__) || defined(__SSE4_1__)
 #if defined(__i386__) || defined(_M_IX86)
         *((uint32_t*)(O+16)) = *((uint32_t*)(I+16)) ^ _mm_extract_epi32(a1, 0);
         *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_extract_epi32(a1, 1);
@@ -341,6 +342,24 @@ size_t Xoodyak_DecryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size
 #else
         *((uint64_t*)(O+16)) = *((uint64_t*)(I+16)) ^ _mm_extract_epi64(a1, 0);
         a1 = _mm_insert_epi64(a1, *((uint64_t*)(I+16)), 0);
+#endif
+#else
+#if defined(__i386__) || defined(_M_IX86)
+        *((uint32_t*)(O+16)) = *((uint32_t*)(I+16)) ^ _mm_cvtsi128_si32(a1);
+        *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_cvtsi128_si32(_mm_srli_si128(a1,4));
+        a1 = _mm_set_epi32(
+            // preserve high words
+            _mm_cvtsi128_si32(_mm_srli_si128(a1,12), 3),
+            _mm_cvtsi128_si32(_mm_srli_si128(a1,8), 2),
+            *((uint32_t*)(I+20)),
+            *((uint32_t*)(I+16)));
+#else
+        *((uint64_t*)(O+16)) = *((uint64_t*)(I+16)) ^ _mm_cvtsi128_si64(a1);
+        a1 = _mm_set_epi64x(
+            // preserve high words
+             _mm_cvtsi128_si64(_mm_srli_si128(a1,8)),
+            *((uint64_t*)(I+16)));
+#endif
 #endif
         STORE128u(O[0], o0);
         a0 = XOR128(a0, o0); 

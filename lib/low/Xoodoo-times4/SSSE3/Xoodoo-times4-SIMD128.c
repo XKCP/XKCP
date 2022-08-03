@@ -46,7 +46,11 @@ typedef __m128i V128;
 //static const uint64_t rho8[2] = {0x0605040302010007, 0x0E0D0C0B0A09080F};
 #endif
 #define STORE128(a, b)              _mm_store_si128((V128 *)&(a), b)
+#if defined(__SSE41__) || defined(__SSE4_1__)
 #define STORE4_32(r, a, b, c, d)    a = _mm_extract_epi32(r, 0), b = _mm_extract_epi32(r, 1), c = _mm_extract_epi32(r, 2), d = _mm_extract_epi32(r, 3)
+#else
+#define STORE4_32(r, a, b, c, d)    a = _mm_cvtsi128_si32(r), b = _mm_cvtsi128_si32(_mm_srli_si128(r,4)), c = _mm_cvtsi128_si32(_mm_srli_si128(r,8)), d = _mm_cvtsi128_si32(_mm_srli_si128(r,12))
+#endif
 #define XOR128(a, b)                _mm_xor_si128(a, b)
 #define XOReq128(a, b)              a = XOR128(a, b)
 
