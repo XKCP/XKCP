@@ -217,6 +217,12 @@ endif
 ifneq (,$(findstring mingw32,$(CC)))
     ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,old_gas_syntax=1 -Wa,-defsym,no_plt=1
 endif
+ifneq (,$(findstring MINGW,$(UNAME_S)))
+    ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,no_type=1 -Wa,-defsym,no_size=1 -Wa,-defsym,no_plt=1
+endif
+ifneq (,$(findstring MSYS_NT,$(UNAME_S)))
+    ASMFLAGS := -x assembler-with-cpp -Wa,-defsym,no_type=1 -Wa,-defsym,no_size=1 -Wa,-defsym,no_plt=1
+endif
 UNAME_M := $(shell uname -m)
 
 </xsl:text>
