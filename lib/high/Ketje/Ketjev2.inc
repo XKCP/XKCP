@@ -41,6 +41,10 @@ int Ketje_Initialize(Ketje_Instance *instance, const unsigned char *key, unsigne
     unsigned int keyPackSizeInBits;
 
     keyPackSizeInBits = 8*((keySizeInBits+16)/8);
+    if (keyPackSizeInBits > SnP_width)
+        return 1;
+    if (nonceSizeInBits > SnP_width)
+        return 1;
     if ( (keyPackSizeInBits + nonceSizeInBits + 2) > SnP_width)
         return 1;
 
@@ -87,7 +91,7 @@ int Ketje_FeedAssociatedData(Ketje_Instance *instance, const unsigned char *data
     if ((instance->phase & Ketje_Phase_FeedingAssociatedData) == 0)
         return 1;
 
-    if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize )
+    if ( dataSizeInBytes > Ketje_BlockSize - instance->dataRemainderSize )
     {
         if (instance->dataRemainderSize != 0)
         {
@@ -127,7 +131,7 @@ int Ketje_WrapPlaintext(Ketje_Instance *instance, const unsigned char *plaintext
     if ( (instance->phase & Ketje_Phase_Wrapping) == 0)
         return 1;
 
-    if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize )
+    if ( dataSizeInBytes > Ketje_BlockSize - instance->dataRemainderSize )
     {
         /* More than a block */
         if (instance->dataRemainderSize != 0)
@@ -181,7 +185,7 @@ int Ketje_UnwrapCiphertext(Ketje_Instance *instance, const unsigned char *cipher
     if ( (instance->phase & Ketje_Phase_Unwrapping) == 0)
         return 1;
 
-    if ( (instance->dataRemainderSize + dataSizeInBytes) > Ketje_BlockSize )
+    if ( dataSizeInBytes > Ketje_BlockSize - instance->dataRemainderSize )
     {
         /* More than a block */
         if (instance->dataRemainderSize != 0)

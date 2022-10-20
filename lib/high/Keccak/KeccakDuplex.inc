@@ -58,6 +58,8 @@ int Duplexing(DuplexInstance *instance, const unsigned char *sigmaBegin, unsigne
 
     if (delimitedSigmaEnd == 0)
         return 1;
+    if (sigmaBeginByteLen > rho_max/8)
+        return 1;
     if ((instance->byteInputIndex+sigmaBeginByteLen)*8 > rho_max)
         return 1;
     if (rho_max - sigmaBeginByteLen*8 < 7) {
@@ -102,6 +104,8 @@ int DuplexingFeedPartialInput(DuplexInstance *instance, const unsigned char *inp
 {
     const unsigned int rho_max = instance->rate - 2;
 
+    if (inputByteLen > rho_max/8)
+        return 1;
     if ((instance->byteInputIndex+inputByteLen)*8 > rho_max)
         return 1;
 
@@ -114,6 +118,8 @@ int DuplexingFeedZeroes(DuplexInstance *instance, unsigned int inputByteLen)
 {
     const unsigned int rho_max = instance->rate - 2;
 
+    if (inputByteLen > rho_max/8)
+        return 1;
     if ((instance->byteInputIndex+inputByteLen)*8 > rho_max)
         return 1;
 
@@ -125,6 +131,8 @@ int DuplexingOverwritePartialInput(DuplexInstance *instance, const unsigned char
 {
     const unsigned int rho_max = instance->rate - 2;
 
+    if (inputByteLen > rho_max/8)
+        return 1;
     if ((instance->byteInputIndex+inputByteLen)*8 > rho_max)
         return 1;
 
@@ -137,6 +145,8 @@ int DuplexingOverwriteWithZeroes(DuplexInstance *instance, unsigned int inputByt
 {
     const unsigned int rho_max = instance->rate - 2;
 
+    if (inputByteLen > rho_max/8)
+        return 1;
     if ((instance->byteInputIndex != 0) || (inputByteLen*8 > rho_max))
         return 1;
 
@@ -148,7 +158,7 @@ int DuplexingOverwriteWithZeroes(DuplexInstance *instance, unsigned int inputByt
 
 int DuplexingGetFurtherOutput(DuplexInstance *instance, unsigned char *output, unsigned int outputByteLen)
 {
-    if ((outputByteLen+instance->byteOutputIndex) > (instance->rate+7)/8)
+    if (outputByteLen > (instance->rate+7)/8 - instance->byteOutputIndex)
         return 1; /* The output length must not be greater than the rate (rounded up to a byte) */
 
     SnP_ExtractBytes(instance->state, output, instance->byteOutputIndex, outputByteLen);
@@ -162,7 +172,7 @@ int DuplexingGetFurtherOutput(DuplexInstance *instance, unsigned char *output, u
 
 int DuplexingGetFurtherOutputAndAdd(DuplexInstance *instance, const unsigned char *input, unsigned char *output, unsigned int outputByteLen)
 {
-    if ((outputByteLen+instance->byteOutputIndex) > (instance->rate+7)/8)
+    if (outputByteLen > (instance->rate+7)/8 - instance->byteOutputIndex)
         return 1; /* The output length must not be greater than the rate (rounded up to a byte) */
 
     SnP_ExtractAndAddBytes(instance->state, input, output, instance->byteOutputIndex, outputByteLen);

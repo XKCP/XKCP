@@ -54,7 +54,7 @@ int SpongePRG_Feed(SpongePRG_Instance *instance, const unsigned char *input, uns
     unsigned int rhoInBytes = (instance->duplex.rate-2)/8;
     int error = 0;
 
-    while( !error && ((DuplexGetInputIndex(&instance->duplex) + inputByteLen) >= rhoInBytes)) {
+    while( !error && (inputByteLen >= rhoInBytes - DuplexGetInputIndex(&instance->duplex))) {
         unsigned int localSize = rhoInBytes - DuplexGetInputIndex(&instance->duplex);
         error |= DuplexingFeedPartialInput(&instance->duplex, input, localSize);
         error |= Duplexing(&instance->duplex, 0, 0, 0, 0, 0x01);
