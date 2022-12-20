@@ -37,6 +37,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <c>tests/UnitTests/testPermutations.c</c>
         <h>tests/UnitTests/testPermutations.h</h>
         <inc>tests/UnitTests/testSnP.inc</inc>
+        <inc>tests/UnitTests/testSnPnominal.inc</inc>
         <inc>tests/UnitTests/testPlSnP.inc</inc>
         <c>tests/UnitTests/testSponge.c</c>
         <inc>tests/UnitTests/testSponge.inc</inc>
@@ -72,6 +73,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <h>tests/UnitTests/testXoofffModes.h</h>
         <c>tests/UnitTests/testXoodyak.c</c>
         <h>tests/UnitTests/testXoodyak.h</h>
+        <inc>tests/UnitTests/testXoodyakHash.inc</inc>
+        <inc>tests/UnitTests/testXoodyakKeyed.inc</inc>
     </fragment>
 
     <fragment name="UnitTests" inherits="All UT"/>
