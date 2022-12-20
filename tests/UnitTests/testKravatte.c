@@ -88,7 +88,7 @@ static void performTestKravatteOneInput(BitLength keyLen, BitLength inputLen, Bi
         key[keyLen / 8] &= (1 << (keyLen & 7)) - 1;
 
     #ifdef UT_VERBOSE
-    printf( "keyLen %5u, outputLen %5u, inputLen %5u (in bits)\n", keyLen, outputLen, inputLen);
+    printf( "keyLen %5zu, outputLen %5zu, inputLen %5zu (in bits)\n", keyLen, outputLen, inputLen);
     #endif
 
     result = Kravatte_MaskDerivation(&kv, key, keyLen);
@@ -154,7 +154,7 @@ static void performTestKravatteOneInput(BitLength keyLen, BitLength inputLen, Bi
     {
         unsigned int i;
 
-        printf("Key of %d bits:", keyLen);
+        printf("Key of %zu bits:", keyLen);
         keyLen += 7;
         keyLen /= 8;
         for(i=0; (i<keyLen) && (i<16); i++)
@@ -163,7 +163,7 @@ static void performTestKravatteOneInput(BitLength keyLen, BitLength inputLen, Bi
             printf(" ...");
         printf("\n");
 
-        printf("Input of %d bits:", inputLen);
+        printf("Input of %zu bits:", inputLen);
         inputLen += 7;
         inputLen /= 8;
         for(i=0; (i<inputLen) && (i<16); i++)
@@ -172,7 +172,7 @@ static void performTestKravatteOneInput(BitLength keyLen, BitLength inputLen, Bi
             printf(" ...");
         printf("\n");
 
-        printf("Output of %d bits:", outputLen);
+        printf("Output of %zu bits:", outputLen);
         outputLen += 7;
         outputLen /= 8;
         for(i=0; (i<outputLen) && (i<8); i++)

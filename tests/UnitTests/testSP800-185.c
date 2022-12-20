@@ -68,7 +68,7 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
     generateSimpleRawMaterial(input, (inputLen + 7) / 8, (unsigned char)outputLen, (unsigned int)(inputLen + customLen));
 
     #ifdef UT_VERBOSE
-    printf( "securityStrength %u, outputLen %3u, inputLen %5u, nameLen %3u, customLen %3u\n", securityStrength, outputLen, inputLen, nameLen, customLen);
+    printf( "securityStrength %u, outputLen %3zu, inputLen %5zu, nameLen %3zu, customLen %3zu\n", securityStrength, outputLen, inputLen, nameLen, customLen);
     #endif
     if (mode == 0)
     {
@@ -185,13 +185,13 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
         unsigned int i;
 
         printf("cSHAKE%d\n", securityStrength);
-        printf("Input of %d bits:", inputLen);
+        printf("Input of %zu bits:", inputLen);
         for(i=0; (i<(inputLen + 7) / 8) && (i<16); i++)
             printf(" %02x", (int)input[i]);
             if (inputLen > 16)
                 printf(" ...");
         printf("\n");
-        printf("Output of %d bits:", outputLen);
+        printf("Output of %zu bits:", outputLen);
         for(i=0; i<(outputLen + 7) / 8; i++)
             printf(" %02x", (int)output[i]);
         printf("\n\n");
@@ -495,7 +495,7 @@ static void performTestParallelHashOneInput(unsigned int securityStrength, unsig
     generateSimpleRawMaterial(input, inputLen, blockSize / 256 + outputLen, inputLen + customLen);
 
     #ifdef UT_VERBOSE
-    printf( "securityStrength %u, blockSize %5u, outputLen %3u, inputLen %5u, customLen % 3u\n", securityStrength, blockSize, outputLen, inputLen, customLen);
+    printf( "securityStrength %u, blockSize %5u, outputLen %3u, inputLen %5u, customLen %3u\n", securityStrength, blockSize, outputLen, inputLen, customLen);
     #endif
     if (mode == 0)
     {

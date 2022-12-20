@@ -47,7 +47,7 @@ void dumpState(const unsigned char *state, char *message)
     unsigned char buffer[SnP_width/8];
 
     SnP_ExtractBytes(state, buffer, 0, SnP_width/8 );
-    printf( "\n%s\n", message, state );
+    printf( "\n%s\n", message );
     state = buffer;
     for ( i = 0; i < SnP_laneCount; ++i, state += SnP_laneLengthInBytes )
     {
