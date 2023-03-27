@@ -281,16 +281,16 @@ void Xoofff_AddIs(unsigned char *output, const unsigned char *input, size_t bitL
 
     #if !defined(NO_MISALIGNED_ACCESSES)
     while ( byteLen >= 32 ) {
-        *((uint64_t*)(output+0)) ^= *((uint64_t*)(input+0));
-        *((uint64_t*)(output+8)) ^= *((uint64_t*)(input+8));
-        *((uint64_t*)(output+16)) ^= *((uint64_t*)(input+16));
-        *((uint64_t*)(output+24)) ^= *((uint64_t*)(input+24));
+        *((uint64_t*)(output+0)) ^= *((const uint64_t*)(input+0));
+        *((uint64_t*)(output+8)) ^= *((const uint64_t*)(input+8));
+        *((uint64_t*)(output+16)) ^= *((const uint64_t*)(input+16));
+        *((uint64_t*)(output+24)) ^= *((const uint64_t*)(input+24));
         input += 32;
         output += 32;
         byteLen -= 32;
     }
     while ( byteLen >= 8 ) {
-        *((uint64_t*)output) ^= *((uint64_t*)input);
+        *((uint64_t*)output) ^= *((const uint64_t*)input);
         input += 8;
         output += 8;
         byteLen -= 8;

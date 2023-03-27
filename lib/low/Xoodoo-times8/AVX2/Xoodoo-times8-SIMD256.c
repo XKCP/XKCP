@@ -289,7 +289,7 @@ void Xoodootimes8_ExtractBytes(const void *states, unsigned int instanceIndex, u
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
         if (bytesInLane > sizeLeft)
             bytesInLane = sizeLeft;
-        memcpy( curData, ((unsigned char *)&statesAsLanes[laneIndex(instanceIndex, lanePosition)]) + offsetInLane, bytesInLane);
+        memcpy( curData, ((const unsigned char *)&statesAsLanes[laneIndex(instanceIndex, lanePosition)]) + offsetInLane, bytesInLane);
         sizeLeft -= bytesInLane;
         lanePosition++;
         curData += bytesInLane;
@@ -317,7 +317,6 @@ void Xoodootimes8_ExtractLanesAll(const void *states, unsigned char *data, unsig
     uint32_t *curData5 = (uint32_t *)(data+laneOffset*5*SnP_laneLengthInBytes);
     uint32_t *curData6 = (uint32_t *)(data+laneOffset*6*SnP_laneLengthInBytes);
     uint32_t *curData7 = (uint32_t *)(data+laneOffset*7*SnP_laneLengthInBytes);
-    const V256 *stateAsLanes = (const V256 *)states;
     const uint32_t *stateAsLanes32 = (const uint32_t*)states;
     unsigned int i;
 
@@ -374,7 +373,7 @@ void Xoodootimes8_ExtractAndAddBytes(const void *states, unsigned int instanceIn
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *((uint32_t*)curOutput) = *((uint32_t*)curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        *((uint32_t*)curOutput) = *((const uint32_t*)curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)];
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curInput += SnP_laneLengthInBytes;
@@ -392,14 +391,14 @@ void Xoodootimes8_ExtractAndAddBytes(const void *states, unsigned int instanceIn
 
 void Xoodootimes8_ExtractAndAddLanesAll(const void *states, const unsigned char *input, unsigned char *output, unsigned int laneCount, unsigned int laneOffset)
 {
-    const uint32_t *curInput0 = (uint32_t *)(input+laneOffset*0*SnP_laneLengthInBytes);
-    const uint32_t *curInput1 = (uint32_t *)(input+laneOffset*1*SnP_laneLengthInBytes);
-    const uint32_t *curInput2 = (uint32_t *)(input+laneOffset*2*SnP_laneLengthInBytes);
-    const uint32_t *curInput3 = (uint32_t *)(input+laneOffset*3*SnP_laneLengthInBytes);
-    const uint32_t *curInput4 = (uint32_t *)(input+laneOffset*4*SnP_laneLengthInBytes);
-    const uint32_t *curInput5 = (uint32_t *)(input+laneOffset*5*SnP_laneLengthInBytes);
-    const uint32_t *curInput6 = (uint32_t *)(input+laneOffset*6*SnP_laneLengthInBytes);
-    const uint32_t *curInput7 = (uint32_t *)(input+laneOffset*7*SnP_laneLengthInBytes);
+    const uint32_t *curInput0 = (const uint32_t *)(input+laneOffset*0*SnP_laneLengthInBytes);
+    const uint32_t *curInput1 = (const uint32_t *)(input+laneOffset*1*SnP_laneLengthInBytes);
+    const uint32_t *curInput2 = (const uint32_t *)(input+laneOffset*2*SnP_laneLengthInBytes);
+    const uint32_t *curInput3 = (const uint32_t *)(input+laneOffset*3*SnP_laneLengthInBytes);
+    const uint32_t *curInput4 = (const uint32_t *)(input+laneOffset*4*SnP_laneLengthInBytes);
+    const uint32_t *curInput5 = (const uint32_t *)(input+laneOffset*5*SnP_laneLengthInBytes);
+    const uint32_t *curInput6 = (const uint32_t *)(input+laneOffset*6*SnP_laneLengthInBytes);
+    const uint32_t *curInput7 = (const uint32_t *)(input+laneOffset*7*SnP_laneLengthInBytes);
     uint32_t *curOutput0 = (uint32_t *)(output+laneOffset*0*SnP_laneLengthInBytes);
     uint32_t *curOutput1 = (uint32_t *)(output+laneOffset*1*SnP_laneLengthInBytes);
     uint32_t *curOutput2 = (uint32_t *)(output+laneOffset*2*SnP_laneLengthInBytes);
@@ -409,7 +408,6 @@ void Xoodootimes8_ExtractAndAddLanesAll(const void *states, const unsigned char 
     uint32_t *curOutput6 = (uint32_t *)(output+laneOffset*6*SnP_laneLengthInBytes);
     uint32_t *curOutput7 = (uint32_t *)(output+laneOffset*7*SnP_laneLengthInBytes);
 
-    const V256 *stateAsLanes = (const V256 *)states;
     const uint32_t *stateAsLanes32 = (const uint32_t*)states;
     unsigned int i;
 
@@ -599,7 +597,7 @@ void Xooffftimes8_AddIs(unsigned char *output, const unsigned char *input, size_
         output += 32;
     }
    while ( byteLen >= 8 ) {
-        *((uint64_t*)output) ^= *((uint64_t*)input);
+        *((uint64_t*)output) ^= *((const uint64_t*)input);
         input += 8;
         output += 8;
         byteLen -= 8;
@@ -619,9 +617,9 @@ void Xooffftimes8_AddIs(unsigned char *output, const unsigned char *input, size_
 size_t Xooffftimes8_CompressFastLoop(unsigned char *k, unsigned char *x, const unsigned char *input, size_t length)
 {
     DeclareVars;
-    uint32_t    *k32 = (uint32_t*)k;
-    uint32_t    *x32 = (uint32_t*)x;
-    uint32_t    *i32 = (uint32_t*)input;
+    uint32_t       *k32 = (uint32_t*)k;
+    uint32_t       *x32 = (uint32_t*)x;
+    const uint32_t *i32 = (const uint32_t*)input;
     size_t      initialLength;
     V256        r04815926;
     V256        r5926a37b;
@@ -758,10 +756,10 @@ size_t Xooffftimes8_CompressFastLoop(unsigned char *k, unsigned char *x, const u
     x01 = XOR256(x01, SHUFFLE_LANES_RIGHT(x01, 1));
     x20 = XOR256(x20, SHUFFLE_LANES_RIGHT(x20, 1));
     x00 = _mm256_blend_epi32( x00, SHUFFLE_LANES_RIGHT(x01, 7), 0xAA);
-    x20 = _mm256_permutevar8x32_epi32( x20, *(V256*)shufflePack);
+    x20 = _mm256_permutevar8x32_epi32( x20, *(const V256*)shufflePack);
 
     x00 = XOR256(x00, *(V256*)&x32[0]);
-    x4 = XOR128(_mm256_castsi256_si128(x20), *(V128*)&x32[8]);
+    x4 = XOR128(_mm256_castsi256_si128(x20), *(const V128*)&x32[8]);
 
     STORE256u( *(V256*)&x32[0], x00);
     STORE128u( *(V128*)&x32[8], x4);
@@ -787,7 +785,7 @@ size_t Xooffftimes8_CompressFastLoop(unsigned char *k, unsigned char *x, const u
 size_t Xooffftimes8_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, unsigned char *output, size_t length)
 {
     DeclareVars;
-    const uint32_t  *k32 = (uint32_t*)kRoll;
+    const uint32_t  *k32 = (const uint32_t*)kRoll;
     uint32_t        *y32 = (uint32_t*)yAccu;
     uint32_t        *o32 = (uint32_t*)output;
     size_t      initialLength;

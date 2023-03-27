@@ -132,7 +132,7 @@ void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
 void Xoodoo_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    memcpy(data, (unsigned char*)state+offset, length);
+    memcpy(data, (const unsigned char*)state+offset, length);
 #else
     #error "Not yet implemented"
 #endif

@@ -539,7 +539,7 @@ void Xoodootimes16_ExtractBytes(const void *states, unsigned int instanceIndex, 
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
         if (bytesInLane > sizeLeft)
             bytesInLane = sizeLeft;
-        memcpy( curData, ((unsigned char *)&statesAsLanes[laneIndex(instanceIndex, lanePosition)]) + offsetInLane, bytesInLane);
+        memcpy( curData, ((const unsigned char *)&statesAsLanes[laneIndex(instanceIndex, lanePosition)]) + offsetInLane, bytesInLane);
         sizeLeft -= bytesInLane;
         lanePosition++;
         curData += bytesInLane;
@@ -611,7 +611,7 @@ void Xoodootimes16_ExtractAndAddBytes(const void *states, unsigned int instanceI
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *((uint32_t*)curOutput) = *((uint32_t*)curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        *((uint32_t*)curOutput) = *((const uint32_t*)curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)];
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curInput += SnP_laneLengthInBytes;
@@ -802,7 +802,7 @@ void Xooffftimes16_AddIs(unsigned char *output, const unsigned char *input, size
         output += 32;
     }
    while ( byteLen >= 8 ) {
-        *((uint64_t*)output) ^= *((uint64_t*)input);
+        *((uint64_t*)output) ^= *((const uint64_t*)input);
         input += 8;
         output += 8;
         byteLen -= 8;
@@ -822,9 +822,9 @@ void Xooffftimes16_AddIs(unsigned char *output, const unsigned char *input, size
 size_t Xooffftimes16_CompressFastLoop(unsigned char *k, unsigned char *x, const unsigned char *input, size_t length)
 {
     DeclareVars;
-    uint32_t    *k32 = (uint32_t*)k;
-    uint32_t    *x32 = (uint32_t*)x;
-    uint32_t    *i32 = (uint32_t*)input;
+    uint32_t       *k32 = (uint32_t*)k;
+    uint32_t       *x32 = (uint32_t*)x;
+    const uint32_t *i32 = (const uint32_t*)input;
     size_t      initialLength;
     V512        rCGKDHLEIcgkdhlei;
     V512        offsets;
@@ -832,7 +832,7 @@ size_t Xooffftimes16_CompressFastLoop(unsigned char *k, unsigned char *x, const 
 
     DUMP32("k32",k32);
     rCGKDHLEIcgkdhlei = LOAD_GATHER16_32(*(const V512*)oGatherScatterOffsetsRoll, k32);
-    offsets = *(V512*)oGatherScatterOffsets;
+    offsets = *(const V512*)oGatherScatterOffsets;
 
     x00 = _mm512_setzero_si512();
     x01 = _mm512_setzero_si512();
@@ -914,8 +914,8 @@ size_t Xooffftimes16_CompressFastLoop(unsigned char *k, unsigned char *x, const 
     while (length >= (NLANES*4*16));
 
     /*    Reduce from lanes 16 to 8 */
-    v1 = *(V512*)oLow256;
-    v2 = *(V512*)oHigh256;
+    v1 = *(const V512*)oLow256;
+    v2 = *(const V512*)oHigh256;
     x00 = XOR(_mm512_permutex2var_epi32(x00, v1, x10), _mm512_permutex2var_epi32(x00, v2, x10));
     x01 = XOR(_mm512_permutex2var_epi32(x01, v1, x11), _mm512_permutex2var_epi32(x01, v2, x11));
     x02 = XOR(_mm512_permutex2var_epi32(x02, v1, x12), _mm512_permutex2var_epi32(x02, v2, x12));
@@ -924,20 +924,20 @@ size_t Xooffftimes16_CompressFastLoop(unsigned char *k, unsigned char *x, const 
     x21 = XOR(_mm512_permutex2var_epi32(x21, v1, x23), _mm512_permutex2var_epi32(x21, v2, x23));
 
     /*    Reduce from 8 lanes to 4 */
-    v1 = *( V512*)oLow128;
-    v2 = *( V512*)oHigh128;
+    v1 = *(const V512*)oLow128;
+    v2 = *(const V512*)oHigh128;
     x00 = XOR(_mm512_permutex2var_epi32(x00, v1, x02), _mm512_permutex2var_epi32(x00, v2, x02));
     x01 = XOR(_mm512_permutex2var_epi32(x01, v1, x03), _mm512_permutex2var_epi32(x01, v2, x03));
     x20 = XOR(_mm512_permutex2var_epi32(x20, v1, x21), _mm512_permutex2var_epi32(x20, v2, x21));
 
     /*    Reduce from 4 lanes to 2 */
-    v1 = *(V512*)oLow64;
-    v2 = *(V512*)oHigh64;
+    v1 = *(const V512*)oLow64;
+    v2 = *(const V512*)oHigh64;
     x00 = XOR(_mm512_permutex2var_epi32(x00, v1, x01), _mm512_permutex2var_epi32(x00, v2, x01));
     x20 = XOR(_mm512_permutex2var_epi32(x20, v1, x20), _mm512_permutex2var_epi32(x20, v2, x20));
 
     /*    Reduce from 2 lanes to 1 */
-    x00 = XOR(_mm512_permutex2var_epi32(x00, *(V512*)oLow32, x20), _mm512_permutex2var_epi32(x00, *(V512*)oHigh32, x20));
+    x00 = XOR(_mm512_permutex2var_epi32(x00, *(const V512*)oLow32, x20), _mm512_permutex2var_epi32(x00, *(const V512*)oHigh32, x20));
 
     /*  load xAccu, xor and store 12 lanes */
     x01 = _mm512_maskz_load_epi64(0x3F, x32);
@@ -955,9 +955,9 @@ size_t Xooffftimes16_CompressFastLoop(unsigned char *k, unsigned char *x, const 
 size_t Xooffftimes16_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, unsigned char *output, size_t length)
 {
     DeclareVars;
-    uint32_t    *k32 = (uint32_t*)kRoll;
-    uint32_t    *y32 = (uint32_t*)yAccu;
-    uint32_t    *o32 = (uint32_t*)output;
+    const uint32_t *k32 = (const uint32_t*)kRoll;
+    uint32_t       *y32 = (uint32_t*)yAccu;
+    uint32_t       *o32 = (uint32_t*)output;
     size_t      initialLength;
     V512        rCGKDHLEIcgkdhlei;
     V512        offsets;
