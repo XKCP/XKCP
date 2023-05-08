@@ -10,6 +10,7 @@
 
 from TurboSHAKE import TurboSHAKE
 from K12 import KangarooTwelve
+from M14 import MarsupilamiFourteen
 
 def outputHex(s):
     for i in range(len(s)):
@@ -34,6 +35,24 @@ def printK12TestVectors():
         C = bytearray([(j % 251) for j in range(41**i)])
         print("KangarooTwelve(M={0:d} times byte 0xFF, C=pattern 0x00 to 0xFA for 41^{1:d} bytes, 32 output bytes):".format(2**i-1, i))
         outputHex(KangarooTwelve(M, C, 32))
+
+def printM14TestVectors():
+    print("MarsupilamiFourteen(M=empty, C=empty, 32 output bytes):")
+    outputHex(MarsupilamiFourteen(b'', b'', 32))
+    print("MarsupilamiFourteen(M=empty, C=empty, 64 output bytes):")
+    outputHex(MarsupilamiFourteen(b'', b'', 64))
+    print("MarsupilamiFourteen(M=empty, C=empty, 10032 output bytes), last 32 bytes:")
+    outputHex(MarsupilamiFourteen(b'', b'', 10032)[10000:])
+    for i in range(6):
+        C = b''
+        M = bytearray([(j % 251) for j in range(17**i)])
+        print("MarsupilamiFourteen(M=pattern 0x00 to 0xFA for 17^{0:d} bytes, C=empty, 32 output bytes):".format(i))
+        outputHex(MarsupilamiFourteen(M, C, 32))
+    for i in range(4):
+        M = bytearray([0xFF for j in range(2**i-1)])
+        C = bytearray([(j % 251) for j in range(41**i)])
+        print("MarsupilamiFourteen(M={0:d} times byte 0xFF, C=pattern 0x00 to 0xFA for 41^{1:d} bytes, 32 output bytes):".format(2**i-1, i))
+        outputHex(MarsupilamiFourteen(M, C, 32))
 
 def printTurboSHAKETestVectors():
         for c in [256, 512]:
@@ -60,4 +79,5 @@ def printTurboSHAKETestVectors():
             outputHex(TurboSHAKE(c, M, D, 32))
 
 printK12TestVectors()
+printM14TestVectors()
 printTurboSHAKETestVectors()
