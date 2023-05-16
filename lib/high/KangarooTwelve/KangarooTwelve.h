@@ -4,7 +4,7 @@ https://github.com/XKCP/XKCP
 
 KangarooTwelve, designed by Guido Bertoni, Joan Daemen, Michaël Peeters, Gilles Van Assche, Ronny Van Keer and Benoît Viguier.
 
-Implementation by Ronny Van Keer, hereby denoted as "the implementer".
+Implementation by Gilles Van Assche and Ronny Van Keer, hereby denoted as "the implementer".
 
 For more information, feedback or questions, please refer to the Keccak Team website:
 https://keccak.team/
@@ -22,14 +22,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <stddef.h>
 #include "align.h"
-#include "KeccakSponge.h"
+#include "TurboSHAKE.h"
 #include "Phases.h"
 
 typedef KCP_Phases KangarooTwelve_Phases;
 
 typedef struct {
-    KeccakWidth1600_12rounds_SpongeInstance queueNode;
-    KeccakWidth1600_12rounds_SpongeInstance finalNode;
+    TurboSHAKE_Instance queueNode;
+    TurboSHAKE_Instance finalNode;
     size_t fixedOutputLength;
     size_t blockNumber;
     unsigned int queueAbsorbedLen;
@@ -45,7 +45,7 @@ typedef struct {
   * @param  customByteLen   The length of the customization string in bytes.
   * @return 0 if successful, 1 otherwise.
   */
-int KangarooTwelve(const unsigned char *input, size_t inputByteLen, unsigned char *output, size_t outputByteLen, const unsigned char *customization, size_t customByteLen );
+int KangarooTwelve(const unsigned char *input, size_t inputByteLen, unsigned char *output, size_t outputByteLen, const unsigned char *customization, size_t customByteLen);
 
 /**
   * Function to initialize a KangarooTwelve instance.

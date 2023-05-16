@@ -20,6 +20,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
 * KeccakSponge: the Keccak sponge function on top of the supported Keccak-f permutations.
 * FIPS202: all the functions approved in the FIPS 202 standard, i.e., the extendable output functions (SHAKE{128, 256}) and hash functions (SHA3-{224, 256, 384, 512}). This includes also the Keccak hash functions without suffix (e.g., such as Keccak[r=1088, c=512] as used in Ethereum).
 * SP800-185: all the functions defined in the NIST SP 800-185 standard, i.e., cSHAKE, TupleHash, KMAC and ParallelHash.
+* TurboSHAKE: the 12-round variant of Keccak
 * KeccakDuplex: the Keccak duplex object on top of the supported Keccak-f permutations.
 * KeccakPRG: a pseudo-random bit generator based on Keccak.
 * Ketje: Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major, depending on the supported permutations.
@@ -40,6 +41,12 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
         <h>lib/high/Keccak/KeccakSponge.h</h>
         <inc>lib/high/Keccak/KeccakSponge.inc</inc>
         <c>lib/high/Keccak/KeccakSponge.c</c>
+    </fragment>
+
+    <fragment name="TurboSHAKE" inherits="KeccakSponge">
+        <config>XKCP_has_TurboSHAKE</config>
+        <h>lib/high/TurboSHAKE/TurboSHAKE.h</h>
+        <c>lib/high/TurboSHAKE/TurboSHAKE.c</c>
     </fragment>
 
     <!-- NIST standards -->
@@ -99,7 +106,7 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
 
     <!-- KangarooTwelve -->
 
-    <fragment name="KangarooTwelve" inherits="KeccakSponge">
+    <fragment name="KangarooTwelve" inherits="TurboSHAKE">
         <config>XKCP_has_KangarooTwelve</config>
         <c>lib/high/KangarooTwelve/KangarooTwelve.c</c>
         <h>lib/high/KangarooTwelve/KangarooTwelve.h</h>

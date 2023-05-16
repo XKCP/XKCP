@@ -17,6 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define measureSponge                   JOIN(prefix, _measureSponge)
 #define timingRC                        JOIN(prefix, _timingRC)
+#define timingRCx                       JOIN(prefix, _timingRCx)
 #define start                           JOIN(prefix, _start)
 #define Sponge                          JOIN(prefix, _Sponge)
 #define SpongeInstance                  JOIN(prefix, _SpongeInstance)
@@ -51,6 +52,15 @@ void timingRC(cycles_t calibration, unsigned int r, unsigned int c)
     cycles_t twoBlocksI = measureSponge(calibration, r, c, 2*block-1, block);
     cycles_t manyBlocksI = measureSponge(calibration, r, c, Many*block-1, block);
     printf("Keccak[r=%4d, c=%4d]  %8"PRId64" %9"PRId64" %11"PRId64" %6.2f %6.2f\n", r, c, oneBlockI, twoBlocksI, manyBlocksI, manyBlocksI/(1.0*Many*block-1), (manyBlocksI-twoBlocksI)/(1.0*(Many-2)*block));
+}
+
+void timingRCx(cycles_t calibration, unsigned int r, unsigned int c, const char *name)
+{
+    unsigned int block = r/8;
+    cycles_t oneBlockI = measureSponge(calibration, r, c, block-1, block);
+    cycles_t twoBlocksI = measureSponge(calibration, r, c, 2*block-1, block);
+    cycles_t manyBlocksI = measureSponge(calibration, r, c, Many*block-1, block);
+    printf("%s     %8"PRId64" %9"PRId64" %11"PRId64" %6.2f %6.2f\n", name, oneBlockI, twoBlocksI, manyBlocksI, manyBlocksI/(1.0*Many*block-1), (manyBlocksI-twoBlocksI)/(1.0*(Many-2)*block));
 }
 
 cycles_t start(const char *synopsis, const char *implementation)

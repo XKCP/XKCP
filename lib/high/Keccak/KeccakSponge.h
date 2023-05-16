@@ -67,10 +67,4 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #define XKCP_has_Sponge_Keccak_width1600
 #endif
 
-#ifdef XKCP_has_KeccakP1600
-    #include "KeccakP-1600-SnP.h"
-    XKCP_DeclareSpongeStructure(KeccakWidth1600_12rounds, KeccakP1600_stateSizeInBytes, KeccakP1600_stateAlignment)
-    XKCP_DeclareSpongeFunctions(KeccakWidth1600_12rounds)
-#endif
-
 #endif

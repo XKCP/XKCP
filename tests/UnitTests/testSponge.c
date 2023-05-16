@@ -21,6 +21,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include "config.h"
 #include "KeccakSponge.h"
+#include "TurboSHAKE.h"
 #include "UT.h"
 
 #define flavor_OneCall          1
@@ -59,6 +60,15 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #undef SnP_width
 #endif
 
+#ifdef XKCP_has_TurboSHAKE
+    XKCP_DeclareSpongeFunctions(TurboSHAKE)
+    #define prefix TurboSHAKE
+    #define SnP_width 1600
+    #include "testSponge.inc"
+    #undef prefix
+    #undef SnP_width
+#endif
+
 #ifdef UT_OUTPUT
 void writeTestSponge(void)
 {
@@ -82,6 +92,10 @@ void writeTestSponge(void)
 #ifdef XKCP_has_Sponge_Keccak_width1600
     for(rate = 64; rate <= 1600; rate += (rate < 1024) ? 64 : ((rate < 1344) ? 32 : 8))
         KeccakWidth1600_writeTestSponge(f, rate, 1600-rate);
+#endif
+#ifdef XKCP_has_TurboSHAKE
+    for(rate = 1088; rate <= 1600; rate += 8)
+        TurboSHAKE_writeTestSponge(f, rate, 1600-rate);
 #endif
     fclose(f);
 }
@@ -111,6 +125,13 @@ void selfTestSponge(unsigned int rate, unsigned int capacity, int flavor, const 
 #endif
         abort();
 }
+
+#ifdef XKCP_has_TurboSHAKE
+void selfTestTurboSHAKE(unsigned int capacity, int flavor, const char *expected)
+{
+    TurboSHAKE_selfTestSponge(1600-capacity, capacity, flavor, (const uint8_t*)expected);
+}
+#endif
 
 void testSponge()
 {
@@ -303,6 +324,75 @@ void testSponge()
     selfTestSponge(1584, 16, flavor, "\xca\x7a\xf0\xbd\x9a\x5d\xda\x4c"); /* Keccak[r=1584, c=16] */
     selfTestSponge(1592, 8, flavor, "\x61\xec\x09\x23\xcf\xc5\xe5\x29"); /* Keccak[r=1592, c=8] */
     selfTestSponge(1600, 0, flavor, "\x7a\x4d\x47\x73\xf2\xf6\xf8\xbc"); /* Keccak[r=1600, c=0] */
+    UT_endTest();
+#endif
+#ifdef XKCP_has_TurboSHAKE
+    UT_startTest("TurboSHAKE", flavorString);
+    selfTestTurboSHAKE(512, flavor, "\x5e\x8c\xdc\x83\xa9\x84\x55\xc4"); /* TurboSHAKE256 */
+    selfTestTurboSHAKE(504, flavor, "\xb3\xd0\x3d\x52\x04\x31\xf1\x53"); /* TurboSHAKE[c=504] */
+    selfTestTurboSHAKE(496, flavor, "\x8d\x39\xe4\x39\x1a\x16\x10\xbe"); /* TurboSHAKE[c=496] */
+    selfTestTurboSHAKE(488, flavor, "\x52\xde\x8d\x83\x11\xc0\xc4\x5c"); /* TurboSHAKE[c=488] */
+    selfTestTurboSHAKE(480, flavor, "\x84\x09\xd9\x03\x8a\xe9\x88\xaf"); /* TurboSHAKE[c=480] */
+    selfTestTurboSHAKE(472, flavor, "\xa1\xe6\x03\x8b\x37\x6a\x13\x43"); /* TurboSHAKE[c=472] */
+    selfTestTurboSHAKE(464, flavor, "\x9d\x62\xa8\xf6\x93\x1c\xdf\x95"); /* TurboSHAKE[c=464] */
+    selfTestTurboSHAKE(456, flavor, "\xa9\x0f\xb4\x40\xa9\x1f\x04\xdf"); /* TurboSHAKE[c=456] */
+    selfTestTurboSHAKE(448, flavor, "\xdd\x95\xa4\x01\x27\x39\x15\x88"); /* TurboSHAKE[c=448] */
+    selfTestTurboSHAKE(440, flavor, "\xeb\x2f\xe8\x5b\x64\xec\x68\x92"); /* TurboSHAKE[c=440] */
+    selfTestTurboSHAKE(432, flavor, "\x2f\x31\x9d\xd0\xe5\xca\x67\x4f"); /* TurboSHAKE[c=432] */
+    selfTestTurboSHAKE(424, flavor, "\x1a\x28\x33\x98\x24\x6b\xc4\x65"); /* TurboSHAKE[c=424] */
+    selfTestTurboSHAKE(416, flavor, "\x04\x4e\x18\xe0\x12\x9c\xd9\x2d"); /* TurboSHAKE[c=416] */
+    selfTestTurboSHAKE(408, flavor, "\x8c\x72\x0a\x32\x1e\xef\x84\xcc"); /* TurboSHAKE[c=408] */
+    selfTestTurboSHAKE(400, flavor, "\x7c\xa4\x72\xf8\x22\x06\x80\xe0"); /* TurboSHAKE[c=400] */
+    selfTestTurboSHAKE(392, flavor, "\x45\x3c\x03\x44\x5e\xd3\xcc\x50"); /* TurboSHAKE[c=392] */
+    selfTestTurboSHAKE(384, flavor, "\xc8\x09\x03\x09\x77\xec\x73\x71"); /* TurboSHAKE[c=384] */
+    selfTestTurboSHAKE(376, flavor, "\xb9\xe0\xa1\x2c\x5d\xd6\x4c\xe1"); /* TurboSHAKE[c=376] */
+    selfTestTurboSHAKE(368, flavor, "\xd3\x45\xe9\x81\x79\xc4\x6a\x62"); /* TurboSHAKE[c=368] */
+    selfTestTurboSHAKE(360, flavor, "\x1c\xeb\x6a\x25\xd4\x5e\x4e\x51"); /* TurboSHAKE[c=360] */
+    selfTestTurboSHAKE(352, flavor, "\xa5\xfb\x53\xe2\xd9\x4c\xc0\x15"); /* TurboSHAKE[c=352] */
+    selfTestTurboSHAKE(344, flavor, "\xff\x9b\x1b\x6d\x30\x31\x8b\xfe"); /* TurboSHAKE[c=344] */
+    selfTestTurboSHAKE(336, flavor, "\x11\xb0\xf7\x4d\xf0\x53\x3a\x50"); /* TurboSHAKE[c=336] */
+    selfTestTurboSHAKE(328, flavor, "\x28\x6f\xf4\x71\xa8\x4f\x2c\xaa"); /* TurboSHAKE[c=328] */
+    selfTestTurboSHAKE(320, flavor, "\x4f\x13\x68\x21\x4e\x15\x98\x9e"); /* TurboSHAKE[c=320] */
+    selfTestTurboSHAKE(312, flavor, "\x82\xe0\xba\x51\x30\x72\xeb\xdd"); /* TurboSHAKE[c=312] */
+    selfTestTurboSHAKE(304, flavor, "\x96\xb1\x43\x2d\x12\x2d\x9a\xf7"); /* TurboSHAKE[c=304] */
+    selfTestTurboSHAKE(296, flavor, "\x8e\xd0\x3d\x09\xaf\x61\x9d\x65"); /* TurboSHAKE[c=296] */
+    selfTestTurboSHAKE(288, flavor, "\xde\x00\x56\xbe\x64\x0e\xbe\x20"); /* TurboSHAKE[c=288] */
+    selfTestTurboSHAKE(280, flavor, "\x10\x0d\xd7\x81\x65\x94\x3a\xc3"); /* TurboSHAKE[c=280] */
+    selfTestTurboSHAKE(272, flavor, "\xd5\x64\xb1\xf3\xa8\x3f\xc8\xdd"); /* TurboSHAKE[c=272] */
+    selfTestTurboSHAKE(264, flavor, "\xd8\xe3\x4e\xaa\x03\x38\x66\x17"); /* TurboSHAKE[c=264] */
+    selfTestTurboSHAKE(256, flavor, "\xb6\x34\x08\xef\x1e\x12\x02\x50"); /* TurboSHAKE128 */
+    selfTestTurboSHAKE(248, flavor, "\x16\xcd\x24\x09\x4f\xf0\x26\xda"); /* TurboSHAKE[c=248] */
+    selfTestTurboSHAKE(240, flavor, "\x2d\x5b\xab\xc5\x44\x6e\xc6\x4f"); /* TurboSHAKE[c=240] */
+    selfTestTurboSHAKE(232, flavor, "\x0f\x07\x40\xc8\x42\x39\xdb\xb8"); /* TurboSHAKE[c=232] */
+    selfTestTurboSHAKE(224, flavor, "\xdf\x51\xc3\xd5\x8b\x76\x3c\x32"); /* TurboSHAKE[c=224] */
+    selfTestTurboSHAKE(216, flavor, "\x59\x34\xc5\xbb\x58\x5e\x8f\xbd"); /* TurboSHAKE[c=216] */
+    selfTestTurboSHAKE(208, flavor, "\x55\x9f\x34\xa6\x68\x1f\xa5\xd6"); /* TurboSHAKE[c=208] */
+    selfTestTurboSHAKE(200, flavor, "\xed\xb7\x57\x0c\x34\x85\xe8\x0d"); /* TurboSHAKE[c=200] */
+    selfTestTurboSHAKE(192, flavor, "\x6f\xbf\x58\xb0\x2a\x38\x90\x5c"); /* TurboSHAKE[c=192] */
+    selfTestTurboSHAKE(184, flavor, "\x97\xc8\x93\xa6\xb3\x3b\xd4\xc0"); /* TurboSHAKE[c=184] */
+    selfTestTurboSHAKE(176, flavor, "\x8a\xac\x65\x53\xbb\x25\xb4\x79"); /* TurboSHAKE[c=176] */
+    selfTestTurboSHAKE(168, flavor, "\x38\x59\xcf\x97\x5f\xca\xee\xf0"); /* TurboSHAKE[c=168] */
+    selfTestTurboSHAKE(160, flavor, "\x98\xef\xe9\xad\x99\xc1\xb2\x98"); /* TurboSHAKE[c=160] */
+    selfTestTurboSHAKE(152, flavor, "\x62\x2b\x94\x87\x64\x0a\x8e\x61"); /* TurboSHAKE[c=152] */
+    selfTestTurboSHAKE(144, flavor, "\x42\x27\x3e\x9c\x2e\xca\x40\x4c"); /* TurboSHAKE[c=144] */
+    selfTestTurboSHAKE(136, flavor, "\x9e\x28\x47\xf7\x11\x75\x7e\x00"); /* TurboSHAKE[c=136] */
+    selfTestTurboSHAKE(128, flavor, "\x7b\xb4\x96\x76\x11\x17\x84\x10"); /* TurboSHAKE[c=128] */
+    selfTestTurboSHAKE(120, flavor, "\xbd\xb1\xb3\x75\x0e\xf2\x51\x2a"); /* TurboSHAKE[c=120] */
+    selfTestTurboSHAKE(112, flavor, "\x54\xc8\x63\x02\x49\xe4\x63\xee"); /* TurboSHAKE[c=112] */
+    selfTestTurboSHAKE(104, flavor, "\xd5\xb8\xe8\x16\x1b\x39\x0c\x2f"); /* TurboSHAKE[c=104] */
+    selfTestTurboSHAKE( 96, flavor, "\x4d\x94\x3a\xf2\x2e\xd3\x82\x2f"); /* TurboSHAKE[c=96] */
+    selfTestTurboSHAKE( 88, flavor, "\x51\xb0\x57\x9c\x5e\xab\x51\x35"); /* TurboSHAKE[c=88] */
+    selfTestTurboSHAKE( 80, flavor, "\x13\x8e\x3d\x7b\x97\x10\xf1\x09"); /* TurboSHAKE[c=80] */
+    selfTestTurboSHAKE( 72, flavor, "\x23\x81\x43\x92\xc4\x9a\x93\x38"); /* TurboSHAKE[c=72] */
+    selfTestTurboSHAKE( 64, flavor, "\x61\x31\xf0\x5b\x9b\xc0\x67\x54"); /* TurboSHAKE[c=64] */
+    selfTestTurboSHAKE( 56, flavor, "\x27\x2b\xda\x2d\xb4\xcf\x69\x0f"); /* TurboSHAKE[c=56] */
+    selfTestTurboSHAKE( 48, flavor, "\x0e\x6f\xb9\xa1\xe4\xd7\x8c\xe4"); /* TurboSHAKE[c=48] */
+    selfTestTurboSHAKE( 40, flavor, "\xe9\xd4\xb4\x2e\x2a\xf0\xdc\x9b"); /* TurboSHAKE[c=40] */
+    selfTestTurboSHAKE( 32, flavor, "\xa0\xed\x15\x6f\x06\xbc\x4e\x60"); /* TurboSHAKE[c=32] */
+    selfTestTurboSHAKE( 24, flavor, "\x9e\xb4\x43\x3a\xe0\x34\xfb\xd6"); /* TurboSHAKE[c=24] */
+    selfTestTurboSHAKE( 16, flavor, "\xb6\xb8\x35\xa6\xd0\xe9\x9f\x16"); /* TurboSHAKE[c=16] */
+    selfTestTurboSHAKE(  8, flavor, "\xa4\x65\x48\x48\xd7\xef\x3f\xdf"); /* TurboSHAKE[c=8] */
+    selfTestTurboSHAKE(  0, flavor, "\xcc\x9d\xba\x4f\x3c\xc9\xc5\xcc"); /* TurboSHAKE[c=0] */
     UT_endTest();
 #endif
     }

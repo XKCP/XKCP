@@ -355,6 +355,22 @@ void KeccakWidth1600_timing()
 }
 #endif
 
+#ifdef XKCP_has_TurboSHAKE
+XKCP_DeclareSpongeFunctions(TurboSHAKE)
+
+    #define prefix      TurboSHAKE
+        #include "timingSponge.inc"
+    #undef prefix
+
+void TurboSHAKE_timing()
+{
+    cycles_t calibartion = TurboSHAKE_start("TurboSHAKE", KeccakP1600_implementation);
+    TurboSHAKE_timingRCx(calibartion, 1088, 512, "TurboSHAKE256      ");
+    TurboSHAKE_timingRCx(calibartion, 1344, 256, "TurboSHAKE128      ");
+    printf("\n\n");
+}
+#endif
+
 #ifdef XKCP_has_RiverKeyak
     #define prefix      RiverKeyak
     #define Rs          68
@@ -982,6 +998,9 @@ void testPerformance()
 #endif
 #ifdef XKCP_has_Sponge_Keccak_width1600
     KeccakWidth1600_timing();
+#endif
+#ifdef XKCP_has_TurboSHAKE
+    TurboSHAKE_timing();
 #endif
 
 #ifdef XKCP_has_RiverKeyak

@@ -1,5 +1,3 @@
-[![Build Status](http://img.shields.io/travis/XKCP/XKCP.svg)](https://travis-ci.org/XKCP/XKCP)
-
 <img src="doc/logo/XKCP-Anna-banner.svg" width="60%" />
 
 # What is the XKCP?
@@ -11,7 +9,7 @@ and closely related variants, such as
 * the SHAKE extendable-output functions and SHA-3 hash functions from [FIPS 202][fips202_standard],
 * the cSHAKE, KMAC, ParallelHash and TupleHash functions from [NIST SP 800-185][sp800_185_standard],
 * the [Ketje][caesar_ketje] and [Keyak][caesar_keyak] authenticated encryption schemes,
-* the fast [KangarooTwelve][k12] extendable-output function,
+* the fast [TurboSHAKE][turboshake] and [KangarooTwelve][k12] extendable-output functions,
 * the [Kravatte](https://keccak.team/kravatte.html) pseudo-random function and its modes,
 
 as well as the [Xoodoo](https://keccak.team/xoodoo.html) permutation and
@@ -61,7 +59,8 @@ When used as a library or directly from the sources, the XKCP offers the high-le
 * [`KeccakPRG`](doc/KeccakPRG-documentation.h), a pseudo-random number generator based on Keccak duplex objects.
 * [`Keyak`](doc/Keyak-documentation.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
 * [`Ketje`](doc/Ketje-documentation.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
-* [`KangarooTwelve`](lib/high/KangarooTwelve/KangarooTwelve.h), the fast hashing mode based on Keccak-_p_[1600, 12] and Sakura coding.
+* [`TurboSHAKE`](lib/high/TurboSHAKE/TurboSHAKE.h), the fast twelve-round variant to Keccak.
+* [`KangarooTwelve`](lib/high/KangarooTwelve/KangarooTwelve.h), the fast and parallelizable hashing mode based on TurboSHAKE and Sakura coding.
 * [`Kravatte`](lib/high/Kravatte/Kravatte.h) and [`KravatteModes`](lib/high/Kravatte/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
 * [`Xoofff`](lib/high/Xoofff/Xoofff.h) and [`XoofffModes`](lib/high/Xoofff/XoofffModes.h), the pseudo-random function Xoofff, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
 * [`Xoodyak`](doc/Xoodyak-documentation.h), the lightweight cryptographic scheme Xoodyak that can be used for hashing, encryption, MAC computation and authenticated encryption.
@@ -288,3 +287,4 @@ Michaël Peeters, Gilles Van Assche, and Ronny Van Keer.
 [paperAtSPEEDB]: http://ccccspeed.win.tue.nl/papers/KeccakSoftware.pdf
 [slidesAtSPEEDB]: http://ccccspeed.win.tue.nl/presentations/KeccakSoftware-slides.pdf
 [XoodooCookbook]: https://eprint.iacr.org/2018/767
+[turboshake]: https://eprint.iacr.org/2023/342
