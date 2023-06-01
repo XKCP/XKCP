@@ -542,15 +542,25 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
 #define HTOLE64(x) (x)
 #else
-#define HTOLE64(x) (\
-  ((x & 0xff00000000000000ull) >> 56) | \
-  ((x & 0x00ff000000000000ull) >> 40) | \
-  ((x & 0x0000ff0000000000ull) >> 24) | \
-  ((x & 0x000000ff00000000ull) >> 8)  | \
-  ((x & 0x00000000ff000000ull) << 8)  | \
-  ((x & 0x0000000000ff0000ull) << 24) | \
-  ((x & 0x000000000000ff00ull) << 40) | \
-  ((x & 0x00000000000000ffull) << 56))
+/*
+ * Big Endian platforms macro to swap data.
+ *
+ * NOTE: we cannot directly use the 64-bit input
+ * of the following macro because of possible alignment
+ * constraints (on some platforms such as Sparc or MIPS,
+ * dereferencing an uint64_t on a buffer not aligned on the
+ * word size will induce a 'bus error'). Instead, we read and
+ * swap the data byte per byte.
+ */
+#define HTOLE64(x)                                         \
+        (  ((uint64_t) (((uint8_t*)&(x))[ 7]) << 56 )                \
+        |  ((uint64_t) (((uint8_t*)&(x))[ 6]) << 48 )                \
+        |  ((uint64_t) (((uint8_t*)&(x))[ 5]) << 40 )                \
+        |  ((uint64_t) (((uint8_t*)&(x))[ 4]) << 32 )                \
+        |  ((uint64_t) (((uint8_t*)&(x))[ 3]) << 24 )                \
+        |  ((uint64_t) (((uint8_t*)&(x))[ 2]) << 16 )                \
+        |  ((uint64_t) (((uint8_t*)&(x))[ 1]) <<  8 )                \
+        |  ((uint64_t) (((uint8_t*)&(x))[ 0])))
 #endif
 
 #define addInput(X, input, laneCount) \
