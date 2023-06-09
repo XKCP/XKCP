@@ -44,6 +44,7 @@ int TurboSHAKE(unsigned int capacity, const unsigned char *input, size_t inputBy
     if (TurboSHAKE_Absorb(&instance, input, inputByteLen)) return 1;
     if (TurboSHAKE_AbsorbDomainSeparationByte(&instance, domain)) return 1;
     if (TurboSHAKE_Squeeze(&instance, output, outputByteLen)) return 1;
+    return 0;
 }
 
 int TurboSHAKE_Initialize(TurboSHAKE_Instance *instance, unsigned int capacity)
