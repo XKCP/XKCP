@@ -41,7 +41,7 @@ typedef __m256i V256;
 #define LOAD256(a)                  _mm256_load_si256((const V256 *)&(a))
 #define LOAD256u(a)                 _mm256_loadu_si256((const V256 *)&(a))
 #define LOAD8_32(a,b,c,d,e,f,g,h)   _mm256_setr_epi32(a,b,c,d,e,f,g,h)
-#define LOAD_GATHER8_32(idx,p)      _mm256_i32gather_epi32((const void*)(p), idx, 4)
+#define LOAD_GATHER8_32(idx,p)      _mm256_i32gather_epi32((const int*)(p), idx, 4)
 
 #define SHUFFLE_LANES_RIGHT(a, n)   _mm256_permutevar8x32_epi32(a, shuffleR_##n)
 #define SHUFFLE_LANES_RIGHT_2(a)    _mm256_permute4x64_epi64(a, 0x39)

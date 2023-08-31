@@ -1008,7 +1008,7 @@ size_t KeccakP1600times4_12rounds_FastLoop_Absorb(void *states, unsigned int lan
         const uint64_t *curData1 = (const uint64_t *)(data+laneOffsetParallel*1*SnP_laneLengthInBytes);
         const uint64_t *curData2 = (const uint64_t *)(data+laneOffsetParallel*2*SnP_laneLengthInBytes);
         const uint64_t *curData3 = (const uint64_t *)(data+laneOffsetParallel*3*SnP_laneLengthInBytes);
-        V256 *statesAsLanes = states;
+        V256 *statesAsLanes = (V256*)states;
         declareABCDE
 
         copyFromState(A, statesAsLanes)

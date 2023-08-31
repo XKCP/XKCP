@@ -173,11 +173,11 @@ void doTimingPlSnP(const char *module, const char *implementation)
     calibration = CalibrateTimer();
 
     measurement = measurePlSnP_PermuteAll(calibration);
-    printf("Time for " xstr(PlSnP_PermuteAll) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(PlSnP_PermuteAll) "(state): %" PRId64 "\n\n", measurement);
 
 #ifdef PlSnP_PermuteAll_12rounds
     measurement = measurePlSnP_PermuteAll_12rounds(calibration);
-    printf("Time for " xstr(PlSnP_PermuteAll_12rounds) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(PlSnP_PermuteAll_12rounds) "(state): %" PRId64 "\n\n", measurement);
 #endif
 
     gatherPlSnP_GenericLoop_Absorb_interleaved(calibration, measurements, laneCounts);

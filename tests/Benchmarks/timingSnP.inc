@@ -109,11 +109,11 @@ void doTimingSnP(const char *module, const char *implementation)
     calibration = CalibrateTimer();
 
     measurement = measureSnP_Permute(calibration);
-    printf("Time for " xstr(SnP_Permute) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(SnP_Permute) "(state): %" PRId64 "\n\n", measurement);
 
 #ifdef SnP_Permute_12rounds
     measurement = measureSnP_Permute_12rounds(calibration);
-    printf("Time for " xstr(SnP_Permute_12rounds) "(state): %"PRId64"\n\n", measurement);
+    printf("Time for " xstr(SnP_Permute_12rounds) "(state): %" PRId64 "\n\n", measurement);
 #endif
 
     numberOfColumns = gatherSnP_GenericLoop_Absorb(calibration, measurements, laneCounts);
