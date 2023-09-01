@@ -31,7 +31,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 static void assert(int condition)
 {
-    UT_assert(condition, "");
+    UT_assert(condition, (char*)"");
 }
 
 static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2)
@@ -231,7 +231,7 @@ void selfTestKangarooTwelve()
     for(useSqueeze = 0; useSqueeze <= 1; ++useSqueeze)
     for(mode = 0; mode <= 2; ++mode) {
         performTestKangarooTwelve(checksum, mode, useSqueeze);
-        UT_assert(memcmp(expected[useSqueeze*3 + mode], checksum, checksumByteSize) == 0, "The global checksum is incorrect.");
+        UT_assert(memcmp(expected[useSqueeze*3 + mode], checksum, checksumByteSize) == 0, (char*)"The global checksum is incorrect.");
     }
     UT_endTest();
 }
@@ -284,7 +284,7 @@ void printKangarooTwelveTestVectors()
     KangarooTwelve(0, 0, output, 10032, 0, 0);
     outputHex(output+10000, 32);
     for(l=1, i=0; i<7; i++, l=l*17) {
-        M = malloc(l);
+        M = (unsigned char*)malloc(l);
         for(j=0; j<l; j++)
             M[j] = j%251;
         printf("KangarooTwelve(M=pattern 0x00 to 0xFA for 17^%u bytes, C=empty, 32 output bytes):\n", i);
@@ -294,9 +294,9 @@ void printKangarooTwelveTestVectors()
     }
     for(l=1, i=0; i<4; i++, l=l*41) {
         unsigned int ll = (1 << i)-1;
-        M = malloc(ll);
+        M = (unsigned char*)malloc(ll);
         memset(M, 0xFF, ll);
-        C = malloc(l);
+        C = (unsigned char*)malloc(l);
         for(j=0; j<l; j++)
             C[j] = j%251;
         printf("KangarooTwelve(M=%u times byte 0xFF, C=pattern 0x00 to 0xFA for 41^%u bytes, 32 output bytes):\n", ll, i);

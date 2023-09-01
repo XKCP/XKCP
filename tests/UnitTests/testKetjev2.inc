@@ -62,8 +62,8 @@ void test( const char *file, const unsigned char *expected )
             UT_generateSimpleRawMaterial(nonce, Nlen, 0x23 + Nlen + Klen, 6);
 
 
-            UT_assert( Ketje_Initialize( &ketje1, key, keySizeInBits, nonce, nonceSizeInBits) == 0, "Ketje_Initialize 1 did not return zero" );
-            UT_assert( Ketje_Initialize( &ketje2, key, keySizeInBits, nonce, nonceSizeInBits) == 0, "Ketje_Initialize 2 did not return zero" );
+            UT_assert( Ketje_Initialize( &ketje1, key, keySizeInBits, nonce, nonceSizeInBits) == 0, (char*)"Ketje_Initialize 1 did not return zero" );
+            UT_assert( Ketje_Initialize( &ketje2, key, keySizeInBits, nonce, nonceSizeInBits) == 0, (char*)"Ketje_Initialize 2 did not return zero" );
 
             if ( (keySizeInBits % 8) != 0)
             {
@@ -108,29 +108,29 @@ void test( const char *file, const unsigned char *expected )
                             unsigned int i;
 
                             for(i=0; i<split; i++)
-                                UT_assert( Ketje_FeedAssociatedData( &ketje1, associatedData+i, 1) == 0, "Ketje_FeedAssociatedData 1a did not return zero" );
+                                UT_assert( Ketje_FeedAssociatedData( &ketje1, associatedData+i, 1) == 0, (char*)"Ketje_FeedAssociatedData 1a did not return zero" );
                             if (split < Alen)
-                                UT_assert( Ketje_FeedAssociatedData( &ketje1, associatedData+split, Alen-split) == 0, "Ketje_FeedAssociatedData 1b did not return zero" );
+                                UT_assert( Ketje_FeedAssociatedData( &ketje1, associatedData+split, Alen-split) == 0, (char*)"Ketje_FeedAssociatedData 1b did not return zero" );
                         }
 
                         {
                             unsigned int split = Blen/3;
                             memcpy(ciphertext, plaintext, split);
-                            UT_assert( Ketje_WrapPlaintext( &ketje1, ciphertext, ciphertext, split) == 0, "Ketje_WrapPlaintext 1a did not return zero" ); /* in place */
-                            UT_assert( Ketje_WrapPlaintext( &ketje1, plaintext+split, ciphertext+split, Blen-split) == 0, "Ketje_WrapPlaintext 1b did not return zero" );
+                            UT_assert( Ketje_WrapPlaintext( &ketje1, ciphertext, ciphertext, split) == 0, (char*)"Ketje_WrapPlaintext 1a did not return zero" ); /* in place */
+                            UT_assert( Ketje_WrapPlaintext( &ketje1, plaintext+split, ciphertext+split, Blen-split) == 0, (char*)"Ketje_WrapPlaintext 1b did not return zero" );
                         }
-                        UT_assert( Ketje_GetTag( &ketje1, tag1, ell/8) == 0, "Ketje_GetTag 1 did not return zero" );
+                        UT_assert( Ketje_GetTag( &ketje1, tag1, ell/8) == 0, (char*)"Ketje_GetTag 1 did not return zero" );
 
 #ifdef UT_OUTPUT
                         UT_displayByteString(f, "< C (ciphertext)", ciphertext, Blen);
                         UT_displayByteString(f, "< T (tag)", tag1, ell/8);
 #endif
-                        UT_assert( Ketje_FeedAssociatedData( &ketje2, associatedData, Alen) == 0, "Ketje_FeedAssociatedData 2 did not return zero" );
+                        UT_assert( Ketje_FeedAssociatedData( &ketje2, associatedData, Alen) == 0, (char*)"Ketje_FeedAssociatedData 2 did not return zero" );
                         {
                             unsigned int split = Blen/3*2;
                             memcpy(plaintextPrime, ciphertext, split);
-                            UT_assert( Ketje_UnwrapCiphertext(&ketje2, plaintextPrime, plaintextPrime, split) == 0, "Ketje_UnwrapCiphertext 2a did not return zero" ); /* in place */
-                            UT_assert( Ketje_UnwrapCiphertext(&ketje2, ciphertext+split, plaintextPrime+split, Blen-split) == 0, "Ketje_UnwrapCiphertext 2b did not return zero" );
+                            UT_assert( Ketje_UnwrapCiphertext(&ketje2, plaintextPrime, plaintextPrime, split) == 0, (char*)"Ketje_UnwrapCiphertext 2a did not return zero" ); /* in place */
+                            UT_assert( Ketje_UnwrapCiphertext(&ketje2, ciphertext+split, plaintextPrime+split, Blen-split) == 0, (char*)"Ketje_UnwrapCiphertext 2b did not return zero" );
                         }
 #ifdef UT_VERBOSE
                         if (memcmp(plaintext, plaintextPrime, Blen) != 0) { /* !!! */
@@ -142,8 +142,8 @@ void test( const char *file, const unsigned char *expected )
                             UT_displayByteString(stdout, "plaintextPrime", plaintextPrime, Blen);
                         }
 #endif
-                        UT_assert( !memcmp(plaintext, plaintextPrime, Blen), "Unwrapped plaintext does not match" );
-                        UT_assert( Ketje_GetTag( &ketje2, tag2, ell/8) == 0, "Ketje_GetTag 2 did not return zero" );
+                        UT_assert( !memcmp(plaintext, plaintextPrime, Blen), (char*)"Unwrapped plaintext does not match" );
+                        UT_assert( Ketje_GetTag( &ketje2, tag2, ell/8) == 0, (char*)"Ketje_GetTag 2 did not return zero" );
 #ifdef UT_VERBOSE
                         if (memcmp(tag1, tag2, ell/8) != 0) { /* !!! */
                             printf("keySizeInBits: %d\n", keySizeInBits);
@@ -154,7 +154,7 @@ void test( const char *file, const unsigned char *expected )
                             UT_displayByteString(stdout, "tag2", tag2, ell/8);
                         }
 #endif
-                        UT_assert( !memcmp(tag1, tag2, ell/8), "Tags do not match" );
+                        UT_assert( !memcmp(tag1, tag2, ell/8), (char*)"Tags do not match" );
 
                         Ketje_FeedAssociatedData(&checksum, ciphertext, Blen);
                         Ketje_FeedAssociatedData(&checksum, tag1, ell/8);
@@ -173,7 +173,7 @@ void test( const char *file, const unsigned char *expected )
     UT_displayByteString(f, "+++ Global tag ", overallChecksum, 16);
     fclose(f);
 #endif
-    UT_assert(memcmp(overallChecksum, expected, 16) == 0, "The global tag does not match.");
+    UT_assert(memcmp(overallChecksum, expected, 16) == 0, (char*)"The global tag does not match.");
 }
 
 #undef Ketje_Instance

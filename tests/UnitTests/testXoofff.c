@@ -46,7 +46,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 static void assert(int condition)
 {
-    UT_assert(condition, "");
+    UT_assert(condition, (char*)"");
 }
 
 static void randomize( unsigned char* data, unsigned int length)

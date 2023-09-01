@@ -66,7 +66,7 @@ static void testXoodyakHash( const char *file, const uint8_t *expected )
 
     #if defined(UT_OUTPUT)
     f = fopen(file, "w");
-    UT_assert(f != NULL, "Could not open file");
+    UT_assert(f != NULL, (char*)"Could not open file");
     #elif defined(UT_VERBOSE)
     f = stdout;
     #endif
@@ -95,7 +95,7 @@ static void testXoodyakHash( const char *file, const uint8_t *expected )
 	    fclose(f);
 	    #endif
 	    #endif
-	    UT_assert(!memcmp(expected, checksum, sizeof(checksum)), "The global checksum is incorrect.");
+	    UT_assert(!memcmp(expected, checksum, sizeof(checksum)), (char*)"The global checksum is incorrect.");
 
 	}
 

@@ -37,7 +37,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 static void assert(int condition)
 {
-    UT_assert(condition, "");
+    UT_assert(condition, (char*)"");
 }
 
 static void generateSimpleRawMaterial(unsigned char* data, size_t length, unsigned char seed1, unsigned int seed2)

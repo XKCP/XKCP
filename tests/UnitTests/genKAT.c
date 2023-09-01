@@ -120,7 +120,7 @@ void convertShortMsgToPureLSB(void)
         }
         msgbytelen = (msglen+7)/8;
 
-        if ( !ReadHex(fp_in, Msg, msgbytelen, "Msg = ") ) {
+        if ( !ReadHex(fp_in, Msg, msgbytelen, (char*)"Msg = ") ) {
             printf("ERROR: unable to read 'Msg' from <ShortMsgKAT.txt>\n");
             return;
         }
@@ -129,7 +129,7 @@ void convertShortMsgToPureLSB(void)
             Msg[msgbytelen-1] = Msg[msgbytelen-1] >> (8-(msglen%8));
 
         fprintf(fp_out, "\nLen = %d\n", msglen);
-        fprintBstr(fp_out, "Msg = ", Msg, msgbytelen);
+        fprintBstr(fp_out, (char*)"Msg = ", Msg, msgbytelen);
         fprintf(fp_out, "MD = ??\n");
     } while (1);
 
@@ -170,12 +170,12 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
         }
         msgbytelen = (msglen+7)/8;
 
-        if ( !ReadHex(fp_in, Msg, msgbytelen, "Msg = ") ) {
+        if ( !ReadHex(fp_in, Msg, msgbytelen, (char*)"Msg = ") ) {
             printf("ERROR: unable to read 'Msg' from <ShortMsgKAT.txt>\n");
             return KAT_DATA_ERROR;
         }
         fprintf(fp_out, "\nLen = %d\n", msglen);
-        fprintBstr(fp_out, "Msg = ", Msg, msgbytelen);
+        fprintBstr(fp_out, (char*)"Msg = ", Msg, msgbytelen);
 
         if (Keccak_HashInitialize(&hash, rate, capacity, hashbitlen, delimitedSuffix) != KECCAK_SUCCESS) {
             printf("Keccak[r=%d, c=%d] is not supported.\n", rate, capacity);
@@ -184,10 +184,10 @@ genShortMsgHash(unsigned int rate, unsigned int capacity, unsigned char delimite
         Keccak_HashUpdate(&hash, Msg, msglen);
         Keccak_HashFinal(&hash, Squeezed);
         if (hashbitlen > 0)
-            fprintBstr(fp_out, "MD = ", Squeezed, hashbitlen/8);
+            fprintBstr(fp_out, (char*)"MD = ", Squeezed, hashbitlen/8);
         if (squeezedOutputLength > 0) {
             Keccak_HashSqueeze(&hash, Squeezed, squeezedOutputLength);
-            fprintBstr(fp_out, "Squeezed = ", Squeezed, squeezedOutputLength/8);
+            fprintBstr(fp_out, (char*)"Squeezed = ", Squeezed, squeezedOutputLength/8);
         }
     } while ( 1 );
     printf("finished ShortMsgKAT for <%s>\n", fileName);

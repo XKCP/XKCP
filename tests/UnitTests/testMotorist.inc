@@ -38,7 +38,7 @@ static void testMotoristStartEngine(Motorist_Instance * motWrap, Motorist_Instan
     #endif
 
     rv = Motorist_StartEngine( motWrap, SUVcontent, SUVlen, tagFlag, tag, Atom_False, forgetFlag);
-    UT_assert(rv == Atom_True, "motWrap.StartEngine() did not return true.");
+    UT_assert(rv == Atom_True, (char*)"motWrap.StartEngine() did not return true.");
     #ifdef UT_OUTPUT
     if (forgetFlag)
         fprintf( f, "forget\n" );
@@ -46,7 +46,7 @@ static void testMotoristStartEngine(Motorist_Instance * motWrap, Motorist_Instan
     #endif
 
     rv = Motorist_StartEngine( motUnwrap, SUVcontent, SUVlen, tagFlag, tag, Atom_True, forgetFlag);
-    UT_assert(rv == Atom_True, "motUnwrap.StartEngine() did not return true.");
+    UT_assert(rv == Atom_True, (char*)"motUnwrap.StartEngine() did not return true.");
 }
 
 static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motorist_Instance * motUnwrap, Motorist_Instance * motWitness, FILE * f, 
@@ -65,9 +65,9 @@ static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motori
     {
         case 0:
             rv = Motorist_Wrap( motWrap, Pcontent, Plen, Cbuffer, ADcontent, ADlen, tag, 0, forgetFlag, Motorist_Wrap_LastCryptAndMeta, &processedI, &processedMD);
-            UT_assert(rv == Atom_True, "motWrap.Wrap() did not return true.");
-            UT_assert(processedI == Plen, "motWrap.Wrap() did not process all input.");
-            UT_assert(processedMD == ADlen, "motWrap.Wrap() did not process all metadata.");
+            UT_assert(rv == Atom_True, (char*)"motWrap.Wrap() did not return true.");
+            UT_assert(processedI == Plen, (char*)"motWrap.Wrap() did not process all input.");
+            UT_assert(processedMD == ADlen, (char*)"motWrap.Wrap() did not process all metadata.");
             break;
 
         case 1:
@@ -121,9 +121,9 @@ static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motori
                     if ( tempADlen == 0 )
                         lastFlag |= Motorist_Wrap_LastMetaData;
                     rv = Motorist_Wrap( motWrap, I, partialPlen, O, AD, partialADlen, tag, 0, forgetFlag, lastFlag, &processedI, &processedMD);
-                    UT_assert(rv == Atom_True, "motWrap.Wrap() did not return true.");
-                    UT_assert(processedI <= partialPlen, "motWrap.Wrap() did process too much input.");
-                    UT_assert(processedMD <= partialADlen, "motWrap.Wrap() did process too much metadata.");
+                    UT_assert(rv == Atom_True, (char*)"motWrap.Wrap() did not return true.");
+                    UT_assert(processedI <= partialPlen, (char*)"motWrap.Wrap() did process too much input.");
+                    UT_assert(processedMD <= partialADlen, (char*)"motWrap.Wrap() did process too much metadata.");
                     I += processedI;
                     O += processedI;
                     AD += processedMD;
@@ -133,8 +133,8 @@ static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motori
                     totalADlen  += processedMD;
                 }
                 while ( ((tempPlen | tempADlen) != 0) || (lastFlag != Motorist_Wrap_LastCryptAndMeta) );
-                UT_assert(totalPlen == Plen, "motWrap.Wrap() totalPlen != Plen.");
-                UT_assert(totalADlen == ADlen, "motWrap.Wrap() totalADlen != ADlen.");
+                UT_assert(totalPlen == Plen, (char*)"motWrap.Wrap() totalPlen != Plen.");
+                UT_assert(totalADlen == ADlen, (char*)"motWrap.Wrap() totalADlen != ADlen.");
             }
             break;
 
@@ -150,10 +150,10 @@ static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motori
     {
         case 0:
             rv = Motorist_Wrap( motUnwrap, Cbuffer, Plen, PPbuffer, ADcontent, ADlen, tag, 1, forgetFlag, Motorist_Wrap_LastCryptAndMeta, &processedI, &processedMD);
-            UT_assert(rv == Atom_True, "motUnwrap.Wrap() did not return true.");
-            UT_assert(processedI == Plen, "motUnwrap.Wrap() did not process all input.");
-            UT_assert(processedMD == ADlen, "motUnwrap.Wrap() did not process all metadata.");
-            UT_assert(!memcmp( Pcontent, PPbuffer, Plen ), "The plaintexts do not match.");
+            UT_assert(rv == Atom_True, (char*)"motUnwrap.Wrap() did not return true.");
+            UT_assert(processedI == Plen, (char*)"motUnwrap.Wrap() did not process all input.");
+            UT_assert(processedMD == ADlen, (char*)"motUnwrap.Wrap() did not process all metadata.");
+            UT_assert(!memcmp( Pcontent, PPbuffer, Plen ), (char*)"The plaintexts do not match.");
             break;
 
         case 1:
@@ -214,9 +214,9 @@ static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motori
                     }
                     toggle ^= 1;
                     rv = Motorist_Wrap( motUnwrap, I, partialPlen, O, AD, partialADlen, tag, 1, forgetFlag, lastFlag, &processedI, &processedMD);
-                    UT_assert(rv == Atom_True, "motUnwrap.Wrap() did not return true.");
-                    UT_assert(processedI <= partialPlen, "motUnwrap.Wrap() did process too much input.");
-                    UT_assert(processedMD <= partialADlen, "motUnwrap.Wrap() did process too much metadata.");
+                    UT_assert(rv == Atom_True, (char*)"motUnwrap.Wrap() did not return true.");
+                    UT_assert(processedI <= partialPlen, (char*)"motUnwrap.Wrap() did process too much input.");
+                    UT_assert(processedMD <= partialADlen, (char*)"motUnwrap.Wrap() did process too much metadata.");
                     I += processedI;
                     O += processedI;
                     AD += processedMD;
@@ -226,17 +226,17 @@ static void testMotoristWrapUnwrap(int mode, Motorist_Instance * motWrap, Motori
                     totalADlen  += processedMD;
                 }
                 while ( ((tempPlen | tempADlen) != 0) || (lastFlag != Motorist_Wrap_LastCryptAndMeta) );
-                UT_assert(totalPlen == Plen, "motUnwrap.Wrap() totalPlen != Plen.");
-                UT_assert(totalADlen == ADlen, "motUnwrap.Wrap() totalADlen != ADlen.");
-                UT_assert(!memcmp( Pcontent, PPbuffer, Plen ), "The plaintexts do not match.");
+                UT_assert(totalPlen == Plen, (char*)"motUnwrap.Wrap() totalPlen != Plen.");
+                UT_assert(totalADlen == ADlen, (char*)"motUnwrap.Wrap() totalADlen != ADlen.");
+                UT_assert(!memcmp( Pcontent, PPbuffer, Plen ), (char*)"The plaintexts do not match.");
                 break;
             }
     }
 
     rv = Motorist_Wrap( motWitness, 0, 0, 0, tag, TagLength, tag, 0, 0, Motorist_Wrap_LastCryptAndMeta, &processedI, &processedMD);
-    UT_assert(rv == Atom_True, "motWitness.Wrap(tag) did not return true.");
+    UT_assert(rv == Atom_True, (char*)"motWitness.Wrap(tag) did not return true.");
     rv = Motorist_Wrap( motWitness, 0, 0, 0, Cbuffer, Plen, tag, 0, 0, Motorist_Wrap_LastCryptAndMeta, &processedI, &processedMD);
-    UT_assert(rv == Atom_True, "motWitness.Wrap(cryptogram) did not return true.");
+    UT_assert(rv == Atom_True, (char*)"motWitness.Wrap(cryptogram) did not return true.");
 }
 
 static int testMotoristOneMode( int mode, const char *file, const unsigned char *expected )
@@ -263,28 +263,28 @@ static int testMotoristOneMode( int mode, const char *file, const unsigned char 
 
     #ifdef UT_OUTPUT
     FILE *f = fopen(file, "w");
-    UT_assert(f != NULL, "Could not open file");
+    UT_assert(f != NULL, (char*)"Could not open file");
     #else
     void *f = NULL;
     #endif
 
     rv = Motorist_Initialize( &motWitness );
-    UT_assert(rv == Atom_Success, "motWitness.Init() did not return zero.");
+    UT_assert(rv == Atom_Success, (char*)"motWitness.Init() did not return zero.");
     rv = Motorist_StartEngine( &motWitness, 0, 0, Atom_False, 0, Atom_False, Atom_False);
-    UT_assert(rv == Atom_True, "motWitness.StartEngine() did not return true.");
+    UT_assert(rv == Atom_True, (char*)"motWitness.StartEngine() did not return true.");
 
     {
         for( SUVlen=0; SUVlen<=200; SUVlen++)
         for( forgetFlag = 0; forgetFlag < 2; ++forgetFlag)
         for( tagFlag = 0; tagFlag < 2; ++tagFlag) {
             rv = Motorist_Initialize( &motWrap );
-            UT_assert(rv == Atom_Success, "motWrap.Init() did not return zero.");
+            UT_assert(rv == Atom_Success, (char*)"motWrap.Init() did not return zero.");
             rv = Motorist_Initialize( &motUnwrap );
-            UT_assert(rv == Atom_Success, "motUnwrap.Init() did not return zero.");
+            UT_assert(rv == Atom_Success, (char*)"motUnwrap.Init() did not return zero.");
 
             generateSimpleRawMaterial( SUVcontent, SUVlen, SUVlen+0x21, 3);
-            testMotoristStartEngine(&motWrap, &motUnwrap, f, SUVcontent, SUVlen, forgetFlag, tagFlag);
-            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, f, (const uint8_t*)"ABC", 3, (const uint8_t*)"DEF", 3, 0, Cbuffer, PPbuffer );
+            testMotoristStartEngine(&motWrap, &motUnwrap, (FILE*)f, SUVcontent, SUVlen, forgetFlag, tagFlag);
+            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, (FILE*)f, (const uint8_t*)"ABC", 3, (const uint8_t*)"DEF", 3, 0, Cbuffer, PPbuffer );
         }
     }
 
@@ -300,20 +300,20 @@ static int testMotoristOneMode( int mode, const char *file, const unsigned char 
             SUVlen = 40;
             ADlen = ADlengths[ADleni];
             rv = Motorist_Initialize( &motWrap );
-            UT_assert(rv == Atom_Success, "motWrap.Init() did not return zero.");
+            UT_assert(rv == Atom_Success, (char*)"motWrap.Init() did not return zero.");
             rv = Motorist_Initialize( &motUnwrap );
-            UT_assert(rv == Atom_Success, "motUnwrap.Init() did not return zero.");
+            UT_assert(rv == Atom_Success, (char*)"motUnwrap.Init() did not return zero.");
 
             generateSimpleRawMaterial(SUVcontent, SUVlen, SUVlen+0x32, 4);
-            testMotoristStartEngine(&motWrap, &motUnwrap, f, SUVcontent, SUVlen, forgetFlag, tagFlag);
+            testMotoristStartEngine(&motWrap, &motUnwrap, (FILE*)f, SUVcontent, SUVlen, forgetFlag, tagFlag);
 
             generateSimpleRawMaterial(ADbuffer, ADlen, 0xAB+Mlen, 3);
             generateSimpleRawMaterial(Pbuffer, Mlen, 0xCD+ADlen, 4);
-            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer );
+            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, (FILE*)f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer );
 
             generateSimpleRawMaterial(ADbuffer, ADlen, 0xCD+Mlen, 3);
             generateSimpleRawMaterial(Pbuffer, Mlen, 0xEF+ADlen, 4);
-            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer);
+            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, (FILE*)f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer);
         }
     }
 
@@ -330,20 +330,20 @@ static int testMotoristOneMode( int mode, const char *file, const unsigned char 
             SUVlen = 40;
             Mlen = Mlengths[Mleni];
             rv = Motorist_Initialize( &motWrap );
-            UT_assert(rv == Atom_Success, "motWrap.Init() did not return zero.");
+            UT_assert(rv == Atom_Success, (char*)"motWrap.Init() did not return zero.");
             rv = Motorist_Initialize( &motUnwrap );
-            UT_assert(rv == Atom_Success, "motUnwrap.Init() did not return zero.");
+            UT_assert(rv == Atom_Success, (char*)"motUnwrap.Init() did not return zero.");
 
             generateSimpleRawMaterial(SUVcontent, SUVlen, SUVlen+0x43, 4);
-            testMotoristStartEngine( &motWrap, &motUnwrap, f, SUVcontent, SUVlen, forgetFlag, tagFlag);
+            testMotoristStartEngine( &motWrap, &motUnwrap, (FILE*)f, SUVcontent, SUVlen, forgetFlag, tagFlag);
 
             generateSimpleRawMaterial(ADbuffer, ADlen, 0x01+Mlen, 5);
             generateSimpleRawMaterial(Pbuffer, Mlen, 0x23+ADlen, 6);
-            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer);
+            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, (FILE*)f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer);
 
             generateSimpleRawMaterial(ADbuffer, ADlen, 0x45+Mlen, 5);
             generateSimpleRawMaterial(Pbuffer, Mlen, 0x67+ADlen, 6);
-            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer);
+            testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, (FILE*)f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer);
         }
     }
 
@@ -353,25 +353,25 @@ static int testMotoristOneMode( int mode, const char *file, const unsigned char 
         for ( tagFlag = 0; tagFlag < 2; ++tagFlag )
         {
             rv = Motorist_Initialize( &motWrap );
-            UT_assert(rv == Atom_Success, "motWrap.Init() did not return zero.");
+            UT_assert(rv == Atom_Success, (char*)"motWrap.Init() did not return zero.");
             rv = Motorist_Initialize( &motUnwrap );
-            UT_assert(rv == Atom_Success, "motUnwrap.Init() did not return zero.");
+            UT_assert(rv == Atom_Success, (char*)"motUnwrap.Init() did not return zero.");
 
             generateSimpleRawMaterial(SUVcontent, SUVlen, SUVlen+0x12, 1);
-            testMotoristStartEngine(&motWrap, &motUnwrap, f, SUVcontent, SUVlen, forgetFlag, tagFlag);
+            testMotoristStartEngine(&motWrap, &motUnwrap, (FILE*)f, SUVcontent, SUVlen, forgetFlag, tagFlag);
 
             for(ADlen=0; ADlen<=600; ADlen+=(SUVlen > 32) ? 600 : (ADlen/3+1))
             for(Mlen=0; Mlen<=800; Mlen+=(SUVlen > 32) ? 800 : (Mlen/2+1+ADlen)) 
             {
                 generateSimpleRawMaterial(ADbuffer, ADlen, 0x34+Mlen, 3);
                 generateSimpleRawMaterial(Pbuffer, Mlen, 0x45+ADlen, 4);
-                testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer);
+                testMotoristWrapUnwrap( mode, &motWrap, &motUnwrap, &motWitness, (FILE*)f, ADbuffer, ADlen, Pbuffer, Mlen, forgetFlag, Cbuffer, PPbuffer);
             }
         }
     }
 
     rv = Motorist_Wrap( &motWitness, 0, 0, 0, 0, 0, tag, 0, 0, Motorist_Wrap_LastCryptAndMeta, &dummy, &dummy);
-    UT_assert(rv == Atom_True, "motWitness.Wrap(final tag) did not return true.");
+    UT_assert(rv == Atom_True, (char*)"motWitness.Wrap(final tag) did not return true.");
     #if defined(GENERATE)
     for ( Mlen = 0; Mlen < TagLength; ++Mlen )
     {
@@ -380,7 +380,7 @@ static int testMotoristOneMode( int mode, const char *file, const unsigned char 
     printf("\n");
     getch();
     #else
-    UT_assert(!memcmp( expected, tag, TagLength ), "motWitness tag check fail.");
+    UT_assert(!memcmp( expected, tag, TagLength ), (char*)"motWitness tag check fail.");
     #endif
     return (0);
 }
