@@ -343,7 +343,7 @@ void KeccakP1600times8_AddBytes(void *states, unsigned int instanceIndex, const 
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     const unsigned char *curData = data;
-    uint64_t *statesAsLanes = states;
+    uint64_t *statesAsLanes = (uint64_t*)states;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -374,7 +374,7 @@ void KeccakP1600times8_AddBytes(void *states, unsigned int instanceIndex, const 
 
 void KeccakP1600times8_AddLanesAll(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
-    V512 *stateAsLanes = states;
+    V512 *stateAsLanes = (V512*)states;
     const uint64_t *dataAsLanes = (const uint64_t *)data;
     unsigned int i;
     V256 index;
@@ -424,7 +424,7 @@ void KeccakP1600times8_OverwriteBytes(void *states, unsigned int instanceIndex, 
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     const unsigned char *curData = data;
-    uint64_t *statesAsLanes = states;
+    uint64_t *statesAsLanes = (uint64_t*)states;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -451,7 +451,7 @@ void KeccakP1600times8_OverwriteBytes(void *states, unsigned int instanceIndex, 
 
 void KeccakP1600times8_OverwriteLanesAll(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
-    V512 *stateAsLanes = states;
+    V512 *stateAsLanes = (V512*)states;
     const uint64_t *dataAsLanes = (const uint64_t *)data;
     unsigned int i;
     V256 index;
@@ -499,7 +499,7 @@ void KeccakP1600times8_OverwriteWithZeroes(void *states, unsigned int instanceIn
 {
     unsigned int sizeLeft = byteCount;
     unsigned int lanePosition = 0;
-    uint64_t *statesAsLanes = states;
+    uint64_t *statesAsLanes = (uint64_t*)states;
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] = 0;
@@ -518,7 +518,7 @@ void KeccakP1600times8_ExtractBytes(const void *states, unsigned int instanceInd
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     unsigned char *curData = data;
-    const uint64_t *statesAsLanes = states;
+    const uint64_t *statesAsLanes = (const uint64_t*)states;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -544,7 +544,7 @@ void KeccakP1600times8_ExtractBytes(const void *states, unsigned int instanceInd
 
 void KeccakP1600times8_ExtractLanesAll(const void *states, unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
-    const V512 *stateAsLanes = states;
+    const V512 *stateAsLanes = (V512*)states;
     uint64_t *dataAsLanes = (uint64_t *)data;
     unsigned int i;
     V256 index;
@@ -595,7 +595,7 @@ void KeccakP1600times8_ExtractAndAddBytes(const void *states, unsigned int insta
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     const unsigned char *curInput = input;
     unsigned char *curOutput = output;
-    const uint64_t *statesAsLanes = states;
+    const uint64_t *statesAsLanes = (const uint64_t*)states;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -629,7 +629,7 @@ void KeccakP1600times8_ExtractAndAddBytes(const void *states, unsigned int insta
 
 void KeccakP1600times8_ExtractAndAddLanesAll(const void *states, const unsigned char *input, unsigned char *output, unsigned int laneCount, unsigned int laneOffset)
 {
-    const V512 *stateAsLanes = states;
+    const V512 *stateAsLanes = (const V512*)states;
     const uint64_t *inAsLanes = (const uint64_t *)input;
     uint64_t *outAsLanes = (uint64_t *)output;
     unsigned int i;
@@ -934,7 +934,7 @@ static ALIGN(KeccakP1600times8_statesAlignment) const uint64_t KeccakP1600RoundC
 
 void KeccakP1600times8_PermuteAll_24rounds(void *states)
 {
-    V512 *statesAsLanes = states;
+    V512 *statesAsLanes = (V512*)states;
     KeccakP_DeclareVars;
     #ifndef KeccakP1600times8_fullUnrolling
     unsigned int i;
@@ -947,7 +947,7 @@ void KeccakP1600times8_PermuteAll_24rounds(void *states)
 
 void KeccakP1600times8_PermuteAll_12rounds(void *states)
 {
-    V512 *statesAsLanes = states;
+    V512 *statesAsLanes = (V512*)states;
     KeccakP_DeclareVars;
     #if (KeccakP1600times8_unrolling < 12)
     unsigned int i;
@@ -960,7 +960,7 @@ void KeccakP1600times8_PermuteAll_12rounds(void *states)
 
 void KeccakP1600times8_PermuteAll_6rounds(void *states)
 {
-    V512 *statesAsLanes = states;
+    V512 *statesAsLanes = (V512*)states;
     KeccakP_DeclareVars;
 
     copyFromState2rounds(statesAsLanes);
@@ -970,7 +970,7 @@ void KeccakP1600times8_PermuteAll_6rounds(void *states)
 
 void KeccakP1600times8_PermuteAll_4rounds(void *states)
 {
-    V512 *statesAsLanes = states;
+    V512 *statesAsLanes = (V512*)states;
     KeccakP_DeclareVars;
 
     copyFromState(statesAsLanes);
@@ -987,7 +987,7 @@ size_t KeccakF1600times8_FastLoop_Absorb(void *states, unsigned int laneCount, u
         unsigned int i;
         #endif
         const unsigned char *dataStart = data;
-        V512 *statesAsLanes = states;
+        V512 *statesAsLanes = (V512*)states;
         const uint64_t *dataAsLanes = (const uint64_t *)data;
         KeccakP_DeclareVars;
         V256 index;
@@ -1047,7 +1047,7 @@ size_t KeccakP1600times8_12rounds_FastLoop_Absorb(void *states, unsigned int lan
         unsigned int i;
         #endif
         const unsigned char *dataStart = data;
-        V512 *statesAsLanes = states;
+        V512 *statesAsLanes = (V512*)states;
         const uint64_t *dataAsLanes = (const uint64_t *)data;
         KeccakP_DeclareVars;
         V256 index;

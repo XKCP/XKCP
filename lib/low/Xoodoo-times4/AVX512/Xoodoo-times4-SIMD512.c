@@ -433,7 +433,7 @@ typedef __m512i V512;
 #define LOAD512(a)                  _mm512_load_si512((const V512 *)&(a))
 #define LOAD512u(a)                 _mm512_loadu_si512((const V512 *)&(a))
 
-#define LOAD_GATHER4_32(idx,p)      _mm_i32gather_epi32((const void*)(p), idx, 4)
+#define LOAD_GATHER4_32(idx,p)      _mm_i32gather_epi32((const int*)(p), idx, 4)
 #define STORE_SCATTER4_32(idx,a,p)  _mm_i32scatter_epi32((void*)(p), idx, a, 4)
 #define LOAD4_32(a,b,c,d)           _mm_setr_epi32(a,b,c,d)
 
