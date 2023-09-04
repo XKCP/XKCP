@@ -159,10 +159,10 @@ SOURCES := $(SOURCES) </xsl:text>
 </xsl:text>
         <xsl:choose>
             <xsl:when test="local-name(.) = 's'">
-                <xsl:text>&#9;$(CC) $(INCLUDEFLAGS) $(ASMFLAGS) </xsl:text>
+                <xsl:text>&#9;$(CC) $(INCLUDEFLAGS) $(ASMFLAGS) $(EXTRA_ASMFLAGS) </xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>&#9;$(CC) $(INCLUDEFLAGS) $(CFLAGS) </xsl:text>
+                <xsl:text>&#9;$(CC) $(INCLUDEFLAGS) $(CFLAGS) $(EXTRA_CFLAGS) </xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:value-of select="@gcc"/>
@@ -228,7 +228,7 @@ UNAME_M := $(shell uname -m)
 </xsl:text>
 
     <xsl:if test="substring(@name, string-length(@name)-2, 3)='.so'">
-        <xsl:text>CFLAGS := $(CFLAGS) -fpic
+        <xsl:text>CFLAGS := $(CFLAGS) $(EXTRA_CFLAGS) -fpic
 </xsl:text>
     </xsl:if>
 
@@ -269,7 +269,7 @@ bin/</xsl:text>
         <xsl:when test="substring(@name, string-length(@name)-2, 3)='.so'">
             <xsl:text>&#9;mkdir -p $@.headers
 &#9;cp -f $(HEADERS) $@.headers/
-&#9;$(CC) -shared -o $@ $(OBJECTS) $(CFLAGS)
+&#9;$(CC) -shared -o $@ $(OBJECTS) $(CFLAGS) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)
 </xsl:text>
         </xsl:when>
         <xsl:when test="substring(@name, string-length(@name)-5, 6)='.dylib'">
@@ -277,11 +277,11 @@ bin/</xsl:text>
 &#9;cp -f $(HEADERS) $@.headers/
 &#9;$(CC) -dynamiclib -install_name @rpath/</xsl:text>
         <xsl:value-of select="@name"/>
-        <xsl:text> $(CFLAGS) $(OBJECTS) -o $@
+        <xsl:text> $(CFLAGS) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS) $(OBJECTS) -o $@
 </xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>&#9;$(CC) -o $@ $(OBJECTS) $(CFLAGS)
+            <xsl:text>&#9;$(CC) -o $@ $(OBJECTS) $(CFLAGS) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)
 </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
