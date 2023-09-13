@@ -25,7 +25,8 @@ Note that we decided to remove [Ketje](https://keccak.team/ketje.html) and [Keya
 
 **libXKCP** is a library that contains all the Keccak and Xoodoo-based cryptographic schemes mentioned above.
 
-To build it, the quick answer is to launch:
+Before building, please make sure that the submodules have been initialized and fetched using `git submodule update --init`.
+Then, to build **libXKCP**, the quick answer is to launch:
 
 ```
 make <target>/libXKCP.so
