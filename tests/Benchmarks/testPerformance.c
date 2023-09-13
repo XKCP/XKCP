@@ -25,9 +25,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifdef XKCP_has_Sponge_Keccak
 #include "KeccakSponge.h"
 #endif
-#ifdef XKCP_has_Keyak
-#include "Keyakv2.h"
-#endif
 #ifdef XKCP_has_Kravatte
 #include "Kravatte.h"
 #include "KravatteModes.h"
@@ -371,66 +368,6 @@ void TurboSHAKE_timing()
 }
 #endif
 
-#ifdef XKCP_has_RiverKeyak
-    #define prefix      RiverKeyak
-    #define Rs          68
-    #define Ra          96
-    #define P           1
-        #include "timingKeyak.inc"
-    #undef prefix
-    #undef Rs
-    #undef Ra
-    #undef P
-#endif
-
-#ifdef XKCP_has_LakeKeyak
-    #define prefix      LakeKeyak
-    #define Rs          168
-    #define Ra          192
-    #define P           1
-        #include "timingKeyak.inc"
-    #undef prefix
-    #undef Rs
-    #undef Ra
-    #undef P
-#endif
-
-#ifdef XKCP_has_SeaKeyak
-    #define prefix      SeaKeyak
-    #define Rs          168
-    #define Ra          192
-    #define P           2
-        #include "timingKeyak.inc"
-    #undef prefix
-    #undef Rs
-    #undef Ra
-    #undef P
-#endif
-
-#ifdef XKCP_has_OceanKeyak
-    #define prefix      OceanKeyak
-    #define Rs          168
-    #define Ra          192
-    #define P           4
-        #include "timingKeyak.inc"
-    #undef prefix
-    #undef Rs
-    #undef Ra
-    #undef P
-#endif
-
-#ifdef XKCP_has_LunarKeyak
-    #define prefix      LunarKeyak
-    #define Rs          168
-    #define Ra          192
-    #define P           8
-        #include "timingKeyak.inc"
-    #undef prefix
-    #undef Rs
-    #undef Ra
-    #undef P
-#endif
-
 void printParallelImplementations(
     int useKeccakF1600timesN_FastLoop_Absorb,
     int useKeccakP1600timesN_12rounds_FastLoop_Absorb,
@@ -451,7 +388,7 @@ void printParallelImplementations(
     printf("- \303\2271: not used\n");
     #endif
 
-    #if defined(XKCP_has_KeccakP1600times2) && !defined(KeccakP1600times2_isFallback)
+    #if defined(XKCP_has_KeccakP1600times2)
     printf("- \303\2272: " KeccakP1600times2_implementation "\n");
     #if defined(KeccakP1600times2_12rounds_FastLoop_supported)
     if (useKeccakP1600timesN_12rounds_FastLoop_Absorb)
@@ -471,7 +408,7 @@ void printParallelImplementations(
     printf("- \303\2272: not used\n");
     #endif
 
-    #if defined(XKCP_has_KeccakP1600times4) && !defined(KeccakP1600times4_isFallback)
+    #if defined(XKCP_has_KeccakP1600times4)
     printf("- \303\2274: " KeccakP1600times4_implementation "\n");
     #if defined(KeccakP1600times4_12rounds_FastLoop_supported)
     if (useKeccakP1600timesN_12rounds_FastLoop_Absorb)
@@ -491,7 +428,7 @@ void printParallelImplementations(
     printf("- \303\2274: not used\n");
     #endif
 
-    #if defined(XKCP_has_KeccakP1600times8) && !defined(KeccakP1600times8_isFallback)
+    #if defined(XKCP_has_KeccakP1600times8)
     printf("- \303\2278: " KeccakP1600times8_implementation "\n");
     #if defined(KeccakP1600times8_12rounds_FastLoop_supported)
     if (useKeccakP1600timesN_12rounds_FastLoop_Absorb)
@@ -1001,22 +938,6 @@ void testPerformance()
 #endif
 #ifdef XKCP_has_TurboSHAKE
     TurboSHAKE_timing();
-#endif
-
-#ifdef XKCP_has_RiverKeyak
-    RiverKeyak_timing("River Keyak", KeccakP800_implementation);
-#endif
-#ifdef XKCP_has_LakeKeyak
-    LakeKeyak_timing("Lake Keyak", KeccakP1600_implementation);
-#endif
-#ifdef XKCP_has_SeaKeyak
-    SeaKeyak_timing("Sea Keyak", KeccakP1600times2_implementation);
-#endif
-#ifdef XKCP_has_OceanKeyak
-    OceanKeyak_timing("Ocean Keyak", KeccakP1600times4_implementation);
-#endif
-#ifdef XKCP_has_LunarKeyak
-    LunarKeyak_timing("Lunar Keyak", KeccakP1600times8_implementation);
 #endif
 
 #ifdef XKCP_has_SP800_185

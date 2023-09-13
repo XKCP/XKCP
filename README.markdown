@@ -8,7 +8,6 @@ and closely related variants, such as
 
 * the SHAKE extendable-output functions and SHA-3 hash functions from [FIPS 202][fips202_standard],
 * the cSHAKE, KMAC, ParallelHash and TupleHash functions from [NIST SP 800-185][sp800_185_standard],
-* the [Ketje][caesar_ketje] and [Keyak][caesar_keyak] authenticated encryption schemes,
 * the fast [TurboSHAKE][turboshake] and [KangarooTwelve][k12] extendable-output functions,
 * the [Kravatte](https://keccak.team/kravatte.html) pseudo-random function and its modes,
 
@@ -19,6 +18,7 @@ as well as the [Xoodoo](https://keccak.team/xoodoo.html) permutation and
 
 The code in this repository can be built as a library called libXKCP.
 
+Note that we decided to remove [Ketje](https://keccak.team/ketje.html) and [Keyak](https://keccak.team/keyak.html) from the XKCP.
 
 
 # What is libXKCP?
@@ -57,8 +57,6 @@ When used as a library or directly from the sources, the XKCP offers the high-le
 * [`KeccakSponge`](doc/KeccakSponge-documentation.h), all Keccak sponge functions, with or without a message queue.
 * [`KeccakDuplex`](doc/KeccakDuplex-documentation.h), all Keccak duplex objects.
 * [`KeccakPRG`](doc/KeccakPRG-documentation.h), a pseudo-random number generator based on Keccak duplex objects.
-* [`Keyak`](doc/Keyak-documentation.h), the authenticated encryption schemes River, Lake, Sea, Ocean and Lunar Keyak.
-* [`Ketje`](doc/Ketje-documentation.h), the lightweight authenticated encryption schemes Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major.
 * [`TurboSHAKE`](lib/high/TurboSHAKE/TurboSHAKE.h), the fast twelve-round variant to Keccak.
 * [`KangarooTwelve`](lib/high/KangarooTwelve/KangarooTwelve.h), the fast and parallelizable hashing mode based on TurboSHAKE and Sakura coding.
 * [`Kravatte`](lib/high/Kravatte/Kravatte.h) and [`KravatteModes`](lib/high/Kravatte/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
@@ -79,7 +77,7 @@ The low-level services provide an opaque representation of the state together wi
     + [`lib/low/KeccakP-1600/`](lib/low/KeccakP-1600/), for Keccak-_p_[1600]. This is the one used in the six approved FIPS 202 instances.
     + [`lib/low/Xoodoo/`](lib/low/Xoodoo/), for Xoodoo.
 
-* In addition, one can find the implementation of parallelized permutations. There are both implementations based on SIMD instructions and "fallback" implementations relying on a parallelized with a lower degree implementation or on a serial one.
+* In addition, one can find the implementation of parallelized permutations using SIMD instructions.
 
 In both cases, the hierarchy first selects a permutation (or a permutation and a degree of parallelism) and then a given implementation. E.g., one finds in [`lib/low/KeccakP-1600-times4/`](lib/low/KeccakP-1600-times4/) the implementations of 4 parallel instances of Keccak-_p_[1600] and in [`lib/low/KeccakP-1600-times4/AVX2/`](lib/low/KeccakP-1600-times4/AVX2/) a 256-bit SIMD implementation for AVX2.
 
@@ -235,8 +233,6 @@ More information on the cryptographic aspects can be found:
 * on Keccak at [`keccak.team`](https://keccak.team/keccak.html)
 * on the FIPS 202 standard at [`csrc.nist.gov`](http://csrc.nist.gov/groups/ST/hash/sha-3/fips202_standard_2015.html)
 * on the NIST SP 800-185 standard at [`keccak.team`](https://keccak.team/2016/sp_800_185.html)
-* on Ketje at [`keccak.team`](https://keccak.team/ketje.html)
-* on Keyak at [`keccak.team`](https://keccak.team/keyak.html)
 * on KangarooTwelve at [`keccak.team`](https://keccak.team/kangarootwelve.html)
 * on cryptographic sponge functions at [`keccak.team`](https://keccak.team/sponge_duplex.html)
 * on Kravatte at [`keccak.team`](https://keccak.team/kravatte.html)
@@ -280,8 +276,6 @@ Michaël Peeters, Gilles Van Assche, and Ronny Van Keer.
 [slidesAtFOSDEM2017]: https://fosdem.org/2017/schedule/event/keccak/attachments/slides/1692/export/events/attachments/keccak/slides/1692/KeccakAtFOSDEM2017.pdf
 [fips202_standard]: http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf "FIPS 202 standard"
 [sp800_185_standard]: https://doi.org/10.6028/NIST.SP.800-185 "NIST SP 800-185 standard"
-[caesar_ketje]: https://keccak.team/ketje.html
-[caesar_keyak]: https://keccak.team/keyak.html
 [k12]: https://keccak.team/kangarootwelve.html
 [SPEEDB]: http://ccccspeed.win.tue.nl/
 [paperAtSPEEDB]: http://ccccspeed.win.tue.nl/papers/KeccakSoftware.pdf

@@ -175,7 +175,7 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
         }
     }
 
-    #if defined(KeccakP1600times8_implementation) && !defined(KeccakP1600times8_isFallback)
+    #if defined(KeccakP1600times8_implementation)
     #if defined(KeccakP1600times8_K12ProcessLeaves_supported)
     ProcessLeaves( 8 )
     #elif defined(KeccakP1600times8_12rounds_FastLoop_supported)
@@ -185,7 +185,7 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
     #endif
     #endif
 
-    #if defined(KeccakP1600times4_implementation) && !defined(KeccakP1600times4_isFallback)
+    #if defined(KeccakP1600times4_implementation)
     #if defined(KeccakP1600times4_K12ProcessLeaves_supported)
     ProcessLeaves( 4 )
     #elif defined(KeccakP1600times4_12rounds_FastLoop_supported)
@@ -195,7 +195,7 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
     #endif
     #endif
 
-    #if defined(KeccakP1600times2_implementation) && !defined(KeccakP1600times2_isFallback)
+    #if defined(KeccakP1600times2_implementation)
     #if defined(KeccakP1600times2_K12ProcessLeaves_supported)
     ProcessLeaves( 2 )
     #elif defined(KeccakP1600times2_12rounds_FastLoop_supported)

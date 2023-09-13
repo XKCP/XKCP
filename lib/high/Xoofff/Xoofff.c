@@ -370,28 +370,28 @@ static const unsigned char * Xoodoo_CompressBlocks( unsigned char *k, unsigned c
     ALIGN(Xoodoo_stateAlignment) unsigned char encbuf[XoodooMaxParallellism*Xoofff_RollSizeInBytes];
     size_t messageByteLen = *messageBitLen / 8; /* do not include partial last byte */
 
-    #if defined(XKCP_has_Xoodootimes16) && !defined(Xoodootimes16_isFallback)
+    #if defined(XKCP_has_Xoodootimes16)
     #if defined(Xoodootimes16_FastXoofff_supported)
     ParallelCompressLoopFast( 16 )
     #else
     ParallelCompressLoopPlSnP( 16 )
     #endif
     #endif
-    #if defined(XKCP_has_Xoodootimes8) && !defined(Xoodootimes8_isFallback)
+    #if defined(XKCP_has_Xoodootimes8)
     #if defined(Xoodootimes8_FastXoofff_supported)
     ParallelCompressLoopFast( 8 )
     #else
     ParallelCompressLoopPlSnP( 8 )
     #endif
     #endif
-    #if defined(XKCP_has_Xoodootimes4) && !defined(Xoodootimes4_isFallback)
+    #if defined(XKCP_has_Xoodootimes4)
     #if defined(Xoodootimes4_FastXoofff_supported)
     ParallelCompressLoopFast( 4 )
     #else
     ParallelCompressLoopPlSnP( 4 )
     #endif
     #endif
-    #if defined(XKCP_has_Xoodootimes2) && !defined(Xoodootimes2_isFallback)
+    #if defined(XKCP_has_Xoodootimes2)
     #if defined(Xoodootimes2_FastXoofff_supported)
     ParallelCompressLoopFast( 2 )
     #else
@@ -560,28 +560,28 @@ int Xoofff_Expand(Xoofff_Instance *xp, BitSequence *output, BitLength outputBitL
     }
 
     outputByteLen = (outputBitLen + 7) / 8;
-    #if defined(XKCP_has_Xoodootimes16) && !defined(Xoodootimes16_isFallback)
+    #if defined(XKCP_has_Xoodootimes16)
     #if defined(Xoodootimes16_FastXoofff_supported)
     ParallelExpandLoopFast( 16 )
     #else
     ParallelExpandLoopPlSnP( 16 )
     #endif
     #endif
-    #if defined(XKCP_has_Xoodootimes8) && !defined(Xoodootimes8_isFallback)
+    #if defined(XKCP_has_Xoodootimes8)
     #if defined(Xoodootimes8_FastXoofff_supported)
     ParallelExpandLoopFast( 8 )
     #else
     ParallelExpandLoopPlSnP( 8 )
     #endif
     #endif
-    #if defined(XKCP_has_Xoodootimes4) && !defined(Xoodootimes4_isFallback)
+    #if defined(XKCP_has_Xoodootimes4)
     #if defined(Xoodootimes4_FastXoofff_supported)
     ParallelExpandLoopFast( 4 )
     #else
     ParallelExpandLoopPlSnP( 4 )
     #endif
     #endif
-    #if defined(XKCP_has_Xoodootimes2) && !defined(Xoodootimes2_isFallback)
+    #if defined(XKCP_has_Xoodootimes2)
     #if defined(Xoodootimes2_FastXoofff_supported)
     ParallelExpandLoopFast( 2 )
     #else

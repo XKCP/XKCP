@@ -367,7 +367,7 @@ int ParallelHash_Update(ParallelHash_Instance *phi, const BitSequence *input, Bi
         }
     }
 
-    #if defined(KeccakP1600times8_implementation) && !defined(KeccakP1600times8_isFallback)
+    #if defined(KeccakP1600times8_implementation)
     #if defined(KeccakF1600times8_FastLoop_supported)
     ParallelSpongeFastLoop( 8 )
     #else
@@ -375,7 +375,7 @@ int ParallelHash_Update(ParallelHash_Instance *phi, const BitSequence *input, Bi
     #endif
     #endif
 
-    #if defined(KeccakP1600times4_implementation) && !defined(KeccakP1600times4_isFallback)
+    #if defined(KeccakP1600times4_implementation)
     #if defined(KeccakF1600times4_FastLoop_supported)
     ParallelSpongeFastLoop( 4 )
     #else
@@ -383,7 +383,7 @@ int ParallelHash_Update(ParallelHash_Instance *phi, const BitSequence *input, Bi
     #endif
     #endif
 
-    #if defined(KeccakP1600times2_implementation) && !defined(KeccakP1600times2_isFallback)
+    #if defined(KeccakP1600times2_implementation)
     #if defined(KeccakF1600times2_FastLoop_supported)
     ParallelSpongeFastLoop( 2 )
     #else

@@ -56,7 +56,6 @@ void displayMeasurements1101001000(cycles_t *measurements, uint32_t *laneCounts,
 
 #ifdef XKCP_has_Xoodootimes4
 #include "Xoodoo-times4-SnP.h"
-#if !defined(Xoodootimes4_isFallback)
 
     #define prefix                      Xoodootimes4
     #define PlSnP                       Xoodootimes4
@@ -72,11 +71,9 @@ void displayMeasurements1101001000(cycles_t *measurements, uint32_t *laneCounts,
     #undef PlSnP_PermuteAll_6rounds
     #undef PlSnP_PermuteAll_12rounds
 #endif
-#endif
 
 #ifdef XKCP_has_Xoodootimes8
 #include "Xoodoo-times8-SnP.h"
-#if !defined(Xoodootimes8_isFallback)
 
     #define prefix                      Xoodootimes8
     #define PlSnP                       Xoodootimes8
@@ -92,11 +89,9 @@ void displayMeasurements1101001000(cycles_t *measurements, uint32_t *laneCounts,
     #undef PlSnP_PermuteAll_6rounds
     #undef PlSnP_PermuteAll_12rounds
 #endif
-#endif
 
 #ifdef XKCP_has_Xoodootimes16
 #include "Xoodoo-times16-SnP.h"
-#if !defined(Xoodootimes16_isFallback)
 
     #define prefix                      Xoodootimes16
     #define PlSnP                       Xoodootimes16
@@ -111,7 +106,6 @@ void displayMeasurements1101001000(cycles_t *measurements, uint32_t *laneCounts,
     #undef SnP_width
     #undef PlSnP_PermuteAll_6rounds
     #undef PlSnP_PermuteAll_12rounds
-#endif
 #endif
 
 #ifdef XKCP_has_Xoofff
@@ -274,13 +268,13 @@ void printXoofffPerformanceHeader( void )
     printf("*** Xoofff ***\n");
     printf("Using Xoodoo implementations:\n");
     printf("- \303\227\x31: " Xoodoo_implementation "\n");
-    #if defined(XKCP_has_Xoodootimes4) && !defined(Xoodootimes4_isFallback)
+    #if defined(XKCP_has_Xoodootimes4)
     printf("- \303\2274: " Xoodootimes4_implementation "\n");
     #endif
-    #if defined(XKCP_has_Xoodootimes8) && !defined(Xoodootimes8_isFallback)
+    #if defined(XKCP_has_Xoodootimes8)
     printf("- \303\2278: " Xoodootimes8_implementation "\n");
     #endif
-    #if defined(XKCP_has_Xoodootimes16) && !defined(Xoodootimes16_isFallback)
+    #if defined(XKCP_has_Xoodootimes16)
     printf("- \303\22716: " Xoodootimes16_implementation "\n");
     #endif
     printf("\n");
@@ -594,13 +588,13 @@ void testXooPerformance(void)
 #ifdef XKCP_has_Xoodoo
     Xoodoo_timingSnP("Xoodoo", Xoodoo_implementation);
 #endif
-#if defined(XKCP_has_Xoodootimes4) && !defined(Xoodootimes4_isFallback)
+#if defined(XKCP_has_Xoodootimes4)
     Xoodootimes4_timingPlSnP("Xoodoo\303\2274", Xoodootimes4_implementation);
 #endif
-#if defined(XKCP_has_Xoodootimes8) && !defined(Xoodootimes8_isFallback)
+#if defined(XKCP_has_Xoodootimes8)
     Xoodootimes8_timingPlSnP("Xoodoo\303\2278", Xoodootimes8_implementation);
 #endif
-#if defined(XKCP_has_Xoodootimes16) && !defined(Xoodootimes16_isFallback)
+#if defined(XKCP_has_Xoodootimes16)
     Xoodootimes16_timingPlSnP("Xoodoo\303\22716", Xoodootimes16_implementation);
 #endif
 

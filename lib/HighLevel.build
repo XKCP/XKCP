@@ -23,8 +23,6 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
 * TurboSHAKE: the 12-round variant of Keccak
 * KeccakDuplex: the Keccak duplex object on top of the supported Keccak-f permutations.
 * KeccakPRG: a pseudo-random bit generator based on Keccak.
-* Ketje: Ketje Jr, Ketje Sr, Ketje Minor and Ketje Major, depending on the supported permutations.
-* Keyak: River Keyak, Lake Keyak, Sea Keyak, Ocean Keyak and Lunar Keyak, depending on the supported permutations.
 * KangarooTwelve: the KangarooTwelve extendable output function.
 * Kravatte: the Kravatte pseudo-random function and its modes (Kravatte-SANE, -SANSE, -WBC and -WBC-AE).
 
@@ -85,25 +83,6 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
         <c>lib/high/Keccak/PRG/KeccakPRG.c</c>
     </fragment>
 
-    <!-- Ketje -->
-
-    <fragment name="Ketje" inherits="common">
-        <config>XKCP_has_Ketje</config>
-        <h>lib/high/Ketje/Ketjev2.h</h>
-        <inc>lib/high/Ketje/Ketjev2.inc</inc>
-        <c>lib/high/Ketje/Ketjev2.c</c>
-    </fragment>
-
-    <!-- Keyak -->
-
-    <fragment name="Keyak" inherits="common">
-        <config>XKCP_has_Keyak</config>
-        <inc>lib/high/Keyak/Motorist.inc</inc>
-        <h>lib/high/Keyak/Keyakv2.h</h>
-        <inc>lib/high/Keyak/Keyakv2.inc</inc>
-        <c>lib/high/Keyak/Keyakv2.c</c>
-    </fragment>
-
     <!-- KangarooTwelve -->
 
     <fragment name="KangarooTwelve" inherits="TurboSHAKE">
@@ -145,6 +124,6 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
 
     <!--- All high-level services -->
 
-    <fragment name="All" inherits="common Ketje Keyak KeccakSponge KeccakDuplex KeccakPRG FIPS202 SP800-185 KangarooTwelve Kravatte Xoofff Xoodyak"/>
+    <fragment name="All" inherits="common KeccakSponge KeccakDuplex KeccakPRG FIPS202 SP800-185 KangarooTwelve Kravatte Xoofff Xoodyak"/>
 
 </group>

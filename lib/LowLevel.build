@@ -448,12 +448,6 @@ The fragments below allow to select the desired implementation of the permutatio
         <config>XKCP_has_KeccakP1600times2</config>
     </fragment>
 
-    <fragment name="K1600x2-on1" inherits="K1600x2">
-        <c>lib/low/KeccakP-1600-times2/fallback-on1/KeccakP-1600-times2-on1.c</c>
-        <h>lib/low/KeccakP-1600-times2/fallback-on1/KeccakP-1600-times2-SnP.h</h>
-        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
-    </fragment>
-
     <fragment name="K1600x2-SIMD128" inherits="optimized K1600x2">
         <h>lib/low/KeccakP-1600-times2/SIMD128/KeccakP-1600-times2-SnP.h</h>
         <inc>lib/low/KeccakP-1600/common/KeccakP-1600-unrolling.macros</inc>
@@ -513,18 +507,6 @@ The fragments below allow to select the desired implementation of the permutatio
         <config>XKCP_has_KeccakP1600times4</config>
     </fragment>
 
-    <fragment name="K1600x4-on1" inherits="K1600x4">
-        <c>lib/low/KeccakP-1600-times4/fallback-on1/KeccakP-1600-times4-on1.c</c>
-        <h>lib/low/KeccakP-1600-times4/fallback-on1/KeccakP-1600-times4-SnP.h</h>
-        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
-    </fragment>
-
-    <fragment name="K1600x4-on2" inherits="K1600x4">
-        <c>lib/low/KeccakP-1600-times4/fallback-on2/KeccakP-1600-times4-on2.c</c>
-        <h>lib/low/KeccakP-1600-times4/fallback-on2/KeccakP-1600-times4-SnP.h</h>
-        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
-    </fragment>
-
     <fragment name="K1600x4-AVX2" inherits="optimized K1600x4">
         <c gcc="-mavx2">lib/low/KeccakP-1600-times4/AVX2/KeccakP-1600-times4-SIMD256.c</c>
         <h>lib/low/KeccakP-1600-times4/AVX2/KeccakP-1600-times4-SnP.h</h>
@@ -564,24 +546,6 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="K1600x8">
         <config>XKCP_has_KeccakP1600times8</config>
-    </fragment>
-
-    <fragment name="K1600x8-on1" inherits="K1600x8">
-        <c>lib/low/KeccakP-1600-times8/fallback-on1/KeccakP-1600-times8-on1.c</c>
-        <h>lib/low/KeccakP-1600-times8/fallback-on1/KeccakP-1600-times8-SnP.h</h>
-        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
-    </fragment>
-
-    <fragment name="K1600x8-on2" inherits="K1600x8">
-        <c>lib/low/KeccakP-1600-times8/fallback-on2/KeccakP-1600-times8-on2.c</c>
-        <h>lib/low/KeccakP-1600-times8/fallback-on2/KeccakP-1600-times8-SnP.h</h>
-        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
-    </fragment>
-
-    <fragment name="K1600x8-on4" inherits="K1600x8">
-        <c>lib/low/KeccakP-1600-times8/fallback-on4/KeccakP-1600-times8-on4.c</c>
-        <h>lib/low/KeccakP-1600-times8/fallback-on4/KeccakP-1600-times8-SnP.h</h>
-        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
     </fragment>
 
     <fragment name="K1600x8-AVX512" inherits="optimized K1600x8">
@@ -669,12 +633,6 @@ The fragments below allow to select the desired implementation of the permutatio
         <config>XKCP_has_Xoodootimes4</config>
     </fragment>
 
-    <fragment name="Xoodoox4-on1" inherits="common optimized Xoodoox4">
-        <c>lib/low/Xoodoo-times4/fallback-on1/Xoodoo-times4-on1.c</c>
-        <h>lib/low/Xoodoo-times4/fallback-on1/Xoodoo-times4-SnP.h</h>
-        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
-    </fragment>
-
     <fragment name="Xoodoox4-SSSE3" inherits="common optimized Xoodoox4">
         <c gcc="-mssse3">lib/low/Xoodoo-times4/SSSE3/Xoodoo-times4-SIMD128.c</c>
         <h>lib/low/Xoodoo-times4/SSSE3/Xoodoo-times4-SnP.h</h>
@@ -698,12 +656,6 @@ The fragments below allow to select the desired implementation of the permutatio
         <config>XKCP_has_Xoodootimes8</config>
     </fragment>
 
-    <fragment name="Xoodoox8-on1" inherits="common optimized Xoodoox8">
-        <c>lib/low/Xoodoo-times8/fallback-on1/Xoodoo-times8-on1.c</c>
-        <h>lib/low/Xoodoo-times8/fallback-on1/Xoodoo-times8-SnP.h</h>
-        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
-    </fragment>
-
     <fragment name="Xoodoox8-AVX2" inherits="common optimized Xoodoox8">
         <c gcc="-mavx2">lib/low/Xoodoo-times8/AVX2/Xoodoo-times8-SIMD256.c</c>
         <h>lib/low/Xoodoo-times8/AVX2/Xoodoo-times8-SnP.h</h>
@@ -720,45 +672,9 @@ The fragments below allow to select the desired implementation of the permutatio
         <config>XKCP_has_Xoodootimes16</config>
     </fragment>
 
-    <fragment name="Xoodoox16-on1" inherits="common optimized Xoodoox16">
-        <c>lib/low/Xoodoo-times16/fallback-on1/Xoodoo-times16-on1.c</c>
-        <h>lib/low/Xoodoo-times16/fallback-on1/Xoodoo-times16-SnP.h</h>
-        <inc>lib/low/common/PlSnP-Fallback.inc</inc>
-    </fragment>
-
     <fragment name="Xoodoox16-AVX512" inherits="common optimized Xoodoox16">
         <c gcc="-mavx512f -mavx512vl">lib/low/Xoodoo-times16/AVX512/Xoodoo-times16-SIMD512.c</c>
         <h>lib/low/Xoodoo-times16/AVX512/Xoodoo-times16-SnP.h</h>
-    </fragment>
-
-<!--
-For Ketje, one of the following fragments is required:
-* Ket-SnP: to glue the Ketje implementation to an implementation of the permutation with SnP (default choice)
-* Ket-ARMv7M: same as Ket{Jr, Sr, Mn, Mj}-SnP, but with specific optimizations for ARMv7M
-* Ket-optimizedLE: same as Ket{Jr, Sr, Mn, Mj}-SnP, but with specific optimizations for platforms that are little-endian and such that the state representation is pure
--->
-
-    <!-- "Ket", the layer between SnP and Ketje services -->
-
-    <!-- TODO Some day, it would be good to blend Ket-SnP and Ket-optimizedLE, and automate the selection based on the reprensentation of the state and the endianness of the platform. -->
-
-    <fragment name="Ket-SnP">
-        <inc>lib/low/Ketje/SnP-compliant/Ket.inc</inc>
-        <h>lib/low/Ketje/SnP-compliant/Ket.h</h>
-        <c>lib/low/Ketje/SnP-compliant/Ket.c</c>
-    </fragment>
-
-    <fragment name="Ket-optimizedLE">
-        <inc>lib/low/Ketje/OptimizedLE/Ket.inc</inc>
-        <h>lib/low/Ketje/OptimizedLE/Ket.h</h>
-        <c>lib/low/Ketje/OptimizedLE/Ket.c</c>
-    </fragment>
-
-    <fragment name="Ket-ARMv7M">
-        <h>lib/low/Ketje/OptimizedAsmARM/Ket.h</h>
-        <s>lib/low/Ketje/OptimizedAsmARM/KetjeJr-armv7m-le-gcc.s</s>
-        <s>lib/low/Ketje/OptimizedAsmARM/KetjeSr-armv7m-le-gcc.s</s>
-        <!-- TODO: <fragment name="Ket-ARMv7M" inherits="KetJr-ARMv7M KetSr-ARMv7M KetMn-optimizedLE KetMj-SnP"/> -->
     </fragment>
 
 </group>

@@ -24,9 +24,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testPRG.h"
 #include "testSP800-185.h"
 #include "testKangarooTwelve.h"
-#include "testKetjev2.h"
-#include "testMotorist.h"
-#include "testKeyakv2.h"
 #include "testKravatte.h"
 #include "testKravatteModes.h"
 #include "testXoofff.h"
@@ -510,12 +507,6 @@ void printHelp()
 #ifdef XKCP_has_SP800_185
         printf("  --SP800-185               Tests on SP800-185 functions\n");
 #endif
-#ifdef XKCP_has_Keyak
-        printf("  --Keyak or -y             Tests on the Keyak authentication encryption scheme\n");
-#endif
-#ifdef XKCP_has_Ketje
-        printf("  --Ketje or -t             Tests on the Ketje authentication encryption scheme\n");
-#endif
 #ifdef XKCP_has_KangarooTwelve
         printf("  --KangarooTwelve or -K12  Tests on KangarooTwelve\n");
 #endif
@@ -542,8 +533,6 @@ int process(int argc, char* argv[])
     int KeccakDuplex = 0;
     int KeccakPRG = 0;
     int FIPS202 = 0;
-    int Keyak = 0;
-    int Ketje = 0;
     int KangarooTwelve = 0;
     int Kravatte = 0;
     int SP800_185 = 0;
@@ -558,7 +547,7 @@ int process(int argc, char* argv[])
         if ((strcmp("--help", argv[i]) == 0) || (strcmp("-h", argv[i]) == 0))
             help = 1;
         else if ((strcmp("--all", argv[i]) == 0) || (strcmp("-a", argv[i]) == 0))
-            SnP = KeccakSponge = KeccakDuplex = KeccakPRG = FIPS202 = Keyak = Ketje = KangarooTwelve = Kravatte = SP800_185 = examples = Xoofff = Xoodyak = 1;
+            SnP = KeccakSponge = KeccakDuplex = KeccakPRG = FIPS202 = KangarooTwelve = Kravatte = SP800_185 = examples = Xoofff = Xoodyak = 1;
         else if ((strcmp("--SnP", argv[i]) == 0) || (strcmp("-p", argv[i]) == 0))
             SnP = 1;
 #if defined (XKCP_has_Sponge_Keccak) || defined(XKCP_has_Duplex_Keccak)
@@ -580,14 +569,6 @@ int process(int argc, char* argv[])
 #ifdef XKCP_has_FIPS202
         else if ((strcmp("--FIPS202", argv[i]) == 0) || (strcmp("-f", argv[i]) == 0))
             FIPS202 = 1;
-#endif
-#ifdef XKCP_has_Keyak
-        else if ((strcmp("--Keyak", argv[i]) == 0) || (strcmp("-y", argv[i]) == 0))
-            Keyak = 1;
-#endif
-#ifdef XKCP_has_Ketje
-        else if ((strcmp("--Ketje", argv[i]) == 0) || (strcmp("-t", argv[i]) == 0))
-            Ketje = 1;
 #endif
         else if ((strcmp("--KangarooTwelve", argv[i]) == 0) || (strcmp("-K12", argv[i]) == 0))
             KangarooTwelve = 1;
@@ -652,17 +633,6 @@ int process(int argc, char* argv[])
     if (FIPS202) {
         testFIPS202();
         genKAT_main();
-    }
-#endif
-#ifdef XKCP_has_Keyak
-    if (Keyak) {
-        testMotorist();
-        testKeyak();
-    }
-#endif
-#ifdef XKCP_has_Ketje
-    if (Ketje) {
-        testKetje();
     }
 #endif
 #ifdef XKCP_has_Kravatte
