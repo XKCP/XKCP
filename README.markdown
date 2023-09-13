@@ -93,7 +93,7 @@ The package contains:
 * [**A benchmarking tool**](tests/Benchmarks/main.c) to measure the timing of the various schemes;
 * [**KeccakSum**](util/KeccakSum/KeccakSum.c) that computes a hash of the file (or multiple files) given in parameter.
 
-Note that, to run the benchmarks on ARM processors, you may need to include the Kernel-PMU module, see [`Kernel-pmu.md`](support/Kernel-PMU/Kernel-pmu.md) for more details.
+Note that, to run the benchmarks on ARM processors, you may need to include the [Kernel-PMU module](https://github.com/XKCP/Kernel-PMU).
 
 
 ## Standalone implementations
