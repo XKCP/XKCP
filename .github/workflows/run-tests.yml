@@ -13,9 +13,14 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v2
 
-      - name: Compile and run unit tests
-        run: |
-          git submodule update --init
-          make generic64/UnitTests
-#          cd bin/generic64
-#          ./UnitTests -p
+      - name: Initialize submodules
+        run: git submodule update --init --recursive
+
+      - name: Compile Unit Tests
+        run: make generic64/UnitTests
+
+      - name: Change to bin/generic64 directory
+        run: cd bin/generic64
+
+      - name: Run Unit Tests
+        run: ./UnitTests -a
