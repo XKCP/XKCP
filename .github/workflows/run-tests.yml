@@ -16,6 +16,9 @@ jobs:
       - name: Initialize submodules
         run: git submodule update --init --recursive
 
+      - name: Install dependencies
+        run: sudo apt-get install -y xsltproc
+
       - name: Compile Unit Tests
         run: make generic64/UnitTests
 
