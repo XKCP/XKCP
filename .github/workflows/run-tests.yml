@@ -22,11 +22,5 @@ jobs:
       - name: Compile Unit Tests
         run: make generic64/UnitTests
 
-      - name: Change to bin/generic64 directory
-        run: cd bin/generic64
-
-      - name: debug dir content
-        run: ls -la
-
       - name: Run Unit Tests
-        run: ./UnitTests -a
+        run: bin/generic64/UnitTests -p
