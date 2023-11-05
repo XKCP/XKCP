@@ -25,5 +25,8 @@ jobs:
       - name: Change to bin/generic64 directory
         run: cd bin/generic64
 
+      - name: debug dir content
+        run: ls -la
+
       - name: Run Unit Tests
         run: ./UnitTests -a
