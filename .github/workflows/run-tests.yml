@@ -23,4 +23,4 @@ jobs:
         run: make generic64/UnitTests
 
       - name: Run Unit Tests
-        run: bin/generic64/UnitTests -K12
+        run: bin/generic64/UnitTests -a
