@@ -318,8 +318,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 void testPermutations()
 {
 #ifdef XKCP_has_KeccakP200
-    // Note: the `KeccakP200_testSnP` is defined in `testSnP.inc`,
-    //  but for it to work, we had to setup the proper `#define`s above.
     KeccakP200_testSnP("KeccakP-200.txt", "Keccak-p[200]",
         (const uint8_t*)"\x73\x1b\x9a\xc1\x78\x5f\xaf\x1a\x48\xf7\x70\x53\x59\x98\x63\x19\x95\x74\xcd\xe8\x14\xbf\x13\xfe\x9f"
     );
