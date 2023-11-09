@@ -115,9 +115,13 @@ For more information on how to use the FIPS 202 functions, see the `SimpleFIPS20
 Keccak-p permutation reduced to 12 rounds (instead of 24), so about twice faster. 
 They are based on the `Sponge construction`, and the `Keccak-p[1600, 12]` permutation.
 
+[//]: # (TODO: add example)
+
 ## KangarooTwelve
 `KangarooTwelve`, or `K12`, is a family of XOFs, based on the `TurboSHAKE128`, hence it also uses the `Keccak-p[1600, 12]` permutation.
 On high-end platforms, it can exploit a high degree of parallelism, whether using multiple cores or the SIMD instruction set of modern processors.
+
+[//]: # (TODO: add example)
 
 # {{Other types of functions}}
 
