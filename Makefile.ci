@@ -1,0 +1,13 @@
+ifeq ($(CI_FORCE_REBUILD),1)
+NOCACHE=--no-cache
+RECREATE=--force-recreate
+else
+NOCACHE=
+RECREATE=
+endif
+ifeq ($(CI_VERBOSE),1)
+BUILDKIT_PROGRESS=plain
+endif
+
+all:
+	DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=$(BUILDKIT_PROGRESS) docker build $(NOCACHE) --build-arg OTHER_PLATFORMS=$(OTHER_PLATFORMS) --file CI/Dockerfile.ci .

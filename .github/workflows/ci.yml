@@ -1,0 +1,28 @@
+name: XKCP CI
+
+# Run this workflow every time a new commit pushed to your repository
+on: push
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Initialize submodules
+      run: git submodule update --init --recursive
+
+    - name: Build and test
+      id: build-image
+      env:
+        CI_VERBOSE: 1
+        # For now, platforms other than x86 and ARM are not activated in the CI
+        # (this concerns mips(el),mips64(el), sparc64, riscv64)
+        # This is not active as XKCP endianness and memory alignment issues must
+        # be resolved in all the low-level layers: once done, this environment
+        # variable can be set to 1.
+        OTHER_PLATFORMS: 0
+      run: |
+        make -f Makefile.ci

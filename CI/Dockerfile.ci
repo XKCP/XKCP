@@ -1,0 +1,71 @@
+FROM debian:bookworm-slim AS builder
+ARG OTHER_PLATFORMS
+ENV OTHER_PLATFORMS $OTHER_PLATFORMS
+
+RUN if [ "$OTHER_PLATFORMS" = 1 ]; then apt-get update        && \
+    apt-get install -qy --no-install-recommends                     \
+        make                                                        \
+        gcc                                                         \
+        gcc-multilib-i686-linux-gnu                                 \
+        libc6-dev-armel-cross                                       \
+        libc6-dev-arm64-cross                                       \
+        gcc-mingw-w64-x86-64                                        \
+        gcc-mingw-w64-i686-win32                                    \
+        gcc-arm-linux-gnueabi                                       \
+        gcc-arm-none-eabi                                           \
+        gcc-aarch64-linux-gnu                                       \
+        qemu-user-static                                            \
+        qemu-system-arm                                             \
+        picolibc-arm-none-eabi                                      \
+        xsltproc                                                    \
+        wine                                                        \
+        xvfb                                                        \
+        gcc-sparc64-linux-gnu                                       \
+        libc6-dev-sparc-sparc64-cross                               \
+        gcc-mips-linux-gnu                                          \
+        gcc-mipsel-linux-gnu                                        \
+        gcc-mips64-linux-gnuabi64                                   \
+        gcc-mips64el-linux-gnuabi64                                 \
+        libc6-dev-mips-cross                                        \
+        libc6-dev-mips32-mips64-cross                               \
+        libc6-dev-mipsel-cross                                      \
+        libc6-dev-mips64-cross                                      \
+        libc6-dev-mips64-mipsel-cross                               \
+        libc6-dev-mips64el-cross                                    \
+        gcc-riscv64-linux-gnu                                       \
+        libc6-dev-riscv64-cross                                     \
+        clang                                                    && \
+    dpkg --add-architecture i386                                 && \
+    apt-get update                                               && \
+    apt-get install -qy --no-install-recommends wine32:i386      && \
+    apt-get clean                                                && \
+    rm -rf /var/lib/apt/lists/; else                                \
+    apt-get update                                               && \
+    apt-get install -qy --no-install-recommends                     \
+        make                                                        \
+        gcc                                                         \
+        gcc-multilib-i686-linux-gnu                                 \
+        libc6-dev-armel-cross                                       \
+        libc6-dev-arm64-cross                                       \
+        gcc-mingw-w64-x86-64                                        \
+        gcc-mingw-w64-i686-win32                                    \
+        gcc-arm-linux-gnueabi                                       \
+        gcc-arm-none-eabi                                           \
+        gcc-aarch64-linux-gnu                                       \
+        qemu-user-static                                            \
+        qemu-system-arm                                             \
+        picolibc-arm-none-eabi                                      \
+        xsltproc                                                    \
+        wine                                                        \
+        xvfb                                                        \
+        clang                                                    && \
+    dpkg --add-architecture i386                                 && \
+    apt-get update                                               && \
+    apt-get install -qy --no-install-recommends wine32:i386      && \
+    apt-get clean                                                && \
+    rm -rf /var/lib/apt/lists/; fi
+
+WORKDIR /build
+COPY ./ ./
+COPY ./CI/ci_tests.sh ./
+RUN sh ci_tests.sh
