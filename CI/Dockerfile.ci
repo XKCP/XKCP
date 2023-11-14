@@ -68,4 +68,7 @@ RUN if [ "$OTHER_PLATFORMS" = 1 ]; then apt-get update        && \
 WORKDIR /build
 COPY ./ ./
 COPY ./CI/ci_tests.sh ./
+# NOTE: the random forces a Docker cache miss to force
+# the execution of the script
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN sh ci_tests.sh
