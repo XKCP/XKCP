@@ -1,6 +1,9 @@
 In this guide, we will provide examples of using the high-level API, with less emphasis on 
 the low-level implementation, since XKCP abstracts the low-level implementation from the user.
 
+Before proceeding with the usage example, please make sure that you have built the XKCP library as described in the [README](../README.md).
+and included it in your C/C++ project.
+
 # Hashing and Extendable output functions (XOFs)
 
 ## FIPS 202
@@ -19,8 +22,6 @@ NIST standardized the following hash functions in FIPS 202:
 
 The suffix `224`, `256`, `384`, and `512` indicate the fixed length of the `digest` in bits.
 
-[//]: # (TODO: verify the above statement)
-
 ### Extendable output functions (XOFs)
 A XOF is a function on bit strings, also called _messages_, in which the output can be extended to any desired length. <br>
 
@@ -35,78 +36,112 @@ The suffix `128` and `256` indicates the desired security level of the function.
 To use any of them in your C/C++ project, you have to first build the FIPS202 library, and include it in your project.
 The following steps illustrate how to do that:
 
-1. From `LowLevel.build`, choose your low level implementation, it has to be one for `Keccak-p[1600]`  
-since the FIPS 202 functions are based on the `Keccak-p 1600`. In the following,
-we will use the unoptimized reference implementation `K1600-ref-64bits`.
-You can find more information about available low-level implementations in the `LowLevel.build` file.
-2. In `HOWTO-customize.build`, add the following line:
-```<target name="FIPS202.a" inherits="FIPS202 KeccakP-1600-reference" />```
-Where `FIPS202` is the name of the high-level target that includes the FIPS 202 functions, 
-more information about the high-level targets can be found in the `HighLevel.build` file.
-3. From the root of the XKCP repository, run `make FIPS202.a`
-4. In `bin` you will find the static library `FIPS202.a`, and the corresponding headers directory `FIPS202.a.headers`.
-You can copy those to your project directory.
-5. In your C/C++ main file, include the header `#include "FIPS202.a.headers/SimpleFIPS202.h"
-6. You are ready to use the FIPS 202 functions in your code. See below for an example of using the `SHA3_256` and `SHAKE128` functions.
-7. Before executing the code, you have to compile the code with the static library `FIPS202.a`.
-   When using `gcc`, this step might look like this:
-    ```bash
-    gcc main.c FIPS202_reference.a;
-    ```
-8. Run the executable:
-    ```bash
-    ./a.out
-    ```
-
 #### Example of using the `SHA3_256` hash function
     
-Add the following code to your C/C++ main file:
+<details open>
+    <summary>Simple usage</summary>
 
-```c
-// your input message
-const unsigned char *input = 
-        (const unsigned char *) "The random message to hash";
+   ```c
+   #include "SimpleFIPS202.h"
 
-int OUTPUT_LENGTH = 32;
-unsigned char output[OUTPUT_LENGTH];
-
-int result = SHA3_256(output, input, strlen((const char *) input));
-
-// returning 0 means success
-assert(result == 0);
-
-// printing the hash in hexadecimal format
-for (int i = 0; i < OUTPUT_LENGTH; i++)
-    printf("\\x%02x", output[i]);
- 
-printf("\n");
+   int main() {
+      // your input message
+      const unsigned char *input = 
+              (const unsigned char *) "The random message to hash";
+      
+      int OUTPUT_LENGTH = 32;
+      unsigned char output[OUTPUT_LENGTH];
+      
+      int result = SHA3_256(output, input, strlen((const char *) input));
+      
+      // returning 0 means success
+      assert(result == 0);
+      
+      // printing the hash in hexadecimal format
+      for (int i = 0; i < OUTPUT_LENGTH; i++)
+          printf("\\x%02x", output[i]);
+       
+      printf("\n");
+   }
 ```
+</details>
+
+<details open>
+    <summary>Advanced: Feeding input in chunks</summary>
+    Sometimes, the input of your function is too long to be stored in memory and passed to the function at once, 
+    think of a big file for example. In such cases, you can feed the input as chunks to the hash function, and at the end, 
+    get the output at once or in chunks as well (We'll show an example of that later, with the SHAKE128 XOF).
+    
+   ```c
+    int main() {
+        const int CHUNKS_COUNT = 4;
+
+        const unsigned char *inputs[CHUNKS_COUNT] = {
+            (const unsigned char *) "Hello, ",
+            (const unsigned char *) "this is ",
+            (const unsigned char *) "my custom ",
+            (const unsigned char *) "message!"
+        };
+
+        const unsigned char *expected_output = (const unsigned char *)
+            "\x26\x62\x38\x57\xFC\xe3\x9A\xc3\xF2\xFC\xAC\xFA\xe6\x45\x30\xCB"
+            "\x75\xB0\x17\x16\xFD\xB3\x4C\x72\xFB\xFE\x97\xAA\x89\xC2\xDB\x9B";
+
+        Keccak_HashInstance hi;
+        HashReturn result;
+
+        // initialize the hash instance
+        result = Keccak_HashInitialize_SHA3_256(&hi);
+        assert(result == KECCAK_SUCCESS);
+
+        for (int i = 0; i < CHUNKS_COUNT; i++) {
+            // feed the input in chunks
+            Keccak_HashUpdate(&hi, inputs[i], strlen((const char *) inputs[i]) * 8);
+            assert(result == KECCAK_SUCCESS);
+        }
+
+        unsigned char output[32];
+
+        // get the output
+        result = Keccak_HashFinal(&hi, output);
+        assert(result == KECCAK_SUCCESS);
+
+        assert(memcmp(output, expected_output, 32) == 0);
+    }
+```
+</details>
 
 #### Example of using the `SHAKE128` XOF
 
-Add the following code to your C/C++ main file:
+<details open>
+  <summary>Add the following code to your C/C++ main file:</summary>
 
-```c
- // your input message
- const unsigned char *input = 
-         (const unsigned char *) "The random message to hash";
+   ```c
+    #include "SimpleFIPS202.h"
 
-// you can choose any output length
-int OUTPUT_LENGTH = 64;
+    int main() {
+        // your input message
+        const unsigned char *input = (const unsigned char *) "The random message to hash";
 
- unsigned char output[OUTPUT_LENGTH];
+        // you can choose any output length
+        int OUTPUT_LENGTH = 64;
 
- int result = SHAKE128(output, OUTPUT_LENGTH, input, strlen((const char *) input));
+        unsigned char output[OUTPUT_LENGTH];
 
- // returning 0 means success
- assert(result == 0);
+        int result = SHAKE128(output, OUTPUT_LENGTH, input, strlen((const char *) input));
 
- // printing the hash in hexadecimal format
- for (int i = 0; i < OUTPUT_LENGTH; i++)
-    printf("\\x%02x", output[i]);
- 
- printf("\n");
+        // returning 0 means success
+        assert(result == 0);
+
+        // printing the hash in hexadecimal format
+        for (int i = 0; i < OUTPUT_LENGTH; i++)
+           printf("\\x%02x", output[i]);
+        printf("\n");
+
+        // ...
+    }
 ```
+</details>
 
 For more information on how to use the FIPS 202 functions, see the `SimpleFIPS202.h` header file.
 
