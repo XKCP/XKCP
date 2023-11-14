@@ -48,7 +48,7 @@ The following steps illustrate how to do that:
       // your input message
       const unsigned char *input = 
               (const unsigned char *) "The random message to hash";
-      
+
       int OUTPUT_LENGTH = 32;
       unsigned char output[OUTPUT_LENGTH];
       
@@ -60,14 +60,15 @@ The following steps illustrate how to do that:
       // printing the hash in hexadecimal format
       for (int i = 0; i < OUTPUT_LENGTH; i++)
           printf("\\x%02x", output[i]);
-       
       printf("\n");
+
+      // ...
    }
-```
+   ```
 </details>
 
 <details open>
-    <summary>Advanced: Feeding input in chunks</summary>
+    <summary>Advanced: Chunked input</summary>
     Sometimes, the input of your function is too long to be stored in memory and passed to the function at once, 
     think of a big file for example. In such cases, you can feed the input as chunks to the hash function, and at the end, 
     get the output at once or in chunks as well (We'll show an example of that later, with the SHAKE128 XOF).
@@ -83,10 +84,6 @@ The following steps illustrate how to do that:
             (const unsigned char *) "message!"
         };
 
-        const unsigned char *expected_output = (const unsigned char *)
-            "\x26\x62\x38\x57\xFC\xe3\x9A\xc3\xF2\xFC\xAC\xFA\xe6\x45\x30\xCB"
-            "\x75\xB0\x17\x16\xFD\xB3\x4C\x72\xFB\xFE\x97\xAA\x89\xC2\xDB\x9B";
-
         Keccak_HashInstance hi;
         HashReturn result;
 
@@ -100,21 +97,27 @@ The following steps illustrate how to do that:
             assert(result == KECCAK_SUCCESS);
         }
 
-        unsigned char output[32];
+        int OUTPUT_LENGTH = 32;
+        unsigned char output[OUTPUT_LENGTH];
 
         // get the output
         result = Keccak_HashFinal(&hi, output);
         assert(result == KECCAK_SUCCESS);
 
-        assert(memcmp(output, expected_output, 32) == 0);
+        // printing the hash in hexadecimal format
+        for (int i = 0; i < OUTPUT_LENGTH; i++)
+            printf("\\x%02x", output[i]);
+        printf("\n"); 
+        
+        // ...
     }
-```
+   ```
 </details>
 
 #### Example of using the `SHAKE128` XOF
 
 <details open>
-  <summary>Add the following code to your C/C++ main file:</summary>
+   <summary>Simple usage</summary>
 
    ```c
     #include "SimpleFIPS202.h"
@@ -125,11 +128,9 @@ The following steps illustrate how to do that:
 
         // you can choose any output length
         int OUTPUT_LENGTH = 64;
-
         unsigned char output[OUTPUT_LENGTH];
 
         int result = SHAKE128(output, OUTPUT_LENGTH, input, strlen((const char *) input));
-
         // returning 0 means success
         assert(result == 0);
 
@@ -140,7 +141,62 @@ The following steps illustrate how to do that:
 
         // ...
     }
-```
+   ```
+</details>
+
+<details open>
+    <summary>Advanced: Chunked output</summary>
+    Since a XOF function has an arbitrary output length, you might want to read the output in chunks.
+    
+   ```c
+    int main() {
+        // your input message
+        const unsigned char *input = (const unsigned char *) "The random message to hash";
+
+        Keccak_HashInstance hi;
+        HashReturn result;
+
+        // initialize the hash instance
+        result = Keccak_HashInitialize_SHAKE128(&hi);
+        assert(result == KECCAK_SUCCESS);
+
+        // feed the input
+        Keccak_HashUpdate(&hi, input, strlen((const char *) input) * 8);
+        assert(result == KECCAK_SUCCESS);
+
+        // call `Keccak_HashFinal` to mark the end of the input
+        result = Keccak_HashFinal(&hi, NULL);
+        assert(result == KECCAK_SUCCESS);
+
+        // choose the output chunk length
+        const int OUTPUT_CHUNK_LENGTH = 16;
+        unsigned char chunk[OUTPUT_CHUNK_LENGTH];
+
+        // choose the number of output chunks
+        const int OUTPUT_CHUNKS_COUNT = 4;
+
+        // initialize the full output
+        const int FULL_OUTPUT_LENGTH = OUTPUT_CHUNK_LENGTH * OUTPUT_CHUNKS_COUNT;
+        unsigned char output[FULL_OUTPUT_LENGTH];
+
+        for (int i = 0; i < OUTPUT_CHUNKS_COUNT; i++) {
+            result = Keccak_HashSqueeze(&hi, chunk, OUTPUT_CHUNK_LENGTH * 8);
+            assert(result == KECCAK_SUCCESS);
+
+            // incrementally build the output, like writing to a file.
+            // for simplicity, we use `memcpy` in this example:
+            memcpy(output + (i * OUTPUT_CHUNK_LENGTH), chunk, OUTPUT_CHUNK_LENGTH);
+        }
+
+        // printing the output chunk in hexadecimal format
+        for (int i = 0; i < FULL_OUTPUT_LENGTH; i++)
+            printf("\\x%02x", output[i]);
+        printf("\n");
+
+        return 0;
+}
+   ```
+
 </details>
 
 For more information on how to use the FIPS 202 functions, see the `SimpleFIPS202.h` header file.
