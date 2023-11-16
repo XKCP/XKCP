@@ -25,20 +25,75 @@ else
 	echo "\n\n\nSkipping non-x86 and non-ARM platforms, as OTHER_PLATFORMS has not been defined ...\n\n\n"
 fi
 
+### Current running CPU native support
+ARCH=`arch`
+SSSE3=`grep -o ssse3 /proc/cpuinfo || /bin/true`
+AVX=`grep -o 'avx ' /proc/cpuinfo || /bin/true`
+AVX2=`grep -o avx2 /proc/cpuinfo || /bin/true`
+AVX512VL=`grep -o avx512vl /proc/cpuinfo || /bin/true`
+AVX512F=`grep -o avx512f /proc/cpuinfo || /bin/true`
+
+echo "======== Symmary of the running CPU ======="
+echo "ARCH     : $ARCH"
+echo "SSSE3    : $SSSE3"
+echo "AVX      : $AVX"
+echo "AVX2     : $AVX2"
+echo "AVX512VL : $AVX512VL"
+echo "AVX512F  : $AVX512F"
+echo "==========================================="
+
 ## x86_64 targets using the local host compiler (gcc or clang)
 for t in generic32 generic32lc generic64 generic64lc SSSE3 AVX AVX2 AVX2noAsm AVX512 AVX512noAsm; do
-	for c in gcc clang x86_64-w64-mingw32-gcc; do
+	for c in x86_64-linux-gnu-gcc x86_64-w64-mingw32-gcc gcc clang; do
 		echo "=========== Compiling $t (with $c compiler)\n\n\n"
 		make clean && CC=$c make $t/UnitTests -j`nproc`
-		# NOTE: AVX512 is not supported by Qemu as of now, so do not test them
 		if echo "$t" | grep -q "AVX512"; then
-			echo "\n\n\n=========== Skipping run test for $t (compiled with $c compiler): AVX512 not supported yet by Qemu (and not supported by native CI CPUs)\n\n\n"
+			# NOTE: AVX512 is not supported by Qemu as of now, so dynamically check if the native CPU supports it or not
+			if [ "$AVX512VL" != "" ] && [ "$AVX512F" != "" ]; then
+				echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64 (native test as AVX512 is not supported yet by Qemu)\n\n\n"
+				./bin/$t/UnitTests -p
+			else
+				echo "\n\n\n=========== Skipping run test for $t (compiled with $c compiler): AVX512 not supported yet by Qemu and not supported by the native CI CPU\n\n\n"
+			fi
 		else
 			if echo "$c" | grep -q "mingw"; then
+				WINEOK="NOK"
 				# NOTE: for mingw targets, it is complicated to emulate non generic instruction set on any CPU
+				# Hence, we check that we are 
 				if echo "$t" | grep -q "generic"; then
+					# For generic targets, we mainly check that this is a x86_64 platform for the
+					# x86 compilers
+					if echo "$c" | grep -q "x86"; then
+						if [ "$ARCH" = "x86_64" ]; then
+							WINEOK="OK"
+						fi
+					fi
+				else
+					# We check if the native CPU supports of the target instruction set
+					if echo "$t" | grep -q "SSSE3"; then
+						if [ "$SSSE3" != "" ]; then
+							WINEOK="OK"
+						fi
+					fi
+					if [ "$t" = "AVX" ]; then
+						if [ "$AVX" != "" ]; then
+							WINEOK="OK"
+						fi
+					fi
+					if echo "$t" | grep -q "AVX2"; then
+						if [ "$AVX2" != "" ]; then
+							WINEOK="OK"
+						fi
+					fi
+					if echo "$t" | grep -q "AVX512"; then
+						if [ "$AVX512VL" != "" ] && [ "$AVX512F" != "" ]; then
+							WINEOK="OK"
+						fi
+					fi
+				fi
+				if [ "$WINEOK" = "OK" ]; then
 					echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64 windows\n\n\n"
-					echo "============== (emulating with wine)"
+					echo "============== (emulating with wine, native CPU support checked)"
 					wine ./bin/$t/UnitTests.exe -p
 				fi
 			else
@@ -55,8 +110,16 @@ for t in generic32 generic32lc generic64 generic64lc; do
 		echo "=========== Compiling $t (with $c compiler)\n\n\n"
 		make clean && CC=$c EXTRA_CFLAGS="-static" make $t/UnitTests -j`nproc`
 		if echo "$c" | grep -q "mingw"; then
-			# NOTE: for mingw targets, it is complicated to emulate non generic instruction set on any CPU
-			if echo "$t" | grep -q "generic"; then
+			WINEOK="NOK"
+			# NOTE: we should be ensured here that we have a 'generic' target
+			# For generic targets, we mainly check that this is a x86_64 platform for the
+			# x86 compilers
+			if echo "$c" | grep -q "i686"; then
+				if [ "$ARCH" = "x86_64" ] || [ "$ARCH" = "i386" ]; then
+					WINEOK="OK"
+				fi
+			fi
+			if [ "$WINEOK" = "OK" ]; then
 				echo "\n\n\n=========== Testing $t (compiled with $c compiler) for i386 windows\n\n\n"
 				echo "============== (emulating with wine)"
 				wine ./bin/$t/UnitTests.exe -p
