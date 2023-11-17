@@ -74,6 +74,8 @@ The following steps illustrate how to do that:
     get the output at once or in chunks as well (We'll show an example of that later, with the SHAKE128 XOF).
     
    ```c
+    #include "KeccakHash.h"
+
     int main() {
         const int CHUNKS_COUNT = 4;
 
@@ -149,6 +151,8 @@ The following steps illustrate how to do that:
     Since a XOF function has an arbitrary output length, you might want to read the output in chunks.
     
    ```c
+    #include "KeccakHash.h"
+
     int main() {
         // your input message
         const unsigned char *input = (const unsigned char *) "The random message to hash";
@@ -199,7 +203,7 @@ The following steps illustrate how to do that:
 
 </details>
 
-For more information on how to use the FIPS 202 functions, see the `SimpleFIPS202.h` header file.
+For more information on how to use the FIPS 202 functions, see the `SimpleFIPS202.h` and `KeccakHash.h` headers.
 
 ## TurboSHAKE
 `TurboSHAKE` is a family of fast and secure XOFs. These are just like the SHAKE functions of FIPS 202, but with the 
