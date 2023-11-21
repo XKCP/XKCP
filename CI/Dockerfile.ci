@@ -2,7 +2,7 @@ FROM debian:bookworm-slim AS builder
 ARG OTHER_PLATFORMS
 ENV OTHER_PLATFORMS $OTHER_PLATFORMS
 
-RUN if [ "$OTHER_PLATFORMS" = 1 ]; then apt-get update        && \
+RUN if [ "$OTHER_PLATFORMS" = "1" ]; then apt-get update        && \
     apt-get install -qy --no-install-recommends                     \
         make                                                        \
         gcc                                                         \
@@ -71,4 +71,18 @@ COPY ./CI/ci_tests.sh ./
 # NOTE: the random forces a Docker cache miss to force
 # the execution of the script
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-RUN sh ci_tests.sh
+
+RUN sh ci_tests.sh; echo $? > artifacts/status; tar -czvf artifacts.tar.gz artifacts/
+
+# Prepare our binary
+ARG FAILURE_ARTIFACTS
+ENV FAILURE_ARTIFACTS $FAILURE_ARTIFACTS
+RUN  if [ "$FAILURE_ARTIFACTS" = "1" ]; then echo "#include <sys/syscall.h>\n#include <unistd.h>\nint main() { unlink(\"status\"); _exit(0); }" > /tmp/status.c; else echo "#include <unistd.h>\nint main(){ unlink(\"status\"); _exit(`cat artifacts/status`); }" > /tmp/status.c; fi
+RUN gcc -static -nostartfiles /tmp/status.c -o /build/status;
+
+# Copy the produced artifacts to the host
+FROM scratch AS artifacts
+COPY --from=builder /build/artifacts.tar.gz ./artifacts.tar.gz
+COPY --from=builder /build/status ./status
+# Execute our failure or success binary
+RUN [ "/status" ]
