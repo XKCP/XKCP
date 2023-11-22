@@ -77,9 +77,9 @@ The following steps illustrate how to do that:
     #include "KeccakHash.h"
 
     int main() {
-        const int CHUNKS_COUNT = 4;
+        const int INPUT_CHUNKS_COUNT = 4;
 
-        const unsigned char *inputs[CHUNKS_COUNT] = {
+        const unsigned char *input[INPUT_CHUNKS_COUNT] = {
             (const unsigned char *) "Hello, ",
             (const unsigned char *) "this is ",
             (const unsigned char *) "my custom ",
@@ -93,9 +93,9 @@ The following steps illustrate how to do that:
         result = Keccak_HashInitialize_SHA3_256(&hi);
         assert(result == KECCAK_SUCCESS);
 
-        for (int i = 0; i < CHUNKS_COUNT; i++) {
+        for (int i = 0; i < INPUT_CHUNKS_COUNT; i++) {
             // feed the input in chunks
-            Keccak_HashUpdate(&hi, inputs[i], strlen((const char *) inputs[i]) * 8);
+            Keccak_HashUpdate(&hi, input[i], strlen((const char *) input[i]) * 8);
             assert(result == KECCAK_SUCCESS);
         }
 
@@ -302,12 +302,93 @@ We will give usage examples of the `TurboSHAKE128` function, but the same applie
         // ...
     }
    ```
+</details>
 
 ## KangarooTwelve
 `KangarooTwelve`, or `K12`, is a family of XOFs, based on the `TurboSHAKE128`, hence it also uses the `Keccak-p[1600, 12]` permutation.
 On high-end platforms, it can exploit a high degree of parallelism, whether using multiple cores or the SIMD instruction set of modern processors.
 
-[//]: # (TODO: add example)
+We will give 2 examples of using the `KangarooTwelve` function, one for the simple usage, with single input single output, then a more advanced example, with chunked input/output.
+
+<details open>
+   <summary>Simple usage</summary>
+
+   ```c
+    #include "KangarooTwelve.h"
+
+    int main() {
+        const unsigned char *input = (const unsigned char *) "The random message to hash";
+
+        const int OUTPUT_LENGTH = 64;
+        unsigned char output[OUTPUT_LENGTH];
+
+        int result = KangarooTwelve(input, strlen((const char *) input), output, OUTPUT_LENGTH, NULL, 0);
+        assert(result == 0);  // returning 0 means success
+
+        // printing the hash in hexadecimal format
+        for (int i = 0; i < OUTPUT_LENGTH; i++)
+           printf("\\x%02x", output[i]);
+        printf("\n");
+
+        // ...
+    }
+   ```
+</details>
+
+<details open>
+    <summary>Advanced: Chunked input/output</summary>
+    We will feed the input in chunks, and get the output in chunks as well.
+    
+   ```c
+    #include "KangarooTwelve.h"
+
+    int main() {
+        const int INPUT_CHUNKS_COUNT = 4;
+
+        const unsigned char *input[INPUT_CHUNKS_COUNT] = {
+            (const unsigned char *) "The ",
+            (const unsigned char *) "random ",
+            (const unsigned char *) "message ",
+            (const unsigned char *) "to hash"
+        };
+
+        KangarooTwelve_Instance kti;
+
+        int result = KangarooTwelve_Initialize(&kti, 0);
+        assert(result == 0);
+
+        for (int i = 0; i < INPUT_CHUNKS_COUNT; i++) {
+            result = KangarooTwelve_Update(&kti, input[i], strlen((const char *) input[i]));
+            assert(result == 0);
+        }
+
+        result = KangarooTwelve_Final(&kti, NULL, NULL, 0);
+        assert(result == 0);
+
+        const int OUTPUT_CHUNK_LENGTH = 16;
+        unsigned char chunk[OUTPUT_CHUNK_LENGTH];
+
+        const int OUTPUT_CHUNKS_COUNT = 4;
+
+        const int FULL_OUTPUT_LENGTH = OUTPUT_CHUNK_LENGTH * OUTPUT_CHUNKS_COUNT;
+        unsigned char output[FULL_OUTPUT_LENGTH];
+
+        for (int i = 0; i < OUTPUT_CHUNKS_COUNT; i++) {
+            result = KangarooTwelve_Squeeze(&kti, chunk, OUTPUT_CHUNK_LENGTH);
+            assert(result == 0);
+
+            memcpy(output + (i * OUTPUT_CHUNK_LENGTH), chunk, OUTPUT_CHUNK_LENGTH);
+        }
+
+        // printing the output chunk in hexadecimal format
+        for (int i = 0; i < FULL_OUTPUT_LENGTH; i++)
+            printf("\\x%02x", output[i]);
+        printf("\n");
+
+        // ...
+    }
+   ```
+
 
 # {{Other types of functions}}
 
