@@ -1,0 +1,88 @@
+FROM debian:bookworm-slim AS builder
+ARG OTHER_PLATFORMS
+ENV OTHER_PLATFORMS $OTHER_PLATFORMS
+
+RUN if [ "$OTHER_PLATFORMS" = "1" ]; then apt-get update        && \
+    apt-get install -qy --no-install-recommends                     \
+        make                                                        \
+        gcc                                                         \
+        gcc-multilib-i686-linux-gnu                                 \
+        libc6-dev-armel-cross                                       \
+        libc6-dev-arm64-cross                                       \
+        gcc-mingw-w64-x86-64                                        \
+        gcc-mingw-w64-i686-win32                                    \
+        gcc-arm-linux-gnueabi                                       \
+        gcc-arm-none-eabi                                           \
+        gcc-aarch64-linux-gnu                                       \
+        qemu-user-static                                            \
+        qemu-system-arm                                             \
+        picolibc-arm-none-eabi                                      \
+        xsltproc                                                    \
+        wine                                                        \
+        xvfb                                                        \
+        gcc-sparc64-linux-gnu                                       \
+        libc6-dev-sparc-sparc64-cross                               \
+        gcc-mips-linux-gnu                                          \
+        gcc-mipsel-linux-gnu                                        \
+        gcc-mips64-linux-gnuabi64                                   \
+        gcc-mips64el-linux-gnuabi64                                 \
+        libc6-dev-mips-cross                                        \
+        libc6-dev-mips32-mips64-cross                               \
+        libc6-dev-mipsel-cross                                      \
+        libc6-dev-mips64-cross                                      \
+        libc6-dev-mips64-mipsel-cross                               \
+        libc6-dev-mips64el-cross                                    \
+        gcc-riscv64-linux-gnu                                       \
+        libc6-dev-riscv64-cross                                     \
+        clang                                                    && \
+    dpkg --add-architecture i386                                 && \
+    apt-get update                                               && \
+    apt-get install -qy --no-install-recommends wine32:i386      && \
+    apt-get clean                                                && \
+    rm -rf /var/lib/apt/lists/; else                                \
+    apt-get update                                               && \
+    apt-get install -qy --no-install-recommends                     \
+        make                                                        \
+        gcc                                                         \
+        gcc-multilib-i686-linux-gnu                                 \
+        libc6-dev-armel-cross                                       \
+        libc6-dev-arm64-cross                                       \
+        gcc-mingw-w64-x86-64                                        \
+        gcc-mingw-w64-i686-win32                                    \
+        gcc-arm-linux-gnueabi                                       \
+        gcc-arm-none-eabi                                           \
+        gcc-aarch64-linux-gnu                                       \
+        qemu-user-static                                            \
+        qemu-system-arm                                             \
+        picolibc-arm-none-eabi                                      \
+        xsltproc                                                    \
+        wine                                                        \
+        xvfb                                                        \
+        clang                                                    && \
+    dpkg --add-architecture i386                                 && \
+    apt-get update                                               && \
+    apt-get install -qy --no-install-recommends wine32:i386      && \
+    apt-get clean                                                && \
+    rm -rf /var/lib/apt/lists/; fi
+
+WORKDIR /build
+COPY ./ ./
+COPY ./CI/ci_tests.sh ./
+# NOTE: the random forces a Docker cache miss to force
+# the execution of the script
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
+RUN sh ci_tests.sh; echo $? > artifacts/status; tar -czvf artifacts.tar.gz artifacts/
+
+# Prepare our binary
+ARG FAILURE_ARTIFACTS
+ENV FAILURE_ARTIFACTS $FAILURE_ARTIFACTS
+RUN  if [ "$FAILURE_ARTIFACTS" = "1" ]; then echo "#include <sys/syscall.h>\n#include <unistd.h>\nint main() { unlink(\"status\"); _exit(0); }" > /tmp/status.c; else echo "#include <unistd.h>\nint main(){ unlink(\"status\"); _exit(`cat artifacts/status`); }" > /tmp/status.c; fi
+RUN gcc -static -nostartfiles /tmp/status.c -o /build/status;
+
+# Copy the produced artifacts to the host
+FROM scratch AS artifacts
+COPY --from=builder /build/artifacts.tar.gz ./artifacts.tar.gz
+COPY --from=builder /build/status ./status
+# Execute our failure or success binary
+RUN [ "/status" ]
