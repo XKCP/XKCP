@@ -210,7 +210,98 @@ For more information on how to use the FIPS 202 functions, see the `SimpleFIPS20
 Keccak-p permutation reduced to 12 rounds (instead of 24), so about twice faster. 
 They are based on the `Sponge construction`, and the `Keccak-p[1600, 12]` permutation.
 
-[//]: # (TODO: add example)
+There are 2 main functions in this family:
+- TurboSHAKE128
+- TurboSHAKE256
+
+The suffix `128` and `256` indicates the desired security level of the function.
+
+We will give usage examples of the `TurboSHAKE128` function, but the same applies to the `TurboSHAKE256` function.
+
+<details open>
+   <summary>Simple usage</summary>
+
+   ```c
+    #include "TurboSHAKE.h"
+
+    int main() {
+        // your input message
+        const unsigned char *input = (const unsigned char *) "The random message to hash";
+
+        // you can choose any output length
+        int OUTPUT_LENGTH = 512;
+        unsigned char output[OUTPUT_LENGTH];
+
+        // choose a domain separation in the range `[0x01, 0x02, .. , 0x7F]`
+        unsigned char domain = 0x1F;
+
+        int result = TurboSHAKE(256, input, strlen((const char *) input), domain, output, OUTPUT_LENGTH);
+        assert(result == 0);  // returning 0 means success
+
+        // printing the hash in hexadecimal format
+        for (int i = 0; i < OUTPUT_LENGTH; i++)
+           printf("\\x%02x", output[i]);
+        printf("\n");
+
+        // ...
+    }
+   ```
+</details>
+
+<details open>
+    <summary>Advanced: Chunked output</summary>
+    Since a XOF function has an arbitrary output length, you might want to read the output in chunks.
+    
+   ```c
+    #include "TurboSHAKE.h"
+
+    int main() {
+        // your input message
+        const unsigned char *input = (const unsigned char *) "The random message to hash";
+
+        TurboSHAKE_Instance tsi;
+        
+        // initialize the turboSHAKE instance
+        int result = TurboSHAKE_Initialize(&tsi, 256);
+        assert(result == 0);
+
+        // feed the input
+        result = TurboSHAKE_Absorb(&tsi, input, strlen((const char *) input));
+        assert(result == 0);
+
+        // choose a domain separation in the range `[0x01, 0x02, .. , 0x7F]`
+        unsigned char domain = 0x1F;
+        result = TurboSHAKE_AbsorbDomainSeparationByte(&tsi, domain);
+        assert(result == 0);
+
+        // choose the output chunk length
+        const int OUTPUT_CHUNK_LENGTH = 16;
+        unsigned char chunk[OUTPUT_CHUNK_LENGTH];
+
+        // choose the number of output chunks
+        const int OUTPUT_CHUNKS_COUNT = 4;
+
+        // initialize the full output
+        const int FULL_OUTPUT_LENGTH = OUTPUT_CHUNK_LENGTH * OUTPUT_CHUNKS_COUNT;
+        unsigned char output[FULL_OUTPUT_LENGTH];
+
+        for (int i = 0; i < OUTPUT_CHUNKS_COUNT; i++) {
+            result = TurboSHAKE_Squeeze(&tsi, output, OUTPUT_CHUNK_LENGTH);
+            assert(result == 0);
+
+            // incrementally build the output, like writing to a file.
+            // for simplicity, we use `memcpy` in this example:
+            memcpy(output + (i * OUTPUT_CHUNK_LENGTH), chunk, OUTPUT_CHUNK_LENGTH);
+        }
+
+        // printing the output chunk in hexadecimal format
+        for (int i = 0; i < FULL_OUTPUT_LENGTH; i++)
+            printf("\\x%02x", output[i]);
+        printf("\n");
+
+        // ...
+    }
+   ```
 
 ## KangarooTwelve
 `KangarooTwelve`, or `K12`, is a family of XOFs, based on the `TurboSHAKE128`, hence it also uses the `Keccak-p[1600, 12]` permutation.
