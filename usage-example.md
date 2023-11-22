@@ -49,8 +49,8 @@ The following steps illustrate how to do that:
       const unsigned char *input = 
               (const unsigned char *) "The random message to hash";
 
-      int OUTPUT_LENGTH = 32;
-      unsigned char output[OUTPUT_LENGTH];
+      int outputByteLen = 32;
+      unsigned char output[outputByteLen];
       
       int result = SHA3_256(output, input, strlen((const char *) input));
       
@@ -58,7 +58,7 @@ The following steps illustrate how to do that:
       assert(result == 0);
       
       // printing the hash in hexadecimal format
-      for (int i = 0; i < OUTPUT_LENGTH; i++)
+      for (int i = 0; i < outputByteLen; i++)
           printf("\\x%02x", output[i]);
       printf("\n");
 
@@ -77,9 +77,9 @@ The following steps illustrate how to do that:
     #include "KeccakHash.h"
 
     int main() {
-        const int INPUT_CHUNKS_COUNT = 4;
+        const int inputChunksCount = 4;
 
-        const unsigned char *input[INPUT_CHUNKS_COUNT] = {
+        const unsigned char *input[inputChunksCount] = {
             (const unsigned char *) "Hello, ",
             (const unsigned char *) "this is ",
             (const unsigned char *) "my custom ",
@@ -93,21 +93,21 @@ The following steps illustrate how to do that:
         result = Keccak_HashInitialize_SHA3_256(&hi);
         assert(result == KECCAK_SUCCESS);
 
-        for (int i = 0; i < INPUT_CHUNKS_COUNT; i++) {
+        for (int i = 0; i < inputChunksCount; i++) {
             // feed the input in chunks
             Keccak_HashUpdate(&hi, input[i], strlen((const char *) input[i]) * 8);
             assert(result == KECCAK_SUCCESS);
         }
 
-        int OUTPUT_LENGTH = 32;
-        unsigned char output[OUTPUT_LENGTH];
+        int outputByteLen = 32;
+        unsigned char output[outputByteLen];
 
         // get the output
         result = Keccak_HashFinal(&hi, output);
         assert(result == KECCAK_SUCCESS);
 
         // printing the hash in hexadecimal format
-        for (int i = 0; i < OUTPUT_LENGTH; i++)
+        for (int i = 0; i < outputByteLen; i++)
             printf("\\x%02x", output[i]);
         printf("\n"); 
         
@@ -129,15 +129,15 @@ The following steps illustrate how to do that:
         const unsigned char *input = (const unsigned char *) "The random message to hash";
 
         // you can choose any output length
-        int OUTPUT_LENGTH = 64;
-        unsigned char output[OUTPUT_LENGTH];
+        int outputByteLen = 64;
+        unsigned char output[outputByteLen];
 
-        int result = SHAKE128(output, OUTPUT_LENGTH, input, strlen((const char *) input));
+        int result = SHAKE128(output, outputByteLen, input, strlen((const char *) input));
         // returning 0 means success
         assert(result == 0);
 
         // printing the hash in hexadecimal format
-        for (int i = 0; i < OUTPUT_LENGTH; i++)
+        for (int i = 0; i < outputByteLen; i++)
            printf("\\x%02x", output[i]);
         printf("\n");
 
@@ -173,32 +173,32 @@ The following steps illustrate how to do that:
         assert(result == KECCAK_SUCCESS);
 
         // choose the output chunk length
-        const int OUTPUT_CHUNK_LENGTH = 16;
-        unsigned char chunk[OUTPUT_CHUNK_LENGTH];
+        const int outputChunkByteLen = 16;
+        unsigned char chunk[outputChunkByteLen];
 
         // choose the number of output chunks
-        const int OUTPUT_CHUNKS_COUNT = 4;
+        const int outputChunksCount = 4;
 
         // initialize the full output
-        const int FULL_OUTPUT_LENGTH = OUTPUT_CHUNK_LENGTH * OUTPUT_CHUNKS_COUNT;
-        unsigned char output[FULL_OUTPUT_LENGTH];
+        const int fullOutputByteLen = outputChunkByteLen * outputChunksCount;
+        unsigned char output[fullOutputByteLen];
 
-        for (int i = 0; i < OUTPUT_CHUNKS_COUNT; i++) {
-            result = Keccak_HashSqueeze(&hi, chunk, OUTPUT_CHUNK_LENGTH * 8);
+        for (int i = 0; i < outputChunksCount; i++) {
+            result = Keccak_HashSqueeze(&hi, chunk, outputChunkByteLen * 8);
             assert(result == KECCAK_SUCCESS);
 
             // incrementally build the output, like writing to a file.
             // for simplicity, we use `memcpy` in this example:
-            memcpy(output + (i * OUTPUT_CHUNK_LENGTH), chunk, OUTPUT_CHUNK_LENGTH);
+            memcpy(output + (i * outputChunkByteLen), chunk, outputChunkByteLen);
         }
 
         // printing the output chunk in hexadecimal format
-        for (int i = 0; i < FULL_OUTPUT_LENGTH; i++)
+        for (int i = 0; i < fullOutputByteLen; i++)
             printf("\\x%02x", output[i]);
         printf("\n");
 
-        return 0;
-}
+        // ...
+    }
    ```
 
 </details>
@@ -229,17 +229,17 @@ We will give usage examples of the `TurboSHAKE128` function, but the same applie
         const unsigned char *input = (const unsigned char *) "The random message to hash";
 
         // you can choose any output length
-        int OUTPUT_LENGTH = 512;
-        unsigned char output[OUTPUT_LENGTH];
+        int outputByteLen = 512;
+        unsigned char output[outputByteLen];
 
         // choose a domain separation in the range `[0x01, 0x02, .. , 0x7F]`
         unsigned char domain = 0x1F;
 
-        int result = TurboSHAKE(256, input, strlen((const char *) input), domain, output, OUTPUT_LENGTH);
+        int result = TurboSHAKE(256, input, strlen((const char *) input), domain, output, outputByteLen);
         assert(result == 0);  // returning 0 means success
 
         // printing the hash in hexadecimal format
-        for (int i = 0; i < OUTPUT_LENGTH; i++)
+        for (int i = 0; i < outputByteLen; i++)
            printf("\\x%02x", output[i]);
         printf("\n");
 
@@ -275,27 +275,27 @@ We will give usage examples of the `TurboSHAKE128` function, but the same applie
         assert(result == 0);
 
         // choose the output chunk length
-        const int OUTPUT_CHUNK_LENGTH = 16;
-        unsigned char chunk[OUTPUT_CHUNK_LENGTH];
+        const int outputChunkByteLen = 16;
+        unsigned char chunk[outputChunkByteLen];
 
         // choose the number of output chunks
-        const int OUTPUT_CHUNKS_COUNT = 4;
+        const int outputChunksCount = 4;
 
         // initialize the full output
-        const int FULL_OUTPUT_LENGTH = OUTPUT_CHUNK_LENGTH * OUTPUT_CHUNKS_COUNT;
-        unsigned char output[FULL_OUTPUT_LENGTH];
+        const int fullOutputByteLen = outputChunkByteLen * outputChunksCount;
+        unsigned char output[fullOutputByteLen];
 
-        for (int i = 0; i < OUTPUT_CHUNKS_COUNT; i++) {
-            result = TurboSHAKE_Squeeze(&tsi, output, OUTPUT_CHUNK_LENGTH);
+        for (int i = 0; i < outputChunksCount; i++) {
+            result = TurboSHAKE_Squeeze(&tsi, output, outputChunkByteLen);
             assert(result == 0);
 
             // incrementally build the output, like writing to a file.
             // for simplicity, we use `memcpy` in this example:
-            memcpy(output + (i * OUTPUT_CHUNK_LENGTH), chunk, OUTPUT_CHUNK_LENGTH);
+            memcpy(output + (i * outputChunkByteLen), chunk, outputChunkByteLen);
         }
 
         // printing the output chunk in hexadecimal format
-        for (int i = 0; i < FULL_OUTPUT_LENGTH; i++)
+        for (int i = 0; i < fullOutputByteLen; i++)
             printf("\\x%02x", output[i]);
         printf("\n");
 
@@ -319,14 +319,14 @@ We will give 2 examples of using the `KangarooTwelve` function, one for the simp
     int main() {
         const unsigned char *input = (const unsigned char *) "The random message to hash";
 
-        const int OUTPUT_LENGTH = 64;
-        unsigned char output[OUTPUT_LENGTH];
+        const int outputByteLen = 64;
+        unsigned char output[outputByteLen];
 
-        int result = KangarooTwelve(input, strlen((const char *) input), output, OUTPUT_LENGTH, NULL, 0);
+        int result = KangarooTwelve(input, strlen((const char *) input), output, outputByteLen, NULL, 0);
         assert(result == 0);  // returning 0 means success
 
         // printing the hash in hexadecimal format
-        for (int i = 0; i < OUTPUT_LENGTH; i++)
+        for (int i = 0; i < outputByteLen; i++)
            printf("\\x%02x", output[i]);
         printf("\n");
 
@@ -343,9 +343,9 @@ We will give 2 examples of using the `KangarooTwelve` function, one for the simp
     #include "KangarooTwelve.h"
 
     int main() {
-        const int INPUT_CHUNKS_COUNT = 4;
+        const int inputChunksCount = 4;
 
-        const unsigned char *input[INPUT_CHUNKS_COUNT] = {
+        const unsigned char *input[inputChunksCount] = {
             (const unsigned char *) "The ",
             (const unsigned char *) "random ",
             (const unsigned char *) "message ",
@@ -357,7 +357,7 @@ We will give 2 examples of using the `KangarooTwelve` function, one for the simp
         int result = KangarooTwelve_Initialize(&kti, 0);
         assert(result == 0);
 
-        for (int i = 0; i < INPUT_CHUNKS_COUNT; i++) {
+        for (int i = 0; i < inputChunksCount; i++) {
             result = KangarooTwelve_Update(&kti, input[i], strlen((const char *) input[i]));
             assert(result == 0);
         }
@@ -365,30 +365,29 @@ We will give 2 examples of using the `KangarooTwelve` function, one for the simp
         result = KangarooTwelve_Final(&kti, NULL, NULL, 0);
         assert(result == 0);
 
-        const int OUTPUT_CHUNK_LENGTH = 16;
-        unsigned char chunk[OUTPUT_CHUNK_LENGTH];
+        const int outputChunkByteLen = 16;
+        unsigned char chunk[outputChunkByteLen];
 
-        const int OUTPUT_CHUNKS_COUNT = 4;
+        const int outputChunksCount = 4;
 
-        const int FULL_OUTPUT_LENGTH = OUTPUT_CHUNK_LENGTH * OUTPUT_CHUNKS_COUNT;
-        unsigned char output[FULL_OUTPUT_LENGTH];
+        const int fullOutputByteLen = outputChunkByteLen * outputChunksCount;
+        unsigned char output[fullOutputByteLen];
 
-        for (int i = 0; i < OUTPUT_CHUNKS_COUNT; i++) {
-            result = KangarooTwelve_Squeeze(&kti, chunk, OUTPUT_CHUNK_LENGTH);
+        for (int i = 0; i < outputChunksCount; i++) {
+            result = KangarooTwelve_Squeeze(&kti, chunk, outputChunkByteLen);
             assert(result == 0);
 
-            memcpy(output + (i * OUTPUT_CHUNK_LENGTH), chunk, OUTPUT_CHUNK_LENGTH);
+            memcpy(output + (i * outputChunkByteLen), chunk, outputChunkByteLen);
         }
 
         // printing the output chunk in hexadecimal format
-        for (int i = 0; i < FULL_OUTPUT_LENGTH; i++)
+        for (int i = 0; i < fullOutputByteLen; i++)
             printf("\\x%02x", output[i]);
         printf("\n");
 
         // ...
     }
    ```
-
 
 # {{Other types of functions}}
 
