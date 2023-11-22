@@ -106,6 +106,10 @@ The XKCP also provides some standalone implementations, including:
 * the reference code of KangarooTwelve in Python in [`Standalone/KangarooTwelve/Python/`](Standalone/KangarooTwelve/Python/).
 
 
+# Is there example code?
+
+Yes, there is example code for using many cryptographic functions of the XKCP. You can find them in the [`usage-example.md`](usage-example.md) file.
+
 
 # Under which license is the XKCP distributed?
 
