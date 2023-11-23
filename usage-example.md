@@ -391,8 +391,6 @@ We will give 2 examples of using the `KangarooTwelve` function, one for the simp
 
 # {{Other types of functions}}
 
-- [ ]  Ketje
-- [ ]  Keyak
 - [ ]  Kravatte and its modes
 - [ ]  Xoofff and its modes
 - [ ]  Xoodyak
