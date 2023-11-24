@@ -388,11 +388,166 @@ We will give 2 examples of using the `KangarooTwelve` function, one for the simp
         // ...
     }
    ```
+</details>
 
-# {{Other types of functions}}
+# General-purpose deck functions
 
-- [ ]  Kravatte and its modes
-- [ ]  Xoofff and its modes
-- [ ]  Xoodyak
+A deck function allows us to feed arbitrary long input chunks and get arbitrary long output chunks interchangeably, 
+while offering incremental properties on the input and output, helping in speeding up the computation.
+
+## Kravatte
+
+[//]: # (TODO: give some description about Kravatte)
+
+### Basic usages
+
+<details open>
+   <summary>Single input single output</summary>
+
+   ```c
+    #include "Kravatte.h"
+
+    int main() {
+        // choose your key
+        const unsigned char *key = (const unsigned char *) "alksjdfo2300a9sdflkjasdfdq343ag2";
+        
+        const unsigned char *input = (const unsigned char *) "a random input message";
+
+        Kravatte_Instance ki;
+        int result;
+
+        // initialize the Kravatte instance
+        result = Kravatte_MaskDerivation(&ki, key, strlen((const char *) key) * 8);
+        assert(result == 0);
+
+        int outputByteLen = 32;
+        unsigned char output[outputByteLen];
+
+        // one call to feed the input and get the output
+        result = Kravatte(&ki, input, strlen((const char *) input) * 8, output, outputByteLen * 8, 0);
+        assert(result == 0);
+
+        // printing the hash in hexadecimal format
+        for (int i = 0; i < outputByteLen; i++)
+           printf("\\x%02x", output[i]);
+        printf("\n");
+
+        // ...
+    }
+   ```
+</details>
+
+<details open>
+    <summary>Advanced: Multiple input single output</summary>
+    We will feed the input in chunks, and get the output at once.
+
+   ```c
+    #include "Kravatte.h"
+
+    int main() {
+        const unsigned char *key = (const unsigned char *) "alksjdfo2300a9sdflkjasdfdq343ag2";
+
+        const int inputChunksCount = 4;
+        const unsigned char *input[inputChunksCount] = {
+            (const unsigned char *) "a ",
+            (const unsigned char *) "random ",
+            (const unsigned char *) "input ",
+            (const unsigned char *) "message"
+        };
+
+        const unsigned char *expectedOutput = (const unsigned char *)
+                "\xf9\x98\x1b\x67\x97\xbf\xf5\x45\xf5\xd1\xae\x6d\x33\x14\xb0\x99"
+                "\xcd\x9c\x5a\xcb\x52\xa4\x56\x69\xf7\xea\x52\xc8\x30\xf6\xb3\x7e";
+
+        Kravatte_Instance ki;
+        int result;
+
+        result = Kravatte_MaskDerivation(&ki, key,
+        strlen((const char *) key) * 8);
+        assert(result == 0);
+
+        // feeding the input in chunks
+        for (int i = 0; i < inputChunksCount; i++) {
+            int flags = (i == inputChunksCount - 1) ? KRAVATTE_FLAG_LAST_PART : 0;
+            result = Kra(&ki, input[i], strlen((const char *) input[i]) * 8, flags);
+            assert(result == 0);
+        }
+
+        int outputByteLen = 32;
+        unsigned char output[outputByteLen];
+
+        // getting the output at once
+        result = Vatte(&ki, output, outputByteLen * 8, KRAVATTE_FLAG_LAST_PART);
+        assert(result == 0);
+
+        // printing the output chunk in hexadecimal format
+        for (int i = 0; i < outputByteLen; i++)
+            printf("\\x%02x", output[i]);
+        printf("\n");
+
+        // ...
+    }
+
+   ```
+</details>
+
+<details open>
+    <summary>Advanced: Single input multiple output</summary>
+    We will feed the input at once, and get the output in chunks.
+
+   ```c
+    #include "Kravatte.h"
+
+    int main() {
+        const unsigned char *key = (const unsigned char *) "alksjdfo2300a9sdflkjasdfdq343ag2";
+        const unsigned char *input = (const unsigned char *) "a random input message";
+
+        Kravatte_Instance ki;
+        int result;
+
+        result = Kravatte_MaskDerivation(&ki, key,
+        strlen((const char *) key) * 8);
+        assert(result == 0);
+
+        // feeding the input at once
+        result = Kra(&ki, input, strlen((const char *) input) * 8, KRAVATTE_FLAG_LAST_PART);
+        assert(result == 0);
+
+
+        const int outputChunksCount = 2;
+        const int outputChunkByteLen = 16;
+        unsigned char chunkOutput[outputChunkByteLen];
+
+        // initialize the full output
+        const int fullOutputByteLen = outputChunkByteLen * outputChunksCount;
+        unsigned char output[fullOutputByteLen]; 
+
+        // getting the output in chunks
+        for (int i = 0; i < outputChunksCount; i++) {
+            int flags = (i == outputChunksCount - 1) ? KRAVATTE_FLAG_LAST_PART : 0;
+            result = Vatte(&ki, chunkOutput, outputChunkByteLen * 8, flags);
+            assert(result == 0);
+            // incrementally build the output, like writing to a file.
+            // for simplicity, we use `memcpy` in this example:
+            memcpy(output + (i * outputChunkByteLen), chunkOutput, outputChunkByteLen);
+        }
+
+        // printing the output chunk in hexadecimal format
+        for (int i = 0; i < fullOutputByteLen; i++)
+            printf("\\x%02x", output[i]);
+        printf("\n");
+
+        // ...
+    }
+   ```
+</details>
+    
+Those examples can be adapted to support multiple input multiple output as well, by using a sequence of `Kra` and `Vatte` calls.
+
+### {{ More interesting examples based on the Kravatte modes SANE, SANSE, and WBC }} 
 
 ...
+
+## Xoofff
+
+## Xoodyak
