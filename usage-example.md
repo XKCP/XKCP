@@ -905,9 +905,76 @@ int main() {
 
     // ...
 }
+```
+
 ...
 
 ## Xoofff
 
+Xoofff is similar to Kravatte, it's also built on top of the Farfalle construction, however,
+it uses the Xoodoo permutation as primitive instead of the Keccak-p used in Kravatte, which makes it more suitable for constrained environments.
+
+Xoofff has an API similar to Kravatte, so the examples of Kravatte can be adapted to use Xoofff.
+In the following, we will give the differences between the APIs of Kravatte and Xoofff.
+
+One can use the below to adapt the examples of Kravatte to use Xoofff.
+
+### Basic usages
+
+| Feature                   | Kravatte                | Xoofff                |
+| ------------------------- | ----------------------- | --------------------- |
+| Header                    | "Kravatte.h"            | "Xoofff.h"            |
+| Instance Type             | Kravatte_Instance       | Xoofff_Instance       |
+| Initialization            | Kravatte_MaskDerivation | Xoofff_MaskDerivation |
+| One call Hashing Function | Kravatte                | Xoofff                |
+| Input feeding Function    | Kra                     | Xoofff_Compress       |
+| Output Retrieval Function | Vatte                   | Xoofff_Expand         |
+| Flag for Last Part        | KRAVATTE_FLAG_LAST_PART | Xoofff_FlagLastPart   |
+
+### SANE mode (Authenticated Encryption)
+
+| Feature             | Kravatte SANE            | Xoofff SANE           |
+| ------------------- | ------------------------ | --------------------- |
+| Header              | "KravatteModes.h"        | "XoofffModes.h"       |
+| Instance Type       | Kravatte_SANE_Instance   | XoofffSANE_Instance   |
+| Initialization      | Kravatte_SANE_Initialize | XoofffSANE_Initialize |
+| Wrapping Function   | Kravatte_SANE_Wrap       | XoofffSANE_Wrap       |
+| Unwrapping Function | Kravatte_SANE_Unwrap     | XoofffSANE_Unwrap     |
+| Tag Length          | Kravatte_SANE_TagLength  | XoofffSANE_TagLength  |
+
+### SANSE mode (Authenticated Encryption)
+
+| Feature             | Kravatte SANSE            | Xoofff SANSE           |
+| ------------------- | ------------------------- | ---------------------- |
+| Header              | "KravatteModes.h"         | "XoofffModes.h"        |
+| Instance Type       | Kravatte_SANSE_Instance   | XoofffSANSE_Instance   |
+| Initialization      | Kravatte_SANSE_Initialize | XoofffSANSE_Initialize |
+| Wrapping Function   | Kravatte_SANSE_Wrap       | XoofffSANSE_Wrap       |
+| Unwrapping Function | Kravatte_SANSE_Unwrap     | XoofffSANSE_Unwrap     |
+| Tag Length          | Kravatte_SANSE_TagLength  | XoofffSANSE_TagLength  |
+
+### WBC
+
+| Feature           | Kravatte WBC            | Xoofff WBC           |
+| ----------------- | ----------------------- | -------------------- |
+| Header            | "KravatteModes.h"       | "XoofffModes.h"      |
+| Instance Type     | Kravatte_Instance       | Xoofff_Instance      |
+| Initialization    | Kravatte_WBC_Initialize | XoofffWBC_Initialize |
+| Encipher Function | Kravatte_WBC_Encipher   | XoofffWBC_Encipher   |
+| Decipher Function | Kravatte_WBC_Decipher   | XoofffWBC_Decipher   |
+
+### WBC-AE
+
+| Feature           | Kravatte WBC-AE           | Xoofff WBC-AE          |
+| ----------------- | ------------------------- | ---------------------- |
+| Header            | "KravatteModes.h"         | "XoofffModes.h"        |
+| Instance Type     | Kravatte_Instance         | Xoofff_Instance        |
+| Initialization    | Kravatte_WBCAE_Initialize | XoofffWBCAE_Initialize |
+| Encipher Function | Kravatte_WBCAE_Encipher   | XoofffWBCAE_Encipher   |
+| Decipher Function | Kravatte_WBCAE_Decipher   | XoofffWBCAE_Decipher   |
+
 ## Xoodyak
+
+```
+
 ```
