@@ -919,7 +919,7 @@ it uses the Xoodoo permutation as primitive instead of the Keccak-p used in Krav
 Xoofff has an API similar to Kravatte, so the examples of Kravatte can be adapted to use Xoofff.
 In the following, we will give the differences between the APIs of Kravatte and Xoofff.
 
-One can use the below to adapt the examples of Kravatte to use Xoofff.
+One can use the below conversion tables to adapt the examples of Kravatte to use Xoofff.
 
 ### Basic usages
 
