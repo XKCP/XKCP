@@ -717,8 +717,8 @@ int main() {
     const int keyBitLen = 256;
     BitSequence key[keyBitLen] = "alksjdfo2300a9sdflkjasdfdq343ag2";
 
-    BitSequence tagEnc[Kravatte_SANE_TagLength];
-    BitSequence tagDec[Kravatte_SANE_TagLength];
+    BitSequence tagEnc[Kravatte_SANSE_TagLength];
+    BitSequence tagDec[Kravatte_SANSE_TagLength];
 
     int result;
 
@@ -876,8 +876,8 @@ int main() {
     // so we need to allocate buffers with size `messageBitLen + Kravatte_WBCAE_t`
     int extendedBitLen = messageBitLen + Kravatte_WBCAE_t;
 
-    BitSequence *plaintext = malloc((extendedBitLen) / 8);
-    memcpy(plaintext, plaintext, messageBitLen / 8);
+    BitSequence *plaintext_buffer = malloc((extendedBitLen) / 8);
+    memcpy(plaintext_buffer, plaintext, messageBitLen / 8);
 
     BitSequence *ciphertext = malloc((extendedBitLen) / 8);
 
@@ -885,7 +885,7 @@ int main() {
     BitSequence metadata[metadataBitLen] = "time: 2020-12-12 12:12:12";
 
     // encrypt the message
-    result = Kravatte_WBCAE_Encipher(&kwiInstance, plaintext, ciphertext, messageBitLen, metadata, metadataBitLen);
+    result = Kravatte_WBCAE_Encipher(&kwiInstance, plaintext_buffer, ciphertext, messageBitLen, metadata, metadataBitLen);
     assert(result == 0);
 
     // CAUTION: uncomment the line below (tempering with the ciphertexts)
