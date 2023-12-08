@@ -907,6 +907,8 @@ int main() {
 }
 ```
 
+</details>
+
 ...
 
 ## Xoofff
