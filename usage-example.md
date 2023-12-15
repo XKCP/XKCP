@@ -1270,14 +1270,14 @@ void testXoodyakKeyedSessionAuthenticatedEncryptionWithRollingSubKeys() {
     Xoodyak_Instance aliceInstanceSession1;
     Xoodyak_Instance bobInstanceSession1;
 
-    unsigned char aliceKey[16] = "o2jso2j!~l;aksj-";
-    unsigned char bobKey[16] = "o2jso2j!~l;aksj-";
+    unsigned char aliceKeySession1[16] = "o2jso2j!~l;aksj-";
+    unsigned char bobKeySession1[16] = "o2jso2j!~l;aksj-";
 
     // choose the same key for both instances
-    assert(memcmp(aliceKey, bobKey, 16) == 0);
+    assert(memcmp(aliceKeySession1, bobKeySession1, 16) == 0);
 
-    Xoodyak_Initialize(&aliceInstanceSession1, aliceKey, 16, NULL, 0, NULL, 0);
-    Xoodyak_Initialize(&bobInstanceSession1, bobKey, 16, NULL, 0, NULL, 0);
+    Xoodyak_Initialize(&aliceInstanceSession1, aliceKeySession1, 16, NULL, 0, NULL, 0);
+    Xoodyak_Initialize(&bobInstanceSession1, bobKeySession1, 16, NULL, 0, NULL, 0);
 
     unsigned char nonceSession1[16] = "#dojd983&72-21!@";
 
@@ -1287,11 +1287,15 @@ void testXoodyakKeyedSessionAuthenticatedEncryptionWithRollingSubKeys() {
 
     // now after we have initialized the instances of session 1,
     // we can derive the subkeys for session 2 and stored it for later.
-    Xoodyak_SqueezeKey(&aliceInstanceSession1, aliceKey, 16);
-    Xoodyak_SqueezeKey(&bobInstanceSession1, bobKey, 16);
 
-    // the new derived keys must be the same
-    assert(memcmp(aliceKey, bobKey, 16) == 0);
+    unsigned char aliceKeySession2[16];
+    unsigned char bobKeySession2[16];
+
+    Xoodyak_SqueezeKey(&aliceInstanceSession1, aliceKeySession2, 16);
+    Xoodyak_SqueezeKey(&bobInstanceSession1, bobKeySession2, 16);
+
+    // the new derived keys will be the same
+    assert(memcmp(aliceKeySession2, bobKeySession2, 16) == 0);
 
     // start of session 1 (note that we will not detail the usage of Xoodyak here, 
     // for a detailed example, see `testXoodyakKeyedSessionAuthenticatedEncryption`)
@@ -1324,8 +1328,8 @@ void testXoodyakKeyedSessionAuthenticatedEncryptionWithRollingSubKeys() {
     Xoodyak_Instance aliceInstanceSession2;
     Xoodyak_Instance bobInstanceSession2;
 
-    Xoodyak_Initialize(&aliceInstanceSession2, aliceKey, 16, NULL, 0, NULL, 0);
-    Xoodyak_Initialize(&bobInstanceSession2, bobKey, 16, NULL, 0, NULL, 0);
+    Xoodyak_Initialize(&aliceInstanceSession2, aliceKeySession2, 16, NULL, 0, NULL, 0);
+    Xoodyak_Initialize(&bobInstanceSession2, bobKeySession2, 16, NULL, 0, NULL, 0);
 
     unsigned char nonceSession2[16] = "#dojd923572-21!@";
 
