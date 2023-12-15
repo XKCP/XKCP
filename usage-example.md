@@ -978,6 +978,8 @@ One can use the below conversion tables to adapt the examples of Kravatte to use
 ## Xoodyak
 
 ```c
+#include "libXKCP.a.headers/Xoodyak.h"
+
 struct Message
 {
     unsigned char *data;
@@ -1165,6 +1167,196 @@ void testXoodyakKeyedAuthenticatedEncryption() {
 }
 
 void testXoodyakKeyedSessionAuthenticatedEncryption() {
+    Xoodyak_Instance aliceInstance;
+    Xoodyak_Instance bobInstance;
+
+    unsigned char key[16] = "o2jso2j!~l;aksj-";
+
+    Xoodyak_Initialize(&aliceInstance, key, 16, NULL, 0, NULL, 0);
+    Xoodyak_Initialize(&bobInstance, key, 16, NULL, 0, NULL, 0);
+
+    unsigned char nonce[16] = "#dojd983&72-21!@";
+
+    // they must absorb the same nonce
+    Xoodyak_Absorb(&aliceInstance, nonce, 16);
+    Xoodyak_Absorb(&bobInstance, nonce, 16);
+
+    const int tagByteLen = 16;
+    const int messageCount = 6;
+
+    unsigned char *encrypted_messages[messageCount];
+    unsigned char *tags[messageCount];
+
+    // Alice sends all the messages to Bob:
+
+    for (int i = 0; i < messageCount; i++) {
+        const int messageByteLen = strlen((char *)messages[i].data);
+
+        tags[i] = malloc(tagByteLen);
+
+        if (messages[i].metadata != NULL) {
+            Xoodyak_Absorb(&aliceInstance, messages[i].metadata, strlen((char *)messages[i].metadata));
+        }
+
+        if (messageByteLen) {
+            encrypted_messages[i] = malloc(messageByteLen);
+            Xoodyak_Encrypt(&aliceInstance, messages[i].data, encrypted_messages[i], messageByteLen);
+        } else {
+            encrypted_messages[i] = NULL;
+        }
+
+        Xoodyak_Squeeze(&aliceInstance, tags[i], tagByteLen);
+    }
+
+    // CAUTION: temper with the encrypted message (flip a bit) by uncommenting
+    // the following line and the tags will not match -> Authentication insured.
+    // encrypted_messages[0][0] ^= 1;
+
+    // Bob receives the messages and ensure that they're authenticated:
+
+    for (int i = 0; i < messageCount; i++) {
+        const int messageByteLen = strlen((char *)messages[i].data);
+
+        if (messages[i].metadata != NULL) {
+            Xoodyak_Absorb(&bobInstance, messages[i].metadata, strlen((char *)messages[i].metadata));
+        }
+
+        if (messageByteLen) {
+            unsigned char decrypted[messageByteLen];
+            Xoodyak_Decrypt(&bobInstance, encrypted_messages[i], decrypted, messageByteLen);
+            assert(memcmp(messages[i].data, decrypted, messageByteLen) == 0);
+        } else {
+            assert(encrypted_messages[i] == NULL);
+        }
+
+        unsigned char expectedTag[tagByteLen];
+        Xoodyak_Squeeze(&bobInstance, expectedTag, tagByteLen);
+        assert(memcmp(tags[i], expectedTag, tagByteLen) == 0);
+    }
+
+
+    // Bob sends a confirmation message to Alice:
+
+    unsigned char confirmationMessage[32] = "I have received all the messages";
+    
+    unsigned char confirmationEncrypted[32];
+    Xoodyak_Encrypt(&bobInstance, confirmationMessage, confirmationEncrypted, 32);
+
+    unsigned char confirmationTag[tagByteLen];
+    Xoodyak_Squeeze(&bobInstance, confirmationTag, tagByteLen);
+
+    // CAUTION: temper with the encrypted message (flip a bit) by uncommenting
+    // the following line and the tags will not match -> Authentication insured.
+    // confirmationEncrypted[0] ^= 1;
+
+    // Alice receives the confirmation message and ensure that it's authenticated:
+
+    unsigned char confirmationDecrypted[32];
+    Xoodyak_Decrypt(&aliceInstance, confirmationEncrypted, confirmationDecrypted, 32);
+
+    unsigned char expectedConfirmationTag[tagByteLen];
+    Xoodyak_Squeeze(&aliceInstance, expectedConfirmationTag, tagByteLen);
+
+    assert(memcmp(confirmationMessage, confirmationDecrypted, 32) == 0);
+    assert(memcmp(confirmationTag, expectedConfirmationTag, tagByteLen) == 0);
+
+    for (int i = 0; i < messageCount; i++) {
+        free(encrypted_messages[i]);
+        free(tags[i]);
+    }
+}
+
+void testXoodyakKeyedSessionAuthenticatedEncryptionWithRollingSubKeys() {
+    Xoodyak_Instance aliceInstanceSession1;
+    Xoodyak_Instance bobInstanceSession1;
+
+    unsigned char aliceKey[16] = "o2jso2j!~l;aksj-";
+    unsigned char bobKey[16] = "o2jso2j!~l;aksj-";
+
+    // choose the same key for both instances
+    assert(memcmp(aliceKey, bobKey, 16) == 0);
+
+    Xoodyak_Initialize(&aliceInstanceSession1, aliceKey, 16, NULL, 0, NULL, 0);
+    Xoodyak_Initialize(&bobInstanceSession1, bobKey, 16, NULL, 0, NULL, 0);
+
+    unsigned char nonceSession1[16] = "#dojd983&72-21!@";
+
+    // they must absorb the same nonce
+    Xoodyak_Absorb(&aliceInstanceSession1, nonceSession1, 16);
+    Xoodyak_Absorb(&bobInstanceSession1, nonceSession1, 16);
+
+    // now after we have initialized the instances of session 1,
+    // we can derive the subkeys for session 2 and stored it for later.
+    Xoodyak_SqueezeKey(&aliceInstanceSession1, aliceKey, 16);
+    Xoodyak_SqueezeKey(&bobInstanceSession1, bobKey, 16);
+
+    // the new derived keys must be the same
+    assert(memcmp(aliceKey, bobKey, 16) == 0);
+
+    // start of session 1 (note that we will not detail the usage of Xoodyak here, 
+    // for a detailed example, see `testXoodyakKeyedSessionAuthenticatedEncryption`)
+
+    const int tagByteLen = 16;
+
+    // alice sends a message to bob
+    unsigned char aliceToBobMessage[24] = "Hello Bob, this is Alice";
+
+    unsigned char encryptedAliceToBobMessage[24];
+    Xoodyak_Encrypt(&aliceInstanceSession1, aliceToBobMessage, encryptedAliceToBobMessage, 24);
+
+    unsigned char aliceToBobMessageTag[tagByteLen];
+    Xoodyak_Squeeze(&aliceInstanceSession1, aliceToBobMessageTag, tagByteLen);
+
+    // bob receives the message and decrypts it
+
+    unsigned char decryptedAliceToBobMessage[24];
+    Xoodyak_Decrypt(&bobInstanceSession1, encryptedAliceToBobMessage, decryptedAliceToBobMessage, 24);
+
+    unsigned char expectedAliceToBobMessageTag[tagByteLen];
+    Xoodyak_Squeeze(&bobInstanceSession1, expectedAliceToBobMessageTag, tagByteLen);
+
+    assert(memcmp(aliceToBobMessage, decryptedAliceToBobMessage, 24) == 0);
+    assert(memcmp(aliceToBobMessageTag, expectedAliceToBobMessageTag, tagByteLen) == 0);
+    
+
+    // start of session 2
+
+    Xoodyak_Instance aliceInstanceSession2;
+    Xoodyak_Instance bobInstanceSession2;
+
+    Xoodyak_Initialize(&aliceInstanceSession2, aliceKey, 16, NULL, 0, NULL, 0);
+    Xoodyak_Initialize(&bobInstanceSession2, bobKey, 16, NULL, 0, NULL, 0);
+
+    unsigned char nonceSession2[16] = "#dojd923572-21!@";
+
+    // they must absorb the same nonce
+    Xoodyak_Absorb(&aliceInstanceSession2, nonceSession2, 16);
+    Xoodyak_Absorb(&bobInstanceSession2, nonceSession2, 16);
+
+
+    // bob sends a message to alice
+
+    unsigned char bobToAliceMessage[24] = "Hello Alice, this is Bob";
+
+    unsigned char encryptedBobToAliceMessage[24];
+    Xoodyak_Encrypt(&bobInstanceSession2, bobToAliceMessage, encryptedBobToAliceMessage, 24);
+
+    unsigned char bobToAliceMessage1Tag[tagByteLen];
+    Xoodyak_Squeeze(&bobInstanceSession2, bobToAliceMessage1Tag, tagByteLen);
+
+    // alice receives the message and decrypts it
+
+    unsigned char decryptedBobToAliceMessage[24];
+    Xoodyak_Decrypt(&aliceInstanceSession2, encryptedBobToAliceMessage, decryptedBobToAliceMessage, 24);
+
+    unsigned char expectedBobToAliceMessageTag[tagByteLen];
+    Xoodyak_Squeeze(&aliceInstanceSession2, expectedBobToAliceMessageTag, tagByteLen);
+
+    assert(memcmp(bobToAliceMessage, decryptedBobToAliceMessage, 24) == 0);
+    assert(memcmp(bobToAliceMessage1Tag, expectedBobToAliceMessageTag, tagByteLen) == 0);
+}
+
+void testXoodyakKeyedAuthenticatedEncryptionWithRatchet() {
     Xoodyak_Instance encInstance;
     Xoodyak_Instance decInstance;
 
@@ -1179,72 +1371,53 @@ void testXoodyakKeyedSessionAuthenticatedEncryption() {
     Xoodyak_Absorb(&encInstance, nonce, 16);
     Xoodyak_Absorb(&decInstance, nonce, 16);
 
+    const int messageByteLen = strlen((char *)messages[0].data);
     const int tagByteLen = 16;
-    const int messageCount = 6;
-
-    unsigned char *encrypted_messages[messageCount];
-    unsigned char *tags[messageCount];
 
     // sender side:
+    
+    unsigned char encrypted[messageByteLen];
+    Xoodyak_Absorb(&encInstance, messages[0].metadata, messageByteLen);
+    Xoodyak_Encrypt(&encInstance, messages[0].data, encrypted, messageByteLen);
 
-    for (int i = 0; i < messageCount; i++) {
-        const int messageByteLen = strlen((char *)messages[i].data);
+    // Ratchet can be called here (before squeezing the tag) and in 
+    //  that case, it only requires on extra call to the permutation f.
+    //  In this example, it's called before squeezing the tag.
+    Xoodyak_Ratchet(&encInstance);
 
-        tags[i] = malloc(tagByteLen);
+    unsigned char tag[tagByteLen];
+    Xoodyak_Squeeze(&encInstance, tag, tagByteLen);
 
-        if (messages[i].metadata != NULL) {
-            Xoodyak_Absorb(&encInstance, messages[i].metadata, strlen((char *)messages[i].metadata));
-        }
-
-        if (messageByteLen) {
-            encrypted_messages[i] = malloc(messageByteLen);
-            Xoodyak_Encrypt(&encInstance, messages[i].data, encrypted_messages[i], messageByteLen);
-        } else {
-            encrypted_messages[i] = NULL;
-        }
-
-        Xoodyak_Squeeze(&encInstance, tags[i], tagByteLen);
-    }
+    // Ratchet can be called here (after squeezing the tag) and in
+    //  that case, its processing can be done asynchronously, while
+    //  the message is transmitted, and waits for the next message.
 
     // on the wire:
     // CAUTION: temper with the encrypted message (flip a bit) by uncommenting
     // the following line and the tags will not match -> Authentication insured.
-    // encrypted_messages[0][0] ^= 1;
+    // encrypted[0] ^= 1;
 
     // receiver side:
 
-    for (int i = 0; i < messageCount; i++) {
-        const int messageByteLen = strlen((char *)messages[i].data);
+    unsigned char decrypted[messageByteLen];
+    Xoodyak_Absorb(&decInstance, messages[0].metadata, messageByteLen);
+    Xoodyak_Decrypt(&decInstance, encrypted, decrypted, messageByteLen);
 
-        if (messages[i].metadata != NULL) {
-            Xoodyak_Absorb(&decInstance, messages[i].metadata, strlen((char *)messages[i].metadata));
-        }
+    // same as the sender, the receiver has to call Ratchet before squeezing the tag.
+    Xoodyak_Ratchet(&decInstance);
 
-        if (messageByteLen) {
-            unsigned char decrypted[messageByteLen];
-            Xoodyak_Decrypt(&decInstance, encrypted_messages[i], decrypted, messageByteLen);
-            assert(memcmp(messages[i].data, decrypted, messageByteLen) == 0);
-        } else {
-            assert(encrypted_messages[i] == NULL);
-        }
+    unsigned char expectedTag[tagByteLen];
+    Xoodyak_Squeeze(&decInstance, expectedTag, tagByteLen);
 
-        unsigned char expectedTag[tagByteLen];
-        Xoodyak_Squeeze(&decInstance, expectedTag, tagByteLen);
-        assert(memcmp(tags[i], expectedTag, tagByteLen) == 0);
-    }
-
-    for (int i = 0; i < messageCount; i++) {
-        free(encrypted_messages[i]);
-        free(tags[i]);
-    }
+    assert(memcmp(messages[0].data, decrypted, messageByteLen) == 0);
+    assert(memcmp(tag, expectedTag, tagByteLen) == 0);
 }
-
-// TODO: add rolling subkey test
 
 void testXoodyakKeyedModes() {
     testXoodyakKeyedSimpleEncryptDecrypt();
     testXoodyakKeyedAuthenticatedEncryption();
     testXoodyakKeyedSessionAuthenticatedEncryption();
+    testXoodyakKeyedSessionAuthenticatedEncryptionWithRollingSubKeys();
     testXoodyakKeyedAuthenticatedEncryptionWithRatchet();
 }
 
@@ -1313,6 +1486,19 @@ void testXoodyakCombinedMode() {
     Xoodyak_Decrypt(&encInstance, encrypted2, decrypted2, 32);
 
     assert(memcmp(message2, decrypted2, 32) == 0);
+}
+
+int main()
+{
+    printf("Tests started..\n");
+
+    testXoodyakHashedModes();
+    testXoodyakKeyedModes();
+    testXoodyakCombinedMode();
+
+    printf("All tests passed\n");
+
+    return 0;
 }
 
 ```
