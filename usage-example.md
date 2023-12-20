@@ -1564,7 +1564,6 @@ void authenticatedEncryptionWithRatchet() {
     unsigned char expectedTag[tagByteLen];
     Xoodyak_Squeeze(&decInstance, expectedTag, tagByteLen);
 
-    assert(memcmp(messages[0].data, decrypted, messageByteLen) == 0);
     assert(memcmp(tag, expectedTag, tagByteLen) == 0);
 }
 
@@ -1583,6 +1582,7 @@ An example of such usage is given below. Note that we're not focusing on the det
     <summary>Asymetric encryption example with Deffie-Hellman</summary>
 
 ```c
+
 void xoodyakCombinedMode() {
     // Alice and Bob have their own public keys
     unsigned char alicePublicKey[32] = "alice's public key";
@@ -1643,4 +1643,7 @@ void xoodyakCombinedMode() {
     // ...
 }
 
-````
+```
+
+</details>
+
