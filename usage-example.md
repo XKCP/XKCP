@@ -909,8 +909,6 @@ int main() {
 
 </details>
 
-...
-
 ## Xoofff
 
 Xoofff is similar to Kravatte, it's also built on top of the Farfalle construction, however,
