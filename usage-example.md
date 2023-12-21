@@ -1,10 +1,10 @@
 In this guide, we will provide examples of using the high-level API, with less emphasis on
 the low-level implementation, since XKCP abstracts the low-level implementation from the user.
 
-Before proceeding with the usage example, please make sure that you have built the XKCP library as described in the [README](../README.md).
+Before proceeding with the usage example, please make sure that you have built the XKCP library as described in the [README](../README.md)
 and included it in your C/C++ project.
 
-# Hashing and Extendable output functions (XOFs)
+# Hashing and extendable output functions (XOFs)
 
 ## FIPS 202
 
@@ -13,21 +13,21 @@ The functions are:
 
 ### Hash functions
 
-A hash function is a function on binary data (i.e., bit strings) for which the length of the output is fixed. <br>
+A hash function is a function of binary data (i.e., of a bit string) for which the length of the output is fixed.
 The input to a hash function is called the _message_, and the output is called the _digest_ or _hash value_.
 
 NIST standardized the following hash functions in FIPS 202:
 
-- `SHA3_224`
-- `SHA3_256`
-- `SHA3_384`
-- `SHA3_512`
+- `SHA3-224`
+- `SHA3-256`
+- `SHA3-384`
+- `SHA3-512`
 
 The suffix `224`, `256`, `384`, and `512` indicate the fixed length of the `digest` in bits.
 
 ### Extendable output functions (XOFs)
 
-A XOF is a function on bit strings, also called _messages_, in which the output can be extended to any desired length. <br>
+A XOF is a function of a bit string, also called _message_, but for which the output can be extended to any desired length.
 
 NIST standardized the following XOFs in FIPS 202, marking them as the first XOFs to be standardized by NIST.
 
@@ -38,10 +38,10 @@ The suffix `128` and `256` indicates the desired security level of the function.
 
 ### Usage
 
-To use any of them in your C/C++ project, you have to first build the FIPS202 library, and include it in your project.
+To use any of them in your C/C++ project, you have to first build the XKCP library, and include it in your project.
 The following steps illustrate how to do that:
 
-#### Example of using the `SHA3_256` hash function
+#### Example of using the `SHA3-256` hash function
 
 <details open>
     <summary>Simple usage</summary>
@@ -77,8 +77,9 @@ int main() {
     <summary>Advanced: Chunked input</summary>
     Sometimes, the input of your function is too long to be stored in memory and passed to the function at once, 
     think of a big file for example. In such cases, you can feed the input as chunks to the hash function, and at the end, 
-    get the output at once or in chunks as well (We'll show an example of that later, with the SHAKE128 XOF).
-    
+    get the output at once or in chunks as well.
+    (We'll show an example of that later, with the SHAKE128 XOF.)
+
    ```c
     #include "KeccakHash.h"
 
@@ -220,8 +221,8 @@ Keccak-p permutation reduced to 12 rounds (instead of 24), so about twice faster
 They are based on the `Sponge construction`, and the `Keccak-p[1600, 12]` permutation.
 
 There are 2 main functions in this family:
-- TurboSHAKE128
-- TurboSHAKE256
+- `TurboSHAKE128`
+- `TurboSHAKE256`
 
 The suffix `128` and `256` indicates the desired security level of the function.
 
@@ -560,10 +561,10 @@ while offering incremental properties on the input and output, helping in speedi
     
 Those examples can be adapted to support multiple input multiple output as well, by using a sequence of `Kra` and `Vatte` calls.
 
-### SANE mode (Authenticated Encryption)
+### Kravatte-SANE authenticated encryption
 
-SANE is an authenticated encryption scheme supporting sessions, the tag for the message n authenticates
-the full history of the session up to that point, i.e. the messages 1, 2, ..., n. <br>
+SANE is a nonce-based authenticated encryption scheme supporting sessions, the tag for the message _n_ authenticates
+the full history of the session up to that point, i.e., the messages 1, 2, ..., _n_.
 
 <details open>
    <summary>Authenticated Encryption: conversation example</summary>
@@ -594,6 +595,7 @@ int main() {
 
     // choose the nonce. it must be the same for both ksiEnc and ksiDec
     const int nonceBitLen = 128;
+    // important: the nonce must be a different value at every use!
     BitSequence nonce[nonceBitLen] = "alksjdfo2300a9sd";
 
     BitSequence tagEnc[Kravatte_SANE_TagLength];
@@ -678,15 +680,16 @@ int main() {
 
 </details>
 
-### SANSE mode (Authenticated Encryption)
+### Kravatte-SANSE authenticated encryption
 
-Like SANE, SANE is an authenticated encryption scheme supporting sessions, the tag for the message n authenticates
-the full history of the session up to that point, i.e. the messages 1, 2, ..., n. <br>
+Like SANE, SANE is an authenticated encryption scheme supporting sessions, the tag for the message _n_ authenticates
+the full history of the session up to that point, i.e. the messages 1, 2, ..., _n_.
 
-However, SANSE is a nonce-misuse resistant version of SANE, and doesn't require the user to provide a nonce.
+However, SANSE is a nonce-misuse resistant version of SANE.
 Instead, it uses a nonce internally, and the user only needs to provide a key.
 
-For better security, a user can include a nonce in the metadata of the first message.
+Equal plaintext-associated data pairs can still be detected from equal ciphertexts, so it is best to make sure the associated data is unique per session.
+For instance, a user can include a nonce in the associated data of the first message of the session.
 
 <!-- TODO: clarify more about nonce misuse resistant of SANSE? -->
 
@@ -796,9 +799,9 @@ int main() {
 
 </details>
 
-### WBC mode (Wide Block Cipher)
+### Kravatte-WBC wide block cipher
 
-WBC is a wide block cipher mode, Built on top of the Farfalle construction and the Feistel network.
+WBC is a wide block cipher mode, built as a Feistel network.
 It can be used to encrypt a message of any length, and produce a ciphertext of the same length.
 
 <details open>
@@ -846,9 +849,9 @@ int main() {
 
 </details>
 
-### WBC-AE mode (Wide Block Cipher Authenticated Encryption)
+### Kravatte-WBC-AE authenticated encryption
 
-WBC-AE is an Authenticated Encryption mode, Built on top of the WBC mode.
+WBC-AE is an authenticated encryption mode, built on top of the WBC mode.
 
 <details open>
    <summary>Simple encryption/decryption example with authentication</summary>
@@ -911,8 +914,8 @@ int main() {
 
 ## Xoofff
 
-Xoofff is similar to Kravatte, it's also built on top of the Farfalle construction, however,
-it uses the Xoodoo permutation as primitive instead of the Keccak-p used in Kravatte, which makes it more suitable for constrained environments.
+Xoofff is similar to Kravatte, it's also built on top of the Farfalle construction.
+However, it uses the Xoodoo permutation as primitive instead of the Keccak-p used in Kravatte, which makes it more suitable for constrained environments.
 
 Xoofff has an API similar to Kravatte, so the examples of Kravatte can be adapted to use Xoofff.
 In the following, we will give the differences between the APIs of Kravatte and Xoofff.
@@ -931,7 +934,7 @@ One can use the below conversion tables to adapt the examples of Kravatte to use
 | Output Retrieval Function | Vatte                   | Xoofff_Expand         |
 | Flag for Last Part        | KRAVATTE_FLAG_LAST_PART | Xoofff_FlagLastPart   |
 
-### SANE mode (Authenticated Encryption)
+### Xoofff-SANE authenticated encryption
 
 | Feature             | Kravatte SANE            | Xoofff SANE           |
 | ------------------- | ------------------------ | --------------------- |
@@ -942,7 +945,7 @@ One can use the below conversion tables to adapt the examples of Kravatte to use
 | Unwrapping Function | Kravatte_SANE_Unwrap     | XoofffSANE_Unwrap     |
 | Tag Length          | Kravatte_SANE_TagLength  | XoofffSANE_TagLength  |
 
-### SANSE mode (Authenticated Encryption)
+### Xoofff-SANSE authenticated encryption
 
 | Feature             | Kravatte SANSE            | Xoofff SANSE           |
 | ------------------- | ------------------------- | ---------------------- |
@@ -953,7 +956,7 @@ One can use the below conversion tables to adapt the examples of Kravatte to use
 | Unwrapping Function | Kravatte_SANSE_Unwrap     | XoofffSANSE_Unwrap     |
 | Tag Length          | Kravatte_SANSE_TagLength  | XoofffSANSE_TagLength  |
 
-### WBC
+### Xoofff-WBC wide block cipher
 
 | Feature           | Kravatte WBC            | Xoofff WBC           |
 | ----------------- | ----------------------- | -------------------- |
@@ -963,7 +966,7 @@ One can use the below conversion tables to adapt the examples of Kravatte to use
 | Encipher Function | Kravatte_WBC_Encipher   | XoofffWBC_Encipher   |
 | Decipher Function | Kravatte_WBC_Decipher   | XoofffWBC_Decipher   |
 
-### WBC-AE
+### Xoofff-WBC-AE authenticated encryption
 
 | Feature           | Kravatte WBC-AE           | Xoofff WBC-AE          |
 | ----------------- | ------------------------- | ---------------------- |
@@ -985,9 +988,9 @@ The mode of operation on top of Xoodoo is called Cyclist.
 
 Xoodoo can be used in 2 modes, Hashed mode and Keyed mode. We will provide examples for both modes separately, as well as an example for using them together.
 
-### Hashed mode
+### Hash mode
 
-In Hashed mode, Xoodoo can absorb an arbitrary length input, and produce an arbitrary length output.
+In hash mode, Xoodoo can absorb an arbitrary length input, and produce an arbitrary length output.
 
 <details open>
    <summary>Simple usage: single input single output</summary>
@@ -1144,7 +1147,7 @@ void multipleInputMultipleOutput()
 In keyed mode, Xoodyak can do stream encryption, message authentication code (MAC)
 computation and authenticated encryption.
 
-Note that in the following examples, we will use the same `messages` array used in the above "Hashed Mode" examples.
+Note that in the following examples, we will use the same `messages` array used in the above "Hash mode" examples.
 
 <details open>
     <summary>Simple encryption/decryption</summary>
@@ -1164,6 +1167,7 @@ Xoodyak_Instance decInstance;
     Xoodyak_Initialize(&decInstance, key, 16, NULL, 0, NULL, 0);
 
     // choose any nonce
+    // important: the nonce must be a different value at every use!
     unsigned char nonce[16] = "#dojd983&72-21!@";
 
     // encryption and decryption instances must absorb the same nonce
@@ -1209,6 +1213,7 @@ void authenticatedEncryption() {
     Xoodyak_Initialize(&decInstance, key, 16, NULL, 0, NULL, 0);
 
     // choose any nonce
+    // important: the nonce must be a different value at every use (or the metadata of the first message must be unique).
     unsigned char nonce[16] = "#dojd983&72-21!@";
 
     // encryption and decryption instances must absorb the same nonce
@@ -1238,7 +1243,7 @@ void authenticatedEncryption() {
     // 4. send the encrypted message and the tag over the wire:
 
     // on the wire:
-    // CAUTION: temper with the encrypted message (flip a bit) by uncommenting
+    // CAUTION: tamper with the encrypted message (flip a bit) by uncommenting
     // the following line and the tags will not match -> Authentication insured.
     // encrypted[0] ^= 1;
 
@@ -1287,6 +1292,7 @@ void sessionAuthenticatedEncryption() {
     Xoodyak_Initialize(&bobInstance, key, 16, NULL, 0, NULL, 0);
 
     // choose any nonce
+    // important: the nonce must be a different value at every use (or the metadata of the first message must be unique).
     unsigned char nonce[16] = "#dojd983&72-21!@";
 
     // alice and bob instances must absorb the same nonce
@@ -1572,9 +1578,9 @@ void authenticatedEncryptionWithRatchet() {
 </details>
 
 
-### Combining Hashed and Keyed modes
+### Combining hash and keyed modes
 
-A key exchange protocol, such as Diffie-Hellman or variant, results in a common secret that usually requires further derivation before being used as a symmetric secret key. To do this with a Xoodyak, we can first use it in hash mode to process the common secret, and then use the derived key with Xoodyak in Keyed mode.
+A key exchange protocol, such as Diffie-Hellman or variant, results in a common secret that usually requires further derivation before being used as a symmetric secret key. To do this with a Xoodyak, we can first use it in hash mode to process the common secret, and then use the derived key with Xoodyak in keyed mode.
 
 An example of such usage is given below. Note that we're not focusing on the details on the Diffie-Hellman key exchange, but rather on how to use Xoodyak in Hashed and Keyed modes together.
 
