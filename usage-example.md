@@ -273,7 +273,7 @@ We will give usage examples of the `TurboSHAKE128` function, but the same applie
         TurboSHAKE_Instance tsi;
 
         // initialize the turboSHAKE instance
-        int result = TurboSHAKE_Initialize(&tsi, 256);
+        int result = TurboSHAKE128_Initialize(&tsi);
         assert(result == 0);
 
         // feed the input
