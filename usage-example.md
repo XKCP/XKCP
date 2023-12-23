@@ -80,48 +80,49 @@ int main() {
     get the output at once or in chunks as well.
     (We'll show an example of that later, with the SHAKE128 XOF.)
 
-   ```c
-    #include "KeccakHash.h"
+```c
+ #include "KeccakHash.h"
 
-    int main() {
-        const int inputChunksCount = 4;
+ int main() {
+     const int inputChunksCount = 4;
 
-        const unsigned char *input[inputChunksCount] = {
-            (const unsigned char *) "Hello, ",
-            (const unsigned char *) "this is ",
-            (const unsigned char *) "my custom ",
-            (const unsigned char *) "message!"
-        };
+     const unsigned char *input[inputChunksCount] = {
+         (const unsigned char *) "Hello, ",
+         (const unsigned char *) "this is ",
+         (const unsigned char *) "my custom ",
+         (const unsigned char *) "message!"
+     };
 
-        Keccak_HashInstance hi;
-        HashReturn result;
+     Keccak_HashInstance hi;
+     HashReturn result;
 
-        // initialize the hash instance
-        result = Keccak_HashInitialize_SHA3_256(&hi);
-        assert(result == KECCAK_SUCCESS);
+     // initialize the hash instance
+     result = Keccak_HashInitialize_SHA3_256(&hi);
+     assert(result == KECCAK_SUCCESS);
 
-        for (int i = 0; i < inputChunksCount; i++) {
-            // feed the input in chunks
-            Keccak_HashUpdate(&hi, input[i], strlen((const char *) input[i]) * 8);
-            assert(result == KECCAK_SUCCESS);
-        }
+     for (int i = 0; i < inputChunksCount; i++) {
+         // feed the input in chunks
+         Keccak_HashUpdate(&hi, input[i], strlen((const char *) input[i]) * 8);
+         assert(result == KECCAK_SUCCESS);
+     }
 
-        int outputByteLen = 32;
-        unsigned char output[outputByteLen];
+     int outputByteLen = 32;
+     unsigned char output[outputByteLen];
 
-        // get the output
-        result = Keccak_HashFinal(&hi, output);
-        assert(result == KECCAK_SUCCESS);
+     // get the output
+     result = Keccak_HashFinal(&hi, output);
+     assert(result == KECCAK_SUCCESS);
 
-        // printing the hash in hexadecimal format
-        for (int i = 0; i < outputByteLen; i++)
-            printf("\\x%02x", output[i]);
-        printf("\n");
+     // printing the hash in hexadecimal format
+     for (int i = 0; i < outputByteLen; i++)
+         printf("\\x%02x", output[i]);
+     printf("\n");
 
-        // ...
-    }
+     // ...
+ }
 
-````
+```
+
 </details>
 
 #### Example of using the `SHAKE128` XOF
@@ -151,7 +152,7 @@ int main() {
 
      // ...
  }
-````
+```
 
 </details>
 
@@ -904,7 +905,7 @@ void multipleInputSingleOutput()
     // intialize the instance, with no key, no id, and no counter
     Xoodyak_Initialize(&instance, NULL, 0, NULL, 0, NULL, 0);
 
-    // absorb multiple messages, as chunks in multiple calls
+    // absorb multiple messages
     Xoodyak_Absorb(&instance, messages[0].data, strlen((char *)messages[0].data));
     Xoodyak_Absorb(&instance, messages[1].data, strlen((char *)messages[1].data));
     Xoodyak_Absorb(&instance, messages[2].data, strlen((char *)messages[2].data));
@@ -936,19 +937,19 @@ void singleInputMultipleOutput()
     const int outputByteLen = 16;
     unsigned char output[outputByteLen];
 
-    // get the hash in multiple calls
+    // squeeze multiple outputs
     for (int i = 0; i < 2; i++)
     {
         Xoodyak_Squeeze(&instance, output, outputByteLen);
 
-        // print the chunk in hexadecimal format
+        // print the output in hexadecimal format
         for (int i = 0; i < outputByteLen; i++)
             printf("\\x%02x", output[i]);
         printf("\n");
 
-        // NOTE: the first chunk should be the same as the first 16 bytes of the output of
+        // NOTE: the first output should be the same as the first 16 bytes of the output of
         // the `singleInputSingleOuput` example above - this is due to the Cyclist properties.
-        // However, the second chunk onwards will be different.
+        // However, the second output onwards will be different.
     }
 
     // ...
@@ -961,7 +962,7 @@ void multipleInputMultipleOutput()
     // intialize the instance, with no key, no id, and no counter
     Xoodyak_Initialize(&instance, NULL, 0, NULL, 0, NULL, 0);
 
-    // absorb multiple messages, as chunks in multiple calls
+    // absorb multiple messages
     Xoodyak_Absorb(&instance, messages[0].data, strlen((char *)messages[0].data));
     Xoodyak_Absorb(&instance, messages[1].data, strlen((char *)messages[1].data));
     Xoodyak_Absorb(&instance, messages[2].data, strlen((char *)messages[2].data));
@@ -969,20 +970,20 @@ void multipleInputMultipleOutput()
     const int outputByteLen = 16;
     unsigned char output[outputByteLen];
 
-    // get the hash in multiple calls
+    // squeeze multiple outputs
     for (int i = 0; i < 2; i++)
     {
 
         Xoodyak_Squeeze(&instance, output, outputByteLen);
 
-        // print the chunk in hexadecimal format
+        // print the output in hexadecimal format
         for (int i = 0; i < outputByteLen; i++)
             printf("\\x%02x", output[i]);
         printf("\n");
 
-        // NOTE: the first chunk should be the same as the first 16 bytes of the output of
+        // NOTE: the first output should be the same as the first 16 bytes of the output of
         // the `multipleInputSingleOutput` example above - this is due to the Cyclist properties.
-        // However, the second chunk onwards will be different.
+        // However, the second output onwards will be different.
     }
 
     // ...
@@ -1001,7 +1002,7 @@ Note that in the following examples, we will use the same `messages` array used 
 
 <details open>
     <summary>Simple encryption/decryption</summary>
-    
+
 ```c
 #include "Xoodyak.h"
 
@@ -1043,7 +1044,6 @@ Xoodyak_Instance decInstance;
 ````
 
 </details>
-
 
 <details open>
     <summary>Authenticated Encryption: simple example</summary>
@@ -1121,7 +1121,6 @@ void authenticatedEncryption() {
 ```
 
 </details>
-
 
 <details open>
     <summary>Authenticated Encryption: Session (aka conversation) example</summary>
@@ -1229,7 +1228,7 @@ void sessionAuthenticatedEncryption() {
     // the following line and the tags will not match -> Authentication insured.
     // confirmationEncrypted[0] ^= 1;
 
-    // Alice receives the confirmation message and ensure that it's authenticated:
+    // Alice receives the confirmation message and ensures that it's authenticated:
 
     unsigned char confirmationDecrypted[32];
     Xoodyak_Decrypt(&aliceInstance, confirmationEncrypted, confirmationDecrypted, 32);
@@ -1254,7 +1253,6 @@ void sessionAuthenticatedEncryption() {
 ```
 
 </details>
-
 
 <details open>
     <summary>Authenticated Encryption: Session with rolling subkeys example</summary>
@@ -1427,7 +1425,6 @@ void authenticatedEncryptionWithRatchet() {
 
 </details>
 
-
 ### Combining hash and keyed modes
 
 A key exchange protocol, such as Diffie-Hellman or variant, results in a common secret that usually requires further derivation before being used as a symmetric secret key. To do this with a Xoodyak, we can first use it in hash mode to process the common secret, and then use the derived key with Xoodyak in keyed mode.
@@ -1502,4 +1499,3 @@ void xoodyakCombinedMode() {
 ```
 
 </details>
-
