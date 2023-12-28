@@ -252,10 +252,10 @@ done
 
 
 # # test the high level API with the generic64 implementation and the clang compiler
-# t="generic64"
-# c="clang"
-# echo "=========== Compiling $t (with $c compiler)\n\n\n" | tee -a artifacts/CIlog.log
-# make clean && CC=$c make $t/UnitTests -j`nproc`
-# cp ./bin/$t/UnitTests artifacts/UnitTests_"$t"_"$c"
-# echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64\n\n\n" | tee -a artifacts/CIlog.log
-# ./bin/$t/UnitTests -a
+t="generic64"
+c="clang"
+echo "=========== Compiling $t (with $c compiler)\n\n\n" | tee -a artifacts/CIlog.log
+make clean && CC=$c make $t/UnitTests -j`nproc`
+cp ./bin/$t/UnitTests artifacts/UnitTests_"$t"_"$c"
+echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64\n\n\n" | tee -a artifacts/CIlog.log
+./bin/$t/UnitTests -a
