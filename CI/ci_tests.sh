@@ -112,7 +112,11 @@ for t in generic32 generic32lc generic64 generic64lc SSSE3 AVX AVX2 AVX2noAsm AV
 					./bin/$t/UnitTests -p
 				else
 					echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64\n\n\n" | tee -a artifacts/CIlog.log
-					qemu-x86_64-static ./bin/$t/UnitTests -p
+                    if [ "$t" = "generic64" ] && [ "$c" = "clang" ]; then
+                        qemu-x86_64-static ./bin/$t/UnitTests -a
+                    else
+                        qemu-x86_64-static ./bin/$t/UnitTests -p
+                    fi
 				fi
 			fi
 		fi
@@ -248,14 +252,3 @@ for t in ARMv6M ARMv7M; do
 		qemu-system-arm -semihosting-config enable=on -monitor none -serial none -nographic -machine mps2-an385,accel=tcg -no-reboot -kernel ./bin/$t/UnitTests
 	fi
 done
-
-
-
-# # test the high level API with the generic64 implementation and the clang compiler
-t="generic64"
-c="clang"
-echo "=========== Compiling $t (with $c compiler)\n\n\n" | tee -a artifacts/CIlog.log
-make clean && CC=$c make $t/UnitTests -j`nproc`
-cp ./bin/$t/UnitTests artifacts/UnitTests_"$t"_"$c"
-echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64\n\n\n" | tee -a artifacts/CIlog.log
-./bin/$t/UnitTests -a
