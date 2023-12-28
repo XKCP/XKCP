@@ -105,6 +105,9 @@ for t in generic32 generic32lc generic64 generic64lc SSSE3 AVX AVX2 AVX2noAsm AV
 					echo "\n\n\n=========== Skipping run test for $t (compiled with $c compiler): AVX512 not supported yet by Qemu and not supported by the native CI CPU\n\n\n" | tee -a artifacts/CIlog.log
 				fi
 			else
+                # TODO: testing the HIGH level APIs is taking so much time here (+20 min).
+                # So maybe make a separate job to test the HIGH level APIs (similar to the
+                #  one in https://github.com/XKCP/XKCP/pull/131 )
 				if [ "$AVX512VL" != "" ] && [ "$AVX512F" != "" ]; then
 					# Since the -march=native / -mtune=native toggles are used, we cannot rely on Qemu on
 					# CPUs that support AVX512. Hence we execute the test natively
