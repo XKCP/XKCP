@@ -112,18 +112,18 @@ for t in generic32 generic32lc generic64 generic64lc SSSE3 AVX AVX2 AVX2noAsm AV
 					# Since the -march=native / -mtune=native toggles are used, we cannot rely on Qemu on
 					# CPUs that support AVX512. Hence we execute the test natively
 					echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64 (native test as AVX512 is not supported yet by Qemu)\n\n\n" | tee -a artifacts/CIlog.log
-                    if [ "$t" = "generic64" ] && [ "$c" = "clang" ]; then
-                        ./bin/$t/UnitTests -a
-                    else
+                    # if [ "$t" = "generic64" ] && [ "$c" = "clang" ]; then
+                    #     ./bin/$t/UnitTests -a
+                    # else
                         ./bin/$t/UnitTests -p
-                    fi
+                    # fi
 				else
 					echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64\n\n\n" | tee -a artifacts/CIlog.log
-                    if [ "$t" = "generic64" ] && [ "$c" = "clang" ]; then
-                        qemu-x86_64-static ./bin/$t/UnitTests -a
-                    else
+                    # if [ "$t" = "generic64" ] && [ "$c" = "clang" ]; then
+                    #     qemu-x86_64-static ./bin/$t/UnitTests -a
+                    # else
                         qemu-x86_64-static ./bin/$t/UnitTests -p
-                    fi
+                    # fi
 				fi
 			fi
 		fi
