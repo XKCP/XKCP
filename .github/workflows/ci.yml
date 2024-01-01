@@ -4,7 +4,7 @@ name: XKCP CI
 on: push
 
 jobs:
-  permutations_different_lowlevel_implementations:
+  permutations_different_low_level_implementations:
     runs-on: ubuntu-latest
 
     steps:
