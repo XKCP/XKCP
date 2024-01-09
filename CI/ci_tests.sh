@@ -109,10 +109,10 @@ for t in generic32 generic32lc generic64 generic64lc SSSE3 AVX AVX2 AVX2noAsm AV
 					# Since the -march=native / -mtune=native toggles are used, we cannot rely on Qemu on
 					# CPUs that support AVX512. Hence we execute the test natively
 					echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64 (native test as AVX512 is not supported yet by Qemu)\n\n\n" | tee -a artifacts/CIlog.log
-                    ./bin/$t/UnitTests -p
+                                        ./bin/$t/UnitTests -p
 				else
 					echo "\n\n\n=========== Testing $t (compiled with $c compiler) for x86_64\n\n\n" | tee -a artifacts/CIlog.log
-                    qemu-x86_64-static ./bin/$t/UnitTests -p
+                                        qemu-x86_64-static ./bin/$t/UnitTests -p
 				fi
 			fi
 		fi
