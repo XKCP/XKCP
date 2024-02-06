@@ -545,7 +545,7 @@ int main() {
 
 ### Kravatte-SANSE authenticated encryption
 
-Like SANE, SANE is an authenticated encryption scheme supporting sessions, the tag for the message _n_ authenticates
+Like SANE, SANSE is an authenticated encryption scheme supporting sessions, the tag for the message _n_ authenticates
 the full history of the session up to that point, i.e. the messages 1, 2, ..., _n_.
 
 However, SANSE is a nonce-misuse resistant version of SANE.
