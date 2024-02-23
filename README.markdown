@@ -263,11 +263,13 @@ We wish to thank all the contributors, and in particular:
 - Bruno Pairault for testing and benchmarking on ARM platforms
 - Conno Boel for the NEON implementations of Xoodoo
 - D.J. Bernstein, Peter Schwabe and Gilles Van Assche for the tweetable FIPS 202 implementation `TweetableFIPS202.c`
+- Hadi El Yakhni for providing example code
 - Hussama Ismail for setting up the continuous integration with Travis
 - Kent Ross for various improvements in [XKCP/K12](https://github.com/XKCP/K12) imported here
 - Larry Bassham, NIST for the original `genKAT.c` developed during the SHA-3 contest
+- Ryad Benadjila for adding continuous integration on different platforms with qemu
 - Stéphane Léon for helping support macOS
-
+- And to all those who fixed bugs or brought improvements (in no specific order): Tyler Young, Robert J Spencer, amane-c, Øystein Heskestad, Norman (Hongyu) Xu, Jorrit Jongma, David Adrian, Sebastian Ramacher, lvd2, Sam Chen, Thom Wiggers, Thomas van der Burgt, Donald Tsang, MoorayJenkins, UnePierre, Diggory Hardy, Joost Rijneveld, Steve Thomas, Benoît Viguier, Ko Stoffelen, Bogdan Vaneev, Alf Watt, surrim, Robert Crossfield, David Leon Gil, Matt Kelly, Ross Biro
 
 ***
 
