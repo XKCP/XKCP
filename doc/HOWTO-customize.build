@@ -42,9 +42,6 @@ Please refer to lib/HighLevel.build for the list of supported cryptographic func
 Then, identify the permutations that the chosen cryptographic functions need.
 
 Each cryptographic function implemented in the XKCP depends on a given permutation. It interacts with the permutation through an interface called SnP. Some functions further can take advantage of a parallel implementation of the permutation, in which case the interface is called PlSnP. The choice of high-level services therefore determines what we need as low-level services:
-* Those that require Keccak-p[200]: Keccak{Sponge, Duplex, PRG} with rate + capacity = 200
-* Those that require Keccak-p[400]: Keccak{Sponge, Duplex, PRG} with rate + capacity = 400
-* Those that require Keccak-p[800]: Keccak{Sponge, Duplex, PRG} with rate + capacity = 800
 * Those that require Keccak-p[1600]: Kravatte, KangarooTwelve, FIPS202, SP800-185, Keccak{Sponge, Duplex, PRG} with rate + capacity = 1600
 * Those that require Xoodoo: Xoofff, Xoodyak
 
@@ -63,12 +60,6 @@ Please refer to the file lib/LowLevel.build for the list of supported implementa
 -->
 
 <!-- Examples -->
-
-    <!-- Type "make PRG-AVR8.pack" to get a tarball with the sources needed to compile a pseudo-random number generator on top of Keccak-f[200] for AVR8. -->
-    <target name="PRG-AVR8" inherits="KeccakPRG K200-AVR8"/>
-
-    <!-- Type "make libKeccak-16bits.a" to compile a library with Keccak sponge, duplex and PRG on top of Keccak-f[400], using plain reference code. Add ".pack" when invoking make to get a tarball with the source files instead. -->
-    <target name="libKeccak-16bits.a" inherits="KeccakSponge KeccakDuplex KeccakPRG K400-ref"/>
 
     <!-- Type "make Xoodyak-ARMv7M.pack" to get a tarball with the sources needed to compile Xoodyak on ARMv7M. -->
     <target name="Xoodyak-ARMv7M" inherits="Xoodyak Xoodoo-ARMv7M"/>
