@@ -89,7 +89,7 @@ The granularity is the lane (64 bits).
 For the first state, we take the 8*laneCount bytes at data[0 : 8*laneCount] and add them to it.
 For the second state, we take 8*laneCount bytes 8*laneOffset bytes further, so at data[8*laneOffset : 8*laneOffset + 8*laneCount], and add them to it.
 For the third state, we do the same, but again 8*laneOffset bytes further, etc.
-For KT128 (and KT256), 8*laneOffset is 8192 so that the first state gets data from the first leaf, the second state from the second leaf, etc.
+For KT128 and KT256, 8*laneOffset is 8192 so that the first state gets data from the first leaf, the second state from the second leaf, etc.
 
 Parameters
 ----------
