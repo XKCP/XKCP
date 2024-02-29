@@ -9,7 +9,7 @@
 # http://creativecommons.org/publicdomain/zero/1.0/
 
 """
-The Python code in this module illustrates how KangarooTwelve (K12) can be implemented using single-instruction-multiple-data (SIMD) instructions.
+The Python code in this module illustrates how the KangarooTwelve variations, KT128 and KT256, can be implemented using single-instruction-multiple-data (SIMD) instructions.
 It does not provide optimized SIMD code, but instead illustrates how one can write SIMD code for K12 by simulating how SIMD works.
 As a convention, it simulates SIMD registers of N×64 bits, for some positive integer N, by putting the N words of 64 bits in a list.
 For instance, 256-bit SIMD instructions like AVX2 work on N=4 words of 64 bits.
@@ -89,7 +89,6 @@ The granularity is the lane (64 bits).
 For the first state, we take the 8*laneCount bytes at data[0 : 8*laneCount] and add them to it.
 For the second state, we take 8*laneCount bytes 8*laneOffset bytes further, so at data[8*laneOffset : 8*laneOffset + 8*laneCount], and add them to it.
 For the third state, we do the same, but again 8*laneOffset bytes further, etc.
-// NOTE: important
 For KT128 (and KT256), 8*laneOffset is 8192 so that the first state gets data from the first leaf, the second state from the second leaf, etc.
 
 Parameters
@@ -173,7 +172,6 @@ def KangarooTwelve_ProcessLeaves_128(N, data):
         # - add bytes data[j : j + 168] to the first state
         # - add bytes data[8KiB + j : 8KiB + j + 168] to the second state
         # - add bytes data[16KiB + j : 16KiB + j + 168] to the third state, etc.
-        # Note: the last param is offset in lanes, not in bytes, thus the //8
         KeccakP1600timesN_AddLanesAll(N, A, data[j:], rateInLanes, B//8) 
         # Apply Keccak-p[1600, 12 rounds] to all states
         A = KeccakP1600timesN_SIMD(N, A, 12)
@@ -360,21 +358,21 @@ def outputHex(s):
 
 # Produce test vectors
 def printK12TestVectors():
-    print("KangarooTwelve(M=empty, C=empty, 32 output bytes):")
+    print("KT128(M=empty, C=empty, 32 output bytes):")
     outputHex(KT128(b'', b'', 32))
-    print("KangarooTwelve(M=empty, C=empty, 64 output bytes):")
+    print("KT128(M=empty, C=empty, 64 output bytes):")
     outputHex(KT128(b'', b'', 64))
-    print("KangarooTwelve(M=empty, C=empty, 10032 output bytes), last 32 bytes:")
+    print("KT128(M=empty, C=empty, 10032 output bytes), last 32 bytes:")
     outputHex(KT128(b'', b'', 10032)[10000:])
     for i in range(6):
         C = b''
         M = bytearray([(j % 251) for j in range(17**i)])
-        print("KangarooTwelve(M=pattern 0x00 to 0xFA for 17^{0:d} bytes, C=empty, 32 output bytes):".format(i))
+        print("KT128(M=pattern 0x00 to 0xFA for 17^{0:d} bytes, C=empty, 32 output bytes):".format(i))
         outputHex(KT128(M, C, 32))
     for i in range(4):
         M = bytearray([0xFF for j in range(2**i-1)])
         C = bytearray([(j % 251) for j in range(41**i)])
-        print("KangarooTwelve(M={0:d} times byte 0xFF, C=pattern 0x00 to 0xFA for 41^{1:d} bytes, 32 output bytes):".format(2**i-1, i))
+        print("KT128(M={0:d} times byte 0xFF, C=pattern 0x00 to 0xFA for 41^{1:d} bytes, 32 output bytes):".format(2**i-1, i))
         outputHex(KT128(M, C, 32))
 
 
