@@ -288,6 +288,7 @@ def KT128(inputMessage, customizationString, outputByteLen):
             + right_encode(n) + b'\xFF\xFF'
         return TurboSHAKE128(NodeStar, 0x06, outputByteLen)
     
+
 def KT256(inputMessage, customizationString, outputByteLen):
     c = 512
     # Concatenate the input message, the customization string and the length of the latter
@@ -326,7 +327,6 @@ def KT256(inputMessage, customizationString, outputByteLen):
         NodeStar = S[0:B] + bytearray([3,0,0,0,0,0,0,0]) + CVs \
             + right_encode(n) + b'\xFF\xFF'
         return TurboSHAKE256(NodeStar, 0x06, outputByteLen)
-
 
 
 # Test that KeccakP1600timesN_SIMD does what it is supposed to
@@ -377,6 +377,9 @@ def printK12TestVectors():
         print("KangarooTwelve(M={0:d} times byte 0xFF, C=pattern 0x00 to 0xFA for 41^{1:d} bytes, 32 output bytes):".format(2**i-1, i))
         outputHex(KT128(M, C, 32))
 
+
+# for testing reasons, inspired by the test vectors of the update KangarooTwelve draft
+# https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-kangarootwelve
 def ptn(n):
     pattern = bytes(range(0xFA + 1))  # Include 0xFA
     repetitions = n // len(pattern)
@@ -384,10 +387,10 @@ def ptn(n):
     repeated_pattern = pattern * repetitions + pattern[:remainder]
     return repeated_pattern
 
+
 # outputHex(KT256(b'', b'', 64))
 # print()
 # outputHex(KT256(b'', b'', 128))
-
 # outputHex(KT256(ptn(17), b'', 64))
 # print()
 # outputHex(KT256(ptn(17**2), b'', 64))
@@ -411,6 +414,6 @@ def ptn(n):
 # outputHex(KT256(ptn(8192), ptn(8190), 64))
 
 
-# Test_KeccakP1600timesN_SIMD()
-# Test_KangarooTwelve_ProcessLeaves_128()
-# printK12TestVectors()
+Test_KeccakP1600timesN_SIMD()
+Test_KangarooTwelve_ProcessLeaves_128()
+printK12TestVectors()
