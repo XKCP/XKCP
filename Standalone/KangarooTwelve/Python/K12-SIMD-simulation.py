@@ -159,7 +159,7 @@ Returns
 byte array
     The N chaining values.
 """
-def KangarooTwelve_ProcessLeaves_128(N, data):
+def KT128_ProcessLeaves(N, data):
     assert(len(data) >= N*B)
     rateInLanes = 21
     rateInBytes = rateInLanes*8
@@ -191,7 +191,11 @@ def KangarooTwelve_ProcessLeaves_128(N, data):
     CVs = bytearray().join([store64(A[0][0][i]) + store64(A[1][0][i]) + store64(A[2][0][i]) + store64(A[3][0][i]) for i in range(N)])
     return CVs
 
-def KangarooTwelve_ProcessLeaves_256(N, data):
+"""
+Same concept as KT128_ProcessLeaves, but for KT256.
+The returned chaining value is 512 bits instead of 256 bits, to conform to the 256 bits security level of KT256.
+"""
+def KT256_ProcessLeaves(N, data):
     assert(len(data) >= N*B)
     rateInLanes = 17
     rateInBytes = rateInLanes*8
@@ -263,17 +267,17 @@ def KT128(inputMessage, customizationString, outputByteLen):
         n = 0
         # Process 8 leaves in parallel if possible
         while(j + 8*B <= len(S)):
-            CVs = CVs + KangarooTwelve_ProcessLeaves_128(8, S[j:])
+            CVs = CVs + KT128_ProcessLeaves(8, S[j:])
             j = j + 8*B
             n = n + 8
         # Process 4 leaves in parallel if possible
         while(j + 4*B <= len(S)):
-            CVs = CVs + KangarooTwelve_ProcessLeaves_128(4, S[j:])
+            CVs = CVs + KT128_ProcessLeaves(4, S[j:])
             j = j + 4*B
             n = n + 4
         # Process 2 leaves in parallel if possible
         while(j + 2*B <= len(S)):
-            CVs = CVs + KangarooTwelve_ProcessLeaves_128(2, S[j:])
+            CVs = CVs + KT128_ProcessLeaves(2, S[j:])
             j = j + 2*B
             n = n + 2
         # Process the remaining leaf
@@ -287,6 +291,9 @@ def KT128(inputMessage, customizationString, outputByteLen):
         return TurboSHAKE128(NodeStar, 0x06, outputByteLen)
     
 
+"""
+Same concept as KT128, but for KT256.
+"""
 def KT256(inputMessage, customizationString, outputByteLen):
     c = 512
     # Concatenate the input message, the customization string and the length of the latter
@@ -303,17 +310,17 @@ def KT256(inputMessage, customizationString, outputByteLen):
         n = 0
         # Process 8 leaves in parallel if possible
         while(j + 8*B <= len(S)):
-            CVs = CVs + KangarooTwelve_ProcessLeaves_256(8, S[j:])
+            CVs = CVs + KT256_ProcessLeaves(8, S[j:])
             j = j + 8*B
             n = n + 8
         # Process 4 leaves in parallel if possible
         while(j + 4*B <= len(S)):
-            CVs = CVs + KangarooTwelve_ProcessLeaves_256(4, S[j:])
+            CVs = CVs + KT256_ProcessLeaves(4, S[j:])
             j = j + 4*B
             n = n + 4
         # Process 2 leaves in parallel if possible
         while(j + 2*B <= len(S)):
-            CVs = CVs + KangarooTwelve_ProcessLeaves_256(2, S[j:])
+            CVs = CVs + KT256_ProcessLeaves(2, S[j:])
             j = j + 2*B
             n = n + 2
         # Process the remaining leaf
@@ -340,14 +347,14 @@ def Test_KeccakP1600timesN_SIMD():
     return
 
 # Test that KangarooTwelve_ProcessLeaves does what it is supposed to
-def Test_KangarooTwelve_ProcessLeaves_128():
+def Test_KT128_ProcessLeaves():
     c = 256
     for N in range(1, 5):
-        print("Testing KangarooTwelve_ProcessLeaves for N =", N)
+        print("Testing KT128_ProcessLeaves for N =", N)
         S = bytearray([(i%247) for i in range(B*N)])
         Si = [bytearray(S[i*B:(i+1)*B]) for i in range(N)]
         ref_CVs = bytearray().join([TurboSHAKE128(Si[i], 0x0B, c//8) for i in range(N)])
-        test_CVs = KangarooTwelve_ProcessLeaves_128(N, S)
+        test_CVs = KT128_ProcessLeaves(N, S)
         assert(test_CVs == ref_CVs)
 
 def outputHex(s):
@@ -356,27 +363,7 @@ def outputHex(s):
     print()
     print()
 
-# Produce test vectors
-def printK12TestVectors():
-    print("KT128(M=empty, C=empty, 32 output bytes):")
-    outputHex(KT128(b'', b'', 32))
-    print("KT128(M=empty, C=empty, 64 output bytes):")
-    outputHex(KT128(b'', b'', 64))
-    print("KT128(M=empty, C=empty, 10032 output bytes), last 32 bytes:")
-    outputHex(KT128(b'', b'', 10032)[10000:])
-    for i in range(6):
-        C = b''
-        M = bytearray([(j % 251) for j in range(17**i)])
-        print("KT128(M=pattern 0x00 to 0xFA for 17^{0:d} bytes, C=empty, 32 output bytes):".format(i))
-        outputHex(KT128(M, C, 32))
-    for i in range(4):
-        M = bytearray([0xFF for j in range(2**i-1)])
-        C = bytearray([(j % 251) for j in range(41**i)])
-        print("KT128(M={0:d} times byte 0xFF, C=pattern 0x00 to 0xFA for 41^{1:d} bytes, 32 output bytes):".format(2**i-1, i))
-        outputHex(KT128(M, C, 32))
-
-
-# for testing reasons, inspired by the test vectors of the update KangarooTwelve draft
+# for testing purposes, inspired by the test vectors of the update KangarooTwelve draft
 # https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-kangarootwelve
 def ptn(n):
     pattern = bytes(range(0xFA + 1))  # Include 0xFA
@@ -385,33 +372,43 @@ def ptn(n):
     repeated_pattern = pattern * repetitions + pattern[:remainder]
     return repeated_pattern
 
+# Produce test vectors
+def printKT128TestVectors():
+    print("KT128(M=empty, C=empty, 32 output bytes):")
+    outputHex(KT128(b'', b'', 32))
+    print("KT128(M=empty, C=empty, 64 output bytes):")
+    outputHex(KT128(b'', b'', 64))
+    print("KT128(M=empty, C=empty, 10032 output bytes), last 32 bytes:")
+    outputHex(KT128(b'', b'', 10032)[10000:])
+    for i in range(6):
+        C = b''
+        M = ptn(17**i)
+        print("KT128(M=pattern 0x00 to 0xFA for 17^{0:d} bytes, C=empty, 32 output bytes):".format(i))
+        outputHex(KT128(M, C, 32))
+    for i in range(4):
+        M = bytearray([0xFF for j in range(2**i-1)])
+        C = ptn(41**i)
+        print("KT128(M={0:d} times byte 0xFF, C=pattern 0x00 to 0xFA for 41^{1:d} bytes, 32 output bytes):".format(2**i-1, i))
+        outputHex(KT128(M, C, 32))
 
-# outputHex(KT256(b'', b'', 64))
-# print()
-# outputHex(KT256(b'', b'', 128))
-# outputHex(KT256(ptn(17), b'', 64))
-# print()
-# outputHex(KT256(ptn(17**2), b'', 64))
-# print()
-# outputHex(KT256(ptn(17**3), b'', 64))
-# print()
-# outputHex(KT256(ptn(17**4), b'', 64))
-# print()
-# outputHex(KT256(ptn(17**5), b'', 64))
-# print()
-# outputHex(KT256(ptn(17**6), b'', 64))
-# print()
-# outputHex(KT256(b'\xFF\xFF\xFF\xFF\xFF\xFF\xFF', ptn(41**3), 64))
-# print()
-# outputHex(KT256(ptn(8191), b'', 64))
-# print()
-# outputHex(KT256(ptn(8192), b'', 64))
-# print()
-# outputHex(KT256(ptn(8192), ptn(8189), 64))
-# print()
-# outputHex(KT256(ptn(8192), ptn(8190), 64))
+def printKT256TestVectors():
+    print("KT256(M=empty, C=empty, 64 output bytes):")
+    outputHex(KT256(b'', b'', 64))
+    print("KT256(M=empty, C=empty, 128 output bytes):")
+    outputHex(KT256(b'', b'', 128))
+    for i in range(6):
+        C = b''
+        M = ptn(17**i)
+        print("KT256(M=pattern 0x00 to 0xFA for 17^{0:d} bytes, C=empty, 64 output bytes):".format(i))
+        outputHex(KT256(M, C, 64))
+    for i in range(4):
+        M = bytearray([0xFF for j in range(2**i-1)])
+        C = ptn(41**i)
+        print("KT256(M={0:d} times byte 0xFF, C=pattern 0x00 to 0xFA for 41^{1:d} bytes, 64 output bytes):".format(2**i-1, i))
+        outputHex(KT256(M, C, 64))
 
 
 Test_KeccakP1600timesN_SIMD()
-Test_KangarooTwelve_ProcessLeaves_128()
-printK12TestVectors()
+Test_KT128_ProcessLeaves()
+printKT128TestVectors()
+printKT256TestVectors()
