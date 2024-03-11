@@ -102,7 +102,7 @@ int main() {
 
      for (int i = 0; i < inputChunksCount; i++) {
          // feed the input in chunks
-         Keccak_HashUpdate(&hi, input[i], strlen((const char *) input[i]) * 8);
+         result = Keccak_HashUpdate(&hi, input[i], strlen((const char *) input[i]) * 8);
          assert(result == KECCAK_SUCCESS);
      }
 
@@ -175,7 +175,7 @@ int main() {
         assert(result == KECCAK_SUCCESS);
 
         // feed the input
-        Keccak_HashUpdate(&hi, input, strlen((const char *) input) * 8);
+        result = Keccak_HashUpdate(&hi, input, strlen((const char *) input) * 8);
         assert(result == KECCAK_SUCCESS);
 
         // call `Keccak_HashFinal` to mark the end of the input
