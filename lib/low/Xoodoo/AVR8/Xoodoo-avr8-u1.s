@@ -40,7 +40,7 @@
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_Initialize(void *state)
+; void Xoodoo_Initialize(Xoodoo_plain8_state *state)
 ;
 ; argument state   is passed in r24:r25
 ;
@@ -64,7 +64,7 @@ Xoodoo_StaticInitialize:
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_AddByte(void *state, unsigned char data, unsigned int offset)
+; void Xoodoo_AddByte(Xoodoo_plain8_state *state, unsigned char data, unsigned int offset)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23, only LSB (r22) is used
@@ -82,7 +82,7 @@ Xoodoo_AddByte:
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void Xoodoo_AddBytes(Xoodoo_plain8_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23
@@ -150,7 +150,7 @@ Xoodoo_AddBytes_End:
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void Xoodoo_OverwriteBytes(Xoodoo_plain8_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23
@@ -199,7 +199,7 @@ Xoodoo_OverwriteBytes_End:
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
+; void Xoodoo_OverwriteWithZeroes(Xoodoo_plain8_state *state, unsigned int byteCount)
 ;
 ; argument state        is passed in r24:r25
 ; argument byteCount    is passed in r22:r23, only LSB (r22) is used
@@ -235,7 +235,7 @@ Xoodoo_OverwriteWithZeroes_End:
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void Xoodoo_ExtractBytes(Xoodoo_plain8_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23
@@ -284,7 +284,7 @@ Xoodoo_ExtractBytes_End:
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+; void Xoodoo_ExtractAndAddBytes(Xoodoo_plain8_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument input     is passed in r22:r23
@@ -401,7 +401,7 @@ Xoodoo_RoundConstants_0:
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_Permute_Nrounds( void *state, unsigned int nrounds )
+; void Xoodoo_Permute_Nrounds( Xoodoo_plain8_state *state, unsigned int nrounds )
 ;
 ; argument state     is passed in r24:r25
 ; argument nrounds   is passed in r22:r23 (only LSB (r22) is used)
@@ -418,7 +418,7 @@ Xoodoo_Permute_Nrounds:
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_Permute_6rounds( void *state )
+; void Xoodoo_Permute_6rounds( Xoodoo_plain8_state *state )
 ;
 ; argument state     is passed in r24:r25
 ;
@@ -430,7 +430,7 @@ Xoodoo_Permute_6rounds:
 
 ;----------------------------------------------------------------------------
 ;
-; void Xoodoo_Permute_12rounds( void *state )
+; void Xoodoo_Permute_12rounds( Xoodoo_plain8_state *state )
 ;
 ; argument state     is passed in r24:r25
 ;

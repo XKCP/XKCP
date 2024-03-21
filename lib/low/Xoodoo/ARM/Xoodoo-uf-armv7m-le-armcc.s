@@ -22,7 +22,7 @@
 
 ; ----------------------------------------------------------------------------
 ;
-;  void Xoodoo_Initialize(void *state)
+;  void Xoodoo_Initialize(Xoodoo_plain32_state *state)
 ;
     align   4
     EXPORT  Xoodoo_Initialize
@@ -40,7 +40,7 @@ Xoodoo_Initialize   PROC
 
 ; ----------------------------------------------------------------------------
 ;
-;  void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+;  void Xoodoo_AddBytes(Xoodoo_plain32_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
     EXPORT  Xoodoo_AddBytes
 Xoodoo_AddBytes   PROC
@@ -72,7 +72,7 @@ Xoodoo_AddBytes_Exit
 
 ; ----------------------------------------------------------------------------
 ;
-;  void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+;  void Xoodoo_OverwriteBytes(Xoodoo_plain32_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
     EXPORT  Xoodoo_OverwriteBytes
 Xoodoo_OverwriteBytes   PROC
@@ -99,7 +99,7 @@ Xoodoo_OverwriteBytes_Exit
 
 ; ----------------------------------------------------------------------------
 ;
-;  void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
+;  void Xoodoo_OverwriteWithZeroes(Xoodoo_plain32_state *state, unsigned int byteCount)
 ;
     EXPORT  Xoodoo_OverwriteWithZeroes
 Xoodoo_OverwriteWithZeroes  PROC
@@ -124,7 +124,7 @@ Xoodoo_OverwriteWithZeroes_Exit
 
 ; ----------------------------------------------------------------------------
 ;
-;  void Xoodoo_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+;  void Xoodoo_ExtractBytes(Xoodoo_plain32_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
     EXPORT  Xoodoo_ExtractBytes
 Xoodoo_ExtractBytes   PROC
@@ -151,7 +151,7 @@ Xoodoo_ExtractBytes_Exit
 
 ; ----------------------------------------------------------------------------
 ;
-;  void Xoodoo_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+;  void Xoodoo_ExtractAndAddBytes(Xoodoo_plain32_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 ;
     EXPORT  Xoodoo_ExtractAndAddBytes
 Xoodoo_ExtractAndAddBytes   PROC
@@ -318,7 +318,7 @@ _rc1x12 equ 0x00000120
 
 ; ----------------------------------------------------------------------------
 ;
-;  void Xoodoo_Permute_6rounds( void *state )
+;  void Xoodoo_Permute_6rounds( Xoodoo_plain32_state *state )
 ;
     EXPORT  Xoodoo_Permute_6rounds
 Xoodoo_Permute_6rounds   PROC
@@ -354,7 +354,7 @@ Xoodoo_Permute_6rounds   PROC
 
 ; ----------------------------------------------------------------------------
 ;
-;  void Xoodoo_Permute_12rounds( void *state )
+;  void Xoodoo_Permute_12rounds( Xoodoo_plain32_state *state )
 ;
     EXPORT  Xoodoo_Permute_12rounds
 Xoodoo_Permute_12rounds   PROC

@@ -37,6 +37,7 @@ We would like to thank Vladimir Sedach, we have used parts of his Keccak AVX-512
 #include "align.h"
 #include "brg_endian.h"
 #include "KeccakP-1600-AVX512-config.h"
+#include "KeccakP-1600-SnP.h"
 
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
 #error Expecting a little-endian platform
@@ -226,19 +227,19 @@ typedef __m512i     V512;
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_Initialize(void *state)
+void KeccakP1600_Initialize(KeccakP1600_plain64_state *state)
 {
-    memset(state, 0, 1600/8);
+    memset(state->A, 0, sizeof(KeccakP1600_plain64_state));
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP1600_AddBytes(KeccakP1600_plain64_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     uint8_t  *stateAsBytes;
     uint64_t *stateAsLanes;
 
-    for( stateAsBytes = (uint8_t*)state; ((offset % 8) != 0) && (length != 0); ++offset, --length)
+    for( stateAsBytes = (uint8_t*)state->A; ((offset % 8) != 0) && (length != 0); ++offset, --length)
         stateAsBytes[offset] ^= *(data++);
     for (stateAsLanes = (uint64_t*)(stateAsBytes + offset); length >= 8*8; stateAsLanes += 8, data += 8*8, length -= 8*8)
         STORE_8Lanes( stateAsLanes, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes((const uint64_t*)data)));
@@ -250,33 +251,33 @@ void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int o
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP1600_OverwriteBytes(KeccakP1600_plain64_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
-    memcpy((unsigned char*)state+offset, data, length);
+    memcpy((unsigned char*)state->A + offset, data, length);
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
+void KeccakP1600_OverwriteWithZeroes(KeccakP1600_plain64_state *state, unsigned int byteCount)
 {
-    memset(state, 0, byteCount);
+    memset(state->A, 0, byteCount);
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP1600_ExtractBytes(const KeccakP1600_plain64_state *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
-    memcpy(data, (unsigned char*)state+offset, length);
+    memcpy(data, (unsigned char*)state->A + offset, length);
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_ExtractAndAddBytes(const void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+void KeccakP1600_ExtractAndAddBytes(const KeccakP1600_plain64_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
     uint8_t  *stateAsBytes;
     uint64_t *stateAsLanes;
 
-    for( stateAsBytes = (uint8_t*)state; ((offset % 8) != 0) && (length != 0); ++offset, --length)
+    for( stateAsBytes = (uint8_t*)state->A; ((offset % 8) != 0) && (length != 0); ++offset, --length)
         *(output++) = stateAsBytes[offset] ^ *(input++);
     for (stateAsLanes = (uint64_t*)(stateAsBytes + offset); length >= 8*8; stateAsLanes += 8, input += 8*8, output += 8*8, length -= 8*8)
         STORE_8Lanes( (uint64_t*)output, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes((const uint64_t*)input)));
@@ -495,11 +496,11 @@ const uint64_t KeccakP1600RoundConstants[24] = {
 #error "Unrolling is not correctly specified!"
 #endif
 
-void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+void KeccakP1600_Permute_Nrounds(KeccakP1600_plain64_state *state, unsigned int nrounds)
 {
     KeccakP_DeclareVars
     unsigned int i;
-    uint64_t *stateAsLanes = (uint64_t*)state;
+    uint64_t *stateAsLanes = state->A;
 
     copyFromState(stateAsLanes);
     if ((nrounds & 1) != 0) {
@@ -522,13 +523,13 @@ void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_Permute_12rounds(void *state)
+void KeccakP1600_Permute_12rounds(KeccakP1600_plain64_state *state)
 {
     KeccakP_DeclareVars
     #ifndef KeccakP1600_fullUnrolling
     unsigned int i;
     #endif
-    uint64_t *stateAsLanes = (uint64_t*)state;
+    uint64_t *stateAsLanes = state->A;
 
     copyFromState(stateAsLanes);
     rounds12;
@@ -537,20 +538,20 @@ void KeccakP1600_Permute_12rounds(void *state)
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_Permute_24rounds(void *state)
+void KeccakP1600_Permute_24rounds(KeccakP1600_plain64_state *state)
 {
     KeccakP_DeclareVars
     #ifndef KeccakP1600_fullUnrolling
     unsigned int i;
     #endif
-    uint64_t *stateAsLanes = (uint64_t*)state;
+    uint64_t *stateAsLanes = state->A;
 
     copyFromState(stateAsLanes);
     rounds24;
     copyToState(stateAsLanes);
 }
 
-size_t KeccakF1600_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen)
+size_t KeccakF1600_FastLoop_Absorb(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen)
 {
     size_t originalDataByteLen = dataByteLen;
 
@@ -559,7 +560,7 @@ size_t KeccakF1600_FastLoop_Absorb(void *state, unsigned int laneCount, const un
         #ifndef KeccakP1600_fullUnrolling
         unsigned int i;
         #endif
-        uint64_t *stateAsLanes = (uint64_t*)state;
+        uint64_t *stateAsLanes = state->A;
         uint64_t *inDataAsLanes = (uint64_t*)data;
 
         copyFromState(stateAsLanes);
@@ -586,7 +587,7 @@ size_t KeccakF1600_FastLoop_Absorb(void *state, unsigned int laneCount, const un
     return originalDataByteLen - dataByteLen;
 }
 
-size_t KeccakP1600_12rounds_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen)
+size_t KeccakP1600_12rounds_FastLoop_Absorb(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen)
 {
     size_t originalDataByteLen = dataByteLen;
 
@@ -595,7 +596,7 @@ size_t KeccakP1600_12rounds_FastLoop_Absorb(void *state, unsigned int laneCount,
         #if !defined(KeccakP1600_fullUnrolling) && (KeccakP1600_unrolling < 12)
         unsigned int i;
         #endif
-        uint64_t *stateAsLanes = (uint64_t*)state;
+        uint64_t *stateAsLanes = state->A;
         uint64_t *inDataAsLanes = (uint64_t*)data;
 
         copyFromState(stateAsLanes);

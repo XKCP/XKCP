@@ -158,7 +158,7 @@ void displayKeccakF800IntermediateValues()
 #include "KeccakP-1600-reference.h"
 void displayKeccakF1600IntermediateValues()
 {
-    unsigned char state[KeccakP1600_stateSizeInBytes];
+    KeccakP1600_state state;
     #ifdef KeccakReference32BI
     const char *fileName = "KeccakF-1600-IntermediateValues32BI.txt";
     #else
@@ -184,12 +184,12 @@ void displayKeccakF1600IntermediateValues()
 
         fprintf(f, "+++ Example with the all-zero input +++\n");
         fprintf(f, "\n");
-        KeccakP1600_Initialize(state);
-        KeccakP1600_Permute_24rounds(state);
+        KeccakP1600_Initialize(&state);
+        KeccakP1600_Permute_24rounds(&state);
 
         fprintf(f, "+++ Example taking the previous output as input +++\n");
         fprintf(f, "\n");
-        KeccakP1600_Permute_24rounds(state);
+        KeccakP1600_Permute_24rounds(&state);
 
         fclose(f);
         displaySetIntermediateValueFile(0);
@@ -233,7 +233,7 @@ void displaySpongeIntermediateValuesOne(const unsigned char *message, unsigned i
     }
 
     KeccakWidth1600_SpongeInitialize(&sponge, rate, capacity);
-    displayStateAsBytes(1, "Initial state", sponge.state, 1600);
+    displayStateAsBytes(1, "Initial state", (const unsigned char *)&sponge.state, 1600);
     KeccakWidth1600_SpongeAbsorb(&sponge, messageWithSuffix, messageLengthWithSuffix/8);
     if ((messageLengthWithSuffix % 8) != 0)
         KeccakWidth1600_SpongeAbsorbLastFewBits(&sponge, messageWithSuffix[messageLengthWithSuffix/8] | (1 << (messageLengthWithSuffix % 8)));
@@ -380,7 +380,7 @@ void displayDuplexIntermediateValuesOne(FILE *f, unsigned int rate, unsigned int
     unsigned int x = 33;
 
     KeccakWidth1600_DuplexInitialize(&duplex, rate, capacity);
-    displayStateAsBytes(1, "Initial state", duplex.state, 1600);
+    displayStateAsBytes(1, "Initial state", (const unsigned char *)&duplex.state, 1600);
 
     for(i=0; i<=rate+120; i+=123) {
         inBitLen = i;

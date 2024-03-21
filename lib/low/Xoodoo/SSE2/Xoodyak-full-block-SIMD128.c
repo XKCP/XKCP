@@ -25,6 +25,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <tmmintrin.h>
 #include "align.h"
 #include "Xoodoo.h"
+#include "Xoodoo-SnP.h"
 #include "Xoodyak-parameters.h"
 
 #include "brg_endian.h"
@@ -87,9 +88,9 @@ ALIGN(16) static const uint8_t maskRhoEast2[16] = {
 #define    DeclareVars          V128    a0, a1, a2, p, e; \
                                 V128    rhoEast2 = CONST128(maskRhoEast2)
 
-#define    State2Vars(state)    a0 = LOAD128(((uint32_t*)state)[0]), a1 = LOAD128(((uint32_t*)state)[4]), a2 = LOAD128(((uint32_t*)state)[8]);
+#define    State2Vars(state)    a0 = LOAD128(state->A[0]), a1 = LOAD128(state->A[4]), a2 = LOAD128(state->A[8]);
 
-#define    Vars2State(state)    STORE128(((uint32_t*)state)[0], a0), STORE128(((uint32_t*)state)[4], a1), STORE128(((uint32_t*)state)[8], a2);
+#define    Vars2State(state)    STORE128(state->A[0], a0), STORE128(state->A[4], a1), STORE128(state->A[8], a2);
 
 /*
 ** Theta: Column Parity Mixer
@@ -157,7 +158,7 @@ static const uint32_t    RC[MAXROUNDS] = {
     _rc1
 };
 
-size_t Xoodyak_AbsorbKeyedFullBlocks(void *state, const uint8_t *X, size_t XLen)
+size_t Xoodyak_AbsorbKeyedFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *X, size_t XLen)
 {
     size_t  initialLength = XLen;
     DeclareVars;
@@ -187,7 +188,7 @@ size_t Xoodyak_AbsorbKeyedFullBlocks(void *state, const uint8_t *X, size_t XLen)
     return initialLength - XLen;
 }
 
-size_t Xoodyak_AbsorbHashFullBlocks(void *state, const uint8_t *X, size_t XLen)
+size_t Xoodyak_AbsorbHashFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *X, size_t XLen)
 {
     size_t  initialLength = XLen;
     V128    one = _mm_set_epi32(0, 0, 0, 1); 
@@ -218,7 +219,7 @@ size_t Xoodyak_AbsorbHashFullBlocks(void *state, const uint8_t *X, size_t XLen)
 }
 
 
-size_t Xoodyak_SqueezeKeyedFullBlocks(void *state, uint8_t *Y, size_t YLen)
+size_t Xoodyak_SqueezeKeyedFullBlocks(Xoodoo_align128plain32_state *state, uint8_t *Y, size_t YLen)
 {
     size_t  initialLength = YLen;
     V128    one = _mm_set_epi32(0, 0, 0, 1); 
@@ -249,7 +250,7 @@ size_t Xoodyak_SqueezeKeyedFullBlocks(void *state, uint8_t *Y, size_t YLen)
     return initialLength - YLen;
 }
 
-size_t Xoodyak_SqueezeHashFullBlocks(void *state, uint8_t *Y, size_t YLen)
+size_t Xoodyak_SqueezeHashFullBlocks(Xoodoo_align128plain32_state *state, uint8_t *Y, size_t YLen)
 {
     size_t  initialLength = YLen;
     V128    one = _mm_set_epi32(0, 0, 0, 1); 
@@ -279,7 +280,7 @@ size_t Xoodyak_SqueezeHashFullBlocks(void *state, uint8_t *Y, size_t YLen)
     return initialLength - YLen;
 }
 
-size_t Xoodyak_EncryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size_t IOLen)
+size_t Xoodyak_EncryptFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *I, uint8_t *O, size_t IOLen)
 {
     size_t  initialLength = IOLen;
     DeclareVars;
@@ -311,7 +312,7 @@ size_t Xoodyak_EncryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size
     return initialLength - IOLen;
 }
 
-size_t Xoodyak_DecryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size_t IOLen)
+size_t Xoodyak_DecryptFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *I, uint8_t *O, size_t IOLen)
 {
     size_t  initialLength = IOLen;
     V128    o0;

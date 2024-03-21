@@ -30,10 +30,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include    <stdio.h>
 
-#define KCP_DeclareCyclistStructure(prefix, size, alignment)                    \
-            ALIGN(alignment) typedef struct prefix##_CyclistInstanceStruct {    \
-            uint8_t         state[size];                                        \
-            uint8_t         stateShadow[size];                                  \
+#define KCP_DeclareCyclistStructure(prefix, state_t)                            \
+            typedef struct prefix##_CyclistInstanceStruct {                     \
+            state_t         state;                                              \
+            state_t         stateShadow[size];                                  \
             FILE            *file;                                              \
             unsigned int    phase;                                              \
             unsigned int    mode;                                               \
@@ -43,9 +43,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #else
 
-#define KCP_DeclareCyclistStructure(prefix, size, alignment)                    \
-            ALIGN(alignment) typedef struct prefix##_CyclistInstanceStruct {    \
-            uint8_t         state[size];                                        \
+#define KCP_DeclareCyclistStructure(prefix, state_t)                            \
+            typedef struct prefix##_CyclistInstanceStruct {                     \
+            state_t         state;                                              \
             unsigned int    phase;                                              \
             unsigned int    mode;                                               \
             unsigned int    Rabsorb;                                            \

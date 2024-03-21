@@ -18,7 +18,7 @@
 
 .text
 
-@ Xoodootimes4_InitializeAll: void * states -> void
+@ Xoodootimes4_InitializeAll: Xoodootimes4_SIMD128_states * states -> void
 .align 8
 .global Xoodootimes4_InitializeAll
 .type Xoodootimes4_InitializeAll, %function
@@ -42,7 +42,7 @@ Xoodootimes4_InitializeAll:
   bx        lr
 
 
-@ Xoodootimes4_AddByte: void * states -> uint instanceIndex -> const uchar byte -> uint offset -> void
+@ Xoodootimes4_AddByte: Xoodootimes4_SIMD128_states * states -> uint instanceIndex -> const uchar byte -> uint offset -> void
 .align 8
 .global Xoodootimes4_AddByte
 .type Xoodootimes4_AddByte, %function
@@ -57,7 +57,7 @@ Xoodootimes4_AddByte:
   strb      r3, [r0]
   bx        lr
 
-@ Xoodootimes4_AddBytes: void * states -> uint instanceIndex -> const uchar * data -> uint offset -> uint length -> void
+@ Xoodootimes4_AddBytes: Xoodootimes4_SIMD128_states * states -> uint instanceIndex -> const uchar * data -> uint offset -> uint length -> void
 .align 8
 .global Xoodootimes4_AddBytes
 .type Xoodootimes4_AddBytes, %function
@@ -90,7 +90,7 @@ Xt4_AddBytes_Loop:
   bcs       Xt4_AddBytes_Loop
   pop       {r4, r5, pc}
 
-@ Xoodootimes4_AddLanesAll: void * states -> const uchar * data -> uint laneCount -> uint laneOffset -> void
+@ Xoodootimes4_AddLanesAll: Xoodootimes4_SIMD128_states * states -> const uchar * data -> uint laneCount -> uint laneOffset -> void
 .align 8
 .global Xoodootimes4_AddLanesAll
 .type Xoodootimes4_AddLanesAll, %function
@@ -211,7 +211,7 @@ Xt4_AddLanesAll_Full:
   vstm      r0, {d24-d31}
   mov       pc, r3
 
-@ Xoodootimes4_OverwriteBytes: void * states -> uint instanceIndex -> const uchar * data -> uint offset -> uint length -> void
+@ Xoodootimes4_OverwriteBytes: Xoodootimes4_SIMD128_states * states -> uint instanceIndex -> const uchar * data -> uint offset -> uint length -> void
 .align 8
 .global Xoodootimes4_OverwriteBytes
 .type Xoodootimes4_OverwriteBytes, %function
@@ -264,7 +264,7 @@ Xt4_OverwriteBytes_Full:
   str       r14, [r0], #16
   pop       {r4, pc}
 
-@ Xoodootimes4_OverwriteLanesAll: void * states -> uchar * data -> uint lanecount -> uint laneOffset -> void
+@ Xoodootimes4_OverwriteLanesAll: Xoodootimes4_SIMD128_states * states -> uchar * data -> uint lanecount -> uint laneOffset -> void
 .align 8
 .global Xoodootimes4_OverwriteLanesAll
 .type Xoodootimes4_OverwriteLanesAll, %function
@@ -341,7 +341,7 @@ Xt4_OverwriteLanesAll_Unaligned_Loop:
   pop       {r4-r6,pc}
 
 
-@ Xoodootimes4_OverwriteWithZeroes: void * states -> uint instanceIndex -> uint byteCount -> void
+@ Xoodootimes4_OverwriteWithZeroes: Xoodootimes4_SIMD128_states * states -> uint instanceIndex -> uint byteCount -> void
 .align 8
 .global Xoodootimes4_OverwriteWithZeroes
 .type Xoodootimes4_OverwriteWithZeroes, %function
@@ -363,7 +363,7 @@ Xt4_OverwriteWithZeroes_Leftovers:
   mov       pc, r3
 
 
-@ Xoodootimes4_ExtractBytes: void * states -> uint instanceIndex -> const uchar * data -> uint offset -> uint length -> void
+@ Xoodootimes4_ExtractBytes: Xoodootimes4_SIMD128_states * states -> uint instanceIndex -> const uchar * data -> uint offset -> uint length -> void
 .align 8
 .global Xoodootimes4_ExtractBytes
 .type Xoodootimes4_ExtractBytes, %function
@@ -389,7 +389,7 @@ Xt4_ExtractBytes_Loop:
   bcs       Xt4_ExtractBytes_Loop
   pop       {r4, pc}
 
-@ Xoodootimes4_ExtractLanesAll: void * states -> uchar * data -> uint lanecount -> uint laneoffset -> void
+@ Xoodootimes4_ExtractLanesAll: Xoodootimes4_SIMD128_states * states -> uchar * data -> uint lanecount -> uint laneoffset -> void
 .align 8
 .global Xoodootimes4_ExtractLanesAll
 .type Xoodootimes4_ExtractLanesAll, %function
@@ -463,7 +463,7 @@ Xt4_ExtractLanesAll_Unaligned_Loop:
   bcs       Xt4_ExtractLanesAll_Unaligned_Loop
   pop       {r4-r6,pc}
 
-@ Xoodootimes4_ExtractAndAddBytes: void * states -> uint instanceIndex -> uchar * input -> uchar * output -> uint offset -> uint length -> void
+@ Xoodootimes4_ExtractAndAddBytes: Xoodootimes4_SIMD128_states * states -> uint instanceIndex -> uchar * input -> uchar * output -> uint offset -> uint length -> void
 .align 8
 .global Xoodootimes4_ExtractAndAddBytes
 .type Xoodootimes4_ExtractAndAddBytes, %function
@@ -533,7 +533,7 @@ Xt4_ExtractAndAddBytes_Full:
   pop       {r4, r5, pc}
 
 
-@ Xoodootimes4_ExtractAndAddLanesAll: void * states -> uchar * input -> uchar * output -> uint laneCount -> uint laneOffset
+@ Xoodootimes4_ExtractAndAddLanesAll: Xoodootimes4_SIMD128_states * states -> uchar * input -> uchar * output -> uint laneCount -> uint laneOffset
 .align 8
 .global Xoodootimes4_ExtractAndAddLanesAll
 .type Xoodootimes4_ExtractAndAddLanesAll, %function

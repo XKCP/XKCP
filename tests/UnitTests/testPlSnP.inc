@@ -23,10 +23,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define dumpState                       JOIN(prefix, _dumpState)
 #define testPlSnP                       JOIN(prefix, _testPlSnP)
 
-#define PlSnP_statesSizeInBytes         JOIN(PlSnP, _statesSizeInBytes)
-#define PlSnP_statesAlignment           JOIN(PlSnP, _statesAlignment)
 #define PlSnP_P                         PlSnP_parallelism
 
+#define PlSnP_states                    JOIN(PlSnP, _states)
 #define SnP_laneLengthInBytes           ((SnP_width)/(8*SnP_laneCount))
 #define PlSnP_StaticInitialize          JOIN(PlSnP, _StaticInitialize)
 #define PlSnP_InitializeAll             JOIN(PlSnP, _InitializeAll)
@@ -84,12 +83,12 @@ void dumpBuffer( const unsigned char * buffer )
     }
 }
 
-void dumpState( const unsigned char * state, char * message )
+void dumpState( const PlSnP_states * state, char * message )
 {
     unsigned int n;
     unsigned char buffer[(SnP_width/8) * PlSnP_parallelism];
 
-    PlSnP_ExtractLanesAll(state, buffer, SnP_laneCount, SnP_laneCount);
+    PlSnP_ExtractLanesAll(&state, buffer, SnP_laneCount, SnP_laneCount);
     for ( n = 0; n < PlSnP_parallelism; ++n )
     {
         printf( "\n%s %u\n", message, n );
@@ -102,7 +101,7 @@ void dumpState( const unsigned char * state, char * message )
 
 #ifndef PlSnP_FastLoop_Absorb
 #define PlSnP_FastLoop_Absorb JOIN(PlSnP, _FastLoop_Absorb)
-size_t PlSnP_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, unsigned char *data, size_t dataByteLen)
+size_t PlSnP_FastLoop_Absorb(PlSnP_states *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, unsigned char *data, size_t dataByteLen)
 {
     const unsigned char *dataStart = data;
 
@@ -116,13 +115,13 @@ size_t PlSnP_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int 
 }
 #endif
 
-void accumulateBufferParallel(void *stateAccumulated, const unsigned char *buffer)
+void accumulateBufferParallel(PlSnP_states *stateAccumulated, const unsigned char *buffer)
 {
     PlSnP_AddLanesAll(stateAccumulated, buffer, SnP_laneCount, SnP_laneCount);
     PlSnP_PermuteAll(stateAccumulated);
 }
 
-void accumulateStateParallel(void *stateAccumulated, const void *stateTest)
+void accumulateStateParallel(PlSnP_states *stateAccumulated, const PlSnP_states *stateTest)
 {
     unsigned char buffer[PlSnP_P*(SnP_width/8)];
     PlSnP_ExtractLanesAll(stateTest, buffer, SnP_laneCount, SnP_laneCount);
@@ -131,25 +130,25 @@ void accumulateStateParallel(void *stateAccumulated, const void *stateTest)
 
 void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *expected)
 {
-    ALIGN(PlSnP_statesAlignment) unsigned char stateAccumulated[PlSnP_statesSizeInBytes];
-    ALIGN(PlSnP_statesAlignment) unsigned char stateTest[PlSnP_statesSizeInBytes];
+    PlSnP_states stateAccumulated;
+    PlSnP_states stateTest;
 
     UT_startTest(synopsis, JOIN(PlSnP, _implementation));
 
     PlSnP_StaticInitialize();
 
-    PlSnP_InitializeAll(stateAccumulated);
+    PlSnP_InitializeAll(&stateAccumulated);
 
-    memset(stateTest, 0xAA, sizeof(stateTest));
+    memset(&stateTest, 0xAA, sizeof(stateTest));
 
     /* Testing PlSnP_InitializeAll() */
     {
-        PlSnP_InitializeAll(stateTest);
-        accumulateStateParallel(stateAccumulated, stateTest);
+        PlSnP_InitializeAll(&stateTest);
+        accumulateStateParallel(&stateAccumulated, &stateTest);
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_InitializeAll()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_InitializeAll()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_InitializeAll()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_InitializeAll()" );
 
     /* Testing PlSnP_AddByte() */
     {
@@ -158,14 +157,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++) {
             for(offset=0; offset<(SnP_width/8); offset += (offset < 6) ? 1 : (9+2*instanceIndex)) {
                 uint8_t byte = (uint8_t)(0xCD - offset*4 + instanceIndex*16);
-                PlSnP_AddByte(stateTest, instanceIndex, byte, offset);
-                accumulateStateParallel(stateAccumulated, stateTest);
+                PlSnP_AddByte(&stateTest, instanceIndex, byte, offset);
+                accumulateStateParallel(&stateAccumulated, &stateTest);
             }
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_AddByte()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_AddByte()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_AddByte()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_AddByte()" );
 
     /* Testing PlSnP_AddBytes() */
     {
@@ -179,14 +178,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             for(offset=0; offset<(SnP_width/8); offset += (offset < 10) ? 1 : (7+4*instanceIndex))
             for(length=(offset == instanceIndex) ? 0 : ((SnP_width/8)-offset); length<=(SnP_width/8)-offset; length += ((SnP_width/8)-offset-length < 20) ? 1 : (5+2*instanceIndex)) {
                 alignment = (offset+length+instanceIndex+1)%8;
-                PlSnP_AddBytes(stateTest, instanceIndex, buffer+alignment, offset, length);
-                accumulateStateParallel(stateAccumulated, stateTest);
+                PlSnP_AddBytes(&stateTest, instanceIndex, buffer+alignment, offset, length);
+                accumulateStateParallel(&stateAccumulated, &stateTest);
             }
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_AddBytes()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_AddBytes()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_AddBytes()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_AddBytes()" );
 
     /* Testing PlSnP_AddLanesAll() */
     {
@@ -198,13 +197,13 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             alignment = (laneCount+2)%8;
             for(i=0; i<sizeof(buffer)-8; i++)
                 buffer[i+alignment] = (uint8_t)(0x75 + 3*i - 8*alignment);
-            PlSnP_AddLanesAll(stateTest, buffer+alignment, laneCount, laneOffset);
-            accumulateStateParallel(stateAccumulated, stateTest);
+            PlSnP_AddLanesAll(&stateTest, buffer+alignment, laneCount, laneOffset);
+            accumulateStateParallel(&stateAccumulated, &stateTest);
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_AddLanesAll()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_AddLanesAll()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_AddLanesAll()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_AddLanesAll()" );
 
     /* Testing PlSnP_OverwriteBytes() */
     {
@@ -217,14 +216,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
                 alignment = (offset+length+instanceIndex+3)%8;
                 for(i=0; i<sizeof(buffer); i++)
                     buffer[i] = (uint8_t)(0xF3 + 5*i + alignment + offset + length + instanceIndex);
-                PlSnP_OverwriteBytes(stateTest, instanceIndex, buffer+alignment, offset, length);
-                accumulateStateParallel(stateAccumulated, stateTest);
+                PlSnP_OverwriteBytes(&stateTest, instanceIndex, buffer+alignment, offset, length);
+                accumulateStateParallel(&stateAccumulated, &stateTest);
             }
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_OverwriteBytes()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_OverwriteBytes()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_OverwriteBytes()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_OverwriteBytes()" );
 
     /* Testing PlSnP_OverwriteLanesAll() */
     {
@@ -236,13 +235,13 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             alignment = (laneCount+4)%8;
             for(i=0; i<sizeof(buffer)-8; i++)
                 buffer[i+alignment] = (uint8_t)(0x75 + 3*i - 8*alignment - laneCount);
-            PlSnP_OverwriteLanesAll(stateTest, buffer+alignment, laneCount, laneOffset);
-            accumulateStateParallel(stateAccumulated, stateTest);
+            PlSnP_OverwriteLanesAll(&stateTest, buffer+alignment, laneCount, laneOffset);
+            accumulateStateParallel(&stateAccumulated, &stateTest);
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_OverwriteLanesAll()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_OverwriteLanesAll()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_OverwriteLanesAll()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_OverwriteLanesAll()" );
 
     /* Testing PlSnP_OverwriteWithZeroes() */
     {
@@ -250,14 +249,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
 
         for(instanceIndex=0; instanceIndex<PlSnP_P; instanceIndex++)
         for(byteCount=0; byteCount<=SnP_width/8; byteCount++) {
-            PlSnP_PermuteAll(stateTest);
-            PlSnP_OverwriteWithZeroes(stateTest, instanceIndex, byteCount);
-            accumulateStateParallel(stateAccumulated, stateTest);
+            PlSnP_PermuteAll(&stateTest);
+            PlSnP_OverwriteWithZeroes(&stateTest, instanceIndex, byteCount);
+            accumulateStateParallel(&stateAccumulated, &stateTest);
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_OverwriteWithZeroes()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_OverwriteWithZeroes()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_OverwriteWithZeroes()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_OverwriteWithZeroes()" );
 
 #ifdef PlSnP_PermuteAll_12rounds
     /* Testing PlSnP_PermuteAll_12rounds() */
@@ -265,13 +264,13 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
         unsigned int i;
 
         for(i=0; i<3; i++) {
-            PlSnP_PermuteAll_12rounds(stateTest);
-            accumulateStateParallel(stateAccumulated, stateTest);
+            PlSnP_PermuteAll_12rounds(&stateTest);
+            accumulateStateParallel(&stateAccumulated, &stateTest);
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_PermuteAll_12rounds()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_12rounds()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_PermuteAll_12rounds()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_12rounds()" );
 #endif
 
 #ifdef PlSnP_PermuteAll_6rounds
@@ -280,13 +279,13 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
         unsigned int i;
 
         for(i=0; i<3; i++) {
-            PlSnP_PermuteAll_6rounds(stateTest);
-            accumulateStateParallel(stateAccumulated, stateTest);
+            PlSnP_PermuteAll_6rounds(&stateTest);
+            accumulateStateParallel(&stateAccumulated, &stateTest);
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_PermuteAll_6rounds()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_6rounds()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_PermuteAll_6rounds()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_6rounds()" );
 #endif
 
 #ifdef PlSnP_PermuteAll_4rounds
@@ -295,13 +294,13 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
         unsigned int i;
 
         for(i=0; i<3; i++) {
-            PlSnP_PermuteAll_4rounds(stateTest);
-            accumulateStateParallel(stateAccumulated, stateTest);
+            PlSnP_PermuteAll_4rounds(&stateTest);
+            accumulateStateParallel(&stateAccumulated, &stateTest);
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_PermuteAll_4rounds()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_4rounds()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_PermuteAll_4rounds()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_PermuteAll_4rounds()" );
 #endif
 
     /* Testing PlSnP_ExtractBytes() */
@@ -314,14 +313,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             for(length=(offset == instanceIndex) ? 0 : ((SnP_width/8)-offset); length<=(SnP_width/8)-offset; length += ((SnP_width/8)-offset-length < 22) ? 1 : (5+4*instanceIndex)) {
                 alignment = (offset+length+instanceIndex+5)%8;
                 memset(buffer, 0x3C+offset+length+instanceIndex, sizeof(buffer));
-                PlSnP_ExtractBytes(stateTest, instanceIndex, buffer+alignment, offset, length);
-                accumulateBufferParallel(stateAccumulated, buffer+alignment);
+                PlSnP_ExtractBytes(&stateTest, instanceIndex, buffer+alignment, offset, length);
+                accumulateBufferParallel(&stateAccumulated, buffer+alignment);
             }
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_ExtractBytes()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractBytes()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_ExtractBytes()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_ExtractBytes()" );
 
     /* Testing PlSnP_ExtractLanesAll() */
     {
@@ -332,14 +331,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             laneOffset = laneCount + (laneCount+3)%4;
             alignment = (laneCount+6)%8;
             memset(buffer, 0xD2-laneCount-32*alignment, sizeof(buffer));
-            PlSnP_ExtractLanesAll(stateTest, buffer+alignment, laneCount, laneOffset);
-            accumulateBufferParallel(stateAccumulated, buffer+alignment);
-            accumulateBufferParallel(stateAccumulated, buffer+alignment+PlSnP_P*PlSnP_X*SnP_laneLengthInBytes);
+            PlSnP_ExtractLanesAll(&stateTest, buffer+alignment, laneCount, laneOffset);
+            accumulateBufferParallel(&stateAccumulated, buffer+alignment);
+            accumulateBufferParallel(&stateAccumulated, buffer+alignment+PlSnP_P*PlSnP_X*SnP_laneLengthInBytes);
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_ExtractLanesAll()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractLanesAll()" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_ExtractLanesAll()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_ExtractLanesAll()" );
 
     /* Testing PlSnP_ExtractAndAddBytes() (input = output) */
     {
@@ -351,14 +350,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             for(length=(offset == instanceIndex) ? 0 : ((SnP_width/8)-offset); length<=(SnP_width/8)-offset; length += ((SnP_width/8)-offset-length < 23) ? 1 : (9+4*instanceIndex)) {
                 alignment = (offset+length+instanceIndex+7)%8;
                 memset(buffer, 0x3C+offset+length+instanceIndex, sizeof(buffer));
-                PlSnP_ExtractAndAddBytes(stateTest, instanceIndex, buffer+alignment, buffer+alignment, offset, length);
-                accumulateBufferParallel(stateAccumulated, buffer+alignment);
+                PlSnP_ExtractAndAddBytes(&stateTest, instanceIndex, buffer+alignment, buffer+alignment, offset, length);
+                accumulateBufferParallel(&stateAccumulated, buffer+alignment);
             }
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_ExtractAndAddBytes() (input = output)" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddBytes() (input = output)" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_ExtractAndAddBytes() (input = output)" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddBytes() (input = output)" );
 
     /* Testing PlSnP_ExtractAndAddBytes() (input ≠ output) */
     {
@@ -372,14 +371,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
                 alignment = (offset+length+instanceIndex)%8;
                 memset(buffer1, 0x3C+offset+length+instanceIndex, sizeof(buffer1));
                 memset(buffer2, 0x4D+offset+length+instanceIndex, sizeof(buffer2));
-                PlSnP_ExtractAndAddBytes(stateTest, instanceIndex, buffer1+alignment, buffer2+alignment, offset, length);
-                accumulateBufferParallel(stateAccumulated, buffer2+alignment);
+                PlSnP_ExtractAndAddBytes(&stateTest, instanceIndex, buffer1+alignment, buffer2+alignment, offset, length);
+                accumulateBufferParallel(&stateAccumulated, buffer2+alignment);
             }
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_ExtractAndAddBytes() (input != output)" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddBytes() (input != output)" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_ExtractAndAddBytes() (input != output)" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddBytes() (input != output)" );
 
     /* Testing PlSnP_ExtractAndAddLanesAll() (input = output) */
     {
@@ -390,14 +389,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             laneOffset = laneCount + (laneCount+0)%4;
             alignment = (laneCount+1)%8;
             memset(buffer, 0xD2-laneCount-32*alignment, sizeof(buffer));
-            PlSnP_ExtractAndAddLanesAll(stateTest, buffer+alignment, buffer+alignment, laneCount, laneOffset);
-            accumulateBufferParallel(stateAccumulated, buffer+alignment);
-            accumulateBufferParallel(stateAccumulated, buffer+alignment+PlSnP_P*PlSnP_X*SnP_laneLengthInBytes);
+            PlSnP_ExtractAndAddLanesAll(&stateTest, buffer+alignment, buffer+alignment, laneCount, laneOffset);
+            accumulateBufferParallel(&stateAccumulated, buffer+alignment);
+            accumulateBufferParallel(&stateAccumulated, buffer+alignment+PlSnP_P*PlSnP_X*SnP_laneLengthInBytes);
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_ExtractAndAddLanesAll() (input = output)" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddLanesAll() (input = output)" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_ExtractAndAddLanesAll() (input = output)" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddLanesAll() (input = output)" );
 
     /* Testing PlSnP_ExtractAndAddLanesAll() (input ≠ output) */
     {
@@ -411,14 +410,14 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             alignment2 = (2*laneCount+5)%8;
             memset(buffer1, 0xE3-laneCount-16*alignment1, sizeof(buffer1));
             memset(buffer2, 0xF4-laneCount-8*alignment1, sizeof(buffer2));
-            PlSnP_ExtractAndAddLanesAll(stateTest, buffer1+alignment1, buffer2+alignment2, laneCount, laneOffset);
-            accumulateBufferParallel(stateAccumulated, buffer2+alignment2);
-            accumulateBufferParallel(stateAccumulated, buffer2+alignment2+PlSnP_P*PlSnP_X*SnP_laneLengthInBytes);
+            PlSnP_ExtractAndAddLanesAll(&stateTest, buffer1+alignment1, buffer2+alignment2, laneCount, laneOffset);
+            accumulateBufferParallel(&stateAccumulated, buffer2+alignment2);
+            accumulateBufferParallel(&stateAccumulated, buffer2+alignment2+PlSnP_P*PlSnP_X*SnP_laneLengthInBytes);
         }
     }
-    PlSnP_PermuteAll(stateTest);
-    DUMP( stateTest, "stateTest after testing PlSnP_ExtractAndAddLanesAll() (input != output)" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddLanesAll() (input != output)" );
+    PlSnP_PermuteAll(&stateTest);
+    DUMP( &stateTest, "stateTest after testing PlSnP_ExtractAndAddLanesAll() (input != output)" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_ExtractAndAddLanesAll() (input != output)" );
 
 #ifndef PlSnP_NoFastLoopAbsorb
     /* Testing PlSnP_FastLoop_Absorb() */
@@ -426,7 +425,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
         unsigned char buffer[PlSnP_P*SnP_laneLengthInBytes*100+SnP_laneCount*SnP_laneLengthInBytes+8];
         unsigned i, blocks, extra, laneCount, alignment;
 
-        assert(PlSnP_FastLoop_Absorb(stateTest, SnP_laneCount, SnP_laneCount, PlSnP_P*SnP_laneCount, buffer, (SnP_laneCount-1)*PlSnP_P) == 0);
+        assert(PlSnP_FastLoop_Absorb(&stateTest, SnP_laneCount, SnP_laneCount, PlSnP_P*SnP_laneCount, buffer, (SnP_laneCount-1)*PlSnP_P) == 0);
         for(laneCount=1; laneCount<SnP_laneCount; laneCount++) {
             blocks = 100/laneCount;
             if (blocks > 20) blocks = 20;
@@ -435,15 +434,15 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             assert(blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra+alignment <= sizeof(buffer));
             for(i=0; i<sizeof(buffer)-8; i++)
                 buffer[i+alignment] = 0xA0 - 17*i + 2*alignment - 4*laneCount;
-            assert(PlSnP_FastLoop_Absorb(stateTest, laneCount, laneCount, PlSnP_P*laneCount, buffer+alignment, blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra)
+            assert(PlSnP_FastLoop_Absorb(&stateTest, laneCount, laneCount, PlSnP_P*laneCount, buffer+alignment, blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra)
                 == blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes);
-            assert(PlSnP_FastLoop_Absorb(stateTest, laneCount, blocks*laneCount, laneCount, buffer+alignment, blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra)
+            assert(PlSnP_FastLoop_Absorb(&stateTest, laneCount, blocks*laneCount, laneCount, buffer+alignment, blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra)
                 == blocks*laneCount*SnP_laneLengthInBytes);
         }
-        accumulateStateParallel(stateAccumulated, stateTest);
+        accumulateStateParallel(&stateAccumulated, &stateTest);
     }
-    DUMP( stateTest, "stateTest after testing PlSnP_FastLoop_Absorb()" );
-    DUMP( stateAccumulated, "stateAccumulated after testing PlSnP_FastLoop_Absorb()" );
+    DUMP( &stateTest, "stateTest after testing PlSnP_FastLoop_Absorb()" );
+    DUMP( &stateAccumulated, "stateAccumulated after testing PlSnP_FastLoop_Absorb()" );
 #endif
 
     {
@@ -452,8 +451,8 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
 
         memset(buffer, 0, sizeof(buffer));
         for(i=0; i<PlSnP_P; i++) {
-            PlSnP_ExtractAndAddBytes(stateAccumulated, i, buffer, buffer, 0, SnP_width/8);
-            PlSnP_PermuteAll(stateAccumulated);
+            PlSnP_ExtractAndAddBytes(&stateAccumulated, i, buffer, buffer, 0, SnP_width/8);
+            PlSnP_PermuteAll(&stateAccumulated);
         }
 #ifdef UT_OUTPUT
         /* Outputting the result */
@@ -480,8 +479,6 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
 #undef dumpBuffer
 #undef dumpState
 #undef testPlSnP
-#undef PlSnP_statesSizeInBytes
-#undef PlSnP_statesAlignment
 #undef PlSnP_P
 #undef SnP_laneLengthInBytes
 #undef SnP_laneCount

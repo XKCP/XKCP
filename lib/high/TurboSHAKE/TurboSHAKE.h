@@ -24,7 +24,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #ifdef XKCP_has_KeccakP1600
     #include "KeccakP-1600-SnP.h"
-    XKCP_DeclareSpongeStructure(TurboSHAKE, KeccakP1600_stateSizeInBytes, KeccakP1600_stateAlignment)
+    XKCP_DeclareSpongeStructure(TurboSHAKE, KeccakP1600_state)
 
 typedef TurboSHAKE_SpongeInstance TurboSHAKE_Instance;
 

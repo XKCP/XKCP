@@ -40,7 +40,7 @@
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_Initialize(void *state)
+; void KeccakP1600_Initialize(KeccakP1600_state *state)
 ;
 ; argument state   is passed in r24:r25
 ;
@@ -57,7 +57,7 @@ KeccakP1600_StaticInitialize:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_AddByte(void *state, unsigned char data, unsigned int offset)
+; void KeccakP1600_AddByte(KeccakP1600_state *state, unsigned char data, unsigned int offset)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23, only LSB (r22) is used
@@ -75,7 +75,7 @@ KeccakP1600_AddByte:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void KeccakP1600_AddBytes(KeccakP1600_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23
@@ -102,7 +102,7 @@ KeccakP1600_AddBytes_End:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void KeccakP1600_OverwriteBytes(KeccakP1600_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23
@@ -127,7 +127,7 @@ KeccakP1600_OverwriteBytes_End:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
+; void KeccakP1600_OverwriteWithZeroes(KeccakP1600_state *state, unsigned int byteCount)
 ;
 ; argument state        is passed in r24:r25
 ; argument byteCount    is passed in r22:r23, only LSB (r22) is used
@@ -146,7 +146,7 @@ KeccakP1600_OverwriteWithZeroes_End:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+; void KeccakP1600_ExtractBytes(KeccakP1600_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument data      is passed in r22:r23
@@ -171,7 +171,7 @@ KeccakP1600_ExtractBytes_End:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+; void KeccakP1600_ExtractAndAddBytes(KeccakP1600_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 ;
 ; argument state     is passed in r24:r25
 ; argument input     is passed in r22:r23
@@ -269,7 +269,7 @@ KeccakP1600_RoundConstants_0:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_Permute_Nrounds( void *state, unsigned int nrounds )
+; void KeccakP1600_Permute_Nrounds( KeccakP1600_state *state, unsigned int nrounds )
 ;
 ; argument state     is passed in r24:r25
 ; argument nrounds   is passed in r22:r23 (only LSB (r22) is used)
@@ -288,7 +288,7 @@ KeccakP1600_Permute_Nrounds:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_Permute_24rounds( void *state )
+; void KeccakP1600_Permute_24rounds( KeccakP1600_state *state )
 ;
 .global KeccakP1600_Permute_24rounds
 KeccakP1600_Permute_24rounds:
@@ -298,7 +298,7 @@ KeccakP1600_Permute_24rounds:
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600_Permute_12rounds( void *state )
+; void KeccakP1600_Permute_12rounds( KeccakP1600_state *state )
 ;
 .global KeccakP1600_Permute_12rounds
 KeccakP1600_Permute_12rounds:

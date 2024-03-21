@@ -50,8 +50,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define MaxParallellism 8
 #define laneSize        8
-#define widthInLanes    (SnP_widthInBytes/laneSize)
-#define SnP_width       (SnP_widthInBytes*8)
+#define widthInLanes    25
+#define SnP_width       1600
 
 #define MyMin(a, b)     (((a) < (b)) ? (a) : (b))
 
@@ -69,8 +69,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 
 #if defined(NEED_INITIALIZE)
-#define mInitialize(argState)                   KeccakP1600_Initialize(argState)
-#define mInitializePl(argStates, Parallellism)  KeccakP1600times##Parallellism##_InitializeAll(argStates)
+#define mInitialize(argState)                   KeccakP1600_Initialize(&argState)
+#define mInitializePl(argStates, Parallellism)  KeccakP1600times##Parallellism##_InitializeAll(&argStates)
 #else
 #define mInitialize(argState)
 #define mInitializePl(argStates, Parallellism)
@@ -109,31 +109,31 @@ static void DUMP64( const unsigned char * pText, const unsigned char * pData, un
 
 #define ParallelExpandLoopFast( Parallellism ) \
     if ( outputByteLen >= Parallellism * SnP_widthInBytes ) { \
-        size_t processed = KeccakP1600times##Parallellism##_KravatteExpand((uint64_t*)kv->yAccu.a, (uint64_t*)kv->kRoll.a, output, outputByteLen); \
+        size_t processed = KeccakP1600times##Parallellism##_KravatteExpand((uint64_t*)kv->yAccu, (uint64_t*)kv->kRoll, output, outputByteLen); \
         output += processed; \
         outputByteLen -= processed; \
     }
 
 #define ParallelCompressLoopPlSnP( Parallellism ) \
     if ( messageByteLen >= Parallellism * SnP_widthInBytes ) { \
-        ALIGN(KeccakP1600times##Parallellism##_statesAlignment) unsigned char states[KeccakP1600times##Parallellism##_statesSizeInBytes]; \
+        KeccakP1600times##Parallellism##_states states; \
         unsigned int i; \
         \
         KeccakP1600times##Parallellism##_StaticInitialize(); \
         mInitializePl(states, Parallellism); \
         do { \
             Kravatte_Rollc( (uint64_t*)k, encbuf, Parallellism ); \
-            KeccakP1600times##Parallellism##_OverwriteLanesAll(states, k, Kravatte_RollcOffset/8, 0); \
+            KeccakP1600times##Parallellism##_OverwriteLanesAll(&states, k, Kravatte_RollcOffset/8, 0); \
             i = 0; \
             do { \
-                KeccakP1600times##Parallellism##_OverwriteBytes(states, i, encbuf + i * Kravatte_RollcSizeInBytes, Kravatte_RollcOffset, Kravatte_RollcSizeInBytes); \
+                KeccakP1600times##Parallellism##_OverwriteBytes(&states, i, encbuf + i * Kravatte_RollcSizeInBytes, Kravatte_RollcOffset, Kravatte_RollcSizeInBytes); \
             } while ( ++i < Parallellism ); \
-            KeccakP1600times##Parallellism##_AddLanesAll(states, message, widthInLanes, widthInLanes); \
+            KeccakP1600times##Parallellism##_AddLanesAll(&states, message, widthInLanes, widthInLanes); \
             DUMP("msg pn", message, Parallellism * SnP_widthInBytes); \
-            KeccakP1600times##Parallellism##_PermuteAll_6rounds(states); \
+            KeccakP1600times##Parallellism##_PermuteAll_6rounds(&states); \
             i = 0; \
             do { \
-                KeccakP1600times##Parallellism##_ExtractAndAddBytes(states, i, x, x, 0, SnP_widthInBytes); \
+                KeccakP1600times##Parallellism##_ExtractAndAddBytes(&states, i, x, x, 0, SnP_widthInBytes); \
                 DUMP("xAc pn", x, SnP_widthInBytes); \
             } while ( ++i < Parallellism ); \
             message += Parallellism * SnP_widthInBytes; \
@@ -143,22 +143,22 @@ static void DUMP64( const unsigned char * pText, const unsigned char * pData, un
 
 #define ParallelExpandLoopPlSnP( Parallellism ) \
     if ( outputByteLen >= Parallellism * SnP_widthInBytes ) { \
-        ALIGN(KeccakP1600times##Parallellism##_statesAlignment) unsigned char states[KeccakP1600times##Parallellism##_statesSizeInBytes]; \
+        KeccakP1600times##Parallellism##_states states; \
         unsigned int i; \
         \
         KeccakP1600times##Parallellism##_StaticInitialize(); \
         mInitializePl(states, Parallellism); \
         do { \
-            Kravatte_Rolle( (uint64_t*)kv->yAccu.a, encbuf, Parallellism ); \
-            KeccakP1600times##Parallellism##_OverwriteLanesAll(states, kv->yAccu.a, Kravatte_RolleOffset/8, 0); \
+            Kravatte_Rolle( (uint64_t*)kv->yAccu, encbuf, Parallellism ); \
+            KeccakP1600times##Parallellism##_OverwriteLanesAll(&states, kv->yAccu, Kravatte_RolleOffset/8, 0); \
             i = 0; \
             do { \
-                KeccakP1600times##Parallellism##_OverwriteBytes(states, i, encbuf + i * Kravatte_RolleSizeInBytes, Kravatte_RolleOffset, Kravatte_RolleSizeInBytes); \
+                KeccakP1600times##Parallellism##_OverwriteBytes(&states, i, encbuf + i * Kravatte_RolleSizeInBytes, Kravatte_RolleOffset, Kravatte_RolleSizeInBytes); \
             } while ( ++i < Parallellism ); \
-            KeccakP1600times##Parallellism##_PermuteAll_6rounds(states); \
+            KeccakP1600times##Parallellism##_PermuteAll_6rounds(&states); \
             i = 0; \
             do { \
-                KeccakP1600times##Parallellism##_ExtractAndAddBytes(states, i, kv->kRoll.a, output, 0, SnP_widthInBytes); \
+                KeccakP1600times##Parallellism##_ExtractAndAddBytes(&states, i, kv->kRoll, output, 0, SnP_widthInBytes); \
                 DUMP("out n", output, SnP_widthInBytes); \
                 output += SnP_widthInBytes; \
             } while ( ++i < Parallellism ); \
@@ -296,17 +296,17 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
     #endif
 
     if (messageByteLen >= SnP_widthInBytes) {
-        ALIGN(KeccakP1600_stateAlignment) unsigned char state[KeccakP1600_stateSizeInBytes];
+        KeccakP1600_state state;
 
         KeccakP1600_StaticInitialize();
-        mInitialize(state);
+        mInitialize(&state);
         do {
-            KeccakP1600_OverwriteBytes(state, k, 0, SnP_widthInBytes);
+            KeccakP1600_OverwriteBytes(&state, k, 0, SnP_widthInBytes);
             Kravatte_Rollc((uint64_t*)k, encbuf, 1);
-            KeccakP1600_AddBytes(state, message, 0, SnP_widthInBytes);
+            KeccakP1600_AddBytes(&state, message, 0, SnP_widthInBytes);
             DUMP("msg p1", message, SnP_widthInBytes);
-            KeccakP1600_Permute_Nrounds(state, 6);
-            KeccakP1600_ExtractAndAddBytes(state, x, x, 0, SnP_widthInBytes);
+            KeccakP1600_Permute_Nrounds(&state, 6);
+            KeccakP1600_ExtractAndAddBytes(&state, x, x, 0, SnP_widthInBytes);
             DUMP("xAc p1", x, SnP_widthInBytes);
             message += SnP_widthInBytes;
             messageByteLen -= SnP_widthInBytes;
@@ -314,25 +314,25 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
     }
     *messageBitLen %= SnP_width;
     if ( lastFlag != 0 ) {
-        ALIGN(KeccakP1600_stateAlignment) unsigned char state[KeccakP1600_stateSizeInBytes];
+        KeccakP1600_state state;
 
         #if DEBUG
         assert(messageByteLen < SnP_widthInBytes);
         #endif
         KeccakP1600_StaticInitialize();
-        mInitialize(state);
-        KeccakP1600_OverwriteBytes(state, k, 0, SnP_widthInBytes); /* write k */
+        mInitialize(&state);
+        KeccakP1600_OverwriteBytes(&state, k, 0, SnP_widthInBytes); /* write k */
         Kravatte_Rollc((uint64_t*)k, encbuf, 1);
-        KeccakP1600_AddBytes(state, message, 0, (unsigned int)messageByteLen); /* add message */
+        KeccakP1600_AddBytes(&state, message, 0, (unsigned int)messageByteLen); /* add message */
         DUMP("msg pL", state, SnP_widthInBytes);
         message += messageByteLen;
         *messageBitLen %= 8;
         if (*messageBitLen != 0) /* padding */
-            KeccakP1600_AddByte(state, *message++ | (1 << *messageBitLen), (unsigned int)messageByteLen);
+            KeccakP1600_AddByte(&state, *message++ | (1 << *messageBitLen), (unsigned int)messageByteLen);
         else
-            KeccakP1600_AddByte(state, 1, (unsigned int)messageByteLen);
-        KeccakP1600_Permute_Nrounds(state, 6);
-        KeccakP1600_ExtractAndAddBytes(state, x, x, 0, SnP_widthInBytes);
+            KeccakP1600_AddByte(&state, 1, (unsigned int)messageByteLen);
+        KeccakP1600_Permute_Nrounds(&state, 6);
+        KeccakP1600_ExtractAndAddBytes(&state, x, x, 0, SnP_widthInBytes);
         DUMP("xAc pL", x, SnP_widthInBytes);
         Kravatte_Rollc((uint64_t*)k, encbuf, 1);
         *messageBitLen = 0;
@@ -342,7 +342,7 @@ static const unsigned char * Kra_Compress( unsigned char *k, unsigned char *x, c
 
 int Kravatte_MaskDerivation(Kravatte_Instance *kv, const BitSequence *Key, BitLength KeyBitLen)
 {
-    ALIGN(KeccakP1600_stateAlignment) unsigned char state[KeccakP1600_stateSizeInBytes];
+    KeccakP1600_state state;
     BitSequence lastByte;
     unsigned int numberOfBits;
 
@@ -350,8 +350,8 @@ int Kravatte_MaskDerivation(Kravatte_Instance *kv, const BitSequence *Key, BitLe
     if (KeyBitLen >= SnP_width)
         return 1;
     /* Compute k from K */
-    memset(kv->k.a, 0, SnP_widthInBytes);
-    memcpy(kv->k.a, Key, KeyBitLen/8);
+    memset(&kv->k, 0, SnP_widthInBytes);
+    memcpy(&kv->k, Key, KeyBitLen/8);
     numberOfBits = KeyBitLen & 7;
     if ((numberOfBits) != 0) {
         lastByte = (Key[KeyBitLen/8] & ((1 << numberOfBits) - 1)) | (1 << numberOfBits);
@@ -359,14 +359,14 @@ int Kravatte_MaskDerivation(Kravatte_Instance *kv, const BitSequence *Key, BitLe
     else {
         lastByte = 1;
     }
-    kv->k.a[KeyBitLen/8] = lastByte;
+    kv->k[KeyBitLen/8] = lastByte;
     KeccakP1600_StaticInitialize();
-    mInitialize(state);
-    KeccakP1600_OverwriteBytes(state, kv->k.a, 0, SnP_widthInBytes);
-    KeccakP1600_Permute_Nrounds(state, 6);
-    KeccakP1600_ExtractBytes(state, kv->k.a, 0, SnP_widthInBytes);
-    memcpy( kv->kRoll.a, kv->k.a, SnP_widthInBytes );
-    memset( kv->xAccu.a, 0, SnP_widthInBytes );
+    mInitialize(&state);
+    KeccakP1600_OverwriteBytes(&state, kv->k, 0, SnP_widthInBytes);
+    KeccakP1600_Permute_Nrounds(&state, 6);
+    KeccakP1600_ExtractBytes(&state, kv->k, 0, SnP_widthInBytes);
+    memcpy( kv->kRoll, kv->k, SnP_widthInBytes );
+    memset( &kv->xAccu, 0, SnP_widthInBytes );
     kv->phase = COMPRESSING;
     kv->queueOffset = 0;
 
@@ -380,8 +380,8 @@ int Kra(Kravatte_Instance *kv, const BitSequence *input, BitLength inputBitLen, 
     if ((finalFlag == 0) && ((inputBitLen & 7) != 0))
         return 1;
     if ( (flags & KRAVATTE_FLAG_INIT) != 0 ) {
-        memcpy(kv->kRoll.a, kv->k.a, SnP_widthInBytes);
-        memset(kv->xAccu.a, 0, SnP_widthInBytes);
+        memcpy(kv->kRoll, kv->k, SnP_widthInBytes);
+        memset(&kv->xAccu, 0, SnP_widthInBytes);
         kv->queueOffset = 0;
     }
     if (kv->phase != COMPRESSING) {
@@ -392,28 +392,28 @@ int Kra(Kravatte_Instance *kv, const BitSequence *input, BitLength inputBitLen, 
         unsigned int bitlen = (unsigned int)MyMin(inputBitLen, SnP_width - kv->queueOffset);
         unsigned int bytelen = (bitlen + 7) / 8;
 
-        memcpy(kv->queue.a + kv->queueOffset / 8, input, bytelen);
+        memcpy(kv->queue + kv->queueOffset / 8, input, bytelen);
         input += bytelen;
         inputBitLen -= bitlen;
         kv->queueOffset += bitlen;
         if ( kv->queueOffset == SnP_width ) { /* queue full */
-            Kra_Compress(kv->kRoll.a, kv->xAccu.a, kv->queue.a, &kv->queueOffset, 0);
+            Kra_Compress(kv->kRoll, kv->xAccu, kv->queue, &kv->queueOffset, 0);
             kv->queueOffset = 0;
         } 
         else if ( finalFlag != 0 ) {
-            Kra_Compress(kv->kRoll.a, kv->xAccu.a, kv->queue.a, &kv->queueOffset, 1);
+            Kra_Compress(kv->kRoll, kv->xAccu, kv->queue, &kv->queueOffset, 1);
             return 0;
         }
     }
     if ( (inputBitLen >= SnP_width) || (finalFlag != 0) ) { /* Compress blocks */
-        input = Kra_Compress(kv->kRoll.a, kv->xAccu.a, input, &inputBitLen, finalFlag);
+        input = Kra_Compress(kv->kRoll, kv->xAccu, input, &inputBitLen, finalFlag);
     }
     if ( inputBitLen != 0 ) { /* Queue eventual residual message bytes */
         #if DEBUG
         assert( inputBitLen < SnP_width );
         assert( finalFlag == 0 );
         #endif
-        memcpy(kv->queue.a, input, inputBitLen/8);
+        memcpy(kv->queue, input, inputBitLen/8);
         kv->queueOffset = inputBitLen;
     }
     return 0;
@@ -431,20 +431,20 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
         if ( kv->queueOffset != 0 )
             return 1;
         if ((flags & KRAVATTE_FLAG_SHORT) != 0) {
-            memcpy(kv->yAccu.a, kv->xAccu.a, SnP_widthInBytes);
+            memcpy(kv->yAccu, kv->xAccu, SnP_widthInBytes);
         }
         else {
-            ALIGN(KeccakP1600_stateAlignment) unsigned char state[KeccakP1600_stateSizeInBytes];
+            KeccakP1600_state state;
 
             KeccakP1600_StaticInitialize();
-            mInitialize(state);
-            KeccakP1600_OverwriteBytes(state, kv->xAccu.a, 0, SnP_widthInBytes);
-            KeccakP1600_Permute_Nrounds(state, 6);
-            KeccakP1600_ExtractBytes(state, kv->yAccu.a, 0, SnP_widthInBytes);
+            mInitialize(&state);
+            KeccakP1600_OverwriteBytes(&state, kv->xAccu, 0, SnP_widthInBytes);
+            KeccakP1600_Permute_Nrounds(&state, 6);
+            KeccakP1600_ExtractBytes(&state, kv->yAccu, 0, SnP_widthInBytes);
         }
         kv->phase = EXPANDING;
-        DUMP("yAccu", kv->yAccu.a, SnP_widthInBytes);
-        DUMP("key  ", kv->k.a, SnP_widthInBytes);
+        DUMP("yAccu", kv->yAccu, SnP_widthInBytes);
+        DUMP("key  ", kv->k, SnP_widthInBytes);
     }
     else if (kv->phase != EXPANDING)
         return 1;
@@ -452,7 +452,7 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
         unsigned int bitlen = (unsigned int)MyMin(outputBitLen, SnP_widthInBytes*8 - kv->queueOffset);
         unsigned int bytelen = (bitlen + 7) / 8;
 
-        memcpy(output, kv->queue.a + kv->queueOffset / 8, bytelen);
+        memcpy(output, kv->queue + kv->queueOffset / 8, bytelen);
         kv->queueOffset += bitlen;
         if (kv->queueOffset == SnP_widthInBytes*8)
             kv->queueOffset = 0;
@@ -490,17 +490,17 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
     #endif
     #endif
     if ( outputByteLen != 0 ) {
-        ALIGN(KeccakP1600_stateAlignment) unsigned char state[KeccakP1600_stateSizeInBytes];
+        KeccakP1600_state state;
         unsigned int len;
 
         KeccakP1600_StaticInitialize();
-        mInitialize(state);
+        mInitialize(&state);
         do {
             len = (unsigned int)MyMin(outputByteLen, SnP_widthInBytes);
-            KeccakP1600_OverwriteBytes(state, kv->yAccu.a, 0, SnP_widthInBytes);
-            Kravatte_Rolle((uint64_t*)kv->yAccu.a, encbuf, 1);
-            KeccakP1600_Permute_Nrounds(state, 6);
-            KeccakP1600_ExtractAndAddBytes(state, kv->kRoll.a, output, 0, len);
+            KeccakP1600_OverwriteBytes(&state, kv->yAccu, 0, SnP_widthInBytes);
+            Kravatte_Rolle((uint64_t*)kv->yAccu, encbuf, 1);
+            KeccakP1600_Permute_Nrounds(&state, 6);
+            KeccakP1600_ExtractAndAddBytes(&state, kv->kRoll, output, 0, len);
             DUMP("out 1", output, len);
             output += len;
             outputByteLen -= len;
@@ -508,7 +508,7 @@ int Vatte(Kravatte_Instance *kv, BitSequence *output, BitLength outputBitLen, in
         if (!finalFlag && (len != SnP_widthInBytes)) { /* Put rest of expanded data into queue */
             unsigned int offset = len;
             len = SnP_widthInBytes - len;
-            KeccakP1600_ExtractAndAddBytes(state, kv->kRoll.a + offset, kv->queue.a + offset, offset, len);
+            KeccakP1600_ExtractAndAddBytes(&state, kv->kRoll + offset, kv->queue + offset, offset, len);
             kv->queueOffset = offset * 8; /* current bit offset in queue buffer */
         }
     }

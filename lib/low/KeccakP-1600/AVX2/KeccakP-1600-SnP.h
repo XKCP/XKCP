@@ -22,6 +22,7 @@ Please refer to SnP-documentation.h for more details.
 #define _KeccakP_1600_SnP_h_
 
 #include <stddef.h>
+#include <stdint.h>
 
 #ifdef __MINGW32__
 #define FORCE_SYSV __attribute__((sysv_abi))
@@ -29,24 +30,33 @@ Please refer to SnP-documentation.h for more details.
 #define FORCE_SYSV
 #endif
 
+typedef struct {
+    uint64_t Aba, Abe, Abi, Abo, Abu;
+    uint64_t Aka, Asa, Aga, Ama;
+    uint64_t Ame, Agi, Aso, Aku;
+    uint64_t Ake, Asi, Ago, Amu;
+    uint64_t Ase, Ami, Ako, Agu;
+    uint64_t Age, Aki, Amo, Asu;
+} KeccakP1600_AVX2_state;
+
+typedef KeccakP1600_AVX2_state KeccakP1600_state;
+
 #define KeccakP1600_implementation      "AVX2 optimized implementation"
-#define KeccakP1600_stateSizeInBytes    200
-#define KeccakP1600_stateAlignment      8
 #define KeccakF1600_FastLoop_supported
 #define KeccakP1600_12rounds_FastLoop_supported
 
 #define KeccakP1600_StaticInitialize()
-FORCE_SYSV void KeccakP1600_Initialize(void *state);
-FORCE_SYSV void KeccakP1600_AddByte(void *state, unsigned char data, unsigned int offset);
-FORCE_SYSV void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
-FORCE_SYSV void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
-FORCE_SYSV void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount);
-FORCE_SYSV void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds);
-FORCE_SYSV void KeccakP1600_Permute_12rounds(void *state);
-FORCE_SYSV void KeccakP1600_Permute_24rounds(void *state);
-FORCE_SYSV void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length);
-FORCE_SYSV void KeccakP1600_ExtractAndAddBytes(const void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
-FORCE_SYSV size_t KeccakF1600_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
-FORCE_SYSV size_t KeccakP1600_12rounds_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
+FORCE_SYSV void KeccakP1600_Initialize(KeccakP1600_AVX2_state *state);
+FORCE_SYSV void KeccakP1600_AddByte(KeccakP1600_AVX2_state *state, unsigned char data, unsigned int offset);
+FORCE_SYSV void KeccakP1600_AddBytes(KeccakP1600_AVX2_state *state, const unsigned char *data, unsigned int offset, unsigned int length);
+FORCE_SYSV void KeccakP1600_OverwriteBytes(KeccakP1600_AVX2_state *state, const unsigned char *data, unsigned int offset, unsigned int length);
+FORCE_SYSV void KeccakP1600_OverwriteWithZeroes(KeccakP1600_AVX2_state *state, unsigned int byteCount);
+FORCE_SYSV void KeccakP1600_Permute_Nrounds(KeccakP1600_AVX2_state *state, unsigned int nrounds);
+FORCE_SYSV void KeccakP1600_Permute_12rounds(KeccakP1600_AVX2_state *state);
+FORCE_SYSV void KeccakP1600_Permute_24rounds(KeccakP1600_AVX2_state *state);
+FORCE_SYSV void KeccakP1600_ExtractBytes(const KeccakP1600_AVX2_state *state, unsigned char *data, unsigned int offset, unsigned int length);
+FORCE_SYSV void KeccakP1600_ExtractAndAddBytes(const KeccakP1600_AVX2_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
+FORCE_SYSV size_t KeccakF1600_FastLoop_Absorb(KeccakP1600_AVX2_state *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
+FORCE_SYSV size_t KeccakP1600_12rounds_FastLoop_Absorb(KeccakP1600_AVX2_state *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
 
 #endif

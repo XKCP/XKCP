@@ -23,21 +23,26 @@ http://creativecommons.org/publicdomain/zero/1.0/
 /** For the documentation, see SnP-documentation.h.
  */
 
+typedef struct {
+    uint8_t A[48];
+} Xoodoo_plain8_state;
+
+typedef Xoodoo_plain8_state Xoodoo_state;
+
 #define Xoodoo_implementation      "AVR8 optimized implementation"
-#define Xoodoo_stateSizeInBytes    (3*4*4)
 #define Xoodoo_stateAlignment      1
 #define Xoodoo_HasNround
 
 #define Xoodoo_StaticInitialize()
-void Xoodoo_Initialize(void *state);
+void Xoodoo_Initialize(Xoodoo_plain8_state *state);
 #define Xoodoo_AddByte(argS, argData, argOffset)    ((uint8_t*)argS)[argOffset] ^= (argData)
-void Xoodoo_AddBytes(void *state, const uint8_t *data, unsigned int offset, unsigned int length);
-void Xoodoo_OverwriteBytes(void *state, const uint8_t *data, unsigned int offset, unsigned int length);
-void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount);
-void Xoodoo_Permute_Nrounds(void *state, unsigned int nrounds);
-void Xoodoo_Permute_6rounds(void *state);
-void Xoodoo_Permute_12rounds(void *state);
-void Xoodoo_ExtractBytes(const void *state, uint8_t *data, unsigned int offset, unsigned int length);
-void Xoodoo_ExtractAndAddBytes(const void *state, const uint8_t *input, uint8_t *output, unsigned int offset, unsigned int length);
+void Xoodoo_AddBytes(Xoodoo_plain8_state *state, const uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_OverwriteBytes(Xoodoo_plain8_state *state, const uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_OverwriteWithZeroes(Xoodoo_plain8_state *state, unsigned int byteCount);
+void Xoodoo_Permute_Nrounds(Xoodoo_plain8_state *state, unsigned int nrounds);
+void Xoodoo_Permute_6rounds(Xoodoo_plain8_state *state);
+void Xoodoo_Permute_12rounds(Xoodoo_plain8_state *state);
+void Xoodoo_ExtractBytes(const Xoodoo_plain8_state *state, uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_ExtractAndAddBytes(const Xoodoo_plain8_state *state, const uint8_t *input, uint8_t *output, unsigned int offset, unsigned int length);
 
 #endif

@@ -82,17 +82,12 @@ typedef enum
     #define Xoofff_Alignment        Xoodoo_stateAlignment
 #endif
 
-ALIGN(Xoofff_Alignment) typedef struct
-{
-    unsigned char a[SnP_widthInBytes];
-} Xoofff_AlignedArray;
-
 typedef struct {
-    Xoofff_AlignedArray k;
-    Xoofff_AlignedArray kRoll;
-    Xoofff_AlignedArray xAccu;
-    Xoofff_AlignedArray yAccu;
-    Xoofff_AlignedArray queue;      /* input/output queue buffer */
+    ALIGN(4) uint8_t k[48];
+    ALIGN(4) uint8_t kRoll[48];
+    ALIGN(4) uint8_t xAccu[48];
+    ALIGN(4) uint8_t yAccu[48];
+    ALIGN(4) uint8_t queue[48];     /* input/output queue buffer */
     BitLength queueOffset;          /* current offset in queue */
     Xoofff_Phases phase;
 } Xoofff_Instance;
