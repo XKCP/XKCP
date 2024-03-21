@@ -21,28 +21,27 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define measurePlSnP_PermuteAll_12rounds            JOIN(prefix, _measureSnP_Permute_12rounds)
 #define doTimingPlSnP                               JOIN(prefix, _timingPlSnP)
 
-#define PlSnP_statesSizeInBytes                     JOIN(PlSnP, _statesSizeInBytes)
-#define PlSnP_statesAlignment                       JOIN(PlSnP, _statesAlignment)
 #define PlSnP_P                                     PlSnP_parallelism
+#define PlSnP_states                                JOIN(PlSnP, _states)
 #define PlSnP_StaticInitialize                      JOIN(PlSnP, _StaticInitialize)
 #define PlSnP_InitializeAll                         JOIN(PlSnP, _InitializeAll)
 #define PlSnP_AddLanesAll                           JOIN(PlSnP, _AddLanesAll)
 
 cycles_t measurePlSnP_PermuteAll_6rounds(cycles_t dtMin)
 {
-    ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
+    PlSnP_states states;
 
     measureTimingBegin
-    PlSnP_PermuteAll_6rounds(states);
+    PlSnP_PermuteAll_6rounds(&states);
     measureTimingEnd
 }
 
 cycles_t measurePlSnP_PermuteAll_12rounds(cycles_t dtMin)
 {
-    ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
+    PlSnP_states states;
 
     measureTimingBegin
-    PlSnP_PermuteAll_12rounds(states);
+    PlSnP_PermuteAll_12rounds(&states);
     measureTimingEnd
 }
 
@@ -68,9 +67,8 @@ void doTimingPlSnP(const char *module, const char *implementation)
 #undef measurePlSnP_PermuteAll_6rounds
 #undef measurePlSnP_PermuteAll_12rounds
 #undef doTimingPlSnP
-#undef PlSnP_statesSizeInBytes
-#undef PlSnP_statesAlignment
 #undef PlSnP_P
+#undef PlSnP_states
 #undef PlSnP_StaticInitialize
 #undef PlSnP_InitializeAll
 #undef PlSnP_AddLanesAll

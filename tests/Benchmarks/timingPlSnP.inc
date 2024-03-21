@@ -27,9 +27,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define gatherPlSnP_GenericLoop_Absorb_interleaved  JOIN(prefix, _gatherPlSnP_GenericLoop_Absorb_interleaved)
 #define doTimingPlSnP                               JOIN(prefix, _timingPlSnP)
 
-#define PlSnP_statesSizeInBytes                     JOIN(PlSnP, _statesSizeInBytes)
-#define PlSnP_statesAlignment                       JOIN(PlSnP, _statesAlignment)
 #define PlSnP_P                                     PlSnP_parallelism
+#define PlSnP_states                                JOIN(PlSnP, _states)
 #define SnP_laneLengthInBytes                       ((SnP_width)/200)
 #define SnP_laneCount                               25
 #define PlSnP_StaticInitialize                      JOIN(PlSnP, _StaticInitialize)
@@ -38,20 +37,20 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 cycles_t measurePlSnP_PermuteAll(cycles_t dtMin)
 {
-    ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
+    PlSnP_states states;
 
     measureTimingBegin
-    PlSnP_PermuteAll(states);
+    PlSnP_PermuteAll(&states);
     measureTimingEnd
 }
 
 #ifdef PlSnP_PermuteAll_12rounds
 cycles_t measurePlSnP_PermuteAll_12rounds(cycles_t dtMin)
 {
-    ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
+    PlSnP_states states;
 
     measureTimingBegin
-    PlSnP_PermuteAll_12rounds(states);
+    PlSnP_PermuteAll_12rounds(&states);
     measureTimingEnd
 }
 #endif
@@ -59,7 +58,7 @@ cycles_t measurePlSnP_PermuteAll_12rounds(cycles_t dtMin)
 #ifdef PlSnP_FastLoop_Absorb
 cycles_t measurePlSnP_FastLoop_Absorb_interleaved(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
-    ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
+    PlSnP_states states;
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes*PlSnP_P;
     measureTimingDeclare
     assert(dataSize <= sizeof(bigBuffer1));
@@ -90,7 +89,7 @@ void gatherPlSnP_FastLoop_Absorb_interleaved(cycles_t dtMin, cycles_t *measureme
 
 cycles_t measurePlSnP_FastLoop_Absorb_segmented(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
-    ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
+    PlSnP_states states;
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes*PlSnP_P;
     measureTimingDeclare
     assert(dataSize <= sizeof(bigBuffer1));
@@ -122,7 +121,7 @@ void gatherPlSnP_FastLoop_Absorb_segmented(cycles_t dtMin, cycles_t *measurement
 
 cycles_t measurePlSnP_GenericLoop_Absorb_interleaved(cycles_t dtMin, unsigned int laneCount, unsigned int blockCount)
 {
-    ALIGN(PlSnP_statesAlignment) unsigned char states[PlSnP_statesSizeInBytes];
+    PlSnP_states states;
     unsigned int dataSize = laneCount*blockCount*SnP_laneLengthInBytes*PlSnP_P;
     measureTimingDeclare
     assert(dataSize <= sizeof(bigBuffer1));
@@ -134,8 +133,8 @@ cycles_t measurePlSnP_GenericLoop_Absorb_interleaved(cycles_t dtMin, unsigned in
         unsigned int i;
 
         for(i=0; i<blockCount; i++) {
-            PlSnP_AddLanesAll(states, curData, laneCount, laneCount);
-            PlSnP_PermuteAll(states);
+            PlSnP_AddLanesAll(&states, curData, laneCount, laneCount);
+            PlSnP_PermuteAll(&states);
             curData += rateInBytes;
         }
     }
@@ -206,9 +205,8 @@ void doTimingPlSnP(const char *module, const char *implementation)
 #undef measurePlSnP_GenericLoop_Absorb_interleaved
 #undef gatherPlSnP_GenericLoop_Absorb_interleaved
 #undef doTimingPlSnP
-#undef PlSnP_statesSizeInBytes
-#undef PlSnP_statesAlignment
 #undef PlSnP_P
+#undef PlSnP_states
 #undef SnP_laneLengthInBytes
 #undef SnP_laneCount
 #undef PlSnP_StaticInitialize
