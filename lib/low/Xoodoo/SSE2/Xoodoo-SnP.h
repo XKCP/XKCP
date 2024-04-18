@@ -23,31 +23,36 @@ http://creativecommons.org/publicdomain/zero/1.0/
 /** For the documentation, see SnP-documentation.h.
  */
 
+typedef struct {
+    ALIGN(16) uint32_t A[12];
+} Xoodoo_align128plain32_state;
+
+typedef Xoodoo_align128plain32_state Xoodoo_state;
+
 #define Xoodoo_implementation      "SIMD-128 optimized implementation"
-#define Xoodoo_stateSizeInBytes    (3*4*4)
-#define Xoodoo_stateAlignment      16
 #define Xoodoo_HasNround
+#define Xoodoo_stateAlignment      16
 
 /* void Xoodoo_StaticInitialize( void ); */
 #define Xoodoo_StaticInitialize()
-void Xoodoo_Initialize(void *state);
-/* void Xoodoo_AddByte(void *state, uint8_t data, unsigned int offset); */
+void Xoodoo_Initialize(Xoodoo_align128plain32_state *state);
+/* void Xoodoo_AddByte(Xoodoo_align128plain32_state *state, uint8_t data, unsigned int offset); */
 #define Xoodoo_AddByte(argS, argData, argOffset)    ((uint8_t*)argS)[argOffset] ^= (argData)
-void Xoodoo_AddBytes(void *state, const uint8_t *data, unsigned int offset, unsigned int length);
-void Xoodoo_OverwriteBytes(void *state, const uint8_t *data, unsigned int offset, unsigned int length);
-void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount);
-void Xoodoo_Permute_Nrounds(void *state, unsigned int nrounds);
-void Xoodoo_Permute_6rounds(void *state);
-void Xoodoo_Permute_12rounds(void *state);
-void Xoodoo_ExtractBytes(const void *state, uint8_t *data, unsigned int offset, unsigned int length);
-void Xoodoo_ExtractAndAddBytes(const void *state, const uint8_t *input, uint8_t *output, unsigned int offset, unsigned int length);
+void Xoodoo_AddBytes(Xoodoo_align128plain32_state *state, const uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_OverwriteBytes(Xoodoo_align128plain32_state *state, const uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_OverwriteWithZeroes(Xoodoo_align128plain32_state *state, unsigned int byteCount);
+void Xoodoo_Permute_Nrounds(Xoodoo_align128plain32_state *state, unsigned int nrounds);
+void Xoodoo_Permute_6rounds(Xoodoo_align128plain32_state *state);
+void Xoodoo_Permute_12rounds(Xoodoo_align128plain32_state *state);
+void Xoodoo_ExtractBytes(const Xoodoo_align128plain32_state *state, uint8_t *data, unsigned int offset, unsigned int length);
+void Xoodoo_ExtractAndAddBytes(const Xoodoo_align128plain32_state *state, const uint8_t *input, uint8_t *output, unsigned int offset, unsigned int length);
 
 #define CyclistFullBlocks_supported
-size_t Xoodyak_AbsorbKeyedFullBlocks(void *state, const uint8_t *X, size_t XLen);
-size_t Xoodyak_AbsorbHashFullBlocks(void *state, const uint8_t *X, size_t XLen);
-size_t Xoodyak_SqueezeHashFullBlocks(void *state, uint8_t *Y, size_t YLen);
-size_t Xoodyak_SqueezeKeyedFullBlocks(void *state, uint8_t *Y, size_t YLen);
-size_t Xoodyak_EncryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size_t IOLen);
-size_t Xoodyak_DecryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size_t IOLen);
+size_t Xoodyak_AbsorbKeyedFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *X, size_t XLen);
+size_t Xoodyak_AbsorbHashFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *X, size_t XLen);
+size_t Xoodyak_SqueezeHashFullBlocks(Xoodoo_align128plain32_state *state, uint8_t *Y, size_t YLen);
+size_t Xoodyak_SqueezeKeyedFullBlocks(Xoodoo_align128plain32_state *state, uint8_t *Y, size_t YLen);
+size_t Xoodyak_EncryptFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *I, uint8_t *O, size_t IOLen);
+size_t Xoodyak_DecryptFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *I, uint8_t *O, size_t IOLen);
 
 #endif

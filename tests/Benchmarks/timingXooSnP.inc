@@ -21,8 +21,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define measureSnP_Permute_12rounds     JOIN(prefix, _measureSnP_Permute_12rounds)
 #define doTimingSnP                     JOIN(prefix, _timingSnP)
 
-#define SnP_stateAlignment              JOIN(SnP, _stateAlignment)
-#define SnP_stateSizeInBytes            JOIN(SnP, _stateSizeInBytes)
 #define SnP_laneLengthInBytes           ((SnP_width)/(3*4))
 #define SnP_laneCount                   (3*4)
 #define SnP_StaticInitialize            JOIN(SnP, _StaticInitialize)
@@ -31,19 +29,19 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 cycles_t measureSnP_Permute_6rounds(cycles_t dtMin)
 {
-    ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
+    SnP_state state;
 
     measureTimingBegin
-    SnP_Permute_6rounds(state);
+    SnP_Permute_6rounds(&state);
     measureTimingEnd
 }
 
 cycles_t measureSnP_Permute_12rounds(cycles_t dtMin)
 {
-    ALIGN(SnP_stateAlignment) unsigned char state[SnP_stateSizeInBytes];
+    SnP_state state;
 
     measureTimingBegin
-    SnP_Permute_12rounds(state);
+    SnP_Permute_12rounds(&state);
     measureTimingEnd
 }
 
@@ -68,8 +66,6 @@ void doTimingSnP(const char *module, const char *implementation)
 #undef measureSnP_Permute_6rounds
 #undef measureSnP_Permute_12rounds
 #undef doTimingSnP
-#undef SnP_stateAlignment
-#undef SnP_stateSizeInBytes
 #undef SnP_laneLengthInBytes
 #undef SnP_laneCount
 #undef SnP_StaticInitialize

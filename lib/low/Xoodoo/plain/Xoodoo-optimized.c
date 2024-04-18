@@ -17,6 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdio.h>
 #include <string.h>
 #include "Xoodoo.h"
+#include "Xoodoo-SnP.h"
 
 #define VERBOSE         0
 
@@ -49,18 +50,18 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_Initialize(void *state)
+void Xoodoo_Initialize(Xoodoo_plain32_state *state)
 {
-    memset(state, 0, NLANES*sizeof(tXoodooLane));
+    memset(state, 0, sizeof(Xoodoo_plain32_state));
 }
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_AddBytes(void *argState, const unsigned char *argdata, unsigned int offset, unsigned int length)
+void Xoodoo_AddBytes(Xoodoo_plain32_state *argState, const unsigned char *argdata, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     if (length == (3*4*4)) {
-        uint32_t *state = (uint32_t *)argState;
+        uint32_t *state = argState->A;
         uint32_t *data = (uint32_t *)argdata;
         state[0] ^= data[0];
         state[1] ^= data[1];
@@ -80,7 +81,7 @@ void Xoodoo_AddBytes(void *argState, const unsigned char *argdata, unsigned int 
         unsigned int lanePosition = offset/4;
         unsigned int offsetInLane = offset%4;
         const unsigned char *curData = argdata;
-        uint32_t *state = (uint32_t*)argState;
+        uint32_t *state = argState->A;
 
         state += lanePosition;
         if ((sizeLeft > 0) && (offsetInLane != 0)) {
@@ -113,11 +114,11 @@ void Xoodoo_AddBytes(void *argState, const unsigned char *argdata, unsigned int 
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_OverwriteBytes(void *argstate, const unsigned char *argdata, unsigned int offset, unsigned int length)
+void Xoodoo_OverwriteBytes(Xoodoo_plain32_state *argstate, const unsigned char *argdata, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     if (length == (3*4*4)) {
-        uint32_t *state = (uint32_t *)argstate;
+        uint32_t *state = argstate->A;
         uint32_t *data = (uint32_t *)argdata;
         state[0] = data[0];
         state[1] = data[1];
@@ -141,7 +142,7 @@ void Xoodoo_OverwriteBytes(void *argstate, const unsigned char *argdata, unsigne
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_OverwriteWithZeroes(void *argstate, unsigned int byteCount)
+void Xoodoo_OverwriteWithZeroes(Xoodoo_plain32_state *argstate, unsigned int byteCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     memset(argstate, 0, byteCount);
@@ -152,7 +153,7 @@ void Xoodoo_OverwriteWithZeroes(void *argstate, unsigned int byteCount)
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodoo_ExtractBytes(const Xoodoo_plain32_state *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     memcpy(data, (unsigned char*)state+offset, length);
@@ -163,11 +164,11 @@ void Xoodoo_ExtractBytes(const void *state, unsigned char *data, unsigned int of
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_ExtractAndAddBytes(const void *argState, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+void Xoodoo_ExtractAndAddBytes(const Xoodoo_plain32_state *argState, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     if (length == (3*4*4)) {
-        uint32_t *state = (uint32_t *)argState;
+        const uint32_t *state = argState->A;
         const uint32_t *ii = (const uint32_t *)input;
         uint32_t *oo = (uint32_t *)output;
 
@@ -190,7 +191,7 @@ void Xoodoo_ExtractAndAddBytes(const void *argState, const unsigned char *input,
         unsigned int offsetInLane = offset%4;
         const unsigned char *curInput = input;
         unsigned char *curOutput = output;
-        const uint32_t *state = (const uint32_t*)argState;
+        const uint32_t *state = argState->A;
 
         state += lanePosition;
         if ((sizeLeft > 0) && (offsetInLane != 0)) {
@@ -234,13 +235,13 @@ void Xoodoo_ExtractAndAddBytes(const void *argState, const unsigned char *input,
                         uint32_t    a20, a21, a22, a23; \
                         uint32_t    v1, v2
 
-#define    State2Vars   a00 = state[0+0], a01 = state[0+1], a02 = state[0+2], a03 = state[0+3]; \
-                        a10 = state[4+0], a11 = state[4+1], a12 = state[4+2], a13 = state[4+3]; \
-                        a20 = state[8+0], a21 = state[8+1], a22 = state[8+2], a23 = state[8+3]
+#define    State2Vars   a00 = state->A[0+0], a01 = state->A[0+1], a02 = state->A[0+2], a03 = state->A[0+3]; \
+                        a10 = state->A[4+0], a11 = state->A[4+1], a12 = state->A[4+2], a13 = state->A[4+3]; \
+                        a20 = state->A[8+0], a21 = state->A[8+1], a22 = state->A[8+2], a23 = state->A[8+3]
 
-#define    Vars2State   state[0+0] = a00, state[0+1] = a01, state[0+2] = a02, state[0+3] = a03; \
-                        state[4+0] = a10, state[4+1] = a11, state[4+2] = a12, state[4+3] = a13; \
-                        state[8+0] = a20, state[8+1] = a21, state[8+2] = a22, state[8+3] = a23
+#define    Vars2State   state->A[0+0] = a00, state->A[0+1] = a01, state->A[0+2] = a02, state->A[0+3] = a03; \
+                        state->A[4+0] = a10, state->A[4+1] = a11, state->A[4+2] = a12, state->A[4+3] = a13; \
+                        state->A[8+0] = a20, state->A[8+1] = a21, state->A[8+2] = a22, state->A[8+3] = a23
 
 /*
 ** Theta: Column Parity Mixer
@@ -348,7 +349,7 @@ static const uint32_t    RC[MAXROUNDS] = {
     _rc1
 };
 
-void Xoodoo_Permute_Nrounds( uint32_t * state, uint32_t nr )
+void Xoodoo_Permute_Nrounds(Xoodoo_plain32_state *state, uint32_t nr)
 {
     DeclareVars;
     uint32_t    i;
@@ -362,7 +363,7 @@ void Xoodoo_Permute_Nrounds( uint32_t * state, uint32_t nr )
     Vars2State;
 }
 
-void Xoodoo_Permute_6rounds( uint32_t * state)
+void Xoodoo_Permute_6rounds(Xoodoo_plain32_state *state)
 {
     DeclareVars;
 
@@ -377,7 +378,7 @@ void Xoodoo_Permute_6rounds( uint32_t * state)
     Vars2State;
 }
 
-void Xoodoo_Permute_12rounds( uint32_t * state)
+void Xoodoo_Permute_12rounds(Xoodoo_plain32_state *state)
 {
     DeclareVars;
 

@@ -24,9 +24,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "align.h"
 #include "config.h"
 
-#define XKCP_DeclareSpongeStructure(prefix, size, alignment) \
-    ALIGN(alignment) typedef struct prefix##_SpongeInstanceStruct { \
-        unsigned char state[size]; \
+#define XKCP_DeclareSpongeStructure(prefix, state_t) \
+    typedef struct prefix##_SpongeInstanceStruct { \
+        state_t state; \
         unsigned int rate; \
         unsigned int byteIOIndex; \
         int squeezing; \
@@ -62,7 +62,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #ifdef XKCP_has_KeccakP1600
     #include "KeccakP-1600-SnP.h"
-    XKCP_DeclareSpongeStructure(KeccakWidth1600, KeccakP1600_stateSizeInBytes, KeccakP1600_stateAlignment)
+    XKCP_DeclareSpongeStructure(KeccakWidth1600, KeccakP1600_state)
     XKCP_DeclareSpongeFunctions(KeccakWidth1600)
     #define XKCP_has_Sponge_Keccak_width1600
 #endif

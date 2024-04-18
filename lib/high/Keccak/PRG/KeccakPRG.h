@@ -25,8 +25,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "config.h"
 #include "KeccakDuplex.h"
 
-#define XKCP_DeclareSpongePRG_Structure(prefix, size, alignment) \
-    ALIGN(alignment) typedef struct prefix##_SpongePRG_InstanceStruct { \
+#define XKCP_DeclareSpongePRG_Structure(prefix) \
+    typedef struct prefix##_SpongePRG_InstanceStruct { \
         prefix##_DuplexInstance duplex; \
     } prefix##_SpongePRG_Instance;
 
@@ -59,7 +59,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #ifdef XKCP_has_KeccakP1600
     #include "KeccakP-1600-SnP.h"
-    XKCP_DeclareSpongePRG_Structure(KeccakWidth1600, KeccakP1600_stateSizeInBytes, KeccakP1600_stateAlignment)
+    XKCP_DeclareSpongePRG_Structure(KeccakWidth1600)
     XKCP_DeclareSpongePRG_Functions(KeccakWidth1600)
     #define XKCP_has_PRG_Keccak_width1600
 #endif

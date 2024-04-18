@@ -67,14 +67,11 @@ When used as a library or directly from the sources, the XKCP offers the high-le
 
 ## Low-level services
 
-The low-level services implement the different permutations Keccak-_f_[200 to 1600] and Keccak-_p_[200 to 1600]. Note that these two permutation families are closely related. In Keccak-_p_ the number of rounds is a parameter while in Keccak-_f_ it is fixed. As Keccak-_f_ are just instances of Keccak-_p_, we focus on the latter here.
+The low-level services implement the different permutations Keccak-_f_[1600], Keccak-_p_[1600, 12 rounds] and Xoodoo.
 
 The low-level services provide an opaque representation of the state together with functions to add data into and extract data from the state. Together with the permutations themselves, the low-level services implement what we call the **state and permutation** interface (abbreviated **SnP**). For parallelized implementation, we similarly use the **parallel** state and permutation interface or **PlSnP**.
 
 * In [`lib/low/`](lib/low/), one can find implementations of the following permutations for different platforms.
-    + [`lib/low/KeccakP-200/`](lib/low/KeccakP-200/) for Keccak-_p_[200].
-    + [`lib/low/KeccakP-400/`](lib/low/KeccakP-400/), for Keccak-_p_[400].
-    + [`lib/low/KeccakP-800/`](lib/low/KeccakP-800/), for Keccak-_p_[800].
     + [`lib/low/KeccakP-1600/`](lib/low/KeccakP-1600/), for Keccak-_p_[1600]. This is the one used in the six approved FIPS 202 instances.
     + [`lib/low/Xoodoo/`](lib/low/Xoodoo/), for Xoodoo.
 
@@ -318,11 +315,13 @@ We wish to thank all the contributors, and in particular:
 - Bruno Pairault for testing and benchmarking on ARM platforms
 - Conno Boel for the NEON implementations of Xoodoo
 - D.J. Bernstein, Peter Schwabe and Gilles Van Assche for the tweetable FIPS 202 implementation `TweetableFIPS202.c`
+- Hadi El Yakhni for providing example code
 - Hussama Ismail for setting up the continuous integration with Travis
 - Kent Ross for various improvements in [XKCP/K12](https://github.com/XKCP/K12) imported here
 - Larry Bassham, NIST for the original `genKAT.c` developed during the SHA-3 contest
+- Ryad Benadjila for adding continuous integration on different platforms with qemu
 - Stéphane Léon for helping support macOS
-
+- And to all those who fixed bugs or brought improvements (in no specific order): Tyler Young, Robert J Spencer, amane-c, Øystein Heskestad, Norman (Hongyu) Xu, Jorrit Jongma, David Adrian, Sebastian Ramacher, lvd2, Sam Chen, Thom Wiggers, Thomas van der Burgt, Donald Tsang, MoorayJenkins, UnePierre, Diggory Hardy, Joost Rijneveld, Steve Thomas, Benoît Viguier, Ko Stoffelen, Bogdan Vaneev, Alf Watt, surrim, Robert Crossfield, David Leon Gil, Matt Kelly, Ross Biro
 
 ***
 

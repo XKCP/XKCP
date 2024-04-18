@@ -43,12 +43,14 @@ void displayMeasurements1101001000(cycles_t *measurements, uint32_t *laneCounts,
 
     #define prefix Xoodoo
     #define SnP Xoodoo
+    #define SnP_state Xoodoo_state
     #define SnP_width 384
     #define SnP_Permute_6rounds  Xoodoo_Permute_6rounds
     #define SnP_Permute_12rounds Xoodoo_Permute_12rounds
         #include "timingXooSnP.inc"
     #undef prefix
     #undef SnP
+    #undef SnP_state
     #undef SnP_width
     #undef SnP_Permute
     #undef SnP_Permute_12rounds

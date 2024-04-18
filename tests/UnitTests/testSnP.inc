@@ -26,8 +26,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define elementarySnPtest               JOIN(prefix, _elementarySnPtest)
 #define nominalSnPtest                  JOIN(prefix, _nominalSnPtest)
 
-#define SnP_stateAlignment              JOIN(SnP, _stateAlignment)
-#define SnP_stateSizeInBytes            JOIN(SnP, _stateSizeInBytes)
+#define SnP_state                       JOIN(SnP, _state)
+#define SnP_stateSizeInBytes            sizeof(SnP_state)
 #define SnP_laneLengthInBytes           ((SnP_width)/(8*SnP_laneCount))
 #define SnP_StaticInitialize            JOIN(SnP, _StaticInitialize)
 #define SnP_Initialize                  JOIN(SnP, _Initialize)
@@ -89,7 +89,7 @@ void dumpState(const unsigned char *state, char *message)
 
 #ifndef SnP_FastLoop_Absorb
 #define SnP_FastLoop_Absorb JOIN(SnP, _FastLoop_Absorb)
-size_t SnP_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen)
+size_t SnP_FastLoop_Absorb(SnP_state *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen)
 {
     size_t processed = 0;
 
@@ -104,13 +104,13 @@ size_t SnP_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned c
 }
 #endif
 
-void accumulateBuffer(void *stateAccumulated, const unsigned char *buffer)
+void accumulateBuffer(SnP_state *stateAccumulated, const unsigned char *buffer)
 {
     SnP_AddBytes(stateAccumulated, buffer, 0, SnP_width/8);
     SnP_Permute(stateAccumulated);
 }
 
-void accumulateState(void *stateAccumulated, const void *stateTest)
+void accumulateState(SnP_state *stateAccumulated, const SnP_state *stateTest)
 {
     unsigned char buffer[SnP_width/8];
     SnP_ExtractBytes(stateTest, buffer, 0, SnP_width/8);
@@ -159,7 +159,7 @@ void elementarySnPtest()
     for(a = 0; a <= SnP_stateAlignment; a += SnP_stateAlignment) {
         unsigned char *paddedState = prePaddedState + a;
         unsigned char *paddedBuffer = prePaddedBuffer + a;
-        unsigned char *state = paddedState + padding;
+        SnP_state *state = (SnP_state*)(paddedState + padding);
         unsigned char *buffer = paddedBuffer + padding;
         unsigned int i, j;
 
@@ -279,8 +279,8 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
     unsigned int a;
     for(a = 0; a <= SnP_stateAlignment; a += SnP_stateAlignment) {
 
-        unsigned char *stateAccumulated = preStateAccumulated + a;
-        unsigned char *stateTest = preStateTest + a;
+        SnP_state *stateAccumulated = (SnP_state*)(preStateAccumulated + a);
+        SnP_state *stateTest = (SnP_state*)(preStateTest + a);
         memset(preStateTest, 0xAA, sizeof(preStateTest));
 
 #ifdef UT_VERBOSE
@@ -326,7 +326,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
 #undef elementarySnPtest
 #undef nominalSnPtest
 
-#undef SnP_stateAlignment
+#undef SnP_state
 #undef SnP_stateSizeInBytes
 #undef SnP_laneLengthInBytes
 #undef SnP_StaticInitialize

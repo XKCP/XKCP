@@ -25,7 +25,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "Xoodoo-SnP.h"
 #include "Xoodyak-parameters.h"
 
-KCP_DeclareCyclistStructure(Xoodyak, Xoodoo_stateSizeInBytes, Xoodoo_stateAlignment)
+KCP_DeclareCyclistStructure(Xoodyak, Xoodoo_state)
 KCP_DeclareCyclistFunctions(Xoodyak)
 
 #else

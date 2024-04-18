@@ -44,7 +44,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define ParallelSpongeFastLoop( Parallellism ) \
     while ( inLen >= Parallellism * chunkSize ) { \
-        ALIGN(KeccakP1600times##Parallellism##_statesAlignment) unsigned char states[KeccakP1600times##Parallellism##_statesSizeInBytes]; \
+        KeccakP1600times##Parallellism##_states states; \
         unsigned char intermediate[Parallellism*capacityInBytes]; \
         unsigned int localBlockLen = chunkSize; \
         const unsigned char * localInput = input; \
@@ -52,49 +52,49 @@ http://creativecommons.org/publicdomain/zero/1.0/
         unsigned int fastLoopOffset; \
         \
         KeccakP1600times##Parallellism##_StaticInitialize(); \
-        KeccakP1600times##Parallellism##_InitializeAll(states); \
-        fastLoopOffset = (unsigned int)KeccakP1600times##Parallellism##_12rounds_FastLoop_Absorb(states, rateInLanes, chunkSize / laneSize, rateInLanes, localInput, Parallellism * chunkSize); \
+        KeccakP1600times##Parallellism##_InitializeAll(&states); \
+        fastLoopOffset = (unsigned int)KeccakP1600times##Parallellism##_12rounds_FastLoop_Absorb(&states, rateInLanes, chunkSize / laneSize, rateInLanes, localInput, Parallellism * chunkSize); \
         localBlockLen -= fastLoopOffset; \
         localInput += fastLoopOffset; \
         for ( i = 0; i < Parallellism; ++i, localInput += chunkSize ) { \
-            KeccakP1600times##Parallellism##_AddBytes(states, i, localInput, 0, localBlockLen); \
-            KeccakP1600times##Parallellism##_AddByte(states, i, suffixLeaf, localBlockLen); \
-            KeccakP1600times##Parallellism##_AddByte(states, i, 0x80, rateInBytes-1); \
+            KeccakP1600times##Parallellism##_AddBytes(&states, i, localInput, 0, localBlockLen); \
+            KeccakP1600times##Parallellism##_AddByte(&states, i, suffixLeaf, localBlockLen); \
+            KeccakP1600times##Parallellism##_AddByte(&states, i, 0x80, rateInBytes-1); \
         } \
-        KeccakP1600times##Parallellism##_PermuteAll_12rounds(states); \
+        KeccakP1600times##Parallellism##_PermuteAll_12rounds(&states); \
         input += Parallellism * chunkSize; \
         inLen -= Parallellism * chunkSize; \
         ktInstance->blockNumber += Parallellism; \
-        KeccakP1600times##Parallellism##_ExtractLanesAll(states, intermediate, capacityInLanes, capacityInLanes ); \
+        KeccakP1600times##Parallellism##_ExtractLanesAll(&states, intermediate, capacityInLanes, capacityInLanes ); \
         if (TurboSHAKE_Absorb(&ktInstance->finalNode, intermediate, Parallellism * capacityInBytes) != 0) return 1; \
             }
 
 #define ParallelSpongeLoop( Parallellism ) \
     while ( inLen >= Parallellism * chunkSize ) { \
-        ALIGN(KeccakP1600times##Parallellism##_statesAlignment) unsigned char states[KeccakP1600times##Parallellism##_statesSizeInBytes]; \
+        KeccakP1600times##Parallellism##_states states; \
         unsigned char intermediate[Parallellism*capacityInBytes]; \
         unsigned int localBlockLen = chunkSize; \
         const unsigned char * localInput = input; \
         unsigned int i; \
         \
         KeccakP1600times##Parallellism##_StaticInitialize(); \
-        KeccakP1600times##Parallellism##_InitializeAll(states); \
+        KeccakP1600times##Parallellism##_InitializeAll(&states); \
         while(localBlockLen >= rateInBytes) { \
-            KeccakP1600times##Parallellism##_AddLanesAll(states, localInput, rateInLanes, chunkSize / laneSize); \
-            KeccakP1600times##Parallellism##_PermuteAll_12rounds(states); \
+            KeccakP1600times##Parallellism##_AddLanesAll(&states, localInput, rateInLanes, chunkSize / laneSize); \
+            KeccakP1600times##Parallellism##_PermuteAll_12rounds(&states); \
             localBlockLen -= rateInBytes; \
             localInput += rateInBytes; \
            } \
         for ( i = 0; i < Parallellism; ++i, localInput += chunkSize ) { \
-            KeccakP1600times##Parallellism##_AddBytes(states, i, localInput, 0, localBlockLen); \
-            KeccakP1600times##Parallellism##_AddByte(states, i, suffixLeaf, localBlockLen); \
-            KeccakP1600times##Parallellism##_AddByte(states, i, 0x80, rateInBytes-1); \
+            KeccakP1600times##Parallellism##_AddBytes(&states, i, localInput, 0, localBlockLen); \
+            KeccakP1600times##Parallellism##_AddByte(&states, i, suffixLeaf, localBlockLen); \
+            KeccakP1600times##Parallellism##_AddByte(&states, i, 0x80, rateInBytes-1); \
         } \
-        KeccakP1600times##Parallellism##_PermuteAll_12rounds(states); \
+        KeccakP1600times##Parallellism##_PermuteAll_12rounds(&states); \
         input += Parallellism * chunkSize; \
         inLen -= Parallellism * chunkSize; \
         ktInstance->blockNumber += Parallellism; \
-        KeccakP1600times##Parallellism##_ExtractLanesAll(states, intermediate, capacityInLanes, capacityInLanes ); \
+        KeccakP1600times##Parallellism##_ExtractLanesAll(&states, intermediate, capacityInLanes, capacityInLanes ); \
         if (TurboSHAKE_Absorb(&ktInstance->finalNode, intermediate, Parallellism * capacityInBytes) != 0) return 1; \
 }
 

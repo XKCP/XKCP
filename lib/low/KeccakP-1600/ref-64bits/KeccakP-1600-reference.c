@@ -33,6 +33,7 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #ifdef KeccakReference
 #include "displayIntermediateValues.h"
 #endif
+#include "KeccakP-1600-SnP.h"
 
 typedef uint64_t tKeccakLane;
 
@@ -142,24 +143,24 @@ static const unsigned int KeccakRhoOffsets[nrLanes] =
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_Initialize(void *state)
+void KeccakP1600_Initialize(KeccakP1600_plain8_state *state)
 {
-    memset(state, 0, 1600/8);
+    memset(state->A, 0, sizeof(state->A));
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_AddByte(void *state, unsigned char byte, unsigned int offset)
+void KeccakP1600_AddByte(KeccakP1600_plain8_state *state, unsigned char byte, unsigned int offset)
 {
     #if DEBUG
     assert(offset < 200);
     #endif
-    ((unsigned char *)state)[offset] ^= byte;
+    state->A[offset] ^= byte;
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP1600_AddBytes(KeccakP1600_plain8_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     unsigned int i;
 
@@ -168,28 +169,28 @@ void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int o
     assert(offset+length <= 200);
     #endif
     for(i=0; i<length; i++)
-        ((unsigned char *)state)[offset+i] ^= data[i];
+        state->A[offset+i] ^= data[i];
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP1600_OverwriteBytes(KeccakP1600_plain8_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     #if DEBUG
     assert(offset < 200);
     assert(offset+length <= 200);
     #endif
-    memcpy((unsigned char*)state+offset, data, length);
+    memcpy(state->A+offset, data, length);
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
+void KeccakP1600_OverwriteWithZeroes(KeccakP1600_plain8_state *state, unsigned int byteCount)
 {
     #if DEBUG
     assert(byteCount <= 200);
     #endif
-    memset(state, 0, byteCount);
+    memset(state->A, 0, byteCount);
 }
 
 /* ---------------------------------------------------------------- */
@@ -206,71 +207,39 @@ static void pi(tKeccakLane *A);
 static void chi(tKeccakLane *A);
 static void iota(tKeccakLane *A, unsigned int indexRound);
 
-void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds)
+void KeccakP1600_Permute_Nrounds(KeccakP1600_plain8_state *state, unsigned int nrounds)
 {
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
     tKeccakLane stateAsWords[1600/64];
 #endif
 
 #ifdef KeccakReference
-    displayStateAsBytes(1, "Input of permutation", (const unsigned char *)state, 1600);
+    displayStateAsBytes(1, "Input of permutation", (const unsigned char *)state->A, 1600);
 #endif
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    KeccakP1600OnWords((tKeccakLane*)state, nrounds);
+    KeccakP1600OnWords((tKeccakLane*)state->A, nrounds);
 #else
-    fromBytesToWords(stateAsWords, (const unsigned char *)state);
+    fromBytesToWords(stateAsWords, state->A);
     KeccakP1600OnWords(stateAsWords, nrounds);
-    fromWordsToBytes((unsigned char *)state, stateAsWords);
+    fromWordsToBytes(state->A, stateAsWords);
 #endif
 #ifdef KeccakReference
-    displayStateAsBytes(1, "State after permutation", (const unsigned char *)state, 1600);
+    displayStateAsBytes(1, "State after permutation", (const unsigned char *)state->A, 1600);
 #endif
 }
 
-void KeccakP1600_Permute_12rounds(void *state)
+void KeccakP1600_Permute_12rounds(KeccakP1600_plain8_state *state)
 {
-#if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
-    tKeccakLane stateAsWords[1600/64];
-#endif
-
-#ifdef KeccakReference
-    displayStateAsBytes(1, "Input of permutation", (const unsigned char *)state, 1600);
-#endif
-#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    KeccakP1600OnWords((tKeccakLane*)state, 12);
-#else
-    fromBytesToWords(stateAsWords, (const unsigned char *)state);
-    KeccakP1600OnWords(stateAsWords, 12);
-    fromWordsToBytes((unsigned char *)state, stateAsWords);
-#endif
-#ifdef KeccakReference
-    displayStateAsBytes(1, "State after permutation", (const unsigned char *)state, 1600);
-#endif
+    KeccakP1600_Permute_Nrounds(state, 12);
 }
 
-void KeccakP1600_Permute_24rounds(void *state)
+void KeccakP1600_Permute_24rounds(KeccakP1600_plain8_state *state)
 {
-#if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
-    tKeccakLane stateAsWords[1600/64];
-#endif
-
-#ifdef KeccakReference
-    displayStateAsBytes(1, "Input of permutation", (const unsigned char *)state, 1600);
-#endif
-#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-    KeccakP1600OnWords((tKeccakLane*)state, 24);
-#else
-    fromBytesToWords(stateAsWords, (const unsigned char *)state);
-    KeccakP1600OnWords(stateAsWords, 24);
-    fromWordsToBytes((unsigned char *)state, stateAsWords);
-#endif
-#ifdef KeccakReference
-    displayStateAsBytes(1, "State after permutation", (const unsigned char *)state, 1600);
-#endif
+    KeccakP1600_Permute_Nrounds(state, 24);
 }
 
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
-static void fromBytesToWords(tKeccakLane *stateAsWords, const unsigned char *state)
+static void fromBytesToWords(tKeccakLane *stateAsWords, const uint8_t *state)
 {
     unsigned int i, j;
 
@@ -281,13 +250,13 @@ static void fromBytesToWords(tKeccakLane *stateAsWords, const unsigned char *sta
     }
 }
 
-static void fromWordsToBytes(unsigned char *state, const tKeccakLane *stateAsWords)
+static void fromWordsToBytes(uint8_t *state, const tKeccakLane *stateAsWords)
 {
     unsigned int i, j;
 
     for(i=0; i<nrLanes; i++)
         for(j=0; j<(64/8); j++)
-            state[i*(64/8)+j] = (unsigned char)((stateAsWords[i] >> (8*j)) & 0xFF);
+            state[i*(64/8)+j] = (uint8_t)((stateAsWords[i] >> (8*j)) & 0xFF);
 }
 #endif
 
@@ -393,18 +362,18 @@ static void iota(tKeccakLane *A, unsigned int indexRound)
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
+void KeccakP1600_ExtractBytes(const KeccakP1600_plain8_state *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
     #if DEBUG
     assert(offset < 200);
     assert(offset+length <= 200);
     #endif
-    memcpy(data, (unsigned char*)state+offset, length);
+    memcpy(data, state->A+offset, length);
 }
 
 /* ---------------------------------------------------------------- */
 
-void KeccakP1600_ExtractAndAddBytes(const void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+void KeccakP1600_ExtractAndAddBytes(const KeccakP1600_plain8_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
     unsigned int i;
 
@@ -413,7 +382,7 @@ void KeccakP1600_ExtractAndAddBytes(const void *state, const unsigned char *inpu
     assert(offset+length <= 200);
     #endif
     for(i=0; i<length; i++)
-        output[i] = input[i] ^ ((unsigned char *)state)[offset+i];
+        output[i] = input[i] ^ state->A[offset+i];
 }
 
 /* ---------------------------------------------------------------- */

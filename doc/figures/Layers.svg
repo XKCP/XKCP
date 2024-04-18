@@ -107,15 +107,15 @@ rect.lower {
      transform="translate(150,0)">
     <g transform="translate(-70,100)">
         <rect x="-30" y="0" width="60" height="10" rx="2" ry="2" class="box"/>
-        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle"><tspan style="font-variant: small-caps;">Keccak</tspan>-<tspan style="font-style: italic">f</tspan>[200]</text>
+        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle">Xoodoo</text>
     </g>
     <g transform="translate(0,100)">
         <rect x="-30" y="0" width="60" height="10" rx="2" ry="2" class="box"/>
-        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle"><tspan style="font-variant: small-caps;">Keccak</tspan>-<tspan style="font-style: italic">f</tspan>[1600]</text>
+        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle">Keccak-<tspan style="font-style: italic">f</tspan>[1600]</text>
     </g>
     <g transform="translate(70,100)">
         <rect x="-30" y="0" width="60" height="10" rx="2" ry="2" class="box"/>
-        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle"><tspan style="font-variant: small-caps;">Keccak</tspan>-<tspan style="font-style: italic">p</tspan>[800, 12]</text>
+        <text class="box" xml:space="preserve" x="0" y="7.2" style="text-anchor: middle">Keccak-<tspan style="font-style: italic">p</tspan>[1600, 12]</text>
     </g>
     <path class="dashed" d="M -120,90 180,90"/>
     <g transform="translate(120,100)">

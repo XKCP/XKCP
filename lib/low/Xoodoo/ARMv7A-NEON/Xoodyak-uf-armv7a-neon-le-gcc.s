@@ -102,7 +102,7 @@ _rc12:
 
 @ ----------------------------------------------------------------------------
 @
-@ size_t Xoodyak_AbsorbKeyedFullBlocks(void *state, const uint8_t *X, size_t XLen)
+@ size_t Xoodyak_AbsorbKeyedFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *X, size_t XLen)
 @ {
 @     size_t  initialLength = XLen@
 @
@@ -146,7 +146,7 @@ Xoodyak_AbsorbKeyedFullBlocks_Loop:
 
 @ ----------------------------------------------------------------------------
 @
-@ size_t Xoodyak_AbsorbHashFullBlocks(void *state, const uint8_t *X, size_t XLen)
+@ size_t Xoodyak_AbsorbHashFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *X, size_t XLen)
 @ {
 @     size_t  initialLength = XLen@
 @
@@ -188,7 +188,7 @@ Xoodyak_AbsorbHashFullBlocks_Loop:
 
 @ ----------------------------------------------------------------------------
 @
-@ size_t Xoodyak_SqueezeKeyedFullBlocks(void *state, uint8_t *Y, size_t YLen)
+@ size_t Xoodyak_SqueezeKeyedFullBlocks(Xoodoo_align128plain32_state *state, uint8_t *Y, size_t YLen)
 @ {
 @     size_t  initialLength = YLen@
 @
@@ -230,7 +230,7 @@ Xoodyak_SqueezeKeyedFullBlocks_Loop:
 
 @ ----------------------------------------------------------------------------
 @
-@ size_t Xoodyak_SqueezeHashFullBlocks(void *state, uint8_t *Y, size_t YLen)
+@ size_t Xoodyak_SqueezeHashFullBlocks(Xoodoo_align128plain32_state *state, uint8_t *Y, size_t YLen)
 @ {
 @     size_t  initialLength = YLen@
 @
@@ -271,7 +271,7 @@ Xoodyak_SqueezeHashFullBlocks_Loop:
 
 @ ----------------------------------------------------------------------------
 @
-@ size_t Xoodyak_EncryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size_t IOLen)
+@ size_t Xoodyak_EncryptFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *I, uint8_t *O, size_t IOLen)
 @ {
 @     size_t  initialLength = IOLen@
 @
@@ -318,7 +318,7 @@ Xoodyak_EncryptFullBlocks_Loop:
 
 @ ----------------------------------------------------------------------------
 @
-@ size_t Xoodyak_DecryptFullBlocks(void *state, const uint8_t *I, uint8_t *O, size_t IOLen)
+@ size_t Xoodyak_DecryptFullBlocks(Xoodoo_align128plain32_state *state, const uint8_t *I, uint8_t *O, size_t IOLen)
 @ {
 @     size_t  initialLength = IOLen@
 @

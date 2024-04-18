@@ -26,6 +26,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "align.h"
 #include "brg_endian.h"
 #include "Xoodoo.h"
+#include "Xoodoo-SnP.h"
 
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
 #error Expecting a little-endian platform
@@ -162,21 +163,21 @@ static __m512i _mm512_xor_si512( __m512i a, __m512i b)
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_Initialize(void *state)
+void Xoodoo_Initialize(Xoodoo_align128plain32_state *state)
 {
-    memset(state, 0, NLANES*sizeof(tXoodooLane));
+    memset(state, 0, sizeof(Xoodoo_align128plain32_state));
 }
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_AddBytes(void *argState, const unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodoo_AddBytes(Xoodoo_align128plain32_state *argState, const unsigned char *data, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     unsigned int sizeLeft = length;
     unsigned int lanePosition = offset/4;
     unsigned int offsetInLane = offset%4;
     const unsigned char *curData = data;
-    uint32_t *state = (uint32_t*)argState;
+    uint32_t *state = argState->A;
 
     state += lanePosition;
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
@@ -208,7 +209,7 @@ void Xoodoo_AddBytes(void *argState, const unsigned char *data, unsigned int off
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodoo_OverwriteBytes(Xoodoo_align128plain32_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     memcpy((unsigned char*)state+offset, data, length);
@@ -219,7 +220,7 @@ void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int 
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
+void Xoodoo_OverwriteWithZeroes(Xoodoo_align128plain32_state *state, unsigned int byteCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     memset(state, 0, byteCount);
@@ -230,7 +231,7 @@ void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodoo_ExtractBytes(const Xoodoo_align128plain32_state *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     memcpy(data, (const unsigned char*)state+offset, length);
@@ -241,7 +242,7 @@ void Xoodoo_ExtractBytes(const void *state, unsigned char *data, unsigned int of
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_ExtractAndAddBytes(const void *argState, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+void Xoodoo_ExtractAndAddBytes(const Xoodoo_align128plain32_state *argState, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     unsigned int sizeLeft = length;
@@ -249,7 +250,7 @@ void Xoodoo_ExtractAndAddBytes(const void *argState, const unsigned char *input,
     unsigned int offsetInLane = offset%4;
     const unsigned char *curInput = input;
     unsigned char *curOutput = output;
-    const uint32_t *state = (const uint32_t*)argState;
+    const uint32_t *state = argState->A;
 
     state += lanePosition;
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
@@ -320,8 +321,8 @@ ALIGN(16) static const uint8_t maskRhoEast2[16] = {
 #define XOR512(a, b)            _mm512_xor_si512(a, b)
 
 #define DeclareVars             V128    a0, a1, a2, p, e, rhoEast2 = CONST128(maskRhoEast2);
-#define State2Vars              a0 = LOAD128(state[0]), a1 = LOAD128(state[4]), a2 = LOAD128(state[8]);
-#define Vars2State              STORE128(state[0], a0), STORE128(state[4], a1), STORE128(state[8], a2);
+#define State2Vars              a0 = LOAD128(state->A[0]), a1 = LOAD128(state->A[4]), a2 = LOAD128(state->A[8]);
+#define Vars2State              STORE128(state->A[0], a0), STORE128(state->A[4], a1), STORE128(state->A[8], a2);
 
 #define Round(__rc)                                                             \
                         /* Theta: Column Parity Mixer */                        \
@@ -369,7 +370,7 @@ static const uint32_t    RC[MAXROUNDS] = {
     _rc1
 };
 
-void Xoodoo_Permute_Nrounds( uint32_t * state, uint32_t nr )
+void Xoodoo_Permute_Nrounds(Xoodoo_align128plain32_state *state, uint32_t nr)
 {
     DeclareVars;
     uint32_t    i;
@@ -383,7 +384,7 @@ void Xoodoo_Permute_Nrounds( uint32_t * state, uint32_t nr )
     Vars2State;
 }
 
-void Xoodoo_Permute_6rounds( uint32_t * state)
+void Xoodoo_Permute_6rounds(Xoodoo_align128plain32_state *state)
 {
     DeclareVars;
 
@@ -398,7 +399,7 @@ void Xoodoo_Permute_6rounds( uint32_t * state)
     Vars2State;
 }
 
-void Xoodoo_Permute_12rounds( uint32_t * state)
+void Xoodoo_Permute_12rounds(Xoodoo_align128plain32_state *state)
 {
     DeclareVars;
 
