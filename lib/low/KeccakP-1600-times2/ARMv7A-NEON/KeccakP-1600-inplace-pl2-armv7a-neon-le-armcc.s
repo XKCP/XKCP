@@ -620,7 +620,7 @@ KeccakP1600times2_StaticInitialize   PROC
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_InitializeAll( void *states )
+; void KeccakP1600times2_InitializeAll( KeccakP1600times2_states *states )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_InitializeAll
@@ -642,7 +642,7 @@ KeccakP1600times2_InitializeAll   PROC
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_AddByte( void *states, unsigned int instanceIndex, unsigned char byte, unsigned int offset )
+; void KeccakP1600times2_AddByte( KeccakP1600times2_states *states, unsigned int instanceIndex, unsigned char byte, unsigned int offset )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_AddByte
@@ -660,7 +660,7 @@ KeccakP1600times2_AddByte   PROC
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_AddBytes( void *states, unsigned int instanceIndex, const unsigned char *data,
+; void KeccakP1600times2_AddBytes( KeccakP1600times2_states *states, unsigned int instanceIndex, const unsigned char *data,
 ;                                   unsigned int offset, unsigned int length )
 ;
     ALIGN
@@ -719,7 +719,7 @@ KeccakP1600times2_AddBytes_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_AddLanesAll( void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset )
+; void KeccakP1600times2_AddLanesAll( KeccakP1600times2_states *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_AddLanesAll
@@ -750,7 +750,7 @@ KeccakP1600times2_AddLanesAll_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_OverwriteBytes( void *states, unsigned int instanceIndex, const unsigned char *data,
+; void KeccakP1600times2_OverwriteBytes( KeccakP1600times2_states *states, unsigned int instanceIndex, const unsigned char *data,
 ;                                   unsigned int offset, unsigned int length )
 ;
     ALIGN
@@ -801,7 +801,7 @@ KeccakP1600times2_OverwriteBytes_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; KeccakP1600times2_OverwriteLanesAll( void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset )
+; KeccakP1600times2_OverwriteLanesAll( KeccakP1600times2_states *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_OverwriteLanesAll
@@ -845,7 +845,7 @@ KeccakP1600times2_OverwriteLanesAll_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_OverwriteWithZeroes( void *states, unsigned int instanceIndex, unsigned int byteCount )
+; void KeccakP1600times2_OverwriteWithZeroes( KeccakP1600times2_states *states, unsigned int instanceIndex, unsigned int byteCount )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_OverwriteWithZeroes
@@ -873,7 +873,7 @@ KeccakP1600times2_OverwriteWithZeroes_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_ExtractBytes( void *states, unsigned int instanceIndex, const unsigned char *data,
+; void KeccakP1600times2_ExtractBytes( KeccakP1600times2_states *states, unsigned int instanceIndex, const unsigned char *data,
 ;                                   unsigned int offset, unsigned int length )
 ;
     ALIGN
@@ -924,7 +924,7 @@ KeccakP1600times2_ExtractBytes_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_ExtractLanesAll( const void *states, unsigned char *data, unsigned int laneCount, unsigned int laneOffset )
+; void KeccakP1600times2_ExtractLanesAll( const KeccakP1600times2_states *states, unsigned char *data, unsigned int laneCount, unsigned int laneOffset )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_ExtractLanesAll
@@ -968,7 +968,7 @@ KeccakP1600times2_ExtractLanesAll_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_ExtractAndAddBytes(    void *states, unsigned int instanceIndex, 
+; void KeccakP1600times2_ExtractAndAddBytes(    KeccakP1600times2_states *states, unsigned int instanceIndex,
 ;                                           const unsigned char *input, unsigned char *output,
 ;                                           unsigned int offset, unsigned int length )
 ;
@@ -1029,7 +1029,7 @@ KeccakP1600times2_ExtractAndAddBytes_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_ExtractAndAddLanesAll( const void *states, 
+; void KeccakP1600times2_ExtractAndAddLanesAll( const KeccakP1600times2_states *states,
 ;                                               const unsigned char *input, unsigned char *output,
 ;                                               unsigned int laneCount, unsigned int laneOffset )
 ;
@@ -1100,7 +1100,7 @@ KeccakP1600times2_ExtractAndAddLanesAll_Exit
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_PermuteAll_6rounds( void *states )
+; void KeccakP1600times2_PermuteAll_6rounds( KeccakP1600times2_states *states )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_PermuteAll_6rounds
@@ -1260,7 +1260,7 @@ KeccakP1600times2_Permute_RoundConstants4
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_PermuteAll_24rounds( void *states )
+; void KeccakP1600times2_PermuteAll_24rounds( KeccakP1600times2_states *states )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_PermuteAll_24rounds
@@ -1272,7 +1272,7 @@ KeccakP1600times2_PermuteAll_24rounds   PROC
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_PermuteAll_12rounds( void *states )
+; void KeccakP1600times2_PermuteAll_12rounds( KeccakP1600times2_states *states )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_PermuteAll_12rounds
@@ -1284,7 +1284,7 @@ KeccakP1600times2_PermuteAll_12rounds   PROC
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_PermuteAll_4rounds( void *states )
+; void KeccakP1600times2_PermuteAll_4rounds( KeccakP1600times2_states *states )
 ;
     ALIGN
     EXPORT  KeccakP1600times2_PermuteAll_4rounds
@@ -1296,7 +1296,7 @@ KeccakP1600times2_PermuteAll_4rounds   PROC
 
 ;----------------------------------------------------------------------------
 ;
-; void KeccakP1600times2_PermuteAll( void *states, void *rc, unsigned int nr )
+; void KeccakP1600times2_PermuteAll( KeccakP1600times2_states *states, void *rc, unsigned int nr )
 ;
     ALIGN
 KeccakP1600times2_PermuteAll   PROC

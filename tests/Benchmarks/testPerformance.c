@@ -108,6 +108,7 @@ void displayMeasurements1101001000(cycles_t *measurements, uint32_t *laneCounts,
 
     #define prefix KeccakP1600
     #define SnP KeccakP1600
+    #define SnP_state KeccakP1600_state
     #define SnP_width 1600
     #define SnP_Permute KeccakP1600_Permute_24rounds
     #define SnP_Permute_12rounds KeccakP1600_Permute_12rounds
@@ -117,6 +118,7 @@ void displayMeasurements1101001000(cycles_t *measurements, uint32_t *laneCounts,
         #include "timingSnP.inc"
     #undef prefix
     #undef SnP
+    #undef SnP_state
     #undef SnP_width
     #undef SnP_Permute
     #undef SnP_Permute_12rounds

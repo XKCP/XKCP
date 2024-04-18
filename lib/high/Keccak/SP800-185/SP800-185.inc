@@ -238,7 +238,7 @@ int KMAC(const BitSequence *key, BitLength keyBitLen, const BitSequence *input, 
 
 #define ParallelSpongeFastLoop( Parallellism ) \
     while ( inputByteLen >= Parallellism * phi->blockLen ) { \
-        ALIGN(KeccakP1600times##Parallellism##_statesAlignment) unsigned char states[KeccakP1600times##Parallellism##_statesSizeInBytes]; \
+        KeccakP1600times##Parallellism##_states states; \
         unsigned char intermediate[Parallellism*capacityInBytes]; \
         size_t localBlockLen = phi->blockLen; \
         const unsigned char * localInput = input; \
@@ -246,47 +246,47 @@ int KMAC(const BitSequence *key, BitLength keyBitLen, const BitSequence *input, 
         size_t fastLoopOffset; \
         \
         KeccakP1600times##Parallellism##_StaticInitialize(); \
-        KeccakP1600times##Parallellism##_InitializeAll(states); \
-        fastLoopOffset = KeccakF1600times##Parallellism##_FastLoop_Absorb(states, rateInLanes, phi->blockLen / laneSize, rateInLanes, localInput, Parallellism * phi->blockLen); \
+        KeccakP1600times##Parallellism##_InitializeAll(&states); \
+        fastLoopOffset = KeccakF1600times##Parallellism##_FastLoop_Absorb(&states, rateInLanes, phi->blockLen / laneSize, rateInLanes, localInput, Parallellism * phi->blockLen); \
         localBlockLen -= fastLoopOffset; \
         localInput += fastLoopOffset; \
         for ( i = 0; i < Parallellism; ++i, localInput += phi->blockLen ) { \
-            KeccakP1600times##Parallellism##_AddBytes(states, i, localInput, 0, localBlockLen); \
-            KeccakP1600times##Parallellism##_AddByte(states, i, suffix, localBlockLen); \
-            KeccakP1600times##Parallellism##_AddByte(states, i, 0x80, rateInBytes-1); \
+            KeccakP1600times##Parallellism##_AddBytes(&states, i, localInput, 0, localBlockLen); \
+            KeccakP1600times##Parallellism##_AddByte(&states, i, suffix, localBlockLen); \
+            KeccakP1600times##Parallellism##_AddByte(&states, i, 0x80, rateInBytes-1); \
         } \
-        KeccakP1600times##Parallellism##_PermuteAll_24rounds(states); \
+        KeccakP1600times##Parallellism##_PermuteAll_24rounds(&states); \
         input += Parallellism * phi->blockLen; \
         inputByteLen -= Parallellism * phi->blockLen; \
-        KeccakP1600times##Parallellism##_ExtractLanesAll(states, intermediate, capacityInLanes, capacityInLanes ); \
+        KeccakP1600times##Parallellism##_ExtractLanesAll(&states, intermediate, capacityInLanes, capacityInLanes ); \
         if (KeccakWidth1600_SpongeAbsorb(&phi->finalNode, intermediate, Parallellism * capacityInBytes) != 0) return 1; \
     }
 
 #define ParallelSpongeLoop( Parallellism ) \
     while ( inputByteLen >= Parallellism * phi->blockLen ) { \
-        ALIGN(KeccakP1600times##Parallellism##_statesAlignment) unsigned char states[KeccakP1600times##Parallellism##_statesSizeInBytes]; \
+        KeccakP1600times##Parallellism##_states states; \
         unsigned char intermediate[Parallellism*capacityInBytes]; \
         size_t localBlockLen = phi->blockLen; \
         const unsigned char * localInput = input; \
         unsigned int i; \
         \
         KeccakP1600times##Parallellism##_StaticInitialize(); \
-        KeccakP1600times##Parallellism##_InitializeAll(states); \
+        KeccakP1600times##Parallellism##_InitializeAll(&states); \
         while(localBlockLen >= rateInBytes) { \
-            KeccakP1600times##Parallellism##_AddLanesAll(states, localInput, rateInLanes, phi->blockLen / laneSize); \
-            KeccakP1600times##Parallellism##_PermuteAll_24rounds(states); \
+            KeccakP1600times##Parallellism##_AddLanesAll(&states, localInput, rateInLanes, phi->blockLen / laneSize); \
+            KeccakP1600times##Parallellism##_PermuteAll_24rounds(&states); \
             localBlockLen -= rateInBytes; \
             localInput += rateInBytes; \
         } \
         for ( i = 0; i < Parallellism; ++i, localInput += phi->blockLen ) { \
-            KeccakP1600times##Parallellism##_AddBytes(states, i, localInput, 0, localBlockLen); \
-            KeccakP1600times##Parallellism##_AddByte(states, i, suffix, localBlockLen); \
-            KeccakP1600times##Parallellism##_AddByte(states, i, 0x80, rateInBytes-1); \
+            KeccakP1600times##Parallellism##_AddBytes(&states, i, localInput, 0, localBlockLen); \
+            KeccakP1600times##Parallellism##_AddByte(&states, i, suffix, localBlockLen); \
+            KeccakP1600times##Parallellism##_AddByte(&states, i, 0x80, rateInBytes-1); \
         } \
-        KeccakP1600times##Parallellism##_PermuteAll_24rounds(states); \
+        KeccakP1600times##Parallellism##_PermuteAll_24rounds(&states); \
         input += Parallellism * phi->blockLen; \
         inputByteLen -= Parallellism * phi->blockLen; \
-        KeccakP1600times##Parallellism##_ExtractLanesAll(states, intermediate, capacityInLanes, capacityInLanes ); \
+        KeccakP1600times##Parallellism##_ExtractLanesAll(&states, intermediate, capacityInLanes, capacityInLanes ); \
         if (KeccakWidth1600_SpongeAbsorb(&phi->finalNode, intermediate, Parallellism * capacityInBytes) != 0) return 1; \
     }
 

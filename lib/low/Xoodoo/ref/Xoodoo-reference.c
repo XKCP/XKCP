@@ -23,6 +23,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include <stdlib.h>
 #include "Xoodoo.h"
+#include "Xoodoo-SnP.h"
 
 /* ---------------------------------------------------------------- */
 
@@ -32,24 +33,24 @@ void Xoodoo_StaticInitialize( void )
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_Initialize(void *state)
+void Xoodoo_Initialize(Xoodoo_plain8_state *state)
 {
-    memset(state, 0, NLANES*sizeof(tXoodooLane));
+    memset(state, 0, sizeof(Xoodoo_plain8_state));
 }
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_AddByte(void *state, unsigned char byte, unsigned int offset)
+void Xoodoo_AddByte(Xoodoo_plain8_state *state, unsigned char byte, unsigned int offset)
 {
     #if DEBUG
     assert(offset < NLANES*sizeof(tXoodooLane));
     #endif
-    ((unsigned char *)state)[offset] ^= byte;
+    state->A[offset] ^= byte;
 }
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodoo_AddBytes(Xoodoo_plain8_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     unsigned int i;
 
@@ -58,23 +59,23 @@ void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset
     assert(offset+length <= NLANES*sizeof(tXoodooLane));
     #endif
     for(i=0; i<length; i++)
-        ((unsigned char *)state)[offset+i] ^= data[i];
+        state->A[offset+i] ^= data[i];
 }
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodoo_OverwriteBytes(Xoodoo_plain8_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     #if DEBUG
     assert(offset < NLANES*sizeof(tXoodooLane));
     assert(offset+length <= NLANES*sizeof(tXoodooLane));
     #endif
-    memcpy((unsigned char*)state+offset, data, length);
+    memcpy(state->A+offset, data, length);
 }
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
+void Xoodoo_OverwriteWithZeroes(Xoodoo_plain8_state *state, unsigned int byteCount)
 {
     #if DEBUG
     assert(byteCount <= NLANES*sizeof(tXoodooLane));
@@ -84,18 +85,18 @@ void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodoo_ExtractBytes(const Xoodoo_plain8_state *state, unsigned char *data, unsigned int offset, unsigned int length)
 {
     #if DEBUG
     assert(offset < NLANES*sizeof(tXoodooLane));
     assert(offset+length <= NLANES*sizeof(tXoodooLane));
     #endif
-    memcpy(data, (unsigned char*)state+offset, length);
+    memcpy(data, state->A+offset, length);
 }
 
 /* ---------------------------------------------------------------- */
 
-void Xoodoo_ExtractAndAddBytes(const void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+void Xoodoo_ExtractAndAddBytes(const Xoodoo_plain8_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
     unsigned int i;
 
@@ -104,7 +105,7 @@ void Xoodoo_ExtractAndAddBytes(const void *state, const unsigned char *input, un
     assert(offset+length <= NLANES*sizeof(tXoodooLane));
     #endif
     for(i=0; i<length; i++)
-        output[i] = input[i] ^ ((unsigned char *)state)[offset+i];
+        output[i] = input[i] ^ state->A[offset+i];
 }
 
 /* ---------------------------------------------------------------- */
@@ -142,7 +143,7 @@ static void Dump(char * text, tXoodooLane * a, unsigned int level)
 #endif
 
 
-static void fromBytesToWords(tXoodooLane *stateAsWords, const unsigned char *state)
+static void fromBytesToWords(tXoodooLane *stateAsWords, const uint8_t *state)
 {
     unsigned int i, j;
 
@@ -153,7 +154,7 @@ static void fromBytesToWords(tXoodooLane *stateAsWords, const unsigned char *sta
     }
 }
 
-static void fromWordsToBytes(unsigned char *state, const tXoodooLane *stateAsWords)
+static void fromWordsToBytes(uint8_t *state, const tXoodooLane *stateAsWords)
 {
     unsigned int i, j;
 
@@ -225,12 +226,12 @@ static const uint32_t    RC[MAXROUNDS] = {
     _rc1
 };
 
-void Xoodoo_Permute_Nrounds( void * state, uint32_t nr )
+void Xoodoo_Permute_Nrounds(Xoodoo_plain8_state *state, uint32_t nr )
 {
     tXoodooLane        a[NLANES];
     unsigned int    i;
 
-    fromBytesToWords(a, (const unsigned char *)state);
+    fromBytesToWords(a, state->A);
 
     for (i = MAXROUNDS - nr; i < MAXROUNDS; ++i ) {
         Xoodoo_Round( a, RC[i] );
@@ -238,16 +239,16 @@ void Xoodoo_Permute_Nrounds( void * state, uint32_t nr )
     }
     Dump("Permutation", a, 0);
 
-    fromWordsToBytes((unsigned char *)state, a);
+    fromWordsToBytes(state->A, a);
 
 }
 
-void Xoodoo_Permute_6rounds( uint32_t * state)
+void Xoodoo_Permute_6rounds(Xoodoo_plain8_state *state)
 {
     Xoodoo_Permute_Nrounds( state, 6 );
 }
 
-void Xoodoo_Permute_12rounds( uint32_t * state)
+void Xoodoo_Permute_12rounds(Xoodoo_plain8_state *state)
 {
     Xoodoo_Permute_Nrounds( state, 12 );
 }

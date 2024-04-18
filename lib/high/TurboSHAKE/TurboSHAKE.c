@@ -21,6 +21,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     #define prefix TurboSHAKE
     #define SnP KeccakP1600
+    #define SnP_state KeccakP1600_state
     #define SnP_width 1600
     #define SnP_Permute KeccakP1600_Permute_12rounds
     #if defined(KeccakP1600_12rounds_FastLoop_supported)
@@ -29,6 +30,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         #include "KeccakSponge.inc"
     #undef prefix
     #undef SnP
+    #undef SnP_state
     #undef SnP_width
     #undef SnP_Permute
     #undef SnP_FastLoop_Absorb

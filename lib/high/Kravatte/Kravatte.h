@@ -37,8 +37,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define KRAVATTE_FLAG_LAST_PART     2 /* If set, indicates the last part of input/output */
 #define KRAVATTE_FLAG_SHORT         4 /* If set, indicates Short-Kravatte will be performed */
 
-#define KRAVATTE_ALIGNMENT          KeccakP1600_stateAlignment
-
 typedef unsigned char BitSequence;
 typedef size_t BitLength;
 
@@ -50,17 +48,12 @@ typedef enum
     EXPANDED,
 } Kravatte_Phases;
 
-ALIGN(KRAVATTE_ALIGNMENT) typedef struct
-{
-    unsigned char a[SnP_widthInBytes];
-} Kravatte_AlignedArray;
-
 typedef struct {
-    Kravatte_AlignedArray k;
-    Kravatte_AlignedArray kRoll;
-    Kravatte_AlignedArray xAccu;
-    Kravatte_AlignedArray yAccu;
-    Kravatte_AlignedArray queue;    /* input/output queue buffer */
+    ALIGN(8) uint8_t k[200];
+    ALIGN(8) uint8_t kRoll[200];
+    ALIGN(8) uint8_t xAccu[200];
+    ALIGN(8) uint8_t yAccu[200];
+    ALIGN(8) uint8_t queue[200];    /* input/output queue buffer */
     BitLength queueOffset;          /* current offset in queue */
     Kravatte_Phases phase;
 } Kravatte_Instance;

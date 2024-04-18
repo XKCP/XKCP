@@ -527,18 +527,18 @@ ALIGN(32) static const uint32_t     oHigh32[]       = { 1, 4+1,   3, 4+3 };
 
 ALIGN(32) static const uint32_t     oGatherScatterOffsets[] = { 0*12, 1*12, 2*12, 3*12 };
 
-void Xoodootimes4_InitializeAll(void *states)
+void Xoodootimes4_InitializeAll(Xoodootimes4_align512SIMD128_states *states)
 {
-    memset(states, 0, Xoodootimes4_statesSizeInBytes);
+    memset(states, 0, sizeof(Xoodootimes4_align512SIMD128_states));
 }
 
-void Xoodootimes4_AddBytes(void *states, unsigned int instanceIndex, const unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodootimes4_AddBytes(Xoodootimes4_align512SIMD128_states *states, unsigned int instanceIndex, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     unsigned int sizeLeft = length;
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     const unsigned char *curData = data;
-    uint32_t *statesAsLanes = (uint32_t *)states;
+    uint32_t *statesAsLanes = (uint32_t *)states->A;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -567,9 +567,9 @@ void Xoodootimes4_AddBytes(void *states, unsigned int instanceIndex, const unsig
     }
 }
 
-void Xoodootimes4_AddLanesAll(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
+void Xoodootimes4_AddLanesAll(Xoodootimes4_align512SIMD128_states *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
-    V128 *stateAsLanes = (V128 *)states;
+    V128 *stateAsLanes = states->A;
     unsigned int i;
     const uint32_t *data32 = (const uint32_t *)data;
     V128 offsets = SET4_32(0*laneOffset, 1*laneOffset, 2*laneOffset, 3*laneOffset);
@@ -597,13 +597,13 @@ void Xoodootimes4_AddLanesAll(void *states, const unsigned char *data, unsigned 
     #undef  Xor_In
 }
 
-void Xoodootimes4_OverwriteBytes(void *states, unsigned int instanceIndex, const unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodootimes4_OverwriteBytes(Xoodootimes4_align512SIMD128_states *states, unsigned int instanceIndex, const unsigned char *data, unsigned int offset, unsigned int length)
 {
     unsigned int sizeLeft = length;
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     const unsigned char *curData = data;
-    uint32_t *statesAsLanes = (uint32_t *)states;
+    uint32_t *statesAsLanes = (uint32_t *)states->A;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -628,9 +628,9 @@ void Xoodootimes4_OverwriteBytes(void *states, unsigned int instanceIndex, const
     }
 }
 
-void Xoodootimes4_OverwriteLanesAll(void *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
+void Xoodootimes4_OverwriteLanesAll(Xoodootimes4_align512SIMD128_states *states, const unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
-    V128 *stateAsLanes = (V128 *)states;
+    V128 *stateAsLanes = states->A;
     unsigned int i;
     const uint32_t *data32 = (const uint32_t *)data;
     V128 offsets = SET4_32(0*laneOffset, 1*laneOffset, 2*laneOffset, 3*laneOffset);
@@ -658,11 +658,11 @@ void Xoodootimes4_OverwriteLanesAll(void *states, const unsigned char *data, uns
     #undef  OverWr
 }
 
-void Xoodootimes4_OverwriteWithZeroes(void *states, unsigned int instanceIndex, unsigned int byteCount)
+void Xoodootimes4_OverwriteWithZeroes(Xoodootimes4_align512SIMD128_states *states, unsigned int instanceIndex, unsigned int byteCount)
 {
     unsigned int sizeLeft = byteCount;
     unsigned int lanePosition = 0;
-    uint32_t *statesAsLanes = (uint32_t *)states;
+    uint32_t *statesAsLanes = (uint32_t *)states->A;
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] = 0;
@@ -675,13 +675,13 @@ void Xoodootimes4_OverwriteWithZeroes(void *states, unsigned int instanceIndex, 
     }
 }
 
-void Xoodootimes4_ExtractBytes(const void *states, unsigned int instanceIndex, unsigned char *data, unsigned int offset, unsigned int length)
+void Xoodootimes4_ExtractBytes(const Xoodootimes4_align512SIMD128_states *states, unsigned int instanceIndex, unsigned char *data, unsigned int offset, unsigned int length)
 {
     unsigned int sizeLeft = length;
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     unsigned char *curData = data;
-    const uint32_t *statesAsLanes = (const uint32_t *)states;
+    const uint32_t *statesAsLanes = (const uint32_t *)states->A;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -705,9 +705,9 @@ void Xoodootimes4_ExtractBytes(const void *states, unsigned int instanceIndex, u
     }
 }
 
-void Xoodootimes4_ExtractLanesAll(const void *states, unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
+void Xoodootimes4_ExtractLanesAll(const Xoodootimes4_align512SIMD128_states *states, unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
-    const V128 *stateAsLanes = (const V128 *)states;
+    const V128 *stateAsLanes = states->A;
     unsigned int i;
     uint32_t *data32 = (uint32_t *)data;
     V128 offsets = SET4_32(0*laneOffset, 1*laneOffset, 2*laneOffset, 3*laneOffset);
@@ -735,14 +735,14 @@ void Xoodootimes4_ExtractLanesAll(const void *states, unsigned char *data, unsig
     #undef  Extr
 }
 
-void Xoodootimes4_ExtractAndAddBytes(const void *states, unsigned int instanceIndex, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+void Xoodootimes4_ExtractAndAddBytes(const Xoodootimes4_align512SIMD128_states *states, unsigned int instanceIndex, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 {
     unsigned int sizeLeft = length;
     unsigned int lanePosition = offset/SnP_laneLengthInBytes;
     unsigned int offsetInLane = offset%SnP_laneLengthInBytes;
     const unsigned char *curInput = input;
     unsigned char *curOutput = output;
-    const uint32_t *statesAsLanes = (const uint32_t *)states;
+    const uint32_t *statesAsLanes = (const uint32_t *)states->A;
 
     if ((sizeLeft > 0) && (offsetInLane != 0)) {
         unsigned int bytesInLane = SnP_laneLengthInBytes - offsetInLane;
@@ -774,9 +774,9 @@ void Xoodootimes4_ExtractAndAddBytes(const void *states, unsigned int instanceIn
     }
 }
 
-void Xoodootimes4_ExtractAndAddLanesAll(const void *states, const unsigned char *input, unsigned char *output, unsigned int laneCount, unsigned int laneOffset)
+void Xoodootimes4_ExtractAndAddLanesAll(const Xoodootimes4_align512SIMD128_states *states, const unsigned char *input, unsigned char *output, unsigned int laneCount, unsigned int laneOffset)
 {
-    const V128 *stateAsLanes = (const V128 *)states;
+    const V128 *stateAsLanes = states->A;
     unsigned int i;
     const uint32_t *datai32 = (const uint32_t *)input;
     uint32_t *datao32 = (uint32_t *)output;
@@ -882,9 +882,9 @@ void Xoodootimes4_ExtractAndAddLanesAll(const void *states, const unsigned char 
     a23i = ROL32(a23i, 8);                                  \
     Dump3("Rho-east",a)
 
-void Xoodootimes4_PermuteAll_6rounds(void *argstates)
+void Xoodootimes4_PermuteAll_6rounds(Xoodootimes4_align512SIMD128_states *argstates)
 {
-    V128 * states = (V128 *)argstates;
+    V128 * states = argstates->A;
     DeclareVars;
 
     State2Vars2;
@@ -898,9 +898,9 @@ void Xoodootimes4_PermuteAll_6rounds(void *argstates)
     Vars2State;
 }
 
-void Xoodootimes4_PermuteAll_12rounds(void *argstates)
+void Xoodootimes4_PermuteAll_12rounds(Xoodootimes4_align512SIMD128_states *argstates)
 {
-    V128 * states = (V128 *)argstates;
+    V128 * states = argstates->A;
     DeclareVars;
 
     State2Vars;

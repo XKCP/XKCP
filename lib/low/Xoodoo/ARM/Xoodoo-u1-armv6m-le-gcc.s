@@ -23,7 +23,7 @@
 
 @ ----------------------------------------------------------------------------
 @
-@  void Xoodoo_Initialize(void *state)
+@  void Xoodoo_Initialize(Xoodoo_plain32_state *state)
 @
     .align  4
 .global Xoodoo_Initialize
@@ -42,7 +42,7 @@ Xoodoo_Initialize:
 
 @ ----------------------------------------------------------------------------
 @
-@  void Xoodoo_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+@  void Xoodoo_AddBytes(Xoodoo_plain32_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
 .global Xoodoo_AddBytes
 .type	Xoodoo_AddBytes, %function;
@@ -80,7 +80,7 @@ Xoodoo_AddBytes_Exit:
 
 @ ----------------------------------------------------------------------------
 @
-@  void Xoodoo_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+@  void Xoodoo_OverwriteBytes(Xoodoo_plain32_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
 .global Xoodoo_OverwriteBytes
 .type	Xoodoo_OverwriteBytes, %function;
@@ -113,7 +113,7 @@ Xoodoo_OverwriteBytes_Exit:
 
 @ ----------------------------------------------------------------------------
 @
-@  void Xoodoo_OverwriteWithZeroes(void *state, unsigned int byteCount)
+@  void Xoodoo_OverwriteWithZeroes(Xoodoo_plain32_state *state, unsigned int byteCount)
 @
 .global Xoodoo_OverwriteWithZeroes
 .type	Xoodoo_OverwriteWithZeroes, %function;
@@ -140,7 +140,7 @@ Xoodoo_OverwriteWithZeroes_Exit:
 
 @ ----------------------------------------------------------------------------
 @
-@  void Xoodoo_ExtractBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length)
+@  void Xoodoo_ExtractBytes(Xoodoo_plain32_state *state, const unsigned char *data, unsigned int offset, unsigned int length)
 @
 .global Xoodoo_ExtractBytes
 .type	Xoodoo_ExtractBytes, %function;
@@ -173,7 +173,7 @@ Xoodoo_ExtractBytes_Exit:
 
 @ ----------------------------------------------------------------------------
 @
-@  void Xoodoo_ExtractAndAddBytes(void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
+@  void Xoodoo_ExtractAndAddBytes(Xoodoo_plain32_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length)
 @
 .global Xoodoo_ExtractAndAddBytes
 .type	Xoodoo_ExtractAndAddBytes, %function;
@@ -406,7 +406,7 @@ Xoodoo_ExtractAndAddBytes_Exit:
 
 @ ----------------------------------------------------------------------------
 @
-@ void Xoodoo_Permute_Nrounds(void *state, unsigned int nrounds)
+@ void Xoodoo_Permute_Nrounds(Xoodoo_plain32_state *state, unsigned int nrounds)
 @
 
 @ offsets on stack
@@ -494,7 +494,7 @@ Xoodoo_Permute_RoundConstants12:
 
 @ ----------------------------------------------------------------------------
 @
-@  void Xoodoo_Permute_6rounds( void *state )
+@  void Xoodoo_Permute_6rounds( Xoodoo_plain32_state *state )
 @
 .global Xoodoo_Permute_6rounds
 .type	Xoodoo_Permute_6rounds, %function;
@@ -507,7 +507,7 @@ Xoodoo_Permute_6rounds:
 
 @ ----------------------------------------------------------------------------
 @
-@  void Xoodoo_Permute_12rounds( void *state )
+@  void Xoodoo_Permute_12rounds( Xoodoo_plain32_state *state )
 @
 .global Xoodoo_Permute_12rounds
 .type	Xoodoo_Permute_12rounds, %function;

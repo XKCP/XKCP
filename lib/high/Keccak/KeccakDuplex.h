@@ -24,9 +24,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "align.h"
 #include "config.h"
 
-#define XKCP_DeclareDuplexStructure(prefix, size, alignment) \
-    ALIGN(alignment) typedef struct prefix##_DuplexInstanceStruct { \
-        unsigned char state[size]; \
+#define XKCP_DeclareDuplexStructure(prefix, state_t) \
+    typedef struct prefix##_DuplexInstanceStruct { \
+        state_t state; \
         unsigned int rate; \
         unsigned int byteInputIndex; \
         unsigned int byteOutputIndex; \
@@ -65,7 +65,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #ifdef XKCP_has_KeccakP1600
     #include "KeccakP-1600-SnP.h"
-    XKCP_DeclareDuplexStructure(KeccakWidth1600, KeccakP1600_stateSizeInBytes, KeccakP1600_stateAlignment)
+    XKCP_DeclareDuplexStructure(KeccakWidth1600, KeccakP1600_state)
     XKCP_DeclareDuplexFunctions(KeccakWidth1600)
     #define XKCP_has_Duplex_Keccak_width1600
 #endif

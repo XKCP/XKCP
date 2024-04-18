@@ -117,14 +117,14 @@ static void DumpBuf( const unsigned char * pText, const unsigned char * pData, u
 
 #define ParallelExpandLoopFast( Parallellism ) \
     if ( outputByteLen >= Parallellism * SnP_widthInBytes ) { \
-        size_t processed = Xooffftimes##Parallellism##_ExpandFastLoop((uint8_t*)xp->yAccu.a, (uint8_t*)xp->kRoll.a, output, outputByteLen); \
+        size_t processed = Xooffftimes##Parallellism##_ExpandFastLoop((uint8_t*)xp->yAccu, (uint8_t*)xp->kRoll, output, outputByteLen); \
         output += processed; \
         outputByteLen -= processed; \
     }
 
 #define ParallelCompressLoopPlSnP( Parallellism ) \
     if ( messageByteLen >= Parallellism * SnP_widthInBytes ) { \
-        ALIGN(Xoodootimes##Parallellism##_statesAlignment) unsigned char states[Xoodootimes##Parallellism##_statesSizeInBytes]; \
+        Xoodootimes##Parallellism##_states states; \
         unsigned int i; \
         \
         Xoodootimes##Parallellism##_StaticInitialize(); \
@@ -133,14 +133,14 @@ static void DumpBuf( const unsigned char * pText, const unsigned char * pData, u
             Xoofff_Rollc( (uint32_t*)k, encbuf, Parallellism ); \
             i = 0; \
             do { \
-                Xoodootimes##Parallellism##_OverwriteBytes(states, i, encbuf + i * Xoofff_RollSizeInBytes, Xoofff_RollOffset, Xoofff_RollSizeInBytes); \
+                Xoodootimes##Parallellism##_OverwriteBytes(&states, i, encbuf + i * Xoofff_RollSizeInBytes, Xoofff_RollOffset, Xoofff_RollSizeInBytes); \
             } while ( ++i < Parallellism ); \
-            Xoodootimes##Parallellism##_AddLanesAll(states, message, widthInLanes, widthInLanes); \
+            Xoodootimes##Parallellism##_AddLanesAll(&states, message, widthInLanes, widthInLanes); \
             DUMP("msg pn", message, Parallellism * SnP_widthInBytes); \
-            Xoodootimes##Parallellism##_PermuteAll_6rounds(states); \
+            Xoodootimes##Parallellism##_PermuteAll_6rounds(&states); \
             i = 0; \
             do { \
-                Xoodootimes##Parallellism##_ExtractAndAddBytes(states, i, x, x, 0, SnP_widthInBytes); \
+                Xoodootimes##Parallellism##_ExtractAndAddBytes(&states, i, x, x, 0, SnP_widthInBytes); \
                 DUMP("xAc pn", x, SnP_widthInBytes); \
             } while ( ++i < Parallellism ); \
             message += Parallellism * SnP_widthInBytes; \
@@ -150,21 +150,21 @@ static void DumpBuf( const unsigned char * pText, const unsigned char * pData, u
 
 #define ParallelExpandLoopPlSnP( Parallellism ) \
     if ( outputByteLen >= Parallellism * SnP_widthInBytes ) { \
-        ALIGN(Xoodootimes##Parallellism##_statesAlignment) unsigned char states[Xoodootimes##Parallellism##_statesSizeInBytes]; \
+        Xoodootimes##Parallellism##_states states; \
         unsigned int i; \
         \
         Xoodootimes##Parallellism##_StaticInitialize(); \
         mInitializePl(states, Parallellism); \
         do { \
-            Xoofff_Rolle( (uint32_t*)xp->yAccu.a, encbuf, Parallellism ); \
+            Xoofff_Rolle( (uint32_t*)xp->yAccu, encbuf, Parallellism ); \
             i = 0; \
             do { \
-                Xoodootimes##Parallellism##_OverwriteBytes(states, i, encbuf + i * Xoofff_RollSizeInBytes, Xoofff_RollOffset, Xoofff_RollSizeInBytes); \
+                Xoodootimes##Parallellism##_OverwriteBytes(&states, i, encbuf + i * Xoofff_RollSizeInBytes, Xoofff_RollOffset, Xoofff_RollSizeInBytes); \
             } while ( ++i < Parallellism ); \
-            Xoodootimes##Parallellism##_PermuteAll_6rounds(states); \
+            Xoodootimes##Parallellism##_PermuteAll_6rounds(&states); \
             i = 0; \
             do { \
-                Xoodootimes##Parallellism##_ExtractAndAddBytes(states, i, xp->kRoll.a, output, 0, SnP_widthInBytes); \
+                Xoodootimes##Parallellism##_ExtractAndAddBytes(&states, i, xp->kRoll, output, 0, SnP_widthInBytes); \
                 DUMP("out n", output, SnP_widthInBytes); \
                 output += SnP_widthInBytes; \
             } while ( ++i < Parallellism ); \
@@ -315,7 +315,7 @@ void Xoofff_AddIs(unsigned char *output, const unsigned char *input, size_t bitL
 size_t Xoofff_CompressFastLoop(unsigned char *k, unsigned char *x, const unsigned char *input, size_t length)
 {
     unsigned char encbuf[Xoofff_RollSizeInBytes];
-    ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
+    Xoodoo_state state;
     size_t    initialLength = length;
 
     #if DEBUG
@@ -324,12 +324,12 @@ size_t Xoofff_CompressFastLoop(unsigned char *k, unsigned char *x, const unsigne
     Xoodoo_StaticInitialize();
     mInitialize(state);
     do {
-        Xoodoo_OverwriteBytes(state, k, 0, SnP_widthInBytes);
+        Xoodoo_OverwriteBytes(&state, k, 0, SnP_widthInBytes);
         Xoofff_Rollc((uint32_t*)k, encbuf, 1);
-        Xoodoo_AddBytes(state, input, 0, SnP_widthInBytes);
+        Xoodoo_AddBytes(&state, input, 0, SnP_widthInBytes);
         DUMP("msg p1", input, SnP_widthInBytes);
-        Xoodoo_Permute_6rounds(state);
-        Xoodoo_ExtractAndAddBytes(state, x, x, 0, SnP_widthInBytes);
+        Xoodoo_Permute_6rounds(&state);
+        Xoodoo_ExtractAndAddBytes(&state, x, x, 0, SnP_widthInBytes);
         DUMP("xAc p1", x, SnP_widthInBytes);
         input += SnP_widthInBytes;
         length -= SnP_widthInBytes;
@@ -342,7 +342,7 @@ size_t Xoofff_CompressFastLoop(unsigned char *k, unsigned char *x, const unsigne
 size_t Xoofff_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, unsigned char *output, size_t length)
 {
     unsigned char encbuf[Xoofff_RollSizeInBytes];
-    ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
+    Xoodoo_state state;
     size_t    initialLength = length;
 
     #if DEBUG
@@ -351,10 +351,10 @@ size_t Xoofff_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, u
     Xoodoo_StaticInitialize();
     mInitialize(state);
     do {
-        Xoodoo_OverwriteBytes(state, yAccu, 0, SnP_widthInBytes);
+        Xoodoo_OverwriteBytes(&state, yAccu, 0, SnP_widthInBytes);
         Xoofff_Rolle((uint32_t*)yAccu, encbuf, 1);
-        Xoodoo_Permute_6rounds(state);
-        Xoodoo_ExtractAndAddBytes(state, kRoll, output, 0, SnP_widthInBytes);
+        Xoodoo_Permute_6rounds(&state);
+        Xoodoo_ExtractAndAddBytes(&state, kRoll, output, 0, SnP_widthInBytes);
         DUMP("out 1", output, SnP_widthInBytes);
         output += SnP_widthInBytes;
         length -= SnP_widthInBytes;
@@ -367,7 +367,7 @@ size_t Xoofff_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, u
 
 static const unsigned char * Xoodoo_CompressBlocks( unsigned char *k, unsigned char *x, const BitSequence *message, BitLength *messageBitLen, int lastFlag )
 {
-    ALIGN(Xoodoo_stateAlignment) unsigned char encbuf[XoodooMaxParallellism*Xoofff_RollSizeInBytes];
+    ALIGN(XoodooMaxParallellism*4) unsigned char encbuf[XoodooMaxParallellism*Xoofff_RollSizeInBytes];
     size_t messageByteLen = *messageBitLen / 8; /* do not include partial last byte */
 
     #if defined(XKCP_has_Xoodootimes16)
@@ -406,25 +406,25 @@ static const unsigned char * Xoodoo_CompressBlocks( unsigned char *k, unsigned c
     }
     *messageBitLen %= SnP_width;
     if ( lastFlag != 0 ) {
-        ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
+        Xoodoo_state state;
 
         #if DEBUG
         assert(messageByteLen < SnP_widthInBytes);
         #endif
         Xoodoo_StaticInitialize();
         mInitialize(state);
-        Xoodoo_OverwriteBytes(state, k, 0, SnP_widthInBytes); /* write k */
+        Xoodoo_OverwriteBytes(&state, k, 0, SnP_widthInBytes); /* write k */
         Xoofff_Rollc((uint32_t*)k, encbuf, 1);
-        Xoodoo_AddBytes(state, message, 0, (unsigned int)messageByteLen); /* add message */
-        DUMP("msg pL", state, SnP_widthInBytes);
+        Xoodoo_AddBytes(&state, message, 0, (unsigned int)messageByteLen); /* add message */
+        DUMP("msg pL", &state, SnP_widthInBytes);
         message += messageByteLen;
         *messageBitLen %= 8;
         if (*messageBitLen != 0) /* padding */
-            Xoodoo_AddByte(state, *message++ | (1 << *messageBitLen), messageByteLen);
+            Xoodoo_AddByte(&state, *message++ | (1 << *messageBitLen), messageByteLen);
         else
-            Xoodoo_AddByte(state, 1, messageByteLen);
-        Xoodoo_Permute_6rounds(state);
-        Xoodoo_ExtractAndAddBytes(state, x, x, 0, SnP_widthInBytes);
+            Xoodoo_AddByte(&state, 1, messageByteLen);
+        Xoodoo_Permute_6rounds(&state);
+        Xoodoo_ExtractAndAddBytes(&state, x, x, 0, SnP_widthInBytes);
         DUMP("xAc pL", x, SnP_widthInBytes);
         Xoofff_Rollc((uint32_t*)k, encbuf, 1);
         *messageBitLen = 0;
@@ -434,7 +434,7 @@ static const unsigned char * Xoodoo_CompressBlocks( unsigned char *k, unsigned c
 
 int Xoofff_MaskDerivation(Xoofff_Instance *xp, const BitSequence *Key, BitLength KeyBitLen)
 {
-    ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
+    Xoodoo_state state;
     BitSequence lastByte;
     unsigned int numberOfBits;
 
@@ -442,8 +442,8 @@ int Xoofff_MaskDerivation(Xoofff_Instance *xp, const BitSequence *Key, BitLength
     if (KeyBitLen >= SnP_width)
         return 1;
     /* Compute k from K */
-    memset(xp->k.a, 0, SnP_widthInBytes);
-    memcpy(xp->k.a, Key, KeyBitLen/8);
+    memset(xp->k, 0, SnP_widthInBytes);
+    memcpy(xp->k, Key, KeyBitLen/8);
     numberOfBits = KeyBitLen & 7;
     if ((numberOfBits) != 0) {
         lastByte = (Key[KeyBitLen/8] & ((1 << numberOfBits) - 1)) | (1 << numberOfBits);
@@ -451,14 +451,14 @@ int Xoofff_MaskDerivation(Xoofff_Instance *xp, const BitSequence *Key, BitLength
     else {
         lastByte = 1;
     }
-    xp->k.a[KeyBitLen/8] = lastByte;
+    xp->k[KeyBitLen/8] = lastByte;
     Xoodoo_StaticInitialize();
     mInitialize(state);
-    Xoodoo_OverwriteBytes(state, xp->k.a, 0, SnP_widthInBytes);
-    Xoodoo_Permute_6rounds(state);
-    Xoodoo_ExtractBytes(state, xp->k.a, 0, SnP_widthInBytes);
-    memcpy(xp->kRoll.a, xp->k.a, SnP_widthInBytes);
-    memset(xp->xAccu.a, 0, SnP_widthInBytes);
+    Xoodoo_OverwriteBytes(&state, xp->k, 0, SnP_widthInBytes);
+    Xoodoo_Permute_6rounds(&state);
+    Xoodoo_ExtractBytes(&state, xp->k, 0, SnP_widthInBytes);
+    memcpy(xp->kRoll, xp->k, SnP_widthInBytes);
+    memset(xp->xAccu, 0, SnP_widthInBytes);
     xp->phase = COMPRESSING;
     xp->queueOffset = 0;
 
@@ -472,8 +472,8 @@ int Xoofff_Compress(Xoofff_Instance *xp, const BitSequence *input, BitLength inp
     if ((finalFlag == 0) && ((inputBitLen & 7) != 0))
         return 1;
     if ( (flags & Xoofff_FlagInit) != 0 ) {
-        memcpy(xp->kRoll.a, xp->k.a, SnP_widthInBytes);
-        memset(xp->xAccu.a, 0, SnP_widthInBytes);
+        memcpy(xp->kRoll, xp->k, SnP_widthInBytes);
+        memset(xp->xAccu, 0, SnP_widthInBytes);
         xp->queueOffset = 0;
     }
     if (xp->phase != COMPRESSING) {
@@ -484,28 +484,28 @@ int Xoofff_Compress(Xoofff_Instance *xp, const BitSequence *input, BitLength inp
         unsigned int bitlen = (unsigned int)MyMin(inputBitLen, SnP_width - xp->queueOffset);
         unsigned int bytelen = (bitlen + 7) / 8;
 
-        memcpy(xp->queue.a + xp->queueOffset / 8, input, bytelen);
+        memcpy(xp->queue + xp->queueOffset / 8, input, bytelen);
         input += bytelen;
         inputBitLen -= bitlen;
         xp->queueOffset += bitlen;
         if ( xp->queueOffset == SnP_width ) { /* queue full */
-            Xoodoo_CompressBlocks(xp->kRoll.a, xp->xAccu.a, xp->queue.a, &xp->queueOffset, 0);
+            Xoodoo_CompressBlocks(xp->kRoll, xp->xAccu, xp->queue, &xp->queueOffset, 0);
             xp->queueOffset = 0;
         }
         else if ( finalFlag != 0 ) {
-            Xoodoo_CompressBlocks(xp->kRoll.a, xp->xAccu.a, xp->queue.a, &xp->queueOffset, 1);
+            Xoodoo_CompressBlocks(xp->kRoll, xp->xAccu, xp->queue, &xp->queueOffset, 1);
             return 0;
         }
     }
     if ( (inputBitLen >= SnP_width) || (finalFlag != 0) ) { /* Compress blocks */
-        input = Xoodoo_CompressBlocks(xp->kRoll.a, xp->xAccu.a, input, &inputBitLen, finalFlag);
+        input = Xoodoo_CompressBlocks(xp->kRoll, xp->xAccu, input, &inputBitLen, finalFlag);
     }
     if ( inputBitLen != 0 ) { /* Queue eventual residual message bytes */
         #if DEBUG
         assert( inputBitLen < SnP_width );
         assert( finalFlag == 0 );
         #endif
-        memcpy(xp->queue.a, input, inputBitLen/8);
+        memcpy(xp->queue, input, inputBitLen/8);
         xp->queueOffset = inputBitLen;
     }
     return 0;
@@ -514,7 +514,7 @@ int Xoofff_Compress(Xoofff_Instance *xp, const BitSequence *input, BitLength inp
 int Xoofff_Expand(Xoofff_Instance *xp, BitSequence *output, BitLength outputBitLen, int flags)
 {
     size_t outputByteLen;
-    ALIGN(Xoofff_Alignment) unsigned char encbuf[XoodooMaxParallellism*Xoofff_RollSizeInBytes];
+    ALIGN(XoodooMaxParallellism*4) unsigned char encbuf[XoodooMaxParallellism*Xoofff_RollSizeInBytes];
     int finalFlag = flags & Xoofff_FlagLastPart;
 
     if ((finalFlag == 0) && ((outputBitLen & 7) != 0))
@@ -523,20 +523,20 @@ int Xoofff_Expand(Xoofff_Instance *xp, BitSequence *output, BitLength outputBitL
         if ( xp->queueOffset != 0 )
             return 1;
         if ((flags & Xoofff_FlagXoofffie) != 0) {
-            memcpy(xp->yAccu.a, xp->xAccu.a, SnP_widthInBytes);
+            memcpy(xp->yAccu, xp->xAccu, SnP_widthInBytes);
         }
         else {
-            ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
+            Xoodoo_state state;
 
             Xoodoo_StaticInitialize();
             mInitialize(state);
-            Xoodoo_OverwriteBytes(state, xp->xAccu.a, 0, SnP_widthInBytes);
-            Xoodoo_Permute_6rounds(state);
-            Xoodoo_ExtractBytes(state, xp->yAccu.a, 0, SnP_widthInBytes);
+            Xoodoo_OverwriteBytes(&state, xp->xAccu, 0, SnP_widthInBytes);
+            Xoodoo_Permute_6rounds(&state);
+            Xoodoo_ExtractBytes(&state, xp->yAccu, 0, SnP_widthInBytes);
         }
         xp->phase = EXPANDING;
-        DUMP("yAccu", xp->yAccu.a, SnP_widthInBytes);
-        DUMP("key  ", xp->k.a, SnP_widthInBytes);
+        DUMP("yAccu", xp->yAccu, SnP_widthInBytes);
+        DUMP("key  ", xp->k, SnP_widthInBytes);
     }
     else if (xp->phase != EXPANDING)
         return 1;
@@ -544,7 +544,7 @@ int Xoofff_Expand(Xoofff_Instance *xp, BitSequence *output, BitLength outputBitL
         unsigned int bitlen = (unsigned int)MyMin(outputBitLen, SnP_widthInBytes*8 - xp->queueOffset);
         unsigned int bytelen = (bitlen + 7) / 8;
 
-        memcpy(output, xp->queue.a + xp->queueOffset / 8, bytelen);
+        memcpy(output, xp->queue + xp->queueOffset / 8, bytelen);
         xp->queueOffset += bitlen;
         if (xp->queueOffset == SnP_widthInBytes*8)
             xp->queueOffset = 0;
@@ -589,27 +589,27 @@ int Xoofff_Expand(Xoofff_Instance *xp, BitSequence *output, BitLength outputBitL
     #endif
     #endif
     if ( outputByteLen >= SnP_widthInBytes ) {
-        size_t processed = Xoofff_ExpandFastLoop(xp->yAccu.a, xp->kRoll.a, output, outputByteLen);
+        size_t processed = Xoofff_ExpandFastLoop(xp->yAccu, xp->kRoll, output, outputByteLen);
         output += processed;
         outputByteLen -= processed;
     }
     if ( outputByteLen != 0 ) {    /* Last incomplete block */
-        ALIGN(Xoodoo_stateAlignment) unsigned char state[Xoodoo_stateSizeInBytes];
+        Xoodoo_state state;
 
         #if DEBUG
         assert(outputByteLen <= SnP_widthInBytes);
         #endif
         Xoodoo_StaticInitialize();
         mInitialize(state);
-        Xoodoo_OverwriteBytes(state, xp->yAccu.a, 0, SnP_widthInBytes);
-        Xoofff_Rolle((uint32_t*)xp->yAccu.a, encbuf, 1);
-        Xoodoo_Permute_6rounds(state);
-        Xoodoo_ExtractAndAddBytes(state, xp->kRoll.a, output, 0, (unsigned int)outputByteLen);
+        Xoodoo_OverwriteBytes(&state, xp->yAccu, 0, SnP_widthInBytes);
+        Xoofff_Rolle((uint32_t*)xp->yAccu, encbuf, 1);
+        Xoodoo_Permute_6rounds(&state);
+        Xoodoo_ExtractAndAddBytes(&state, xp->kRoll, output, 0, (unsigned int)outputByteLen);
         DUMP("out 1", output, outputByteLen);
         output += outputByteLen;
         if (!finalFlag) { /* Put rest of expanded data into queue */
             unsigned int offset = (unsigned int)outputByteLen;
-            Xoodoo_ExtractAndAddBytes(state, xp->kRoll.a + offset, xp->queue.a + offset, offset, SnP_widthInBytes - (unsigned int)outputByteLen);
+            Xoodoo_ExtractAndAddBytes(&state, xp->kRoll + offset, xp->queue + offset, offset, SnP_widthInBytes - (unsigned int)outputByteLen);
             xp->queueOffset = offset * 8; /* current bit offset in queue buffer */
         }
     }

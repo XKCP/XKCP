@@ -23,6 +23,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     #define prefix KeccakP1600
     #define SnP KeccakP1600
+    #ifdef KeccakP1600_stateAlignment
+        #define SnP_stateAlignment KeccakP1600_stateAlignment
+    #else
+        #define SnP_stateAlignment 8
+    #endif
     #define SnP_width 1600
     #define SnP_laneCount 25
     #define SnP_Permute KeccakP1600_Permute_24rounds
@@ -35,6 +40,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         #include "testSnP.inc"
     #undef prefix
     #undef SnP
+    #undef SnP_stateAlignment
     #undef SnP_width
     #undef SnP_laneCount
     #undef SnP_Permute
@@ -213,6 +219,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
     #define prefix Xoodoo
     #define SnP Xoodoo
+    #ifdef Xoodoo_stateAlignment
+        #define SnP_stateAlignment Xoodoo_stateAlignment
+    #else
+        #define SnP_stateAlignment 4
+    #endif
     #define SnP_width (3*4*32)
     #define SnP_laneCount 12
     #define SnP_Permute          Xoodoo_Permute_6rounds
@@ -226,6 +237,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         #include "testSnP.inc"
     #undef prefix
     #undef SnP
+    #undef SnP_stateAlignment
     #undef SnP_width
     #undef SnP_laneCount
     #undef SnP_Permute

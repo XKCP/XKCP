@@ -20,7 +20,7 @@
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_Initialize(void *state);
+# void KeccakP1600_Initialize(KeccakP1600_plain64_state *state);
 #
 .globl  KeccakP1600_Initialize
 .globl _KeccakP1600_Initialize
@@ -42,7 +42,7 @@ _KeccakP1600_Initialize:
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_AddByte(void *state, unsigned char data, unsigned int offset);
+# void KeccakP1600_AddByte(KeccakP1600_plain64_state *state, unsigned char data, unsigned int offset);
 #                                %rdi                 %rsi               %rdx
 #!!
 #.globl  KeccakP1600_AddByte
@@ -61,7 +61,7 @@ _KeccakP1600_Initialize:
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
+# void KeccakP1600_AddBytes(KeccakP1600_plain64_state *state, const unsigned char *data, unsigned int offset, unsigned int length);
 #                                %rdi                         %rsi               %rdx                 %rcx
 #
 .globl  KeccakP1600_AddBytes
@@ -116,7 +116,7 @@ KeccakP1600_AddBytes_Exit:
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
+# void KeccakP1600_OverwriteBytes(KeccakP1600_plain64_state *state, const unsigned char *data, unsigned int offset, unsigned int length);
 #                                       %rdi                        %rsi               %rdx                 %rcx
 #
 .globl  KeccakP1600_OverwriteBytes
@@ -171,7 +171,7 @@ KeccakP1600_OverwriteBytes_Exit:
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount);
+# void KeccakP1600_OverwriteWithZeroes(KeccakP1600_plain64_state *state, unsigned int byteCount);
 #                                            %rdi                %rsi
 #
 .globl  KeccakP1600_OverwriteWithZeroes
@@ -207,7 +207,7 @@ KeccakP1600_OverwriteWithZeroes_Exit:
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_ExtractBytes(const void *state, unsigned char *data, unsigned int offset, unsigned int length);
+# void KeccakP1600_ExtractBytes(const KeccakP1600_plain64_state *state, unsigned char *data, unsigned int offset, unsigned int length);
 #                                           %rdi                  %rsi               %rdx                 %rcx
 #
 .globl  KeccakP1600_ExtractBytes
@@ -262,7 +262,7 @@ KeccakP1600_ExtractBytes_Exit:
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_ExtractAndAddBytes(const void *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
+# void KeccakP1600_ExtractAndAddBytes(const KeccakP1600_plain64_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
 #                                                 %rdi                        %rsi                  %rdx                 %rcx                  %r8
 #
 .globl  KeccakP1600_ExtractAndAddBytes
@@ -445,7 +445,7 @@ __KeccakF1600:
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_Permute_24rounds(void *state);
+# void KeccakP1600_Permute_24rounds(KeccakP1600_plain64_state *state);
 #                                        %rdi
 #
 .globl  KeccakP1600_Permute_24rounds
@@ -507,7 +507,7 @@ _KeccakP1600_Permute_24rounds:
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_Permute_12rounds(void *state);
+# void KeccakP1600_Permute_12rounds(KeccakP1600_plain64_state *state);
 #                                        %rdi
 #
 .globl  KeccakP1600_Permute_12rounds
@@ -569,7 +569,7 @@ _KeccakP1600_Permute_12rounds:
 
 # -----------------------------------------------------------------------------
 #
-# void KeccakP1600_Permute_Nrounds(void *state, unsigned int nrounds);
+# void KeccakP1600_Permute_Nrounds(KeccakP1600_plain64_state *state, unsigned int nrounds);
 #                                        %rdi                %rsi
 #
 .globl  KeccakP1600_Permute_Nrounds
@@ -702,7 +702,7 @@ _KeccakP1600_Permute_Nrounds:
 
 # -----------------------------------------------------------------------------
 #
-# size_t KeccakF1600_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
+# size_t KeccakF1600_FastLoop_Absorb(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
 #                                          %rdi                %rsi                            %rdx         %rcx
 #
 .globl  KeccakF1600_FastLoop_Absorb
@@ -841,7 +841,7 @@ KeccakF1600_FastLoop_Absorb_LanesAddLoop:
 
 # -----------------------------------------------------------------------------
 #
-# size_t KeccakP1600_12rounds_FastLoop_Absorb(void *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
+# size_t KeccakP1600_12rounds_FastLoop_Absorb(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
 #                                          %rdi                %rsi                            %rdx         %rcx
 #
 .globl  KeccakP1600_12rounds_FastLoop_Absorb

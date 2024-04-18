@@ -97,8 +97,8 @@ int XoofffWBC_Encipher(Xoofff_Instance *xp, const BitSequence *plaintext, BitSeq
     /* L = L + Fk(R || 1 . W) */
     if (Xoofff_Compress(xp, W, WBitLen, Xoofff_FlagInit | Xoofff_FlagLastPart) != 0)
         return 1;
-    memcpy(HkW, xp->xAccu.a, SnP_widthInBytes);
-    memcpy(kRollAfterHkW, xp->kRoll.a+Xoofff_RollOffset, Xoofff_RollSizeInBytes);
+    memcpy(HkW, xp->xAccu, SnP_widthInBytes);
+    memcpy(kRollAfterHkW, xp->kRoll+Xoofff_RollOffset, Xoofff_RollSizeInBytes);
     numberOfBitsInLastByte = nR & 7;
     lastByte[0] = (numberOfBitsInLastByte != 0) ? Rp[nR/8] : 0;
     if (nR0 == nR) {
@@ -120,8 +120,8 @@ int XoofffWBC_Encipher(Xoofff_Instance *xp, const BitSequence *plaintext, BitSeq
     Xoofff_AddIs(Lc, Lp, nL);
 
     /* R = R + Fk(L || 0 . W) */
-    memcpy(xp->kRoll.a+Xoofff_RollOffset, kRollAfterHkW, Xoofff_RollSizeInBytes);
-    memcpy(xp->xAccu.a, HkW, SnP_widthInBytes);
+    memcpy(xp->kRoll+Xoofff_RollOffset, kRollAfterHkW, Xoofff_RollSizeInBytes);
+    memcpy(xp->xAccu, HkW, SnP_widthInBytes);
     if (Xoofff_Compress(xp, Lc, nL, Xoofff_FlagNone) != 0)
         return 1;
     lastByte[0] = 0;
@@ -170,8 +170,8 @@ int XoofffWBC_Decipher(Xoofff_Instance *xp, const BitSequence *ciphertext, BitSe
     /* R = R + Fk(L || 0 . W) */
     if (Xoofff_Compress(xp, W, WBitLen, Xoofff_FlagInit | Xoofff_FlagLastPart) != 0)
         return 1;
-    memcpy(HkW, xp->xAccu.a, SnP_widthInBytes);
-    memcpy(kRollAfterHkW, xp->kRoll.a+Xoofff_RollOffset, Xoofff_RollSizeInBytes);
+    memcpy(HkW, xp->xAccu, SnP_widthInBytes);
+    memcpy(kRollAfterHkW, xp->kRoll+Xoofff_RollOffset, Xoofff_RollSizeInBytes);
     if (Xoofff_Compress(xp, L0, nL0, Xoofff_FlagNone) != 0) /* compress L0 */
         return 1;
     if (Xoofff_Compress(xp, Lc + nL0 / 8, nL - nL0, Xoofff_FlagNone) != 0)  /* compress rest of L */
@@ -182,8 +182,8 @@ int XoofffWBC_Decipher(Xoofff_Instance *xp, const BitSequence *ciphertext, BitSe
     Xoofff_AddIs(Rp, Rc, nR);
 
     /* L = L + Fk(R || 1 . W) */
-    memcpy(xp->kRoll.a+Xoofff_RollOffset, kRollAfterHkW, Xoofff_RollSizeInBytes);
-    memcpy(xp->xAccu.a, HkW, SnP_widthInBytes);
+    memcpy(xp->kRoll+Xoofff_RollOffset, kRollAfterHkW, Xoofff_RollSizeInBytes);
+    memcpy(xp->xAccu, HkW, SnP_widthInBytes);
     if (Xoofff_Compress(xp, Rp, nR - numberOfBitsInLastByte, Xoofff_FlagNone) != 0)
         return 1;
     lastByte[0] = (numberOfBitsInLastByte != 0) ? Rp[nR/8] : 0;

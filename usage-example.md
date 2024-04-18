@@ -1,7 +1,7 @@
 In this guide, we will provide examples of using the high-level API, with less emphasis on
 the low-level implementation, since XKCP abstracts the low-level implementation from the user.
 
-Before proceeding with the usage example, please make sure that you have built the XKCP library as described in the [README](../README.md)
+Before proceeding with the usage example, please make sure that you have built the XKCP library as described in the [README](../README.markdown)
 and included it in your C/C++ project.
 
 # Hashing and extendable output functions (XOFs)
@@ -102,7 +102,7 @@ int main() {
 
      for (int i = 0; i < inputChunksCount; i++) {
          // feed the input in chunks
-         Keccak_HashUpdate(&hi, input[i], strlen((const char *) input[i]) * 8);
+         result = Keccak_HashUpdate(&hi, input[i], strlen((const char *) input[i]) * 8);
          assert(result == KECCAK_SUCCESS);
      }
 
@@ -175,7 +175,7 @@ int main() {
         assert(result == KECCAK_SUCCESS);
 
         // feed the input
-        Keccak_HashUpdate(&hi, input, strlen((const char *) input) * 8);
+        result = Keccak_HashUpdate(&hi, input, strlen((const char *) input) * 8);
         assert(result == KECCAK_SUCCESS);
 
         // call `Keccak_HashFinal` to mark the end of the input
