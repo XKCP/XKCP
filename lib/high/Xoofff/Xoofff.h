@@ -49,37 +49,23 @@ typedef enum
     EXPANDED,
 } Xoofff_Phases;
 
-#ifdef XKCP_has_Xoodootimes16
-#include "Xoodoo-times16-SnP.h"
-#endif
-#ifdef XKCP_has_Xoodootimes8
-#include "Xoodoo-times8-SnP.h"
-#endif
-#ifdef XKCP_has_Xoodootimes4
-#include "Xoodoo-times4-SnP.h"
-#endif
-#include "Xoodoo-SnP.h"
 #if defined(XKCP_has_Xoodootimes16)
     #define XoodooMaxParallellism   16
-    #define Xoofff_Alignment        Xoodootimes16_statesAlignment
     #if defined(Xoodootimes16_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes16_AddIs
     #endif
 #elif defined(XKCP_has_Xoodootimes8)
     #define XoodooMaxParallellism   8
-    #define Xoofff_Alignment        Xoodootimes8_statesAlignment
     #if defined(Xoodootimes8_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes8_AddIs
     #endif
 #elif defined(XKCP_has_Xoodootimes4)
     #define XoodooMaxParallellism   4
-    #define Xoofff_Alignment        Xoodootimes4_statesAlignment
     #if defined(Xoodootimes4_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes4_AddIs
     #endif
 #else
     #define XoodooMaxParallellism   1
-    #define Xoofff_Alignment        Xoodoo_stateAlignment
 #endif
 
 typedef struct {

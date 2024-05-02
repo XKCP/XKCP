@@ -23,6 +23,16 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "brg_endian.h"
 #include "Xoofff.h"
 #include "Xoodoo.h"
+#ifdef XKCP_has_Xoodootimes16
+#include "Xoodoo-times16-SnP.h"
+#endif
+#ifdef XKCP_has_Xoodootimes8
+#include "Xoodoo-times8-SnP.h"
+#endif
+#ifdef XKCP_has_Xoodootimes4
+#include "Xoodoo-times4-SnP.h"
+#endif
+#include "Xoodoo-SnP.h"
 
 /*
 ** Uncomment this define if calls to Xoodoo_Initialize() and
