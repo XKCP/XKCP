@@ -226,7 +226,7 @@ static const uint32_t    RC[MAXROUNDS] = {
     _rc1
 };
 
-void Xoodoo_Permute_Nrounds(Xoodoo_plain8_state *state, uint32_t nr )
+void Xoodoo_Permute_Nrounds(Xoodoo_plain8_state *state, unsigned int nr )
 {
     tXoodooLane        a[NLANES];
     unsigned int    i;
