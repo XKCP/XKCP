@@ -50,20 +50,24 @@ typedef enum
 
 #if defined(XKCP_has_KeccakP1600times8)
     #define KravatteMaxParallellism   8
+    #define KravatteAlignment         64
 #elif defined(XKCP_has_KeccakP1600times4)
     #define KravatteMaxParallellism   4
+    #define KravatteAlignment         32
 #elif defined(XKCP_has_KeccakP1600times2)
     #define KravatteMaxParallellism   2
+    #define KravatteAlignment         16
 #else
     #define KravatteMaxParallellism   1
+    #define KravatteAlignment         8
 #endif
 
 typedef struct {
-    ALIGN(KravatteMaxParallellism*8) uint8_t k[200];
-    ALIGN(KravatteMaxParallellism*8) uint8_t kRoll[200];
-    ALIGN(KravatteMaxParallellism*8) uint8_t xAccu[200];
-    ALIGN(KravatteMaxParallellism*8) uint8_t yAccu[200];
-    ALIGN(KravatteMaxParallellism*8) uint8_t queue[200];    /* input/output queue buffer */
+    ALIGN(KravatteAlignment) uint8_t k[200];
+    ALIGN(KravatteAlignment) uint8_t kRoll[200];
+    ALIGN(KravatteAlignment) uint8_t xAccu[200];
+    ALIGN(KravatteAlignment) uint8_t yAccu[200];
+    ALIGN(KravatteAlignment) uint8_t queue[200];    /* input/output queue buffer */
     BitLength queueOffset;          /* current offset in queue */
     Kravatte_Phases phase;
 } Kravatte_Instance;

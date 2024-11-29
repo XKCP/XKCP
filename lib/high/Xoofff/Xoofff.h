@@ -51,29 +51,33 @@ typedef enum
 
 #if defined(XKCP_has_Xoodootimes16)
     #define XoodooMaxParallellism   16
+    #define XoodooAlignment         64
     #if defined(Xoodootimes16_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes16_AddIs
     #endif
 #elif defined(XKCP_has_Xoodootimes8)
     #define XoodooMaxParallellism   8
+    #define XoodooAlignment         32
     #if defined(Xoodootimes8_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes8_AddIs
     #endif
 #elif defined(XKCP_has_Xoodootimes4)
     #define XoodooMaxParallellism   4
+    #define XoodooAlignment         16
     #if defined(Xoodootimes4_FastXoofff_supported)
         #define    Xoofff_AddIs    Xooffftimes4_AddIs
     #endif
 #else
     #define XoodooMaxParallellism   1
+    #define XoodooAlignment         4
 #endif
 
 typedef struct {
-    ALIGN(XoodooMaxParallellism*4) uint8_t k[48];
-    ALIGN(XoodooMaxParallellism*4) uint8_t kRoll[48];
-    ALIGN(XoodooMaxParallellism*4) uint8_t xAccu[48];
-    ALIGN(XoodooMaxParallellism*4) uint8_t yAccu[48];
-    ALIGN(XoodooMaxParallellism*4) uint8_t queue[48];     /* input/output queue buffer */
+    ALIGN(XoodooAlignment) uint8_t k[48];
+    ALIGN(XoodooAlignment) uint8_t kRoll[48];
+    ALIGN(XoodooAlignment) uint8_t xAccu[48];
+    ALIGN(XoodooAlignment) uint8_t yAccu[48];
+    ALIGN(XoodooAlignment) uint8_t queue[48];     /* input/output queue buffer */
     BitLength queueOffset;          /* current offset in queue */
     Xoofff_Phases phase;
 } Xoofff_Instance;

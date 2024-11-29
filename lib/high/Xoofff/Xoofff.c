@@ -377,7 +377,7 @@ size_t Xoofff_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, u
 
 static const unsigned char * Xoodoo_CompressBlocks( unsigned char *k, unsigned char *x, const BitSequence *message, BitLength *messageBitLen, int lastFlag )
 {
-    ALIGN(XoodooMaxParallellism*4) unsigned char encbuf[XoodooMaxParallellism*Xoofff_RollSizeInBytes];
+    ALIGN(XoodooAlignment) unsigned char encbuf[XoodooMaxParallellism*Xoofff_RollSizeInBytes];
     size_t messageByteLen = *messageBitLen / 8; /* do not include partial last byte */
 
     #if defined(XKCP_has_Xoodootimes16)
@@ -524,7 +524,7 @@ int Xoofff_Compress(Xoofff_Instance *xp, const BitSequence *input, BitLength inp
 int Xoofff_Expand(Xoofff_Instance *xp, BitSequence *output, BitLength outputBitLen, int flags)
 {
     size_t outputByteLen;
-    ALIGN(XoodooMaxParallellism*4) unsigned char encbuf[XoodooMaxParallellism*Xoofff_RollSizeInBytes];
+    ALIGN(XoodooAlignment) unsigned char encbuf[XoodooMaxParallellism*Xoofff_RollSizeInBytes];
     int finalFlag = flags & Xoofff_FlagLastPart;
 
     if ((finalFlag == 0) && ((outputBitLen & 7) != 0))
