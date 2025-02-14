@@ -1104,6 +1104,8 @@ size_t KeccakP1600times8_12rounds_FastLoop_Absorb(KeccakP1600times8_SIMD512_stat
 #define CONST_64(a)                 _mm512_set1_epi64(a)
 
 #define chunkSize 8192
+#define KT128_rateInBytes (21*8)
+#define KT256_rateInBytes (17*8)
 
 #define initializeState(X) \
     X##ba = ZERO(); \
