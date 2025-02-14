@@ -99,8 +99,7 @@ Note that, to run the benchmarks on ARM processors, you may need to include the 
 The XKCP also provides some standalone implementations, including:
 
 * a very [compact](https://keccak.team/2015/tweetfips202.html) C code of the FIPS 202 (SHA-3) standard in [`Standalone/CompactFIPS202/C/`](Standalone/CompactFIPS202/C/);
-* a compact implementation in Python in [`Standalone/CompactFIPS202/Python/`](Standalone/CompactFIPS202/Python/);
-* the reference code of KangarooTwelve in Python in [`Standalone/KangarooTwelve/Python/`](Standalone/KangarooTwelve/Python/).
+* a compact implementation in Python in [`Standalone/CompactFIPS202/Python/`](Standalone/CompactFIPS202/Python/).
 
 
 # Is there example code?
