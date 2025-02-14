@@ -1104,7 +1104,6 @@ size_t KeccakP1600times8_12rounds_FastLoop_Absorb(KeccakP1600times8_SIMD512_stat
 #define CONST_64(a)                 _mm512_set1_epi64(a)
 
 #define chunkSize 8192
-#define rateInBytes 168
 
 #define initializeState(X) \
     X##ba = ZERO(); \
@@ -1167,6 +1166,12 @@ size_t KeccakP1600times8_12rounds_FastLoop_Absorb(KeccakP1600times8_SIMD512_stat
     r6 = _mm512_shuffle_i32x4(t2, t6, 0xdd); \
     r7 = _mm512_shuffle_i32x4(t3, t7, 0xdd); \
 
+#define XORdata4(X, index, dataAsLanes) \
+    XOReq(X##ba, LOAD_GATHER8_64(index, (dataAsLanes) + 0)); \
+    XOReq(X##be, LOAD_GATHER8_64(index, (dataAsLanes) + 1)); \
+    XOReq(X##bi, LOAD_GATHER8_64(index, (dataAsLanes) + 2)); \
+    XOReq(X##bo, LOAD_GATHER8_64(index, (dataAsLanes) + 3)); \
+
 #define XORdata16(X, index, dataAsLanes) \
     LoadAndTranspose8(dataAsLanes, 0) \
     XOReq(X##ba, r0); \
@@ -1187,15 +1192,18 @@ size_t KeccakP1600times8_12rounds_FastLoop_Absorb(KeccakP1600times8_SIMD512_stat
     XOReq(X##ku, r6); \
     XOReq(X##ma, r7); \
 
-#define XORdata21(X, index, dataAsLanes) \
+#define XORdata17(X, index, dataAsLanes) \
     XORdata16(X, index, dataAsLanes) \
     XOReq(X##me, LOAD_GATHER8_64(index, (dataAsLanes) + 16)); \
+
+#define XORdata21(X, index, dataAsLanes) \
+    XORdata17(X, index, dataAsLanes) \
     XOReq(X##mi, LOAD_GATHER8_64(index, (dataAsLanes) + 17)); \
     XOReq(X##mo, LOAD_GATHER8_64(index, (dataAsLanes) + 18)); \
     XOReq(X##mu, LOAD_GATHER8_64(index, (dataAsLanes) + 19)); \
     XOReq(X##sa, LOAD_GATHER8_64(index, (dataAsLanes) + 20)); \
 
-void KeccakP1600times8_K12ProcessLeaves(const unsigned char *input, unsigned char *output)
+void KeccakP1600times8_KT128ProcessLeaves(const unsigned char *input, unsigned char *output)
 {
     KeccakP_DeclareVars;
     unsigned int j;
@@ -1207,10 +1215,10 @@ void KeccakP1600times8_K12ProcessLeaves(const unsigned char *input, unsigned cha
     initializeState(_);
 
     index = LOAD8_32(7*(chunkSize / 8), 6*(chunkSize / 8), 5*(chunkSize / 8), 4*(chunkSize / 8), 3*(chunkSize / 8), 2*(chunkSize / 8), 1*(chunkSize / 8), 0*(chunkSize / 8));
-    for(j = 0; j < (chunkSize - rateInBytes); j += rateInBytes) {
+    for(j = 0; j < (chunkSize - KT128_rateInBytes); j += KT128_rateInBytes) {
         XORdata21(_, index, (const uint64_t *)input);
         rounds12
-        input += rateInBytes;
+        input += KT128_rateInBytes;
     }
 
     XORdata16(_, index, (const uint64_t *)input);
@@ -1223,6 +1231,40 @@ void KeccakP1600times8_K12ProcessLeaves(const unsigned char *input, unsigned cha
     STORE_SCATTER8_64(outputAsLanes+1, index, _be);
     STORE_SCATTER8_64(outputAsLanes+2, index, _bi);
     STORE_SCATTER8_64(outputAsLanes+3, index, _bo);
+}
+
+void KeccakP1600times8_KT256ProcessLeaves(const unsigned char *input, unsigned char *output)
+{
+    KeccakP_DeclareVars;
+    unsigned int j;
+    const uint64_t *outputAsLanes = (const uint64_t *)output;
+    __m256i index;
+    __m512i t0, t1, t2, t3, t4, t5, t6, t7;
+    __m512i r0, r1, r2, r3, r4, r5, r6, r7;
+
+    initializeState(_);
+
+    index = LOAD8_32(7*(chunkSize / 8), 6*(chunkSize / 8), 5*(chunkSize / 8), 4*(chunkSize / 8), 3*(chunkSize / 8), 2*(chunkSize / 8), 1*(chunkSize / 8), 0*(chunkSize / 8));
+    for(j = 0; j < (chunkSize - KT256_rateInBytes); j += KT256_rateInBytes) {
+        XORdata17(_, index, (const uint64_t *)input);
+        rounds12
+        input += KT256_rateInBytes;
+    }
+
+    XORdata4(_, index, (const uint64_t *)input);
+    XOReq(_bu, CONST_64(0x0BULL));
+    XOReq(_me, CONST_64(0x8000000000000000ULL));
+    rounds12
+
+    index = LOAD8_32(7*8, 6*8, 5*8, 4*8, 3*8, 2*8, 1*8, 0*8);
+    STORE_SCATTER8_64(outputAsLanes+0, index, _ba);
+    STORE_SCATTER8_64(outputAsLanes+1, index, _be);
+    STORE_SCATTER8_64(outputAsLanes+2, index, _bi);
+    STORE_SCATTER8_64(outputAsLanes+3, index, _bo);
+    STORE_SCATTER8_64(outputAsLanes+4, index, _bu);
+    STORE_SCATTER8_64(outputAsLanes+5, index, _ga);
+    STORE_SCATTER8_64(outputAsLanes+6, index, _ge);
+    STORE_SCATTER8_64(outputAsLanes+7, index, _gi);
 }
 
 #undef LOAD

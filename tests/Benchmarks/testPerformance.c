@@ -373,7 +373,8 @@ void TurboSHAKE_timing()
 void printParallelImplementations(
     int useKeccakF1600timesN_FastLoop_Absorb,
     int useKeccakP1600timesN_12rounds_FastLoop_Absorb,
-    int useKeccakF1600timesN_FastKravatte
+    int useKeccakF1600timesN_FastKravatte,
+    int useKeccakP1600timesN_KangarooTwelveProcessLeaves
 )
 {
     #ifdef XKCP_has_KeccakP1600
@@ -406,6 +407,14 @@ void printParallelImplementations(
         printf("      + KeccakP1600times2_KravatteExpand()\n");
     }
     #endif
+    if (useKeccakP1600timesN_KangarooTwelveProcessLeaves) {
+    #if defined(KeccakP1600times2_KT128ProcessLeaves_supported)
+        printf("      + KeccakP1600times2_KT128ProcessLeaves()\n");
+    #endif
+    #if defined(KeccakP1600times2_KT256ProcessLeaves_supported)
+        printf("      + KeccakP1600times2_KT256ProcessLeaves()\n");
+    #endif
+    }
     #else
     printf("- \303\2272: not used\n");
     #endif
@@ -426,6 +435,14 @@ void printParallelImplementations(
         printf("      + KeccakP1600times4_KravatteExpand()\n");
     }
     #endif
+    if (useKeccakP1600timesN_KangarooTwelveProcessLeaves) {
+    #if defined(KeccakP1600times4_KT128ProcessLeaves_supported)
+        printf("      + KeccakP1600times4_KT128ProcessLeaves()\n");
+    #endif
+    #if defined(KeccakP1600times4_KT256ProcessLeaves_supported)
+        printf("      + KeccakP1600times4_KT256ProcessLeaves()\n");
+    #endif
+    }
     #else
     printf("- \303\2274: not used\n");
     #endif
@@ -446,6 +463,14 @@ void printParallelImplementations(
         printf("      + KeccakP1600times8_KravatteExpand()\n");
     }
     #endif
+    if (useKeccakP1600timesN_KangarooTwelveProcessLeaves) {
+    #if defined(KeccakP1600times8_KT128ProcessLeaves_supported)
+        printf("      + KeccakP1600times8_KT128ProcessLeaves()\n");
+    #endif
+    #if defined(KeccakP1600times8_KT256ProcessLeaves_supported)
+        printf("      + KeccakP1600times8_KT256ProcessLeaves()\n");
+    #endif
+    }
     #else
     printf("- \303\2278: not used\n");
     #endif
@@ -480,7 +505,7 @@ void printParallelHashPerformanceHeader(unsigned int securityStrength)
 {
     printf("*** ParallelHash%d ***\n", securityStrength);
     printf("Using Keccak-f[1600] implementations:\n");
-    printParallelImplementations(1, 0, 0);
+    printParallelImplementations(1, 0, 0, 0);
     printf("\n");
 }
 
@@ -525,7 +550,7 @@ void testParallelHashPerformance()
 #endif
 
 #ifdef XKCP_has_KangarooTwelve
-cycles_t measureKangarooTwelve(cycles_t dtMin, unsigned int inputLen)
+cycles_t measureKangarooTwelve(cycles_t dtMin, unsigned int securityStrengthLevel, int inputLen)
 {
     unsigned char *input = bigBuffer1;
     ALIGN_DEFAULT unsigned char output[32];
@@ -536,7 +561,7 @@ cycles_t measureKangarooTwelve(cycles_t dtMin, unsigned int inputLen)
     memset(input, 0xA5, 16);
 
     measureTimingBeginDeclared
-    KangarooTwelve(input, inputLen, output, 32, (const BitSequence *)"", 0);
+    KangarooTwelve(securityStrengthLevel, input, inputLen, output, 32, (const BitSequence *)"", 0);
     measureTimingEnd
 }
 
@@ -544,11 +569,11 @@ void printKangarooTwelvePerformanceHeader( void )
 {
     printf("*** KangarooTwelve ***\n");
     printf("Using Keccak-p[1600,12] implementations:\n");
-    printParallelImplementations(0, 1, 0);
+    printParallelImplementations(0, 1, 0, 1);
     printf("\n");
 }
 
-void testKangarooTwelvePerformanceOne( void )
+void testKangarooTwelvePerformanceOne(unsigned int securityStrengthLevel)
 {
     const unsigned int chunkSize = 8192;
     unsigned halfTones;
@@ -556,20 +581,21 @@ void testKangarooTwelvePerformanceOne( void )
     unsigned int chunkSizeLog = (unsigned int)floor(log(chunkSize)/log(2.0)+0.5);
     int displaySlope = 0;
 
-    measureKangarooTwelve(calibration, 500000);
+    printf("KT%u\n", securityStrengthLevel);
+    measureKangarooTwelve(calibration, securityStrengthLevel, 500000);
     for(halfTones=chunkSizeLog*12-28; halfTones<=13*12; halfTones+=4) {
         double I = pow(2.0, halfTones/12.0);
         unsigned int i  = (unsigned int)floor(I+0.5);
         cycles_t time, timePlus1Block, timePlus2Blocks, timePlus4Blocks, timePlus8Blocks;
         cycles_t timePlus168Blocks;
-        time = measureKangarooTwelve(calibration, i);
+        time = measureKangarooTwelve(calibration, securityStrengthLevel, i);
         if (i == chunkSize) {
             displaySlope = 1;
-            timePlus1Block  = measureKangarooTwelve(calibration, i+1*chunkSize);
-            timePlus2Blocks = measureKangarooTwelve(calibration, i+2*chunkSize);
-            timePlus4Blocks = measureKangarooTwelve(calibration, i+4*chunkSize);
-            timePlus8Blocks = measureKangarooTwelve(calibration, i+8*chunkSize);
-            timePlus168Blocks = measureKangarooTwelve(calibration, i+168*chunkSize);
+            timePlus1Block  = measureKangarooTwelve(calibration, securityStrengthLevel, i+1*chunkSize);
+            timePlus2Blocks = measureKangarooTwelve(calibration, securityStrengthLevel, i+2*chunkSize);
+            timePlus4Blocks = measureKangarooTwelve(calibration, securityStrengthLevel, i+4*chunkSize);
+            timePlus8Blocks = measureKangarooTwelve(calibration, securityStrengthLevel, i+8*chunkSize);
+            timePlus168Blocks = measureKangarooTwelve(calibration, securityStrengthLevel, i+168*chunkSize);
         }
         printf("%8u bytes: %9" PRId64 " %s, %6.3f %s/byte\n", i, time, getTimerUnit(), time*1.0/i, getTimerUnit());
         if (displaySlope) {
@@ -585,7 +611,7 @@ void testKangarooTwelvePerformanceOne( void )
         double I = chunkSize + pow(2.0, halfTones/12.0);
         unsigned int i  = (unsigned int)floor(I+0.5);
         cycles_t time;
-        time = measureKangarooTwelve(calibration, i);
+        time = measureKangarooTwelve(calibration, securityStrengthLevel, i);
         printf("%8u bytes: %9" PRId64 " %s, %6.3f %s/byte\n", i, time, getTimerUnit(), time*1.0/i, getTimerUnit());
     }
     printf("\n\n");
@@ -594,7 +620,8 @@ void testKangarooTwelvePerformanceOne( void )
 void testKangarooTwelvePerformance()
 {
     printKangarooTwelvePerformanceHeader();
-    testKangarooTwelvePerformanceOne();
+    testKangarooTwelvePerformanceOne(128);
+    testKangarooTwelvePerformanceOne(256);
 }
 #endif
 
@@ -749,7 +776,7 @@ void printKravattePerformanceHeader( void )
 {
     printf("*** Kravatte ***\n");
     printf("Using Keccak-p[1600,6] implementations:\n");
-    printParallelImplementations(0, 0, 1);
+    printParallelImplementations(0, 0, 1, 0);
     printf("\n");
 }
 

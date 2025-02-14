@@ -34,9 +34,11 @@ typedef struct {
     size_t blockNumber;
     unsigned int queueAbsorbedLen;
     KangarooTwelve_Phases phase;
+    int securityLevel;
 } KangarooTwelve_Instance;
 
 /** Extendable ouput function KangarooTwelve.
+  * @param  securityLevel   128 for KT128 or 256 for KT256
   * @param  input           Pointer to the input message (M).
   * @param  inputByteLen    The length of the input message in bytes.
   * @param  output          Pointer to the output buffer.
@@ -45,16 +47,33 @@ typedef struct {
   * @param  customByteLen   The length of the customization string in bytes.
   * @return 0 if successful, 1 otherwise.
   */
-int KangarooTwelve(const unsigned char *input, size_t inputByteLen, unsigned char *output, size_t outputByteLen, const unsigned char *customization, size_t customByteLen);
+int KangarooTwelve(int securityLevel, const unsigned char *input, size_t inputByteLen, unsigned char *output, size_t outputByteLen, const unsigned char *customization, size_t customByteLen);
+
+/**
+ * Wrapper around `KangarooTwelve` to use the 128-bit security level.
+*/
+int KT128(const unsigned char *input, size_t inputByteLen, unsigned char *output, size_t outputByteLen, const unsigned char *customization, size_t customByteLen);
+
+/**
+ * Wrapper around `KangarooTwelve` to use the 256-bit security level.
+*/
+int KT256(const unsigned char *input, size_t inputByteLen, unsigned char *output, size_t outputByteLen, const unsigned char *customization, size_t customByteLen);
 
 /**
   * Function to initialize a KangarooTwelve instance.
   * @param  ktInstance      Pointer to the instance to be initialized.
+  * @param  securityLevel   128 for KT128 or 256 for KT256
   * @param  outputByteLen   The desired number of output bytes,
   *                         or 0 for an arbitrarily-long output.
   * @return 0 if successful, 1 otherwise.
   */
-int KangarooTwelve_Initialize(KangarooTwelve_Instance *ktInstance, size_t outputByteLen);
+int KangarooTwelve_Initialize(KangarooTwelve_Instance *ktInstance, int securityLevel, size_t outputByteLen);
+
+#define KT128_Initialize(instance, outputByteLen) \
+    KangarooTwelve_Initialize((instance), 128, (outputByteLen));
+
+#define KT256_Initialize(instance, outputByteLen) \
+    KangarooTwelve_Initialize((instance), 256, (outputByteLen));
 
 /**
   * Function to give input data to be absorbed.

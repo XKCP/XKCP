@@ -1044,6 +1044,48 @@ size_t KeccakP1600times4_12rounds_FastLoop_Absorb(KeccakP1600times4_states *stat
         return (const unsigned char *)curData0 - dataStart;
 #endif
     }
+    else if (laneCount == 17) {
+        unsigned int i;
+        const unsigned char *dataStart = data;
+        const uint64_t *curData0 = (const uint64_t *)data;
+        const uint64_t *curData1 = (const uint64_t *)(data+laneOffsetParallel*1*SnP_laneLengthInBytes);
+        const uint64_t *curData2 = (const uint64_t *)(data+laneOffsetParallel*2*SnP_laneLengthInBytes);
+        const uint64_t *curData3 = (const uint64_t *)(data+laneOffsetParallel*3*SnP_laneLengthInBytes);
+        V256 *statesAsLanes = (V256*)states;
+        declareABCDE
+
+        copyFromState(A, statesAsLanes)
+        while(dataByteLen >= (laneOffsetParallel*3 + laneCount)*8) {
+            #define XOR_In( Xxx, argIndex ) \
+                XOReq256(Xxx, LOAD4_64(curData3[argIndex], curData2[argIndex], curData1[argIndex], curData0[argIndex]))
+            XOR_In( Aba, 0 );
+            XOR_In( Abe, 1 );
+            XOR_In( Abi, 2 );
+            XOR_In( Abo, 3 );
+            XOR_In( Abu, 4 );
+            XOR_In( Aga, 5 );
+            XOR_In( Age, 6 );
+            XOR_In( Agi, 7 );
+            XOR_In( Ago, 8 );
+            XOR_In( Agu, 9 );
+            XOR_In( Aka, 10 );
+            XOR_In( Ake, 11 );
+            XOR_In( Aki, 12 );
+            XOR_In( Ako, 13 );
+            XOR_In( Aku, 14 );
+            XOR_In( Ama, 15 );
+            XOR_In( Ame, 16 );
+            #undef XOR_In
+            rounds12
+            curData0 += laneOffsetSerial;
+            curData1 += laneOffsetSerial;
+            curData2 += laneOffsetSerial;
+            curData3 += laneOffsetSerial;
+            dataByteLen -= laneOffsetSerial*8;
+        }
+        copyToState(statesAsLanes, A)
+        return (const unsigned char *)curData0 - dataStart;
+    }
     else {
         unsigned int i;
         const unsigned char *dataStart = data;
