@@ -1,4 +1,6 @@
+#if DEBUG
 #include <assert.h>
+#endif
 #include <string.h>
 
 typedef unsigned char u8;
@@ -33,5 +35,7 @@ void Keccak(int rate, int capacity, const unsigned char *input, unsigned long lo
     if ((rate == 576) && (capacity == 1024) && (delimitedSuffix == 0x06) && (outputByteLen == 64))
         crypto_hash_sha3512(output, input, inputByteLen);
     else
+#if DEBUG
         assert(0);
+#endif
 }

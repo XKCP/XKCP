@@ -14,7 +14,9 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
+#if DEBUG
 #include <assert.h>
+#endif
 #include <string.h>
 #include <stdint.h>
 #include "KangarooTwelve.h"
@@ -181,7 +183,9 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
         ktInstance->queueAbsorbedLen += len;
         if ( ktInstance->queueAbsorbedLen == chunkSize ) {
             unsigned char intermediate[maxCapacityInBytes];
+#if DEBUG
             assert(capacityInBytes <= maxCapacityInBytes);
+#endif
             ktInstance->queueAbsorbedLen = 0;
             ++ktInstance->blockNumber;
             if (TurboSHAKE_AbsorbDomainSeparationByte(&ktInstance->queueNode, suffixLeaf) != 0)
@@ -290,7 +294,9 @@ int KangarooTwelve_Update(KangarooTwelve_Instance *ktInstance, const unsigned ch
         inLen -= len;
         if ( len == chunkSize ) {
             unsigned char intermediate[maxCapacityInBytes];
+#if DEBUG
             assert(capacityInBytes <= maxCapacityInBytes);
+#endif
             ++ktInstance->blockNumber;
             if (TurboSHAKE_AbsorbDomainSeparationByte(&ktInstance->queueNode, suffixLeaf) != 0)
                 return 1;
@@ -332,7 +338,9 @@ int KangarooTwelve_Final(KangarooTwelve_Instance *ktInstance, unsigned char * ou
         if (ktInstance->queueAbsorbedLen != 0) {
             /* There is data in the queue node */
             unsigned char intermediate[maxCapacityInBytes];
+#if DEBUG
             assert(capacityInBytes <= maxCapacityInBytes);
+#endif
             ++ktInstance->blockNumber;
             if (TurboSHAKE_AbsorbDomainSeparationByte(&ktInstance->queueNode, suffixLeaf) != 0)
                 return 1;
