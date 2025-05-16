@@ -118,8 +118,6 @@ The fragments below allow to select the desired implementation of the permutatio
         <gcc>-fomit-frame-pointer</gcc>
         <gcc>-O2</gcc>
         <gcc>-g0</gcc>
-        <gcc>-march=native</gcc>
-        <gcc>-mtune=native</gcc>
     </fragment>
 
     <!-- Keccak-p[1600] -->

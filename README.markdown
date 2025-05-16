@@ -35,6 +35,7 @@ make <target>/libXKCP.so
 where `<target>` is to be replaced with the actual target (e.g., `ARMv6M` or `AVX512`), and where `.so` can be replaced with `.a` for a static library or with `.dylib` for a dynamic library on macOS.
 More details, and in particular the list of targets, can be found in the section on how to build the XKCP below.
 
+If your compiler supports it, you may add `EXTRA_CFLAGS="-march=native -mtune=native"` at the end of the command line so that the code is further optimized for the platform on which it is compiled.
 
 
 # More precisely, what does the XKCP contain?
