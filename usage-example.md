@@ -318,10 +318,10 @@ We will give usage examples of the `TurboSHAKE128` function, but the same applie
 </details>
 
 ## KangarooTwelve
-`KangarooTwelve`, or `K12`, is a family of XOFs, based on the `TurboSHAKE128`, hence it also uses the `Keccak-p[1600, 12]` permutation.
+`KangarooTwelve` is a family of XOFs, `KT128` and `KT256`, based on `TurboSHAKE128` and `TurboSHAKE256`, respectively, hence using the `Keccak-p[1600, 12]` permutation.
 On high-end platforms, it can exploit a high degree of parallelism, whether using multiple cores or the SIMD instruction set of modern processors.
 
-We will give 2 examples of using the `KangarooTwelve` function, one for the simple usage, with single input single output, then a more advanced example, with chunked input/output.
+We will give 2 examples of using the `KT128` function, one for the simple usage, with single input single output, then a more advanced example, with chunked input/output.
 
 <details open>
 <summary>Simple usage</summary>
@@ -335,7 +335,7 @@ We will give 2 examples of using the `KangarooTwelve` function, one for the simp
      const int outputByteLen = 64;
      unsigned char output[outputByteLen];
 
-     int result = KangarooTwelve(input, strlen((const char *) input), output, outputByteLen, NULL, 0);
+     int result = KT128(input, strlen((const char *) input), output, outputByteLen, NULL, 0);
      assert(result == 0);  // returning 0 means success
 
      // printing the hash in hexadecimal format
@@ -368,7 +368,7 @@ We will give 2 examples of using the `KangarooTwelve` function, one for the simp
 
         KangarooTwelve_Instance kti;
 
-        int result = KangarooTwelve_Initialize(&kti, 0);
+        int result = KangarooTwelve_Initialize(&kti, 128, 0);
         assert(result == 0);
 
         for (int i = 0; i < inputChunksCount; i++) {
