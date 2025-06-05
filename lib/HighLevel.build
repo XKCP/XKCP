@@ -74,6 +74,22 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
         <c>lib/high/Keccak/KeccakDuplex.c</c>
     </fragment>
 
+    <fragment name="KeccakOD" inherits="common">
+        <config>XKCP_has_OD_Keccak</config>
+        <h>lib/high/Keccak/KeccakOD.h</h>
+        <c>lib/high/Keccak/KeccakOD.c</c>
+        <inc>lib/high/Keccak/KeccakOD.inc</inc>
+    </fragment>
+
+    <!-- Shaking up authenticated encryption -->
+
+    <fragment name="ShakingUpAE" inherits="KeccakOD">
+        <config>XKCP_has_ShakingUpAE</config>
+        <h>lib/high/ShakingUpAE/ShakingUpAE.h</h>
+        <c>lib/high/ShakingUpAE/ShakingUpAE.c</c>
+        <inc>lib/high/ShakingUpAE/ShakingUpAE.inc</inc>
+    </fragment>
+
     <!-- Pseudo-random bit generation -->
 
     <fragment name="KeccakPRG" inherits="common KeccakDuplex">
@@ -124,6 +140,6 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
 
     <!--- All high-level services -->
 
-    <fragment name="All" inherits="common KeccakSponge KeccakDuplex KeccakPRG FIPS202 SP800-185 KangarooTwelve Kravatte Xoofff Xoodyak"/>
+    <fragment name="All" inherits="common KeccakSponge KeccakDuplex KeccakOD ShakingUpAE KeccakPRG FIPS202 SP800-185 KangarooTwelve Kravatte Xoofff Xoodyak"/>
 
 </group>

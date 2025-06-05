@@ -563,3 +563,225 @@ size_t KeccakP1600_12rounds_FastLoop_Absorb(KeccakP1600_plain64_state *state, un
     copyToState(stateAsLanes, A)
     return originalDataByteLen - dataByteLen;
 }
+
+/* ---------------------------------------------------------------- */
+
+// r = 160
+#define mStateIn160( __s )          Asa = __s[20]; Ase = __s[21]; Asi = __s[22]; Aso = __s[23]; Asu = __s[24]
+
+#define mStateOut160( __s )         __s[20] = Asa; __s[21] = Ase; __s[22] = Asi; __s[23] = Aso; __s[24] = Asu
+
+#define mStateOver160( __i )        Aba = __i[ 0]; Abe = __i[ 1]; Abi = __i[ 2]; Abo = __i[ 3]; Abu = __i[ 4]; \
+                                    Aga = __i[ 5]; Age = __i[ 6]; Agi = __i[ 7]; Ago = __i[ 8]; Agu = __i[ 9]; \
+                                    Aka = __i[10]; Ake = __i[11]; Aki = __i[12]; Ako = __i[13]; Aku = __i[14]; \
+                                    Ama = __i[15]; Ame = __i[16]; Ami = __i[17]; Amo = __i[18]; Amu = __i[19]
+
+#define mStateNoInput160()          Aba = 1; Abe = 0; Abi = 0; Abo = 0; Abu = 0; \
+                                    Aga = 0; Age = 0; Agi = 0; Ago = 0; Agu = 0; \
+                                    Aka = 0; Ake = 0; Aki = 0; Ako = 0; Aku = 0; \
+                                    Ama = 0; Ame = 0; Ami = 0; Amo = 0; Amu = 0
+
+#define mStateExtr160( __o, __oA )  __o[ 0] = Aba ^ __oA[ 0]; __o[ 1] = Abe ^ __oA[ 1]; __o[ 2] = Abi ^ __oA[ 2]; __o[ 3] = Abo ^ __oA[ 3]; __o[ 4] = Abu ^ __oA[ 4]; \
+                                    __o[ 5] = Aga ^ __oA[ 5]; __o[ 6] = Age ^ __oA[ 6]; __o[ 7] = Agi ^ __oA[ 7]; __o[ 8] = Ago ^ __oA[ 8]; __o[ 9] = Agu ^ __oA[ 9]; \
+                                    __o[10] = Aka ^ __oA[10]; __o[11] = Ake ^ __oA[11]; __o[12] = Aki ^ __oA[12]; __o[13] = Ako ^ __oA[13]; __o[14] = Aku ^ __oA[14]; \
+                                    __o[15] = Ama ^ __oA[15]; __o[16] = Ame ^ __oA[16]; __o[17] = Ami ^ __oA[17]; __o[18] = Amo ^ __oA[18]; __o[19] = Amu ^ __oA[19]
+
+// r = 128
+#define mStateIn128( __s )          mStateIn160( __s ); Ame = __s[16]; Ami = __s[17]; Amo = __s[18]; Amu = __s[19]
+
+#define mStateOut128( __s )         mStateOut160( __s ); __s[16] = Ame; __s[17] = Ami; __s[18] = Amo; __s[19] = Amu
+
+#define mStateOver128( __i )        Aba = __i[ 0]; Abe = __i[ 1]; Abi = __i[ 2]; Abo = __i[ 3]; Abu = __i[ 4]; \
+                                    Aga = __i[ 5]; Age = __i[ 6]; Agi = __i[ 7]; Ago = __i[ 8]; Agu = __i[ 9]; \
+                                    Aka = __i[10]; Ake = __i[11]; Aki = __i[12]; Ako = __i[13]; Aku = __i[14]; \
+                                    Ama = __i[15]
+
+#define mStateNoInput128()          Aba = 1; Abe = 0; Abi = 0; Abo = 0; Abu = 0; \
+                                    Aga = 0; Age = 0; Agi = 0; Ago = 0; Agu = 0; \
+                                    Aka = 0; Ake = 0; Aki = 0; Ako = 0; Aku = 0; \
+                                    Ama = 0
+
+#define mStateExtr128( __o, __oA )  __o[ 0] = Aba ^ __oA[ 0]; __o[ 1] = Abe ^ __oA[ 1]; __o[ 2] = Abi ^ __oA[ 2]; __o[ 3] = Abo ^ __oA[ 3]; __o[ 4] = Abu ^ __oA[ 4]; \
+                                    __o[ 5] = Aga ^ __oA[ 5]; __o[ 6] = Age ^ __oA[ 6]; __o[ 7] = Agi ^ __oA[ 7]; __o[ 8] = Ago ^ __oA[ 8]; __o[ 9] = Agu ^ __oA[ 9]; \
+                                    __o[10] = Aka ^ __oA[10]; __o[11] = Ake ^ __oA[11]; __o[12] = Aki ^ __oA[12]; __o[13] = Ako ^ __oA[13]; __o[14] = Aku ^ __oA[14]; \
+                                    __o[15] = Ama ^ __oA[15]
+
+// Whole state
+#define mStateOutAll( __s )         __s[ 0] = Aba; __s[ 1] = Abe; __s[ 2] = Abi; __s[ 3] = Abo; __s[ 4] = Abu; \
+                                    __s[ 5] = Aga; __s[ 6] = Age; __s[ 7] = Agi; __s[ 8] = Ago; __s[ 9] = Agu; \
+                                    __s[10] = Aka; __s[11] = Ake; __s[12] = Aki; __s[13] = Ako; __s[14] = Aku; \
+                                    __s[15] = Ama; __s[16] = Ame; __s[17] = Ami; __s[18] = Amo; __s[19] = Amu; \
+                                    __s[20] = Asa; __s[21] = Ase; __s[22] = Asi; __s[23] = Aso; __s[24] = Asu;
+
+/* ---------------------------------------------------------------- */
+
+#define ODDuplexingFastInOut(RHO, trailerLane, rounds) \
+    size_t originalDataByteLen = len; \
+    uint64_t        *stateAsLanes       = (uint64_t*)state; \
+    const uint64_t  *inDataAsLanes      = (const uint64_t*)idata; \
+    uint64_t        *outDataAsLanes     = (uint64_t*)odata; \
+    const uint64_t  *outDataAddAsLanes  = (const uint64_t*)odataAdd; \
+    \
+    mStateIn##RHO( stateAsLanes ); \
+    while ( len >= RHO ) { \
+        mStateOver##RHO( inDataAsLanes ); \
+        trailerLane ^= trailencAsLane; \
+        rounds \
+        mStateExtr##RHO( outDataAsLanes, outDataAddAsLanes ); \
+        inDataAsLanes       += RHO / 8; \
+        outDataAsLanes      += RHO / 8; \
+        outDataAddAsLanes   += RHO / 8; \
+        len                 -= RHO; \
+    } \
+    mStateOut##RHO( stateAsLanes ); \
+    \
+    return originalDataByteLen - len;
+
+size_t KeccakP1600_ODDuplexingFastInOut(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *idata, size_t len, unsigned char *odata, const unsigned char *odataAdd, uint64_t trailencAsLane)
+{
+    declareABCDE
+    #ifndef KeccakP1600_fullUnrolling
+    unsigned int i;
+    #endif
+
+    if (laneCount == 16) {
+        ODDuplexingFastInOut(128, Ame, rounds24)
+    }
+    else if (laneCount == 20) {
+        ODDuplexingFastInOut(160, Asa, rounds24)
+    }
+    else {
+        abort();
+    }
+}
+
+size_t KeccakP1600_12rounds_ODDuplexingFastInOut(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *idata, size_t len, unsigned char *odata, const unsigned char *odataAdd, uint64_t trailencAsLane)
+{
+    declareABCDE
+    #ifndef KeccakP1600_fullUnrolling
+    unsigned int i;
+    #endif
+
+    if (laneCount == 16) {
+        ODDuplexingFastInOut(128, Ame, rounds12)
+    }
+    else if (laneCount == 20) {
+        ODDuplexingFastInOut(160, Asa, rounds12)
+    }
+    else {
+        abort();
+    }
+}
+
+/* ---------------------------------------------------------------- */
+
+#define ODDuplexingFastOut(RHO, trailerLane, rounds) \
+    size_t originalDataByteLen = len; \
+    uint64_t        *stateAsLanes       = (uint64_t*)state; \
+    uint64_t        *outDataAsLanes     = (uint64_t*)odata; \
+    const uint64_t  *outDataAddAsLanes  = (const uint64_t*)odataAdd; \
+    \
+    mStateIn##RHO( stateAsLanes ); \
+    while ( len >= RHO ) { \
+        mStateNoInput##RHO(); \
+        trailerLane ^= trailencAsLane; \
+        rounds \
+        mStateExtr##RHO( outDataAsLanes, outDataAddAsLanes ); \
+        outDataAsLanes      += RHO / 8; \
+        outDataAddAsLanes   += RHO / 8; \
+        len                 -= RHO; \
+    } \
+    mStateOut##RHO( stateAsLanes ); \
+    \
+    return originalDataByteLen - len;
+
+size_t KeccakP1600_ODDuplexingFastOut(KeccakP1600_plain64_state *state, unsigned int laneCount, unsigned char *odata, size_t len, const unsigned char *odataAdd, uint64_t trailencAsLane)
+{
+    declareABCDE
+    #ifndef KeccakP1600_fullUnrolling
+    unsigned int i;
+    #endif
+
+    if (laneCount == 16) {
+        ODDuplexingFastOut(128, Ame, rounds24)
+    }
+    else if (laneCount == 20) {
+        ODDuplexingFastOut(160, Asa, rounds24)
+    }
+    else {
+        abort();
+    }
+}
+
+size_t KeccakP1600_12rounds_ODDuplexingFastOut(KeccakP1600_plain64_state *state, unsigned int laneCount, unsigned char *odata, size_t len, const unsigned char *odataAdd, uint64_t trailencAsLane)
+{
+    declareABCDE
+    #ifndef KeccakP1600_fullUnrolling
+    unsigned int i;
+    #endif
+
+    if (laneCount == 16) {
+        ODDuplexingFastOut(128, Ame, rounds12)
+    }
+    else if (laneCount == 20) {
+        ODDuplexingFastOut(160, Asa, rounds12)
+    }
+    else {
+        abort();
+    }
+}
+
+/* ---------------------------------------------------------------- */
+
+#define ODDuplexingFastIn(RHO, trailerLane, rounds) \
+    size_t originalDataByteLen = len; \
+    uint64_t        *stateAsLanes       = (uint64_t*)state; \
+    const uint64_t  *inDataAsLanes      = (const uint64_t*)idata; \
+    \
+    mStateIn##RHO( stateAsLanes ); \
+    while ( len > RHO ) { \
+        mStateOver##RHO( inDataAsLanes ); \
+        trailerLane ^= trailencAsLane; \
+        rounds \
+        inDataAsLanes   += RHO / 8; \
+        len             -= RHO; \
+    } \
+    mStateOutAll( stateAsLanes ); \
+    \
+    return originalDataByteLen - len;
+
+size_t KeccakP1600_ODDuplexingFastIn(KeccakP1600_plain64_state *state, unsigned int laneCount, const uint8_t *idata, size_t len, uint64_t trailencAsLane)
+{
+    declareABCDE
+    #ifndef KeccakP1600_fullUnrolling
+    unsigned int i;
+    #endif
+
+    if (laneCount == 16) {
+        ODDuplexingFastIn(128, Ame, rounds24)
+    }
+    else if (laneCount == 20) {
+        ODDuplexingFastIn(160, Asa, rounds24)
+    }
+    else {
+        abort();
+    }
+}
+
+size_t KeccakP1600_12rounds_ODDuplexingFastIn(KeccakP1600_plain64_state *state, unsigned int laneCount, const uint8_t *idata, size_t len, uint64_t trailencAsLane)
+{
+    declareABCDE
+    #ifndef KeccakP1600_fullUnrolling
+    unsigned int i;
+    #endif
+
+    if (laneCount == 16) {
+        ODDuplexingFastIn(128, Ame, rounds12)
+    }
+    else if (laneCount == 20) {
+        ODDuplexingFastIn(160, Asa, rounds12)
+    }
+    else {
+        abort();
+    }
+}

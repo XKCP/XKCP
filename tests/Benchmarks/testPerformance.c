@@ -32,6 +32,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifdef XKCP_has_SP800_185
 #include "SP800-185.h"
 #endif
+#ifdef XKCP_has_ShakingUpAE
+#include "ShakingUpAE.h"
+#endif
+
 #include "timing.h"
 #include "testPerformance.h"
 
@@ -932,6 +936,323 @@ void testKravattePerformance(void)
 }
 #endif
 
+// ----------------------------------------------------------------------------
+
+#ifdef XKCP_has_ShakingUpAE
+
+typedef cycles_t (* measurePerfOD)(cycles_t, int, uint32_t, unsigned int);
+
+static void testOD_PerfSlope(measurePerfOD pFunc, int turbo, unsigned int rate, cycles_t calibration)
+{
+	uint32_t len;
+    uint32_t count;
+    cycles_t time;
+    cycles_t time128;
+    cycles_t time256;
+    const uint32_t stabilityCount = 10;
+
+    time128 = CYCLES_MAX;
+    len = 128*rate;
+	count = stabilityCount;
+    do {
+        time = pFunc(calibration, turbo, 1600/8 - 64/8 - rate, len);
+		if (time < time128) {
+			time128 = time;
+			count = stabilityCount;
+		}
+    } while( --count != 0);
+    time256 = CYCLES_MAX;
+    len = 256*rate;
+	count = stabilityCount;
+    do {
+        time = pFunc(calibration, turbo, 1600/8 - 64/8 - rate, len);
+		if (time < time256) {
+			time256 = time;
+			count = stabilityCount;
+		}
+    } while( --count != 0);
+
+    time = time256-time128;
+	len = 128*rate;
+    printf("   +128 blocks: %9" PRId64 " %s, %6.3f %s/byte (slope)\n", time, getTimerUnit(), time*1.0/len, getTimerUnit());
+}
+
+uint32_t testODNextLen( uint32_t len, uint32_t rate )
+{
+    if (len < rate) {
+        len <<= 1;
+        if (len > rate)
+            len = rate;
+    }
+    else
+        len <<= 1;
+	return len;
+}
+
+cycles_t measureSHAKE_Wrap_Init(cycles_t dtMin, int turbo, uint32_t c )
+{
+    ALIGN_DEFAULT unsigned char key[32];
+    KeccakWidth1600_DWrapInstance od;
+    measureTimingDeclare
+ 
+    memset(key, 0xA5, sizeof(key));
+
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        measureTimingEnd
+    }
+}
+
+cycles_t measureSHAKE_Wrap_Wrap(cycles_t dtMin, int turbo, uint32_t c, unsigned int inputLen)
+{
+    unsigned char* input = bigBuffer1;
+    unsigned char* output = bigBuffer2;
+    ALIGN_DEFAULT unsigned char key[32];
+    ALIGN_DEFAULT unsigned char nonce[16];
+    ALIGN_DEFAULT unsigned char AD[16];
+    ALIGN_DEFAULT unsigned char tag[2*32];
+    KeccakWidth1600_DWrapInstance od;
+    measureTimingDeclare
+
+    assert(inputLen <= sizeof(bigBuffer1));
+
+    memset(key, 0xA5, sizeof(key) );
+    memset(nonce, 0x55, sizeof(nonce));
+    if (turbo) {
+        TurboSHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+    }
+    else {
+        SHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+    }
+    memset(input, 0xA5, inputLen);
+    memset(AD, 0x5A, sizeof(AD));
+
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_Wrap_Wrap(&od, output, AD, 0, input, inputLen );
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_Wrap_Wrap(&od, output, AD, 0, input, inputLen );
+        measureTimingEnd
+    }
+}
+
+cycles_t measureSHAKE_Wrap_MAC(cycles_t dtMin, int turbo, uint32_t c, unsigned int ADLen)
+{
+    ALIGN_DEFAULT unsigned char input[1];
+    ALIGN_DEFAULT unsigned char output[1];
+    ALIGN_DEFAULT unsigned char key[32];
+    ALIGN_DEFAULT unsigned char nonce[16];
+    unsigned char* AD = bigBuffer1;
+    ALIGN_DEFAULT unsigned char tag[2*32];
+    KeccakWidth1600_DWrapInstance od;
+    measureTimingDeclare
+
+    assert(ADLen <= sizeof(bigBuffer1));
+
+    memset(key, 0xA5, sizeof(key));
+    memset(nonce, 0x55, sizeof(nonce));
+    if (turbo) {
+        TurboSHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+    }
+    else {
+        SHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+    }
+    memset(input, 0xA5, sizeof(input));
+    memset(AD, 0x5A, ADLen);
+
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_Wrap_Wrap(&od, output, AD, ADLen, input, 0 );
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_Wrap_Wrap(&od, output, AD, ADLen, input, 0 );
+        measureTimingEnd
+    }
+}
+
+void testSHAKE_WrapPerformanceOne( int turbo )
+{
+    cycles_t calibration = CalibrateTimer();
+    uint32_t len;
+    cycles_t time;
+
+    for ( unsigned int c = 2 * 128 / 8; c <= 2 * 256 / 8; c <<= 1 )
+    {
+        unsigned int    rate    = 1600/8 - c - 64/8;
+        unsigned int    taglen  = c;
+
+        time = measureSHAKE_Wrap_Init( calibration, turbo, c );
+        printf("*** ");
+        if (turbo) printf("Turbo");
+        printf("SHAKE%u-Wrap ***\n\317\201=%u bytes\n", c*4, rate);
+        printf("\n.initialize()   %9u %s\n", time, getTimerUnit());
+
+        printf("\n.wrap(only plaintext input, no AD)\n");
+        for(len = 1; len <= 128*rate; len = testODNextLen(len, rate)) {
+            time = measureSHAKE_Wrap_Wrap(calibration, turbo, c, len );
+            printf("%8d bytes: %9u %s, %6.3f %s/byte\n", len, time, getTimerUnit(), time*1.0/(len), getTimerUnit());
+        }
+        testOD_PerfSlope(measureSHAKE_Wrap_Wrap, turbo, rate, calibration);
+
+        printf("\n.wrap(only AD input, no plaintext)\n");
+        for(len = 1; len <= 128*rate; len = testODNextLen(len, rate)) {
+            time = measureSHAKE_Wrap_MAC(calibration, turbo, c, len );
+            printf("%8d bytes: %9u %s, %6.3f %s/byte\n", len, time, getTimerUnit(), time*1.0/(len), getTimerUnit());
+        }
+        testOD_PerfSlope( measureSHAKE_Wrap_MAC, turbo, rate, calibration );
+
+        printf("\n\n");
+    }
+}
+
+
+cycles_t measureSHAKE_BO_Init(cycles_t dtMin, int turbo, uint32_t c )
+{
+    ALIGN_DEFAULT unsigned char key[32];
+    KeccakWidth1600_DeckBOInstance od;
+    measureTimingDeclare
+ 
+    memset(key, 0xA5, sizeof(key));
+
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        measureTimingEnd
+    }
+}
+
+cycles_t measureSHAKE_BO_Wrap(cycles_t dtMin, int turbo, uint32_t c, unsigned int inputLen)
+{
+    unsigned char* input = bigBuffer1;
+    unsigned char* output = bigBuffer2;
+    ALIGN_DEFAULT unsigned char key[32];
+    ALIGN_DEFAULT unsigned char nonce[16];
+    ALIGN_DEFAULT unsigned char AD[16];
+    ALIGN_DEFAULT unsigned char tag[2*32];
+    KeccakWidth1600_DeckBOInstance od;
+    measureTimingDeclare
+
+    assert(inputLen <= sizeof(bigBuffer1));
+
+    memset(key, 0xA5, sizeof(key) );
+    memset(nonce, 0x55, sizeof(nonce));
+    if (turbo) {
+        TurboSHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+    }
+    else {
+        SHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+    }
+    memset(input, 0xA5, inputLen);
+    memset(AD, 0x5A, sizeof(AD));
+
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_BO_Wrap(&od, output, AD, 0, input, inputLen );
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_BO_Wrap(&od, output, AD, 0, input, inputLen );
+        measureTimingEnd
+    }
+}
+
+cycles_t measureSHAKE_BO_MAC(cycles_t dtMin, int turbo, uint32_t c, unsigned int ADLen)
+{
+    ALIGN_DEFAULT unsigned char input[1];
+    ALIGN_DEFAULT unsigned char output[1];
+    ALIGN_DEFAULT unsigned char key[32];
+    ALIGN_DEFAULT unsigned char nonce[16];
+    unsigned char* AD = bigBuffer1;
+    ALIGN_DEFAULT unsigned char tag[2*32];
+    KeccakWidth1600_DeckBOInstance od;
+    measureTimingDeclare
+
+    assert(ADLen <= sizeof(bigBuffer1));
+
+    memset(key, 0xA5, sizeof(key));
+    memset(nonce, 0x55, sizeof(nonce));
+    if (turbo) {
+        TurboSHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+    }
+    else {
+        SHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+    }
+    memset(input, 0xA5, sizeof(input));
+    memset(AD, 0x5A, ADLen);
+
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_BO_Wrap(&od, output, AD, ADLen, input, 0 );
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_BO_Wrap(&od, output, AD, ADLen, input, 0 );
+        measureTimingEnd
+    }
+}
+
+void testSHAKE_BOPerformanceOne( int turbo )
+{
+    cycles_t calibration = CalibrateTimer();
+    uint32_t len;
+    cycles_t time;
+
+    for ( unsigned int c = 2 * 128 / 8; c <= 2 * 256 / 8; c <<= 1 )
+    {
+        unsigned int    rate    = 1600/8 - c - 64/8;
+        unsigned int    taglen  = c;
+
+        time = measureSHAKE_BO_Init( calibration, turbo, c );
+        printf("*** ");
+        if (turbo) printf("Turbo");
+        printf("SHAKE%u-BO ***\n\317\201=%u bytes\n", c*4, rate);
+        printf("\n.initialize()   %9u %s\n", time, getTimerUnit());
+
+        printf("\n.wrap(only plaintext input, no AD)\n");
+        for(len = 1; len <= 128*rate; len = testODNextLen(len, rate)) {
+            time = measureSHAKE_BO_Wrap(calibration, turbo, c, len );
+            printf("%8d bytes: %9u %s, %6.3f %s/byte\n", len, time, getTimerUnit(), time*1.0/(len), getTimerUnit());
+        }
+        testOD_PerfSlope(measureSHAKE_BO_Wrap, turbo, rate, calibration);
+
+        printf("\n.wrap(only AD input, no plaintext)\n");
+        for(len = 1; len <= 128*rate; len = testODNextLen(len, rate)) {
+            time = measureSHAKE_BO_MAC(calibration, turbo, c, len );
+            printf("%8d bytes: %9u %s, %6.3f %s/byte\n", len, time, getTimerUnit(), time*1.0/(len), getTimerUnit());
+        }
+        testOD_PerfSlope( measureSHAKE_BO_MAC, turbo, rate, calibration );
+
+        printf("\n\n");
+    }
+}
+
+void testShakingUpAEPerformance( void )
+{
+    testSHAKE_WrapPerformanceOne(0);
+    testSHAKE_BOPerformanceOne(0);
+    testSHAKE_WrapPerformanceOne(1);
+    testSHAKE_BOPerformanceOne(1);
+}
+#endif
+
 void testPerformance()
 {
 #ifdef XKCP_has_KeccakP200
@@ -979,6 +1300,10 @@ void testPerformance()
 
 #ifdef XKCP_has_Kravatte
     testKravattePerformance();
+#endif
+
+#ifdef XKCP_has_ShakingUpAE
+    testShakingUpAEPerformance();
 #endif
 }
 

@@ -10,6 +10,7 @@ and closely related variants, such as
 * the cSHAKE, KMAC, ParallelHash and TupleHash functions from [NIST SP 800-185][sp800_185_standard],
 * the fast [TurboSHAKE][turboshake] and [KangarooTwelve][k12] extendable-output functions,
 * the [Kravatte](https://keccak.team/kravatte.html) pseudo-random function and its modes,
+* the [SHAKE- and TurboSHAKE-Wrap and -BO](https://eprint.iacr.org/2024/1618) authenticated encryption schemes,
 
 as well as the [Xoodoo](https://keccak.team/xoodoo.html) permutation and
 
@@ -58,9 +59,11 @@ When used as a library or directly from the sources, the XKCP offers the high-le
 * [`SP800-185`](lib/high/Keccak/SP800-185/SP800-185.h), the functions (cSHAKE, KMAC, ParallelHash and TupleHash) in the official NIST SP 800-185 standard.
 * [`KeccakSponge`](doc/KeccakSponge-documentation.h), all Keccak sponge functions, with or without a message queue.
 * [`KeccakDuplex`](doc/KeccakDuplex-documentation.h), all Keccak duplex objects.
+* [`KeccakOD`](doc/KeccakOD-documentation.h), all Keccak overwrite duplex (OD) objects.
 * [`KeccakPRG`](doc/KeccakPRG-documentation.h), a pseudo-random number generator based on Keccak duplex objects.
 * [`TurboSHAKE`](lib/high/TurboSHAKE/TurboSHAKE.h), the fast twelve-round variant to Keccak.
 * [`KangarooTwelve`](lib/high/KangarooTwelve/KangarooTwelve.h), the fast and parallelizable hashing mode based on TurboSHAKE and Sakura coding.
+* [`ShakingUpAE`](doc/ShakingUpAE-documentation.h), the SHAKE- and TurboSHAKE-Wrap and -BO authenticated encryption schemes.
 * [`Kravatte`](lib/high/Kravatte/Kravatte.h) and [`KravatteModes`](lib/high/Kravatte/KravatteModes.h), the pseudo-random function Kravatte, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
 * [`Xoofff`](lib/high/Xoofff/Xoofff.h) and [`XoofffModes`](lib/high/Xoofff/XoofffModes.h), the pseudo-random function Xoofff, as well as the modes on top of it (SANE, SANSE, WBC and WBC-AE).
 * [`Xoodyak`](doc/Xoodyak-documentation.h), the lightweight cryptographic scheme Xoodyak that can be used for hashing, encryption, MAC computation and authenticated encryption.

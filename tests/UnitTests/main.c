@@ -22,6 +22,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testSponge.h"
 #include "testDuplex.h"
 #include "testPRG.h"
+#include "testShakingUpAE.h"
 #include "testSP800-185.h"
 #include "testKangarooTwelve.h"
 #include "testKravatte.h"
@@ -498,6 +499,9 @@ void printHelp()
 #ifdef XKCP_has_Duplex_Keccak
         printf("  --KeccakDuplex            Tests on Keccak duplex\n");
 #endif
+#ifdef XKCP_has_ShakingUpAE
+        printf("  --ShakingUpAE             Tests on 'Shaking up AE' schemes\n");
+#endif
 #ifdef XKCP_has_PRG_Keccak
         printf("  --KeccakPRG               Tests on KeccakPRG\n");
 #endif
@@ -531,6 +535,7 @@ int process(int argc, char* argv[])
     int SnP = 0;
     int KeccakSponge = 0;
     int KeccakDuplex = 0;
+    int KeccakShakingUpAE = 0;
     int KeccakPRG = 0;
     int FIPS202 = 0;
     int KangarooTwelve = 0;
@@ -547,7 +552,7 @@ int process(int argc, char* argv[])
         if ((strcmp("--help", argv[i]) == 0) || (strcmp("-h", argv[i]) == 0))
             help = 1;
         else if ((strcmp("--all", argv[i]) == 0) || (strcmp("-a", argv[i]) == 0))
-            SnP = KeccakSponge = KeccakDuplex = KeccakPRG = FIPS202 = KangarooTwelve = Kravatte = SP800_185 = examples = Xoofff = Xoodyak = 1;
+            SnP = KeccakSponge = KeccakDuplex = KeccakShakingUpAE = KeccakPRG = FIPS202 = KangarooTwelve = Kravatte = SP800_185 = examples = Xoofff = Xoodyak = 1;
         else if ((strcmp("--SnP", argv[i]) == 0) || (strcmp("-p", argv[i]) == 0))
             SnP = 1;
 #if defined (XKCP_has_Sponge_Keccak) || defined(XKCP_has_Duplex_Keccak)
@@ -561,6 +566,10 @@ int process(int argc, char* argv[])
 #ifdef XKCP_has_Duplex_Keccak
         else if (strcmp("--KeccakDuplex", argv[i]) == 0)
             KeccakDuplex = 1;
+#endif
+#ifdef XKCP_has_ShakingUpAE
+        else if (strcmp("--ShakingUpAE", argv[i]) == 0)
+            KeccakShakingUpAE = 1;
 #endif
 #ifdef XKCP_has_PRG_Keccak
         else if (strcmp("--KeccakPRG", argv[i]) == 0)
@@ -614,6 +623,12 @@ int process(int argc, char* argv[])
         testDuplex();
     }
 #endif
+#ifdef XKCP_has_ShakingUpAE
+    if (KeccakShakingUpAE) {
+        testShakingUpAE();
+    }
+#endif
+
 #ifdef XKCP_has_KangarooTwelve
     if (KangarooTwelve) {
         testKangarooTwelve();

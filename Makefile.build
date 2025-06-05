@@ -43,8 +43,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <inc>tests/UnitTests/testSponge.inc</inc>
         <h>tests/UnitTests/testSponge.h</h>
         <c>tests/UnitTests/testDuplex.c</c>
+        <c>tests/UnitTests/testShakingUpAE.c</c>
         <inc>tests/UnitTests/testDuplex.inc</inc>
         <h>tests/UnitTests/testDuplex.h</h>
+        <h>tests/UnitTests/testShakingUpAE.h</h>
         <c>tests/UnitTests/genKAT.c</c>
         <h>tests/UnitTests/genKAT.h</h>
         <c>tests/UnitTests/testPRG.c</c>

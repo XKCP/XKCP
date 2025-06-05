@@ -36,6 +36,7 @@ typedef KeccakP1600_plain64_state KeccakP1600_state;
 #define KeccakP1600_implementation      "generic 64-bit optimized implementation (" KeccakP1600_implementation_config ")"
 #define KeccakF1600_FastLoop_supported
 #define KeccakP1600_12rounds_FastLoop_supported
+#define KeccakF1600_ODFastLoop_supported
 
 #define KeccakP1600_StaticInitialize()
 void KeccakP1600_Initialize(KeccakP1600_plain64_state *state);
@@ -55,5 +56,11 @@ void KeccakP1600_ExtractBytes(const KeccakP1600_plain64_state *state, unsigned c
 void KeccakP1600_ExtractAndAddBytes(const KeccakP1600_plain64_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
 size_t KeccakF1600_FastLoop_Absorb(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
 size_t KeccakP1600_12rounds_FastLoop_Absorb(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *data, size_t dataByteLen);
+size_t KeccakP1600_ODDuplexingFastInOut(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *idata, size_t len, unsigned char *odata, const unsigned char *odataAdd, uint64_t trailencAsLane);
+size_t KeccakP1600_12rounds_ODDuplexingFastInOut(KeccakP1600_plain64_state *state, unsigned int laneCount, const unsigned char *idata, size_t len, unsigned char *odata, const unsigned char *odataAdd, uint64_t trailencAsLane);
+size_t KeccakP1600_ODDuplexingFastOut(KeccakP1600_plain64_state *state, unsigned int laneCount, unsigned char *odata, size_t len, const unsigned char *odataAdd, uint64_t trailencAsLane);
+size_t KeccakP1600_12rounds_ODDuplexingFastOut(KeccakP1600_plain64_state *state, unsigned int laneCount, unsigned char *odata, size_t len, const unsigned char *odataAdd, uint64_t trailencAsLane);
+size_t KeccakP1600_ODDuplexingFastIn(KeccakP1600_plain64_state *state, unsigned int laneCount, const uint8_t *idata, size_t len, uint64_t trailencAsLane);
+size_t KeccakP1600_12rounds_ODDuplexingFastIn(KeccakP1600_plain64_state *state, unsigned int laneCount, const uint8_t *idata, size_t len, uint64_t trailencAsLane);
 
 #endif
