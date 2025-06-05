@@ -156,6 +156,8 @@ At the time of this writing, the possible target names before the slash are:
 * `ARMv8A`: implementations selected for processors with the ARMv8-A architecture;
 * `AVR8`: implementations selected for processors with the 8-bit AVR architecture.
 
+If your compiler supports it, you may add `EXTRA_CFLAGS="-march=native -mtune=native"` at the end of the command line so that the code is further optimized for the platform on which it is compiled.
+
 Instead of building an executable with *GCC*, one can choose to select the files needed and make a package. For this, simply append `.pack` to the target name, e.g.,
 
 ```
