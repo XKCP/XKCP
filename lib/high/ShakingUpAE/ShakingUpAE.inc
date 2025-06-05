@@ -43,7 +43,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 // DWrap ----------------------------------------------------------------------
 
-void DWrap_Initialize( KeccakWidth1600_DWrapInstance *D, const uint8_t *k, uint32_t klen, unsigned int taglen, unsigned int rho, unsigned int c )
+void DWrap_Initialize( KeccakWidth1600_DWrapInstance *D, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c )
 {
     assert( taglen <= TAG_LEN_MAX );
     assert( rho * 8u + c + 64u == 1600u );
@@ -207,7 +207,7 @@ int DWrap_Unwrap( KeccakWidth1600_DWrapInstance *D, uint8_t *P, const uint8_t *A
 
 // UpperDeck ------------------------------------------------------------------
 
-void UpperDeck_Initialize( KeccakWidth1600_UpperDeckInstance *ud, const uint8_t *k, uint32_t klen, unsigned int rho, unsigned int c )
+void UpperDeck_Initialize( KeccakWidth1600_UpperDeckInstance *ud, const uint8_t *k, unsigned int klen, unsigned int rho, unsigned int c )
 {
     assert( rho <= RHO_LEN_MAX );
     assert( klen <= rho );

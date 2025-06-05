@@ -44,7 +44,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     } prefix##_UpperDeckInstance;
 
 #define XKCP_DeclareUpperDeckFunctions(prefix, inst) \
-    void prefix##_UpperDeck_Initialize(inst##_UpperDeckInstance *ud, const uint8_t *k, uint32_t klen, unsigned int rho, unsigned int c ); \
+    void prefix##_UpperDeck_Initialize(inst##_UpperDeckInstance *ud, const uint8_t *k, unsigned int klen, unsigned int rho, unsigned int c ); \
     void prefix##_UpperDeck_Clone(inst##_UpperDeckInstance *udnew, const inst##_UpperDeckInstance *ud ); \
     void prefix##_UpperDeck_CloneCompact(inst##_UpperDeckInstance *udnew, const inst##_UpperDeckInstance *ud ); \
     void prefix##_UpperDeck_Duplexing(inst##_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *X, size_t Xlen, unsigned int E, const uint8_t *Yadd ); \
