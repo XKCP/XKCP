@@ -16,6 +16,7 @@
 # Adaptations for macOS by Stéphane Léon.
 # Adaptations for mingw-w64 (changes macOS too) by Jorrit Jongma.
 
+.section .note.GNU-stack,"",@progbits
 .text
 
 # -----------------------------------------------------------------------------
