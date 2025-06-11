@@ -16,7 +16,9 @@
 # Adaptations for macOS by Stéphane Léon.
 # Adaptations for mingw-w64 (changes macOS too) by Jorrit Jongma.
 
+.ifndef old_gas_syntax
 .section .note.GNU-stack,"",@progbits
+.endif
 .text
 
 # -----------------------------------------------------------------------------
