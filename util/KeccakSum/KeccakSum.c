@@ -67,7 +67,7 @@ int hashInitialize(Instance *instance, const Specifications *specs)
             return 0;
     }
     else if (specs->algorithm == algorithm_K12) {
-        if (KangarooTwelve_Initialize(&instance->k12, specs->hashbitlen/8)) {
+        if (KangarooTwelve_Initialize(&instance->k12, specs->capacity/2, specs->hashbitlen/8)) {
             printf("Incorrect KangarooTwelve parameters.\n");
             return -1;
         }
