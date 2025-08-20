@@ -955,7 +955,7 @@ static void testOD_PerfSlope(measurePerfOD pFunc, int turbo, unsigned int rate, 
     len = 128*rate;
 	count = stabilityCount;
     do {
-        time = pFunc(calibration, turbo, 1600/8 - 64/8 - rate, len);
+        time = pFunc(calibration, turbo, 1600 - 64 - 8*rate, len);
 		if (time < time128) {
 			time128 = time;
 			count = stabilityCount;
@@ -965,7 +965,7 @@ static void testOD_PerfSlope(measurePerfOD pFunc, int turbo, unsigned int rate, 
     len = 256*rate;
 	count = stabilityCount;
     do {
-        time = pFunc(calibration, turbo, 1600/8 - 64/8 - rate, len);
+        time = pFunc(calibration, turbo, 1600 - 64 - 8*rate, len);
 		if (time < time256) {
 			time256 = time;
 			count = stabilityCount;
@@ -999,12 +999,12 @@ cycles_t measureSHAKE_Wrap_Init(cycles_t dtMin, int turbo, uint32_t c )
 
     if (turbo) {
         measureTimingBeginDeclared
-        TurboSHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        TurboSHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
         measureTimingEnd
     }
     else {
         measureTimingBeginDeclared
-        SHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        SHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
         measureTimingEnd
     }
 }
@@ -1025,10 +1025,10 @@ cycles_t measureSHAKE_Wrap_Wrap(cycles_t dtMin, int turbo, uint32_t c, unsigned 
     memset(key, 0xA5, sizeof(key) );
     memset(nonce, 0x55, sizeof(nonce));
     if (turbo) {
-        TurboSHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        TurboSHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
     }
     else {
-        SHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        SHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
     }
     memset(input, 0xA5, inputLen);
     memset(AD, 0x5A, sizeof(AD));
@@ -1061,10 +1061,10 @@ cycles_t measureSHAKE_Wrap_MAC(cycles_t dtMin, int turbo, uint32_t c, unsigned i
     memset(key, 0xA5, sizeof(key));
     memset(nonce, 0x55, sizeof(nonce));
     if (turbo) {
-        TurboSHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        TurboSHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
     }
     else {
-        SHAKE_Wrap_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        SHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
     }
     memset(input, 0xA5, sizeof(input));
     memset(AD, 0x5A, ADLen);
@@ -1087,15 +1087,15 @@ void testSHAKE_WrapPerformanceOne( int turbo )
     uint32_t len;
     cycles_t time;
 
-    for ( unsigned int c = 2 * 128 / 8; c <= 2 * 256 / 8; c <<= 1 )
+    for ( unsigned int c = 256; c <= 512; c <<= 1 )
     {
-        unsigned int    rate    = 1600/8 - c - 64/8;
+        unsigned int    rate    = (1600 - c - 64)/8;
         unsigned int    taglen  = c;
 
         time = measureSHAKE_Wrap_Init( calibration, turbo, c );
         printf("*** ");
         if (turbo) printf("Turbo");
-        printf("SHAKE%u-Wrap ***\n\317\201=%u bytes\n", c*4, rate);
+        printf("SHAKE%u-Wrap ***\n\317\201=%u bytes\n", c/2, rate);
         printf("\n.initialize()   %9u %s\n", time, getTimerUnit());
 
         printf("\n.wrap(only plaintext input, no AD)\n");
@@ -1127,12 +1127,12 @@ cycles_t measureSHAKE_BO_Init(cycles_t dtMin, int turbo, uint32_t c )
 
     if (turbo) {
         measureTimingBeginDeclared
-        TurboSHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        TurboSHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
         measureTimingEnd
     }
     else {
         measureTimingBeginDeclared
-        SHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        SHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
         measureTimingEnd
     }
 }
@@ -1153,10 +1153,10 @@ cycles_t measureSHAKE_BO_Wrap(cycles_t dtMin, int turbo, uint32_t c, unsigned in
     memset(key, 0xA5, sizeof(key) );
     memset(nonce, 0x55, sizeof(nonce));
     if (turbo) {
-        TurboSHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        TurboSHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
     }
     else {
-        SHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        SHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
     }
     memset(input, 0xA5, inputLen);
     memset(AD, 0x5A, sizeof(AD));
@@ -1189,10 +1189,10 @@ cycles_t measureSHAKE_BO_MAC(cycles_t dtMin, int turbo, uint32_t c, unsigned int
     memset(key, 0xA5, sizeof(key));
     memset(nonce, 0x55, sizeof(nonce));
     if (turbo) {
-        TurboSHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        TurboSHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
     }
     else {
-        SHAKE_BO_Initialize( &od, key, c / 2, c, 1600/8 - c - 64/8, c );
+        SHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
     }
     memset(input, 0xA5, sizeof(input));
     memset(AD, 0x5A, ADLen);
@@ -1215,15 +1215,15 @@ void testSHAKE_BOPerformanceOne( int turbo )
     uint32_t len;
     cycles_t time;
 
-    for ( unsigned int c = 2 * 128 / 8; c <= 2 * 256 / 8; c <<= 1 )
+    for ( unsigned int c = 256; c <= 512; c <<= 1 )
     {
-        unsigned int    rate    = 1600/8 - c - 64/8;
+        unsigned int    rate    = (1600 - c - 64)/8;
         unsigned int    taglen  = c;
 
         time = measureSHAKE_BO_Init( calibration, turbo, c );
         printf("*** ");
         if (turbo) printf("Turbo");
-        printf("SHAKE%u-BO ***\n\317\201=%u bytes\n", c*4, rate);
+        printf("SHAKE%u-BO ***\n\317\201=%u bytes\n", c/2, rate);
         printf("\n.initialize()   %9u %s\n", time, getTimerUnit());
 
         printf("\n.wrap(only plaintext input, no AD)\n");
