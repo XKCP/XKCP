@@ -73,7 +73,9 @@ size_t OD_DuplexingFast( KeccakWidth1600_ODInstance *od, const uint8_t *idata, s
     od->o = r;
 
     #ifdef KeccakF1600_ODFastLoop_supported
-    return SnP_ODDuplexingFastInOut(&od->s, r/8, idata, len, odata, odataAdd, *(const uint64_t*)trailenc);
+    size_t processed = SnP_ODDuplexingFastInOut(&od->s, r/8, idata, len, odata, odataAdd, *(const uint64_t*)trailenc);
+    if (processed > 0)
+        return processed;
     #endif
 
     size_t  initialLen = len;
@@ -105,7 +107,9 @@ size_t OD_DuplexingFastOnlyOut( KeccakWidth1600_ODInstance *od, unsigned int E, 
     od->o = r;
 
     #ifdef KeccakF1600_ODFastLoop_supported
-    return SnP_ODDuplexingFastOut( &od->s, r/8, odata, len, odataAdd, *(const uint64_t*)trailenc );
+    size_t processed = SnP_ODDuplexingFastOut( &od->s, r/8, odata, len, odataAdd, *(const uint64_t*)trailenc );
+    if (processed > 0)
+        return processed;
     #endif
 
     size_t  initialLen = len;
@@ -136,7 +140,9 @@ size_t OD_DuplexingFastOnlyIn( KeccakWidth1600_ODInstance *od, const uint8_t *id
     od->o = 0;
 
     #ifdef KeccakF1600_ODFastLoop_supported
-    return SnP_ODDuplexingFastIn( &od->s, r/8, idata, len, *(const uint64_t*)trailenc );
+    size_t processed = SnP_ODDuplexingFastIn( &od->s, r/8, idata, len, *(const uint64_t*)trailenc );
+    if (processed > 0)
+        return processed;
     #endif
 
     size_t initialLen = len;
