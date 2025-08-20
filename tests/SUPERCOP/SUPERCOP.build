@@ -107,7 +107,7 @@ The fragments below allow to make the desired packages for SUPERCOP and eBASH
     <group all="supercop">
         <product delimiter="/">
             <factor set="crypto_hash/shake128/kcp SHAKE128_SelfTest crypto_hash/shake256/kcp SHAKE256_SelfTest crypto_hash/sha3224/kcp SHA3-224_SelfTest crypto_hash/sha3256/kcp SHA3-256_SelfTest crypto_hash/sha3384/kcp SHA3-384_SelfTest crypto_hash/sha3512/kcp SHA3-512_SelfTest crypto_hash/k12/kcp KangarooTwelve_SelfTest"/>
-            <factor set="K1600-ref-64bits K1600-ref-32bits K1600-compact K1600-AVR8-compact K1600-plain-32bits-inplace K1600-ARMv6M-inplace K1600-ARMv7M-inplace K1600-ARMv7A-inplace K1600-plain-64bits-u6 K1600-plain-64bits-ua K1600-plain-64bits-lcu6 K1600-plain-64bits-lcua K1600-plain-64bits-lcua-shld K1600-x86-64 K1600-x86-64-shld K1600-x86-64-Apple K1600-AVX2 K1600-AVX512 K1600-XOP-u6 K1600-XOP-ua K1600-ARMv6M-u1 K1600-ARMv6M-u2 K1600-ARMv7A-NEON K1600-ARMv8A K1600-AVR8"/>
+            <factor set="K1600-ref-64bits K1600-ref-32bits K1600-compact K1600-AVR8-compact K1600-plain-32bits-inplace K1600-ARMv6M-inplace K1600-ARMv7M-inplace K1600-ARMv7A-inplace K1600-plain-64bits-u6 K1600-plain-64bits-ua K1600-plain-64bits-lcu6 K1600-plain-64bits-lcua K1600-plain-64bits-lcua-shld K1600-AVX2 K1600-AVX512 K1600-XOP-u6 K1600-XOP-ua K1600-ARMv6M-u1 K1600-ARMv6M-u2 K1600-ARMv7A-NEON K1600-ARMv8A K1600-AVR8"/>
         </product>
     </group>
 

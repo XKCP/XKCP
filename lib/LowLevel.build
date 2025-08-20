@@ -32,9 +32,6 @@ The fragments below allow to select the desired implementation of the permutatio
 * K1600-plain-64bits-lcu6: same as K1600-plain-64bits-u6 but using the lane complementing technique, which is useful for platforms that do not have a "and not" instruction
 * K1600-plain-64bits-lcua: same as K1600-plain-64bits-lcu6 but with all rounds unrolled
 * K1600-plain-64bits-lcua-shld: same as K1600-plain-64bits-lcua but with the rotation implementation with the 'shld' instruction, as it is faster on some platforms (e.g., SandyBridge)
-* K1600-x86-64: an assembly-optimized implementation for x86_64 [obsolete: a plain C implementation is often faster]
-* K1600-x86-64-shld: same as K1600-x86-64, but with the 'shld' instruction [obsolete: a plain C implementation is often faster]
-* K1600-x86-64-Apple: same as K1600-x86-64, but with a syntax that works better on some Apple platforms [obsolete: a plain C implementation is often faster]
 * K1600-AVX2: an optimized implementation taking advantage of the AVX2 instruction set
 * K1600-AVX512: an optimized implementation taking advantage of the AVX-512 instruction set (in assembler)
 * K1600-AVX512-C: an optimized implementation taking advantage of the AVX-512 instruction set (in C) [obsolete: K1600-AVX512 is faster]
@@ -197,21 +194,6 @@ The fragments below allow to select the desired implementation of the permutatio
 
     <fragment name="K1600-plain-64bits-lcua-shld" inherits="K1600-plain-64bits">
         <h>lib/low/KeccakP-1600/plain-64bits/lcua-shld/KeccakP-1600-opt64-config.h</h>
-    </fragment>
-
-    <fragment name="K1600-x86-64" inherits="K1600 optimized">
-        <s>lib/low/KeccakP-1600/x86-64/KeccakP-1600-x86-64-gas.s</s>
-        <h>lib/low/KeccakP-1600/x86-64/KeccakP-1600-SnP.h</h>
-    </fragment>
-
-    <fragment name="K1600-x86-64-shld" inherits="K1600 optimized">
-        <s>lib/low/KeccakP-1600/x86-64/KeccakP-1600-x86-64-shld-gas.s</s>
-        <h>lib/low/KeccakP-1600/x86-64/KeccakP-1600-SnP.h</h>
-    </fragment>
-
-    <fragment name="K1600-x86-64-Apple" inherits="K1600 optimized">
-        <s>lib/low/KeccakP-1600/x86-64/KeccakP-1600-x86-64-gas_Apple.s</s>
-        <h>lib/low/KeccakP-1600/x86-64/KeccakP-1600-SnP.h</h>
     </fragment>
 
     <fragment name="K1600-AVX2" inherits="K1600 optimized">
