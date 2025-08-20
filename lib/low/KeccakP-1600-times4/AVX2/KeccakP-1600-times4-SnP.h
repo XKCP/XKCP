@@ -35,6 +35,8 @@ typedef KeccakP1600times4_SIMD256_states KeccakP1600times4_states;
 #define KeccakF1600times4_FastLoop_supported
 #define KeccakP1600times4_12rounds_FastLoop_supported
 #define KeccakF1600times4_FastKravatte_supported
+#define KeccakP1600times4_KT128ProcessLeaves_supported
+#define KeccakP1600times4_KT256ProcessLeaves_supported
 
 #define KeccakP1600times4_StaticInitialize()
 void KeccakP1600times4_InitializeAll(KeccakP1600times4_states *states);
@@ -57,5 +59,7 @@ size_t KeccakF1600times4_FastLoop_Absorb(KeccakP1600times4_states *states, unsig
 size_t KeccakP1600times4_12rounds_FastLoop_Absorb(KeccakP1600times4_states *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen);
 size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, const unsigned char *input, size_t inputByteLen);
 size_t KeccakP1600times4_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, unsigned char *output, size_t outputByteLen);
+void KeccakP1600times4_KT128ProcessLeaves(const unsigned char *input, unsigned char *output);
+void KeccakP1600times4_KT256ProcessLeaves(const unsigned char *input, unsigned char *output);
 
 #endif
