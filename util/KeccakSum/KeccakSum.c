@@ -14,10 +14,19 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdlib.h>
 #include <string.h>
 #include "base64.h"
+#include "config.h"
+#ifdef XKCP_has_Sponge_Keccak
 #include "KeccakHash.h"
+#endif
+#ifdef XKCP_has_KangarooTwelve
 #include "KangarooTwelve.h"
+#endif
+#ifdef XKCP_has_SP800_185
 #include "SP800-185.h"
+#endif
+#ifdef XKCP_has_TurboSHAKE
 #include "TurboSHAKE.h"
+#endif
 
 int hexencode(const void* data_buf, size_t dataLength, char* result, size_t resultSize)
 {
@@ -53,14 +62,23 @@ typedef struct {
 } Specifications;
 
 typedef union {
+#ifdef XKCP_has_Sponge_Keccak
     Keccak_HashInstance keccak;
+#endif
+#ifdef XKCP_has_KangarooTwelve
     KangarooTwelve_Instance k12;
+#endif
+#ifdef XKCP_has_SP800_185
     ParallelHash_Instance ph;
+#endif
+#ifdef XKCP_has_TurboSHAKE
     TurboSHAKE_Instance ts;
+#endif
 } Instance;
 
 int hashInitialize(Instance *instance, const Specifications *specs)
 {
+#ifdef XKCP_has_Sponge_Keccak
     if (specs->algorithm == algorithm_Keccak) {
         if (Keccak_HashInitialize(&instance->keccak, specs->rate, specs->capacity, specs->hashbitlen, specs->delimitedSuffix)) {
             printf("Incorrect Keccak parameters (%d, %d, %d, 0x%02x).\n", specs->rate, specs->capacity, specs->hashbitlen, specs->delimitedSuffix);
@@ -69,7 +87,10 @@ int hashInitialize(Instance *instance, const Specifications *specs)
         else
             return 0;
     }
-    else if (specs->algorithm == algorithm_K12) {
+    else
+#endif
+#ifdef XKCP_has_KangarooTwelve
+    if (specs->algorithm == algorithm_K12) {
         if (KangarooTwelve_Initialize(&instance->k12, specs->capacity/2, specs->hashbitlen/8)) {
             printf("Incorrect KangarooTwelve parameters.\n");
             return -1;
@@ -77,7 +98,10 @@ int hashInitialize(Instance *instance, const Specifications *specs)
         else
             return 0;
     }
-    else if (specs->algorithm == algorithm_ParallelHash) {
+    else
+#endif
+#ifdef XKCP_has_SP800_185
+    if (specs->algorithm == algorithm_ParallelHash) {
         if (specs->capacity == 256) {
             if (ParallelHash128_Initialize(&instance->ph, specs->blockByteLen, specs->hashbitlen, "", 0)) {
                 printf("Incorrect ParallelHash128 parameters.\n");
@@ -99,7 +123,10 @@ int hashInitialize(Instance *instance, const Specifications *specs)
             return -1;
         }
     }
-    else if (specs->algorithm == algorithm_TurboSHAKE) {
+    else
+#endif
+#ifdef XKCP_has_TurboSHAKE
+    if (specs->algorithm == algorithm_TurboSHAKE) {
         if (TurboSHAKE_Initialize(&instance->ts, specs->capacity)) {
             printf("Incorrect TurboSHAKE parameters.\n");
             return -1;
@@ -108,41 +135,66 @@ int hashInitialize(Instance *instance, const Specifications *specs)
             return 0;
     }
     else
+#endif
         return -1;
 }
 
 int hashUpdate(Instance *instance, const Specifications *specs, const unsigned char *buffer, size_t size)
 {
+#ifdef XKCP_has_Sponge_Keccak
     if (specs->algorithm == algorithm_Keccak)
         return Keccak_HashUpdate(&instance->keccak, buffer, size*8);
-    else if (specs->algorithm == algorithm_K12)
+    else
+#endif
+#ifdef XKCP_has_KangarooTwelve
+    if (specs->algorithm == algorithm_K12)
         return KangarooTwelve_Update(&instance->k12, buffer, size);
-    else if ((specs->algorithm == algorithm_ParallelHash) && (specs->capacity == 256))
+    else
+#endif
+#ifdef XKCP_has_SP800_185
+    if ((specs->algorithm == algorithm_ParallelHash) && (specs->capacity == 256))
         return ParallelHash128_Update(&instance->ph, buffer, size*8);
-    else if ((specs->algorithm == algorithm_ParallelHash) && (specs->capacity == 512))
+    else
+    if ((specs->algorithm == algorithm_ParallelHash) && (specs->capacity == 512))
         return ParallelHash256_Update(&instance->ph, buffer, size*8);
-    else if (specs->algorithm == algorithm_TurboSHAKE)
+    else
+#endif
+#ifdef XKCP_has_TurboSHAKE
+    if (specs->algorithm == algorithm_TurboSHAKE)
         return TurboSHAKE_Absorb(&instance->ts, buffer, size);
     else
+#endif
         return -1;
 }
 
 int hashFinal(Instance *instance, const Specifications *specs, unsigned char *buffer)
 {
+#ifdef XKCP_has_Sponge_Keccak
     if (specs->algorithm == algorithm_Keccak)
         return Keccak_HashFinal(&instance->keccak, buffer);
-    else if (specs->algorithm == algorithm_K12)
+    else
+#endif
+#ifdef XKCP_has_KangarooTwelve
+    if (specs->algorithm == algorithm_K12)
         return KangarooTwelve_Final(&instance->k12, buffer, "", 0);
-    else if ((specs->algorithm == algorithm_ParallelHash) && (specs->capacity == 256))
+    else
+#endif
+#ifdef XKCP_has_SP800_185
+    if ((specs->algorithm == algorithm_ParallelHash) && (specs->capacity == 256))
         return ParallelHash128_Final(&instance->ph, buffer);
-    else if ((specs->algorithm == algorithm_ParallelHash) && (specs->capacity == 512))
+    else
+    if ((specs->algorithm == algorithm_ParallelHash) && (specs->capacity == 512))
         return ParallelHash256_Final(&instance->ph, buffer);
-    else if (specs->algorithm == algorithm_TurboSHAKE) {
+    else
+#endif
+#ifdef XKCP_has_TurboSHAKE
+    if (specs->algorithm == algorithm_TurboSHAKE) {
         int code = TurboSHAKE_AbsorbDomainSeparationByte(&instance->ts, specs->delimitedSuffix);
         code |= TurboSHAKE_Squeeze(&instance->ts, buffer, (specs->hashbitlen + 7)/8);
         return code;
     }
     else
+#endif
         return -1;
 }
 
@@ -284,15 +336,22 @@ void printHelp()
     printf("  --hex                       Print in hexadecimal\n");
     printf("  --outputbits <integer>      Number of output bits\n");
     printf("\nHashes and XOFs (roughly from fastest to slowest):\n");
+#ifdef XKCP_has_KangarooTwelve
     printf("  --kangarootwelve or --k12   KT128\n");
     printf("  --kt128                     KT128\n");
     printf("  --kt256                     KT256\n");
+#endif
+#ifdef XKCP_has_SP800_185
     printf("  --ph128                     ParallelHash128\n");
     printf("  --ph256                     ParallelHash256\n");
     printf("   -B <block size in bytes>   ParallelHash's B parameter\n");
     printf("                              (default is 8192 bytes)\n");
+#endif
+#ifdef XKCP_has_TurboSHAKE
     printf("  --turboshake128 or --ts128  TurboSHAKE128\n");
     printf("  --turboshake256 or --ts256  TurboSHAKE256\n");
+#endif
+#ifdef XKCP_has_Sponge_Keccak
     printf("  --shake128                  SHAKE128\n");
     printf("  --shake256                  SHAKE256\n");
     printf("  --sha3-224                  SHA3-224\n");
@@ -301,8 +360,16 @@ void printHelp()
     printf("  --sha3-512                  SHA3-512\n");
     printf("  --no-suffix                 Use 0x01 as delimited suffix (pure Keccak)\n");
     printf("  --ethereum                  Equivalent to --sha3-256 --no-suffix\n");
+#endif
     printf("\n");
-    printf("The options are processed in order.\nBy default, it uses SHAKE128 and base64 display.\n");
+    printf("The options are processed in order.\n");
+#ifdef XKCP_has_Sponge_Keccak
+    printf("By default, it uses SHAKE128 and base64 display.\n");
+#elifdef XKCP_has_KangarooTwelve
+    printf("By default, it uses KT128 and base64 display.\n");
+#else
+#error "No default algorithm defined."
+#endif
     printf("With no file names and no strings, it reads the standard input.\n");
 }
 
@@ -312,11 +379,18 @@ int process(int argc, char* argv[])
     int base64 = 1;
     int i, r;
     int was_filename_or_string = 0;
+#ifdef XKCP_has_Sponge_Keccak
     specs.algorithm = algorithm_Keccak;
     specs.rate = 1344;
     specs.capacity = 256;
-    specs.hashbitlen = 264;
     specs.delimitedSuffix = 0x1F;
+#elifdef XKCP_has_KangarooTwelve
+    specs.algorithm = algorithm_K12;
+    specs.capacity = 256;
+#else
+#error "No default algorithm defined."
+#endif
+    specs.hashbitlen = (base64 ? 264 : 256);
 
     for(i=1; i<argc; i++) {
         int outputbits;
@@ -339,6 +413,7 @@ int process(int argc, char* argv[])
                 return -1;
             }
         }
+#ifdef XKCP_has_Sponge_Keccak
         else if (strcmp("--shake128", argv[i]) == 0) {
             specs.rate = 1344;
             specs.capacity = 256;
@@ -351,6 +426,8 @@ int process(int argc, char* argv[])
             specs.hashbitlen = (base64 ? 528 : 512);
             specs.delimitedSuffix = 0x1F;
         }
+#endif
+#ifdef XKCP_has_TurboSHAKE
         else if ((strcmp("--turboshake128", argv[i]) == 0) || (strcmp("--ts128", argv[i]) == 0)) {
             specs.algorithm = algorithm_TurboSHAKE;
             specs.capacity = 256;
@@ -363,6 +440,8 @@ int process(int argc, char* argv[])
             specs.hashbitlen = (base64 ? 528 : 512);
             specs.delimitedSuffix = 0x1F;
         }
+#endif
+#ifdef XKCP_has_Sponge_Keccak
         else if (strcmp("--sha3-224", argv[i]) == 0) {
             specs.rate = 1152;
             specs.capacity = 448;
@@ -396,6 +475,8 @@ int process(int argc, char* argv[])
             specs.hashbitlen = 256;
             specs.delimitedSuffix = 0x01;
         }
+#endif
+#ifdef XKCP_has_KangarooTwelve
         else if ((strcmp("--kangarootwelve", argv[i]) == 0) || (strcmp("--k12", argv[i]) == 0) || (strcmp("--kt128", argv[i]) == 0)) {
             specs.algorithm = algorithm_K12;
             specs.capacity = 256;
@@ -406,6 +487,8 @@ int process(int argc, char* argv[])
             specs.capacity = 512;
             specs.hashbitlen = (base64 ? 528 : 512);
         }
+#endif
+#ifdef XKCP_has_SP800_185
         else if (strcmp("--ph128", argv[i]) == 0) {
             specs.algorithm = algorithm_ParallelHash;
             specs.capacity = 256;
@@ -434,6 +517,7 @@ int process(int argc, char* argv[])
                 return -1;
             }
         }
+#endif
         else if (strcmp("--string", argv[i]) == 0) {
             if ((i+1) >= argc) {
                 printf("Error: missing argument for --string\n");
