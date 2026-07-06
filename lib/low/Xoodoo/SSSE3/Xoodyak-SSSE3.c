@@ -143,7 +143,13 @@ ALIGN(16) static const uint8_t maskRhoEast2[16] = {
                         Rho_east();             \
                         Dump3("Rho-east")
 
-static const uint32_t    RC[MAXROUNDS] __attribute__((unused)) = {
+#if defined(__GNUC__) || defined(__clang__)
+    #define UNUSED __attribute__((unused))
+#else
+    #define UNUSED
+#endif
+
+static const uint32_t    RC[MAXROUNDS] UNUSED = {
     _rc12,
     _rc11,
     _rc10,
