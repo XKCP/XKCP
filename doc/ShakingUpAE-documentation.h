@@ -47,16 +47,18 @@ typedef struct KeccakWidth1600_DWrapInstanceStruct {
   * @param  taglen      The ciphertext expansion (or tag length) in bytes.
   * @param  rho         The block size of the underlying OD in bytes (160 for [Turbo]SHAKE128-Wrap or 128 for [Turbo]SHAKE256-Wrap).
   * @param  c           The capacity in bits (256 for [Turbo]SHAKE128-Wrap or 512 for [Turbo]SHAKE256-Wrap).
+  * @return 0 if successful, 1 otherwise.
   * @pre    @a klen must fit in one block, hence must be at most @a rho.
   */
-void Prefix_Wrap_Initialize(KeccakWidth1600_DWrapInstance *D, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c);
+int Prefix_Wrap_Initialize(KeccakWidth1600_DWrapInstance *D, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c);
 
 /**
   * Function to clone a DWrap cipher.
   * @param  Dnew        Pointer to the destination DWrap instance.
   * @param  D           Pointer to the source DWrap instance.
+  * @return 0 if successful, 1 otherwise.
   */
-void Prefix_Wrap_Clone(KeccakWidth1600_DWrapInstance *Dnew, const KeccakWidth1600_DWrapInstance *D);
+int Prefix_Wrap_Clone(KeccakWidth1600_DWrapInstance *Dnew, const KeccakWidth1600_DWrapInstance *D);
 
 /**
   * Function to wrap a plaintext - associated data pair.
@@ -66,8 +68,9 @@ void Prefix_Wrap_Clone(KeccakWidth1600_DWrapInstance *Dnew, const KeccakWidth160
   * @param  Alen        The length of the associated data in bytes.
   * @param  P           Pointer to the plaintext.
   * @param  Plen        The length of the plaintext in bytes.
+  * @return 0 if successful, 1 otherwise.
   */
-void Prefix_Wrap_Wrap(KeccakWidth1600_DWrapInstance *D, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen);
+int Prefix_Wrap_Wrap(KeccakWidth1600_DWrapInstance *D, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen);
 
 /**
   * Function to unwrap a ciphertext - associated data pair.
@@ -77,7 +80,7 @@ void Prefix_Wrap_Wrap(KeccakWidth1600_DWrapInstance *D, uint8_t *C, const uint8_
   * @param  Alen        The length of the associated data in bytes.
   * @param  C           Pointer to the ciphertext.
   * @param  Clen        The length of the ciphertext in bytes.
-  * @return -1 in case of error (forgery), 0 otherwise
+  * @return 0 if successful, -1 in case of forgery attempt, 1 for any other error
   */
 int Prefix_Wrap_Unwrap(KeccakWidth1600_DWrapInstance *D, uint8_t *P, const uint8_t *A, size_t Alen, const uint8_t *C, size_t Clen);
 
@@ -101,23 +104,26 @@ typedef struct KeccakWidth1600_UpperDeckInstanceStruct {
   * @param  klen        The length of the secret key in bytes.
   * @param  rho         The block size of the underling OD in bytes (160 for [Turbo]SHAKE128-UpperDeck or 128 for [Turbo]SHAKE256-UpperDeck).
   * @param  c           The capacity in bits (256 for [Turbo]SHAKE128-UpperDeck or 512 for [Turbo]SHAKE256-UpperDeck).
+  * @return 0 if successful, 1 otherwise.
   * @pre    @a klen must fit in one OD block, hence must be at most @a rho.
   */
-void Prefix_UpperDeck_Initialize(KeccakWidth1600_UpperDeckInstance *ud, const uint8_t *k, unsigned int klen, unsigned int rho, unsigned int c);
+int Prefix_UpperDeck_Initialize(KeccakWidth1600_UpperDeckInstance *ud, const uint8_t *k, unsigned int klen, unsigned int rho, unsigned int c);
 
 /**
   * Function to clone an UpperDeck cipher.
   * @param  udnew       Pointer to the destination UpperDeck instance.
   * @param  ud          Pointer to the source UpperDeck instance.
+  * @return 0 if successful, 1 otherwise.
   */
-void Prefix_UpperDeck_Clone(KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud);
+int Prefix_UpperDeck_Clone(KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud);
 
 /**
   * Function to clone an UpperDeck cipher but clearing its output stream.
   * @param  udnew       Pointer to the destination UpperDeck instance.
   * @param  ud          Pointer to the source UpperDeck instance.
+  * @return 0 if successful, 1 otherwise.
   */
-void Prefix_UpperDeck_CloneCompact(KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud);
+int Prefix_UpperDeck_CloneCompact(KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud);
 
 /** Function to perform a duplexing call, that is, to absorb input data and possibly squeeze out data.
   * In addition, the caller can optionally pass a pointer (@a Yadd) to a buffer
@@ -130,9 +136,10 @@ void Prefix_UpperDeck_CloneCompact(KeccakWidth1600_UpperDeckInstance *udnew, con
   * @param  E           The trailer value (1 ≤ @a E ≤ 31).
   * @param  Yadd    The null pointer,
   *                     or a pointer to a buffer of @a Zlen bytes that are XORed to the output stream.
+  * @return 0 if successful, 1 otherwise.
   * @pre    1 ≤ @a E ≤ 31
   */
-void Prefix_UpperDeck_Duplexing(KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *X, size_t Xlen, unsigned int E, const uint8_t *Yadd);
+int Prefix_UpperDeck_Duplexing(KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *X, size_t Xlen, unsigned int E, const uint8_t *Yadd);
 
 /** Function to perform a squeezing call, that is, further squeeze out data from the previous duplexing call.
   * In addition, the caller can optionally pass a pointer (@a odataAdd) to a buffer
@@ -142,8 +149,9 @@ void Prefix_UpperDeck_Duplexing(KeccakWidth1600_UpperDeckInstance *ud, uint8_t *
   * @param  Zlen        The number of output bytes requested.
   * @param  Yadd    The null pointer,
   *                     or a pointer to a buffer of @a Zlen bytes that are XORed to the output stream.
+  * @return 0 if successful, 1 otherwise.
   */
-void Prefix_UpperDeck_Squeezing(KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *Yadd);
+int Prefix_UpperDeck_Squeezing(KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *Yadd);
 
 /**
   * Structure that contains the Deck-BO instance for use with the
@@ -164,16 +172,18 @@ typedef struct KeccakWidth1600_DeckBOInstanceStruct {
   * @param  taglen      The ciphertext expansion (or tag length) in bytes.
   * @param  rho         The block size of the underlying OD in bytes (160 for [Turbo]SHAKE128-Wrap or 128 for [Turbo]SHAKE256-Wrap).
   * @param  c           The capacity in bits (256 for [Turbo]SHAKE128-Wrap or 512 for [Turbo]SHAKE256-Wrap).
+  * @return 0 if successful, 1 otherwise.
   * @pre    @a klen must fit in one block, hence must be at most @a rho.
   */
-void Prefix_BO_Initialize(KeccakWidth1600_Deck-BOInstance *dbo, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c);
+int Prefix_BO_Initialize(KeccakWidth1600_Deck-BOInstance *dbo, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c);
 
 /**
   * Function to clone a Deck-BO cipher.
   * @param  dbonew      Pointer to the destination Deck-BO instance.
   * @param  dbo         Pointer to the source Deck-BO instance.
+  * @return 0 if successful, 1 otherwise.
   */
-void Prefix_BO_Clone(KeccakWidth1600_Deck-BOInstance *dbonew, const KeccakWidth1600_Deck-BOInstance *dbo);
+int Prefix_BO_Clone(KeccakWidth1600_Deck-BOInstance *dbonew, const KeccakWidth1600_Deck-BOInstance *dbo);
 
 /**
   * Function to wrap a plaintext - associated data pair.
@@ -183,8 +193,9 @@ void Prefix_BO_Clone(KeccakWidth1600_Deck-BOInstance *dbonew, const KeccakWidth1
   * @param  Alen        The length of the associated data in bytes.
   * @param  P           Pointer to the plaintext.
   * @param  Plen        The length of the plaintext in bytes.
+  * @return 0 if successful, 1 otherwise.
   */
-void Prefix_BO_Wrap(KeccakWidth1600_Deck-BOInstance *dbo, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen);
+int Prefix_BO_Wrap(KeccakWidth1600_Deck-BOInstance *dbo, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen);
 
 /**
   * Function to unwrap a ciphertext - associated data pair.
@@ -194,7 +205,7 @@ void Prefix_BO_Wrap(KeccakWidth1600_Deck-BOInstance *dbo, uint8_t *C, const uint
   * @param  Alen        The length of the associated data in bytes.
   * @param  C           Pointer to the ciphertext.
   * @param  Clen        The length of the ciphertext in bytes.
-  * @return -1 in case of error (forgery), 0 otherwise
+  * @return 0 if successful, -1 in case of forgery attempt, 1 for any other error
   */
 int Prefix_BO_Unwrap(KeccakWidth1600_Deck-BOInstance *dbo, uint8_t *P, const uint8_t *A, size_t Alen, const uint8_t *C, size_t Clen);
 #endif

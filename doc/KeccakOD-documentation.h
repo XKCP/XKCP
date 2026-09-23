@@ -51,23 +51,26 @@ typedef struct KeccakWidth1600_ODInstanceStruct {
   * @param  c           The capacity in bits (256 for [Turbo]SHAKE128-OD or 512 for [Turbo]SHAKE256-OD).
   * @param  k           The secret key.
   * @param  klen        The length of the secret key in bytes.
+  * @return 0 if successful, 1 otherwise.
   * @pre    @a klen must fit in one block, hence must be at most @a rho.
   */
-void Prefix_OD_Initialize(KeccakWidth1600_ODInstance *od, unsigned int rho, unsigned int c, const uint8_t *k, unsigned int klen);
+int Prefix_OD_Initialize(KeccakWidth1600_ODInstance *od, unsigned int rho, unsigned int c, const uint8_t *k, unsigned int klen);
 
 /**
   * Function to clone an OD cipher.
   * @param  odnew       Pointer to the destination OD instance.
   * @param  od          Pointer to the source OD instance.
+  * @return 0 if successful, 1 otherwise.
   */
-void Prefix_OD_Clone(KeccakWidth1600_ODInstance *odnew, const KeccakWidth1600_ODInstance *od);
+int Prefix_OD_Clone(KeccakWidth1600_ODInstance *odnew, const KeccakWidth1600_ODInstance *od);
 
 /**
   * Function to clone an OD cipher but clearing its output stream.
   * @param  odnew       Pointer to the destination OD instance.
   * @param  od          Pointer to the source OD instance.
+  * @return 0 if successful, 1 otherwise.
   */
-void Prefix_OD_CloneCompact(KeccakWidth1600_ODInstance *odnew, const KeccakWidth1600_ODInstance *od);
+int Prefix_OD_CloneCompact(KeccakWidth1600_ODInstance *odnew, const KeccakWidth1600_ODInstance *od);
 
 /** Function to perform a duplexing call, that is, to absorb input data and possibly squeeze out data.
   * In addition, the caller can optionally pass a pointer (@a odataAdd) to a buffer
@@ -80,11 +83,12 @@ void Prefix_OD_CloneCompact(KeccakWidth1600_ODInstance *odnew, const KeccakWidth
   * @param  E           The trailer value (1 ≤ @a E ≤ 63).
   * @param  odataAdd    The null pointer,
   *                     or a pointer to a buffer of @a olen bytes that are XORed to the output stream.
+  * @return 0 if successful, 1 otherwise.
   * @pre    1 ≤ @a E ≤ 63
   * @pre    @a ilen ≤ @a rho
   * @pre    @a olen ≤ @a rho
   */
-void Prefix_OD_Duplexing(KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *idata, unsigned int ilen, unsigned int E, const uint8_t *odataAdd);
+int Prefix_OD_Duplexing(KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *idata, unsigned int ilen, unsigned int E, const uint8_t *odataAdd);
 
 /** Function to perform a squeezing call, that is, further squeeze out data from the previous duplexing call.
   * In addition, the caller can optionally pass a pointer (@a odataAdd) to a buffer
@@ -94,9 +98,10 @@ void Prefix_OD_Duplexing(KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigne
   * @param  olen        The number of output bytes requested.
   * @param  odataAdd    The null pointer,
   *                     or a pointer to a buffer of @a olen bytes that are XORed to the output stream.
+  * @return 0 if successful, 1 otherwise.
   * @pre    The total number of output bytes requested since the last duplexing call must be at most @a rho.
   */
-void Prefix_OD_Squeezing(KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *odataAdd );
+int Prefix_OD_Squeezing(KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *odataAdd );
 
 /** Function that iterates duplexing calls with @a odataAdd not null.
   * It is equivalent to calling Prefix_OD_Duplexing(od, odata + i*rho, rho, idata + i*rho, rho, E, odataAdd + i*rho)

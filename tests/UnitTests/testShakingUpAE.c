@@ -61,23 +61,23 @@ static void testDWrap( int turbo, uint32_t c )
             //printf("Alen %u, Plen %u capa %u, rho %u, taglen %u\n", Alen, Plen, c, rho, taglen );
             KeccakWidth1600_DWrapInstance dww;
             if (turbo) {
-                TurboSHAKE_Wrap_Initialize( &dww, k, sizeof(k), taglen, rho, c );
-                TurboSHAKE_Wrap_Wrap( &dww, C, A, Alen, P, Plen );
+                UT_assert(TurboSHAKE_Wrap_Initialize( &dww, k, sizeof(k), taglen, rho, c ) == 0);
+                UT_assert(TurboSHAKE_Wrap_Wrap( &dww, C, A, Alen, P, Plen ) == 0);
             }
             else {
-                SHAKE_Wrap_Initialize( &dww, k, sizeof(k), taglen, rho, c );
-                SHAKE_Wrap_Wrap( &dww, C, A, Alen, P, Plen );
+                UT_assert(SHAKE_Wrap_Initialize( &dww, k, sizeof(k), taglen, rho, c ) == 0);
+                UT_assert(SHAKE_Wrap_Wrap( &dww, C, A, Alen, P, Plen ) == 0);
             }
 
             KeccakWidth1600_DWrapInstance dwu;
             size_t Clen = Plen + taglen;
             int rv;
             if (turbo) {
-                TurboSHAKE_Wrap_Initialize( &dwu, k, sizeof(k), taglen, rho, c );
+                UT_assert(TurboSHAKE_Wrap_Initialize( &dwu, k, sizeof(k), taglen, rho, c ) == 0);
                 rv = TurboSHAKE_Wrap_Unwrap( &dwu, P2, A, Alen, C, Clen );
             }
             else {
-                SHAKE_Wrap_Initialize( &dwu, k, sizeof(k), taglen, rho, c );
+                UT_assert(SHAKE_Wrap_Initialize( &dwu, k, sizeof(k), taglen, rho, c ) == 0);
                 rv = SHAKE_Wrap_Unwrap( &dwu, P2, A, Alen, C, Clen );
             }
             UT_assert(rv == 0);
@@ -111,22 +111,22 @@ static void testDeckBO( int turbo, uint32_t c )
             //printf("Alen %u, Plen %u capa %u, rho %u, taglen %u\n", Alen, Plen, c, rho, taglen );
             KeccakWidth1600_DeckBOInstance dbow;
             if (turbo) {
-                TurboSHAKE_BO_Initialize( &dbow, k, sizeof(k), taglen, rho, c );
-                TurboSHAKE_BO_Wrap( &dbow, C, A, Alen, P, Plen );
+                UT_assert(TurboSHAKE_BO_Initialize( &dbow, k, sizeof(k), taglen, rho, c ) == 0);
+                UT_assert(TurboSHAKE_BO_Wrap( &dbow, C, A, Alen, P, Plen ) == 0);
             }
             else {
-                SHAKE_BO_Initialize( &dbow, k, sizeof(k), taglen, rho, c );
-                SHAKE_BO_Wrap( &dbow, C, A, Alen, P, Plen );
+                UT_assert(SHAKE_BO_Initialize( &dbow, k, sizeof(k), taglen, rho, c ) == 0);
+                UT_assert(SHAKE_BO_Wrap( &dbow, C, A, Alen, P, Plen ) == 0);
             }
 
             KeccakWidth1600_DeckBOInstance dbou;
             int rv;
             if (turbo) {
-                TurboSHAKE_BO_Initialize( &dbou, k, sizeof(k), taglen, rho, c );
+                UT_assert(TurboSHAKE_BO_Initialize( &dbou, k, sizeof(k), taglen, rho, c ) == 0);
                 rv = TurboSHAKE_BO_Unwrap( &dbou, P2, A, Alen, C, Plen + taglen );
             }
             else {
-                SHAKE_BO_Initialize( &dbou, k, sizeof(k), taglen, rho, c );
+                UT_assert(SHAKE_BO_Initialize( &dbou, k, sizeof(k), taglen, rho, c ) == 0);
                 rv = SHAKE_BO_Unwrap( &dbou, P2, A, Alen, C, Plen + taglen );
             }
             UT_assert(rv == 0);
@@ -171,12 +171,12 @@ static void testvectorsDWrap( int turbo, uint32_t c, unsigned char *checksum )
         {
             KeccakWidth1600_DWrapInstance dww;
             if (turbo) {
-                TurboSHAKE_Wrap_Initialize( &dww, key, sizeof(key), taglen, rho, c );
-                TurboSHAKE_Wrap_Wrap( &dww, C, A, alen, P, plen );
+                UT_assert(TurboSHAKE_Wrap_Initialize( &dww, key, sizeof(key), taglen, rho, c ) == 0);
+                UT_assert(TurboSHAKE_Wrap_Wrap( &dww, C, A, alen, P, plen ) == 0);
             }
             else {
-                SHAKE_Wrap_Initialize( &dww, key, sizeof(key), taglen, rho, c );
-                SHAKE_Wrap_Wrap( &dww, C, A, alen, P, plen );
+                UT_assert(SHAKE_Wrap_Initialize( &dww, key, sizeof(key), taglen, rho, c ) == 0);
+                UT_assert(SHAKE_Wrap_Wrap( &dww, C, A, alen, P, plen ) == 0);
             }
             TurboSHAKE_Absorb(&xof, C, plen+taglen);
 #ifdef UT_VERBOSE
@@ -253,12 +253,12 @@ static void testvectorsDeckBO( int turbo, uint32_t c, unsigned char *checksum )
         {
             KeccakWidth1600_DeckBOInstance dbo;
             if (turbo) {
-                TurboSHAKE_BO_Initialize( &dbo, key, sizeof(key), taglen, rho, c );
-                TurboSHAKE_BO_Wrap( &dbo, C, A, alen, P, plen );
+                UT_assert(TurboSHAKE_BO_Initialize( &dbo, key, sizeof(key), taglen, rho, c ) == 0);
+                UT_assert(TurboSHAKE_BO_Wrap( &dbo, C, A, alen, P, plen ) == 0);
             }
             else {
-                SHAKE_BO_Initialize( &dbo, key, sizeof(key), taglen, rho, c );
-                SHAKE_BO_Wrap( &dbo, C, A, alen, P, plen );
+                UT_assert(SHAKE_BO_Initialize( &dbo, key, sizeof(key), taglen, rho, c ) == 0);
+                UT_assert(SHAKE_BO_Wrap( &dbo, C, A, alen, P, plen ) == 0);
             }
             TurboSHAKE_Absorb(&xof, C, plen+taglen);
 #ifdef UT_VERBOSE

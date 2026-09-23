@@ -43,23 +43,25 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 // DWrap ----------------------------------------------------------------------
 
-void DWrap_Initialize( KeccakWidth1600_DWrapInstance *D, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c )
+int DWrap_Initialize( KeccakWidth1600_DWrapInstance *D, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c )
 {
-    assert( taglen <= TAG_LEN_MAX );
-    assert( rho * 8u + c + 64u == 1600u );
-    assert( rho <= RHO_LEN_MAX );
-    assert( klen <= rho );
+    if (   (taglen > TAG_LEN_MAX)
+        || (rho * 8u + c + 64u != 1600u)
+        || (rho > RHO_LEN_MAX)
+        || (klen > rho))
+        return 1;
 
     D->taglen = taglen;
-    OD_Initialize( &D->od, rho, c, k, klen );
+    return OD_Initialize( &D->od, rho, c, k, klen );
 }
 
-void DWrap_Clone( KeccakWidth1600_DWrapInstance *Dnew, const KeccakWidth1600_DWrapInstance *D )
+int DWrap_Clone( KeccakWidth1600_DWrapInstance *Dnew, const KeccakWidth1600_DWrapInstance *D )
 {
     *Dnew = *D;
+    return 0;
 }
 
-void DWrap_Wrap( KeccakWidth1600_DWrapInstance *D, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen )
+int DWrap_Wrap( KeccakWidth1600_DWrapInstance *D, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen )
 {
     unsigned int    blocklen;
     unsigned int    lastBlockLen;
@@ -123,7 +125,7 @@ void DWrap_Wrap( KeccakWidth1600_DWrapInstance *D, uint8_t *C, const uint8_t *A,
         // No plaintext, last A block, generate tag in C
         OD_Duplexing( &D->od, C, D->taglen, A, Alen, 7u, NULL );
     }
-
+    return 0;
 }
 
 int DWrap_Unwrap( KeccakWidth1600_DWrapInstance *D, uint8_t *P, const uint8_t *A, size_t Alen, const uint8_t *C, size_t Clen )
@@ -207,30 +209,38 @@ int DWrap_Unwrap( KeccakWidth1600_DWrapInstance *D, uint8_t *P, const uint8_t *A
 
 // UpperDeck ------------------------------------------------------------------
 
-void UpperDeck_Initialize( KeccakWidth1600_UpperDeckInstance *ud, const uint8_t *k, unsigned int klen, unsigned int rho, unsigned int c )
+int UpperDeck_Initialize( KeccakWidth1600_UpperDeckInstance *ud, const uint8_t *k, unsigned int klen, unsigned int rho, unsigned int c )
 {
-    assert( rho <= RHO_LEN_MAX );
-    assert( klen <= rho );
-    OD_Initialize( &ud->D, rho, c, k, klen );
+    if ((rho > RHO_LEN_MAX)
+        || (klen > rho))
+        return 1;
+    if (OD_Initialize( &ud->D, rho, c, k, klen ) != 0)
+        return 1;
     memset( &ud->Dsqueeze, 0u, sizeof(ud->Dsqueeze) ); // Deallocate by clearing rho
     ud->o = (size_t)-1;
+    return 0;
 }
 
-void UpperDeck_Clone( KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud )
+int UpperDeck_Clone( KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud )
 {
     udnew->o = ud->o;
-    OD_Clone( &udnew->D,        &ud->D );
-    OD_Clone( &udnew->Dsqueeze, &ud->D );
+    if (OD_Clone( &udnew->D,        &ud->D ) != 0)
+        return 1;
+    if (OD_Clone( &udnew->Dsqueeze, &ud->D ) != 0)
+        return 1;
+    return 0;
 }
 
-void UpperDeck_CloneCompact( KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud )
+int UpperDeck_CloneCompact( KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud )
 {
     udnew->o = (size_t)-1;
-    OD_CloneCompact( &udnew->D, &ud->D );
+    if (OD_CloneCompact( &udnew->D, &ud->D ) != 0)
+        return 1;
     memset( &udnew->Dsqueeze, 0u, sizeof(udnew->Dsqueeze) ); // Deallocate by clearing rho
+    return 0;
 }
 
-void UpperDeck_Duplexing( KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *X, size_t Xlen, unsigned int E, const uint8_t *Yadd )
+int UpperDeck_Duplexing( KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *X, size_t Xlen, unsigned int E, const uint8_t *Yadd )
 {
 
     if ( Xlen > ud->D.rho ) {
@@ -242,20 +252,23 @@ void UpperDeck_Duplexing( KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, siz
     }
     // Last X block, [0 - rho] bytes
     assert( Xlen <= ud->D.rho );
-    OD_Duplexing( &ud->D, NULL, 0, X, Xlen, OD_Concat( E, 1u ), NULL );
+    if (OD_Duplexing( &ud->D, NULL, 0, X, Xlen, OD_Concat( E, 1u ), NULL ) != 0)
+        return 1;
     ud->o = 0u;
     memset( &ud->Dsqueeze, 0u, sizeof(ud->Dsqueeze) ); // Deallocate by clearing rho
-    UpperDeck_Squeezing( ud, Z, Zlen, Yadd );
+    return UpperDeck_Squeezing( ud, Z, Zlen, Yadd );
 }
 
-void UpperDeck_Squeezing( KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *Yadd )
+int UpperDeck_Squeezing( KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *Yadd )
 {
 
     if ( ud->o <= ud->D.rho ) {
         unsigned int x = MYMIN( ud->D.rho - ud->o, Zlen );
-        OD_Squeezing( &ud->D, Z, x, Yadd );
+        if (OD_Squeezing( &ud->D, Z, x, Yadd ) != 0)
+            return 1;
         if ( (ud->o + Zlen) > ud->D.rho ) {
-            OD_CloneCompact( &ud->Dsqueeze, &ud->D );
+            if (OD_CloneCompact( &ud->Dsqueeze, &ud->D ) != 0)
+                return 1;
         }
         Zlen    -= x;
         Z       += x;
@@ -277,14 +290,16 @@ void UpperDeck_Squeezing( KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, siz
             }
             assert( Zlen <= ud->D.rho );
             if ( Zlen > 0u ) {
-                OD_Duplexing( &ud->Dsqueeze, Z, Zlen, NULL, 0u, 2u, Yadd );
+                if (OD_Duplexing( &ud->Dsqueeze, Z, Zlen, NULL, 0u, 2u, Yadd ) != 0)
+                    return 1;
                 ud->o += Zlen;
                 Zlen = 0;
             }
         }
         else {
             unsigned int x = MYMIN( ud->Dsqueeze.rho - ud->o % ud->Dsqueeze.rho, Zlen );
-            OD_Squeezing( &ud->Dsqueeze, Z, x, Yadd );
+            if (OD_Squeezing( &ud->Dsqueeze, Z, x, Yadd ) != 0)
+                return 1;
             Zlen    -= x;
             Z       += x;
             if ( Yadd != NULL ) {
@@ -293,35 +308,42 @@ void UpperDeck_Squeezing( KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, siz
             ud->o += x;
         }
     }
+    return 0;
 }
 
 // DeckBO ---------------------------------------------------------------------
 
-void DeckBO_Initialize( KeccakWidth1600_DeckBOInstance *dbo, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c )
+int DeckBO_Initialize( KeccakWidth1600_DeckBOInstance *dbo, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c )
 {
-    assert( taglen <= TAG_LEN_MAX );
-    UpperDeck_Initialize( &dbo->D, k, klen, rho, c );
+    if (taglen > TAG_LEN_MAX)
+        return 1;
+    if (UpperDeck_Initialize( &dbo->D, k, klen, rho, c ) != 0)
+        return 1;
     dbo->taglen = taglen;
+    return 0;
 }
 
-void DeckBO_Clone( KeccakWidth1600_DeckBOInstance *dbonew, const KeccakWidth1600_DeckBOInstance *dbo )
+int DeckBO_Clone( KeccakWidth1600_DeckBOInstance *dbonew, const KeccakWidth1600_DeckBOInstance *dbo )
 {
     *dbonew = *dbo;
+    return 0;
 }
 
-void DeckBO_Wrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen )
+int DeckBO_Wrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen )
 {
     if ( Plen == 0 ) {
-        UpperDeck_Duplexing( &dbo->D, C, dbo->taglen, A, Alen, 4u, NULL );
-        return;
+        return UpperDeck_Duplexing( &dbo->D, C, dbo->taglen, A, Alen, 4u, NULL );
     }
     if ( Alen != 0 ) {
-        UpperDeck_Duplexing( &dbo->D, NULL, 0, A, Alen, 5u, NULL );
+        if (UpperDeck_Duplexing( &dbo->D, NULL, 0, A, Alen, 5u, NULL ) != 0)
+            return 1;
     }
     KeccakWidth1600_UpperDeckInstance Dkey;
-    UpperDeck_CloneCompact( &Dkey, &dbo->D );
-    UpperDeck_Duplexing( &dbo->D, C + Plen, dbo->taglen, P, Plen, 14u, NULL );
-    UpperDeck_Duplexing( &Dkey, C, Plen, C + Plen, dbo->taglen, 13u, P );
+    if (UpperDeck_CloneCompact( &Dkey, &dbo->D ) != 0)
+        return 1;
+    if (UpperDeck_Duplexing( &dbo->D, C + Plen, dbo->taglen, P, Plen, 14u, NULL ) != 0)
+        return 1;
+    return UpperDeck_Duplexing( &Dkey, C, Plen, C + Plen, dbo->taglen, 13u, P );
 }
 
 int DeckBO_Unwrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *P, const uint8_t *A, size_t Alen, const uint8_t *C, size_t Clen )
@@ -332,9 +354,11 @@ int DeckBO_Unwrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *P, const uint8_
     if ( Clen < dbo->taglen ) {
         return -1;
     }
-    UpperDeck_Clone( &udSaved, &dbo->D );
+    if (UpperDeck_Clone( &udSaved, &dbo->D ) != 0)
+        return 1;
     if ( Clen == dbo->taglen ) {
-        UpperDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, A, Alen, 4u, NULL );
+        if (UpperDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, A, Alen, 4u, NULL ) != 0)
+            return 1;
         if ( memcmp( tagPrime, C, dbo->taglen ) != 0 ) {
             UpperDeck_Clone( &dbo->D, &udSaved );
             return -1;
@@ -343,12 +367,16 @@ int DeckBO_Unwrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *P, const uint8_
     else {
         Clen -= dbo->taglen;
         if ( Alen != 0 ) {
-            UpperDeck_Duplexing( &dbo->D, NULL, 0u, A, Alen, 5u, NULL );
+            if (UpperDeck_Duplexing( &dbo->D, NULL, 0u, A, Alen, 5u, NULL ) != 0)
+                return 1;
         }
         KeccakWidth1600_UpperDeckInstance Dkey;
-        UpperDeck_Clone( &Dkey, &dbo->D );
-        UpperDeck_Duplexing( &Dkey, P, Clen, C + Clen, dbo->taglen, 13u, C );
-        UpperDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, P, Clen, 14u, NULL );
+        if (UpperDeck_Clone( &Dkey, &dbo->D ) != 0)
+            return 1;
+        if (UpperDeck_Duplexing( &Dkey, P, Clen, C + Clen, dbo->taglen, 13u, C ) != 0)
+            return 1;
+        if (UpperDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, P, Clen, 14u, NULL ) != 0)
+            return 1;
         if ( memcmp( tagPrime, C + Clen, dbo->taglen ) != 0 ) {
             memset( P, 0, Clen ); // Wipe plaintext
             UpperDeck_Clone( &dbo->D, &udSaved );

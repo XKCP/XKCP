@@ -38,7 +38,7 @@ static void OD_TrailencAndXor( KeccakWidth1600_ODInstance *od, uint8_t D )
     SnP_AddBytes( &od->s, trailenc, od->rho, sizeof(trailenc) );
 }
 
-void OD_Initialize( KeccakWidth1600_ODInstance *od, unsigned int rho, unsigned int c, const uint8_t *k, unsigned int klen )
+int OD_Initialize( KeccakWidth1600_ODInstance *od, unsigned int rho, unsigned int c, const uint8_t *k, unsigned int klen )
 {
 
     od->o       = rho;
@@ -47,26 +47,30 @@ void OD_Initialize( KeccakWidth1600_ODInstance *od, unsigned int rho, unsigned i
     SnP_StaticInitialize();
     SnP_Initialize( &od->s );
     OD_Duplexing( od, NULL, 0, k, klen, 1, NULL );
+    return 0;
 }
 
-void OD_Clone( KeccakWidth1600_ODInstance *odnew, const KeccakWidth1600_ODInstance *od )
+int OD_Clone( KeccakWidth1600_ODInstance *odnew, const KeccakWidth1600_ODInstance *od )
 {
     *odnew = *od;
+    return 0;
 }
 
-void OD_CloneCompact( KeccakWidth1600_ODInstance *odnew, const KeccakWidth1600_ODInstance *od )
+int OD_CloneCompact( KeccakWidth1600_ODInstance *odnew, const KeccakWidth1600_ODInstance *od )
 {
     *odnew = *od;
     odnew->o = odnew->rho;
     SnP_OverwriteWithZeroes( &odnew->s, odnew->rho );
+    return 0;
 }
 
 size_t OD_DuplexingFast( KeccakWidth1600_ODInstance *od, const uint8_t *idata, size_t len, unsigned int E, uint8_t *odata, const uint8_t *odataAdd )
 {
-    assert( E >= 1u );
-    assert( E <= 63u );
-    assert( len >= od->rho );
-    assert( odataAdd != NULL );
+    if ((E < 1u) || (E > 63u)
+        || (od->rho == 0u)
+        || (len < od->rho)
+        || (odataAdd == NULL))
+        return 0;
 
     ALIGN(8) const uint8_t  trailenc[8]     = { OD_Concat( E, 1u ), 0u, 0u, 0u, 0u, 0u, 0u, 0x80u + DOM_SEP };
     unsigned int            r               = od->rho;
@@ -94,10 +98,11 @@ size_t OD_DuplexingFast( KeccakWidth1600_ODInstance *od, const uint8_t *idata, s
 
 size_t OD_DuplexingFastOnlyOut( KeccakWidth1600_ODInstance *od, unsigned int E, uint8_t *odata, size_t len, const uint8_t *odataAdd )
 {
-    assert( E >= 1u );
-    assert( E <= 63u );
-    assert( len >= od->rho );
-    assert( odataAdd != NULL );
+    if ((E < 1u) || (E > 63u)
+        || (od->rho == 0u)
+        || (len < od->rho)
+        || (odataAdd == NULL))
+        return 0;
 
     ALIGN(8) const uint8_t  trailenc[8] = { OD_Concat( E, 0u ), 0u, 0u, 0u, 0u, 0u, 0u, 0x80u + DOM_SEP };
     unsigned int            r           = od->rho;
@@ -125,9 +130,10 @@ size_t OD_DuplexingFastOnlyOut( KeccakWidth1600_ODInstance *od, unsigned int E, 
 
 size_t OD_DuplexingFastOnlyIn( KeccakWidth1600_ODInstance *od, const uint8_t *idata, size_t len, unsigned int E )
 {
-    assert( E >= 1u );
-    assert( E <= 63u );
-    assert( len > od->rho );
+    if ((E < 1u) || (E > 63u)
+        || (od->rho == 0u)
+        || (len < od->rho))
+        return 0;
 
     ALIGN(8) const uint8_t  trailenc[8] = { OD_Concat( E, 1u ), 0u, 0u, 0u, 0u, 0u, 0u, 0x80u + DOM_SEP };
     unsigned int            r           = od->rho;
@@ -150,14 +156,14 @@ size_t OD_DuplexingFastOnlyIn( KeccakWidth1600_ODInstance *od, const uint8_t *id
     return initialLen - len; // bytes processed
 }
 
-void OD_Duplexing( KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *idata, unsigned int ilen, unsigned int E, const uint8_t *odataAdd )
+int OD_Duplexing( KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *idata, unsigned int ilen, unsigned int E, const uint8_t *odataAdd )
 {
+    if ((E < 1u) || (E > 63u)
+        || (od->rho == 0u)
+        || (ilen > od->rho)
+        || (olen > od->rho))
+        return 1;
 
-    assert( E >= 1u );
-    assert( E <= 63u );
-    assert( od->rho != 0u );
-    assert( ilen <= od->rho );
-    assert( olen <= od->rho );
     if ( ilen == od->rho ) {
         SnP_OverwriteBytes( &od->s, idata, 0u, ilen );
         OD_TrailencAndXor( od, OD_Concat( E, 1u ) );
@@ -176,12 +182,14 @@ void OD_Duplexing( KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int 
         SnP_ExtractBytes( &od->s, odata, 0u, olen );
     }
     od->o = olen;
+    return 0;
 }
 
-void OD_Squeezing( KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *odataAdd )
+int OD_Squeezing( KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *odataAdd )
 {
-    assert( od->rho != 0u );
-    assert( olen <= (od->rho - od->o) );
+    if ((od->rho == 0u)
+        || (olen + od->o > od->rho))
+        return 1;
 
     if ( odataAdd != NULL ) {
         SnP_ExtractAndAddBytes( &od->s, odataAdd, odata, od->o, olen );
@@ -190,6 +198,7 @@ void OD_Squeezing( KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int 
         SnP_ExtractBytes( &od->s, odata, od->o, olen );
     }
     od->o += olen;
+    return 0;
 }
 
 #undef OD_TrailencAndXor

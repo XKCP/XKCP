@@ -29,9 +29,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     } prefix##_DWrapInstance;
 
 #define XKCP_DeclareDWrapFunctions(prefix, inst) \
-    void prefix##_Wrap_Initialize(inst##_DWrapInstance *D, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c ); \
-    void prefix##_Wrap_Clone(inst##_DWrapInstance *Dnew, const inst##_DWrapInstance *D ); \
-    void prefix##_Wrap_Wrap(inst##_DWrapInstance *D, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen ); \
+    int prefix##_Wrap_Initialize(inst##_DWrapInstance *D, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c ); \
+    int prefix##_Wrap_Clone(inst##_DWrapInstance *Dnew, const inst##_DWrapInstance *D ); \
+    int prefix##_Wrap_Wrap(inst##_DWrapInstance *D, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen ); \
     int prefix##_Wrap_Unwrap(inst##_DWrapInstance *D, uint8_t *P, const uint8_t *A, size_t Alen, const uint8_t *C, size_t Clen );
 
 // Upper Deck --------------------------------------------------------------
@@ -44,11 +44,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
     } prefix##_UpperDeckInstance;
 
 #define XKCP_DeclareUpperDeckFunctions(prefix, inst) \
-    void prefix##_UpperDeck_Initialize(inst##_UpperDeckInstance *ud, const uint8_t *k, unsigned int klen, unsigned int rho, unsigned int c ); \
-    void prefix##_UpperDeck_Clone(inst##_UpperDeckInstance *udnew, const inst##_UpperDeckInstance *ud ); \
-    void prefix##_UpperDeck_CloneCompact(inst##_UpperDeckInstance *udnew, const inst##_UpperDeckInstance *ud ); \
-    void prefix##_UpperDeck_Duplexing(inst##_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *X, size_t Xlen, unsigned int E, const uint8_t *Yadd ); \
-    void prefix##_UpperDeck_Squeezing(inst##_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *Yadd );
+    int prefix##_UpperDeck_Initialize(inst##_UpperDeckInstance *ud, const uint8_t *k, unsigned int klen, unsigned int rho, unsigned int c ); \
+    int prefix##_UpperDeck_Clone(inst##_UpperDeckInstance *udnew, const inst##_UpperDeckInstance *ud ); \
+    int prefix##_UpperDeck_CloneCompact(inst##_UpperDeckInstance *udnew, const inst##_UpperDeckInstance *ud ); \
+    int prefix##_UpperDeck_Duplexing(inst##_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *X, size_t Xlen, unsigned int E, const uint8_t *Yadd ); \
+    int prefix##_UpperDeck_Squeezing(inst##_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *Yadd );
 
 // Deck-BO -----------------------------------------------------------------
 
@@ -59,9 +59,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     } prefix##_DeckBOInstance;
 
 #define XKCP_DeclareDeckBOFunctions(prefix, inst) \
-    void prefix##_BO_Initialize(inst##_DeckBOInstance *dbo, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c ); \
-    void prefix##_BO_Clone(inst##_DeckBOInstance *dbonew, const inst##_DeckBOInstance *dbo ); \
-    void prefix##_BO_Wrap(inst##_DeckBOInstance *dbo, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen ); \
+    int prefix##_BO_Initialize(inst##_DeckBOInstance *dbo, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c ); \
+    int prefix##_BO_Clone(inst##_DeckBOInstance *dbonew, const inst##_DeckBOInstance *dbo ); \
+    int prefix##_BO_Wrap(inst##_DeckBOInstance *dbo, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen ); \
     int prefix##_BO_Unwrap(inst##_DeckBOInstance *dbo, uint8_t *P, const uint8_t *A, size_t Alen, const uint8_t *C, size_t Clen );
 
 #ifdef XKCP_has_KeccakP1600

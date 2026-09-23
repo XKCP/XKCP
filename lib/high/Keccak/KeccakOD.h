@@ -33,11 +33,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
     } prefix##_ODInstance;
 
 #define XKCP_DeclareODFunctions(prefix, inst) \
-    void prefix##_OD_Initialize(inst##_ODInstance *od, unsigned int rho, unsigned int c, const uint8_t *k, unsigned int klen ); \
-    void prefix##_OD_Clone(inst##_ODInstance *odnew, const inst##_ODInstance *od ); \
-    void prefix##_OD_CloneCompact(inst##_ODInstance *odnew, const inst##_ODInstance *od ); \
-    void prefix##_OD_Duplexing(inst##_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *idata, unsigned int ilen, unsigned int E, const uint8_t *odataAdd ); \
-    void prefix##_OD_Squeezing(inst##_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *odataAdd ); \
+    int prefix##_OD_Initialize(inst##_ODInstance *od, unsigned int rho, unsigned int c, const uint8_t *k, unsigned int klen ); \
+    int prefix##_OD_Clone(inst##_ODInstance *odnew, const inst##_ODInstance *od ); \
+    int prefix##_OD_CloneCompact(inst##_ODInstance *odnew, const inst##_ODInstance *od ); \
+    int prefix##_OD_Duplexing(inst##_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *idata, unsigned int ilen, unsigned int E, const uint8_t *odataAdd ); \
+    int prefix##_OD_Squeezing(inst##_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *odataAdd ); \
     size_t prefix##_OD_DuplexingFast(inst##_ODInstance *od, const uint8_t *idata, size_t len, unsigned int E, uint8_t *odata, const uint8_t *odataAdd ); \
     size_t prefix##_OD_DuplexingFastOnlyOut(inst##_ODInstance *od, unsigned int E, uint8_t *odata, size_t len, const uint8_t *odataAdd ); \
     size_t prefix##_OD_DuplexingFastOnlyIn(inst##_ODInstance *od, const uint8_t *idata, size_t len, unsigned int E ); \
