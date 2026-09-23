@@ -17,6 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include "brg_endian.h"
 #include "load-store.h"
+#include "xkcp-memcmp.h"
 #include "Kravatte.h"
 #include "KravatteModes.h"
 
@@ -217,7 +218,7 @@ int Kravatte_SANE_Unwrap(Kravatte_SANE_Instance *kp, const BitSequence *cipherte
         return 1;
     kp->e ^= 1;
      /* Wipe plaintext on tag difference */
-    if ( memcmp( tagPrime, tag, Kravatte_SANE_TagLength) != 0) {
+    if ( XKCP_memcmp( tagPrime, tag, Kravatte_SANE_TagLength) != 0) {
         memset(plaintext, 0, (dataBitLen + 7) / 8);
         return 1;
     }
@@ -345,7 +346,7 @@ int Kravatte_SANSE_Unwrap(Kravatte_SANSE_Instance *kp, const BitSequence *cipher
     kp->e ^= 1;
 
     /* if T' != T then */
-    if ( memcmp( tagPrime, tag, sizeof(tagPrime)) != 0) {
+    if ( XKCP_memcmp( tagPrime, tag, sizeof(tagPrime)) != 0) {
         /* wipe P, return error! */
         memset(plaintext, 0, (dataBitLen + 7) / 8);
         return 1;
@@ -543,7 +544,7 @@ int Kravatte_WBCAE_Decipher(Kravatte_Instance *kv, const BitSequence *ciphertext
             return 1;
         }
     }
-    if (memcmp(plaintext + (dataBitLen+7)/8, Kravatte_WBCAE_Zero, Kravatte_WBCAE_t/8) != 0) {
+    if (XKCP_memcmp(plaintext + (dataBitLen+7)/8, Kravatte_WBCAE_Zero, Kravatte_WBCAE_t/8) != 0) {
         memset( plaintext, 0, (dataBitLen + Kravatte_WBCAE_t + 7) / 8 );
         return 1;
     }

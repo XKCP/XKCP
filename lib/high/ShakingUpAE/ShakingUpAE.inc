@@ -15,6 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #include "align.h"
+#include "xkcp-memcmp.h"
 
 #define JOIN0(a, b)                     a ## b
 #define JOIN(a, b)                      JOIN0(a, b)
@@ -198,7 +199,7 @@ int DWrap_Unwrap( KeccakWidth1600_DWrapInstance *D, uint8_t *P, const uint8_t *A
         // Last A block, generate tag
         OD_Duplexing( &D->od, tag, D->taglen, A, Alen, 7u, NULL );
     }
-    if ( memcmp( tag, Ctag, D->taglen ) == 0 ) {
+    if ( XKCP_memcmp( tag, Ctag, D->taglen ) == 0 ) {
         return 0;
     }
     // Wrong tag
@@ -359,7 +360,7 @@ int DeckBO_Unwrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *P, const uint8_
     if ( Clen == dbo->taglen ) {
         if (UpperDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, A, Alen, 4u, NULL ) != 0)
             return 1;
-        if ( memcmp( tagPrime, C, dbo->taglen ) != 0 ) {
+        if ( XKCP_memcmp( tagPrime, C, dbo->taglen ) != 0 ) {
             UpperDeck_Clone( &dbo->D, &udSaved );
             return -1;
         }
@@ -377,7 +378,7 @@ int DeckBO_Unwrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *P, const uint8_
             return 1;
         if (UpperDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, P, Clen, 14u, NULL ) != 0)
             return 1;
-        if ( memcmp( tagPrime, C + Clen, dbo->taglen ) != 0 ) {
+        if ( XKCP_memcmp( tagPrime, C + Clen, dbo->taglen ) != 0 ) {
             memset( P, 0, Clen ); // Wipe plaintext
             UpperDeck_Clone( &dbo->D, &udSaved );
             return -1;

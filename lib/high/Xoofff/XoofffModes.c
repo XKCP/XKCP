@@ -16,6 +16,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #include <string.h>
 #include "brg_endian.h"
+#include "xkcp-memcmp.h"
 #include "Xoofff.h"
 #include "XoofffModes.h"
 
@@ -236,7 +237,7 @@ int XoofffWBCAE_Decipher(Xoofff_Instance *xp, const BitSequence *ciphertext, Bit
             return 1;
         }
     }
-    if (memcmp(plaintext + (dataBitLen+7)/8, XoofffWBCAE_Zero, XoofffWBCAE_t/8) != 0) {
+    if (XKCP_memcmp(plaintext + (dataBitLen+7)/8, XoofffWBCAE_Zero, XoofffWBCAE_t/8) != 0) {
         memset( plaintext, 0, (dataBitLen + XoofffWBCAE_t + 7) / 8 );
         return 1;
     }
@@ -342,7 +343,7 @@ int XoofffSANE_Unwrap(XoofffSANE_Instance *xp, const BitSequence *ciphertext, Bi
         return 1;
     xp->e ^= 1;
      /* Wipe plaintext on tag difference */
-    if ( memcmp( tagPrime, tag, XoofffSANE_TagLength) != 0) {
+    if ( XKCP_memcmp( tagPrime, tag, XoofffSANE_TagLength) != 0) {
         memset(plaintext, 0, (dataBitLen + 7) / 8);
         return 1;
     }
@@ -471,7 +472,7 @@ int XoofffSANSE_Unwrap(XoofffSANSE_Instance *xp, const BitSequence *ciphertext, 
     xp->e ^= 1;
 
     /* if T' != T then */
-    if ( memcmp( tagPrime, tag, sizeof(tagPrime)) != 0) {
+    if ( XKCP_memcmp( tagPrime, tag, sizeof(tagPrime)) != 0) {
         /* wipe P, return error! */
         memset(plaintext, 0, (dataBitLen + 7) / 8);
         return 1;
