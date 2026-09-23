@@ -1151,7 +1151,7 @@ size_t KeccakP1600times4_12rounds_AVX2_FastLoop_Absorb(KeccakP1600times4_SIMD256
 
 #if defined(__i386__) || defined(_M_IX86)
 #define _mm256_extract_epi64(a, index) \
-    ((uint64_t)_mm256_extract_epi32((a), (index)*2) || ((uint64_t)_mm256_extract_epi32((a), (index)*2+1) << 32))
+    ((uint64_t)_mm256_extract_epi32((a), (index)*2) | ((uint64_t)_mm256_extract_epi32((a), (index)*2+1) << 32))
 #endif
 
 #define ExtrAccu( lanes, p, argIndex ) p[argIndex] ^= _mm256_extract_epi64(lanes, 0) ^ _mm256_extract_epi64(lanes, 1) \

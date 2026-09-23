@@ -1115,7 +1115,7 @@ ALIGN(32) static const uint32_t     oGatherScatter[]= {0*25, 1*25, 2*25, 3*25, 4
 
 #if defined(__i386__) || defined(_M_IX86)
 #define _mm256_extract_epi64(a, index) \
-    ((uint64_t)_mm256_extract_epi32((a), (index)*2) || ((uint64_t)_mm256_extract_epi32((a), (index)*2+1) << 32))
+    ((uint64_t)_mm256_extract_epi32((a), (index)*2) | ((uint64_t)_mm256_extract_epi32((a), (index)*2+1) << 32))
 #endif
 
 size_t KeccakP1600times8_AVX512_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, const unsigned char *input, size_t inputByteLen)
