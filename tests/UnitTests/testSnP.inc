@@ -143,8 +143,8 @@ void checkStatePadding(const unsigned char *paddedState)
 {
     unsigned int i;
     for(i=0; i<padding; i++) {
-        assert(paddedState[i] == 0x5A);
-        assert(paddedState[padding+SnP_stateSizeInBytes+i] == 0x5A);
+        UT_assert(paddedState[i] == 0x5A);
+        UT_assert(paddedState[padding+SnP_stateSizeInBytes+i] == 0x5A);
     }
 }
 
@@ -152,8 +152,8 @@ void checkBufferPadding(const unsigned char *paddedBuffer)
 {
     unsigned int i;
     for(i=0; i<padding; i++) {
-        assert(paddedBuffer[i] == 0x96);
-        assert(paddedBuffer[padding+SnP_width/8+i] == 0x96);
+        UT_assert(paddedBuffer[i] == 0x96);
+        UT_assert(paddedBuffer[padding+SnP_width/8+i] == 0x96);
     }
 }
 
@@ -179,7 +179,7 @@ void elementarySnPtest()
             checkStatePadding(paddedState);
             checkBufferPadding(paddedBuffer);
             for(i=0; i<SnP_width/8; i++)
-                assert(buffer[i] == 0);
+                UT_assert(buffer[i] == 0);
         }
 
         /* Testing SnP_AddByte() */
@@ -190,7 +190,7 @@ void elementarySnPtest()
             checkStatePadding(paddedState);
             checkBufferPadding(paddedBuffer);
             for(i=0; i<SnP_width/8; i++)
-                assert(buffer[i] == i);
+                UT_assert(buffer[i] == i);
         }
 
         /* Testing SnP_ExtractBytes() */
@@ -199,9 +199,9 @@ void elementarySnPtest()
                 memset(buffer, 0x3C, SnP_width/8);
                 SnP_ExtractBytes(state, buffer, i, SnP_width/8-4*i);
                 for(j=0; j<SnP_width/8-4*i; j++)
-                    assert(buffer[j] == (i+j));
+                    UT_assert(buffer[j] == (i+j));
                 for(j=i+SnP_width/8-4*i; j<SnP_width/8; j++)
-                    assert(buffer[j] == 0x3C);
+                    UT_assert(buffer[j] == 0x3C);
             }
             checkStatePadding(paddedState);
             checkBufferPadding(paddedBuffer);
@@ -213,9 +213,9 @@ void elementarySnPtest()
                 memset(buffer, 0xC3, SnP_width/8);
                 SnP_ExtractAndAddBytes(state, buffer, buffer, i, SnP_width/8-4*i);
                 for(j=0; j<SnP_width/8-4*i; j++)
-                    assert(buffer[j] == (0xC3 ^ (i+j)));
+                    UT_assert(buffer[j] == (0xC3 ^ (i+j)));
                 for(j=i+SnP_width/8-4*i; j<SnP_width/8; j++)
-                    assert(buffer[j] == 0xC3);
+                    UT_assert(buffer[j] == 0xC3);
             }
             checkStatePadding(paddedState);
             checkBufferPadding(paddedBuffer);
@@ -231,11 +231,11 @@ void elementarySnPtest()
             checkStatePadding(paddedState);
             checkBufferPadding(paddedBuffer);
             for(i=0; i<7; i++)
-                assert(buffer[i] == (i ^ ((1 << (i+1))-1)));
+                UT_assert(buffer[i] == (i ^ ((1 << (i+1))-1)));
             for(i=7; i<SnP_width/8-7; i++)
-                assert(buffer[i] == (i ^ 0xFF));
+                UT_assert(buffer[i] == (i ^ 0xFF));
             for(i=SnP_width/8-7; i<SnP_width/8; i++)
-                assert(buffer[i] == (i ^ ((1 << (SnP_width/8-i))-1)));
+                UT_assert(buffer[i] == (i ^ ((1 << (SnP_width/8-i))-1)));
         }
 
         /* Testing SnP_OverwriteBytes() */
@@ -248,11 +248,11 @@ void elementarySnPtest()
             checkStatePadding(paddedState);
             checkBufferPadding(paddedBuffer);
             for(i=0; i<8; i++)
-                assert(buffer[i] == i+1);
+                UT_assert(buffer[i] == i+1);
             for(i=8; i<SnP_width/8-16; i++)
-                assert(buffer[i] == 8);
+                UT_assert(buffer[i] == 8);
             for(i=SnP_width/8-16; i<SnP_width/8; i++)
-                assert(buffer[i] == (SnP_width/8-i-1)/2+1);
+                UT_assert(buffer[i] == (SnP_width/8-i-1)/2+1);
         }
 
         /* Testing SnP_OverwriteWithZeroes() */
@@ -260,10 +260,10 @@ void elementarySnPtest()
             for(i=0; i<SnP_width/8; i+=7) {
                 SnP_OverwriteWithZeroes(state, i);
                 SnP_ExtractBytes(state, buffer, i, 1);
-                assert(buffer[0] != 0);
+                UT_assert(buffer[0] != 0);
                 if (i > 0) {
                     SnP_ExtractBytes(state, buffer, i-1, 1);
-                    assert(buffer[0] == 0);
+                    UT_assert(buffer[0] == 0);
                 }
             }
             SnP_OverwriteWithZeroes(state, SnP_width/8);
@@ -271,7 +271,7 @@ void elementarySnPtest()
             checkStatePadding(paddedState);
             checkBufferPadding(paddedBuffer);
             for(i=0; i<SnP_width/8; i++)
-                assert(buffer[i] == 0);
+                UT_assert(buffer[i] == 0);
         }
     }
 }
@@ -305,7 +305,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
 
             SnP_ExtractBytes(stateAccumulated, buffer, 0, SnP_width/8);
             f = fopen(fileName, "w");
-            assert(f != NULL);
+            UT_assert(f != NULL);
             fprintf(f, "%s", synopsis);
             fprintf(f, "\"");
             for(i=0; i<SnP_width/8; i++)
@@ -318,7 +318,7 @@ void nominalSnPtest(const char *fileName, const char *synopsis, const unsigned c
         {
             unsigned char buffer[SnP_width/8];
             SnP_ExtractBytes(stateAccumulated, buffer, 0, SnP_width/8);
-            assert(memcmp(expected, buffer, sizeof(buffer)) == 0);
+            UT_assert(memcmp(expected, buffer, sizeof(buffer)) == 0);
         }
     }
 }

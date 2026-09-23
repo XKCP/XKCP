@@ -31,7 +31,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 static void assert(int condition)
 {
-    UT_assert(condition, (char*)"");
+    UT_assertSyn(condition, (char*)"");
 }
 
 static void generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2)
@@ -231,7 +231,7 @@ void selfTestKT128()
     for(useSqueeze = 0; useSqueeze <= 1; ++useSqueeze)
     for(mode = 0; mode <= 2; ++mode) {
         performTestKangarooTwelve(128, checksum, mode, useSqueeze);
-        UT_assert(memcmp(expected[useSqueeze*3 + mode], checksum, checksumByteSize) == 0, (char*)"The global checksum is incorrect.");
+        UT_assertSyn(memcmp(expected[useSqueeze*3 + mode], checksum, checksumByteSize) == 0, (char*)"The global checksum is incorrect.");
     }
     UT_endTest();
 }
@@ -253,7 +253,7 @@ void selfTestKT256()
     for(useSqueeze = 0; useSqueeze <= 1; ++useSqueeze)
     for(mode = 0; mode <= 2; ++mode) {
         performTestKangarooTwelve(256, checksum, mode, useSqueeze);
-        UT_assert(memcmp(expected[useSqueeze*3 + mode], checksum, checksumByteSize) == 0, (char*)"The global checksum is incorrect.");
+        UT_assertSyn(memcmp(expected[useSqueeze*3 + mode], checksum, checksumByteSize) == 0, (char*)"The global checksum is incorrect.");
     }
     UT_endTest();
 }

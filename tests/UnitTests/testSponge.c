@@ -15,7 +15,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "config.h"
 #ifdef XKCP_has_Sponge_Keccak
 
-#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,7 +51,7 @@ void writeTestSponge(void)
     unsigned int rate;
 
     f = fopen("TestSponge.txt", "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
 #ifdef XKCP_has_Sponge_Keccak_width1600
     for(rate = 64; rate <= 1600; rate += (rate < 1024) ? 64 : ((rate < 1344) ? 32 : 8))
         KeccakWidth1600_writeTestSponge(f, rate, 1600-rate);

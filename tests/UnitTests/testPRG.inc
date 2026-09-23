@@ -59,7 +59,7 @@ void performTestSpongePRG(unsigned int rhoInBytes, int flavor, unsigned char *ch
             SpongePRG_Instance prg;
 
             result = SpongePRG_Initialize(&prg, capacity);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             if (flavor == flavor_IUF_Pieces)
             {
@@ -76,13 +76,13 @@ void performTestSpongePRG(unsigned int rhoInBytes, int flavor, unsigned char *ch
                         size = inputByteLength - offset;
 
                     result = SpongePRG_Feed(&prg, input + offset, size);
-                    assert(result == 0);
+                    UT_assert(result == 0);
                 }
             }
             else
             {
                 result = SpongePRG_Feed(&prg, input, inputByteLength);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
 
             if (flavor == flavor_IUF_Pieces)
@@ -102,7 +102,7 @@ void performTestSpongePRG(unsigned int rhoInBytes, int flavor, unsigned char *ch
                         size = outputByteLength - offset;
 
                     result = SpongePRG_Fetch(&prg, output + offset, size);
-                    assert(result == 0);
+                    UT_assert(result == 0);
                     for(i = offset + size; i<sizeof(output); i++)
                         if (output[i] != filler) {
                             #ifndef UT_EMBEDDED
@@ -115,19 +115,19 @@ void performTestSpongePRG(unsigned int rhoInBytes, int flavor, unsigned char *ch
             else
             {
                 result = SpongePRG_Fetch(&prg, output, outputByteLength);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
             if ((outputByteLength > 0) && (output[0] & 1 ))
             {
                 if (output[0] & 2) {
                     result = SpongePRG_Feed(&prg, input, inputByteLength);
-                    assert(result == 0);
+                    UT_assert(result == 0);
                 }
                 result = SpongePRG_Forget(&prg);
-                assert(result == (((rhoInBytes*8) >= capacity) ? 0 : 1));
+                UT_assert(result == (((rhoInBytes*8) >= capacity) ? 0 : 1));
                 if (output[0] & 4) {
                     result = SpongePRG_Fetch(&prg, output, outputByteLength);
-                    assert(result == 0);
+                    UT_assert(result == 0);
                 }
             }
         }
@@ -164,7 +164,7 @@ void selfTestSpongePRG(unsigned int rhoInBytes, int flavor, const unsigned char 
     unsigned char checksum[checksumByteSize];
 
     performTestSpongePRG(rhoInBytes, flavor, checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
 }
 
 #ifdef UT_OUTPUT

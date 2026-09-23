@@ -52,7 +52,7 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
         if ((flavor == flavor_IUF_AllAtOnce) || (flavor == flavor_IUF_Pieces)) {
             SpongeInstance sponge;
             result = SpongeInitialize(&sponge, rate, capacity);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             if (flavor == flavor_IUF_Pieces) {
                 for(offset = 0; offset < inputBitLength/8; offset += size) {
@@ -67,16 +67,16 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
                         size = inputBitLength/8 - offset;
 
                     result = SpongeAbsorb(&sponge, input + offset, size);
-                    assert(result == 0);
+                    UT_assert(result == 0);
                 }
             }
             else {
                 result = SpongeAbsorb(&sponge, input, inputBitLength/8);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
             if ((inputBitLength % 8) != 0) {
                 result = SpongeAbsorbLastFewBits(&sponge, input[inputByteLengthCeiling-1] | (1 << (inputBitLength % 8)));
-                assert(result == 0);
+                UT_assert(result == 0);
             }
 
             if (flavor == flavor_IUF_Pieces) {
@@ -94,7 +94,7 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
                         size = outputByteSize - offset;
 
                     result = SpongeSqueeze(&sponge, output + offset, size);
-                    assert(result == 0);
+                    UT_assert(result == 0);
                     for(i = offset + size; i<sizeof(output); i++)
                         if (output[i] != filler) {
                             #ifndef UT_EMBEDDED
@@ -106,14 +106,14 @@ void performTestSponge(unsigned int rate, unsigned int capacity, int flavor, uns
             }
             else {
                 result = SpongeSqueeze(&sponge, output, outputByteSize);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
         }
         else if (flavor == flavor_OneCall) {
             unsigned char suffix = ((inputBitLength % 8) != 0) ?
                 input[inputByteLengthCeiling-1] | (1 << (inputBitLength % 8)) : 0x01;
             result = Sponge(rate, capacity, input, inputBitLength/8, suffix, output, outputByteSize);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
         
 #ifdef UT_VERBOSE
@@ -148,7 +148,7 @@ void selfTestSponge(unsigned int rate, unsigned int capacity, int flavor, const 
     unsigned char checksum[checksumByteSize];
 
     performTestSponge(rate, capacity, flavor, checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
 }
 
 #ifdef UT_OUTPUT

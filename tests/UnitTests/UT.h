@@ -24,9 +24,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdio.h>
 #endif
 
+#define STR0(x) #x
+#define STR(x) STR0(x)
+#define UT_assert(condition)    UT_assertSyn((condition), "Assertion `" #condition "' failed at " __FILE__ ":" STR(__LINE__))
+
 void UT_startTest(const char *synopsis, const char *implementation);
 void UT_endTest();
-void UT_assert(int condition, char * synopsis);
+void UT_assertSyn(int condition, char * synopsis);
 void UT_displayInfo(const char *header, const char *contents);
 #ifdef UT_EMBEDDED
 #define UT_displayByteString(f, synopsis, data, length)

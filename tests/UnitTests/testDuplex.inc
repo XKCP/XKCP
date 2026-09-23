@@ -166,7 +166,7 @@ void selfTestDuplex(unsigned int rate, unsigned int capacity, int flavor, const 
     unsigned char checksum[checksumByteSize];
 
     performTestDuplex(rate, capacity, flavor, checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
 }
 
 #ifdef UT_OUTPUT

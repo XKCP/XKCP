@@ -20,7 +20,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "TurboSHAKE.h"
 #include "UT.h"
 #include <time.h>
-#include <assert.h>
 
 #define checksumByteSize 16
 
@@ -81,9 +80,9 @@ static void testDWrap( int turbo, uint32_t c )
                 SHAKE_Wrap_Initialize( &dwu, k, sizeof(k), taglen, rho, c );
                 rv = SHAKE_Wrap_Unwrap( &dwu, P2, A, Alen, C, Clen );
             }
-            assert(rv == 0);
+            UT_assert(rv == 0);
             rv = memcmp( P, P2, Plen );
-            assert(rv == 0);
+            UT_assert(rv == 0);
         }
     }
 }
@@ -130,9 +129,9 @@ static void testDeckBO( int turbo, uint32_t c )
                 SHAKE_BO_Initialize( &dbou, k, sizeof(k), taglen, rho, c );
                 rv = SHAKE_BO_Unwrap( &dbou, P2, A, Alen, C, Plen + taglen );
             }
-            assert(rv == 0);
+            UT_assert(rv == 0);
             rv = memcmp( P, P2, Plen );
-            assert(rv == 0);
+            UT_assert(rv == 0);
         }
     }
 }
@@ -209,7 +208,7 @@ void selfTestDWrap(int turbo, uint32_t c, const unsigned char *expected)
     UT_startTest(name, "");
     testDWrap(turbo, c);
     testvectorsDWrap(turbo, c, checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -291,7 +290,7 @@ void selfTestDeckBO(int turbo, uint32_t c, const unsigned char *expected)
     UT_startTest(name, "");
     testDeckBO(turbo, c);
     testvectorsDeckBO(turbo, c, checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -315,7 +314,7 @@ void writeTests(const char *filename)
     int turbo;
     uint32_t c;
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
     for(turbo=0; turbo<=1; turbo++) {
         for(c=256; c<=512; c += 256) {
             writeTestDWrap_One(f, turbo, c);

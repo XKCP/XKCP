@@ -12,7 +12,6 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 #include "config.h"

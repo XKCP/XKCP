@@ -112,9 +112,9 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
 			Xoodyak_Ratchet(&decrypt);
 		}
 
-	    UT_assert(!memcmp( newKey, newKeyPrime, squeezeKLen ), (char*)"The new keys do not match.");
-	    UT_assert(!memcmp( P, PPbuffer + align, Plen ), (char*)"The plaintexts do not match.");
-	    UT_assert(!memcmp( tag + align, tagPrime + align, Xoodyak_TagLength ), (char*)"The tags do not match.");
+	    UT_assertSyn(!memcmp( newKey, newKeyPrime, squeezeKLen ), (char*)"The new keys do not match.");
+	    UT_assertSyn(!memcmp( P, PPbuffer + align, Plen ), (char*)"The plaintexts do not match.");
+	    UT_assertSyn(!memcmp( tag + align, tagPrime + align, Xoodyak_TagLength ), (char*)"The tags do not match.");
 
 		if (squeezeKLen != 0) {
 		    Xoodyak_Absorb( global, newKey, squeezeKLen);
@@ -151,7 +151,7 @@ static int testXoodyakKeyed( const char *file, const uint8_t *expected )
 
     #if defined(UT_OUTPUT)
     f = fopen(file, "w");
-    UT_assert(f != NULL, "Could not open file");
+    UT_assertSyn(f != NULL, "Could not open file");
     #elif defined(UT_VERBOSE)
     f = stdout;
     #endif
@@ -228,7 +228,7 @@ static int testXoodyakKeyed( const char *file, const uint8_t *expected )
             fclose(f);
             #endif
             #endif
-	        UT_assert(!memcmp(expected, checksum, sizeof(checksum)), (char*)"The global checksum is incorrect.");
+	        UT_assertSyn(!memcmp(expected, checksum, sizeof(checksum)), (char*)"The global checksum is incorrect.");
 	    }
 
 	}

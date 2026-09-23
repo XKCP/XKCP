@@ -19,7 +19,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #error This test requires an implementation of the Keccak sponge
 #endif
 
-#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>

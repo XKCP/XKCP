@@ -55,7 +55,7 @@ void UT_displayByteString(FILE *f, const char* synopsis, const unsigned char *da
 }
 #endif
 
-void UT_assert(int condition, char * synopsis)
+void UT_assertSyn(int condition, char * synopsis)
 {
     if (!condition)
     {

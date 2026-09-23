@@ -12,7 +12,6 @@ and related or neighboring rights to the source code in this file.
 http://creativecommons.org/publicdomain/zero/1.0/
 */
 
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,6 +30,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testXoofff.h"
 #include "testXoofffModes.h"
 #include "testXoodyak.h"
+#include "UT.h"
 #ifdef XKCP_has_x86_64_CPU_detection
 #include "x86-64-dispatch.h"
 #endif
@@ -359,18 +359,18 @@ void testFIPS202()
         "\x10\x9D\x52\x23\x7C\x99\x56\x40\x1F\xD4\x4B\x22\x1F\x82\xAB\x37";
     unsigned char buffer[64];
 
-    assert(SHAKE128(buffer, 64, input, 5) == 0);
-    assert(memcmp(buffer, outputSHAKE128, 64) == 0);
-    assert(SHAKE256(buffer, 64, input, 5) == 0);
-    assert(memcmp(buffer, outputSHAKE256, 64) == 0);
-    assert(SHA3_224(buffer, input, 5) == 0);
-    assert(memcmp(buffer, outputSHA3_224, 28) == 0);
-    assert(SHA3_256(buffer, input, 5) == 0);
-    assert(memcmp(buffer, outputSHA3_256, 32) == 0);
-    assert(SHA3_384(buffer, input, 5) == 0);
-    assert(memcmp(buffer, outputSHA3_384, 48) == 0);
-    assert(SHA3_512(buffer, input, 5) == 0);
-    assert(memcmp(buffer, outputSHA3_512, 64) == 0);
+    UT_assert(SHAKE128(buffer, 64, input, 5) == 0);
+    UT_assert(memcmp(buffer, outputSHAKE128, 64) == 0);
+    UT_assert(SHAKE256(buffer, 64, input, 5) == 0);
+    UT_assert(memcmp(buffer, outputSHAKE256, 64) == 0);
+    UT_assert(SHA3_224(buffer, input, 5) == 0);
+    UT_assert(memcmp(buffer, outputSHA3_224, 28) == 0);
+    UT_assert(SHA3_256(buffer, input, 5) == 0);
+    UT_assert(memcmp(buffer, outputSHA3_256, 32) == 0);
+    UT_assert(SHA3_384(buffer, input, 5) == 0);
+    UT_assert(memcmp(buffer, outputSHA3_384, 48) == 0);
+    UT_assert(SHA3_512(buffer, input, 5) == 0);
+    UT_assert(memcmp(buffer, outputSHA3_512, 64) == 0);
 }
 #endif
 

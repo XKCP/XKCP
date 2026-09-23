@@ -36,11 +36,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define checksumByteSize        16
 
-static void assert(int condition)
-{
-    UT_assert(condition, (char*)"");
-}
-
 static void randomize( unsigned char* data, unsigned int length)
 {
     #if !defined(UT_EMBEDDED)
@@ -124,10 +119,10 @@ static void performTestKravatte_SANE_OneInput(BitLength keyLen, BitLength nonceL
     #endif
 
     result = Kravatte_SANE_Initialize(&kvEnc, key, keyLen, nonce, nonceLen, tagInit);
-    assert(result == 0);
+    UT_assert(result == 0);
     result = Kravatte_SANE_Initialize(&kvDec, key, keyLen, nonce, nonceLen, tag);
-    assert(result == 0);
-    assert(!memcmp(tag, tagInit, Kravatte_SANE_TagLength));
+    UT_assert(result == 0);
+    UT_assert(!memcmp(tag, tagInit, Kravatte_SANE_TagLength));
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tagInit, Kravatte_SANE_TagLength);
 
     #ifdef UT_VERBOSE
@@ -171,10 +166,10 @@ static void performTestKravatte_SANE_OneInput(BitLength keyLen, BitLength nonceL
 
     for (session = 3; session != 0; --session) {
         result = Kravatte_SANE_Wrap(&kvEnc, input, output, dataLen, AD, ADLen, tag);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = Kravatte_SANE_Unwrap(&kvDec, output, inputPrime, dataLen, AD, ADLen, tag);
-        assert(result == 0);
-        assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
+        UT_assert(result == 0);
+        UT_assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tag, Kravatte_SANE_TagLength);
         #ifdef UT_VERBOSE
@@ -276,7 +271,7 @@ void selfTestKravatte_SANE(const unsigned char *expected)
 
     UT_startTest("Kravatte-SANE", "");
     performTestKravatte_SANE(checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -298,7 +293,7 @@ void writeTestKravatte_SANE_One(FILE *f)
 void writeTestKravatte_SANE(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
     writeTestKravatte_SANE_One(f);
     fclose(f);
 }
@@ -346,9 +341,9 @@ static void performTestKravatte_SANSE_OneInput(BitLength keyLen, BitLength dataL
     #endif
 
     result = Kravatte_SANSE_Initialize(&xpEnc, key, keyLen);
-    assert(result == 0);
+    UT_assert(result == 0);
     result = Kravatte_SANSE_Initialize(&xpDec, key, keyLen);
-    assert(result == 0);
+    UT_assert(result == 0);
 
     #ifdef UT_VERBOSE
     {
@@ -384,10 +379,10 @@ static void performTestKravatte_SANSE_OneInput(BitLength keyLen, BitLength dataL
 
     for (session = 3; session != 0; --session) {
         result = Kravatte_SANSE_Wrap(&xpEnc, input, output, dataLen, AD, ADLen, tag);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = Kravatte_SANSE_Unwrap(&xpDec, output, inputPrime, dataLen, AD, ADLen, tag);
-        assert(result == 0);
-        assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
+        UT_assert(result == 0);
+        UT_assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tag, Kravatte_SANSE_TagLength);
         #ifdef UT_VERBOSE
@@ -474,7 +469,7 @@ void selfTestKravatte_SANSE(const unsigned char *expected)
 
     UT_startTest("Kravatte-SANSE", "");
     performTestKravatte_SANSE(checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -496,7 +491,7 @@ void writeTestKravatte_SANSE_One(FILE *f)
 void writeTestKravatte_SANSE(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
     writeTestKravatte_SANSE_One(f);
     fclose(f);
 }
@@ -539,11 +534,11 @@ static void performTestKravatte_WBC_OneInput(BitLength keyLen, BitLength dataLen
     #endif
 
     result = Kravatte_WBC_Initialize(&kvw, key, keyLen);
-    assert(result == 0);
+    UT_assert(result == 0);
     result = Kravatte_WBC_Encipher(&kvw, input, output, dataLen, W, WLen);
-    assert(result == 0);
+    UT_assert(result == 0);
     result = Kravatte_WBC_Decipher(&kvw, output, inputPrime, dataLen, W, WLen);
-    assert(result == 0);
+    UT_assert(result == 0);
 
     #ifdef UT_VERBOSE
     if (memcmp(input,inputPrime,(dataLen + 7) / 8) != 0)
@@ -561,7 +556,7 @@ static void performTestKravatte_WBC_OneInput(BitLength keyLen, BitLength dataLen
         printf("\n");
     }
     #endif
-    assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
+    UT_assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
 
@@ -668,7 +663,7 @@ void selfTestKravatte_WBC(const unsigned char *expected)
 
     UT_startTest("Kravatte-WBC", "");
     performTestKravatte_WBC(checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -690,7 +685,7 @@ void writeTestKravatte_WBC_One(FILE *f)
 void writeTestKravatte_WBC(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
 
     #if 0
     {
@@ -753,12 +748,12 @@ static void performTestKravatte_WBC_AE_OneInput(BitLength keyLen, BitLength data
     #endif
 
     result = Kravatte_WBCAE_Initialize(&kvw, key, keyLen);
-    assert(result == 0);
+    UT_assert(result == 0);
 
     result = Kravatte_WBCAE_Encipher(&kvw, input, output, dataLen, AD, ADLen);
-    assert(result == 0);
+    UT_assert(result == 0);
     result = Kravatte_WBCAE_Decipher(&kvw, output, inputPrime, dataLen, AD, ADLen);
-    assert(result == 0);
+    UT_assert(result == 0);
     #ifdef UT_VERBOSE
     if (memcmp(input,inputPrime,(dataLen + 7) / 8) != 0)
     {
@@ -775,7 +770,7 @@ static void performTestKravatte_WBC_AE_OneInput(BitLength keyLen, BitLength data
         printf("\n");
     }
     #endif
-    assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
+    UT_assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 8 * expansionLenWBCAE + 7) / 8);
 
@@ -885,7 +880,7 @@ void selfTestKravatte_WBC_AE(const unsigned char *expected)
 
     UT_startTest("Kravatte-WBC-AE ", "");
     performTestKravatte_WBC_AE(checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -907,7 +902,7 @@ void writeTestKravatte_WBC_AE_One(FILE *f)
 void writeTestKravatte_WBC_AE(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
 
     #if 0
     {

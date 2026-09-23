@@ -45,11 +45,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define checksumByteSize        16
 
-static void assert(int condition)
-{
-    UT_assert(condition, (char*)"");
-}
-
 static void randomize( unsigned char* data, unsigned int length)
 {
     #if !defined(UT_EMBEDDED)
@@ -122,14 +117,14 @@ static void performTestXoofffWBC_OneInput(BitLength keyLen, BitLength dataLen, B
     #endif
 
     result = XoofffWBC_Initialize(&xp, key, keyLen);
-    assert(result == 0);
+    UT_assert(result == 0);
 
     result = XoofffWBC_Encipher(&xp, input, output, dataLen, W, WLen);
-    assert(result == 0);
+    UT_assert(result == 0);
 
     result = XoofffWBC_Decipher(&xp, output, inputPrime, dataLen, W, WLen);
-    assert(result == 0);
-    assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
+    UT_assert(result == 0);
+    UT_assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
 
@@ -236,7 +231,7 @@ void selfTestXoofffWBC(const unsigned char *expected)
 
     UT_startTest("Xoofff-WBC", "");
     performTestXoofffWBC(checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -258,7 +253,7 @@ void writeTestXoofffWBC_One(FILE *f)
 void writeTestXoofffWBC(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
 
     #if 0
     {
@@ -321,12 +316,12 @@ static void performTestXoofffWBC_AE_OneInput(BitLength keyLen, BitLength dataLen
     #endif
 
     result = XoofffWBCAE_Initialize(&xp, key, keyLen);
-    assert(result == 0);
+    UT_assert(result == 0);
 
     result = XoofffWBCAE_Encipher(&xp, input, output, dataLen, AD, ADLen);
-    assert(result == 0);
+    UT_assert(result == 0);
     result = XoofffWBCAE_Decipher(&xp, output, inputPrime, dataLen, AD, ADLen);
-    assert(result == 0);
+    UT_assert(result == 0);
     #ifdef UT_VERBOSE
     if (memcmp(input,inputPrime,(dataLen + 7) / 8) != 0)
     {
@@ -343,7 +338,7 @@ static void performTestXoofffWBC_AE_OneInput(BitLength keyLen, BitLength dataLen
         printf("\n");
     }
     #endif
-    assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
+    UT_assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
 
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 8 * expansionLenWBCAE + 7) / 8);
 
@@ -453,7 +448,7 @@ void selfTestXoofffWBC_AE(const unsigned char *expected)
 
     UT_startTest("Xoofff-WBC-AE", "");
     performTestXoofffWBC_AE(checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -475,7 +470,7 @@ void writeTestXoofffWBC_AE_One(FILE *f)
 void writeTestXoofffWBC_AE(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
 
     #if 0
     {
@@ -549,10 +544,10 @@ static void performTestXoofffSANE_OneInput(BitLength keyLen, BitLength nonceLen,
     #endif
 
     result = XoofffSANE_Initialize(&kvEnc, key, keyLen, nonce, nonceLen, tagInit);
-    assert(result == 0);
+    UT_assert(result == 0);
     result = XoofffSANE_Initialize(&kvDec, key, keyLen, nonce, nonceLen, tag);
-    assert(result == 0);
-    assert(!memcmp(tag, tagInit, tagLenSANE));
+    UT_assert(result == 0);
+    UT_assert(!memcmp(tag, tagInit, tagLenSANE));
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tagInit, tagLenSANE);
 
     #ifdef UT_VERBOSE
@@ -596,10 +591,10 @@ static void performTestXoofffSANE_OneInput(BitLength keyLen, BitLength nonceLen,
 
     for (session = 3; session != 0; --session) {
         result = XoofffSANE_Wrap(&kvEnc, input, output, dataLen, AD, ADLen, tag);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = XoofffSANE_Unwrap(&kvDec, output, inputPrime, dataLen, AD, ADLen, tag);
-        assert(result == 0);
-        assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
+        UT_assert(result == 0);
+        UT_assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tag, tagLenSANE);
         #ifdef UT_VERBOSE
@@ -701,7 +696,7 @@ void selfTestXoofffSANE(const unsigned char *expected)
 
     UT_startTest("Xoofff-SANE", "");
     performTestXoofffSANE(checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -723,7 +718,7 @@ void writeTestXoofffSANE_One(FILE *f)
 void writeTestXoofffSANE(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
     writeTestXoofffSANE_One(f);
     fclose(f);
 }
@@ -771,9 +766,9 @@ static void performTestXoofffSANSE_OneInput(BitLength keyLen, BitLength dataLen,
     #endif
 
     result = XoofffSANSE_Initialize(&xpEnc, key, keyLen);
-    assert(result == 0);
+    UT_assert(result == 0);
     result = XoofffSANSE_Initialize(&xpDec, key, keyLen);
-    assert(result == 0);
+    UT_assert(result == 0);
 
     #ifdef UT_VERBOSE
     {
@@ -809,10 +804,10 @@ static void performTestXoofffSANSE_OneInput(BitLength keyLen, BitLength dataLen,
 
     for (session = 3; session != 0; --session) {
         result = XoofffSANSE_Wrap(&xpEnc, input, output, dataLen, AD, ADLen, tag);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = XoofffSANSE_Unwrap(&xpDec, output, inputPrime, dataLen, AD, ADLen, tag);
-        assert(result == 0);
-        assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
+        UT_assert(result == 0);
+        UT_assert(!memcmp(input,inputPrime,(dataLen + 7) / 8));
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (dataLen + 7) / 8);
         KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, tag, tagLenSANSE);
         #ifdef UT_VERBOSE
@@ -899,7 +894,7 @@ void selfTestXoofffSANSE(const unsigned char *expected)
 
     UT_startTest("Xoofff-SANSE", "");
     performTestXoofffSANSE(checksum);
-    assert(memcmp(expected, checksum, checksumByteSize) == 0);
+    UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     UT_endTest();
 }
 
@@ -921,7 +916,7 @@ void writeTestXoofffSANSE_One(FILE *f)
 void writeTestXoofffSANSE(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
     writeTestXoofffSANSE_One(f);
     fclose(f);
 }

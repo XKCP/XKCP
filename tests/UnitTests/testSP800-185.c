@@ -35,11 +35,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define blockByteSizeMax        (8*1024)
 #define inputByteSizePH         (80*1024)
 
-static void assert(int condition)
-{
-    UT_assert(condition, (char*)"");
-}
-
 static void generateSimpleRawMaterial(unsigned char* data, size_t length, unsigned char seed1, unsigned int seed2)
 {
     unsigned int i;
@@ -76,7 +71,7 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
             result = cSHAKE128( input, inputLen, output, outputLen, name, nameLen, customization, customLen );
         else
             result = cSHAKE256( input, inputLen, output, outputLen, name, nameLen, customization, customLen );
-        assert(result == 0);
+        UT_assert(result == 0);
 
         if ((nameLen == 0) && (customLen == 0))
         {    /* Check cSHAKE-xxx output is equal to SHAKE-xxx */
@@ -92,13 +87,13 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
                 Keccak_HashInitialize_SHAKE256(&hi);
             }
             result = Keccak_HashUpdate(&hi, input, inputLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = Keccak_HashFinal(&hi, NULL);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = Keccak_HashSqueeze(&hi, outputShake, (outputLen + 7) & ~7);
-            assert(result == 0);
+            UT_assert(result == 0);
             outputShake[outputLen / 8] &= ((1 << (outputLen & 7)) - 1);
-            assert(!memcmp(output, outputShake, (outputLen + 7) / 8));
+            UT_assert(!memcmp(output, outputShake, (outputLen + 7) / 8));
         }
     }
     else if (mode == 1)
@@ -108,33 +103,33 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
         {
             cSHAKE_Instance csk;
             result = cSHAKE128_Initialize(&csk, outputLen, name, nameLen, customization, customLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             for (i = 0; i < inputLen; i += l )
             {
                 l = inputLen - i;
                 if ( l > 8 )
                     l = 8;
                 result = cSHAKE128_Update(&csk, input + i / 8, l);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
             result =  cSHAKE128_Final(&csk, output);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
         else
         {
             cSHAKE_Instance csk;
             result = cSHAKE256_Initialize(&csk, outputLen, name, nameLen, customization, customLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             for (i = 0; i < inputLen; i += l )
             {
                 l = inputLen - i;
                 if ( l > 8 )
                     l = 8;
                 result = cSHAKE256_Update(&csk, input + i / 8, l);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
             result =  cSHAKE256_Final(&csk, output);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
     }
     else if (mode == 2)
@@ -144,38 +139,38 @@ static void performTestcSHAKEOneInput(unsigned int securityStrength, BitLength i
             cSHAKE_Instance csk;
             unsigned char *pInput = input;
             result = cSHAKE128_Initialize(&csk, outputLen, name, nameLen, customization, customLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             while (inputLen)
             {
                 unsigned int len = ((rand() << 15) ^ rand()) % (inputLen + 1);
                 if (len < inputLen)
                     len -= len & 7; 
                 result = cSHAKE128_Update(&csk, pInput, len);
-                assert(result == 0);
+                UT_assert(result == 0);
                 pInput += len / 8;
                 inputLen -= len;
             }
             result =  cSHAKE128_Final(&csk, output);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
         else
         {
             cSHAKE_Instance csk;
             unsigned char *pInput = input;
             result = cSHAKE256_Initialize(&csk, outputLen, name, nameLen, customization, customLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             while (inputLen)
             {
                 unsigned int len = ((rand() << 15) ^ rand()) % (inputLen + 1);
                 if (len < inputLen)
                     len -= len & 7; 
                 result = cSHAKE256_Update(&csk, pInput, len);
-                assert(result == 0);
+                UT_assert(result == 0);
                 pInput += len / 8;
                 inputLen -= len;
             }
             result =  cSHAKE256_Final(&csk, output);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
     }
     KeccakWidth1600_SpongeAbsorb(pSpongeChecksum, output, (outputLen + 7) / 8);
@@ -218,25 +213,25 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
         {
             cSHAKE_Instance csk;
             result = cSHAKE128_Initialize(&csk, 0, 0, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE128_Update(&csk, input, inputLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE128_Final(&csk, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE128_Squeeze(&csk, output, outputLen);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
         else
         {
             cSHAKE_Instance csk;
             result = cSHAKE256_Initialize(&csk, 0, 0, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE256_Update(&csk, input, inputLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE256_Final(&csk, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE256_Squeeze(&csk, output, outputLen);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
     }
     else if (mode == 1)
@@ -246,11 +241,11 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
         {
             cSHAKE_Instance csk;
             result = cSHAKE128_Initialize(&csk, 0, 0, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE128_Update(&csk, input, inputLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE128_Final(&csk, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             for (i = 0; i < outputLen; i += l)
             {
@@ -258,18 +253,18 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
                 if ( l > 8 )
                     l = 8;
                 result =  cSHAKE128_Squeeze(&csk, output + i / 8, l);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
         }
         else
         {
             cSHAKE_Instance csk;
             result = cSHAKE256_Initialize(&csk, 0, 0, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE256_Update(&csk, input, inputLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE256_Final(&csk, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             for (i = 0; i < outputLen; i += l)
             {
@@ -277,7 +272,7 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
                 if ( l > 8 )
                     l = 8;
                 result =  cSHAKE256_Squeeze(&csk, output + i / 8, l);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
         }
     }
@@ -288,11 +283,11 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
             cSHAKE_Instance csk;
             unsigned int len;
             result = cSHAKE128_Initialize(&csk, 0, 0, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE128_Update(&csk, input, inputLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE128_Final(&csk, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             for (i = 0; i < outputLen; i += len)
             {
@@ -300,7 +295,7 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
                 if (len < (outputLen-i))
                     len -= len & 7; 
                 result = cSHAKE128_Squeeze(&csk, output+i / 8, len);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
         }
         else
@@ -308,11 +303,11 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
             cSHAKE_Instance csk;
             unsigned int len;
             result = cSHAKE256_Initialize(&csk, 0, 0, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE256_Update(&csk, input, inputLen);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = cSHAKE256_Final(&csk, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             for (i = 0; i < outputLen; i += len)
             {
@@ -320,7 +315,7 @@ static void performTestcSHAKEXOFOneInput(unsigned int securityStrength, unsigned
                 if (len < (outputLen-i))
                     len -= len & 7; 
                 result = cSHAKE256_Squeeze(&csk, output+i / 8, len);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
         }
     }
@@ -425,7 +420,7 @@ void selfTestcSHAKE(unsigned int securityStrength, const unsigned char *expected
         UT_startTest("cSHAKE256", "");
     for(mode = 0; mode <= 2; ++mode) {
         performTestcSHAKE(securityStrength, checksum, mode);
-        assert(memcmp(expected, checksum, checksumByteSize) == 0);
+        UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     }
     UT_endTest();
 }
@@ -441,7 +436,7 @@ void selfTestcSHAKEXOF(unsigned int securityStrength, const unsigned char *expec
         UT_startTest("cSHAKE256 (XOF)", "");
     for(mode = 0; mode <= 2; ++mode) {
         performTestcSHAKEXOF(securityStrength, checksum, mode);
-        assert(memcmp(expected, checksum, checksumByteSize) == 0);
+        UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     }
     UT_endTest();
 }
@@ -474,7 +469,7 @@ void writeTestcSHAKEXOFOne(FILE *f, unsigned int securityStrength)
 void writeTestcSHAKE(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
     writeTestcSHAKEOne(f, 128);
     writeTestcSHAKEOne(f, 256);
     writeTestcSHAKEXOFOne(f, 128);
@@ -503,7 +498,7 @@ static void performTestParallelHashOneInput(unsigned int securityStrength, unsig
             result = ParallelHash128( input, inputLen*8, blockSize, output, outputLen*8, customization, customLen*8 );
         else
             result = ParallelHash256( input, inputLen*8, blockSize, output, outputLen*8, customization, customLen*8 );
-        assert(result == 0);
+        UT_assert(result == 0);
     }
     else if (mode == 1)
     {
@@ -511,27 +506,27 @@ static void performTestParallelHashOneInput(unsigned int securityStrength, unsig
         {
             ParallelHash_Instance ph;
             result = ParallelHash128_Initialize(&ph, blockSize, outputLen*8, customization, customLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             for (i = 0; i < inputLen; ++i )
             {
                 result = ParallelHash128_Update(&ph, input + i, 8);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
             result =  ParallelHash128_Final(&ph, output);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
         else
         {
             ParallelHash_Instance ph;
             result = ParallelHash256_Initialize(&ph, blockSize, outputLen*8, customization, customLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             for (i = 0; i < inputLen; ++i )
             {
                 result = ParallelHash256_Update(&ph, input + i, 8);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
             result =  ParallelHash256_Final(&ph, output);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
     }
     else if (mode == 2)
@@ -541,34 +536,34 @@ static void performTestParallelHashOneInput(unsigned int securityStrength, unsig
             ParallelHash_Instance ph;
             unsigned char *pInput = input;
             result = ParallelHash128_Initialize(&ph, blockSize, outputLen*8, customization, customLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             while (inputLen)
             {
                 unsigned int len = ((rand() << 15) ^ rand()) % (inputLen + 1);
                 result = ParallelHash128_Update(&ph, pInput, len*8);
-                assert(result == 0);
+                UT_assert(result == 0);
                 pInput += len;
                 inputLen -= len;
             }
             result =  ParallelHash128_Final(&ph, output);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
         else
         {
             ParallelHash_Instance ph;
             unsigned char *pInput = input;
             result = ParallelHash256_Initialize(&ph, blockSize, outputLen*8, customization, customLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             while (inputLen)
             {
                 unsigned int len = ((rand() << 15) ^ rand()) % (inputLen + 1);
                 result = ParallelHash256_Update(&ph, pInput, len*8);
-                assert(result == 0);
+                UT_assert(result == 0);
                 pInput += len;
                 inputLen -= len;
             }
             result =  ParallelHash256_Final(&ph, output);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
     }
 
@@ -611,25 +606,25 @@ static void performTestParallelHashXOFOneInput(unsigned int securityStrength, un
         {
             ParallelHash_Instance ph;
             result = ParallelHash128_Initialize(&ph, blockSize, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash128_Update(&ph, input, inputLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash128_Final(&ph, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash128_Squeeze(&ph, output, outputLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
         else
         {
             ParallelHash_Instance ph;
             result = ParallelHash256_Initialize(&ph, blockSize, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash256_Update(&ph, input, inputLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash256_Final(&ph, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash256_Squeeze(&ph, output, outputLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
     }
     else if (mode == 1)
@@ -638,32 +633,32 @@ static void performTestParallelHashXOFOneInput(unsigned int securityStrength, un
         {
             ParallelHash_Instance ph;
             result = ParallelHash128_Initialize(&ph, blockSize, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash128_Update(&ph, input, inputLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash128_Final(&ph, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             for (i = 0; i < outputLen; ++i)
             {
                 result =  ParallelHash128_Squeeze(&ph, output + i, 8);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
         }
         else
         {
             ParallelHash_Instance ph;
             result = ParallelHash256_Initialize(&ph, blockSize, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash256_Update(&ph, input, inputLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash256_Final(&ph, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             for (i = 0; i < outputLen; ++i)
             {
                 result =  ParallelHash256_Squeeze(&ph, output + i, 8);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
         }
     }
@@ -674,17 +669,17 @@ static void performTestParallelHashXOFOneInput(unsigned int securityStrength, un
             ParallelHash_Instance ph;
             unsigned int len;
             result = ParallelHash128_Initialize(&ph, blockSize, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash128_Update(&ph, input, inputLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash128_Final(&ph, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             for (i = 0; i < outputLen; i += len)
             {
                 len = ((rand() << 15) ^ rand()) % ((outputLen-i) + 1);
                 result = ParallelHash128_Squeeze(&ph, output+i, len*8);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
         }
         else
@@ -692,17 +687,17 @@ static void performTestParallelHashXOFOneInput(unsigned int securityStrength, un
             ParallelHash_Instance ph;
             unsigned int len;
             result = ParallelHash256_Initialize(&ph, blockSize, 0, 0, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash256_Update(&ph, input, inputLen*8);
-            assert(result == 0);
+            UT_assert(result == 0);
             result = ParallelHash256_Final(&ph, 0);
-            assert(result == 0);
+            UT_assert(result == 0);
 
             for (i = 0; i < outputLen; i += len)
             {
                 len = ((rand() << 15) ^ rand()) % ((outputLen-i) + 1);
                 result = ParallelHash256_Squeeze(&ph, output+i, len*8);
-                assert(result == 0);
+                UT_assert(result == 0);
             }
         }
     }
@@ -741,7 +736,7 @@ static void performTestParallelHash(unsigned int securityStrength, unsigned char
     customLen = 0;
     for(blockSize=1024; blockSize<=8192; blockSize*=8)
     for(inputLen=0; inputLen<=blockSize*9+123; inputLen++) {
-        assert(inputLen <= inputByteSizePH);
+        UT_assert(inputLen <= inputByteSizePH);
         performTestParallelHashOneInput(securityStrength, blockSize, inputLen, outputLen, customLen, &spongeChecksum, mode);
     }
     
@@ -749,7 +744,7 @@ static void performTestParallelHash(unsigned int securityStrength, unsigned char
     for(outputLen = 128/8; outputLen <= 512/8; outputLen <<= 1)
     for(inputLen = 0; inputLen <= (3*blockSize) && inputLen <= inputByteSize; inputLen = inputLen ? (inputLen + ((securityStrength == 128) ? 167 : 135)) : 1)
     for(customLen = 0; customLen <= customizationByteSize; customLen += 7) {
-        assert(inputLen <= inputByteSizePH);
+        UT_assert(inputLen <= inputByteSizePH);
         performTestParallelHashOneInput(securityStrength, blockSize, inputLen, outputLen, customLen, &spongeChecksum, 0);
     }
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
@@ -779,7 +774,7 @@ static void performTestParallelHashXOF(unsigned int securityStrength, unsigned c
     for(blockSize = blockByteSizeMin; blockSize <= blockByteSizeMax; blockSize <<= 1)
     for(inputLen = 0; inputLen <= (3*blockSize) && inputLen <= inputByteSize; inputLen = inputLen ? (inputLen << 2) : 1)
     {
-        assert(inputLen <= inputByteSize);
+        UT_assert(inputLen <= inputByteSize);
         performTestParallelHashXOFOneInput(securityStrength, blockSize, inputLen, outputLen, &spongeChecksum, mode);
     }
     KeccakWidth1600_SpongeSqueeze(&spongeChecksum, checksum, checksumByteSize);
@@ -807,7 +802,7 @@ void selfTestParallelHash(unsigned int securityStrength, const unsigned char *ex
         UT_startTest("ParallelHash256", "");
     for(mode = 0; mode <= 2; ++mode) {
         performTestParallelHash(securityStrength, checksum, mode);
-        assert(memcmp(expected, checksum, checksumByteSize) == 0);
+        UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     }
     UT_endTest();
 }
@@ -823,7 +818,7 @@ void selfTestParallelHashXOF(unsigned int securityStrength, const unsigned char 
         UT_startTest("ParallelHashXOF256", "");
     for(mode = 0; mode <= 2; ++mode) {
         performTestParallelHashXOF(securityStrength, checksum, mode);
-        assert(memcmp(expected, checksum, checksumByteSize) == 0);
+        UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     }
     UT_endTest();
 }
@@ -856,7 +851,7 @@ void writeTestParallelHashXOFOne(FILE *f, unsigned int securityStrength)
 void writeTestParallelHash(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
     writeTestParallelHashOne(f, 128);
     writeTestParallelHashOne(f, 256);
     writeTestParallelHashXOFOne(f, 128);
@@ -878,8 +873,8 @@ static void performTestcSHAKE_NIST(void)
             "\xC1\xC3\x69\x25\xB6\x40\x9A\x04\xF1\xB5\x04\xFC\xBC\xA9\xD8\x2B\x40\x17\x27\x7C\xB5\xED\x2B\x20\x65\xFC\x1D\x38\x14\xD5\xAA\xF5";
 
         result = cSHAKE128( data, 32, output, 256, N, strlen((const char *)N) * 8, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST cSHAKE128 test vector 1 OK\n");
         #endif
@@ -900,8 +895,8 @@ static void performTestcSHAKE_NIST(void)
             "\xC5\x22\x1D\x50\xE4\xF8\x22\xD9\x6A\x2E\x88\x81\xA9\x61\x42\x0F\x29\x4B\x7B\x24\xFE\x3D\x20\x94\xBA\xED\x2C\x65\x24\xCC\x16\x6B";
 
         result = cSHAKE128( data, 1600, output, 256, N, strlen((const char *)N) * 8, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST cSHAKE128 test vector 2 OK\n");
         #endif
@@ -917,8 +912,8 @@ static void performTestcSHAKE_NIST(void)
 
 
         result = cSHAKE256( data, 32, output, 512, N, strlen((const char *)N) * 8, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST cSHAKE256 test vector 3 OK\n");
         #endif
@@ -940,8 +935,8 @@ static void performTestcSHAKE_NIST(void)
             "\x27\xF4\x2B\x17\xED\x1D\xF6\x3E\x8E\xC1\x18\xF0\x4B\x23\x63\x3C\x1D\xFB\x15\x74\xC8\xFB\x55\xCB\x45\xDA\x8E\x25\xAF\xB0\x92\xBB";
 
         result = cSHAKE256( data, 1600, output, 512, N, strlen((const char *)N) * 8, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST cSHAKE256 test vector 4 OK\n");
         #endif
@@ -962,8 +957,8 @@ static void performTestKMAC_NIST(void)
             "\xE5\x78\x0B\x0D\x3E\xA6\xF7\xD3\xA4\x29\xC5\x70\x6A\xA4\x3A\x00\xFA\xDB\xD7\xD4\x96\x28\x83\x9E\x31\x87\x24\x3F\x45\x6E\xE1\x4E";
 
         result = KMAC128( K, 256, data, 32, output, 256, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC128 test vector 1 OK\n");
         #endif
@@ -978,8 +973,8 @@ static void performTestKMAC_NIST(void)
             "\x3B\x1F\xBA\x96\x3C\xD8\xB0\xB5\x9E\x8C\x1A\x6D\x71\x88\x8B\x71\x43\x65\x1A\xF8\xBA\x0A\x70\x70\xC0\x97\x9E\x28\x11\x32\x4A\xA5";
 
         result = KMAC128( K, 256, data, 32, output, 256, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC128 test vector 2 OK\n");
         #endif
@@ -1001,8 +996,8 @@ static void performTestKMAC_NIST(void)
             "\x1F\x5B\x4E\x6C\xCA\x02\x20\x9E\x0D\xCB\x5C\xA6\x35\xB8\x9A\x15\xE2\x71\xEC\xC7\x60\x07\x1D\xFD\x80\x5F\xAA\x38\xF9\x72\x92\x30";
 
         result = KMAC128( K, 256, data, 1600, output, 256, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC128 test vector 3 OK\n");
         #endif
@@ -1019,8 +1014,8 @@ static void performTestKMAC_NIST(void)
 
 
         result = KMAC256( K, 256, data, 32, output, 512, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC256 test vector 4 OK\n");
         #endif
@@ -1044,8 +1039,8 @@ static void performTestKMAC_NIST(void)
 
 
         result = KMAC256( K, 256, data, 1600, output, 512, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC256 test vector 5 OK\n");
         #endif
@@ -1069,8 +1064,8 @@ static void performTestKMAC_NIST(void)
 
 
         result = KMAC256( K, 256, data, 1600, output, 512, S, strlen((const char *)S) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC256 test vector 6 OK\n");
         #endif
@@ -1092,14 +1087,14 @@ static void performTestKMACXOF_NIST(void)
             "\xCD\x83\x74\x0B\xBD\x92\xCC\xC8\xCF\x03\x2B\x14\x81\xA0\xF4\x46\x0E\x7C\xA9\xDD\x12\xB0\x8A\x0C\x40\x31\x17\x8B\xAC\xD6\xEC\x35";
 
         result = KMAC128_Initialize(&km, K, 256, 0, S, strlen((const char *)S) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC128_Update(&km, data, 32);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC128_Final(&km, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC128_Squeeze(&km, output, 256);
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC128 XOF test vector 1 OK\n");
         #endif
@@ -1114,14 +1109,14 @@ static void performTestKMACXOF_NIST(void)
             "\x31\xA4\x45\x27\xB4\xED\x9F\x5C\x61\x01\xD1\x1D\xE6\xD2\x6F\x06\x20\xAA\x5C\x34\x1D\xEF\x41\x29\x96\x57\xFE\x9D\xF1\xA3\xB1\x6C";
 
         result = KMAC128_Initialize(&km, K, 256, 0, S, strlen((const char *)S) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC128_Update(&km, data, 32);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC128_Final(&km, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC128_Squeeze(&km, output, 256);
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC128 XOF test vector 2 OK\n");
         #endif
@@ -1143,14 +1138,14 @@ static void performTestKMACXOF_NIST(void)
             "\x47\x02\x6C\x7C\xD7\x93\x08\x4A\xA0\x28\x3C\x25\x3E\xF6\x58\x49\x0C\x0D\xB6\x14\x38\xB8\x32\x6F\xE9\xBD\xDF\x28\x1B\x83\xAE\x0F";
 
         result = KMAC128_Initialize(&km, K, 256, 0, S, strlen((const char *)S) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC128_Update(&km, data, 1600);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC128_Final(&km, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC128_Squeeze(&km, output, 256);
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC128 XOF test vector 3 OK\n");
         #endif
@@ -1166,14 +1161,14 @@ static void performTestKMACXOF_NIST(void)
                          "\x6F\xAA\x7A\xF6\x34\xA0\xBF\x8F\xF6\xDF\x39\x37\x4F\xA0\x0F\xAD\x9A\x39\xE3\x22\xA7\xC9\x20\x65\xA6\x4E\xB1\xFB\x08\x01\xEB\x2B";
 
         result = KMAC256_Initialize(&km, K, 256, 0, S, strlen((const char *)S) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC256_Update(&km, data, 32);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC256_Final(&km, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC256_Squeeze(&km, output, 512);
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC256 XOF test vector 4 OK\n");
         #endif
@@ -1196,14 +1191,14 @@ static void performTestKMACXOF_NIST(void)
                          "\xA6\x33\x07\x9F\x81\xCE\x12\xA2\x5F\x45\x61\x5E\xC8\x99\x72\x03\x1D\x18\x33\x73\x31\xD2\x4C\xEB\x8F\x8C\xA8\xE6\xA1\x9F\xD9\x8B";
 
         result = KMAC256_Initialize(&km, K, 256, 0, S, strlen((const char *)S) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC256_Update(&km, data, 1600);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC256_Final(&km, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC256_Squeeze(&km, output, 512);
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC256 XOF test vector 5 OK\n");
         #endif
@@ -1226,14 +1221,14 @@ static void performTestKMACXOF_NIST(void)
                          "\x67\xBA\x01\xC6\x2E\x8A\xB8\x57\x8D\x2D\x49\x9B\xD1\xBB\x27\x67\x68\x78\x11\x90\x02\x0A\x30\x6A\x97\xDE\x28\x1D\xCC\x30\x30\x5D";
 
         result = KMAC256_Initialize(&km, K, 256, 0, S, strlen((const char *)S) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC256_Update(&km, data, 1600);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC256_Final(&km, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = KMAC256_Squeeze(&km, output, 512);
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST KMAC256 XOF test vector 6 OK\n");
         #endif
@@ -1255,8 +1250,8 @@ static void performTestParallelHash_NIST(void)
             "\xBA\x8D\xC1\xD1\xD9\x79\x33\x1D\x3F\x81\x36\x03\xC6\x7F\x72\x60\x9A\xB5\xE4\x4B\x94\xA0\xB8\xF9\xAF\x46\x51\x44\x54\xA2\xB4\xF5";
 
         result = ParallelHash128( X192, 192, 8, output, 256, S0, strlen((const char *)S0) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST ParallelHash128 test vector 1 OK\n");
         #endif
@@ -1267,8 +1262,8 @@ static void performTestParallelHash_NIST(void)
             "\xFC\x48\x4D\xCB\x3F\x84\xDC\xEE\xDC\x35\x34\x38\x15\x1B\xEE\x58\x15\x7D\x6E\xFE\xD0\x44\x5A\x81\xF1\x65\xE4\x95\x79\x5B\x72\x06";
 
         result = ParallelHash128( X192, 192, 8, output, 256, S1, strlen((const char *)S1) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST ParallelHash128 test vector 2 OK\n");
         #endif
@@ -1280,8 +1275,8 @@ static void performTestParallelHash_NIST(void)
                          "\x1B\x7F\x2A\x3E\x0C\xE0\x55\xC0\x28\x05\xE7\xC2\xDE\x1F\xB7\x46\xAF\x97\xA1\xDD\x01\xF4\x3B\x82\x4E\x31\xB8\x76\x12\x41\x04\x29";
 
         result = ParallelHash256( X192, 192, 8, output, 512, S0, strlen((const char *)S0) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST ParallelHash256 test vector 1 OK\n");
         #endif
@@ -1293,8 +1288,8 @@ static void performTestParallelHash_NIST(void)
                          "\x33\xA7\x24\x91\xF2\x36\x96\x9C\xA8\xAF\xAE\xA2\x9C\x68\x2D\x47\xA3\x93\xC0\x65\xB3\x8E\x29\xFA\xE6\x51\xA2\x09\x1C\x83\x31\x10"; 
 
         result = ParallelHash256( X192, 192, 8, output, 512, S1, strlen((const char *)S1) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST ParallelHash256 test vector 2 OK\n");
         #endif
@@ -1318,14 +1313,14 @@ static void performTestParallelHashXOF_NIST(void)
             "\xFE\x47\xD6\x61\xE4\x9F\xFE\x5B\x7D\x99\x99\x22\xC0\x62\x35\x67\x50\xCA\xF5\x52\x98\x5B\x8E\x8C\xE6\x66\x7F\x27\x27\xC3\xC8\xD3";
 
         result = ParallelHash128_Initialize(&ph, 8, 0, S0, strlen((const char *)S0) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash128_Update(&ph, X192, 192);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash128_Final(&ph, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash128_Squeeze(&ph, output, 256);
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST ParallelHash128 XOF test vector 1 OK\n");
         #endif
@@ -1336,14 +1331,14 @@ static void performTestParallelHashXOF_NIST(void)
             "\xEA\x2A\x79\x31\x40\x82\x0F\x7A\x12\x8B\x8E\xB7\x0A\x94\x39\xF9\x32\x57\xC6\xE6\xE7\x9B\x4A\x54\x0D\x29\x1D\x6D\xAE\x70\x98\xD7";
 
         result = ParallelHash128_Initialize(&ph, 8, 0, S1, strlen((const char *)S1) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash128_Update(&ph, X192, 192);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash128_Final(&ph, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash128_Squeeze(&ph, output, 256);
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST ParallelHash128 XOF test vector 2 OK\n");
         #endif
@@ -1355,14 +1350,14 @@ static void performTestParallelHashXOF_NIST(void)
                          "\x75\xFB\xF8\x4B\xCA\xE7\x37\x8A\xC4\x44\xBE\x68\x1D\x72\x94\x99\xAF\xCA\x66\x7F\xB8\x79\x34\x8B\xFD\xDA\x42\x78\x63\xC8\x2F\x1C";
 
         result = ParallelHash256_Initialize(&ph, 8, 0, S0, strlen((const char *)S0) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash256_Update(&ph, X192, 192);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash256_Final(&ph, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash256_Squeeze(&ph, output, 512);
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST ParallelHash256 XOF test vector 1 OK\n");
         #endif
@@ -1374,14 +1369,14 @@ static void performTestParallelHashXOF_NIST(void)
                          "\x68\xE5\xC1\xA2\x09\x87\xE2\xC9\xC6\x5F\xEB\xED\x03\x88\x7A\x51\xD3\x56\x24\xED\x12\x37\x75\x94\xB5\x58\x55\x41\xDC\x37\x7E\xFC";
 
         result = ParallelHash256_Initialize(&ph, 8, 0, S1, strlen((const char *)S1) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash256_Update(&ph, X192, 192);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash256_Final(&ph, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = ParallelHash256_Squeeze(&ph, output, 512);
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST ParallelHash256 XOF test vector 2 OK\n");
         #endif
@@ -1410,8 +1405,8 @@ static void performTestTupleHash_NIST(void)
         tuple[1].input = TE6;
         tuple[1].inputBitLen = 6*8;
         result = TupleHash128( tuple, 2, output, 256, S0, strlen((const char *)S0) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash128 test vector 1 OK\n");
         #endif
@@ -1426,8 +1421,8 @@ static void performTestTupleHash_NIST(void)
         tuple[1].input = TE6;
         tuple[1].inputBitLen = 6*8;
         result = TupleHash128( tuple, 2, output, 256, S1, strlen((const char *)S1) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash128 test vector 2 OK\n");
         #endif
@@ -1445,8 +1440,8 @@ static void performTestTupleHash_NIST(void)
         tuple[2].inputBitLen = 9*8;
 
         result = TupleHash128( tuple, 3, output, 256, S1, strlen((const char *)S1) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash128 test vector 3 OK\n");
         #endif
@@ -1462,8 +1457,8 @@ static void performTestTupleHash_NIST(void)
         tuple[1].input = TE6;
         tuple[1].inputBitLen = 6*8;
         result = TupleHash256( tuple, 2, output, 512, S0, strlen((const char *)S0) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash256 test vector 1 OK\n");
         #endif
@@ -1479,8 +1474,8 @@ static void performTestTupleHash_NIST(void)
         tuple[1].input = TE6;
         tuple[1].inputBitLen = 6*8;
         result = TupleHash256( tuple, 2, output, 512, S1, strlen((const char *)S1) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash256 test vector 2 OK\n");
         #endif
@@ -1499,8 +1494,8 @@ static void performTestTupleHash_NIST(void)
         tuple[2].inputBitLen = 9*8;
 
         result = TupleHash256( tuple, 3, output, 512, S1, strlen((const char *)S1) * 8 );
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash256 test vector 3 OK\n");
         #endif
@@ -1529,14 +1524,14 @@ static void performTestTupleHashXOF_NIST(void)
         tuple[1].input = TE6;
         tuple[1].inputBitLen = 6*8;
         result = TupleHash128_Initialize(&th, 0, S0, strlen((const char *)S0) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash128_Update(&th, tuple, 2);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash128_Final(&th, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash128_Squeeze(&th, output, 256);
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash128 XOF test vector 1 OK\n");
         #endif
@@ -1551,14 +1546,14 @@ static void performTestTupleHashXOF_NIST(void)
         tuple[1].input = TE6;
         tuple[1].inputBitLen = 6*8;
         result = TupleHash128_Initialize(&th, 0, S1, strlen((const char *)S1) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash128_Update(&th, tuple, 2);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash128_Final(&th, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash128_Squeeze(&th, output, 256);
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash128 XOF test vector 2 OK\n");
         #endif
@@ -1575,14 +1570,14 @@ static void performTestTupleHashXOF_NIST(void)
         tuple[2].input = TE9;
         tuple[2].inputBitLen = 9*8;
         result = TupleHash128_Initialize(&th, 0, S1, strlen((const char *)S1) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash128_Update(&th, tuple, 3);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash128_Final(&th, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash128_Squeeze(&th, output, 256);
-        assert(result == 0);
-        assert(memcmp(O, output, 256/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 256/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash128 XOF test vector 3 OK\n");
         #endif
@@ -1598,14 +1593,14 @@ static void performTestTupleHashXOF_NIST(void)
         tuple[1].input = TE6;
         tuple[1].inputBitLen = 6*8;
         result = TupleHash256_Initialize(&th, 0, S0, strlen((const char *)S0) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash256_Update(&th, tuple, 2);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash256_Final(&th, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash256_Squeeze(&th, output, 512);
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash256 XOF test vector 1 OK\n");
         #endif
@@ -1621,14 +1616,14 @@ static void performTestTupleHashXOF_NIST(void)
         tuple[1].input = TE6;
         tuple[1].inputBitLen = 6*8;
         result = TupleHash256_Initialize(&th, 0, S1, strlen((const char *)S1) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash256_Update(&th, tuple, 2);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash256_Final(&th, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash256_Squeeze(&th, output, 512);
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash256 XOF test vector 2 OK\n");
         #endif
@@ -1646,14 +1641,14 @@ static void performTestTupleHashXOF_NIST(void)
         tuple[2].input = TE9;
         tuple[2].inputBitLen = 9*8;
         result = TupleHash256_Initialize(&th, 0, S1, strlen((const char *)S1) * 8);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash256_Update(&th, tuple, 3);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash256_Final(&th, output);
-        assert(result == 0);
+        UT_assert(result == 0);
         result = TupleHash256_Squeeze(&th, output, 512);
-        assert(result == 0);
-        assert(memcmp(O, output, 512/8) == 0);
+        UT_assert(result == 0);
+        UT_assert(memcmp(O, output, 512/8) == 0);
         #ifdef UT_VERBOSE
         printf("NIST TupleHash256 XOF test vector 3 OK\n");
         #endif

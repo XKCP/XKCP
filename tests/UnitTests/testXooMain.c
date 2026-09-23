@@ -19,7 +19,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "align.h"
 #if !defined(EMBEDDED)
     #include "timing.h"
-    #include <assert.h>
 #endif
 #include "Xoofff.h"
 #include "XoofffModes.h"

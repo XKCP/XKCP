@@ -44,11 +44,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define keyBitSize              (keyByteSize*8)
 #define checksumByteSize        16
 
-static void assert(int condition)
-{
-    UT_assert(condition, (char*)"");
-}
-
 static void randomize( unsigned char* data, unsigned int length)
 {
     #if !defined(UT_EMBEDDED)
@@ -102,30 +97,30 @@ static void performTestXoofffOneInput(BitLength keyLen, BitLength inputLen, BitL
     #endif
 
     result = Xoofff_MaskDerivation(&xp, key, keyLen);
-    assert(result == 0);
+    UT_assert(result == 0);
 
     if (mode == 0)
     {
         /* Input/Output full size in one call */
         result = Xoofff(&xp, input, inputLen, output, outputLen, flags);
-        assert(result == 0);
+        UT_assert(result == 0);
     }
     else if (mode == 1)
     {
         /* Input/Output one byte per call */
         for (i = 0; i < inputLen / 8; ++i ) {
             result = Xoofff_Compress(&xp, input + i, 8, flags);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
         /* Last bits and final flag */
         result = Xoofff_Compress(&xp, input + i, inputLen & 7, flags | Xoofff_FlagLastPart);
-        assert(result == 0);
+        UT_assert(result == 0);
         for (i = 0; i < outputLen / 8; ++i ) {
             result =  Xoofff_Expand(&xp, output + i, 8, flags);
-            assert(result == 0);
+            UT_assert(result == 0);
         }
         result =  Xoofff_Expand(&xp, output + i, outputLen & 7, flags | Xoofff_FlagLastPart);
-        assert(result == 0);
+        UT_assert(result == 0);
     }
     else if (mode == 2)
     {
@@ -141,7 +136,7 @@ static void performTestXoofffOneInput(BitLength keyLen, BitLength inputLen, BitL
             if ((fl & Xoofff_FlagLastPart) == 0)
                 len &= ~7;
             result = Xoofff_Compress(&xp, pInput, len, fl);
-            assert(result == 0);
+            UT_assert(result == 0);
             pInput += len / 8;
             ilen -= len;
         } while (ilen);
@@ -152,7 +147,7 @@ static void performTestXoofffOneInput(BitLength keyLen, BitLength inputLen, BitL
             if ((fl & Xoofff_FlagLastPart) == 0)
                 len &= ~7;
             result = Xoofff_Expand(&xp, pOutput, len, fl);
-            assert(result == 0);
+            UT_assert(result == 0);
             pOutput += len / 8;
             olen -= len;
         }
@@ -258,7 +253,7 @@ void selfTestXoofff(const unsigned char *expected)
     UT_startTest("Xoofff", "");
     for(mode = 0; mode <= 2; ++mode) {
         performTestXoofff(checksum, mode);
-        assert(memcmp(expected, checksum, checksumByteSize) == 0);
+        UT_assert(memcmp(expected, checksum, checksumByteSize) == 0);
     }
     UT_endTest();
 }
@@ -281,7 +276,7 @@ void writeTestXoofffOne(FILE *f)
 void writeTestXoofff(const char *filename)
 {
     FILE *f = fopen(filename, "w");
-    assert(f != NULL);
+    UT_assert(f != NULL);
     writeTestXoofffOne(f);
     fclose(f);
 }

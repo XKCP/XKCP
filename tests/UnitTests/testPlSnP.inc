@@ -431,18 +431,18 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
         unsigned char buffer[PlSnP_P*SnP_laneLengthInBytes*100+SnP_laneCount*SnP_laneLengthInBytes+8];
         unsigned i, blocks, extra, laneCount, alignment;
 
-        assert(PlSnP_FastLoop_Absorb_dispatch(&stateTest, SnP_laneCount, SnP_laneCount, PlSnP_P*SnP_laneCount, buffer, (SnP_laneCount-1)*PlSnP_P) == 0);
+        UT_assert(PlSnP_FastLoop_Absorb_dispatch(&stateTest, SnP_laneCount, SnP_laneCount, PlSnP_P*SnP_laneCount, buffer, (SnP_laneCount-1)*PlSnP_P) == 0);
         for(laneCount=1; laneCount<SnP_laneCount; laneCount++) {
             blocks = 100/laneCount;
             if (blocks > 20) blocks = 20;
             extra = (laneCount-1)*SnP_laneLengthInBytes + blocks%SnP_laneLengthInBytes;
             alignment = (laneCount+5+extra)%8;
-            assert(blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra+alignment <= sizeof(buffer));
+            UT_assert(blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra+alignment <= sizeof(buffer));
             for(i=0; i<sizeof(buffer)-8; i++)
                 buffer[i+alignment] = 0xA0 - 17*i + 2*alignment - 4*laneCount;
-            assert(PlSnP_FastLoop_Absorb_dispatch(&stateTest, laneCount, laneCount, PlSnP_P*laneCount, buffer+alignment, blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra)
+            UT_assert(PlSnP_FastLoop_Absorb_dispatch(&stateTest, laneCount, laneCount, PlSnP_P*laneCount, buffer+alignment, blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra)
                 == blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes);
-            assert(PlSnP_FastLoop_Absorb_dispatch(&stateTest, laneCount, blocks*laneCount, laneCount, buffer+alignment, blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra)
+            UT_assert(PlSnP_FastLoop_Absorb_dispatch(&stateTest, laneCount, blocks*laneCount, laneCount, buffer+alignment, blocks*laneCount*PlSnP_P*SnP_laneLengthInBytes+extra)
                 == blocks*laneCount*SnP_laneLengthInBytes);
         }
         accumulateStateParallel(&stateAccumulated, &stateTest);
@@ -466,7 +466,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             FILE *f;
 
             f = fopen(fileName, "w");
-            assert(f != NULL);
+            UT_assert(f != NULL);
             fprintf(f, "%s", synopsis);
             fprintf(f, "\"");
             for(i=0; i<sizeof(buffer); i++)
@@ -475,7 +475,7 @@ void testPlSnP(const char *fileName, const char *synopsis, const unsigned char *
             fclose(f);
         }
 #endif
-        assert(memcmp(expected, buffer, sizeof(buffer)) == 0);
+        UT_assert(memcmp(expected, buffer, sizeof(buffer)) == 0);
     }
     UT_endTest();
 }

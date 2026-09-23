@@ -15,7 +15,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "config.h"
 #ifdef XKCP_has_PRG_Keccak
 
-#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
