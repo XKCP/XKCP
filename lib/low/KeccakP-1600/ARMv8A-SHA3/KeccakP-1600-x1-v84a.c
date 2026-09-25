@@ -22,6 +22,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <string.h>
 #include "KeccakP-1600-v84a.h"
 #include "brg_endian.h"
+#include "load-store.h"
 
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
 #error Expecting a little-endian platform
@@ -61,10 +62,9 @@ size_t KeccakF1600_v84a_FastLoop_Absorb(KeccakP1600_v84a_state *state, unsigned 
     uint64_t *A = state->A;
 
     while (dataByteLen >= laneCount * 8) {
-        const uint64_t *lanes = (const uint64_t *)data;
         unsigned int i;
         for (i = 0; i < laneCount; i++)
-            A[i] ^= lanes[i];
+            A[i] ^= XKCP_loadLane64(data, i);
         KeccakP1600_v84a_permute24(A, KeccakP1600_v84a_RC);
         data += laneCount * 8;
         dataByteLen -= laneCount * 8;
