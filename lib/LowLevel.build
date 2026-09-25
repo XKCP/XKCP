@@ -105,8 +105,6 @@ The fragments below allow to select the desired implementation of the permutatio
     <!-- *** Low-level services *** -->
 
     <fragment name="optimized">
-        <h>lib/common/brg_endian.h</h>
-        <h>lib/common/load-store.h</h>
         <gcc>-fomit-frame-pointer</gcc>
         <gcc>-O2</gcc>
         <gcc>-g0</gcc>

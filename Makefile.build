@@ -25,6 +25,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <fragment name="common">
         <h>lib/common/align.h</h>
         <h>lib/common/brg_endian.h</h>
+        <h>lib/common/load-store.h</h>
+        <h>lib/common/xkcp-memcmp.h</h>
         <h>lib/low/common/SnP-implementations.h</h>
         <c>lib/low/common/SnP-implementations.c</c>
     </fragment>
