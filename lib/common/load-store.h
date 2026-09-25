@@ -50,4 +50,31 @@ static inline void XKCP_store64(void *p, uint64_t v)
     memcpy(p, &v, sizeof(v));
 }
 
+/*
+Lane i of a sequence of lanes that starts at byte address p. The index i
+counts lanes of 4 or 8 bytes, not bytes, and p is the start of the sequence.
+The SIMD implementations use these to index caller buffers as arrays of
+lanes.
+*/
+
+static inline uint32_t XKCP_loadLane32(const void *p, size_t i)
+{
+    return XKCP_load32((const unsigned char *)p + 4*i);
+}
+
+static inline uint64_t XKCP_loadLane64(const void *p, size_t i)
+{
+    return XKCP_load64((const unsigned char *)p + 8*i);
+}
+
+static inline void XKCP_storeLane32(void *p, size_t i, uint32_t v)
+{
+    XKCP_store32((unsigned char *)p + 4*i, v);
+}
+
+static inline void XKCP_storeLane64(void *p, size_t i, uint64_t v)
+{
+    XKCP_store64((unsigned char *)p + 8*i, v);
+}
+
 #endif
