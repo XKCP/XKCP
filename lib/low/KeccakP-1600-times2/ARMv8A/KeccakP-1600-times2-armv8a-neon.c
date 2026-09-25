@@ -27,6 +27,7 @@ Please refer to PlSnP-documentation.h for more details.
 #include "KeccakP-1600-times2-SnP.h"
 
 #include "brg_endian.h"
+#include "load-store.h"
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
 #error Expecting a little-endian platform
 #endif
@@ -48,12 +49,12 @@ typedef uint64x2_t V128;
 
 /* 
  * OPTIMIZED: Load two 64-bit values from different addresses into one 128-bit vector.
- * Uses direct SIMD loads (vld1_u64) instead of going through GPRs.
- * This avoids expensive fmov instructions between GPR and SIMD registers.
+ * The pointers need not be aligned. With GCC, XKCP_load64() + vcreate_u64() gives
+ * the same code as vld1_u64(); Clang loads the high lane directly (ld1 {v.d}[1]).
  */
-static inline __attribute__((always_inline)) V128 LOAD6464(const uint64_t *hi_ptr, const uint64_t *lo_ptr) {
-    uint64x1_t lo = vld1_u64(lo_ptr);
-    uint64x1_t hi = vld1_u64(hi_ptr);
+static inline __attribute__((always_inline)) V128 LOAD6464(const unsigned char *hi_ptr, const unsigned char *lo_ptr) {
+    uint64x1_t lo = vcreate_u64(XKCP_load64(lo_ptr));
+    uint64x1_t hi = vcreate_u64(XKCP_load64(hi_ptr));
     return vcombine_u64(lo, hi);
 }
 
@@ -383,7 +384,7 @@ static const uint64_t KeccakF1600RoundConstants_vec[24][2] __attribute__((aligne
  * This is the key optimization - avoiding GPR-to-SIMD transfers.
  */
 #define XOR_In_Fast(Xxx, curData0, curData1, argIndex) \
-    XOReq128(Xxx, LOAD6464(&curData1[argIndex], &curData0[argIndex]))
+    XOReq128(Xxx, LOAD6464((curData1) + 8*(argIndex), (curData0) + 8*(argIndex)))
 
 #if defined(__ARM_FEATURE_SHA3)
 /* ---------------------------------------------------------------- */
@@ -520,7 +521,7 @@ do { \
     STORE128((p)[20],s[20]); STORE128((p)[21],s[21]); STORE128((p)[22],s[22]); STORE128((p)[23],s[23]); STORE128((p)[24],s[24]); \
 } while (0)
 #define KP1600t2_XorIn(s, c0, c1, j) \
-    s[j] = veorq_u64(s[j], LOAD6464(&(c1)[j], &(c0)[j]))
+    s[j] = veorq_u64(s[j], LOAD6464((c1) + 8*(j), (c0) + 8*(j)))
 #endif /* __ARM_FEATURE_SHA3 */
 
 /* ---------------------------------------------------------------- */
@@ -541,8 +542,8 @@ size_t KeccakF1600times2_FastLoop_Absorb(
        rounds without touching memory, and stored once at the end. */
     if (laneCount == 21 || laneCount == 17) {
         const unsigned char *dataStart = data;
-        const uint64_t *curData0 = (const uint64_t *)data;
-        const uint64_t *curData1 = (const uint64_t *)(data + laneOffsetParallel * SnP_laneLengthInBytes);
+        const unsigned char *curData0 = data;
+        const unsigned char *curData1 = data + laneOffsetParallel * SnP_laneLengthInBytes;
         V128 *statesAsLanes = (V128 *)states->A;
         V128 s[25];
 
@@ -561,8 +562,8 @@ size_t KeccakF1600times2_FastLoop_Absorb(
                 KP1600t2_XorIn(s, curData0, curData1, 18); KP1600t2_XorIn(s, curData0, curData1, 19);
                 KP1600t2_XorIn(s, curData0, curData1, 20);
                 KeccakP1600times2_SHA3_Rounds24(s);
-                curData0 += laneOffsetSerial;
-                curData1 += laneOffsetSerial;
+                curData0 += laneOffsetSerial*8;
+                curData1 += laneOffsetSerial*8;
                 dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
             }
         } else { /* laneCount == 17 */
@@ -577,13 +578,13 @@ size_t KeccakF1600times2_FastLoop_Absorb(
                 KP1600t2_XorIn(s, curData0, curData1, 14); KP1600t2_XorIn(s, curData0, curData1, 15);
                 KP1600t2_XorIn(s, curData0, curData1, 16);
                 KeccakP1600times2_SHA3_Rounds24(s);
-                curData0 += laneOffsetSerial;
-                curData1 += laneOffsetSerial;
+                curData0 += laneOffsetSerial*8;
+                curData1 += laneOffsetSerial*8;
                 dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
             }
         }
         KeccakP1600times2_StoreState(statesAsLanes, s);
-        return (const unsigned char *)curData0 - dataStart;
+        return curData0 - dataStart;
     } else {
         /* Other rates: AddLanesAll + the verified asm permute. */
         const unsigned char *dataStart = data;
@@ -599,8 +600,8 @@ size_t KeccakF1600times2_FastLoop_Absorb(
     if (laneCount == 21) {
         /* Optimized path for rate 168 bytes (21 lanes) - SHAKE128/ParallelHash128 */
         const unsigned char *dataStart = data;
-        const uint64_t *curData0 = (const uint64_t *)data;
-        const uint64_t *curData1 = (const uint64_t *)(data + laneOffsetParallel * SnP_laneLengthInBytes);
+        const unsigned char *curData0 = data;
+        const unsigned char *curData1 = data + laneOffsetParallel * SnP_laneLengthInBytes;
         V128 *statesAsLanes = (V128 *)states->A;
         declareABCDE
 
@@ -629,18 +630,18 @@ size_t KeccakF1600times2_FastLoop_Absorb(
             XOR_In_Fast(Asa, curData0, curData1, 20);
             prepareTheta
             rounds24
-            curData0 += laneOffsetSerial;
-            curData1 += laneOffsetSerial;
+            curData0 += laneOffsetSerial*8;
+            curData1 += laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
         }
         copyToState(statesAsLanes, A)
-        return (const unsigned char *)curData0 - dataStart;
+        return curData0 - dataStart;
     }
     else if (laneCount == 17) {
         /* Optimized path for rate 136 bytes (17 lanes) - SHA3-256/SHAKE256 */
         const unsigned char *dataStart = data;
-        const uint64_t *curData0 = (const uint64_t *)data;
-        const uint64_t *curData1 = (const uint64_t *)(data + laneOffsetParallel * SnP_laneLengthInBytes);
+        const unsigned char *curData0 = data;
+        const unsigned char *curData1 = data + laneOffsetParallel * SnP_laneLengthInBytes;
         V128 *statesAsLanes = (V128 *)states->A;
         declareABCDE
 
@@ -665,12 +666,12 @@ size_t KeccakF1600times2_FastLoop_Absorb(
             XOR_In_Fast(Ame, curData0, curData1, 16);
             prepareTheta
             rounds24
-            curData0 += laneOffsetSerial;
-            curData1 += laneOffsetSerial;
+            curData0 += laneOffsetSerial*8;
+            curData1 += laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
         }
         copyToState(statesAsLanes, A)
-        return (const unsigned char *)curData0 - dataStart;
+        return curData0 - dataStart;
     }
     else {
         /* General case - use assembly permutation */
@@ -701,8 +702,8 @@ size_t KeccakP1600times2_12rounds_FastLoop_Absorb(
     if (laneCount == 21) {
         /* Optimized path for rate 168 bytes (21 lanes) - K12/TurboSHAKE128 */
         const unsigned char *dataStart = data;
-        const uint64_t *curData0 = (const uint64_t *)data;
-        const uint64_t *curData1 = (const uint64_t *)(data + laneOffsetParallel * SnP_laneLengthInBytes);
+        const unsigned char *curData0 = data;
+        const unsigned char *curData1 = data + laneOffsetParallel * SnP_laneLengthInBytes;
         V128 *statesAsLanes = (V128 *)states->A;
         declareABCDE
 
@@ -731,18 +732,18 @@ size_t KeccakP1600times2_12rounds_FastLoop_Absorb(
             XOR_In_Fast(Asa, curData0, curData1, 20);
             prepareTheta
             rounds12
-            curData0 += laneOffsetSerial;
-            curData1 += laneOffsetSerial;
+            curData0 += laneOffsetSerial*8;
+            curData1 += laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
         }
         copyToState(statesAsLanes, A)
-        return (const unsigned char *)curData0 - dataStart;
+        return curData0 - dataStart;
     }
     else if (laneCount == 17) {
         /* Optimized path for rate 136 bytes (17 lanes) - TurboSHAKE256 */
         const unsigned char *dataStart = data;
-        const uint64_t *curData0 = (const uint64_t *)data;
-        const uint64_t *curData1 = (const uint64_t *)(data + laneOffsetParallel * SnP_laneLengthInBytes);
+        const unsigned char *curData0 = data;
+        const unsigned char *curData1 = data + laneOffsetParallel * SnP_laneLengthInBytes;
         V128 *statesAsLanes = (V128 *)states->A;
         declareABCDE
 
@@ -767,12 +768,12 @@ size_t KeccakP1600times2_12rounds_FastLoop_Absorb(
             XOR_In_Fast(Ame, curData0, curData1, 16);
             prepareTheta
             rounds12
-            curData0 += laneOffsetSerial;
-            curData1 += laneOffsetSerial;
+            curData0 += laneOffsetSerial*8;
+            curData1 += laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
         }
         copyToState(statesAsLanes, A)
-        return (const unsigned char *)curData0 - dataStart;
+        return curData0 - dataStart;
     }
     else {
         /* General case - use assembly permutation */
