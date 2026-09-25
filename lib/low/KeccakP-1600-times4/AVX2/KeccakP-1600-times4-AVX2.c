@@ -104,7 +104,8 @@ void KeccakP1600times4_AVX2_AddBytes(KeccakP1600times4_SIMD256_states *states, u
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        uint64_t lane = *((const uint64_t*)curData);
+        uint64_t lane = 0;
+        memcpy(&lane, curData, SnP_laneLengthInBytes);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] ^= lane;
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
