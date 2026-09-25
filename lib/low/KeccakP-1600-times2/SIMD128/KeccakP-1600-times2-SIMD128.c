@@ -33,6 +33,7 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #endif
 
 #include "brg_endian.h"
+#include "load-store.h"
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
 #error Expecting a little-endian platform
 #endif
@@ -94,7 +95,7 @@ void KeccakP1600times2_SSSE3_AddBytes(KeccakP1600times2_SIMD128_states *states, 
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        uint64_t lane = *((const uint64_t*)curData);
+        uint64_t lane = XKCP_load64(curData);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] ^= lane;
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
@@ -112,9 +113,9 @@ void KeccakP1600times2_SSSE3_AddLanesAll(KeccakP1600times2_SIMD128_states *state
 {
     V128 *stateAsLanes = states->A;
     unsigned int i;
-    const uint64_t *curData0 = (const uint64_t *)data;
-    const uint64_t *curData1 = (const uint64_t *)(data+laneOffset*SnP_laneLengthInBytes);
-    #define XOR_In( argIndex )  XOReq128( stateAsLanes[argIndex], LOAD6464(curData1[argIndex], curData0[argIndex]))
+    const unsigned char *curData0 = data;
+    const unsigned char *curData1 = data+laneOffset*SnP_laneLengthInBytes;
+    #define XOR_In( argIndex )  XOReq128( stateAsLanes[argIndex], LOAD6464(XKCP_loadLane64(curData1, argIndex), XKCP_loadLane64(curData0, argIndex)))
     if ( laneCount >= 17 )  {
         XOR_In( 0 );
         XOR_In( 1 );
@@ -172,7 +173,7 @@ void KeccakP1600times2_SSSE3_OverwriteBytes(KeccakP1600times2_SIMD128_states *st
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        uint64_t lane = *((const uint64_t*)curData);
+        uint64_t lane = XKCP_load64(curData);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] = lane;
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
@@ -188,9 +189,9 @@ void KeccakP1600times2_SSSE3_OverwriteLanesAll(KeccakP1600times2_SIMD128_states 
 {
     V128 *stateAsLanes = states->A;
     unsigned int i;
-    const uint64_t *curData0 = (const uint64_t *)data;
-    const uint64_t *curData1 = (const uint64_t *)(data+laneOffset*SnP_laneLengthInBytes);
-    #define OverWr( argIndex )  STORE128(stateAsLanes[argIndex], LOAD6464(curData1[argIndex], curData0[argIndex]))
+    const unsigned char *curData0 = data;
+    const unsigned char *curData1 = data+laneOffset*SnP_laneLengthInBytes;
+    #define OverWr( argIndex )  STORE128(stateAsLanes[argIndex], LOAD6464(XKCP_loadLane64(curData1, argIndex), XKCP_loadLane64(curData0, argIndex)))
     if ( laneCount >= 17 )  {
         OverWr( 0 );
         OverWr( 1 );
@@ -265,7 +266,7 @@ void KeccakP1600times2_SSSE3_ExtractBytes(const KeccakP1600times2_SIMD128_states
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *(uint64_t*)curData = statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        XKCP_store64(curData, statesAsLanes[laneIndex(instanceIndex, lanePosition)]);
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curData += SnP_laneLengthInBytes;
@@ -281,19 +282,19 @@ void KeccakP1600times2_SSSE3_ExtractLanesAll(const KeccakP1600times2_SIMD128_sta
     const V128 *stateAsLanes = states->A;
     V128 lanes;
     unsigned int i;
-    uint64_t *curData0 = (uint64_t *)data;
-    uint64_t *curData1 = (uint64_t *)(data+laneOffset*SnP_laneLengthInBytes);
+    unsigned char *curData0 = data;
+    unsigned char *curData1 = data+laneOffset*SnP_laneLengthInBytes;
 
     #define Extr( argIndex )    lanes = LOAD128( stateAsLanes[argIndex] ),          \
-                                STORE64L( curData0[argIndex], lanes ),              \
-                                STORE64H( curData1[argIndex], lanes )
+                                STORE64L( curData0[8*(argIndex)], lanes ),              \
+                                STORE64H( curData1[8*(argIndex)], lanes )
 
     #define Extr2( argIndex )   lanes0 = LOAD128( stateAsLanes[argIndex] ),         \
                                 lanes1 = LOAD128( stateAsLanes[(argIndex)+1] ),     \
                                 lanes =  UNPACKL( lanes0, lanes1 ),                 \
                                 lanes0 = UNPACKH( lanes0, lanes1 ),                 \
-                                STORE128u( *(V128*)&curData0[argIndex], lanes ),    \
-                                STORE128u( *(V128*)&curData1[argIndex], lanes0 )
+                                STORE128u( curData0[8*(argIndex)], lanes ),    \
+                                STORE128u( curData1[8*(argIndex)], lanes0 )
     if ( laneCount >= 16 )  {
         V128 lanes0, lanes1;
         Extr2( 0 );
@@ -346,7 +347,7 @@ void KeccakP1600times2_SSSE3_ExtractAndAddBytes(const KeccakP1600times2_SIMD128_
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *((uint64_t*)curOutput) = *((uint64_t*)curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        XKCP_store64(curOutput, XKCP_load64(curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)]);
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curInput += SnP_laneLengthInBytes;
@@ -366,12 +367,12 @@ void KeccakP1600times2_SSSE3_ExtractAndAddLanesAll(const KeccakP1600times2_SIMD1
 {
     const uint64_t *stateAsLanes = (const uint64_t *)states->A;
     unsigned int i;
-    const uint64_t *curInput0 = (uint64_t *)input;
-    const uint64_t *curInput1 = (uint64_t *)(input+laneOffset*SnP_laneLengthInBytes);
-    uint64_t *curOutput0 = (uint64_t *)output;
-    uint64_t *curOutput1 = (uint64_t *)(output+laneOffset*SnP_laneLengthInBytes);
+    const unsigned char *curInput0 = input;
+    const unsigned char *curInput1 = input+laneOffset*SnP_laneLengthInBytes;
+    unsigned char *curOutput0 = output;
+    unsigned char *curOutput1 = output+laneOffset*SnP_laneLengthInBytes;
 
-    #define ExtrXOR( argIndex ) curOutput0[argIndex] = curInput0[argIndex] ^ stateAsLanes[2*(argIndex)], curOutput1[argIndex] = curInput1[argIndex] ^ stateAsLanes[2*(argIndex)+1]
+    #define ExtrXOR( argIndex ) XKCP_storeLane64(curOutput0, argIndex, XKCP_loadLane64(curInput0, argIndex) ^ stateAsLanes[2*(argIndex)]), XKCP_storeLane64(curOutput1, argIndex, XKCP_loadLane64(curInput1, argIndex) ^ stateAsLanes[2*(argIndex)+1])
 
     if ( laneCount >= 17 )  {
         ExtrXOR( 0 );
@@ -830,9 +831,9 @@ size_t KeccakF1600times2_SSSE3_FastLoop_Absorb(KeccakP1600times2_SIMD128_states 
 
         while(dataByteLen >= (laneOffsetParallel + laneCount)*8) {
             V128 *stateAsLanes = states->A;
-            const uint64_t *curData0 = (const uint64_t *)data;
-            const uint64_t *curData1 = (const uint64_t *)(data+laneOffsetParallel*SnP_laneLengthInBytes);
-            #define XOR_In( argIndex )  XOReq128( stateAsLanes[argIndex], LOAD6464(curData1[argIndex], curData0[argIndex]))
+            const unsigned char *curData0 = data;
+            const unsigned char *curData1 = data+laneOffsetParallel*SnP_laneLengthInBytes;
+            #define XOR_In( argIndex )  XOReq128( stateAsLanes[argIndex], LOAD6464(XKCP_loadLane64(curData1, argIndex), XKCP_loadLane64(curData0, argIndex)))
             XOR_In( 0 );
             XOR_In( 1 );
             XOR_In( 2 );
@@ -863,14 +864,14 @@ size_t KeccakF1600times2_SSSE3_FastLoop_Absorb(KeccakP1600times2_SIMD128_states 
 #else
         unsigned int i;
         const unsigned char *dataStart = data;
-        const uint64_t *curData0 = (const uint64_t *)data;
-        const uint64_t *curData1 = (const uint64_t *)(data+laneOffsetParallel*SnP_laneLengthInBytes);
+        const unsigned char *curData0 = data;
+        const unsigned char *curData1 = data+laneOffsetParallel*SnP_laneLengthInBytes;
         V128 *statesAsLanes = states->A;
         declareABCDE
 
         copyFromState(A, statesAsLanes)
         while(dataByteLen >= (laneOffsetParallel + laneCount)*8) {
-            #define XOR_In( Xxx, argIndex )  XOReq128( Xxx, LOAD6464(curData1[argIndex], curData0[argIndex]))
+            #define XOR_In( Xxx, argIndex )  XOReq128( Xxx, LOAD6464(XKCP_loadLane64(curData1, argIndex), XKCP_loadLane64(curData0, argIndex)))
             XOR_In( Aba, 0 );
             XOR_In( Abe, 1 );
             XOR_In( Abi, 2 );
@@ -894,12 +895,12 @@ size_t KeccakF1600times2_SSSE3_FastLoop_Absorb(KeccakP1600times2_SIMD128_states 
             XOR_In( Asa, 20 );
             #undef XOR_In
             rounds24
-            curData0 += laneOffsetSerial;
-            curData1 += laneOffsetSerial;
+            curData0 += laneOffsetSerial*8;
+            curData1 += laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         copyToState(statesAsLanes, A)
-        return (const unsigned char *)curData0 - dataStart;
+        return curData0 - dataStart;
 #endif
     }
     else {
@@ -923,9 +924,9 @@ size_t KeccakP1600times2_12rounds_SSSE3_FastLoop_Absorb(KeccakP1600times2_SIMD12
 
         while(dataByteLen >= (laneOffsetParallel + laneCount)*8) {
             V128 *stateAsLanes = states->A;
-            const uint64_t *curData0 = (const uint64_t *)data;
-            const uint64_t *curData1 = (const uint64_t *)(data+laneOffsetParallel*SnP_laneLengthInBytes);
-            #define XOR_In( argIndex )  XOReq128( stateAsLanes[argIndex], LOAD6464(curData1[argIndex], curData0[argIndex]))
+            const unsigned char *curData0 = data;
+            const unsigned char *curData1 = data+laneOffsetParallel*SnP_laneLengthInBytes;
+            #define XOR_In( argIndex )  XOReq128( stateAsLanes[argIndex], LOAD6464(XKCP_loadLane64(curData1, argIndex), XKCP_loadLane64(curData0, argIndex)))
             XOR_In( 0 );
             XOR_In( 1 );
             XOR_In( 2 );
@@ -956,14 +957,14 @@ size_t KeccakP1600times2_12rounds_SSSE3_FastLoop_Absorb(KeccakP1600times2_SIMD12
         #else
         unsigned int i;
         const unsigned char *dataStart = data;
-        const uint64_t *curData0 = (const uint64_t *)data;
-        const uint64_t *curData1 = (const uint64_t *)(data+laneOffsetParallel*SnP_laneLengthInBytes);
+        const unsigned char *curData0 = data;
+        const unsigned char *curData1 = data+laneOffsetParallel*SnP_laneLengthInBytes;
         V128 *statesAsLanes = states->A;
         declareABCDE
 
         copyFromState(A, statesAsLanes)
         while(dataByteLen >= (laneOffsetParallel + laneCount)*8) {
-            #define XOR_In( Xxx, argIndex )  XOReq128( Xxx, LOAD6464(curData1[argIndex], curData0[argIndex]))
+            #define XOR_In( Xxx, argIndex )  XOReq128( Xxx, LOAD6464(XKCP_loadLane64(curData1, argIndex), XKCP_loadLane64(curData0, argIndex)))
             XOR_In( Aba, 0 );
             XOR_In( Abe, 1 );
             XOR_In( Abi, 2 );
@@ -987,12 +988,12 @@ size_t KeccakP1600times2_12rounds_SSSE3_FastLoop_Absorb(KeccakP1600times2_SIMD12
             XOR_In( Asa, 20 );
             #undef XOR_In
             rounds12
-            curData0 += laneOffsetSerial;
-            curData1 += laneOffsetSerial;
+            curData0 += laneOffsetSerial*8;
+            curData1 += laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         copyToState(statesAsLanes, A)
-        return (const unsigned char *)curData0 - dataStart;
+        return curData0 - dataStart;
         #endif
     }
     else {
