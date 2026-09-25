@@ -82,9 +82,9 @@ void KeccakP1600_AddBytes(KeccakP1600_plain64_state *state, const unsigned char 
     for( stateAsBytes = (uint8_t*)state->A; ((offset % 8) != 0) && (length != 0); ++offset, --length)
         stateAsBytes[offset] ^= *(data++);
     for (stateAsLanes = (uint64_t*)(stateAsBytes + offset); length >= 8*8; stateAsLanes += 8, data += 8*8, length -= 8*8)
-        STORE_8Lanes( stateAsLanes, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes((const uint64_t*)data)));
+        STORE_8Lanes( stateAsLanes, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes(data)));
     for (/* empty */; length >= 8; ++stateAsLanes, data += 8, length -= 8)
-        STORE_Lane( stateAsLanes, XOR(LOAD_Lane(stateAsLanes), LOAD_Lane((const uint64_t*)data)));
+        STORE_Lane( stateAsLanes, XOR(LOAD_Lane(stateAsLanes), LOAD_Lane(data)));
     for ( stateAsBytes = (uint8_t*)stateAsLanes; length != 0; --length)
         *(stateAsBytes++) ^= *(data++);
 }
@@ -120,9 +120,9 @@ void KeccakP1600_ExtractAndAddBytes(const KeccakP1600_plain64_state *state, cons
     for( stateAsBytes = (uint8_t*)state->A; ((offset % 8) != 0) && (length != 0); ++offset, --length)
         *(output++) = stateAsBytes[offset] ^ *(input++);
     for (stateAsLanes = (uint64_t*)(stateAsBytes + offset); length >= 8*8; stateAsLanes += 8, input += 8*8, output += 8*8, length -= 8*8)
-        STORE_8Lanes( (uint64_t*)output, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes((const uint64_t*)input)));
+        STORE_8Lanes( output, XOR(LOAD_8Lanes(stateAsLanes), LOAD_8Lanes(input)));
     for (/* empty */; length >= 8; ++stateAsLanes, input += 8, output += 8, length -= 8)
-        STORE_Lane( (uint64_t*)output, XOR(LOAD_Lane(stateAsLanes), LOAD_Lane((const uint64_t*)input)));
+        STORE_Lane( output, XOR(LOAD_Lane(stateAsLanes), LOAD_Lane(input)));
     for ( stateAsBytes = (uint8_t*)stateAsLanes; length != 0; --length)
         *(output++) = *(stateAsBytes++) ^ *(input++);
 }
@@ -401,17 +401,17 @@ size_t KeccakF1600_FastLoop_Absorb(KeccakP1600_plain64_state *state, unsigned in
         unsigned int i;
         #endif
         uint64_t *stateAsLanes = state->A;
-        uint64_t *inDataAsLanes = (uint64_t*)data;
+        const unsigned char *inDataAsLanes = data;
 
         copyFromState(stateAsLanes);
         while(dataByteLen >= 21*8) {
-            Baeiou = XOR(Baeiou, LOAD_Plane(inDataAsLanes+ 0));
-            Gaeiou = XOR(Gaeiou, LOAD_Plane(inDataAsLanes+ 5));
-            Kaeiou = XOR(Kaeiou, LOAD_Plane(inDataAsLanes+10));
-            Maeiou = XOR(Maeiou, LOAD_Plane(inDataAsLanes+15));
-            Saeiou = XOR(Saeiou, LOAD_Lane(inDataAsLanes+20));
+            Baeiou = XOR(Baeiou, LOAD_Plane(inDataAsLanes+8*0));
+            Gaeiou = XOR(Gaeiou, LOAD_Plane(inDataAsLanes+8*5));
+            Kaeiou = XOR(Kaeiou, LOAD_Plane(inDataAsLanes+8*10));
+            Maeiou = XOR(Maeiou, LOAD_Plane(inDataAsLanes+8*15));
+            Saeiou = XOR(Saeiou, LOAD_Lane(inDataAsLanes+8*20));
             rounds24;
-            inDataAsLanes += 21;
+            inDataAsLanes += 21*8;
             dataByteLen -= 21*8;
         }
         copyToState(stateAsLanes);
@@ -437,17 +437,17 @@ size_t KeccakP1600_12rounds_FastLoop_Absorb(KeccakP1600_plain64_state *state, un
         unsigned int i;
         #endif
         uint64_t *stateAsLanes = state->A;
-        uint64_t *inDataAsLanes = (uint64_t*)data;
+        const unsigned char *inDataAsLanes = data;
 
         copyFromState(stateAsLanes);
         while(dataByteLen >= 21*8) {
-            Baeiou = XOR(Baeiou, LOAD_Plane(inDataAsLanes+ 0));
-            Gaeiou = XOR(Gaeiou, LOAD_Plane(inDataAsLanes+ 5));
-            Kaeiou = XOR(Kaeiou, LOAD_Plane(inDataAsLanes+10));
-            Maeiou = XOR(Maeiou, LOAD_Plane(inDataAsLanes+15));
-            Saeiou = XOR(Saeiou, LOAD_Lane(inDataAsLanes+20));
+            Baeiou = XOR(Baeiou, LOAD_Plane(inDataAsLanes+8*0));
+            Gaeiou = XOR(Gaeiou, LOAD_Plane(inDataAsLanes+8*5));
+            Kaeiou = XOR(Kaeiou, LOAD_Plane(inDataAsLanes+8*10));
+            Maeiou = XOR(Maeiou, LOAD_Plane(inDataAsLanes+8*15));
+            Saeiou = XOR(Saeiou, LOAD_Lane(inDataAsLanes+8*20));
             rounds12;
-            inDataAsLanes += 21;
+            inDataAsLanes += 21*8;
             dataByteLen -= 21*8;
         }
         copyToState(stateAsLanes);
