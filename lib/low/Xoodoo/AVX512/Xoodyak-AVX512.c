@@ -26,6 +26,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "brg_endian.h"
 #include "Xoodoo.h"
 #include "Xoodoo-SnP.h"
+#include "load-store.h"
 #include "Xoodyak-parameters.h"
 
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
@@ -162,7 +163,7 @@ size_t Xoodyak_AVX512_AbsorbKeyedFullBlocks(Xoodoo_align128plain32_state *state,
         Round(_rc1);
         a0 = XOR(a0, LOAD128u(X[0]));  /* Xoodyak_Down(instance, X, Xoodyak_Rkin, 0); */
         a1 = XOR(a1, LOAD128u(X[16])); 
-        a2 = XOR(a2, _mm_set_epi32(1, *(uint32_t*)(&X[40]), *(uint32_t*)(&X[36]), *(uint32_t*)(&X[32])));
+        a2 = XOR(a2, _mm_set_epi32(1, XKCP_load32(&X[40]), XKCP_load32(&X[36]), XKCP_load32(&X[32])));
         X       += Xoodyak_Rkin;
         XLen    -= Xoodyak_Rkin;
     } while (XLen >= Xoodyak_Rkin);
@@ -283,7 +284,7 @@ size_t Xoodyak_AVX512_EncryptFullBlocks(Xoodoo_align128plain32_state *state, con
         Round(_rc2);
         Round(_rc1);
         a0 = XOR(a0, LOAD128u(I[0]));
-        a1 = XOR(a1, _mm_set_epi32(0, 1, *(uint32_t*)(&I[20]), *(uint32_t*)(&I[16])));
+        a1 = XOR(a1, _mm_set_epi32(0, 1, XKCP_load32(&I[20]), XKCP_load32(&I[16])));
         STORE128u(O[0], a0);
         STORE64L(O[16], a1); 
         I       += Xoodyak_Rkout;
@@ -318,13 +319,13 @@ size_t Xoodyak_AVX512_DecryptFullBlocks(Xoodoo_align128plain32_state *state, con
         Round(_rc1);
         o0 = XOR(a0, LOAD128u(I[0]));
 #if defined(__i386__) || defined(_M_IX86)
-        *((uint32_t*)(O+16)) = *((uint32_t*)(I+16)) ^ _mm_extract_epi32(a1, 0);
-        *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_extract_epi32(a1, 1);
-        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+16)), 0);
-        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+20)), 1);
+        XKCP_store32(O+16, XKCP_load32(I+16) ^ _mm_extract_epi32(a1, 0));
+        XKCP_store32(O+20, XKCP_load32(I+20) ^ _mm_extract_epi32(a1, 1));
+        a1 = _mm_insert_epi32(a1, XKCP_load32(I+16), 0);
+        a1 = _mm_insert_epi32(a1, XKCP_load32(I+20), 1);
 #else
-        *((uint64_t*)(O+16)) = *((uint64_t*)(I+16)) ^ _mm_extract_epi64(a1, 0);
-        a1 = _mm_insert_epi64(a1, *((uint64_t*)(I+16)), 0);
+        XKCP_store64(O+16, XKCP_load64(I+16) ^ _mm_extract_epi64(a1, 0));
+        a1 = _mm_insert_epi64(a1, XKCP_load64(I+16), 0);
 #endif
         STORE128u(O[0], o0);
         a0 = XOR(a0, o0); 
