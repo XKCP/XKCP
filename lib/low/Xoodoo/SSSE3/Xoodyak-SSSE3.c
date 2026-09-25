@@ -356,8 +356,8 @@ size_t Xoodyak_SSSE3_DecryptFullBlocks(Xoodoo_align128plain32_state *state, cons
         *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_cvtsi128_si32(_mm_srli_si128(a1,4));
         a1 = _mm_set_epi32(
             // preserve high words
-            _mm_cvtsi128_si32(_mm_srli_si128(a1,12), 3),
-            _mm_cvtsi128_si32(_mm_srli_si128(a1,8), 2),
+            _mm_cvtsi128_si32(_mm_srli_si128(a1,12)),
+            _mm_cvtsi128_si32(_mm_srli_si128(a1,8)),
             *((uint32_t*)(I+20)),
             *((uint32_t*)(I+16)));
 #else
