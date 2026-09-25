@@ -56,38 +56,38 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
 	switch (keyVariant)
 	{
 		case 0: /* Absorb nonce in blocks */
-		    Xoodyak_Initialize(&encrypt, K, Klen, ID, IDlen, NULL, 0);
-			Xoodyak_Absorb(&encrypt, N, Nlen);
+		    UT_assert(Xoodyak_Initialize(&encrypt, K, Klen, ID, IDlen, NULL, 0) == 0);
+			UT_assert(Xoodyak_Absorb(&encrypt, N, Nlen) == 0);
 			break;
 		case 1: /* Absorb counter in trickling mode */
-		    Xoodyak_Initialize(&encrypt, K, Klen, ID, IDlen, N, Nlen);
+		    UT_assert(Xoodyak_Initialize(&encrypt, K, Klen, ID, IDlen, N, Nlen) == 0);
 			break;
 	}
 
 	switch (keyVariant)
 	{
 		case 0: /* Absorb nonce in blocks */
-		    Xoodyak_Initialize(&decrypt, K, Klen, ID, IDlen, NULL, 0);
-			Xoodyak_Absorb(&decrypt, N, Nlen);
+		    UT_assert(Xoodyak_Initialize(&decrypt, K, Klen, ID, IDlen, NULL, 0) == 0);
+			UT_assert(Xoodyak_Absorb(&decrypt, N, Nlen) == 0);
 			break;
 		case 1: /* Absorb counter in trickling mode */
-		    Xoodyak_Initialize(&decrypt, K, Klen, ID, IDlen, N, Nlen);
+		    UT_assert(Xoodyak_Initialize(&decrypt, K, Klen, ID, IDlen, N, Nlen) == 0);
 			break;
 	}
 
 	for ( /* empty */; nbrMessagesInSession != 0; --nbrMessagesInSession) {
 		if (squeezeKLen != 0) {
-			Xoodyak_SqueezeKey(&encrypt, newKey, squeezeKLen);
+			UT_assert(Xoodyak_SqueezeKey(&encrypt, newKey, squeezeKLen) == 0);
 		}
 
-		Xoodyak_Absorb(&encrypt, AD, ADlen);
-		Xoodyak_Encrypt(&encrypt, P, Cbuffer + align, Plen);
+		UT_assert(Xoodyak_Absorb(&encrypt, AD, ADlen) == 0);
+		UT_assert(Xoodyak_Encrypt(&encrypt, P, Cbuffer + align, Plen) == 0);
 		if (ratchet == 1) { /* ratchet before squeeze */
-			Xoodyak_Ratchet(&encrypt);
+			UT_assert(Xoodyak_Ratchet(&encrypt) == 0);
 		}
-		Xoodyak_Squeeze(&encrypt, tag + align, Xoodyak_TagLength);
+		UT_assert(Xoodyak_Squeeze(&encrypt, tag + align, Xoodyak_TagLength) == 0);
 		if (ratchet == 2) { /* ratchet after squeeze */
-			Xoodyak_Ratchet(&encrypt);
+			UT_assert(Xoodyak_Ratchet(&encrypt) == 0);
 		}
 
 	    #if defined(UT_OUTPUT) || defined(UT_VERBOSE)
@@ -100,16 +100,16 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
 	    #endif
 
 		if (squeezeKLen != 0) {
-			Xoodyak_SqueezeKey(&decrypt, newKeyPrime, squeezeKLen);
+			UT_assert(Xoodyak_SqueezeKey(&decrypt, newKeyPrime, squeezeKLen) == 0);
 		}
-		Xoodyak_Absorb(&decrypt, AD, ADlen);
-	    Xoodyak_Decrypt(&decrypt, Cbuffer + align, PPbuffer + align, Plen);
+		UT_assert(Xoodyak_Absorb(&decrypt, AD, ADlen) == 0);
+	    UT_assert(Xoodyak_Decrypt(&decrypt, Cbuffer + align, PPbuffer + align, Plen) == 0);
 		if (ratchet == 1) { /* ratchet before squeeze */
-			Xoodyak_Ratchet(&decrypt);
+			UT_assert(Xoodyak_Ratchet(&decrypt) == 0);
 		}
-		Xoodyak_Squeeze(&decrypt, tagPrime + align, Xoodyak_TagLength);
+		UT_assert(Xoodyak_Squeeze(&decrypt, tagPrime + align, Xoodyak_TagLength) == 0);
 		if (ratchet == 2) { /* ratchet after squeeze */
-			Xoodyak_Ratchet(&decrypt);
+			UT_assert(Xoodyak_Ratchet(&decrypt) == 0);
 		}
 
 	    UT_assertSyn(!memcmp( newKey, newKeyPrime, squeezeKLen ), (char*)"The new keys do not match.");
@@ -117,10 +117,10 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
 	    UT_assertSyn(!memcmp( tag + align, tagPrime + align, Xoodyak_TagLength ), (char*)"The tags do not match.");
 
 		if (squeezeKLen != 0) {
-		    Xoodyak_Absorb( global, newKey, squeezeKLen);
+		    UT_assert(Xoodyak_Absorb( global, newKey, squeezeKLen) == 0);
 		}
-	    Xoodyak_Absorb( global, Cbuffer + align, Plen);
-	    Xoodyak_Absorb( global, tag + align, Xoodyak_TagLength);
+	    UT_assert(Xoodyak_Absorb( global, Cbuffer + align, Plen) == 0);
+	    UT_assert(Xoodyak_Absorb( global, tag + align, Xoodyak_TagLength) == 0);
 	}
 
 }
@@ -158,7 +158,7 @@ static int testXoodyakKeyed( const char *file, const uint8_t *expected )
 
 	for (align = 0; align < 4; ++align) {
 
-	    Xoodyak_Initialize(&global, NULL, 0, NULL, 0, NULL, 0);
+	    UT_assert(Xoodyak_Initialize(&global, NULL, 0, NULL, 0, NULL, 0) == 0);
 
 		nbrMessagesInSession = 1;
 	    for( keyVariant = 0; keyVariant < 2; ++keyVariant)
@@ -221,7 +221,7 @@ static int testXoodyakKeyed( const char *file, const uint8_t *expected )
 	    }
 
 	    {
-			Xoodyak_Squeeze(&global, checksum, sizeof(checksum));
+			UT_assert(Xoodyak_Squeeze(&global, checksum, sizeof(checksum)) == 0);
             #if defined(UT_OUTPUT) || defined(UT_VERBOSE)
             UT_displayByteString(f, "+++ Global checksum", checksum, sizeof(checksum));
             #if defined(UT_OUTPUT)

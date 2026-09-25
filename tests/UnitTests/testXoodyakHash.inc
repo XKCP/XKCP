@@ -36,21 +36,21 @@ static void testXoodyakHashOne(Xoodyak_Instance * global, FILE *f, size_t messag
 	uint8_t				messageBuffer[MAX_MESSAGE_LEN+3];
 	unsigned int		i;
 
-    Xoodyak_Initialize(&instance, NULL, 0, NULL, 0, NULL, 0);
+    UT_assert(Xoodyak_Initialize(&instance, NULL, 0, NULL, 0, NULL, 0) == 0);
 	for (i = 0; i < numberOfMessages; ++i)	{
         generateSimpleRawMaterial(messageBuffer + align, messageLen, (uint8_t)(messageLen+hashLen+0x12), 3);
 	    #if defined(UT_OUTPUT) || defined(UT_VERBOSE)
 	    fprintf( f, "Absorb" );
 	    UT_displayByteString(f, "> M", messageBuffer + align, messageLen);
 	    #endif
-	    Xoodyak_Absorb(&instance, messageBuffer + align, messageLen);
+	    UT_assert(Xoodyak_Absorb(&instance, messageBuffer + align, messageLen) == 0);
 	}
-    Xoodyak_Squeeze(&instance, hashBuffer + align, hashLen);
+    UT_assert(Xoodyak_Squeeze(&instance, hashBuffer + align, hashLen) == 0);
     #if defined(UT_OUTPUT) || defined(UT_VERBOSE)
     fprintf( f, "Squeeze" );
     UT_displayByteString(f, "> H", hashBuffer + align, hashLen);
     #endif
-    Xoodyak_Absorb(global, hashBuffer + align, hashLen);
+    UT_assert(Xoodyak_Absorb(global, hashBuffer + align, hashLen) == 0);
 
 }
 
@@ -73,7 +73,8 @@ static void testXoodyakHash( const char *file, const uint8_t *expected )
 
 	for (align = 0; align < 4; ++align) {
 
-	    Xoodyak_Initialize(&global, NULL, 0, NULL, 0, NULL, 0);
+	    UT_assert(Xoodyak_Initialize(&global, NULL, 0, NULL, 0, NULL, 0) == 0);
+		UT_assert(Xoodyak_Encrypt(&global, NULL, NULL, 0) == 1);
 
 		hashLen = TYPICAL_HASH_LEN;
 		for (numberOfMessages = 1u; numberOfMessages < MAX_NUMBER_MESSAGES; ++numberOfMessages) {
@@ -88,7 +89,7 @@ static void testXoodyakHash( const char *file, const uint8_t *expected )
 			testXoodyakHashOne( &global, f, messageLen, hashLen, numberOfMessages, align );
 		}
 
-	    Xoodyak_Squeeze(&global, checksum, sizeof(checksum));
+	    UT_assert(Xoodyak_Squeeze(&global, checksum, sizeof(checksum)) == 0);
 	    #if defined(UT_OUTPUT) || defined(UT_VERBOSE)
 	    UT_displayByteString(f, "+++ Global checksum", checksum, sizeof(checksum));
 	    #if defined(UT_OUTPUT)

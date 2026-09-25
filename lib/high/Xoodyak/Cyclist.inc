@@ -124,14 +124,13 @@ static void Cyclist_AbsorbAny(Cyclist_Instance *instance, const uint8_t *X, size
     } while ( XLen != 0 );
 }
 
-static void Cyclist_AbsorbKey(Cyclist_Instance *instance, const uint8_t *K, size_t KLen, const uint8_t *ID, size_t IDLen, const uint8_t *counter, size_t counterLen)
+static int Cyclist_AbsorbKey(Cyclist_Instance *instance, const uint8_t *K, size_t KLen, const uint8_t *ID, size_t IDLen, const uint8_t *counter, size_t counterLen)
 {
     uint8_t KID[Cyclist_Rkin];
 
-    #if DEBUG
-    assert(instance->mode == Cyclist_ModeHash);
-    assert((KLen + IDLen) <= (Cyclist_Rkin - 1));
-    #endif
+    if ((instance->mode != Cyclist_ModeHash)
+        || (KLen + IDLen) > (Cyclist_Rkin - 1))
+        return 1;
     instance->mode      = Cyclist_ModeKeyed;
     instance->Rabsorb   = Cyclist_Rkin;
     instance->Rsqueeze  = Cyclist_Rkout;
@@ -144,6 +143,7 @@ static void Cyclist_AbsorbKey(Cyclist_Instance *instance, const uint8_t *K, size
             Cyclist_AbsorbAny(instance, counter, counterLen, 1, 0x00);
         }
     }
+    return 0;
 }
 
 static void Cyclist_SqueezeAny(Cyclist_Instance *instance, uint8_t *Y, size_t YLen, uint8_t Cu)
@@ -226,7 +226,7 @@ static void Cyclist_Crypt(Cyclist_Instance *instance, const uint8_t *I, uint8_t 
 
 /* ------- Cyclist interfaces ------- */
 
-void Cyclist_Initialize(Cyclist_Instance *instance, const uint8_t *K, size_t KLen, const uint8_t *ID, size_t IDLen, const uint8_t *counter, size_t counterLen)
+int Cyclist_Initialize(Cyclist_Instance *instance, const uint8_t *K, size_t KLen, const uint8_t *ID, size_t IDLen, const uint8_t *counter, size_t counterLen)
 {
     SnP_StaticInitialize();
     SnP_Initialize(&instance->state);
@@ -239,54 +239,57 @@ void Cyclist_Initialize(Cyclist_Instance *instance, const uint8_t *K, size_t KLe
     SnP_Initialize( &instance->stateShadow );
     #endif
     if (KLen != 0) {
-        Cyclist_AbsorbKey(instance, K, KLen, ID, IDLen, counter, counterLen);
+        return Cyclist_AbsorbKey(instance, K, KLen, ID, IDLen, counter, counterLen);
     }
+    return 0;
 }
 
-void Cyclist_Absorb(Cyclist_Instance *instance, const uint8_t *X, size_t XLen)
+int Cyclist_Absorb(Cyclist_Instance *instance, const uint8_t *X, size_t XLen)
 {
     Cyclist_AbsorbAny(instance, X, XLen, instance->Rabsorb, 0x03);
+    return 0;
 }
 
-void Cyclist_Encrypt(Cyclist_Instance *instance, const uint8_t *P, uint8_t *C, size_t PLen)
+int Cyclist_Encrypt(Cyclist_Instance *instance, const uint8_t *P, uint8_t *C, size_t PLen)
 {
-    #if DEBUG
-    assert(instance->mode == Cyclist_ModeKeyed);
-    #endif
+    if (instance->mode != Cyclist_ModeKeyed)
+        return 1;
     Cyclist_Crypt(instance, P, C, PLen, 0);
+    return 0;
 }
 
-void Cyclist_Decrypt(Cyclist_Instance *instance, const uint8_t *C, uint8_t *P, size_t CLen)
+int Cyclist_Decrypt(Cyclist_Instance *instance, const uint8_t *C, uint8_t *P, size_t CLen)
 {
-    #if DEBUG
-    assert(instance->mode == Cyclist_ModeKeyed);
-    #endif
+    if (instance->mode != Cyclist_ModeKeyed)
+        return 1;
     Cyclist_Crypt(instance, C, P, CLen, 1);
+    return 0;
 }
 
-void Cyclist_Squeeze(Cyclist_Instance *instance, uint8_t *Y, size_t YLen)
+int Cyclist_Squeeze(Cyclist_Instance *instance, uint8_t *Y, size_t YLen)
 {
     Cyclist_SqueezeAny(instance, Y, YLen, 0x40);
+    return 0;
 }
 
-void Cyclist_SqueezeKey(Cyclist_Instance *instance, uint8_t *K, size_t KLen)
+int Cyclist_SqueezeKey(Cyclist_Instance *instance, uint8_t *K, size_t KLen)
 {
-    #if DEBUG
-    assert(instance->mode == Cyclist_ModeKeyed);
-    #endif
+    if (instance->mode != Cyclist_ModeKeyed)
+        return 1;
     Cyclist_SqueezeAny(instance, K, KLen, 0x20);
+    return 0;
 }
 
-void Cyclist_Ratchet(Cyclist_Instance *instance)
+int Cyclist_Ratchet(Cyclist_Instance *instance)
 {
     uint8_t buffer[Cyclist_lRatchet];
 
-    #if DEBUG
-    assert(instance->mode == Cyclist_ModeKeyed);
-    #endif
+    if (instance->mode != Cyclist_ModeKeyed)
+        return 1;
     /* Squeeze then absorb is the same as overwriting with zeros */
     Cyclist_SqueezeAny(instance, buffer, sizeof(buffer), 0x10);
     Cyclist_AbsorbAny(instance, buffer, sizeof(buffer), instance->Rabsorb, 0x00);
+    return 0;
 }
 
 #undef SnP_StaticInitialize

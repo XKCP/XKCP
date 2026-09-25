@@ -55,12 +55,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 
 #define KCP_DeclareCyclistFunctions(prefix) \
-    void prefix##_Initialize(prefix##_Instance *instance, const uint8_t *K, size_t KLen, const uint8_t *ID, size_t IDLen, const uint8_t *counter, size_t counterLen); \
-    void prefix##_Absorb(prefix##_Instance *instance, const uint8_t *X, size_t XLen); \
-    void prefix##_Encrypt(prefix##_Instance *instance, const uint8_t *P, uint8_t *C, size_t PLen); \
-    void prefix##_Decrypt(prefix##_Instance *instance, const uint8_t *C, uint8_t *P, size_t CLen); \
-    void prefix##_Squeeze(prefix##_Instance *instance, uint8_t *Y, size_t YLen); \
-    void prefix##_SqueezeKey(prefix##_Instance *instance, uint8_t *K, size_t KLen); \
-    void prefix##_Ratchet(prefix##_Instance *instance);
-
+    int prefix##_Initialize(prefix##_Instance *instance, const uint8_t *K, size_t KLen, const uint8_t *ID, size_t IDLen, const uint8_t *counter, size_t counterLen); \
+    int prefix##_Absorb(prefix##_Instance *instance, const uint8_t *X, size_t XLen); \
+    int prefix##_Encrypt(prefix##_Instance *instance, const uint8_t *P, uint8_t *C, size_t PLen); \
+    int prefix##_Decrypt(prefix##_Instance *instance, const uint8_t *C, uint8_t *P, size_t CLen); \
+    int prefix##_Squeeze(prefix##_Instance *instance, uint8_t *Y, size_t YLen); \
+    int prefix##_SqueezeKey(prefix##_Instance *instance, uint8_t *K, size_t KLen); \
+    int prefix##_Ratchet(prefix##_Instance *instance);
 #endif

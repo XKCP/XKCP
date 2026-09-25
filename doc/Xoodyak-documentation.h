@@ -26,8 +26,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
   * @param  IDLen           The size of the id in bytes. Must be zero if no id is given.
   * @param  counter         Pointer to the counter. Can be null if no counter is given.
   * @param  counterLen      The size of the counter in bytes. Must be zero if no counter is given.
+  * @return 0 if successful, 1 otherwise.
   */
-void Xoodyak_Initialize(Xoodyak_Instance *instance, const uint8_t *K, size_t KLen, const uint8_t *ID, size_t IDLen, const uint8_t *counter, size_t counterLen);
+int Xoodyak_Initialize(Xoodyak_Instance *instance, const uint8_t *K, size_t KLen, const uint8_t *ID, size_t IDLen, const uint8_t *counter, size_t counterLen);
 
 /**
   * Function to call Absorb() on the given Xoodyak object.
@@ -35,8 +36,9 @@ void Xoodyak_Initialize(Xoodyak_Instance *instance, const uint8_t *K, size_t KLe
   * @param  instance        Pointer to the Xoodyak object structure.
   * @param  X               Pointer to the string to absorb.
   * @param  XLen            The length in bytes of the string to absorb.
+  * @return 0 if successful, 1 otherwise.
   */
-void Xoodyak_Absorb(Xoodyak_Instance *instance, const uint8_t *X, size_t XLen);
+int Xoodyak_Absorb(Xoodyak_Instance *instance, const uint8_t *X, size_t XLen);
 
 /**
   * Function to call Encrypt() on the given Xoodyak object.
@@ -46,8 +48,9 @@ void Xoodyak_Absorb(Xoodyak_Instance *instance, const uint8_t *X, size_t XLen);
   * @param  C               Pointer to the buffer where the ciphertext has to be stored.
   *                         The buffer must have at least @a PLen bytes.
   * @param  PLen            The length in bytes of the plaintext string.
+  * @return 0 if successful, 1 otherwise.
   */
-void Xoodyak_Encrypt(Xoodyak_Instance *instance, const uint8_t *P, uint8_t *C, size_t PLen);
+int Xoodyak_Encrypt(Xoodyak_Instance *instance, const uint8_t *P, uint8_t *C, size_t PLen);
 
 /**
   * Function to call Decrypt() on the given Xoodyak object.
@@ -57,8 +60,9 @@ void Xoodyak_Encrypt(Xoodyak_Instance *instance, const uint8_t *P, uint8_t *C, s
   * @param  P               Pointer to the buffer where the plaintext has to be stored.
   *                         The buffer must have at least @a CLen bytes.
   * @param  CLen            The length in bytes of the ciphertext string.
+  * @return 0 if successful, 1 otherwise.
   */
-void Xoodyak_Decrypt(Xoodyak_Instance *instance, const uint8_t *C, uint8_t *P, size_t CLen);
+int Xoodyak_Decrypt(Xoodyak_Instance *instance, const uint8_t *C, uint8_t *P, size_t CLen);
 
 /**
   * Function to call Squeeze() on the given Xoodyak object.
@@ -67,8 +71,9 @@ void Xoodyak_Decrypt(Xoodyak_Instance *instance, const uint8_t *C, uint8_t *P, s
   * @param  Y               Pointer to the buffer where the output has to be stored.
   *                         The buffer must have at least @a YLen bytes.
   * @param  YLen            The length in bytes of the requested output.
+  * @return 0 if successful, 1 otherwise.
   */
-void Xoodyak_Squeeze(Xoodyak_Instance *instance, uint8_t *Y, size_t YLen);
+int Xoodyak_Squeeze(Xoodyak_Instance *instance, uint8_t *Y, size_t YLen);
 
 /**
   * Function to call SqueezeKey() on the given Xoodyak object.
@@ -77,14 +82,16 @@ void Xoodyak_Squeeze(Xoodyak_Instance *instance, uint8_t *Y, size_t YLen);
   * @param  K               Pointer to the buffer where the output has to be stored.
   *                         The buffer must have at least @a KLen bytes.
   * @param  KLen            The length in bytes of the requested output.
+  * @return 0 if successful, 1 otherwise.
   */
-void Xoodyak_SqueezeKey(Xoodyak_Instance *instance, uint8_t *K, size_t KLen);
+int Xoodyak_SqueezeKey(Xoodyak_Instance *instance, uint8_t *K, size_t KLen);
 
 /**
   * Function to call Ratchet() on the given Xoodyak object.
   *
   * @param  instance        Pointer to the Xoodyak object structure.
+  * @return 0 if successful, 1 otherwise.
   */
-void Xoodyak_Ratchet(Xoodyak_Instance *instance);
+int Xoodyak_Ratchet(Xoodyak_Instance *instance);
 
 #endif
