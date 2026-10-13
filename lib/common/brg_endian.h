@@ -51,9 +51,22 @@
 #endif
 #endif
 
-/* Now attempt to set the define for platform byte order using any  */
-/* of the four forms SYMBOL, _SYMBOL, __SYMBOL & __SYMBOL__, which  */
-/* seem to encompass most endian symbol definitions                 */
+/*  GCC and Clang always predefine the byte order, without any header */
+#if defined( __BYTE_ORDER__ ) && defined( __ORDER_BIG_ENDIAN__ ) && \
+    defined( __ORDER_LITTLE_ENDIAN__ )
+#  if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#    define PLATFORM_BYTE_ORDER IS_BIG_ENDIAN
+#  elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#    define PLATFORM_BYTE_ORDER IS_LITTLE_ENDIAN
+#  else
+#    error Unsupported __BYTE_ORDER__ in brg_endian.h, only big and little endian are supported
+#  endif
+#endif
+
+/* Otherwise attempt to set the define for platform byte order using */
+/* any of the four forms SYMBOL, _SYMBOL, __SYMBOL & __SYMBOL__,     */
+/* which seem to encompass most endian symbol definitions            */
+#if !defined(PLATFORM_BYTE_ORDER)
 
 #if defined( BIG_ENDIAN ) && defined( LITTLE_ENDIAN )
 #  if defined( BYTE_ORDER ) && BYTE_ORDER == BIG_ENDIAN
@@ -103,6 +116,8 @@
 #  define PLATFORM_BYTE_ORDER IS_LITTLE_ENDIAN
 #endif
 
+#endif
+
 /*  if the platform byte order could not be determined, then try to */
 /*  set this define using common machine defines                    */
 #if !defined(PLATFORM_BYTE_ORDER)
@@ -135,7 +150,7 @@
 #elif 0     /* **** EDIT HERE IF NECESSARY **** */
 #  define PLATFORM_BYTE_ORDER IS_BIG_ENDIAN
 #else
-#  error Please edit lines 132 or 134 in brg_endian.h to set the platform byte order
+#  error Please edit the lines marked EDIT HERE in brg_endian.h to set the platform byte order
 #endif
 
 #endif
