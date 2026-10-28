@@ -390,22 +390,8 @@ void KeccakP1600_ExtractAndAddLanes(const KeccakP1600_plain32_state *state, cons
     }
 #else
     unsigned int lanePosition;
-    for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
-        uint32_t *stateAsHalfLanes = state->A;
-        uint32_t low, high, temp, temp0, temp1;
-        fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], low, high, temp, temp0, temp1);
-        uint8_t laneAsBytes[8];
-        laneAsBytes[0] = low & 0xFF;
-        laneAsBytes[1] = (low >> 8) & 0xFF;
-        laneAsBytes[2] = (low >> 16) & 0xFF;
-        laneAsBytes[3] = (low >> 24) & 0xFF;
-        laneAsBytes[4] = high & 0xFF;
-        laneAsBytes[5] = (high >> 8) & 0xFF;
-        laneAsBytes[6] = (high >> 16) & 0xFF;
-        laneAsBytes[7] = (high >> 24) & 0xFF;
-        ((uint32_t*)(output+lanePosition*8))[0] = ((uint32_t*)(input+lanePosition*8))[0] ^ (*(const uint32_t*)(laneAsBytes+0));
-        ((uint32_t*)(output+lanePosition*8))[1] = ((uint32_t*)(input+lanePosition*8))[0] ^ (*(const uint32_t*)(laneAsBytes+4));
-    }
+    for(lanePosition=0; lanePosition<laneCount; lanePosition++)
+        KeccakP1600_ExtractAndAddBytesInLane(state, lanePosition, input+lanePosition*8, output+lanePosition*8, 0, 8);
 #endif
 }
 /* ---------------------------------------------------------------- */
