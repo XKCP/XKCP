@@ -73,3 +73,46 @@ jobs:
 
       - name: Run x86-64 Unit Tests with SSSE3 disabled
         run: bin/x86-64/UnitTests -a --disableAVX512 --disableAVX2 --disableSSSE3
+
+  # Misaligned caller buffers, with the UBSan alignment check: the
+  # misaligned-buffer test and the unit tests (see
+  # tests/MemoryAlignment/run.sh), on each CPU dispatch path of the
+  # x86-64 and aarch64 targets. Hosted x86-64 runners do not guarantee
+  # AVX-512, so the first x86-64 leg can test the AVX2 code instead.
+  memory_alignment:
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runner: ubuntu-latest, target: x86-64, options: "" }
+          - { runner: ubuntu-latest, target: x86-64, options: "--disableAVX512" }
+          - { runner: ubuntu-latest, target: x86-64, options: "--disableAVX512 --disableAVX2" }
+          - { runner: ubuntu-latest, target: x86-64, options: "--disableAVX512 --disableAVX2 --disableSSSE3" }
+          - { runner: ubuntu-24.04-arm, target: aarch64, options: "" }
+          - { runner: ubuntu-24.04-arm, target: aarch64, options: "--disableSHA3" }
+    env:
+      COMPILER: gcc
+      WITH_UNITTESTS: 1
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y xsltproc
+
+      - name: Run the misaligned-buffer test and the unit tests
+        env:
+          TARGET: ${{ matrix.target }}
+          OPTIONS: ${{ matrix.options }}
+        run: |
+          # OPTIONS is split into words on purpose.
+          # shellcheck disable=SC2086
+          tests/MemoryAlignment/run.sh . "$TARGET" $OPTIONS
