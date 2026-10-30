@@ -116,7 +116,62 @@ Yes, there is example code for using many cryptographic functions of the XKCP. Y
 Most of the source and header files in the XKCP are released to the **public domain** and associated to the [CC0](http://creativecommons.org/publicdomain/zero/1.0/) deed, but there are exceptions.
 Please refer to the [LICENSE](LICENSE) file for more information.
 
+# Fast Installation with Brew
 
+[Brew](https://brew.sh) is a package manager for macOS and Linux. It can be used to install the XKCP without the need to clone the repository and build the code.
+
+For that, please follow the below steps: 
+
+1. Install HomeBrew. See https://brew.sh/
+2. Add the `XKCP/tap` to brew: `brew tap XKCP/tap`
+3. Install the XKCP: `brew install --HEAD xkcp`
+
+At this point, the XKCP package should have been installed on your system.
+
+You can start using the XKCP by including the header files in your code and linking against the library through the terminal, or your build system (like CMake).
+Please see below for an example.
+
+## Usage Example
+
+### The actual code
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+
+// example, include the SimpleFIPS202 header
+#include "SimpleFIPS202.h"
+
+int main(int argc, char const *argv[])
+{
+    // you can now use the SimpleFIPS202 functions.
+    // see usage-example.md for such examples
+
+   return 0;
+}
+```
+
+### Linking against XKCP
+
+Brew installs the library and the header files in a special directory referred to as `prefix`.
+To find its location on your system, you can run `echo $(brew --prefix)` in the terminal.
+
+For the new ARM based macs, it's usually `/opt/homebrew`. We will assume this location for the rest of the example.
+
+#### From the terminal
+
+```bash
+gcc -l XKCP -L /opt/homebrew/lib -I /opt/homebrew/include/libXKCP.a.headers main.c
+```
+
+#### Using CMake
+```cmake
+include_directories(/opt/homebrew/include/libXKCP.a.headers)
+target_link_libraries(client_cmake /opt/homebrew/lib/libXKCP.a)
+```
+
+Please note that `Brew` support is still an early stage project, in case you found any issues, please report them. Your suggestions are also welcome.
 
 # How can I build the XKCP?
 
