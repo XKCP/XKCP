@@ -340,32 +340,45 @@ size_t Xoodyak_SSSE3_DecryptFullBlocks(Xoodoo_align128plain32_state *state, cons
         Round(_rc2);
         Round(_rc1);
         o0 = XOR128(a0, LOAD128u(I[0]));
+        /* Read the ciphertext words before writing the plaintext words, as O may be I. */
 #if defined(__SSE41__) || defined(__SSE4_1__)
 #if defined(__i386__) || defined(_M_IX86)
-        *((uint32_t*)(O+16)) = *((uint32_t*)(I+16)) ^ _mm_extract_epi32(a1, 0);
-        *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_extract_epi32(a1, 1);
-        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+16)), 0);
-        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+20)), 1);
+        {
+            uint32_t c16 = XKCP_load32(I+16), c20 = XKCP_load32(I+20);
+            XKCP_store32(O+16, c16 ^ _mm_extract_epi32(a1, 0));
+            XKCP_store32(O+20, c20 ^ _mm_extract_epi32(a1, 1));
+            a1 = _mm_insert_epi32(a1, c16, 0);
+            a1 = _mm_insert_epi32(a1, c20, 1);
+        }
 #else
-        *((uint64_t*)(O+16)) = *((uint64_t*)(I+16)) ^ _mm_extract_epi64(a1, 0);
-        a1 = _mm_insert_epi64(a1, *((uint64_t*)(I+16)), 0);
+        {
+            uint64_t c16 = XKCP_load64(I+16);
+            XKCP_store64(O+16, c16 ^ _mm_extract_epi64(a1, 0));
+            a1 = _mm_insert_epi64(a1, c16, 0);
+        }
 #endif
 #else
 #if defined(__i386__) || defined(_M_IX86)
-        *((uint32_t*)(O+16)) = *((uint32_t*)(I+16)) ^ _mm_cvtsi128_si32(a1);
-        *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_cvtsi128_si32(_mm_srli_si128(a1,4));
-        a1 = _mm_set_epi32(
-            // preserve high words
-            _mm_cvtsi128_si32(_mm_srli_si128(a1,12), 3),
-            _mm_cvtsi128_si32(_mm_srli_si128(a1,8), 2),
-            *((uint32_t*)(I+20)),
-            *((uint32_t*)(I+16)));
+        {
+            uint32_t c16 = XKCP_load32(I+16), c20 = XKCP_load32(I+20);
+            XKCP_store32(O+16, c16 ^ _mm_cvtsi128_si32(a1));
+            XKCP_store32(O+20, c20 ^ _mm_cvtsi128_si32(_mm_srli_si128(a1,4)));
+            a1 = _mm_set_epi32(
+                // preserve high words
+                _mm_cvtsi128_si32(_mm_srli_si128(a1,12)),
+                _mm_cvtsi128_si32(_mm_srli_si128(a1,8)),
+                c20,
+                c16);
+        }
 #else
-        *((uint64_t*)(O+16)) = *((uint64_t*)(I+16)) ^ _mm_cvtsi128_si64(a1);
-        a1 = _mm_set_epi64x(
-            // preserve high words
-             _mm_cvtsi128_si64(_mm_srli_si128(a1,8)),
-            *((uint64_t*)(I+16)));
+        {
+            uint64_t c16 = XKCP_load64(I+16);
+            XKCP_store64(O+16, c16 ^ _mm_cvtsi128_si64(a1));
+            a1 = _mm_set_epi64x(
+                // preserve high words
+                 _mm_cvtsi128_si64(_mm_srli_si128(a1,8)),
+                c16);
+        }
 #endif
 #endif
         STORE128u(O[0], o0);
