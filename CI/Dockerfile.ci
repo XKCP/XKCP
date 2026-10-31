@@ -1,4 +1,6 @@
-FROM debian:bookworm-slim AS builder
+# debian:bookworm-slim, pinned by digest so that the base image cannot change
+# without a commit. The packages that apt-get installs below are not pinned.
+FROM debian:bookworm-slim@sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251 AS builder
 ARG OTHER_PLATFORMS
 ENV OTHER_PLATFORMS $OTHER_PLATFORMS
 
@@ -68,9 +70,9 @@ RUN if [ "$OTHER_PLATFORMS" = "1" ]; then apt-get update        && \
 WORKDIR /build
 COPY ./ ./
 COPY ./CI/ci_tests.sh ./
-# NOTE: the random forces a Docker cache miss to force
-# the execution of the script
-ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+# NOTE: a new CACHEBUST value forces a Docker cache miss, so that the tests
+# below run again even when the sources did not change (Makefile.ci sets it)
+ARG CACHEBUST
 
 RUN bash ci_tests.sh; echo $? > artifacts/status; tar -czvf artifacts.tar.gz artifacts/
 

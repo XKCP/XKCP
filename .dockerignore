@@ -1,0 +1,8 @@
+# Not needed to build and test in the CI image (CI/Dockerfile.ci copies the
+# whole tree). .git is large and, with some actions/checkout versions, holds
+# a token; bin/ and the CI outputs come from earlier local runs.
+.git
+**/.git
+bin/
+CI/artifacts.tar.gz
+CI/status
