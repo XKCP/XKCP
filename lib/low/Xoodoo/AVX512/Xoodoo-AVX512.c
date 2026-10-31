@@ -26,6 +26,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "brg_endian.h"
 #include "Xoodoo.h"
 #include "Xoodoo-SnP.h"
+#include "load-store.h"
 
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
 #error Expecting a little-endian platform
@@ -356,7 +357,7 @@ void Xoofff_AVX512_AddIs(unsigned char *output, const unsigned char *input, size
         output += 32;
     }
    while ( byteLen >= 8 ) {
-        *((uint64_t*)output) ^= *((const uint64_t*)input);
+        XKCP_store64(output, XKCP_load64(output) ^ XKCP_load64(input));
         input += 8;
         output += 8;
         byteLen -= 8;

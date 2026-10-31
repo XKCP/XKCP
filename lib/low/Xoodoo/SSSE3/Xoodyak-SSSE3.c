@@ -26,6 +26,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "align.h"
 #include "Xoodoo.h"
 #include "Xoodoo-SSSE3.h"
+#include "load-store.h"
 #include "Xoodyak-parameters.h"
 
 #include "brg_endian.h"
@@ -185,7 +186,7 @@ size_t Xoodyak_SSSE3_AbsorbKeyedFullBlocks(Xoodoo_align128plain32_state *state, 
         Round(_rc1);
         a0 = XOR128(a0, LOAD128u(X[0]));  /* Xoodyak_Down(instance, X, Xoodyak_Rkin, 0); */
         a1 = XOR128(a1, LOAD128u(X[16])); 
-        a2 = XOR128(a2, _mm_set_epi32(1, *(uint32_t*)(&X[40]), *(uint32_t*)(&X[36]), *(uint32_t*)(&X[32])));
+        a2 = XOR128(a2, _mm_set_epi32(1, XKCP_load32(&X[40]), XKCP_load32(&X[36]), XKCP_load32(&X[32])));
         X       += Xoodyak_Rkin;
         XLen    -= Xoodyak_Rkin;
     } while (XLen >= Xoodyak_Rkin);
@@ -306,7 +307,7 @@ size_t Xoodyak_SSSE3_EncryptFullBlocks(Xoodoo_align128plain32_state *state, cons
         Round(_rc2);
         Round(_rc1);
         a0 = XOR128(a0, LOAD128u(I[0]));
-        a1 = XOR128(a1, _mm_set_epi32(0, 1, *(uint32_t*)(&I[20]), *(uint32_t*)(&I[16])));
+        a1 = XOR128(a1, _mm_set_epi32(0, 1, XKCP_load32(&I[20]), XKCP_load32(&I[16])));
         STORE128u(O[0], a0);
         STORE64L(O[16], a1); 
         I       += Xoodyak_Rkout;
@@ -342,30 +343,30 @@ size_t Xoodyak_SSSE3_DecryptFullBlocks(Xoodoo_align128plain32_state *state, cons
         o0 = XOR128(a0, LOAD128u(I[0]));
 #if defined(__SSE41__) || defined(__SSE4_1__)
 #if defined(__i386__) || defined(_M_IX86)
-        *((uint32_t*)(O+16)) = *((uint32_t*)(I+16)) ^ _mm_extract_epi32(a1, 0);
-        *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_extract_epi32(a1, 1);
-        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+16)), 0);
-        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+20)), 1);
+        XKCP_store32(O+16, XKCP_load32(I+16) ^ _mm_extract_epi32(a1, 0));
+        XKCP_store32(O+20, XKCP_load32(I+20) ^ _mm_extract_epi32(a1, 1));
+        a1 = _mm_insert_epi32(a1, XKCP_load32(I+16), 0);
+        a1 = _mm_insert_epi32(a1, XKCP_load32(I+20), 1);
 #else
-        *((uint64_t*)(O+16)) = *((uint64_t*)(I+16)) ^ _mm_extract_epi64(a1, 0);
-        a1 = _mm_insert_epi64(a1, *((uint64_t*)(I+16)), 0);
+        XKCP_store64(O+16, XKCP_load64(I+16) ^ _mm_extract_epi64(a1, 0));
+        a1 = _mm_insert_epi64(a1, XKCP_load64(I+16), 0);
 #endif
 #else
 #if defined(__i386__) || defined(_M_IX86)
-        *((uint32_t*)(O+16)) = *((uint32_t*)(I+16)) ^ _mm_cvtsi128_si32(a1);
-        *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_cvtsi128_si32(_mm_srli_si128(a1,4));
+        XKCP_store32(O+16, XKCP_load32(I+16) ^ _mm_cvtsi128_si32(a1));
+        XKCP_store32(O+20, XKCP_load32(I+20) ^ _mm_cvtsi128_si32(_mm_srli_si128(a1,4)));
         a1 = _mm_set_epi32(
             // preserve high words
             _mm_cvtsi128_si32(_mm_srli_si128(a1,12), 3),
             _mm_cvtsi128_si32(_mm_srli_si128(a1,8), 2),
-            *((uint32_t*)(I+20)),
-            *((uint32_t*)(I+16)));
+            XKCP_load32(I+20),
+            XKCP_load32(I+16));
 #else
-        *((uint64_t*)(O+16)) = *((uint64_t*)(I+16)) ^ _mm_cvtsi128_si64(a1);
+        XKCP_store64(O+16, XKCP_load64(I+16) ^ _mm_cvtsi128_si64(a1));
         a1 = _mm_set_epi64x(
             // preserve high words
              _mm_cvtsi128_si64(_mm_srli_si128(a1,8)),
-            *((uint64_t*)(I+16)));
+            XKCP_load64(I+16));
 #endif
 #endif
         STORE128u(O[0], o0);

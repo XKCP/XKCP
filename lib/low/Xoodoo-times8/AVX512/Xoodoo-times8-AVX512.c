@@ -23,6 +23,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "align.h"
 #include "brg_endian.h"
 #include "Xoodoo.h"
+#include "load-store.h"
 #include "Xoodoo-times8-AVX512.h"
 
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
@@ -183,7 +184,7 @@ void Xoodootimes8_AVX512_AddBytes(Xoodootimes8_align512SIMD256_states *states, u
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        uint32_t lane = *((const uint32_t*)curData);
+        uint32_t lane = XKCP_load32(curData);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] ^= lane;
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
@@ -201,10 +202,10 @@ void Xoodootimes8_AVX512_AddLanesAll(Xoodootimes8_align512SIMD256_states *states
 {
     V256 *stateAsLanes = states->A;
     unsigned int i;
-    const uint32_t *data32 = (const uint32_t *)data;
+    const unsigned char *data32 = data;
     V256 offsets = SET8_32(0*laneOffset, 1*laneOffset, 2*laneOffset, 3*laneOffset, 4*laneOffset, 5*laneOffset, 6*laneOffset, 7*laneOffset);
 
-    #define Xor_In( argIndex )  stateAsLanes[argIndex] = XOR(stateAsLanes[argIndex], LOAD_GATHER8_32(offsets, &data32[argIndex]))
+    #define Xor_In( argIndex )  stateAsLanes[argIndex] = XOR(stateAsLanes[argIndex], LOAD_GATHER8_32(offsets, &data32[4*(argIndex)]))
 
     if ( laneCount == 12 )  {
         Xor_In( 0 );
@@ -246,7 +247,7 @@ void Xoodootimes8_AVX512_OverwriteBytes(Xoodootimes8_align512SIMD256_states *sta
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        uint32_t lane = *((const uint32_t*)curData);
+        uint32_t lane = XKCP_load32(curData);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] = lane;
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
@@ -262,10 +263,10 @@ void Xoodootimes8_AVX512_OverwriteLanesAll(Xoodootimes8_align512SIMD256_states *
 {
     V256 *stateAsLanes = states->A;
     unsigned int i;
-    const uint32_t *data32 = (const uint32_t *)data;
+    const unsigned char *data32 = data;
     V256 offsets = SET8_32(0*laneOffset, 1*laneOffset, 2*laneOffset, 3*laneOffset, 4*laneOffset, 5*laneOffset, 6*laneOffset, 7*laneOffset);
 
-    #define OverWr( argIndex )  stateAsLanes[argIndex] = LOAD_GATHER8_32(offsets, &data32[argIndex])
+    #define OverWr( argIndex )  stateAsLanes[argIndex] = LOAD_GATHER8_32(offsets, &data32[4*(argIndex)])
 
     if ( laneCount == 12 )  {
         OverWr( 0 );
@@ -324,7 +325,7 @@ void Xoodootimes8_AVX512_ExtractBytes(const Xoodootimes8_align512SIMD256_states 
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *(uint32_t*)curData = statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        XKCP_store32(curData, statesAsLanes[laneIndex(instanceIndex, lanePosition)]);
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curData += SnP_laneLengthInBytes;
@@ -339,10 +340,10 @@ void Xoodootimes8_AVX512_ExtractLanesAll(const Xoodootimes8_align512SIMD256_stat
 {
     const V256 *stateAsLanes = states->A;
     unsigned int i;
-    uint32_t *data32 = (uint32_t *)data;
+    unsigned char *data32 = data;
     V256 offsets = SET8_32(0*laneOffset, 1*laneOffset, 2*laneOffset, 3*laneOffset, 4*laneOffset, 5*laneOffset, 6*laneOffset, 7*laneOffset);
 
-    #define Extr( argIndex )        STORE_SCATTER8_32(offsets, stateAsLanes[argIndex], &data32[argIndex])
+    #define Extr( argIndex )        STORE_SCATTER8_32(offsets, stateAsLanes[argIndex], &data32[4*(argIndex)])
 
     if ( laneCount == 12 )  {
         Extr( 0 );
@@ -388,7 +389,7 @@ void Xoodootimes8_AVX512_ExtractAndAddBytes(const Xoodootimes8_align512SIMD256_s
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *((uint32_t*)curOutput) = *((const uint32_t*)curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        XKCP_store32(curOutput, XKCP_load32(curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)]);
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curInput += SnP_laneLengthInBytes;
@@ -408,11 +409,11 @@ void Xoodootimes8_AVX512_ExtractAndAddLanesAll(const Xoodootimes8_align512SIMD25
 {
     const V256 *stateAsLanes = states->A;
     unsigned int i;
-    const uint32_t *datai32 = (const uint32_t *)input;
-    uint32_t *datao32 = (uint32_t *)output;
+    const unsigned char *datai32 = input;
+    unsigned char *datao32 = output;
     V256 offsets = SET8_32(0*laneOffset, 1*laneOffset, 2*laneOffset, 3*laneOffset, 4*laneOffset, 5*laneOffset, 6*laneOffset, 7*laneOffset);
 
-    #define ExtrXor( argIndex ) STORE_SCATTER8_32(offsets, XOR( stateAsLanes[argIndex], LOAD_GATHER8_32(offsets, &datai32[argIndex])), &datao32[argIndex])
+    #define ExtrXor( argIndex ) STORE_SCATTER8_32(offsets, XOR( stateAsLanes[argIndex], LOAD_GATHER8_32(offsets, &datai32[4*(argIndex)])), &datao32[4*(argIndex)])
 
     if ( laneCount == 12 )  {
         ExtrXor( 0 );
@@ -579,7 +580,7 @@ void Xooffftimes8_AVX512_AddIs(unsigned char *output, const unsigned char *input
         output += 32;
     }
    while ( byteLen >= 8 ) {
-        *((uint64_t*)output) ^= *((const uint64_t*)input);
+        XKCP_store64(output, XKCP_load64(output) ^ XKCP_load64(input));
         input += 8;
         output += 8;
         byteLen -= 8;
@@ -601,7 +602,7 @@ size_t Xooffftimes8_AVX512_CompressFastLoop(unsigned char *k, unsigned char *x, 
     DeclareVars;
     uint32_t       *k32 = (uint32_t*)k;
     uint32_t       *x32 = (uint32_t*)x;
-    const uint32_t *i32 = (const uint32_t*)input;
+    const unsigned char *i32 = input;
     size_t      initialLength;
     V256        r04815926;
     V256        r5926a37b;
@@ -654,18 +655,18 @@ size_t Xooffftimes8_AVX512_CompressFastLoop(unsigned char *k, unsigned char *x, 
         r04815926 = a22;
         Dump("Roll-c", a);
 
-        a00 = XOR( a00, LOAD_GATHER8_32(offsets, i32+0));
-        a01 = XOR( a01, LOAD_GATHER8_32(offsets, i32+1));
-        a02 = XOR( a02, LOAD_GATHER8_32(offsets, i32+2));
-        a03 = XOR( a03, LOAD_GATHER8_32(offsets, i32+3));
-        a12 = XOR( a12, LOAD_GATHER8_32(offsets, i32+4));
-        a13 = XOR( a13, LOAD_GATHER8_32(offsets, i32+5));
-        a10 = XOR( a10, LOAD_GATHER8_32(offsets, i32+6));
-        a11 = XOR( a11, LOAD_GATHER8_32(offsets, i32+7));
-        a20 = XOR( a20, LOAD_GATHER8_32(offsets, i32+8));
-        a21 = XOR( a21, LOAD_GATHER8_32(offsets, i32+9));
-        a22 = XOR( a22, LOAD_GATHER8_32(offsets, i32+10));
-        a23 = XOR( a23, LOAD_GATHER8_32(offsets, i32+11));
+        a00 = XOR( a00, LOAD_GATHER8_32(offsets, i32+4*0));
+        a01 = XOR( a01, LOAD_GATHER8_32(offsets, i32+4*1));
+        a02 = XOR( a02, LOAD_GATHER8_32(offsets, i32+4*2));
+        a03 = XOR( a03, LOAD_GATHER8_32(offsets, i32+4*3));
+        a12 = XOR( a12, LOAD_GATHER8_32(offsets, i32+4*4));
+        a13 = XOR( a13, LOAD_GATHER8_32(offsets, i32+4*5));
+        a10 = XOR( a10, LOAD_GATHER8_32(offsets, i32+4*6));
+        a11 = XOR( a11, LOAD_GATHER8_32(offsets, i32+4*7));
+        a20 = XOR( a20, LOAD_GATHER8_32(offsets, i32+4*8));
+        a21 = XOR( a21, LOAD_GATHER8_32(offsets, i32+4*9));
+        a22 = XOR( a22, LOAD_GATHER8_32(offsets, i32+4*10));
+        a23 = XOR( a23, LOAD_GATHER8_32(offsets, i32+4*11));
         Dump("Input Xoodoo (after add)", a);
 
         Round(  a12, a13, a10, a11,    a11, a12, a13, a10,    a20, a21, a22, a23,    _rc6 );
@@ -690,7 +691,7 @@ size_t Xooffftimes8_AVX512_CompressFastLoop(unsigned char *k, unsigned char *x, 
         x23 = XOR(x23, a23);
         Dump("Accu x", x);
 
-        i32 += NLANES*8;
+        i32 += 4*NLANES*8;
         length -= NLANES*4*8;
     }
     while (length >= (NLANES*4*8));
@@ -737,7 +738,7 @@ size_t Xooffftimes8_AVX512_ExpandFastLoop(unsigned char *yAccu, const unsigned c
     DeclareVars;
     const uint32_t *k32 = (const uint32_t*)kRoll;
     uint32_t       *y32 = (uint32_t*)yAccu;
-    uint32_t       *o32 = (uint32_t*)output;
+    unsigned char  *o32 = output;
     size_t      initialLength;
     V256        r04815926;
     V256        r5926a37b;
@@ -798,20 +799,20 @@ size_t Xooffftimes8_AVX512_ExpandFastLoop(unsigned char *yAccu, const unsigned c
         Dump("Xoodoo(y) + kRoll", a);
 
         /*  Extract */
-        STORE_SCATTER8_32(offsets, a00, o32+0);
-        STORE_SCATTER8_32(offsets, a01, o32+1);
-        STORE_SCATTER8_32(offsets, a02, o32+2);
-        STORE_SCATTER8_32(offsets, a03, o32+3);
-        STORE_SCATTER8_32(offsets, a10, o32+4);
-        STORE_SCATTER8_32(offsets, a11, o32+5);
-        STORE_SCATTER8_32(offsets, a12, o32+6);
-        STORE_SCATTER8_32(offsets, a13, o32+7);
-        STORE_SCATTER8_32(offsets, a20, o32+8);
-        STORE_SCATTER8_32(offsets, a21, o32+9);
-        STORE_SCATTER8_32(offsets, a22, o32+10);
-        STORE_SCATTER8_32(offsets, a23, o32+11);
+        STORE_SCATTER8_32(offsets, a00, o32+4*0);
+        STORE_SCATTER8_32(offsets, a01, o32+4*1);
+        STORE_SCATTER8_32(offsets, a02, o32+4*2);
+        STORE_SCATTER8_32(offsets, a03, o32+4*3);
+        STORE_SCATTER8_32(offsets, a10, o32+4*4);
+        STORE_SCATTER8_32(offsets, a11, o32+4*5);
+        STORE_SCATTER8_32(offsets, a12, o32+4*6);
+        STORE_SCATTER8_32(offsets, a13, o32+4*7);
+        STORE_SCATTER8_32(offsets, a20, o32+4*8);
+        STORE_SCATTER8_32(offsets, a21, o32+4*9);
+        STORE_SCATTER8_32(offsets, a22, o32+4*10);
+        STORE_SCATTER8_32(offsets, a23, o32+4*11);
 
-        o32 += NLANES*8;
+        o32 += 4*NLANES*8;
         length -= NLANES*4*8;
     }
     while (length >= (NLANES*4*8));
