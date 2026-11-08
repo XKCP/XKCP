@@ -37,12 +37,16 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
 {
 	Xoodyak_Instance encrypt;
 	Xoodyak_Instance decrypt;
+	Xoodyak_Instance decryptInPlace;
     uint8_t newKey[Xoodyak_MaxKeySize];
     uint8_t newKeyPrime[Xoodyak_MaxKeySize];
+    uint8_t newKeyInPlace[Xoodyak_MaxKeySize];
     uint8_t tag[Xoodyak_TagLength+3];
     uint8_t tagPrime[Xoodyak_TagLength+3];
+    uint8_t tagInPlace[Xoodyak_TagLength+3];
     uint8_t PPbuffer[Xoodyak_DataSize+3];
     uint8_t Cbuffer[Xoodyak_DataSize+3];
+    uint8_t IPbuffer[Xoodyak_DataSize+3];
 
     #if defined(UT_OUTPUT) || defined(UT_VERBOSE)
     fprintf( f, "*** Xoodyak( keyVariant %u, ratchet %u, SqueezeKey %u, nbrMessagesInSession %u ), with:\n", keyVariant, ratchet, squeezeKLen, nbrMessagesInSession );
@@ -74,6 +78,7 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
 		    UT_assert(Xoodyak_Initialize(&decrypt, K, Klen, ID, IDlen, N, Nlen) == 0);
 			break;
 	}
+	decryptInPlace = decrypt;
 
 	for ( /* empty */; nbrMessagesInSession != 0; --nbrMessagesInSession) {
 		if (squeezeKLen != 0) {
@@ -115,6 +120,24 @@ static void testXoodyakKeyed0ne(	Xoodyak_Instance * global, FILE * f,
 	    UT_assertSyn(!memcmp( newKey, newKeyPrime, squeezeKLen ), (char*)"The new keys do not match.");
 	    UT_assertSyn(!memcmp( P, PPbuffer + align, Plen ), (char*)"The plaintexts do not match.");
 	    UT_assertSyn(!memcmp( tag + align, tagPrime + align, Xoodyak_TagLength ), (char*)"The tags do not match.");
+
+		/* The same decryption in place (the ciphertext buffer is also the plaintext buffer) */
+		if (squeezeKLen != 0) {
+			UT_assert(Xoodyak_SqueezeKey(&decryptInPlace, newKeyInPlace, squeezeKLen) == 0);
+		}
+		UT_assert(Xoodyak_Absorb(&decryptInPlace, AD, ADlen) == 0);
+		memcpy(IPbuffer + align, Cbuffer + align, Plen);
+	    UT_assert(Xoodyak_Decrypt(&decryptInPlace, IPbuffer + align, IPbuffer + align, Plen) == 0);
+		if (ratchet == 1) {
+			UT_assert(Xoodyak_Ratchet(&decryptInPlace) == 0);
+		}
+		UT_assert(Xoodyak_Squeeze(&decryptInPlace, tagInPlace + align, Xoodyak_TagLength) == 0);
+		if (ratchet == 2) {
+			UT_assert(Xoodyak_Ratchet(&decryptInPlace) == 0);
+		}
+	    UT_assertSyn(!memcmp( newKey, newKeyInPlace, squeezeKLen ), (char*)"The new keys do not match (in-place decryption).");
+	    UT_assertSyn(!memcmp( P, IPbuffer + align, Plen ), (char*)"The plaintexts do not match (in-place decryption).");
+	    UT_assertSyn(!memcmp( tag + align, tagInPlace + align, Xoodyak_TagLength ), (char*)"The tags do not match (in-place decryption).");
 
 		if (squeezeKLen != 0) {
 		    UT_assert(Xoodyak_Absorb( global, newKey, squeezeKLen) == 0);

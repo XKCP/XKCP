@@ -317,14 +317,21 @@ size_t Xoodyak_AVX512_DecryptFullBlocks(Xoodoo_align128plain32_state *state, con
         Round(_rc2);
         Round(_rc1);
         o0 = XOR(a0, LOAD128u(I[0]));
+        /* Read the ciphertext words before writing the plaintext words, as O may be I. */
 #if defined(__i386__) || defined(_M_IX86)
-        *((uint32_t*)(O+16)) = *((uint32_t*)(I+16)) ^ _mm_extract_epi32(a1, 0);
-        *((uint32_t*)(O+20)) = *((uint32_t*)(I+20)) ^ _mm_extract_epi32(a1, 1);
-        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+16)), 0);
-        a1 = _mm_insert_epi32(a1, *((uint32_t*)(I+20)), 1);
+        {
+            uint32_t c16 = XKCP_load32(I+16), c20 = XKCP_load32(I+20);
+            XKCP_store32(O+16, c16 ^ _mm_extract_epi32(a1, 0));
+            XKCP_store32(O+20, c20 ^ _mm_extract_epi32(a1, 1));
+            a1 = _mm_insert_epi32(a1, c16, 0);
+            a1 = _mm_insert_epi32(a1, c20, 1);
+        }
 #else
-        *((uint64_t*)(O+16)) = *((uint64_t*)(I+16)) ^ _mm_extract_epi64(a1, 0);
-        a1 = _mm_insert_epi64(a1, *((uint64_t*)(I+16)), 0);
+        {
+            uint64_t c16 = XKCP_load64(I+16);
+            XKCP_store64(O+16, c16 ^ _mm_extract_epi64(a1, 0));
+            a1 = _mm_insert_epi64(a1, c16, 0);
+        }
 #endif
         STORE128u(O[0], o0);
         a0 = XOR(a0, o0); 
