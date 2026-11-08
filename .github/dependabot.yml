@@ -1,0 +1,13 @@
+# Propose updates of the GitHub Actions that the workflows pin by commit, and of
+# the base image that CI/Dockerfile.ci pins by digest.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+  # The base image of the CI image, which CI/Dockerfile.ci pins by digest.
+  - package-ecosystem: docker
+    directory: /CI
+    schedule:
+      interval: monthly

@@ -3,13 +3,19 @@ name: XKCP CI
 # Run this workflow every time a new commit pushed to your repository
 on: push
 
+# The jobs only need to read the repository.
+permissions:
+  contents: read
+
 jobs:
   permutations_different_low_level_implementations:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Initialize submodules
         run: git submodule update --init --recursive
@@ -32,7 +38,9 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Initialize submodules
         run: git submodule update --init --recursive
@@ -51,7 +59,9 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Initialize submodules
         run: git submodule update --init --recursive
