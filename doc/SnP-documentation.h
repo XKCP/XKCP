@@ -14,7 +14,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 /** General information
   *
-  * SnP stands for "state and permutation". It provides a set of function to
+  * SnP stands for "state and permutation". It provides a set of functions to
   * access and process a state, and in particular to apply a given permutation
   * (or family of permutations) on it.
   *

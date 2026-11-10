@@ -51,6 +51,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
         <inc>tests/UnitTests/testDuplex.inc</inc>
         <h>tests/UnitTests/testDuplex.h</h>
         <h>tests/UnitTests/testShakingUpAE.h</h>
+        <c>tests/UnitTests/testOD.c</c>
+        <inc>tests/UnitTests/testOD.inc</inc>
+        <inc>tests/UnitTests/testParallelOD.inc</inc>
+        <h>tests/UnitTests/testOD.h</h>
+        <h>tests/UnitTests/testFlightDeck.h</h>
+        <c>tests/UnitTests/testFlightDeck.c</c>
+        <inc>tests/UnitTests/testFlightDeck.inc</inc>
         <c>tests/UnitTests/genKAT.c</c>
         <h>tests/UnitTests/genKAT.h</h>
         <c>tests/UnitTests/testPRG.c</c>

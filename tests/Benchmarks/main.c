@@ -17,6 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include <stdlib.h>
 #include <string.h>
 #include "config.h"
+#include "SnP-implementations.h"
 #include "testPerformance.h"
 #include "testXooPerformance.h"
 #ifdef XKCP_has_x86_64_CPU_detection
@@ -204,9 +205,40 @@ void printHelp()
 {
         printf("Usage: Benchmarks command(s), where the commands can be\n");
         printf("  --help or -h              To display this page\n");
-        printf("  --all or -a               All benchmarsk\n");
-        printf("  --Keccak                  Benchmark of all Keccak-p-based functions\n");
+        printf("  --all or -a               All benchmarks\n");
+        printf("  --Keccak or -c            Benchmark all Keccak-based algorithms\n");
+        printf("  --SnP or -p               Benchmark all available permutations\n");
+#ifdef XKCP_has_Sponge_Keccak_width1600
+        printf("  --KeccakSponge            Benchmark the Keccak sponge\n");
+#endif
+#ifdef XKCP_has_TurboSHAKE
+        printf("  --TurboSHAKE              Benchmark TurboSHAKE\n");
+#endif
+#ifdef XKCP_has_SP800_185
+        printf("  --SP800-185               Benchmark ParallelHash\n");
+#endif
+#ifdef XKCP_has_KangarooTwelve
+        printf("  --KangarooTwelve or -K12  Benchmark KangarooTwelve\n");
+#endif
+#ifdef XKCP_has_Kravatte
+        printf("  --Kravatte                Benchmark Kravatte\n");
+#endif
+#ifdef XKCP_has_FlightDeck_Keccak
+        printf("  --FlightDeck              Benchmark FlightDeck\n");
+#endif
+#ifdef XKCP_has_ShakingUpAE
+        printf("  --ShakingUpAE             Benchmark FlightDeck, UpperDeck, DWrap and DeckBO\n");
+        printf("  --UpperDeck               Benchmark UpperDeck\n");
+        printf("  --DWrap                   Benchmark DWrap\n");
+        printf("  --DeckBO                  Benchmark DeckBO\n");
+#endif
         printf("  --Xoodoo                  Benchmark of all Xoodoo-based functions\n");
+#ifdef XKCP_has_Xoofff
+        printf("  --Xoofff                  Benchmark Xoofff\n");
+#endif
+#ifdef XKCP_has_Xoodyak
+        printf("  --Xoodyak                 Benchmark Xoodyak\n");
+#endif
 #ifdef XKCP_has_x86_64_CPU_detection
         printf("  --disableSSSE3            Disable use of SSSE3 implementations\n");
         printf("  --disableAVX2             Disable use of AVX2 implementations\n");
@@ -223,6 +255,19 @@ int process(int argc, char* argv[])
     int help = 0;
     int K = 0;
     int X = 0;
+    int keccakSnP = 0;
+    int xoodooSnP = 0;
+    int keccakSponge = 0;
+    int turboSHAKE = 0;
+    int parallelHash = 0;
+    int kangarooTwelve = 0;
+    int kravatte = 0;
+    int flightDeck = 0;
+    int upperDeck = 0;
+    int dWrap = 0;
+    int deckBO = 0;
+    int xoofff = 0;
+    int xoodyak = 0;
 
     if (argc == 1)
         help = 1;
@@ -237,8 +282,52 @@ int process(int argc, char* argv[])
             K = X = 1;
         else if ((strcmp("--Keccak", argv[i]) == 0) || (strcmp("-c", argv[i]) == 0))
             K = 1;
+        else if ((strcmp("--SnP", argv[i]) == 0) || (strcmp("-p", argv[i]) == 0))
+            keccakSnP = xoodooSnP = 1;
+#ifdef XKCP_has_Sponge_Keccak_width1600
+        else if (strcmp("--KeccakSponge", argv[i]) == 0)
+            keccakSponge = 1;
+#endif
+#ifdef XKCP_has_TurboSHAKE
+        else if (strcmp("--TurboSHAKE", argv[i]) == 0)
+            turboSHAKE = 1;
+#endif
+#ifdef XKCP_has_SP800_185
+        else if (strcmp("--SP800-185", argv[i]) == 0)
+            parallelHash = 1;
+#endif
+#ifdef XKCP_has_KangarooTwelve
+        else if ((strcmp("--KangarooTwelve", argv[i]) == 0) || (strcmp("-K12", argv[i]) == 0))
+            kangarooTwelve = 1;
+#endif
+#ifdef XKCP_has_Kravatte
+        else if (strcmp("--Kravatte", argv[i]) == 0)
+            kravatte = 1;
+#endif
+#ifdef XKCP_has_FlightDeck_Keccak
+        else if (strcmp("--FlightDeck", argv[i]) == 0)
+            flightDeck = 1;
+#endif
+#ifdef XKCP_has_ShakingUpAE
+        else if (strcmp("--ShakingUpAE", argv[i]) == 0)
+            flightDeck = upperDeck = dWrap = deckBO = 1;
+        else if (strcmp("--UpperDeck", argv[i]) == 0)
+            upperDeck = 1;
+        else if (strcmp("--DWrap", argv[i]) == 0)
+            dWrap = 1;
+        else if (strcmp("--DeckBO", argv[i]) == 0)
+            deckBO = 1;
+#endif
         else if (strcmp("--Xoodoo", argv[i]) == 0)
             X = 1;
+#ifdef XKCP_has_Xoofff
+        else if (strcmp("--Xoofff", argv[i]) == 0)
+            xoofff = 1;
+#endif
+#ifdef XKCP_has_Xoodyak
+        else if (strcmp("--Xoodyak", argv[i]) == 0)
+            xoodyak = 1;
+#endif
         else {
             printf("Unrecognized command '%s'\n", argv[i]);
             return -1;
@@ -248,11 +337,56 @@ int process(int argc, char* argv[])
         printHelp();
         return 0;
     }
+    XKCP_PrintImplementations();
     if (K) {
         testPerformance();
     }
+    else {
+        if (keccakSnP)
+            testKeccakPermutationPerformance();
+        if (keccakSponge)
+            testKeccakSpongePerformance();
+        if (turboSHAKE)
+            testTurboSHAKEPerformance();
+#ifdef XKCP_has_SP800_185
+        if (parallelHash)
+            testParallelHashPerformance();
+#endif
+#ifdef XKCP_has_KangarooTwelve
+        if (kangarooTwelve)
+            testKangarooTwelvePerformance();
+#endif
+#ifdef XKCP_has_Kravatte
+        if (kravatte)
+            testKravattePerformance();
+#endif
+#ifdef XKCP_has_FlightDeck_Keccak
+        if (flightDeck)
+            testFlightDeckPerformance();
+#endif
+#ifdef XKCP_has_ShakingUpAE
+        if (upperDeck)
+            testUpperDeckPerformance();
+        if (dWrap)
+            testDWrapPerformance();
+        if (deckBO)
+            testDeckBOPerformance();
+#endif
+    }
     if (X) {
         Xoo();
+    }
+    else {
+        if (xoodooSnP)
+            testXoodooSnPPerformance();
+#ifdef XKCP_has_Xoofff
+        if (xoofff)
+            testXoofffPerformance();
+#endif
+#ifdef XKCP_has_Xoodyak
+        if (xoodyak)
+            testXoodyakPerformance();
+#endif
     }
     return 0;
 }

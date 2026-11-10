@@ -59,4 +59,13 @@ size_t KeccakP1600times4_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, 
 void KeccakP1600times4_KT128ProcessLeaves(const unsigned char *input, unsigned char *output);
 void KeccakP1600times4_KT256ProcessLeaves(const unsigned char *input, unsigned char *output);
 
+size_t KeccakP1600times4_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times4_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times4_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times4_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times4_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t KeccakP1600times4_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t KeccakP1600times4_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t KeccakP1600times4_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+
 #endif

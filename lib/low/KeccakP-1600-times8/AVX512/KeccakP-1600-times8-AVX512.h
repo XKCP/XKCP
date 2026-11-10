@@ -35,7 +35,12 @@ typedef struct {
 #define KeccakP1600times8_AVX512_GetImplementation() \
     ("AVX512 implementation (" KeccakP1600times8_AVX512_implementation_config ")")
 #define KeccakP1600times8_AVX512_GetFeatures() \
-    (PlSnP_Feature_Main | PlSnP_Feature_SpongeAbsorb | PlSnP_Feature_Farfalle | PlSnP_Feature_KangarooTwelve)
+    (PlSnP_Feature_Main \
+        | PlSnP_Feature_SpongeAbsorb \
+        | PlSnP_Feature_Farfalle \
+        | PlSnP_Feature_KangarooTwelve \
+        | PlSnP_Feature_FlightDeck \
+    )
 
 #define KeccakP1600times8_AVX512_StaticInitialize()
 void KeccakP1600times8_AVX512_InitializeAll(KeccakP1600times8_SIMD512_states *states);
@@ -60,5 +65,14 @@ size_t KeccakP1600times8_AVX512_KravatteCompress(uint64_t *xAccu, uint64_t *kRol
 size_t KeccakP1600times8_AVX512_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, unsigned char *output, size_t outputByteLen);
 void KeccakP1600times8_AVX512_KT128ProcessLeaves(const unsigned char *input, unsigned char *output);
 void KeccakP1600times8_AVX512_KT256ProcessLeaves(const unsigned char *input, unsigned char *output);
+
+size_t KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times8_AVX512_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times8_AVX512_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t KeccakP1600times8_AVX512_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t KeccakP1600times8_AVX512_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
 
 #endif

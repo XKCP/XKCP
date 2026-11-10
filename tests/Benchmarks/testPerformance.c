@@ -32,8 +32,12 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifdef XKCP_has_SP800_185
 #include "SP800-185.h"
 #endif
+#ifdef XKCP_has_FlightDeck_Keccak
+#include "FlightDeck.h"
+#endif
 #ifdef XKCP_has_ShakingUpAE
 #include "ShakingUpAE.h"
+#include "UpperDeck.h"
 #endif
 
 #include "timing.h"
@@ -764,6 +768,228 @@ void testKravattePerformance(void)
 
 // ----------------------------------------------------------------------------
 
+#ifdef XKCP_has_FlightDeck_Keccak
+
+#define FlightDeck_KeyLen 16
+
+cycles_t measureFlightDeckInput(cycles_t dtMin, unsigned int inputLen, int turbo, unsigned int s)
+{
+    unsigned char* input = bigBuffer1;
+    ALIGN_DEFAULT unsigned char key[FlightDeck_KeyLen];
+    KeccakWidth1600_FlightDeckInstance deck;
+    measureTimingDeclare
+
+    assert(inputLen <= sizeof(bigBuffer1));
+
+    memset(key, 0xA5, FlightDeck_KeyLen);
+    if (turbo) {
+        if (s == 128)
+            TurboSHAKE128_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+        else
+            TurboSHAKE256_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+    }
+    else if (s == 128)
+        SHAKE128_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+    else
+        SHAKE256_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+    memset(input, 0xA5, inputLen);
+
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_FlightDeck_Duplexing(&deck, NULL, 0, input, inputLen, 0x01, NULL);
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_FlightDeck_Duplexing(&deck, NULL, 0, input, inputLen, 0x01, NULL);
+        measureTimingEnd
+    }
+}
+
+cycles_t measureFlightDeckOutput(cycles_t dtMin, unsigned int outputLen, int turbo, unsigned int s)
+{
+    unsigned char* output = bigBuffer1;
+    ALIGN_DEFAULT unsigned char key[FlightDeck_KeyLen];
+    KeccakWidth1600_FlightDeckInstance deck;
+    measureTimingDeclare
+
+    assert(outputLen <= sizeof(bigBuffer1));
+
+    memset(key, 0xA5, FlightDeck_KeyLen);
+    if (turbo) {
+        if (s == 128)
+            TurboSHAKE128_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+        else
+            TurboSHAKE256_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+    }
+    else if (s == 128)
+        SHAKE128_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+    else
+        SHAKE256_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_FlightDeck_Duplexing(&deck, output, outputLen, NULL, 0, 0x01, NULL);
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_FlightDeck_Duplexing(&deck, output, outputLen, NULL, 0, 0x01, NULL);
+        measureTimingEnd
+    }
+}
+
+cycles_t measureFlightDeckOutputAndAdd(cycles_t dtMin, unsigned int outputLen, int turbo, unsigned int s)
+{
+    unsigned char* output = bigBuffer1;
+    unsigned char* added = bigBuffer2;
+    ALIGN_DEFAULT unsigned char key[FlightDeck_KeyLen];
+    KeccakWidth1600_FlightDeckInstance deck;
+    measureTimingDeclare
+
+    assert(outputLen <= sizeof(bigBuffer1));
+    assert(outputLen <= sizeof(bigBuffer2));
+
+    memset(key, 0xA5, FlightDeck_KeyLen);
+    if (turbo) {
+        if (s == 128)
+            TurboSHAKE128_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+        else
+            TurboSHAKE256_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+    }
+    else if (s == 128)
+        SHAKE128_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+    else
+        SHAKE256_FlightDeck_Initialize(&deck, key, FlightDeck_KeyLen);
+    memset(added, 0xA5, outputLen);
+
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_FlightDeck_Duplexing(&deck, output, outputLen, NULL, 0, 0x01, added);
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_FlightDeck_Duplexing(&deck, output, outputLen, NULL, 0, 0x01, added);
+        measureTimingEnd
+    }
+}
+
+void printFlightDeckPerformanceHeader( void )
+{
+    printf("*** FlightDeck ***\n");
+    printf("Using Keccak-p[1600,6] implementations:\n");
+    printParallelImplementations(0, 0, 0, 0);
+    printf("\n");
+}
+
+uint32_t testFlightDeckNextLen(uint32_t len, unsigned int rho, size_t alpha)
+{
+    if (len < rho) {
+        len <<= 1;
+        if (len > rho)
+            len = rho;
+    }
+    else if (len < 16*rho) {
+        len += rho;
+    }
+    else if (len < 9*alpha) {
+        if (len < alpha)
+            len = alpha;
+        else
+            len += alpha;
+    }
+    else if (len < 49*alpha) {
+        len += 10*alpha;
+    }
+    else {
+        len *= 2;
+    }
+    return len;
+}
+
+typedef cycles_t (* measureFlightDeckPerf)(cycles_t, unsigned int, int, unsigned int);
+
+static void testFlightDeckPerfSlope(measureFlightDeckPerf pFunc, cycles_t calibration, int turbo, unsigned int s, size_t alpha)
+{
+    uint32_t len1, len2, len;
+    uint32_t count;
+    cycles_t time1, time2, time;
+    const uint32_t stabilityCount = 10;
+
+    time1 = CYCLES_MAX;
+    len1 = (8+1)*alpha;
+    count = stabilityCount;
+    do {
+        time = pFunc(calibration, len1, turbo, s);
+        if (time < time1) {
+            time1 = time;
+            count = stabilityCount;
+        }
+    } while( --count != 0);
+    time2 = CYCLES_MAX;
+    len2 = (8+5*8+1)*alpha;
+    count = stabilityCount;
+    do {
+        time = pFunc(calibration, len2, turbo, s);
+        if (time < time2) {
+            time2 = time;
+            count = stabilityCount;
+        }
+    } while( --count != 0);
+
+    time = time2-time1;
+    len = len2-len1;
+    printf("   +%3u chunks: %9" PRId64 " %s, %6.3f %s/byte (slope)\n", (unsigned int)(len/alpha), time, getTimerUnit(), time*1.0/len, getTimerUnit());
+}
+
+void testFlightDeckPerformanceOne(int turbo, unsigned int s, unsigned int rho, size_t alpha)
+{
+    cycles_t calibration = CalibrateTimer();
+    uint32_t len;
+    cycles_t time;
+
+    printf("** ");
+    if (turbo)
+        printf("Turbo");
+    printf("SHAKE%d-FlightDeck\n\n", s);
+
+    printf("* Varying input sizes\n");
+    for(len=8; len <= BIG_BUFFER_SIZE; len = testFlightDeckNextLen(len, rho, alpha)) {
+        time = measureFlightDeckInput(calibration, len, turbo, s);
+        printf("%8d bytes in:  %9" PRId64 " %s, %6.3f %s/byte\n", len, time, getTimerUnit(), time*1.0/len, getTimerUnit());
+    }
+    testFlightDeckPerfSlope(measureFlightDeckInput, calibration, turbo, s, alpha);
+    printf("\n");
+    printf("* Varying output sizes\n");
+    for(len=8; len <= BIG_BUFFER_SIZE; len = testFlightDeckNextLen(len, rho, alpha)) {
+        time = measureFlightDeckOutput(calibration, len, turbo, s);
+        printf("%8d bytes out: %9" PRId64 " %s, %6.3f %s/byte\n", len, time, getTimerUnit(), time*1.0/len, getTimerUnit());
+    }
+    testFlightDeckPerfSlope(measureFlightDeckOutput, calibration, turbo, s, alpha);
+    printf("\n");
+    printf("* Varying output sizes, with XOR into output\n");
+    for(len=8; len <= BIG_BUFFER_SIZE; len = testFlightDeckNextLen(len, rho, alpha)) {
+        time = measureFlightDeckOutputAndAdd(calibration, len, turbo, s);
+        printf("%8d bytes out: %9" PRId64 " %s, %6.3f %s/byte\n", len, time, getTimerUnit(), time*1.0/len, getTimerUnit());
+    }
+    testFlightDeckPerfSlope(measureFlightDeckOutputAndAdd, calibration, turbo, s, alpha);
+
+    printf("\n\n");
+}
+
+void testFlightDeckPerformance(void)
+{
+    printFlightDeckPerformanceHeader();
+    testFlightDeckPerformanceOne(1, 128, 160, 5120);
+    testFlightDeckPerformanceOne(1, 256, 128, 8192);
+    testFlightDeckPerformanceOne(0, 128, 160, 5120);
+    testFlightDeckPerformanceOne(0, 256, 128, 8192);
+}
+#endif
+
+// ----------------------------------------------------------------------------
+
 #ifdef XKCP_has_ShakingUpAE
 
 typedef cycles_t (* measurePerfOD)(cycles_t, int, uint32_t, unsigned int);
@@ -826,12 +1052,12 @@ cycles_t measureSHAKE_Wrap_Init(cycles_t dtMin, int turbo, uint32_t c )
 
     if (turbo) {
         measureTimingBeginDeclared
-        TurboSHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        TurboSHAKE_Wrap_Initialize( &od, (1600 - c - 64)/8, c, c / 8, key, c / 8 / 2 );
         measureTimingEnd
     }
     else {
         measureTimingBeginDeclared
-        SHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        SHAKE_Wrap_Initialize( &od, (1600 - c - 64)/8, c, c / 8, key, c / 8 / 2 );
         measureTimingEnd
     }
 }
@@ -851,10 +1077,10 @@ cycles_t measureSHAKE_Wrap_Wrap(cycles_t dtMin, int turbo, uint32_t c, unsigned 
     memset(key, 0xA5, sizeof(key) );
     memset(nonce, 0x55, sizeof(nonce));
     if (turbo) {
-        TurboSHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        TurboSHAKE_Wrap_Initialize( &od, (1600 - c - 64)/8, c, c / 8, key, c / 8 / 2 );
     }
     else {
-        SHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        SHAKE_Wrap_Initialize( &od, (1600 - c - 64)/8, c, c / 8, key, c / 8 / 2 );
     }
     memset(input, 0xA5, inputLen);
     memset(AD, 0x5A, sizeof(AD));
@@ -886,10 +1112,10 @@ cycles_t measureSHAKE_Wrap_MAC(cycles_t dtMin, int turbo, uint32_t c, unsigned i
     memset(key, 0xA5, sizeof(key));
     memset(nonce, 0x55, sizeof(nonce));
     if (turbo) {
-        TurboSHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        TurboSHAKE_Wrap_Initialize( &od, (1600 - c - 64)/8, c, c / 8, key, c / 8 / 2 );
     }
     else {
-        SHAKE_Wrap_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        SHAKE_Wrap_Initialize( &od, (1600 - c - 64)/8, c, c / 8, key, c / 8 / 2 );
     }
     memset(input, 0xA5, sizeof(input));
     memset(AD, 0x5A, ADLen);
@@ -941,7 +1167,24 @@ void testSHAKE_WrapPerformanceOne( int turbo )
 }
 
 
-cycles_t measureSHAKE_BO_Init(cycles_t dtMin, int turbo, uint32_t c )
+static int initializeSHAKE_BO(KeccakWidth1600_DeckBOInstance *dbo, int turbo, unsigned int s, const uint8_t *key, unsigned int keyByteLen, unsigned int taglen)
+{
+    if (turbo) {
+        if (s == 128)
+            return TurboSHAKE128_BO_Initialize(dbo, taglen, key, keyByteLen);
+        if (s == 256)
+            return TurboSHAKE256_BO_Initialize(dbo, taglen, key, keyByteLen);
+    }
+    else {
+        if (s == 128)
+            return SHAKE128_BO_Initialize(dbo, taglen, key, keyByteLen);
+        if (s == 256)
+            return SHAKE256_BO_Initialize(dbo, taglen, key, keyByteLen);
+    }
+    return 1;
+}
+
+cycles_t measureSHAKE_BO_Init(cycles_t dtMin, int turbo, unsigned int s )
 {
     ALIGN_DEFAULT unsigned char key[32];
     KeccakWidth1600_DeckBOInstance od;
@@ -951,17 +1194,17 @@ cycles_t measureSHAKE_BO_Init(cycles_t dtMin, int turbo, uint32_t c )
 
     if (turbo) {
         measureTimingBeginDeclared
-        TurboSHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        initializeSHAKE_BO(&od, turbo, s, key, s / 8, s*2 / 8);
         measureTimingEnd
     }
     else {
         measureTimingBeginDeclared
-        SHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        initializeSHAKE_BO(&od, turbo, s, key, s / 8, s*2 / 8);
         measureTimingEnd
     }
 }
 
-cycles_t measureSHAKE_BO_Wrap(cycles_t dtMin, int turbo, uint32_t c, unsigned int inputLen)
+cycles_t measureSHAKE_BO_Wrap(cycles_t dtMin, unsigned int inputLen, int turbo, unsigned int s)
 {
     unsigned char* input = bigBuffer1;
     unsigned char* output = bigBuffer2;
@@ -976,10 +1219,10 @@ cycles_t measureSHAKE_BO_Wrap(cycles_t dtMin, int turbo, uint32_t c, unsigned in
     memset(key, 0xA5, sizeof(key) );
     memset(nonce, 0x55, sizeof(nonce));
     if (turbo) {
-        TurboSHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        initializeSHAKE_BO(&od, turbo, s, key, s / 8, s*2 / 8);
     }
     else {
-        SHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        initializeSHAKE_BO(&od, turbo, s, key, s / 8, s*2 / 8);
     }
     memset(input, 0xA5, inputLen);
     memset(AD, 0x5A, sizeof(AD));
@@ -996,7 +1239,7 @@ cycles_t measureSHAKE_BO_Wrap(cycles_t dtMin, int turbo, uint32_t c, unsigned in
     }
 }
 
-cycles_t measureSHAKE_BO_MAC(cycles_t dtMin, int turbo, uint32_t c, unsigned int ADLen)
+cycles_t measureSHAKE_BO_MAC(cycles_t dtMin, unsigned int ADLen, int turbo, unsigned int s)
 {
     ALIGN_DEFAULT unsigned char input[1];
     ALIGN_DEFAULT unsigned char output[1];
@@ -1011,10 +1254,10 @@ cycles_t measureSHAKE_BO_MAC(cycles_t dtMin, int turbo, uint32_t c, unsigned int
     memset(key, 0xA5, sizeof(key));
     memset(nonce, 0x55, sizeof(nonce));
     if (turbo) {
-        TurboSHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        initializeSHAKE_BO(&od, turbo, s, key, s / 8, s*2 / 8);
     }
     else {
-        SHAKE_BO_Initialize( &od, key, c / 8 / 2, c / 8, (1600 - c - 64)/8, c );
+        initializeSHAKE_BO(&od, turbo, s, key, s / 8, s*2 / 8);
     }
     memset(input, 0xA5, sizeof(input));
     memset(AD, 0x5A, ADLen);
@@ -1037,44 +1280,136 @@ void testSHAKE_BOPerformanceOne( int turbo )
     uint32_t len;
     cycles_t time;
 
-    for ( unsigned int c = 256; c <= 512; c <<= 1 )
+    for ( unsigned int s = 128; s <= 256; s += 128 )
     {
-        unsigned int    rate    = (1600 - c - 64)/8;
+        unsigned int    rate    = (1600 - 2*s - 64)/8;
+        unsigned int    alpha   = (s == 128) ? 5120 : 8192;
 
-        time = measureSHAKE_BO_Init( calibration, turbo, c );
+        time = measureSHAKE_BO_Init( calibration, turbo, s );
         printf("*** ");
         if (turbo) printf("Turbo");
-        printf("SHAKE%u-BO ***\n\317\201=%u bytes\n", c/2, rate);
+        printf("SHAKE%u-BO ***\n\317\201=%u bytes\n", s, rate);
         printf("\n.initialize()   %9" PRId64 " %s\n", time, getTimerUnit());
 
         printf("\n.wrap(only plaintext input, no AD)\n");
-        for(len = 1; len <= 128*rate; len = testODNextLen(len, rate)) {
-            time = measureSHAKE_BO_Wrap(calibration, turbo, c, len );
+        for(len = 1; len <= BIG_BUFFER_SIZE; len = testFlightDeckNextLen(len, rate, alpha)) {
+            time = measureSHAKE_BO_Wrap(calibration, len, turbo, s);
             printf("%8d bytes: %9" PRId64 " %s, %6.3f %s/byte\n", len, time, getTimerUnit(), time*1.0/(len), getTimerUnit());
         }
-        testOD_PerfSlope(measureSHAKE_BO_Wrap, turbo, rate, calibration);
+        testFlightDeckPerfSlope(measureSHAKE_BO_Wrap, calibration, turbo, s, alpha);
 
         printf("\n.wrap(only AD input, no plaintext)\n");
-        for(len = 1; len <= 128*rate; len = testODNextLen(len, rate)) {
-            time = measureSHAKE_BO_MAC(calibration, turbo, c, len );
+        for(len = 1; len <= BIG_BUFFER_SIZE; len = testFlightDeckNextLen(len, rate, alpha)) {
+            time = measureSHAKE_BO_MAC(calibration, len, turbo, s);
             printf("%8d bytes: %9" PRId64 " %s, %6.3f %s/byte\n", len, time, getTimerUnit(), time*1.0/(len), getTimerUnit());
         }
-        testOD_PerfSlope( measureSHAKE_BO_MAC, turbo, rate, calibration );
+        testFlightDeckPerfSlope(measureSHAKE_BO_MAC, calibration, turbo, s, alpha);
 
         printf("\n\n");
     }
 }
 
-void testShakingUpAEPerformance( void )
+static cycles_t measureUpperDeckInitialize(cycles_t dtMin, int turbo, unsigned int c)
+{
+    ALIGN_DEFAULT unsigned char key[32];
+    KeccakWidth1600_UpperDeckInstance ud;
+    unsigned int rho = (1600 - c - 64) / 8;
+    measureTimingDeclare
+
+    memset(key, 0xA5, sizeof(key));
+    if (turbo) {
+        measureTimingBeginDeclared
+        TurboSHAKE_UpperDeck_Initialize(&ud, rho, c, key, c / 16);
+        measureTimingEnd
+    }
+    else {
+        measureTimingBeginDeclared
+        SHAKE_UpperDeck_Initialize(&ud, rho, c, key, c / 16);
+        measureTimingEnd
+    }
+}
+
+static cycles_t measureUpperDeckDuplexing(cycles_t dtMin, int turbo, unsigned int c, unsigned int len)
+{
+    unsigned char *input = bigBuffer1;
+    unsigned char *output = bigBuffer2;
+    ALIGN_DEFAULT unsigned char key[32];
+    KeccakWidth1600_UpperDeckInstance ud;
+    unsigned int rho = (1600 - c - 64) / 8;
+    unsigned int outputLen = (len < rho) ? len : rho;
+    measureTimingDeclare
+
+    assert(len <= sizeof(bigBuffer1));
+    memset(key, 0xA5, sizeof(key));
+    memset(input, 0x5A, len);
+    if (turbo)
+        TurboSHAKE_UpperDeck_Initialize(&ud, rho, c, key, c / 16);
+    else
+        SHAKE_UpperDeck_Initialize(&ud, rho, c, key, c / 16);
+
+    measureTimingBeginDeclared
+    if (turbo)
+        TurboSHAKE_UpperDeck_Duplexing(&ud, output, outputLen, input, len, 1, NULL);
+    else
+        SHAKE_UpperDeck_Duplexing(&ud, output, outputLen, input, len, 1, NULL);
+    measureTimingEnd
+}
+
+static void testUpperDeckPerformanceOne(int turbo)
+{
+    cycles_t calibration = CalibrateTimer();
+    cycles_t time;
+    uint32_t len;
+
+    for (unsigned int c = 256; c <= 512; c <<= 1) {
+        unsigned int rate = (1600 - c - 64) / 8;
+
+        time = measureUpperDeckInitialize(calibration, turbo, c);
+        printf("*** ");
+        if (turbo)
+            printf("Turbo");
+        printf("SHAKE%u-UpperDeck ***\n", c / 2);
+        printf("\n.initialize()   %9" PRId64 " %s\n", time, getTimerUnit());
+        printf("\n.duplexing (varying input, output capped at one rate block)\n");
+        for (len = 1; len <= 128 * rate; len = testODNextLen(len, rate)) {
+            time = measureUpperDeckDuplexing(calibration, turbo, c, len);
+            printf("%8d bytes: %9" PRId64 " %s, %6.3f %s/byte\n",
+                len, time, getTimerUnit(), time * 1.0 / len, getTimerUnit());
+        }
+        printf("\n\n");
+    }
+}
+
+void testUpperDeckPerformance(void)
+{
+    testUpperDeckPerformanceOne(0);
+    testUpperDeckPerformanceOne(1);
+}
+
+void testDWrapPerformance(void)
 {
     testSHAKE_WrapPerformanceOne(0);
-    testSHAKE_BOPerformanceOne(0);
     testSHAKE_WrapPerformanceOne(1);
+}
+
+void testDeckBOPerformance(void)
+{
+    testSHAKE_BOPerformanceOne(0);
     testSHAKE_BOPerformanceOne(1);
+}
+
+void testShakingUpAEPerformance(void)
+{
+#ifdef XKCP_has_FlightDeck_Keccak
+    testFlightDeckPerformance();
+#endif
+    testUpperDeckPerformance();
+    testDWrapPerformance();
+    testDeckBOPerformance();
 }
 #endif
 
-void testPerformance()
+void testKeccakPermutationPerformance(void)
 {
 #ifdef XKCP_has_KeccakP1600
     KeccakP1600_timingSnP("Keccak-p[1600]", KeccakP1600_GetImplementation());
@@ -1091,26 +1426,39 @@ void testPerformance()
     if (KeccakP1600times8_GetFeatures())
         KeccakP1600times8_timingPlSnP("Keccak-p[1600]\303\2278", KeccakP1600times8_GetImplementation());
 #endif
+}
 
+void testKeccakSpongePerformance(void)
+{
 #ifdef XKCP_has_Sponge_Keccak_width1600
     KeccakWidth1600_timing();
 #endif
+}
+
+void testTurboSHAKEPerformance(void)
+{
 #ifdef XKCP_has_TurboSHAKE
     TurboSHAKE_timing();
 #endif
+}
 
+void testPerformance(void)
+{
+    testKeccakPermutationPerformance();
+    testKeccakSpongePerformance();
+    testTurboSHAKEPerformance();
 #ifdef XKCP_has_SP800_185
     testParallelHashPerformance();
 #endif
-
 #ifdef XKCP_has_KangarooTwelve
     testKangarooTwelvePerformance();
 #endif
-
 #ifdef XKCP_has_Kravatte
     testKravattePerformance();
 #endif
-
+#if defined(XKCP_has_FlightDeck_Keccak) && !defined(XKCP_has_ShakingUpAE)
+    testFlightDeckPerformance();
+#endif
 #ifdef XKCP_has_ShakingUpAE
     testShakingUpAEPerformance();
 #endif

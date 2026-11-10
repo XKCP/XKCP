@@ -23,6 +23,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if (defined(UT_OUTPUT) || defined(UT_VERBOSE) || !defined(UT_EMBEDDED))
 #include <stdio.h>
 #endif
+#include <stdint.h>
 
 #define STR0(x) #x
 #define STR(x) STR0(x)
@@ -38,5 +39,16 @@ void UT_displayInfo(const char *header, const char *contents);
 void UT_displayByteString(FILE *f, const char* synopsis, const unsigned char *data, unsigned int length);
 #endif
 void UT_generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsigned char seed1, unsigned int seed2);
+void UT_generateArbitraryMaterial(unsigned char* buffer, size_t length, uint32_t seed);
+
+typedef struct {
+    uint32_t state1;
+    uint32_t state2;
+} UT_arbitraryChecksumState;
+typedef uint32_t UT_arbitraryChecksum;
+
+void UT_arbitraryChecksumInitialize(UT_arbitraryChecksumState *ac);
+void UT_arbitraryChecksumAbsorb(UT_arbitraryChecksumState *ac, const unsigned char *buffer, size_t length);
+UT_arbitraryChecksum UT_arbitraryChecksumSqueeze(UT_arbitraryChecksumState *ac);
 
 #endif

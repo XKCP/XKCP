@@ -23,19 +23,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define RHO_LEN_MAX     ((1600u - 2u * 128u - 64u) / 8u)
 #define MYMIN( a, b )   (((a) < (b)) ? (a) : (b))
 
-static unsigned int OD_Concat( unsigned int E, unsigned int bt )
-{
-    assert( E >= 1u );
-    assert( E <= 63u );
-    assert( bt <= 1u );
-
-    unsigned int top = 1u << 7u;
-    while ( E < top ) {
-        top >>= 1u;
-    }
-    return E + (top << bt);
-}
-
 #ifdef XKCP_has_KeccakP1600
     #define prefix                          TurboSHAKE
         #include "ShakingUpAE.inc"

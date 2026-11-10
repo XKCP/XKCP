@@ -50,9 +50,14 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #define LOAD512u(a)                 _mm512_loadu_si512((const V512 *)&(a))
 #define LOAD8_32(a,b,c,d,e,f,g,h)   _mm256_set_epi32((uint64_t)(a), (uint32_t)(b), (uint32_t)(c), (uint32_t)(d), (uint32_t)(e), (uint32_t)(f), (uint32_t)(g), (uint32_t)(h))
 #define LOAD8_64(a,b,c,d,e,f,g,h)   _mm512_set_epi64((uint64_t)(a), (uint64_t)(b), (uint64_t)(c), (uint64_t)(d), (uint64_t)(e), (uint64_t)(f), (uint64_t)(g), (uint64_t)(h))
+#define LOAD64_BROADCAST(a)         _mm512_set1_epi64(a)
 #define LOAD_GATHER8_64(idx,p)      _mm512_i32gather_epi64( idx, (const void*)(p), 8)
-
+#define STORE512(a, b)              _mm512_store_si512((V512 *)&(a), b)
+#define STORE512u(a, b)             _mm512_storeu_si512((V512 *)&(a), b)
 #define STORE_SCATTER8_64(p,idx, v) _mm512_i32scatter_epi64( (void*)(p), idx, v, 8)
+#define LOAD256u(a)                 _mm256_loadu_si256((const V256 *)&(a))
+#define STORE256u(a, b)             _mm256_storeu_si256((V256 *)&(a), b)
+#define XOR256(a, b)                _mm256_xor_si256(a, b)
 
 #if (VERBOSE > 0)
     #define     DumpMem(__t, buf, __n) { \
@@ -919,15 +924,7 @@ size_t KeccakP1600times8_12rounds_AVX512_FastLoop_Absorb(KeccakP1600times8_SIMD5
     X##so = ZERO(); \
     X##su = ZERO(); \
 
-#define LoadAndTranspose8(dataAsLanes, offset) \
-    t0 = LOAD((dataAsLanes) + (offset) + 0*chunkSize/8); \
-    t1 = LOAD((dataAsLanes) + (offset) + 1*chunkSize/8); \
-    t2 = LOAD((dataAsLanes) + (offset) + 2*chunkSize/8); \
-    t3 = LOAD((dataAsLanes) + (offset) + 3*chunkSize/8); \
-    t4 = LOAD((dataAsLanes) + (offset) + 4*chunkSize/8); \
-    t5 = LOAD((dataAsLanes) + (offset) + 5*chunkSize/8); \
-    t6 = LOAD((dataAsLanes) + (offset) + 6*chunkSize/8); \
-    t7 = LOAD((dataAsLanes) + (offset) + 7*chunkSize/8); \
+#define Transpose8(t0, t1, t2, t3, t4, t5, t6, t7) \
     r0 = _mm512_unpacklo_epi64(t0, t1); \
     r1 = _mm512_unpackhi_epi64(t0, t1); \
     r2 = _mm512_unpacklo_epi64(t2, t3); \
@@ -952,6 +949,48 @@ size_t KeccakP1600times8_12rounds_AVX512_FastLoop_Absorb(KeccakP1600times8_SIMD5
     r5 = _mm512_shuffle_i32x4(t1, t5, 0xdd); \
     r6 = _mm512_shuffle_i32x4(t2, t6, 0xdd); \
     r7 = _mm512_shuffle_i32x4(t3, t7, 0xdd); \
+
+// Generated thanks to Claude Sonnet 5
+// Transpose 4 registers of 8x64-bit values (t0..t3) into
+// 8 registers of 4x64-bit values (r0..r7), using only 512-bit intrinsics.
+// r0..r7 are __m256i.
+#define Transpose4x8(t0, t1, t2, t3, r0, r1, r2, r3, r4, r5, r6, r7) do { \
+    /* index vectors reused for every even/odd pair -- hoist these out of \
+       hot loops (e.g. make them file-scope 'static const __m512i') */    \
+    const __m512i idxA = _mm512_set_epi64(11,10, 3, 2, 9, 8, 1, 0); \
+    const __m512i idxB = _mm512_set_epi64(15,14, 7, 6,13,12, 5, 4); \
+    /* stage 1: interleave rows pairwise within each 128-bit lane */ \
+    __m512i u0 = _mm512_unpacklo_epi64(t0, t1); /* cols 0,2,4,6 (low half of each pair) */ \
+    __m512i u1 = _mm512_unpackhi_epi64(t0, t1); /* cols 1,3,5,7 */ \
+    __m512i u2 = _mm512_unpacklo_epi64(t2, t3); /* cols 0,2,4,6 */ \
+    __m512i u3 = _mm512_unpackhi_epi64(t2, t3); /* cols 1,3,5,7 */ \
+    /* stage 2: gather column pairs directly; each call packs two \
+       finished columns side by side (low 256 / high 256) */ \
+    __m512i o02 = _mm512_permutex2var_epi64(u0, idxA, u2); /* col0 | col2 */ \
+    __m512i o46 = _mm512_permutex2var_epi64(u0, idxB, u2); /* col4 | col6 */ \
+    __m512i o13 = _mm512_permutex2var_epi64(u1, idxA, u3); /* col1 | col3 */ \
+    __m512i o57 = _mm512_permutex2var_epi64(u1, idxB, u3); /* col5 | col7 */ \
+    /* split each into its two finished columns */ \
+    r0 = _mm512_extracti64x4_epi64(o02, 0); \
+    r2 = _mm512_extracti64x4_epi64(o02, 1); \
+    r4 = _mm512_extracti64x4_epi64(o46, 0); \
+    r6 = _mm512_extracti64x4_epi64(o46, 1); \
+    r1 = _mm512_extracti64x4_epi64(o13, 0); \
+    r3 = _mm512_extracti64x4_epi64(o13, 1); \
+    r5 = _mm512_extracti64x4_epi64(o57, 0); \
+    r7 = _mm512_extracti64x4_epi64(o57, 1); \
+} while (0)
+
+#define LoadAndTranspose8(dataAsLanes, offset) \
+    t0 = LOAD((dataAsLanes) + (offset) + 0*chunkSize/8); \
+    t1 = LOAD((dataAsLanes) + (offset) + 1*chunkSize/8); \
+    t2 = LOAD((dataAsLanes) + (offset) + 2*chunkSize/8); \
+    t3 = LOAD((dataAsLanes) + (offset) + 3*chunkSize/8); \
+    t4 = LOAD((dataAsLanes) + (offset) + 4*chunkSize/8); \
+    t5 = LOAD((dataAsLanes) + (offset) + 5*chunkSize/8); \
+    t6 = LOAD((dataAsLanes) + (offset) + 6*chunkSize/8); \
+    t7 = LOAD((dataAsLanes) + (offset) + 7*chunkSize/8); \
+    Transpose8(t0, t1, t2, t3, t4, t5, t6, t7) \
 
 #define XORdata4(X, index, dataAsLanes) \
     XOReq(X##ba, LOAD_GATHER8_64(index, (dataAsLanes) + 0)); \
@@ -1054,12 +1093,429 @@ void KeccakP1600times8_AVX512_KT256ProcessLeaves(const unsigned char *input, uns
     STORE_SCATTER8_64(outputAsLanes+7, index, _gi);
 }
 
+#undef chunkSize
+
+#define Load16 \
+    const uint64_t *inputAsLanes  = (const uint64_t *)input; \
+    LoadAndTranspose8(inputAsLanes, 0); \
+    _ba = r0; \
+    _be = r1; \
+    _bi = r2; \
+    _bo = r3; \
+    _bu = r4; \
+    _ga = r5; \
+    _ge = r6; \
+    _gi = r7; \
+    LoadAndTranspose8(inputAsLanes, 8); \
+    _go = r0; \
+    _gu = r1; \
+    _ka = r2; \
+    _ke = r3; \
+    _ki = r4; \
+    _ko = r5; \
+    _ku = r6; \
+    _ma = r7;
+
+#define Load20 \
+    Load16 \
+    _me = LOAD_GATHER8_64(index, inputAsLanes + 16); \
+    _mi = LOAD_GATHER8_64(index, inputAsLanes + 17); \
+    _mo = LOAD_GATHER8_64(index, inputAsLanes + 18); \
+    _mu = LOAD_GATHER8_64(index, inputAsLanes + 19);
+
+#define Iteration128(rounds, trailer) \
+    Load20 \
+    _sa = XOR(_sa, trailer); \
+    rounds; \
+    input += rho;
+
+#define Iteration256(rounds, trailer) \
+    Load16 \
+    _me = XOR(_me, trailer); \
+    rounds; \
+    input += rho;
+
+#define Prologue128(suffix) \
+    const unsigned int chunkSize = 5120; \
+    const unsigned int rho = 160; \
+    KeccakP_DeclareVars; \
+    unsigned int i, j; \
+    const uint64_t *outputAsLanes = (const uint64_t *)output; \
+    const uint64_t *Dlast64 = (const uint64_t *)Dlast; \
+    __m256i index; \
+    __m512i t0, t1, t2, t3, t4, t5, t6, t7; \
+    __m512i r0, r1, r2, r3, r4, r5, r6, r7; \
+    const V512 trailer1 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000003ULL); \
+    const V512 trailer4 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x800000000000000CULL); \
+    \
+    _sa = LOAD64_BROADCAST(Dlast64[0]); \
+    _se = LOAD64_BROADCAST(Dlast64[1]); \
+    _si = LOAD64_BROADCAST(Dlast64[2]); \
+    _so = LOAD64_BROADCAST(Dlast64[3]); \
+    _su = LOAD64_BROADCAST(Dlast64[4]); \
+    \
+    index = LOAD8_32(7*(chunkSize / 8), 6*(chunkSize / 8), 5*(chunkSize / 8), 4*(chunkSize / 8), 3*(chunkSize / 8), 2*(chunkSize / 8), 1*(chunkSize / 8), 0*(chunkSize / 8));
+
+#define Prologue256(suffix) \
+    const unsigned int chunkSize = 8192; \
+    const unsigned int rho = 128; \
+    KeccakP_DeclareVars; \
+    unsigned int i, j; \
+    const uint64_t *outputAsLanes = (const uint64_t *)output; \
+    const uint64_t *Dlast64 = (const uint64_t *)Dlast; \
+    __m256i index; \
+    __m512i t0, t1, t2, t3, t4, t5, t6, t7; \
+    __m512i r0, r1, r2, r3, r4, r5, r6, r7; \
+    const V512 trailer1 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000003ULL); \
+    const V512 trailer4 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x800000000000000CULL); \
+    \
+    _me = LOAD64_BROADCAST(Dlast64[0]); \
+    _mi = LOAD64_BROADCAST(Dlast64[1]); \
+    _mo = LOAD64_BROADCAST(Dlast64[2]); \
+    _mu = LOAD64_BROADCAST(Dlast64[3]); \
+    _sa = LOAD64_BROADCAST(Dlast64[4]); \
+    _se = LOAD64_BROADCAST(Dlast64[5]); \
+    _si = LOAD64_BROADCAST(Dlast64[6]); \
+    _so = LOAD64_BROADCAST(Dlast64[7]); \
+    _su = LOAD64_BROADCAST(Dlast64[8]); \
+    \
+    index = LOAD8_32(7*(chunkSize / 8), 6*(chunkSize / 8), 5*(chunkSize / 8), 4*(chunkSize / 8), 3*(chunkSize / 8), 2*(chunkSize / 8), 1*(chunkSize / 8), 0*(chunkSize / 8));
+
+#define Store4(A, B, C, D, offset, distance, output) { \
+    __m256i r0, r1, r2, r3, r4, r5, r6, r7; \
+    Transpose4x8(A, B, C, D, r0, r1, r2, r3, r4, r5, r6, r7); \
+    STORE256u(output[(offset) + 0*(distance)], r0); \
+    STORE256u(output[(offset) + 1*(distance)], r1); \
+    STORE256u(output[(offset) + 2*(distance)], r2); \
+    STORE256u(output[(offset) + 3*(distance)], r3); \
+    STORE256u(output[(offset) + 4*(distance)], r4); \
+    STORE256u(output[(offset) + 5*(distance)], r5); \
+    STORE256u(output[(offset) + 6*(distance)], r6); \
+    STORE256u(output[(offset) + 7*(distance)], r7); \
+}
+
+#define AddAndStore4(A, B, C, D, offset, distance, output, oadded) { \
+    __m256i r0, r1, r2, r3, r4, r5, r6, r7; \
+    Transpose4x8(A, B, C, D, r0, r1, r2, r3, r4, r5, r6, r7); \
+    r0 = XOR256(r0, LOAD256u(oadded[(offset) + 0*(distance)])); \
+    r1 = XOR256(r1, LOAD256u(oadded[(offset) + 1*(distance)])); \
+    r2 = XOR256(r2, LOAD256u(oadded[(offset) + 2*(distance)])); \
+    r3 = XOR256(r3, LOAD256u(oadded[(offset) + 3*(distance)])); \
+    r4 = XOR256(r4, LOAD256u(oadded[(offset) + 4*(distance)])); \
+    r5 = XOR256(r5, LOAD256u(oadded[(offset) + 5*(distance)])); \
+    r6 = XOR256(r6, LOAD256u(oadded[(offset) + 6*(distance)])); \
+    r7 = XOR256(r7, LOAD256u(oadded[(offset) + 7*(distance)])); \
+    STORE256u(output[(offset) + 0*(distance)], r0); \
+    STORE256u(output[(offset) + 1*(distance)], r1); \
+    STORE256u(output[(offset) + 2*(distance)], r2); \
+    STORE256u(output[(offset) + 3*(distance)], r3); \
+    STORE256u(output[(offset) + 4*(distance)], r4); \
+    STORE256u(output[(offset) + 5*(distance)], r5); \
+    STORE256u(output[(offset) + 6*(distance)], r6); \
+    STORE256u(output[(offset) + 7*(distance)], r7); \
+}
+
+#define Store8(A, B, C, D, E, F, G, H, offset, distance, output) \
+    Transpose8(A, B, C, D, E, F, G, H) \
+    STORE512u(output[(offset) + 0*(distance)], r0); \
+    STORE512u(output[(offset) + 1*(distance)], r1); \
+    STORE512u(output[(offset) + 2*(distance)], r2); \
+    STORE512u(output[(offset) + 3*(distance)], r3); \
+    STORE512u(output[(offset) + 4*(distance)], r4); \
+    STORE512u(output[(offset) + 5*(distance)], r5); \
+    STORE512u(output[(offset) + 6*(distance)], r6); \
+    STORE512u(output[(offset) + 7*(distance)], r7); \
+
+#define AddAndStore8(A, B, C, D, E, F, G, H, offset, distance, output, oadded) \
+    Transpose8(A, B, C, D, E, F, G, H) \
+    r0 = XOR(r0, LOAD512u(oadded[(offset) + 0*(distance)])); \
+    r1 = XOR(r1, LOAD512u(oadded[(offset) + 1*(distance)])); \
+    r2 = XOR(r2, LOAD512u(oadded[(offset) + 2*(distance)])); \
+    r3 = XOR(r3, LOAD512u(oadded[(offset) + 3*(distance)])); \
+    r4 = XOR(r4, LOAD512u(oadded[(offset) + 4*(distance)])); \
+    r5 = XOR(r5, LOAD512u(oadded[(offset) + 5*(distance)])); \
+    r6 = XOR(r6, LOAD512u(oadded[(offset) + 6*(distance)])); \
+    r7 = XOR(r7, LOAD512u(oadded[(offset) + 7*(distance)])); \
+    STORE512u(output[(offset) + 0*(distance)], r0); \
+    STORE512u(output[(offset) + 1*(distance)], r1); \
+    STORE512u(output[(offset) + 2*(distance)], r2); \
+    STORE512u(output[(offset) + 3*(distance)], r3); \
+    STORE512u(output[(offset) + 4*(distance)], r4); \
+    STORE512u(output[(offset) + 5*(distance)], r5); \
+    STORE512u(output[(offset) + 6*(distance)], r6); \
+    STORE512u(output[(offset) + 7*(distance)], r7); \
+
+#define Epilogue128 \
+    index = LOAD8_32(7*4, 6*4, 5*4, 4*4, 3*4, 2*4, 1*4, 0*4); \
+    STORE_SCATTER8_64(outputAsLanes+0, index, _ba); \
+    STORE_SCATTER8_64(outputAsLanes+1, index, _be); \
+    STORE_SCATTER8_64(outputAsLanes+2, index, _bi); \
+    STORE_SCATTER8_64(outputAsLanes+3, index, _bo);
+
+#define Epilogue256 \
+    index = LOAD8_32(7*8, 6*8, 5*8, 4*8, 3*8, 2*8, 1*8, 0*8); \
+    STORE_SCATTER8_64(outputAsLanes+0, index, _ba); \
+    STORE_SCATTER8_64(outputAsLanes+1, index, _be); \
+    STORE_SCATTER8_64(outputAsLanes+2, index, _bi); \
+    STORE_SCATTER8_64(outputAsLanes+3, index, _bo); \
+    STORE_SCATTER8_64(outputAsLanes+4, index, _bu); \
+    STORE_SCATTER8_64(outputAsLanes+5, index, _ga); \
+    STORE_SCATTER8_64(outputAsLanes+6, index, _ge); \
+    STORE_SCATTER8_64(outputAsLanes+7, index, _gi);
+
+#undef Epilogue256
+#define Epilogue256 \
+    Store8(_ba, _be, _bi, _bo, _bu, _ga, _ge, _gi, 0, 64, output) \
+
+size_t KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    Prologue128(0x00)
+
+    for(j = 0; j < (chunkSize - rho); j += rho) {
+        Iteration128(rounds12, trailer1)
+    }
+    {
+        Iteration128(rounds12, trailer4)
+    }
+
+    Epilogue128
+    return 8*chunkSize;
+}
+
+size_t KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    Prologue256(0x00)
+
+    for(j = 0; j < (chunkSize - rho); j += rho) {
+        Iteration256(rounds12, trailer1)
+    }
+    {
+        Iteration256(rounds12, trailer4)
+    }
+
+    Epilogue256
+    return 8*chunkSize;
+}
+
+size_t KeccakP1600times8_AVX512_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    Prologue128(0x1F)
+
+    for(j = 0; j < (chunkSize - rho); j += rho) {
+        Iteration128(rounds24, trailer1)
+    }
+    {
+        Iteration128(rounds24, trailer4)
+    }
+
+    Epilogue128
+    return 8*chunkSize;
+}
+
+size_t KeccakP1600times8_AVX512_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    Prologue256(0x1F)
+
+    for(j = 0; j < (chunkSize - rho); j += rho) {
+        Iteration256(rounds24, trailer1)
+    }
+    {
+        Iteration256(rounds24, trailer4)
+    }
+
+    Epilogue256
+    return 8*chunkSize;
+}
+
+#undef Iteration128
+#undef Iteration256
+#undef Prologue128
+#undef Prologue256
+
+#define Prologue(suffix) \
+    KeccakP_DeclareVars; \
+    unsigned int i, j; \
+    const V512 trailer2 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000006ULL); \
+    const V512 increment = LOAD64_BROADCAST(8); \
+    V512 r0, r1, r2, r3, r4, r5, r6, r7; \
+    size_t processedBytes = 0; \
+
+#define ItPrologue128 \
+    uint64_t counter = offset / rho; \
+    V512 counters = LOAD8_64(counter + 7, counter + 6, counter + 5, counter + 4, counter + 3, counter + 2, counter + 1, counter); \
+    V512 Isa = XOR(LOAD64_BROADCAST(((const uint64_t *)Dlast)[0]), trailer2); \
+    V512 Ise = LOAD64_BROADCAST(((const uint64_t *)Dlast)[1]); \
+    V512 Isi = LOAD64_BROADCAST(((const uint64_t *)Dlast)[2]); \
+    V512 Iso = LOAD64_BROADCAST(((const uint64_t *)Dlast)[3]); \
+    V512 Isu = LOAD64_BROADCAST(((const uint64_t *)Dlast)[4]); \
+
+#define ItPrologue256 \
+    uint64_t counter = offset / rho; \
+    V512 counters = LOAD8_64(counter + 7, counter + 6, counter + 5, counter + 4, counter + 3, counter + 2, counter + 1, counter); \
+    V512 Ime = XOR(LOAD64_BROADCAST(((const uint64_t *)Dlast)[0]), trailer2); \
+    V512 Imi = LOAD64_BROADCAST(((const uint64_t *)Dlast)[1]); \
+    V512 Imo = LOAD64_BROADCAST(((const uint64_t *)Dlast)[2]); \
+    V512 Imu = LOAD64_BROADCAST(((const uint64_t *)Dlast)[3]); \
+    V512 Isa = LOAD64_BROADCAST(((const uint64_t *)Dlast)[4]); \
+    V512 Ise = LOAD64_BROADCAST(((const uint64_t *)Dlast)[5]); \
+    V512 Isi = LOAD64_BROADCAST(((const uint64_t *)Dlast)[6]); \
+    V512 Iso = LOAD64_BROADCAST(((const uint64_t *)Dlast)[7]); \
+    V512 Isu = LOAD64_BROADCAST(((const uint64_t *)Dlast)[8]); \
+
+#define Iteration128(rounds) \
+    _ba = counters; \
+    _be = ZERO(); \
+    _bi = ZERO(); \
+    _bo = ZERO(); \
+    _bu = ZERO(); \
+    _ga = ZERO(); \
+    _ge = ZERO(); \
+    _gi = ZERO(); \
+    _go = ZERO(); \
+    _gu = ZERO(); \
+    _ka = ZERO(); \
+    _ke = ZERO(); \
+    _ki = ZERO(); \
+    _ko = ZERO(); \
+    _ku = ZERO(); \
+    _ma = ZERO(); \
+    _me = ZERO(); \
+    _mi = ZERO(); \
+    _mo = ZERO(); \
+    _mu = ZERO(); \
+    _sa = Isa; \
+    _se = Ise; \
+    _si = Isi; \
+    _so = Iso; \
+    _su = Isu; \
+    rounds; \
+    if (oadded != NULL) { \
+        AddAndStore8(_ba, _be, _bi, _bo, _bu, _ga, _ge, _gi,   0, rho, odata, oadded) \
+        AddAndStore8(_go, _gu, _ka, _ke, _ki, _ko, _ku, _ma,  64, rho, odata, oadded) \
+        AddAndStore4(_me, _mi, _mo, _mu,                     128, rho, odata, oadded) \
+        oadded += 8*rho; \
+    } \
+    else { \
+        Store8(_ba, _be, _bi, _bo, _bu, _ga, _ge, _gi,   0, rho, odata) \
+        Store8(_go, _gu, _ka, _ke, _ki, _ko, _ku, _ma,  64, rho, odata) \
+        Store4(_me, _mi, _mo, _mu,                     128, rho, odata) \
+    } \
+    counters = _mm512_add_epi64(counters, increment); \
+    processedBytes += 8*rho; \
+    olen -= 8*rho; \
+    odata += 8*rho; \
+
+#define Iteration256(rounds) \
+    _ba = counters; \
+    _be = ZERO(); \
+    _bi = ZERO(); \
+    _bo = ZERO(); \
+    _bu = ZERO(); \
+    _ga = ZERO(); \
+    _ge = ZERO(); \
+    _gi = ZERO(); \
+    _go = ZERO(); \
+    _gu = ZERO(); \
+    _ka = ZERO(); \
+    _ke = ZERO(); \
+    _ki = ZERO(); \
+    _ko = ZERO(); \
+    _ku = ZERO(); \
+    _ma = ZERO(); \
+    _me = Ime; \
+    _mi = Imi; \
+    _mo = Imo; \
+    _mu = Imu; \
+    _sa = Isa; \
+    _se = Ise; \
+    _si = Isi; \
+    _so = Iso; \
+    _su = Isu; \
+    rounds; \
+    if (oadded != NULL) { \
+        AddAndStore8(_ba, _be, _bi, _bo, _bu, _ga, _ge, _gi,   0, rho, odata, oadded) \
+        AddAndStore8(_go, _gu, _ka, _ke, _ki, _ko, _ku, _ma,  64, rho, odata, oadded) \
+        oadded += 8*rho; \
+    } \
+    else { \
+        Store8(_ba, _be, _bi, _bo, _bu, _ga, _ge, _gi,   0, rho, odata) \
+        Store8(_go, _gu, _ka, _ke, _ki, _ko, _ku, _ma,  64, rho, odata) \
+    } \
+    counters = _mm512_add_epi64(counters, increment); \
+    processedBytes += 8*rho; \
+    olen -= 8*rho; \
+    odata += 8*rho; \
+
+size_t KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    const unsigned int rho = 160;
+    Prologue(0x00)
+
+    if (offset % rho == 0) {
+        ItPrologue128
+        while(olen >= 8*rho) {
+            Iteration128(rounds12)
+        }
+    }
+    return processedBytes;
+}
+
+size_t KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    const unsigned int rho = 128;
+    Prologue(0x00)
+
+    if (offset % rho == 0) {
+        ItPrologue256
+        while(olen >= 8*rho) {
+            Iteration256(rounds12)
+        }
+    }
+    return processedBytes;
+}
+
+size_t KeccakP1600times8_AVX512_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    const unsigned int rho = 160;
+    Prologue(0x1F)
+
+    if (offset % rho == 0) {
+        ItPrologue128
+        while(olen >= 8*rho) {
+            Iteration128(rounds24)
+        }
+    }
+    return processedBytes;
+}
+
+size_t KeccakP1600times8_AVX512_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    const unsigned int rho = 128;
+    Prologue(0x1F)
+
+    if (offset % rho == 0) {
+        ItPrologue256
+        while(olen >= 8*rho) {
+            Iteration256(rounds24)
+        }
+    }
+    return processedBytes;
+}
+
 #undef LOAD
 #undef XOReq
 #undef ZERO
 #undef CONST_64
-#undef chunkSize
 #undef rateInBytes
+
+#undef Load16
+#undef TurboIteration16
+#undef Load20
+#undef TurboIteration20
+#undef Prologue128
+#undef Prologue256
+#undef Epilogue128
+#undef Epilogue256
 
 /* ------------------------------------------------------------------------- */
 

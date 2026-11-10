@@ -21,6 +21,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "testPermutations.h"
 #include "testSponge.h"
 #include "testDuplex.h"
+#include "testOD.h"
+#include "testFlightDeck.h"
 #include "testPRG.h"
 #include "testShakingUpAE.h"
 #include "testSP800-185.h"
@@ -389,6 +391,9 @@ void printHelp()
 #ifdef XKCP_has_Duplex_Keccak
         printf("  --KeccakDuplex            Tests on Keccak duplex\n");
 #endif
+#ifdef XKCP_has_OD_Keccak
+        printf("  --KeccakOD                Tests on Keccak overwrite duplex (OD)\n");
+#endif
 #ifdef XKCP_has_ShakingUpAE
         printf("  --ShakingUpAE             Tests on 'Shaking up AE' schemes\n");
 #endif
@@ -433,6 +438,8 @@ int process(int argc, char* argv[])
     int SnP = 0;
     int KeccakSponge = 0;
     int KeccakDuplex = 0;
+    int KeccakOD = 0;
+    int FlightDeck = 0;
     int KeccakShakingUpAE = 0;
     int KeccakPRG = 0;
     int FIPS202 = 0;
@@ -453,7 +460,7 @@ int process(int argc, char* argv[])
         else if (XKCP_ProcessCpuFeatureCommandLineOption(argv[i])) {}
 #endif
         else if ((strcmp("--all", argv[i]) == 0) || (strcmp("-a", argv[i]) == 0))
-            SnP = KeccakSponge = KeccakDuplex = KeccakShakingUpAE = KeccakPRG = FIPS202 = KangarooTwelve = Kravatte = SP800_185 = examples = Xoofff = Xoodyak = 1;
+            SnP = KeccakSponge = KeccakDuplex = KeccakOD = FlightDeck = KeccakShakingUpAE = KeccakPRG = FIPS202 = KangarooTwelve = Kravatte = SP800_185 = examples = Xoofff = Xoodyak = 1;
         else if ((strcmp("--SnP", argv[i]) == 0) || (strcmp("-p", argv[i]) == 0))
             SnP = 1;
 #if defined (XKCP_has_Sponge_Keccak) || defined(XKCP_has_Duplex_Keccak)
@@ -467,6 +474,14 @@ int process(int argc, char* argv[])
 #ifdef XKCP_has_Duplex_Keccak
         else if (strcmp("--KeccakDuplex", argv[i]) == 0)
             KeccakDuplex = 1;
+#endif
+#ifdef XKCP_has_OD_Keccak
+        else if (strcmp("--KeccakOD", argv[i]) == 0)
+            KeccakOD = 1;
+#endif
+#ifdef XKCP_has_FlightDeck_Keccak
+        else if (strcmp("--FlightDeck", argv[i]) == 0)
+            FlightDeck = 1;
 #endif
 #ifdef XKCP_has_ShakingUpAE
         else if (strcmp("--ShakingUpAE", argv[i]) == 0)
@@ -523,6 +538,16 @@ int process(int argc, char* argv[])
 #ifdef XKCP_has_Duplex_Keccak
     if (KeccakDuplex) {
         testDuplex();
+    }
+#endif
+#ifdef XKCP_has_OD_Keccak
+    if (KeccakOD) {
+        testKeccakOD();
+    }
+#endif
+#ifdef XKCP_has_FlightDeck_Keccak
+    if (FlightDeck) {
+        testFlightDeck();
     }
 #endif
 #ifdef XKCP_has_ShakingUpAE

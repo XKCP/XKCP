@@ -19,5 +19,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define PlSnP_Feature_SpongeAbsorb                   2
 #define PlSnP_Feature_Farfalle                       4
 #define PlSnP_Feature_KangarooTwelve                 8
+#define PlSnP_Feature_FlightDeck                    16
 
 #endif

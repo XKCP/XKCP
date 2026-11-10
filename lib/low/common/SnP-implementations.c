@@ -69,6 +69,9 @@ void XKCP_PrintImplementations()
     if (KeccakP1600times2_GetFeatures() & PlSnP_feature_mask & PlSnP_Feature_KangarooTwelve) {
         printf("      + optimized KangarooTwelve parallel leaves processing\n");
     }
+    if (KeccakP1600times2_GetFeatures() & PlSnP_feature_mask & PlSnP_Feature_FlightDeck) {
+        printf("      + optimized FlightDeck parallel processing\n");
+    }
     #elif 0
     printf("Keccak-p[1600]\303\2272 not compiled in\n");
     #endif
@@ -84,6 +87,9 @@ void XKCP_PrintImplementations()
     if (KeccakP1600times4_GetFeatures() & PlSnP_feature_mask & PlSnP_Feature_KangarooTwelve) {
         printf("      + optimized KangarooTwelve parallel leaves processing\n");
     }
+    if (KeccakP1600times4_GetFeatures() & PlSnP_feature_mask & PlSnP_Feature_FlightDeck) {
+        printf("      + optimized FlightDeck parallel processing\n");
+    }
     #elif 0
     printf("Keccak-p[1600]\303\2272 not compiled in\n");
     #endif
@@ -98,6 +104,9 @@ void XKCP_PrintImplementations()
     }
     if (KeccakP1600times8_GetFeatures() & PlSnP_feature_mask & PlSnP_Feature_KangarooTwelve) {
         printf("      + optimized KangarooTwelve parallel leaves processing\n");
+    }
+    if (KeccakP1600times8_GetFeatures() & PlSnP_feature_mask & PlSnP_Feature_FlightDeck) {
+        printf("      + optimized FlightDeck parallel processing\n");
     }
     #elif 0
     printf("Keccak-p[1600]\303\2278 not compiled in\n");

@@ -20,7 +20,6 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 */
 
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <emmintrin.h>
@@ -39,6 +38,7 @@ Please refer to LowLevel.build for the exact list of other files it must be comb
 #define ANDnu256(a, b)          _mm256_andnot_si256(a, b)
 #define CONST256(a)             _mm256_load_si256((const V256 *)&(a))
 #define CONST256_64(a)          _mm256_set1_epi64x(a)
+#define LOAD64_BROADCAST(a)     _mm256_set1_epi64x(a)
 #define LOAD256(a)              _mm256_load_si256((const V256 *)&(a))
 #define LOAD256u(a)             _mm256_loadu_si256((const V256 *)&(a))
 #define LOAD4_64(a, b, c, d)    _mm256_set_epi64x((uint64_t)(a), (uint64_t)(b), (uint64_t)(c), (uint64_t)(d))
@@ -1503,3 +1503,366 @@ void KeccakP1600times4_AVX2_KT256ProcessLeaves(const unsigned char *input, unsig
         STORE256u( output[224], PERM128( lanesH01, lanesH23, 0x31 ) );
     }
 }
+
+#undef chunkSize
+
+#define Load16(X, data0, data1, data2, data3) \
+    X##ba = LOAD4_64((data3)[ 0], (data2)[ 0], (data1)[ 0], (data0)[ 0]); \
+    X##be = LOAD4_64((data3)[ 1], (data2)[ 1], (data1)[ 1], (data0)[ 1]); \
+    X##bi = LOAD4_64((data3)[ 2], (data2)[ 2], (data1)[ 2], (data0)[ 2]); \
+    X##bo = LOAD4_64((data3)[ 3], (data2)[ 3], (data1)[ 3], (data0)[ 3]); \
+    X##bu = LOAD4_64((data3)[ 4], (data2)[ 4], (data1)[ 4], (data0)[ 4]); \
+    X##ga = LOAD4_64((data3)[ 5], (data2)[ 5], (data1)[ 5], (data0)[ 5]); \
+    X##ge = LOAD4_64((data3)[ 6], (data2)[ 6], (data1)[ 6], (data0)[ 6]); \
+    X##gi = LOAD4_64((data3)[ 7], (data2)[ 7], (data1)[ 7], (data0)[ 7]); \
+    X##go = LOAD4_64((data3)[ 8], (data2)[ 8], (data1)[ 8], (data0)[ 8]); \
+    X##gu = LOAD4_64((data3)[ 9], (data2)[ 9], (data1)[ 9], (data0)[ 9]); \
+    X##ka = LOAD4_64((data3)[10], (data2)[10], (data1)[10], (data0)[10]); \
+    X##ke = LOAD4_64((data3)[11], (data2)[11], (data1)[11], (data0)[11]); \
+    X##ki = LOAD4_64((data3)[12], (data2)[12], (data1)[12], (data0)[12]); \
+    X##ko = LOAD4_64((data3)[13], (data2)[13], (data1)[13], (data0)[13]); \
+    X##ku = LOAD4_64((data3)[14], (data2)[14], (data1)[14], (data0)[14]); \
+    X##ma = LOAD4_64((data3)[15], (data2)[15], (data1)[15], (data0)[15]); \
+
+#define Load20(X, data0, data1, data2, data3) \
+    Load16(X, data0, data1, data2, data3) \
+    X##me = LOAD4_64((data3)[16], (data2)[16], (data1)[16], (data0)[16]); \
+    X##mi = LOAD4_64((data3)[17], (data2)[17], (data1)[17], (data0)[17]); \
+    X##mo = LOAD4_64((data3)[18], (data2)[18], (data1)[18], (data0)[18]); \
+    X##mu = LOAD4_64((data3)[19], (data2)[19], (data1)[19], (data0)[19]); \
+
+#define Iteration128(rounds, trailer) \
+    Load20(A, (const uint64_t *)input, (const uint64_t *)(input+chunkSize), (const uint64_t *)(input+2*chunkSize), (const uint64_t *)(input+3*chunkSize)); \
+    Asa = XOR256(Asa, trailer); \
+    rounds \
+    input += rho; \
+
+#define Iteration256(rounds, trailer) \
+    Load16(A, (const uint64_t *)input, (const uint64_t *)(input+chunkSize), (const uint64_t *)(input+2*chunkSize), (const uint64_t *)(input+3*chunkSize)); \
+    Ame = XOR256(Ame, trailer); \
+    rounds \
+    input += rho; \
+
+#define Prologue128(suffix) \
+    const unsigned int chunkSize = 5120; \
+    const unsigned int rho = 160; \
+    declareABCDE \
+    unsigned int i, j; \
+    const __m256i trailer1 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000003ULL); \
+    const __m256i trailer4 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x800000000000000CULL); \
+    __m256i lanesL01, lanesL23, lanesH01, lanesH23; \
+    \
+    Asa = LOAD64_BROADCAST(((const uint64_t *)Dlast)[0]); \
+    Ase = LOAD64_BROADCAST(((const uint64_t *)Dlast)[1]); \
+    Asi = LOAD64_BROADCAST(((const uint64_t *)Dlast)[2]); \
+    Aso = LOAD64_BROADCAST(((const uint64_t *)Dlast)[3]); \
+    Asu = LOAD64_BROADCAST(((const uint64_t *)Dlast)[4]); \
+
+#define Prologue256(suffix) \
+    const unsigned int chunkSize = 8192; \
+    const unsigned int rho = 128; \
+    declareABCDE \
+    unsigned int i, j; \
+    const __m256i trailer1 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000003ULL); \
+    const __m256i trailer4 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x800000000000000CULL); \
+    __m256i lanesL01, lanesL23, lanesH01, lanesH23; \
+    \
+    Ame = LOAD64_BROADCAST(((const uint64_t *)Dlast)[0]); \
+    Ami = LOAD64_BROADCAST(((const uint64_t *)Dlast)[1]); \
+    Amo = LOAD64_BROADCAST(((const uint64_t *)Dlast)[2]); \
+    Amu = LOAD64_BROADCAST(((const uint64_t *)Dlast)[3]); \
+    Asa = LOAD64_BROADCAST(((const uint64_t *)Dlast)[4]); \
+    Ase = LOAD64_BROADCAST(((const uint64_t *)Dlast)[5]); \
+    Asi = LOAD64_BROADCAST(((const uint64_t *)Dlast)[6]); \
+    Aso = LOAD64_BROADCAST(((const uint64_t *)Dlast)[7]); \
+    Asu = LOAD64_BROADCAST(((const uint64_t *)Dlast)[8]); \
+
+#define Store4(A, B, C, D, offset, distance, output) \
+    lanesL01 = UNPACKL(A, B); \
+    lanesH01 = UNPACKH(A, B); \
+    lanesL23 = UNPACKL(C, D); \
+    lanesH23 = UNPACKH(C, D); \
+    STORE256u(output[(offset) +            0], PERM128(lanesL01, lanesL23, 0x20)); \
+    STORE256u(output[(offset) + 1*(distance)], PERM128(lanesH01, lanesH23, 0x20)); \
+    STORE256u(output[(offset) + 2*(distance)], PERM128(lanesL01, lanesL23, 0x31)); \
+    STORE256u(output[(offset) + 3*(distance)], PERM128(lanesH01, lanesH23, 0x31)); \
+
+#define AddAndStore4(A, B, C, D, offset, distance, output, oadded) \
+    lanesL01 = UNPACKL(A, B); \
+    lanesH01 = UNPACKH(A, B); \
+    lanesL23 = UNPACKL(C, D); \
+    lanesH23 = UNPACKH(C, D); \
+    STORE256u(output[(offset) +            0], XOR256(PERM128(lanesL01, lanesL23, 0x20), LOAD256u(oadded[(offset) +            0]))); \
+    STORE256u(output[(offset) + 1*(distance)], XOR256(PERM128(lanesH01, lanesH23, 0x20), LOAD256u(oadded[(offset) + 1*(distance)]))); \
+    STORE256u(output[(offset) + 2*(distance)], XOR256(PERM128(lanesL01, lanesL23, 0x31), LOAD256u(oadded[(offset) + 2*(distance)]))); \
+    STORE256u(output[(offset) + 3*(distance)], XOR256(PERM128(lanesH01, lanesH23, 0x31), LOAD256u(oadded[(offset) + 3*(distance)]))); \
+
+#define Epilogue128 \
+    Store4(Aba, Abe, Abi, Abo,  0, 32, output)
+
+#define Epilogue256 \
+    Store4(Aba, Abe, Abi, Abo,  0, 64, output) \
+    Store4(Abu, Aga, Age, Agi, 32, 64, output)
+
+size_t KeccakP1600times4_AVX2_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    Prologue128(0x00)
+
+    for(j = 0; j < (chunkSize - rho); j += rho) {
+        Iteration128(rounds12, trailer1)
+    }
+    {
+        Iteration128(rounds12, trailer4)
+    }
+
+    Epilogue128
+    return 4*chunkSize;
+}
+
+size_t KeccakP1600times4_AVX2_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    Prologue256(0x00)
+
+    for(j = 0; j < (chunkSize - rho); j += rho) {
+        Iteration256(rounds12, trailer1)
+    }
+    {
+        Iteration256(rounds12, trailer4)
+    }
+
+    Epilogue256
+    return 4*chunkSize;
+}
+
+size_t KeccakP1600times4_AVX2_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    Prologue128(0x1F)
+
+    for(j = 0; j < (chunkSize - rho); j += rho) {
+        Iteration128(rounds24, trailer1)
+    }
+    {
+        Iteration128(rounds24, trailer4)
+    }
+
+    Epilogue128
+    return 4*chunkSize;
+}
+
+size_t KeccakP1600times4_AVX2_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    Prologue256(0x1F)
+
+    for(j = 0; j < (chunkSize - rho); j += rho) {
+        Iteration256(rounds24, trailer1)
+    }
+    {
+        Iteration256(rounds24, trailer4)
+    }
+
+    Epilogue256
+    return 4*chunkSize;
+}
+
+#undef Iteration128
+#undef Iteration256
+#undef Prologue128
+#undef Prologue256
+
+#define Prologue(suffix) \
+    declareABCDE \
+    unsigned int i, j; \
+    const V256 trailer2 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000006ULL); \
+    const V256 increment = LOAD64_BROADCAST(4); \
+    size_t processedBytes = 0; \
+    V256 lanesL01, lanesL23, lanesH01, lanesH23; \
+
+#define ItPrologue128 \
+    uint64_t counter = offset / rho; \
+    V256 counters = LOAD4_64(counter + 3, counter + 2, counter + 1, counter); \
+    V256 Isa = XOR256(LOAD64_BROADCAST(((const uint64_t *)Dlast)[0]), trailer2); \
+    V256 Ise = LOAD64_BROADCAST(((const uint64_t *)Dlast)[1]); \
+    V256 Isi = LOAD64_BROADCAST(((const uint64_t *)Dlast)[2]); \
+    V256 Iso = LOAD64_BROADCAST(((const uint64_t *)Dlast)[3]); \
+    V256 Isu = LOAD64_BROADCAST(((const uint64_t *)Dlast)[4]); \
+
+#define ItPrologue256 \
+    uint64_t counter = offset / rho; \
+    V256 counters = LOAD4_64(counter + 3, counter + 2, counter + 1, counter); \
+    V256 Ime = XOR256(LOAD64_BROADCAST(((const uint64_t *)Dlast)[0]), trailer2); \
+    V256 Imi = LOAD64_BROADCAST(((const uint64_t *)Dlast)[1]); \
+    V256 Imo = LOAD64_BROADCAST(((const uint64_t *)Dlast)[2]); \
+    V256 Imu = LOAD64_BROADCAST(((const uint64_t *)Dlast)[3]); \
+    V256 Isa = LOAD64_BROADCAST(((const uint64_t *)Dlast)[4]); \
+    V256 Ise = LOAD64_BROADCAST(((const uint64_t *)Dlast)[5]); \
+    V256 Isi = LOAD64_BROADCAST(((const uint64_t *)Dlast)[6]); \
+    V256 Iso = LOAD64_BROADCAST(((const uint64_t *)Dlast)[7]); \
+    V256 Isu = LOAD64_BROADCAST(((const uint64_t *)Dlast)[8]); \
+
+#define Iteration128(rounds) \
+    Aba = counters; \
+    Abe = ZERO(); \
+    Abi = ZERO(); \
+    Abo = ZERO(); \
+    Abu = ZERO(); \
+    Aga = ZERO(); \
+    Age = ZERO(); \
+    Agi = ZERO(); \
+    Ago = ZERO(); \
+    Agu = ZERO(); \
+    Aka = ZERO(); \
+    Ake = ZERO(); \
+    Aki = ZERO(); \
+    Ako = ZERO(); \
+    Aku = ZERO(); \
+    Ama = ZERO(); \
+    Ame = ZERO(); \
+    Ami = ZERO(); \
+    Amo = ZERO(); \
+    Amu = ZERO(); \
+    Asa = Isa; \
+    Ase = Ise; \
+    Asi = Isi; \
+    Aso = Iso; \
+    Asu = Isu; \
+    rounds  \
+    if (oadded != NULL) { \
+        AddAndStore4(Aba, Abe, Abi, Abo,   0, rho, odata, oadded) \
+        AddAndStore4(Abu, Aga, Age, Agi,  32, rho, odata, oadded) \
+        AddAndStore4(Ago, Agu, Aka, Ake,  64, rho, odata, oadded) \
+        AddAndStore4(Aki, Ako, Aku, Ama,  96, rho, odata, oadded) \
+        AddAndStore4(Ame, Ami, Amo, Amu, 128, rho, odata, oadded) \
+        oadded += 4*rho; \
+    } \
+    else { \
+        Store4(Aba, Abe, Abi, Abo,   0, rho, odata) \
+        Store4(Abu, Aga, Age, Agi,  32, rho, odata) \
+        Store4(Ago, Agu, Aka, Ake,  64, rho, odata) \
+        Store4(Aki, Ako, Aku, Ama,  96, rho, odata) \
+        Store4(Ame, Ami, Amo, Amu, 128, rho, odata) \
+    } \
+    counters = _mm256_add_epi64(counters, increment); \
+    processedBytes += 4*rho; \
+    olen -= 4*rho; \
+    odata += 4*rho; \
+
+#define Iteration256(rounds) \
+    Aba = counters; \
+    Abe = ZERO(); \
+    Abi = ZERO(); \
+    Abo = ZERO(); \
+    Abu = ZERO(); \
+    Aga = ZERO(); \
+    Age = ZERO(); \
+    Agi = ZERO(); \
+    Ago = ZERO(); \
+    Agu = ZERO(); \
+    Aka = ZERO(); \
+    Ake = ZERO(); \
+    Aki = ZERO(); \
+    Ako = ZERO(); \
+    Aku = ZERO(); \
+    Ama = ZERO(); \
+    Ame = Ime; \
+    Ami = Imi; \
+    Amo = Imo; \
+    Amu = Imu; \
+    Asa = Isa; \
+    Ase = Ise; \
+    Asi = Isi; \
+    Aso = Iso; \
+    Asu = Isu; \
+    rounds \
+    if (oadded != NULL) { \
+        AddAndStore4(Aba, Abe, Abi, Abo,   0, rho, odata, oadded) \
+        AddAndStore4(Abu, Aga, Age, Agi,  32, rho, odata, oadded) \
+        AddAndStore4(Ago, Agu, Aka, Ake,  64, rho, odata, oadded) \
+        AddAndStore4(Aki, Ako, Aku, Ama,  96, rho, odata, oadded) \
+        oadded += 4*rho; \
+    } \
+    else { \
+        Store4(Aba, Abe, Abi, Abo,   0, rho, odata) \
+        Store4(Abu, Aga, Age, Agi,  32, rho, odata) \
+        Store4(Ago, Agu, Aka, Ake,  64, rho, odata) \
+        Store4(Aki, Ako, Aku, Ama,  96, rho, odata) \
+    } \
+    counters = _mm256_add_epi64(counters, increment); \
+    processedBytes += 4*rho; \
+    olen -= 4*rho; \
+    odata += 4*rho; \
+
+size_t KeccakP1600times4_AVX2_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    const unsigned int rho = 160;
+    Prologue(0x00)
+
+    if (offset % rho == 0) {
+        ItPrologue128
+        while(olen >= 4*rho) {
+            Iteration128(rounds12)
+        }
+    }
+    return processedBytes;
+}
+
+size_t KeccakP1600times4_AVX2_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    const unsigned int rho = 128;
+    Prologue(0x00)
+
+    if (offset % rho == 0) {
+        ItPrologue256
+        while(olen >= 4*rho) {
+            Iteration256(rounds12)
+        }
+    }
+    return processedBytes;
+}
+
+size_t KeccakP1600times4_AVX2_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    const unsigned int rho = 160;
+    Prologue(0x1F)
+
+    if (offset % rho == 0) {
+        ItPrologue128
+        while(olen >= 4*rho) {
+            Iteration128(rounds24)
+        }
+    }
+    return processedBytes;
+}
+
+size_t KeccakP1600times4_AVX2_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    const unsigned int rho = 128;
+    Prologue(0x1F)
+
+    if (offset % rho == 0) {
+        ItPrologue256
+        while(olen >= 4*rho) {
+            Iteration256(rounds24)
+        }
+    }
+    return processedBytes;
+}
+
+#undef LOAD
+#undef XOReq
+#undef ZERO
+#undef CONST_64
+#undef rateInBytes
+
+#undef AddAndStore4
+#undef Epilogue128
+#undef Epilogue256
+#undef Iteration128
+#undef Iteration256
+#undef ItPrologue128
+#undef ItPrologue256
+#undef Load16
+#undef Load20
+#undef Prologue
+#undef Prologue128
+#undef Prologue256
+#undef Store4

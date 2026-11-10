@@ -490,6 +490,70 @@ void KeccakP1600times2_KT256ProcessLeaves(const unsigned char *input, unsigned c
         assert(0);
 }
 
+size_t KeccakP1600times2_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableSSSE3)
+        assert(0);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times2_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableSSSE3)
+        assert(0);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times2_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableSSSE3)
+        assert(0);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times2_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableSSSE3)
+        assert(0);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times2_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableSSSE3)
+        assert(0);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times2_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableSSSE3)
+        assert(0);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times2_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableSSSE3)
+        assert(0);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times2_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableSSSE3)
+        assert(0);
+    else
+        assert(0);
+}
+
 #endif
 
 #ifdef XKCP_has_KeccakP1600times4
@@ -731,6 +795,70 @@ void KeccakP1600times4_KT256ProcessLeaves(const unsigned char *input, unsigned c
         assert(0);
 }
 
+size_t KeccakP1600times4_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableAVX2)
+        return KeccakP1600times4_AVX2_TurboSHAKE128_FlightDeckProcessLeaves(Dlast, input, output);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times4_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableAVX2)
+        return KeccakP1600times4_AVX2_TurboSHAKE256_FlightDeckProcessLeaves(Dlast, input, output);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times4_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableAVX2)
+        return KeccakP1600times4_AVX2_SHAKE128_FlightDeckProcessLeaves(Dlast, input, output);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times4_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableAVX2)
+        return KeccakP1600times4_AVX2_SHAKE256_FlightDeckProcessLeaves(Dlast, input, output);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times4_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableAVX2)
+        return KeccakP1600times4_AVX2_TurboSHAKE128_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times4_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableAVX2)
+        return KeccakP1600times4_AVX2_TurboSHAKE256_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times4_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableAVX2)
+        return KeccakP1600times4_AVX2_SHAKE128_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times4_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableAVX2)
+        return KeccakP1600times4_AVX2_SHAKE256_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
+    else
+        assert(0);
+}
+
 #endif
 
 #ifdef XKCP_has_KeccakP1600times8
@@ -928,6 +1056,70 @@ void KeccakP1600times8_KT256ProcessLeaves(const unsigned char *input, unsigned c
 {
     if (XKCP_enableAVX512)
         KeccakP1600times8_AVX512_KT256ProcessLeaves(input, output);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times8_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableAVX512)
+        return KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckProcessLeaves(Dlast, input, output);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times8_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableAVX512)
+        return KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckProcessLeaves(Dlast, input, output);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times8_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableAVX512)
+        return KeccakP1600times8_AVX512_SHAKE128_FlightDeckProcessLeaves(Dlast, input, output);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times8_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
+{
+    if (XKCP_enableAVX512)
+        return KeccakP1600times8_AVX512_SHAKE256_FlightDeckProcessLeaves(Dlast, input, output);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times8_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableAVX512)
+        return KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times8_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableAVX512)
+        return KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times8_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableAVX512)
+        return KeccakP1600times8_AVX512_SHAKE128_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
+    else
+        assert(0);
+}
+
+size_t KeccakP1600times8_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
+{
+    if (XKCP_enableAVX512)
+        return KeccakP1600times8_AVX512_SHAKE256_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
     else
         assert(0);
 }

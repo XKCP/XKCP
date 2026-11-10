@@ -16,5 +16,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define _testXooPerformance_h_
 
 void testXooPerformance(void);
+void testXoodooSnPPerformance(void);
+void testXoofffPerformance(void);
+void testXoodyakPerformance(void);
 
 #endif

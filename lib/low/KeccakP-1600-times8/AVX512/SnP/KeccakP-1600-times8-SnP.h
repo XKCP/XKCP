@@ -47,4 +47,13 @@ typedef KeccakP1600times8_SIMD512_states KeccakP1600times8_states;
 #define KeccakP1600times8_KT128ProcessLeaves        KeccakP1600times8_AVX512_KT128ProcessLeaves
 #define KeccakP1600times8_KT256ProcessLeaves        KeccakP1600times8_AVX512_KT256ProcessLeaves
 
+#define KeccakP1600times8_TurboSHAKE128_FlightDeckProcessLeaves     KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckProcessLeaves
+#define KeccakP1600times8_TurboSHAKE256_FlightDeckProcessLeaves     KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckProcessLeaves
+#define KeccakP1600times8_SHAKE128_FlightDeckProcessLeaves          KeccakP1600times8_AVX512_SHAKE128_FlightDeckProcessLeaves
+#define KeccakP1600times8_SHAKE256_FlightDeckProcessLeaves          KeccakP1600times8_AVX512_SHAKE256_FlightDeckProcessLeaves
+#define KeccakP1600times8_TurboSHAKE128_FlightDeckSqueeze           KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckSqueeze
+#define KeccakP1600times8_TurboSHAKE256_FlightDeckSqueeze           KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckSqueeze
+#define KeccakP1600times8_SHAKE128_FlightDeckSqueeze                KeccakP1600times8_AVX512_SHAKE128_FlightDeckSqueeze
+#define KeccakP1600times8_SHAKE256_FlightDeckSqueeze                KeccakP1600times8_AVX512_SHAKE256_FlightDeckSqueeze
+
 #endif

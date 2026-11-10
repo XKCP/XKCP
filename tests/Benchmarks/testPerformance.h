@@ -25,5 +25,15 @@ extern ALIGN_DEFAULT uint8_t bigBuffer1[BIG_BUFFER_SIZE];
 extern ALIGN_DEFAULT uint8_t bigBuffer2[BIG_BUFFER_SIZE];
 
 void testPerformance(void);
+void testKeccakPermutationPerformance(void);
+void testKeccakSpongePerformance(void);
+void testTurboSHAKEPerformance(void);
+void testParallelHashPerformance(void);
+void testKangarooTwelvePerformance(void);
+void testKravattePerformance(void);
+void testFlightDeckPerformance(void);
+void testUpperDeckPerformance(void);
+void testDWrapPerformance(void);
+void testDeckBOPerformance(void);
 
 #endif

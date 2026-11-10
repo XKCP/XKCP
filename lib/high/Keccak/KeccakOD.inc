@@ -32,13 +32,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 // OD -------------------------------------------------------------------------
 
-static void OD_TrailencAndXor( KeccakWidth1600_ODInstance *od, uint8_t D )
+static void OD_TrailencAndXor( KeccakWidth1600_ODInstance *od, unsigned char D )
 {
-    ALIGN(8) const uint8_t  trailenc[8] = { D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80 + DOM_SEP };
+    ALIGN(8) const unsigned char trailenc[8] = { D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80 + DOM_SEP };
     SnP_AddBytes( &od->s, trailenc, od->rho, sizeof(trailenc) );
 }
 
-int OD_Initialize( KeccakWidth1600_ODInstance *od, unsigned int rho, unsigned int c, const uint8_t *k, unsigned int klen )
+int OD_Initialize( KeccakWidth1600_ODInstance *od, unsigned int rho, unsigned int c, const unsigned char *key, unsigned int keyByteLen )
 {
 
     od->o       = rho;
@@ -46,7 +46,7 @@ int OD_Initialize( KeccakWidth1600_ODInstance *od, unsigned int rho, unsigned in
     od->rho     = rho;
     SnP_StaticInitialize();
     SnP_Initialize( &od->s );
-    OD_Duplexing( od, NULL, 0, k, klen, 1, NULL );
+    OD_Duplexing( od, NULL, 0, key, keyByteLen, 1, NULL );
     return 0;
 }
 
@@ -64,31 +64,31 @@ int OD_CloneCompact( KeccakWidth1600_ODInstance *odnew, const KeccakWidth1600_OD
     return 0;
 }
 
-size_t OD_DuplexingFast( KeccakWidth1600_ODInstance *od, const uint8_t *idata, size_t len, unsigned int E, uint8_t *odata, const uint8_t *odataAdd )
+size_t OD_DuplexingFast( KeccakWidth1600_ODInstance *od, const unsigned char *input, size_t len, unsigned int E, unsigned char *output, const unsigned char *toAdd )
 {
     if ((E < 1u) || (E > 63u)
         || (od->rho == 0u)
         || (len < od->rho)
-        || (odataAdd == NULL))
+        || (toAdd == NULL))
         return 0;
 
-    ALIGN(8) const uint8_t  trailenc[8]     = { OD_Concat( E, 1u ), 0u, 0u, 0u, 0u, 0u, 0u, 0x80u + DOM_SEP };
+    ALIGN(8) const unsigned char trailenc[8] = { OD_Concat( E, 1u ), 0u, 0u, 0u, 0u, 0u, 0u, 0x80u + DOM_SEP };
     unsigned int            r               = od->rho;
 
     od->o = r;
 
     if (SnP_GetFeatures() & SnP_Feature_OD)
-        return SnP_ODDuplexingFastInOut(&od->s, r/8, idata, len, odata, odataAdd, XKCP_load64(trailenc));
+        return SnP_ODDuplexingFastInOut(&od->s, r/8, input, len, output, toAdd, XKCP_load64(trailenc));
 
     size_t  initialLen = len;
     do {
-        SnP_OverwriteBytes( &od->s, idata, 0, r );
+        SnP_OverwriteBytes( &od->s, input, 0, r );
         SnP_AddBytes( &od->s, trailenc, r, sizeof(trailenc) );
         SnP_Permute( &od->s );
-        SnP_ExtractAndAddBytes( &od->s, odataAdd, odata, 0, r );
-        odataAdd += r;
-        odata += r;
-        idata += r;
+        SnP_ExtractAndAddBytes( &od->s, toAdd, output, 0, r );
+        toAdd += r;
+        output += r;
+        input += r;
         len -= r;
     }
     while ( len >= od->rho );
@@ -96,108 +96,108 @@ size_t OD_DuplexingFast( KeccakWidth1600_ODInstance *od, const uint8_t *idata, s
     return initialLen - len; // bytes processed
 }
 
-size_t OD_DuplexingFastOnlyOut( KeccakWidth1600_ODInstance *od, unsigned int E, uint8_t *odata, size_t len, const uint8_t *odataAdd )
+size_t OD_DuplexingFastOnlyOut( KeccakWidth1600_ODInstance *od, unsigned int E, unsigned char *output, size_t outputLen, const unsigned char *toAdd )
 {
     if ((E < 1u) || (E > 63u)
         || (od->rho == 0u)
-        || (len < od->rho)
-        || (odataAdd == NULL))
+        || (outputLen < od->rho)
+        || (toAdd == NULL))
         return 0;
 
-    ALIGN(8) const uint8_t  trailenc[8] = { OD_Concat( E, 0u ), 0u, 0u, 0u, 0u, 0u, 0u, 0x80u + DOM_SEP };
+    ALIGN(8) const unsigned char trailenc[8] = { OD_Concat( E, 0u ), 0u, 0u, 0u, 0u, 0u, 0u, 0x80u + DOM_SEP };
     unsigned int            r           = od->rho;
 
     od->o = r;
 
     if (SnP_GetFeatures() & SnP_Feature_OD)
-        return SnP_ODDuplexingFastOut( &od->s, r/8, odata, len, odataAdd, XKCP_load64(trailenc) );
+        return SnP_ODDuplexingFastOut( &od->s, r/8, output, outputLen, toAdd, XKCP_load64(trailenc) );
 
-    size_t  initialLen = len;
+    size_t  initialLen = outputLen;
     do {
         SnP_OverwriteWithZeroes( &od->s, r );
         SnP_AddByte( &od->s, 1, 0 );
         SnP_AddBytes( &od->s, trailenc, r, sizeof(trailenc) );
         SnP_Permute( &od->s );
-        SnP_ExtractAndAddBytes( &od->s, odataAdd, odata, 0, r );
-        odataAdd += r;
-        odata += r;
-        len -= r;
+        SnP_ExtractAndAddBytes( &od->s, toAdd, output, 0, r );
+        toAdd += r;
+        output += r;
+        outputLen -= r;
     }
-    while ( len >= od->rho );
+    while ( outputLen >= od->rho );
 
-    return initialLen - len; // bytes processed
+    return initialLen - outputLen; // bytes processed
 }
 
-size_t OD_DuplexingFastOnlyIn( KeccakWidth1600_ODInstance *od, const uint8_t *idata, size_t len, unsigned int E )
+size_t OD_DuplexingFastOnlyIn( KeccakWidth1600_ODInstance *od, const unsigned char *input, size_t inputLen, unsigned int E )
 {
     if ((E < 1u) || (E > 63u)
         || (od->rho == 0u)
-        || (len < od->rho))
+        || (inputLen < od->rho))
         return 0;
 
-    ALIGN(8) const uint8_t  trailenc[8] = { OD_Concat( E, 1u ), 0u, 0u, 0u, 0u, 0u, 0u, 0x80u + DOM_SEP };
+    ALIGN(8) const unsigned char trailenc[8] = { OD_Concat( E, 1u ), 0u, 0u, 0u, 0u, 0u, 0u, 0x80u + DOM_SEP };
     unsigned int            r           = od->rho;
 
     od->o = 0;
 
     if (SnP_GetFeatures() & SnP_Feature_OD)
-        return SnP_ODDuplexingFastIn( &od->s, r/8, idata, len, XKCP_load64(trailenc) );
+        return SnP_ODDuplexingFastIn( &od->s, r/8, input, inputLen, XKCP_load64(trailenc) );
 
-    size_t initialLen = len;
+    size_t initialLen = inputLen;
     do {
-        SnP_OverwriteBytes( &od->s, idata, 0, r );
+        SnP_OverwriteBytes( &od->s, input, 0, r );
         SnP_AddBytes( &od->s, trailenc, r, sizeof(trailenc) );
         SnP_Permute( &od->s );
-        idata += r;
-        len -= r;
+        input += r;
+        inputLen -= r;
     }
-    while ( len > od->rho );
+    while ( inputLen > od->rho );
 
-    return initialLen - len; // bytes processed
+    return initialLen - inputLen; // bytes processed
 }
 
-int OD_Duplexing( KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *idata, unsigned int ilen, unsigned int E, const uint8_t *odataAdd )
+int OD_Duplexing( KeccakWidth1600_ODInstance *od, unsigned char *output, unsigned int outputLen, const unsigned char *input, unsigned int inputLen, unsigned int E, const unsigned char *toAdd )
 {
     if ((E < 1u) || (E > 63u)
         || (od->rho == 0u)
-        || (ilen > od->rho)
-        || (olen > od->rho))
+        || (inputLen > od->rho)
+        || (outputLen > od->rho))
         return 1;
 
-    if ( ilen == od->rho ) {
-        SnP_OverwriteBytes( &od->s, idata, 0u, ilen );
+    if ( inputLen == od->rho ) {
+        SnP_OverwriteBytes( &od->s, input, 0u, inputLen );
         OD_TrailencAndXor( od, OD_Concat( E, 1u ) );
     }
     else {
         SnP_OverwriteWithZeroes( &od->s, od->rho );
-        SnP_OverwriteBytes( &od->s, idata, 0u, ilen );
-        SnP_AddByte( &od->s, 1u, ilen );
+        SnP_OverwriteBytes( &od->s, input, 0u, inputLen );
+        SnP_AddByte( &od->s, 1u, inputLen );
         OD_TrailencAndXor( od, OD_Concat( E, 0u ) );
     }
     SnP_Permute( &od->s );
-    if ( odataAdd != NULL ) {
-        SnP_ExtractAndAddBytes( &od->s, odataAdd, odata, 0u, olen );
+    if ( toAdd != NULL ) {
+        SnP_ExtractAndAddBytes( &od->s, toAdd, output, 0u, outputLen );
     }
     else {
-        SnP_ExtractBytes( &od->s, odata, 0u, olen );
+        SnP_ExtractBytes( &od->s, output, 0u, outputLen );
     }
-    od->o = olen;
+    od->o = outputLen;
     return 0;
 }
 
-int OD_Squeezing( KeccakWidth1600_ODInstance *od, uint8_t *odata, unsigned int olen, const uint8_t *odataAdd )
+int OD_Squeezing( KeccakWidth1600_ODInstance *od, unsigned char *output, unsigned int outputLen, const unsigned char *toAdd )
 {
     if ((od->rho == 0u)
-        || (olen + od->o > od->rho))
+        || (outputLen + od->o > od->rho))
         return 1;
 
-    if ( odataAdd != NULL ) {
-        SnP_ExtractAndAddBytes( &od->s, odataAdd, odata, od->o, olen );
+    if ( toAdd != NULL ) {
+        SnP_ExtractAndAddBytes( &od->s, toAdd, output, od->o, outputLen );
     }
     else {
-        SnP_ExtractBytes( &od->s, odata, od->o, olen );
+        SnP_ExtractBytes( &od->s, output, od->o, outputLen );
     }
-    od->o += olen;
+    od->o += outputLen;
     return 0;
 }
 

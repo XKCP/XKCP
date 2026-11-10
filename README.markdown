@@ -10,7 +10,8 @@ and closely related variants, such as
 * the cSHAKE, KMAC, ParallelHash and TupleHash functions from [NIST SP 800-185][sp800_185_standard],
 * the fast [TurboSHAKE][turboshake] and [KangarooTwelve][k12] extendable-output functions,
 * the [Kravatte](https://keccak.team/kravatte.html) pseudo-random function and its modes,
-* the [SHAKE- and TurboSHAKE-Wrap and -BO](https://eprint.iacr.org/2024/1618) authenticated encryption schemes,
+* the [SHAKE- and TurboSHAKE-Wrap](https://eprint.iacr.org/2024/1618) authenticated encryption schemes,
+* the [SHAKE- and TurboSHAKE-BO](https://eprint.iacr.org/2026/2801) (parallelizable) authenticated encryption schemes,
 
 as well as the [Xoodoo](https://keccak.team/xoodoo.html) permutation and
 
@@ -262,6 +263,7 @@ We welcome contributions in various forms, e.g., general feedback, bug reports, 
 
 We wish to thank all the contributors, and in particular:
 
+- Alex Bataille for the parallel implementation of FlightDeck
 - Andre C. de Moraes for ARMv8-A assembly code
 - Andy Polyakov and Ronny Van Keer for the AVX2 and AVX-512 assembly implementations of Keccak-_p_[1600]
 - Anna Guinet for the hummingbird logo design

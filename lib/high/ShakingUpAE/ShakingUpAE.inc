@@ -29,31 +29,45 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define OD_DuplexingFastOnlyIn          JOIN(prefix, _OD_DuplexingFastOnlyIn)
 #define OD_Squeezing                    JOIN(prefix, _OD_Squeezing)
 #define DWrap_Initialize                JOIN(prefix, _Wrap_Initialize)
+#define DWrap_Initialize128             JOIN(prefix, 128_Wrap_Initialize)
+#define DWrap_Initialize256             JOIN(prefix, 256_Wrap_Initialize)
 #define DWrap_Clone                     JOIN(prefix, _Wrap_Clone)
 #define DWrap_Wrap                      JOIN(prefix, _Wrap_Wrap)
 #define DWrap_Unwrap                    JOIN(prefix, _Wrap_Unwrap)
-#define UpperDeck_Initialize            JOIN(prefix, _UpperDeck_Initialize)
-#define UpperDeck_Clone                 JOIN(prefix, _UpperDeck_Clone)
-#define UpperDeck_CloneCompact          JOIN(prefix, _UpperDeck_CloneCompact)
-#define UpperDeck_Duplexing             JOIN(prefix, _UpperDeck_Duplexing)
-#define UpperDeck_Squeezing             JOIN(prefix, _UpperDeck_Squeezing)
+#define FlightDeck_Initialize           JOIN(prefix, _FlightDeck_Initialize)
+#define FlightDeck_Clone                JOIN(prefix, _FlightDeck_Clone)
+#define FlightDeck_CloneCompact         JOIN(prefix, _FlightDeck_CloneCompact)
+#define FlightDeck_Duplexing            JOIN(prefix, _FlightDeck_Duplexing)
+#define FlightDeck_Squeezing            JOIN(prefix, _FlightDeck_Squeezing)
 #define DeckBO_Initialize               JOIN(prefix, _BO_Initialize)
+#define DeckBO_Initialize128            JOIN(prefix, 128_BO_Initialize)
+#define DeckBO_Initialize256            JOIN(prefix, 256_BO_Initialize)
 #define DeckBO_Clone                    JOIN(prefix, _BO_Clone)
 #define DeckBO_Wrap                     JOIN(prefix, _BO_Wrap)
 #define DeckBO_Unwrap                   JOIN(prefix, _BO_Unwrap)
 
 // DWrap ----------------------------------------------------------------------
 
-int DWrap_Initialize( KeccakWidth1600_DWrapInstance *D, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c )
+int DWrap_Initialize( KeccakWidth1600_DWrapInstance *D, unsigned int rho, unsigned int c, unsigned int taglen, const unsigned char *key, unsigned int keyByteLen )
 {
     if (   (taglen > TAG_LEN_MAX)
         || (rho * 8u + c + 64u != 1600u)
         || (rho > RHO_LEN_MAX)
-        || (klen > rho))
+        || (keyByteLen > rho))
         return 1;
 
     D->taglen = taglen;
-    return OD_Initialize( &D->od, rho, c, k, klen );
+    return OD_Initialize( &D->od, rho, c, key, keyByteLen );
+}
+
+int DWrap_Initialize128( KeccakWidth1600_DWrapInstance *D, unsigned int taglen, const unsigned char *key, unsigned int keyByteLen )
+{
+    return DWrap_Initialize(D, 160, 256, taglen, key, keyByteLen);
+}
+
+int DWrap_Initialize256( KeccakWidth1600_DWrapInstance *D, unsigned int taglen, const unsigned char *key, unsigned int keyByteLen )
+{
+    return DWrap_Initialize(D, 128, 512, taglen, key, keyByteLen);
 }
 
 int DWrap_Clone( KeccakWidth1600_DWrapInstance *Dnew, const KeccakWidth1600_DWrapInstance *D )
@@ -62,7 +76,7 @@ int DWrap_Clone( KeccakWidth1600_DWrapInstance *Dnew, const KeccakWidth1600_DWra
     return 0;
 }
 
-int DWrap_Wrap( KeccakWidth1600_DWrapInstance *D, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen )
+int DWrap_Wrap( KeccakWidth1600_DWrapInstance *D, unsigned char *C, const unsigned char *A, size_t Alen, const unsigned char *P, size_t Plen )
 {
     unsigned int    blocklen;
     unsigned int    lastBlockLen;
@@ -129,14 +143,14 @@ int DWrap_Wrap( KeccakWidth1600_DWrapInstance *D, uint8_t *C, const uint8_t *A, 
     return 0;
 }
 
-int DWrap_Unwrap( KeccakWidth1600_DWrapInstance *D, uint8_t *P, const uint8_t *A, size_t Alen, const uint8_t *C, size_t Clen )
+int DWrap_Unwrap( KeccakWidth1600_DWrapInstance *D, unsigned char *P, const unsigned char *A, size_t Alen, const unsigned char *C, size_t Clen )
 {
     KeccakWidth1600_DWrapInstance   Dprime;
     unsigned int                    blocklen;
     unsigned int                    lastBlockLen;
-    ALIGN(8) uint8_t                tag[TAG_LEN_MAX];
-    uint8_t                         *Pinitial   = P;
-    const uint8_t                   *Ctag;
+    ALIGN(8) unsigned char          tag[TAG_LEN_MAX];
+    unsigned char                   *Pinitial   = P;
+    const unsigned char             *Ctag;
     size_t                          ClenInitial;
 
     if ( Clen < D->taglen ) {
@@ -208,120 +222,26 @@ int DWrap_Unwrap( KeccakWidth1600_DWrapInstance *D, uint8_t *P, const uint8_t *A
     return -1;
 }
 
-// UpperDeck ------------------------------------------------------------------
-
-int UpperDeck_Initialize( KeccakWidth1600_UpperDeckInstance *ud, const uint8_t *k, unsigned int klen, unsigned int rho, unsigned int c )
-{
-    if ((rho > RHO_LEN_MAX)
-        || (klen > rho))
-        return 1;
-    if (OD_Initialize( &ud->D, rho, c, k, klen ) != 0)
-        return 1;
-    memset( &ud->Dsqueeze, 0u, sizeof(ud->Dsqueeze) ); // Deallocate by clearing rho
-    ud->o = (size_t)-1;
-    return 0;
-}
-
-int UpperDeck_Clone( KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud )
-{
-    udnew->o = ud->o;
-    if (OD_Clone( &udnew->D,        &ud->D ) != 0)
-        return 1;
-    if (OD_Clone( &udnew->Dsqueeze, &ud->D ) != 0)
-        return 1;
-    return 0;
-}
-
-int UpperDeck_CloneCompact( KeccakWidth1600_UpperDeckInstance *udnew, const KeccakWidth1600_UpperDeckInstance *ud )
-{
-    udnew->o = (size_t)-1;
-    if (OD_CloneCompact( &udnew->D, &ud->D ) != 0)
-        return 1;
-    memset( &udnew->Dsqueeze, 0u, sizeof(udnew->Dsqueeze) ); // Deallocate by clearing rho
-    return 0;
-}
-
-int UpperDeck_Duplexing( KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *X, size_t Xlen, unsigned int E, const uint8_t *Yadd )
-{
-
-    if ( Xlen > ud->D.rho ) {
-        // All X blocks except last one
-        size_t bytesProcessed = OD_DuplexingFastOnlyIn( &ud->D, X, Xlen, 2u );
-        X       += bytesProcessed;
-        Xlen    -= bytesProcessed;
-        assert( Xlen != 0u );
-    }
-    // Last X block, [0 - rho] bytes
-    assert( Xlen <= ud->D.rho );
-    if (OD_Duplexing( &ud->D, NULL, 0, X, Xlen, OD_Concat( E, 1u ), NULL ) != 0)
-        return 1;
-    ud->o = 0u;
-    memset( &ud->Dsqueeze, 0u, sizeof(ud->Dsqueeze) ); // Deallocate by clearing rho
-    return UpperDeck_Squeezing( ud, Z, Zlen, Yadd );
-}
-
-int UpperDeck_Squeezing( KeccakWidth1600_UpperDeckInstance *ud, uint8_t *Z, size_t Zlen, const uint8_t *Yadd )
-{
-
-    if ( ud->o <= ud->D.rho ) {
-        unsigned int x = MYMIN( ud->D.rho - ud->o, Zlen );
-        if (OD_Squeezing( &ud->D, Z, x, Yadd ) != 0)
-            return 1;
-        if ( (ud->o + Zlen) > ud->D.rho ) {
-            if (OD_CloneCompact( &ud->Dsqueeze, &ud->D ) != 0)
-                return 1;
-        }
-        Zlen    -= x;
-        Z       += x;
-        if ( Yadd != NULL ) {
-            Yadd += x;
-        }
-        ud->o += x;
-    }
-    while ( Zlen > 0u ) {
-        if ( (ud->o % ud->Dsqueeze.rho) == 0u ) {
-            if ( Zlen > ud->Dsqueeze.rho ) {
-                size_t bytesProcessed = OD_DuplexingFastOnlyOut( &ud->Dsqueeze, 2u, Z, Zlen, Yadd );
-                Zlen    -= bytesProcessed;
-                Z       += bytesProcessed;
-                if ( Yadd != NULL ) {
-                    Yadd += bytesProcessed;
-                }
-                ud->o += bytesProcessed;
-            }
-            assert( Zlen <= ud->D.rho );
-            if ( Zlen > 0u ) {
-                if (OD_Duplexing( &ud->Dsqueeze, Z, Zlen, NULL, 0u, 2u, Yadd ) != 0)
-                    return 1;
-                ud->o += Zlen;
-                Zlen = 0;
-            }
-        }
-        else {
-            unsigned int x = MYMIN( ud->Dsqueeze.rho - ud->o % ud->Dsqueeze.rho, Zlen );
-            if (OD_Squeezing( &ud->Dsqueeze, Z, x, Yadd ) != 0)
-                return 1;
-            Zlen    -= x;
-            Z       += x;
-            if ( Yadd != NULL ) {
-                Yadd += x;
-            }
-            ud->o += x;
-        }
-    }
-    return 0;
-}
-
 // DeckBO ---------------------------------------------------------------------
 
-int DeckBO_Initialize( KeccakWidth1600_DeckBOInstance *dbo, const uint8_t *k, unsigned int klen, unsigned int taglen, unsigned int rho, unsigned int c )
+int DeckBO_Initialize( KeccakWidth1600_DeckBOInstance *dbo, unsigned int rho, unsigned int c, size_t alpha, unsigned int taglen, const unsigned char *key, unsigned int keyByteLen )
 {
     if (taglen > TAG_LEN_MAX)
         return 1;
-    if (UpperDeck_Initialize( &dbo->D, k, klen, rho, c ) != 0)
+    if (FlightDeck_Initialize( &dbo->D, rho, c, alpha, key, keyByteLen ) != 0)
         return 1;
     dbo->taglen = taglen;
     return 0;
+}
+
+int DeckBO_Initialize128( KeccakWidth1600_DeckBOInstance *dbo, unsigned int taglen, const unsigned char *key, unsigned int keyByteLen )
+{
+    return DeckBO_Initialize(dbo, 160, 256, 5120, taglen, key, keyByteLen);
+}
+
+int DeckBO_Initialize256( KeccakWidth1600_DeckBOInstance *dbo, unsigned int taglen, const unsigned char *key, unsigned int keyByteLen )
+{
+    return DeckBO_Initialize(dbo, 128, 512, 8192, taglen, key, keyByteLen);
 }
 
 int DeckBO_Clone( KeccakWidth1600_DeckBOInstance *dbonew, const KeccakWidth1600_DeckBOInstance *dbo )
@@ -330,57 +250,57 @@ int DeckBO_Clone( KeccakWidth1600_DeckBOInstance *dbonew, const KeccakWidth1600_
     return 0;
 }
 
-int DeckBO_Wrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *C, const uint8_t *A, size_t Alen, const uint8_t *P, size_t Plen )
+int DeckBO_Wrap( KeccakWidth1600_DeckBOInstance *dbo, unsigned char *C, const unsigned char *A, size_t Alen, const unsigned char *P, size_t Plen )
 {
     if ( Plen == 0 ) {
-        return UpperDeck_Duplexing( &dbo->D, C, dbo->taglen, A, Alen, 4u, NULL );
+        return FlightDeck_Duplexing( &dbo->D, C, dbo->taglen, A, Alen, 4u, NULL );
     }
     if ( Alen != 0 ) {
-        if (UpperDeck_Duplexing( &dbo->D, NULL, 0, A, Alen, 5u, NULL ) != 0)
+        if (FlightDeck_Duplexing( &dbo->D, NULL, 0, A, Alen, 5u, NULL ) != 0)
             return 1;
     }
-    KeccakWidth1600_UpperDeckInstance Dkey;
-    if (UpperDeck_CloneCompact( &Dkey, &dbo->D ) != 0)
+    KeccakWidth1600_FlightDeckInstance Dkey;
+    if (FlightDeck_CloneCompact( &Dkey, &dbo->D ) != 0)
         return 1;
-    if (UpperDeck_Duplexing( &dbo->D, C + Plen, dbo->taglen, P, Plen, 14u, NULL ) != 0)
+    if (FlightDeck_Duplexing( &dbo->D, C + Plen, dbo->taglen, P, Plen, 14u, NULL ) != 0)
         return 1;
-    return UpperDeck_Duplexing( &Dkey, C, Plen, C + Plen, dbo->taglen, 13u, P );
+    return FlightDeck_Duplexing( &Dkey, C, Plen, C + Plen, dbo->taglen, 13u, P );
 }
 
-int DeckBO_Unwrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *P, const uint8_t *A, size_t Alen, const uint8_t *C, size_t Clen )
+int DeckBO_Unwrap( KeccakWidth1600_DeckBOInstance *dbo, unsigned char *P, const unsigned char *A, size_t Alen, const unsigned char *C, size_t Clen )
 {
-    KeccakWidth1600_UpperDeckInstance  udSaved;
-    ALIGN(8) uint8_t            tagPrime[TAG_LEN_MAX];
+    KeccakWidth1600_FlightDeckInstance  udSaved;
+    ALIGN(8) unsigned char      tagPrime[TAG_LEN_MAX];
 
     if ( Clen < dbo->taglen ) {
         return -1;
     }
-    if (UpperDeck_Clone( &udSaved, &dbo->D ) != 0)
+    if (FlightDeck_Clone( &udSaved, &dbo->D ) != 0)
         return 1;
     if ( Clen == dbo->taglen ) {
-        if (UpperDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, A, Alen, 4u, NULL ) != 0)
+        if (FlightDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, A, Alen, 4u, NULL ) != 0)
             return 1;
         if ( XKCP_memcmp( tagPrime, C, dbo->taglen ) != 0 ) {
-            UpperDeck_Clone( &dbo->D, &udSaved );
+            FlightDeck_Clone( &dbo->D, &udSaved );
             return -1;
         }
     }
     else {
         Clen -= dbo->taglen;
         if ( Alen != 0 ) {
-            if (UpperDeck_Duplexing( &dbo->D, NULL, 0u, A, Alen, 5u, NULL ) != 0)
+            if (FlightDeck_Duplexing( &dbo->D, NULL, 0u, A, Alen, 5u, NULL ) != 0)
                 return 1;
         }
-        KeccakWidth1600_UpperDeckInstance Dkey;
-        if (UpperDeck_Clone( &Dkey, &dbo->D ) != 0)
+        KeccakWidth1600_FlightDeckInstance Dkey;
+        if (FlightDeck_Clone( &Dkey, &dbo->D ) != 0)
             return 1;
-        if (UpperDeck_Duplexing( &Dkey, P, Clen, C + Clen, dbo->taglen, 13u, C ) != 0)
+        if (FlightDeck_Duplexing( &Dkey, P, Clen, C + Clen, dbo->taglen, 13u, C ) != 0)
             return 1;
-        if (UpperDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, P, Clen, 14u, NULL ) != 0)
+        if (FlightDeck_Duplexing( &dbo->D, tagPrime, dbo->taglen, P, Clen, 14u, NULL ) != 0)
             return 1;
         if ( XKCP_memcmp( tagPrime, C + Clen, dbo->taglen ) != 0 ) {
             memset( P, 0, Clen ); // Wipe plaintext
-            UpperDeck_Clone( &dbo->D, &udSaved );
+            FlightDeck_Clone( &dbo->D, &udSaved );
             return -1;
         }
     }
@@ -396,15 +316,19 @@ int DeckBO_Unwrap( KeccakWidth1600_DeckBOInstance *dbo, uint8_t *P, const uint8_
 #undef OD_DuplexingFastOnlyIn
 #undef OD_Squeezing
 #undef DWrap_Initialize
+#undef DWrap_Initialize128
+#undef DWrap_Initialize256
 #undef DWrap_Clone
 #undef DWrap_Wrap
 #undef DWrap_Unwrap
-#undef UpperDeck_Initialize
-#undef UpperDeck_Clone
-#undef UpperDeck_CloneCompact
-#undef UpperDeck_Duplexing
-#undef UpperDeck_Squeezing
+#undef FlightDeck_Initialize
+#undef FlightDeck_Clone
+#undef FlightDeck_CloneCompact
+#undef FlightDeck_Duplexing
+#undef FlightDeck_Squeezing
 #undef DeckBO_Initialize
+#undef DeckBO_Initialize128
+#undef DeckBO_Initialize256
 #undef DeckBO_Clone
 #undef DeckBO_Wrap
 #undef DeckBO_Unwrap

@@ -586,9 +586,8 @@ void testXoodyakPerformance(void)
 }
 #endif
 
-void testXooPerformance(void)
+void testXoodooSnPPerformance(void)
 {
-
 #ifdef XKCP_has_Xoodoo
     Xoodoo_timingSnP("Xoodoo", Xoodoo_GetImplementation());
 #endif
@@ -604,7 +603,11 @@ void testXooPerformance(void)
     if (Xoodootimes16_GetFeatures())
         Xoodootimes16_timingPlSnP("Xoodoo\303\22716", Xoodootimes16_GetImplementation());
 #endif
+}
 
+void testXooPerformance(void)
+{
+    testXoodooSnPPerformance();
 #ifdef XKCP_has_Xoofff
     testXoofffPerformance();
 #endif

@@ -38,7 +38,9 @@ typedef struct {
     (PlSnP_Feature_Main \
         | PlSnP_Feature_SpongeAbsorb \
         | PlSnP_Feature_Farfalle \
-        | PlSnP_Feature_KangarooTwelve)
+        | PlSnP_Feature_KangarooTwelve \
+        | PlSnP_Feature_FlightDeck \
+    )
 
 #define KeccakP1600times4_AVX2_StaticInitialize()
 void KeccakP1600times4_AVX2_InitializeAll(KeccakP1600times4_SIMD256_states *states);
@@ -66,5 +68,14 @@ size_t KeccakP1600times4_AVX2_KravatteExpand(uint64_t *yAccu, const uint64_t *kR
 
 void KeccakP1600times4_AVX2_KT128ProcessLeaves(const unsigned char *input, unsigned char *output);
 void KeccakP1600times4_AVX2_KT256ProcessLeaves(const unsigned char *input, unsigned char *output);
+
+size_t KeccakP1600times4_AVX2_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times4_AVX2_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times4_AVX2_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times4_AVX2_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t KeccakP1600times4_AVX2_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t KeccakP1600times4_AVX2_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t KeccakP1600times4_AVX2_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t KeccakP1600times4_AVX2_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
 
 #endif

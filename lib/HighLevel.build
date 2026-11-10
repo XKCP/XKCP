@@ -76,14 +76,32 @@ The fragments below allow to select the desired cryptographic functions (a.k.a. 
 
     <fragment name="KeccakOD" inherits="common">
         <config>XKCP_has_OD_Keccak</config>
+        <config>XKCP_has_ParallelOD_Keccak</config>
         <h>lib/high/Keccak/KeccakOD.h</h>
         <c>lib/high/Keccak/KeccakOD.c</c>
         <inc>lib/high/Keccak/KeccakOD.inc</inc>
+        <inc>lib/high/Keccak/KeccakParallelOD.inc</inc>
+    </fragment>
+
+    <!-- Keccak deck ciphers -->
+
+    <fragment name="FlightDeck" inherits="KeccakOD">
+        <config>XKCP_has_FlightDeck_Keccak</config>
+        <h>lib/high/ShakingUpAE/FlightDeck.h</h>
+        <c>lib/high/ShakingUpAE/FlightDeck.c</c>
+        <inc>lib/high/ShakingUpAE/FlightDeck.inc</inc>
+    </fragment>
+
+    <fragment name="UpperDeck" inherits="KeccakOD">
+        <config>XKCP_has_UpperDeck_Keccak</config>
+        <h>lib/high/ShakingUpAE/UpperDeck.h</h>
+        <c>lib/high/ShakingUpAE/UpperDeck.c</c>
+        <inc>lib/high/ShakingUpAE/UpperDeck.inc</inc>
     </fragment>
 
     <!-- Shaking up authenticated encryption -->
 
-    <fragment name="ShakingUpAE" inherits="KeccakOD">
+    <fragment name="ShakingUpAE" inherits="FlightDeck UpperDeck">
         <config>XKCP_has_ShakingUpAE</config>
         <h>lib/high/ShakingUpAE/ShakingUpAE.h</h>
         <c>lib/high/ShakingUpAE/ShakingUpAE.c</c>

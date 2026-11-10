@@ -49,6 +49,7 @@ const char * PlSnP_GetImplementation();
  *   - PlSnP_Feature_SpongeAbsorb
  *   - PlSnP_Feature_Farfalle
  *   - PlSnP_Feature_KangarooTwelve
+ *   - PlSnP_Feature_FlightDeck
  *
  * Each of these features corresponds to a set of functions as detailed below.
  */
@@ -276,7 +277,7 @@ void PlSnP_ExtractAndAddLanesAll(const void *states, const unsigned char *input,
   *                     between each iteration.
   * @param  data    Pointer to the data to use as input.
   * @param  dataByteLen The length of the input data in bytes.
-  * @returns    The total offset.
+  * @return The total offset.
   * @pre    0 < @a laneCount < SnP_laneCount
   */
 size_t PlSnP_FastLoop_Absorb(void *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, unsigned char *data, size_t dataByteLen);
@@ -315,7 +316,7 @@ void PlSnP_AddIs(unsigned char *output, const unsigned char *input, size_t bitLe
   * @param  xAccu       Pointer to the buffer containing the accumulator, updated by this function.
   * @param  input       Pointer to the input buffer, containing @a length bytes.
   * @param  length      The length of the input in bytes.
-  * @returns    The number of bytes absorbed.
+  * @return The number of bytes absorbed.
   * @pre  @a length must be at least one block.
   */
 size_t PlSnP_CompressFastLoop(unsigned char *kRoll, unsigned char *xAccu, const unsigned char *input, size_t length);
@@ -328,7 +329,7 @@ size_t PlSnP_CompressFastLoop(unsigned char *kRoll, unsigned char *xAccu, const 
   * @param  kRoll       Pointer to the buffer containing the rolling key.
   * @param  output      Pointer to the output buffer, containing @a length bytes.
   * @param  length      The requested length in bytes.
-  * @returns    The number of bytes squeezed.
+  * @return The number of bytes squeezed.
   * @pre  @a length must be at least one block.
   */
 size_t PlSnP_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, unsigned char *output, size_t length);
@@ -348,8 +349,47 @@ size_t PlSnP_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, un
 void PlSnP_KT128ProcessLeaves(const unsigned char *input, unsigned char *output);
 
 /** Function that processes N leaves of KT256 and outputs N chaining values,
- * with N the number of permutations computed in parallel.
- * @param  input       Pointer to the buffer containing N leaves, that is N*8192 bytes.
- * @param  output      Pointer to the buffer to store the N chaining values, that is N*64 bytes.
- */
+  * with N the number of permutations computed in parallel.
+  * @param  input       Pointer to the buffer containing N leaves, that is N*8192 bytes.
+  * @param  output      Pointer to the buffer to store the N chaining values, that is N*64 bytes.
+  */
 void PlSnP_KT256ProcessLeaves(const unsigned char *input, unsigned char *output);
+
+
+/** FlightDeck optimizing functions
+  *
+  * An implementation may also instantiate functions that optimize
+  * [Turbo]SHAKE{128, 256}-FlightDeck, in which case the bit PlSnP_Feature_FlightDeck
+  * must be active in PlSnP_GetFeatures().
+  */
+
+/** Functions that process N leaves of [Turbo]SHAKE{128, 256}-FlightDeck and outputs N chaining values,
+  * with N the number of permutations computed in parallel.
+  * @param  Dlast       Pointer to the last 40 ([Turbo]SHAKE128) or 72 ([TurboSHAKE]256) bytes
+  *                     of the state of the OD object D.
+  * @param  input       Pointer to the buffer containing N leaves, that is N*α bytes.
+  * @param  output      Pointer to the buffer to store the N chaining values,
+  *                     that is N*32 ([Turbo]SHAKE128) or N*64 ([Turbo]SHAKE256) bytes.
+  * @return The total number of bytes processed (N*α) or 0 if this function is not supported.
+  */
+size_t PlSnP_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t PlSnP_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t PlSnP_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+size_t PlSnP_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output);
+
+/** Functions that squeeze output bytes from a [Turbo]SHAKE{128, 256}-FlightDeck object.
+  * @param  Dlast       Pointer to the last 40 ([Turbo]SHAKE128) or 72 ([TurboSHAKE]256) bytes
+  *                     of the state of the OD object D.
+  * @param  offset      The value of the offset o at which to start squeezing.
+  * @param  odata       Pointer to the output buffer.
+  * @param  olen        The number of output bytes requested.
+  * @param  oadded      The null pointer,
+  *                     or a pointer to a buffer of @a olen bytes that are XORed to the output stream.
+  * @pre    @a offset must be a multiple of ρ (160 for [Turbo]SHAKE128, 128 for [Turbo]SHAKE256).
+  * @return The actual number of bytes output, either the largest multipe of N*ρ not greater than @a olen
+  *         or 0 if @a offset is not a multiple of ρ or if this function is not supported.
+  */
+size_t PlSnP_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t PlSnP_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t PlSnP_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);
+size_t PlSnP_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded);

@@ -78,3 +78,55 @@ void UT_generateSimpleRawMaterial(unsigned char* data, unsigned int length, unsi
         data[i] = byte;
     }
 }
+
+void UT_generateArbitraryMaterial(unsigned char* buffer, size_t length, uint32_t seed)
+{
+    size_t i;
+    uint32_t state1 = seed;
+    uint32_t state2 = (uint32_t)length;
+
+    for(i=0; i<6; i++) {
+        state1 = 5*state1 + state2 + 1;
+        state1 = (state1 << 19) | (state1 >> 13);
+        state2 = state2 ^ state1;
+        state2 = (state2 << 14) | (state2 >> 18);
+    }
+    for(i=0; i<length; i++) {
+        buffer[i] = (unsigned char)(state1 & 0xFF);
+        state1 ^= (uint32_t)i;
+        state1 = 5*state1 + state2 + 1;
+        state1 = (state1 << 19) | (state1 >> 13);
+        state2 = state2 ^ state1;
+        state2 = (state2 << 14) | (state2 >> 18);
+    }
+}
+
+void UT_arbitraryChecksumInitialize(UT_arbitraryChecksumState *ac)
+{
+    ac->state1 = 0;
+    ac->state2 = 0;
+}
+void UT_arbitraryChecksumAbsorb(UT_arbitraryChecksumState *ac, const unsigned char *buffer, size_t length)
+{
+    size_t i;
+    for(i=0; i<length; i++) {
+        ac->state1 ^= (uint32_t)buffer[i];
+        ac->state1 = 5*ac->state1 + ac->state2 + 1;
+        ac->state1 = (ac->state1 << 20) | (ac->state1 >> 12);
+        ac->state2 = ac->state2 ^ ac->state1;
+        ac->state2 = (ac->state2 << 14) | (ac->state2 >> 18);
+    }
+}
+
+UT_arbitraryChecksum UT_arbitraryChecksumSqueeze(UT_arbitraryChecksumState *ac)
+{
+    size_t i;
+    ac->state1 ^= (uint32_t)0x100;
+    for(i=0; i<6; i++) {
+        ac->state1 = 5*ac->state1 + ac->state2 + 1;
+        ac->state1 = (ac->state1 << 20) | (ac->state1 >> 12);
+        ac->state2 = ac->state2 ^ ac->state1;
+        ac->state2 = (ac->state2 << 14) | (ac->state2 >> 18);
+    }
+    return ac->state1;
+}
