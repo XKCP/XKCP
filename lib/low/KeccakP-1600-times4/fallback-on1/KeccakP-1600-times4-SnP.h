@@ -52,5 +52,14 @@ void KeccakP1600times4_ExtractAndAddLanesAll(const KeccakP1600times4_states *sta
 #define KeccakP1600times4_KT128ProcessLeaves(...)
 #define KeccakP1600times4_KT256ProcessLeaves(...)
 
+#define KeccakP1600times4_TurboSHAKE128_FlightDeckProcessLeaves(...)    0
+#define KeccakP1600times4_TurboSHAKE256_FlightDeckProcessLeaves(...)    0
+#define KeccakP1600times4_SHAKE128_FlightDeckProcessLeaves(...)         0
+#define KeccakP1600times4_SHAKE256_FlightDeckProcessLeaves(...)         0
+#define KeccakP1600times4_TurboSHAKE128_FlightDeckSqueeze(...)          0
+#define KeccakP1600times4_TurboSHAKE256_FlightDeckSqueeze(...)          0
+#define KeccakP1600times4_SHAKE128_FlightDeckSqueeze(...)               0
+#define KeccakP1600times4_SHAKE256_FlightDeckSqueeze(...)               0
+
 
 #endif
