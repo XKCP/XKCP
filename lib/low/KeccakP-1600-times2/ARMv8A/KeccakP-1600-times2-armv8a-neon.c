@@ -562,8 +562,8 @@ size_t KeccakF1600times2_FastLoop_Absorb(
                 KP1600t2_XorIn(s, curData0, curData1, 18); KP1600t2_XorIn(s, curData0, curData1, 19);
                 KP1600t2_XorIn(s, curData0, curData1, 20);
                 KeccakP1600times2_SHA3_Rounds24(s);
-                curData0 += laneOffsetSerial*8;
-                curData1 += laneOffsetSerial*8;
+                curData0 += (size_t)laneOffsetSerial*8;
+                curData1 += (size_t)laneOffsetSerial*8;
                 dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
             }
         } else { /* laneCount == 17 */
@@ -578,8 +578,8 @@ size_t KeccakF1600times2_FastLoop_Absorb(
                 KP1600t2_XorIn(s, curData0, curData1, 14); KP1600t2_XorIn(s, curData0, curData1, 15);
                 KP1600t2_XorIn(s, curData0, curData1, 16);
                 KeccakP1600times2_SHA3_Rounds24(s);
-                curData0 += laneOffsetSerial*8;
-                curData1 += laneOffsetSerial*8;
+                curData0 += (size_t)laneOffsetSerial*8;
+                curData1 += (size_t)laneOffsetSerial*8;
                 dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
             }
         }
@@ -630,8 +630,8 @@ size_t KeccakF1600times2_FastLoop_Absorb(
             XOR_In_Fast(Asa, curData0, curData1, 20);
             prepareTheta
             rounds24
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
         }
         copyToState(statesAsLanes, A)
@@ -666,8 +666,8 @@ size_t KeccakF1600times2_FastLoop_Absorb(
             XOR_In_Fast(Ame, curData0, curData1, 16);
             prepareTheta
             rounds24
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
         }
         copyToState(statesAsLanes, A)
@@ -732,8 +732,8 @@ size_t KeccakP1600times2_12rounds_FastLoop_Absorb(
             XOR_In_Fast(Asa, curData0, curData1, 20);
             prepareTheta
             rounds12
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
         }
         copyToState(statesAsLanes, A)
@@ -768,8 +768,8 @@ size_t KeccakP1600times2_12rounds_FastLoop_Absorb(
             XOR_In_Fast(Ame, curData0, curData1, 16);
             prepareTheta
             rounds12
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial * SnP_laneLengthInBytes;
         }
         copyToState(statesAsLanes, A)

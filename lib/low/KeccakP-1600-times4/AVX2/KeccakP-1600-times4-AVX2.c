@@ -884,10 +884,10 @@ size_t KeccakF1600times4_AVX2_FastLoop_Absorb(KeccakP1600times4_SIMD256_states *
             #undef  Xor_In
             #undef  Xor_In4
             KeccakP1600times4_AVX2_PermuteAll_24rounds(states);
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
-            curData2 += laneOffsetSerial*8;
-            curData3 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
+            curData2 += (size_t)laneOffsetSerial*8;
+            curData3 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         return curData0 - dataStart;
@@ -928,10 +928,10 @@ size_t KeccakF1600times4_AVX2_FastLoop_Absorb(KeccakP1600times4_SIMD256_states *
             XOR_In( Asa, 20 );
             #undef XOR_In
             rounds24
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
-            curData2 += laneOffsetSerial*8;
-            curData3 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
+            curData2 += (size_t)laneOffsetSerial*8;
+            curData3 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         copyToState(statesAsLanes, A)
@@ -986,10 +986,10 @@ size_t KeccakP1600times4_12rounds_AVX2_FastLoop_Absorb(KeccakP1600times4_SIMD256
             #undef  Xor_In
             #undef  Xor_In4
             KeccakP1600times4_AVX2_PermuteAll_12rounds(states);
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
-            curData2 += laneOffsetSerial*8;
-            curData3 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
+            curData2 += (size_t)laneOffsetSerial*8;
+            curData3 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         return curData0 - dataStart;
@@ -1030,10 +1030,10 @@ size_t KeccakP1600times4_12rounds_AVX2_FastLoop_Absorb(KeccakP1600times4_SIMD256
             XOR_In( Asa, 20 );
             #undef XOR_In
             rounds12
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
-            curData2 += laneOffsetSerial*8;
-            curData3 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
+            curData2 += (size_t)laneOffsetSerial*8;
+            curData3 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         copyToState(statesAsLanes, A)
@@ -1073,10 +1073,10 @@ size_t KeccakP1600times4_12rounds_AVX2_FastLoop_Absorb(KeccakP1600times4_SIMD256
             XOR_In( Ame, 16 );
             #undef XOR_In
             rounds12
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
-            curData2 += laneOffsetSerial*8;
-            curData3 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
+            curData2 += (size_t)laneOffsetSerial*8;
+            curData3 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         copyToState(statesAsLanes, A)

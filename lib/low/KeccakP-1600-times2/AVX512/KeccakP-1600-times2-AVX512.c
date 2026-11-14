@@ -686,7 +686,7 @@ size_t KeccakF1600times2_AVX512_FastLoop_Absorb(KeccakP1600times2_align512SIMD12
             Add_In( _sa, 20 );
             #undef  Add_In
             rounds24;
-            dataAsLanes += laneOffsetSerial*8;
+            dataAsLanes += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         copyToState(statesAsLanes);
@@ -745,7 +745,7 @@ size_t KeccakP1600times2_12rounds_AVX512_FastLoop_Absorb(KeccakP1600times2_align
             Add_In( _sa, 20 );
             #undef  Add_In
             rounds12;
-            dataAsLanes += laneOffsetSerial*8;
+            dataAsLanes += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         copyToState(statesAsLanes);

@@ -895,8 +895,8 @@ size_t KeccakF1600times2_SSSE3_FastLoop_Absorb(KeccakP1600times2_SIMD128_states 
             XOR_In( Asa, 20 );
             #undef XOR_In
             rounds24
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         copyToState(statesAsLanes, A)
@@ -988,8 +988,8 @@ size_t KeccakP1600times2_12rounds_SSSE3_FastLoop_Absorb(KeccakP1600times2_SIMD12
             XOR_In( Asa, 20 );
             #undef XOR_In
             rounds12
-            curData0 += laneOffsetSerial*8;
-            curData1 += laneOffsetSerial*8;
+            curData0 += (size_t)laneOffsetSerial*8;
+            curData1 += (size_t)laneOffsetSerial*8;
             dataByteLen -= laneOffsetSerial*8;
         }
         copyToState(statesAsLanes, A)
