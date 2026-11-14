@@ -23,6 +23,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #include "align.h"
 #include "brg_endian.h"
 #include "Xoodoo.h"
+#include "load-store.h"
 #include "Xoodoo-times8-AVX2.h"
 
 #if (PLATFORM_BYTE_ORDER != IS_LITTLE_ENDIAN)
@@ -140,7 +141,7 @@ void Xoodootimes8_AVX2_AddBytes(Xoodootimes8_SIMD256_states *states, unsigned in
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        uint32_t lane = *((const uint32_t*)curData);
+        uint32_t lane = XKCP_load32(curData);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] ^= lane;
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
@@ -158,16 +159,16 @@ void Xoodootimes8_AVX2_AddLanesAll(Xoodootimes8_SIMD256_states *states, const un
 {
     V256 *stateAsLanes = states->A;
     unsigned int i;
-    const uint32_t *curData0 = (const uint32_t *)(data+laneOffset*0*SnP_laneLengthInBytes);
-    const uint32_t *curData1 = (const uint32_t *)(data+laneOffset*1*SnP_laneLengthInBytes);
-    const uint32_t *curData2 = (const uint32_t *)(data+laneOffset*2*SnP_laneLengthInBytes);
-    const uint32_t *curData3 = (const uint32_t *)(data+laneOffset*3*SnP_laneLengthInBytes);
-    const uint32_t *curData4 = (const uint32_t *)(data+laneOffset*4*SnP_laneLengthInBytes);
-    const uint32_t *curData5 = (const uint32_t *)(data+laneOffset*5*SnP_laneLengthInBytes);
-    const uint32_t *curData6 = (const uint32_t *)(data+laneOffset*6*SnP_laneLengthInBytes);
-    const uint32_t *curData7 = (const uint32_t *)(data+laneOffset*7*SnP_laneLengthInBytes);
+    const unsigned char *curData0 = data+laneOffset*0*SnP_laneLengthInBytes;
+    const unsigned char *curData1 = data+laneOffset*1*SnP_laneLengthInBytes;
+    const unsigned char *curData2 = data+laneOffset*2*SnP_laneLengthInBytes;
+    const unsigned char *curData3 = data+laneOffset*3*SnP_laneLengthInBytes;
+    const unsigned char *curData4 = data+laneOffset*4*SnP_laneLengthInBytes;
+    const unsigned char *curData5 = data+laneOffset*5*SnP_laneLengthInBytes;
+    const unsigned char *curData6 = data+laneOffset*6*SnP_laneLengthInBytes;
+    const unsigned char *curData7 = data+laneOffset*7*SnP_laneLengthInBytes;
 
-    #define Xor_In( argIndex )  XOReq256(stateAsLanes[argIndex], LOAD8_32(curData0[argIndex], curData1[argIndex], curData2[argIndex], curData3[argIndex], curData4[argIndex], curData5[argIndex], curData6[argIndex], curData7[argIndex]))
+    #define Xor_In( argIndex )  XOReq256(stateAsLanes[argIndex], LOAD8_32(XKCP_loadLane32(curData0, argIndex), XKCP_loadLane32(curData1, argIndex), XKCP_loadLane32(curData2, argIndex), XKCP_loadLane32(curData3, argIndex), XKCP_loadLane32(curData4, argIndex), XKCP_loadLane32(curData5, argIndex), XKCP_loadLane32(curData6, argIndex), XKCP_loadLane32(curData7, argIndex)))
 
     if ( laneCount == 12 )  {
         Xor_In( 0 );
@@ -209,7 +210,7 @@ void Xoodootimes8_AVX2_OverwriteBytes(Xoodootimes8_SIMD256_states *states, unsig
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        uint32_t lane = *((const uint32_t*)curData);
+        uint32_t lane = XKCP_load32(curData);
         statesAsLanes[laneIndex(instanceIndex, lanePosition)] = lane;
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
@@ -225,16 +226,16 @@ void Xoodootimes8_AVX2_OverwriteLanesAll(Xoodootimes8_SIMD256_states *states, co
 {
     V256 *stateAsLanes = states->A;
     unsigned int i;
-    const uint32_t *curData0 = (const uint32_t *)(data+laneOffset*0*SnP_laneLengthInBytes);
-    const uint32_t *curData1 = (const uint32_t *)(data+laneOffset*1*SnP_laneLengthInBytes);
-    const uint32_t *curData2 = (const uint32_t *)(data+laneOffset*2*SnP_laneLengthInBytes);
-    const uint32_t *curData3 = (const uint32_t *)(data+laneOffset*3*SnP_laneLengthInBytes);
-    const uint32_t *curData4 = (const uint32_t *)(data+laneOffset*4*SnP_laneLengthInBytes);
-    const uint32_t *curData5 = (const uint32_t *)(data+laneOffset*5*SnP_laneLengthInBytes);
-    const uint32_t *curData6 = (const uint32_t *)(data+laneOffset*6*SnP_laneLengthInBytes);
-    const uint32_t *curData7 = (const uint32_t *)(data+laneOffset*7*SnP_laneLengthInBytes);
+    const unsigned char *curData0 = data+laneOffset*0*SnP_laneLengthInBytes;
+    const unsigned char *curData1 = data+laneOffset*1*SnP_laneLengthInBytes;
+    const unsigned char *curData2 = data+laneOffset*2*SnP_laneLengthInBytes;
+    const unsigned char *curData3 = data+laneOffset*3*SnP_laneLengthInBytes;
+    const unsigned char *curData4 = data+laneOffset*4*SnP_laneLengthInBytes;
+    const unsigned char *curData5 = data+laneOffset*5*SnP_laneLengthInBytes;
+    const unsigned char *curData6 = data+laneOffset*6*SnP_laneLengthInBytes;
+    const unsigned char *curData7 = data+laneOffset*7*SnP_laneLengthInBytes;
 
-    #define OverWr( argIndex )  STORE256(stateAsLanes[argIndex], LOAD8_32(curData0[argIndex], curData1[argIndex], curData2[argIndex], curData3[argIndex], curData4[argIndex], curData5[argIndex], curData6[argIndex], curData7[argIndex]))
+    #define OverWr( argIndex )  STORE256(stateAsLanes[argIndex], LOAD8_32(XKCP_loadLane32(curData0, argIndex), XKCP_loadLane32(curData1, argIndex), XKCP_loadLane32(curData2, argIndex), XKCP_loadLane32(curData3, argIndex), XKCP_loadLane32(curData4, argIndex), XKCP_loadLane32(curData5, argIndex), XKCP_loadLane32(curData6, argIndex), XKCP_loadLane32(curData7, argIndex)))
 
     if ( laneCount == 12 )  {
         OverWr( 0 );
@@ -293,7 +294,7 @@ void Xoodootimes8_AVX2_ExtractBytes(const Xoodootimes8_SIMD256_states *states, u
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *(uint32_t*)curData = statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        XKCP_store32(curData, statesAsLanes[laneIndex(instanceIndex, lanePosition)]);
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curData += SnP_laneLengthInBytes;
@@ -306,25 +307,25 @@ void Xoodootimes8_AVX2_ExtractBytes(const Xoodootimes8_SIMD256_states *states, u
 
 void Xoodootimes8_AVX2_ExtractLanesAll(const Xoodootimes8_SIMD256_states *states, unsigned char *data, unsigned int laneCount, unsigned int laneOffset)
 {
-    uint32_t *curData0 = (uint32_t *)(data+laneOffset*0*SnP_laneLengthInBytes);
-    uint32_t *curData1 = (uint32_t *)(data+laneOffset*1*SnP_laneLengthInBytes);
-    uint32_t *curData2 = (uint32_t *)(data+laneOffset*2*SnP_laneLengthInBytes);
-    uint32_t *curData3 = (uint32_t *)(data+laneOffset*3*SnP_laneLengthInBytes);
-    uint32_t *curData4 = (uint32_t *)(data+laneOffset*4*SnP_laneLengthInBytes);
-    uint32_t *curData5 = (uint32_t *)(data+laneOffset*5*SnP_laneLengthInBytes);
-    uint32_t *curData6 = (uint32_t *)(data+laneOffset*6*SnP_laneLengthInBytes);
-    uint32_t *curData7 = (uint32_t *)(data+laneOffset*7*SnP_laneLengthInBytes);
+    unsigned char *curData0 = data+laneOffset*0*SnP_laneLengthInBytes;
+    unsigned char *curData1 = data+laneOffset*1*SnP_laneLengthInBytes;
+    unsigned char *curData2 = data+laneOffset*2*SnP_laneLengthInBytes;
+    unsigned char *curData3 = data+laneOffset*3*SnP_laneLengthInBytes;
+    unsigned char *curData4 = data+laneOffset*4*SnP_laneLengthInBytes;
+    unsigned char *curData5 = data+laneOffset*5*SnP_laneLengthInBytes;
+    unsigned char *curData6 = data+laneOffset*6*SnP_laneLengthInBytes;
+    unsigned char *curData7 = data+laneOffset*7*SnP_laneLengthInBytes;
     const uint32_t *stateAsLanes32 = (const uint32_t*)states->A;
     unsigned int i;
 
-    #define Extr( argIndex )    curData0[argIndex] = stateAsLanes32[8*(argIndex)],      \
-                                curData1[argIndex] = stateAsLanes32[8*(argIndex)+1],    \
-                                curData2[argIndex] = stateAsLanes32[8*(argIndex)+2],    \
-                                curData3[argIndex] = stateAsLanes32[8*(argIndex)+3],    \
-                                curData4[argIndex] = stateAsLanes32[8*(argIndex)+4],    \
-                                curData5[argIndex] = stateAsLanes32[8*(argIndex)+5],    \
-                                curData6[argIndex] = stateAsLanes32[8*(argIndex)+6],    \
-                                curData7[argIndex] = stateAsLanes32[8*(argIndex)+7]
+    #define Extr( argIndex )    XKCP_storeLane32(curData0, argIndex, stateAsLanes32[8*(argIndex)]),      \
+                                XKCP_storeLane32(curData1, argIndex, stateAsLanes32[8*(argIndex)+1]),    \
+                                XKCP_storeLane32(curData2, argIndex, stateAsLanes32[8*(argIndex)+2]),    \
+                                XKCP_storeLane32(curData3, argIndex, stateAsLanes32[8*(argIndex)+3]),    \
+                                XKCP_storeLane32(curData4, argIndex, stateAsLanes32[8*(argIndex)+4]),    \
+                                XKCP_storeLane32(curData5, argIndex, stateAsLanes32[8*(argIndex)+5]),    \
+                                XKCP_storeLane32(curData6, argIndex, stateAsLanes32[8*(argIndex)+6]),    \
+                                XKCP_storeLane32(curData7, argIndex, stateAsLanes32[8*(argIndex)+7])
 
     if ( laneCount == 12 )  {
         Extr( 0 );
@@ -370,7 +371,7 @@ void Xoodootimes8_AVX2_ExtractAndAddBytes(const Xoodootimes8_SIMD256_states *sta
     }
 
     while(sizeLeft >= SnP_laneLengthInBytes) {
-        *((uint32_t*)curOutput) = *((const uint32_t*)curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)];
+        XKCP_store32(curOutput, XKCP_load32(curInput) ^ statesAsLanes[laneIndex(instanceIndex, lanePosition)]);
         sizeLeft -= SnP_laneLengthInBytes;
         lanePosition++;
         curInput += SnP_laneLengthInBytes;
@@ -388,35 +389,35 @@ void Xoodootimes8_AVX2_ExtractAndAddBytes(const Xoodootimes8_SIMD256_states *sta
 
 void Xoodootimes8_AVX2_ExtractAndAddLanesAll(const Xoodootimes8_SIMD256_states *states, const unsigned char *input, unsigned char *output, unsigned int laneCount, unsigned int laneOffset)
 {
-    const uint32_t *curInput0 = (const uint32_t *)(input+laneOffset*0*SnP_laneLengthInBytes);
-    const uint32_t *curInput1 = (const uint32_t *)(input+laneOffset*1*SnP_laneLengthInBytes);
-    const uint32_t *curInput2 = (const uint32_t *)(input+laneOffset*2*SnP_laneLengthInBytes);
-    const uint32_t *curInput3 = (const uint32_t *)(input+laneOffset*3*SnP_laneLengthInBytes);
-    const uint32_t *curInput4 = (const uint32_t *)(input+laneOffset*4*SnP_laneLengthInBytes);
-    const uint32_t *curInput5 = (const uint32_t *)(input+laneOffset*5*SnP_laneLengthInBytes);
-    const uint32_t *curInput6 = (const uint32_t *)(input+laneOffset*6*SnP_laneLengthInBytes);
-    const uint32_t *curInput7 = (const uint32_t *)(input+laneOffset*7*SnP_laneLengthInBytes);
-    uint32_t *curOutput0 = (uint32_t *)(output+laneOffset*0*SnP_laneLengthInBytes);
-    uint32_t *curOutput1 = (uint32_t *)(output+laneOffset*1*SnP_laneLengthInBytes);
-    uint32_t *curOutput2 = (uint32_t *)(output+laneOffset*2*SnP_laneLengthInBytes);
-    uint32_t *curOutput3 = (uint32_t *)(output+laneOffset*3*SnP_laneLengthInBytes);
-    uint32_t *curOutput4 = (uint32_t *)(output+laneOffset*4*SnP_laneLengthInBytes);
-    uint32_t *curOutput5 = (uint32_t *)(output+laneOffset*5*SnP_laneLengthInBytes);
-    uint32_t *curOutput6 = (uint32_t *)(output+laneOffset*6*SnP_laneLengthInBytes);
-    uint32_t *curOutput7 = (uint32_t *)(output+laneOffset*7*SnP_laneLengthInBytes);
+    const unsigned char *curInput0 = input+laneOffset*0*SnP_laneLengthInBytes;
+    const unsigned char *curInput1 = input+laneOffset*1*SnP_laneLengthInBytes;
+    const unsigned char *curInput2 = input+laneOffset*2*SnP_laneLengthInBytes;
+    const unsigned char *curInput3 = input+laneOffset*3*SnP_laneLengthInBytes;
+    const unsigned char *curInput4 = input+laneOffset*4*SnP_laneLengthInBytes;
+    const unsigned char *curInput5 = input+laneOffset*5*SnP_laneLengthInBytes;
+    const unsigned char *curInput6 = input+laneOffset*6*SnP_laneLengthInBytes;
+    const unsigned char *curInput7 = input+laneOffset*7*SnP_laneLengthInBytes;
+    unsigned char *curOutput0 = output+laneOffset*0*SnP_laneLengthInBytes;
+    unsigned char *curOutput1 = output+laneOffset*1*SnP_laneLengthInBytes;
+    unsigned char *curOutput2 = output+laneOffset*2*SnP_laneLengthInBytes;
+    unsigned char *curOutput3 = output+laneOffset*3*SnP_laneLengthInBytes;
+    unsigned char *curOutput4 = output+laneOffset*4*SnP_laneLengthInBytes;
+    unsigned char *curOutput5 = output+laneOffset*5*SnP_laneLengthInBytes;
+    unsigned char *curOutput6 = output+laneOffset*6*SnP_laneLengthInBytes;
+    unsigned char *curOutput7 = output+laneOffset*7*SnP_laneLengthInBytes;
 
     const uint32_t *stateAsLanes32 = (const uint32_t*)states->A;
     unsigned int i;
 
     #define ExtrXor( argIndex ) \
-                                curOutput0[argIndex] = curInput0[argIndex] ^ stateAsLanes32[8*(argIndex)+0],\
-                                curOutput1[argIndex] = curInput1[argIndex] ^ stateAsLanes32[8*(argIndex)+1],\
-                                curOutput2[argIndex] = curInput2[argIndex] ^ stateAsLanes32[8*(argIndex)+2],\
-                                curOutput3[argIndex] = curInput3[argIndex] ^ stateAsLanes32[8*(argIndex)+3],\
-                                curOutput4[argIndex] = curInput4[argIndex] ^ stateAsLanes32[8*(argIndex)+4],\
-                                curOutput5[argIndex] = curInput5[argIndex] ^ stateAsLanes32[8*(argIndex)+5],\
-                                curOutput6[argIndex] = curInput6[argIndex] ^ stateAsLanes32[8*(argIndex)+6],\
-                                curOutput7[argIndex] = curInput7[argIndex] ^ stateAsLanes32[8*(argIndex)+7]
+                                XKCP_storeLane32(curOutput0, argIndex, XKCP_loadLane32(curInput0, argIndex) ^ stateAsLanes32[8*(argIndex)+0]),\
+                                XKCP_storeLane32(curOutput1, argIndex, XKCP_loadLane32(curInput1, argIndex) ^ stateAsLanes32[8*(argIndex)+1]),\
+                                XKCP_storeLane32(curOutput2, argIndex, XKCP_loadLane32(curInput2, argIndex) ^ stateAsLanes32[8*(argIndex)+2]),\
+                                XKCP_storeLane32(curOutput3, argIndex, XKCP_loadLane32(curInput3, argIndex) ^ stateAsLanes32[8*(argIndex)+3]),\
+                                XKCP_storeLane32(curOutput4, argIndex, XKCP_loadLane32(curInput4, argIndex) ^ stateAsLanes32[8*(argIndex)+4]),\
+                                XKCP_storeLane32(curOutput5, argIndex, XKCP_loadLane32(curInput5, argIndex) ^ stateAsLanes32[8*(argIndex)+5]),\
+                                XKCP_storeLane32(curOutput6, argIndex, XKCP_loadLane32(curInput6, argIndex) ^ stateAsLanes32[8*(argIndex)+6]),\
+                                XKCP_storeLane32(curOutput7, argIndex, XKCP_loadLane32(curInput7, argIndex) ^ stateAsLanes32[8*(argIndex)+7])
 
     if ( laneCount == 12 )  {
         ExtrXor( 0 );
@@ -594,7 +595,7 @@ void Xooffftimes8_AVX2_AddIs(unsigned char *output, const unsigned char *input, 
         output += 32;
     }
    while ( byteLen >= 8 ) {
-        *((uint64_t*)output) ^= *((const uint64_t*)input);
+        XKCP_store64(output, XKCP_load64(output) ^ XKCP_load64(input));
         input += 8;
         output += 8;
         byteLen -= 8;
@@ -616,7 +617,7 @@ size_t Xooffftimes8_AVX2_CompressFastLoop(unsigned char *k, unsigned char *x, co
     DeclareVars;
     uint32_t       *k32 = (uint32_t*)k;
     uint32_t       *x32 = (uint32_t*)x;
-    const uint32_t *i32 = (const uint32_t*)input;
+    const unsigned char *i32 = input;
     size_t      initialLength;
     V256        r04815926;
     V256        r5926a37b;
@@ -673,20 +674,20 @@ size_t Xooffftimes8_AVX2_CompressFastLoop(unsigned char *k, unsigned char *x, co
         r04815926 = a22;
         Dump("Roll-c", a);
 
-        a00 = XOR256( a00, LOAD_GATHER8_32(t, i32+0));
-        a01 = XOR256( a01, LOAD_GATHER8_32(t, i32+1));
-        a02 = XOR256( a02, LOAD_GATHER8_32(t, i32+2));
-        a03 = XOR256( a03, LOAD_GATHER8_32(t, i32+3));
+        a00 = XOR256( a00, LOAD_GATHER8_32(t, i32+4*0));
+        a01 = XOR256( a01, LOAD_GATHER8_32(t, i32+4*1));
+        a02 = XOR256( a02, LOAD_GATHER8_32(t, i32+4*2));
+        a03 = XOR256( a03, LOAD_GATHER8_32(t, i32+4*3));
 
-        a12 = XOR256( a12, LOAD_GATHER8_32(t, i32+4));
-        a13 = XOR256( a13, LOAD_GATHER8_32(t, i32+5));
-        a10 = XOR256( a10, LOAD_GATHER8_32(t, i32+6));
-        a11 = XOR256( a11, LOAD_GATHER8_32(t, i32+7));
+        a12 = XOR256( a12, LOAD_GATHER8_32(t, i32+4*4));
+        a13 = XOR256( a13, LOAD_GATHER8_32(t, i32+4*5));
+        a10 = XOR256( a10, LOAD_GATHER8_32(t, i32+4*6));
+        a11 = XOR256( a11, LOAD_GATHER8_32(t, i32+4*7));
 
-        a20 = XOR256( a20, LOAD_GATHER8_32(t, i32+8));
-        a21 = XOR256( a21, LOAD_GATHER8_32(t, i32+9));
-        a22 = XOR256( a22, LOAD_GATHER8_32(t, i32+10));
-        a23 = XOR256( a23, LOAD_GATHER8_32(t, i32+11));
+        a20 = XOR256( a20, LOAD_GATHER8_32(t, i32+4*8));
+        a21 = XOR256( a21, LOAD_GATHER8_32(t, i32+4*9));
+        a22 = XOR256( a22, LOAD_GATHER8_32(t, i32+4*10));
+        a23 = XOR256( a23, LOAD_GATHER8_32(t, i32+4*11));
         Dump("Add input", a);
 
         Round(  a12, a13, a10, a11,    a11, a12, a13, a10,    a20, a21, a22, a23,    _rc6 );
@@ -711,7 +712,7 @@ size_t Xooffftimes8_AVX2_CompressFastLoop(unsigned char *k, unsigned char *x, co
         x23 = XOR256(x23, a23);
         Dump("Accu x", x);
 
-        i32 += NLANES*8;
+        i32 += 4*NLANES*8;
         length -= NLANES*4*8;
     }
     while (length >= (NLANES*4*8));
@@ -783,7 +784,7 @@ size_t Xooffftimes8_AVX2_ExpandFastLoop(unsigned char *yAccu, const unsigned cha
     DeclareVars;
     const uint32_t  *k32 = (const uint32_t*)kRoll;
     uint32_t        *y32 = (uint32_t*)yAccu;
-    uint32_t        *o32 = (uint32_t*)output;
+    unsigned char   *o32 = output;
     size_t      initialLength;
     V256        r04815926;
     V256        r5926a37b;
@@ -880,19 +881,19 @@ size_t Xooffftimes8_AVX2_ExpandFastLoop(unsigned char *yAccu, const unsigned cha
         lanesH01 = UNPACKH128( a00, a10 );
         lanesL23 = UNPACKL128( a01, a11 );
         lanesH23 = UNPACKH128( a01, a11 );
-        STORE256u(o32[0*12+0], lanesL01);
-        STORE256u(o32[4*12+0], lanesH01);
-        STORE256u(o32[1*12+0], lanesL23);
-        STORE256u(o32[5*12+0], lanesH23);
+        STORE256u(o32[4*(0*12+0)], lanesL01);
+        STORE256u(o32[4*(4*12+0)], lanesH01);
+        STORE256u(o32[4*(1*12+0)], lanesL23);
+        STORE256u(o32[4*(5*12+0)], lanesH23);
         
         lanesL01 = UNPACKL128( a02, a12 );
         lanesH01 = UNPACKH128( a02, a12 );
         lanesL23 = UNPACKL128( a03, a13 );
         lanesH23 = UNPACKH128( a03, a13 );
-        STORE256u(o32[2*12+0], lanesL01);
-        STORE256u(o32[6*12+0], lanesH01);
-        STORE256u(o32[3*12+0], lanesL23);
-        STORE256u(o32[7*12+0], lanesH23);
+        STORE256u(o32[4*(2*12+0)], lanesL01);
+        STORE256u(o32[4*(6*12+0)], lanesH01);
+        STORE256u(o32[4*(3*12+0)], lanesL23);
+        STORE256u(o32[4*(7*12+0)], lanesH23);
         
         lanesL01 = UNPACKL32( a20, a21 );
         lanesH01 = UNPACKH32( a20, a21 );
@@ -902,13 +903,13 @@ size_t Xooffftimes8_AVX2_ExpandFastLoop(unsigned char *yAccu, const unsigned cha
         a21 = UNPACKH64( lanesL01, lanesL23 );
         a22 = UNPACKL64( lanesH01, lanesH23 );
         a23 = UNPACKH64( lanesH01, lanesH23 );
-        _mm256_storeu2_m128i((__m128i*)(o32+4*12+8), (__m128i*)(o32+0*12+8), a20);
-        _mm256_storeu2_m128i((__m128i*)(o32+5*12+8), (__m128i*)(o32+1*12+8), a21);
-        _mm256_storeu2_m128i((__m128i*)(o32+6*12+8), (__m128i*)(o32+2*12+8), a22);
-        _mm256_storeu2_m128i((__m128i*)(o32+7*12+8), (__m128i*)(o32+3*12+8), a23);
+        _mm256_storeu2_m128i((__m128i*)(o32+4*(4*12+8)), (__m128i*)(o32+4*(0*12+8)), a20);
+        _mm256_storeu2_m128i((__m128i*)(o32+4*(5*12+8)), (__m128i*)(o32+4*(1*12+8)), a21);
+        _mm256_storeu2_m128i((__m128i*)(o32+4*(6*12+8)), (__m128i*)(o32+4*(2*12+8)), a22);
+        _mm256_storeu2_m128i((__m128i*)(o32+4*(7*12+8)), (__m128i*)(o32+4*(3*12+8)), a23);
         Dump("shuffle", a);
 
-        o32 += NLANES*8;
+        o32 += 4*NLANES*8;
         length -= NLANES*4*8;
     }
     while (length >= (NLANES*4*8));
