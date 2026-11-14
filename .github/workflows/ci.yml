@@ -87,8 +87,10 @@ jobs:
   # Misaligned caller buffers, with the UBSan alignment check: the
   # misaligned-buffer test and the unit tests (see
   # tests/MemoryAlignment/run.sh), on each CPU dispatch path of the
-  # x86-64 and aarch64 targets. Hosted x86-64 runners do not guarantee
-  # AVX-512, so the first x86-64 leg can test the AVX2 code instead.
+  # x86-64 and aarch64 targets. Hosted runners do not guarantee AVX-512
+  # (x86-64) or SHA3 (AArch64): without it, the leg with no options runs
+  # the same code as the first --disable leg of its target. The log of
+  # each leg lists the implementations that it used.
   memory_alignment:
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
