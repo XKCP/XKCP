@@ -23,8 +23,11 @@ shift $(( $# < 2 ? $# : 2 ))
 HERE=$(cd "$(dirname "$0")" && pwd)
 COMPILER="${COMPILER:-clang}"
 SAN="-fsanitize=alignment -g -O1"
-# Keep running after a report (UBSan reports each source location once), and
-# write the reports to the log, whatever the caller's settings.
+# Keep running after a report, and write the reports to the log, whatever the
+# caller's settings. UBSan reports each check that it inserts at most once.
+# Each expansion of a macro is a separate check, and GCC (not Clang) also checks
+# each inlined copy of a function separately, so one source location can give
+# several reports.
 export UBSAN_OPTIONS=halt_on_error=0
 
 WORK=$(mktemp -d /tmp/misalign.XXXXXX)
@@ -50,6 +53,7 @@ DONE=$(grep -c "^All misaligned-buffer results match" "$LOG")
 
 echo "== $TARGET $* in $TREE =="
 grep -E '^(Keccak-p|Xoodoo)' "$LOG" | sed 's/^/   /'
+grep '^SKIPPED' "$LOG" | sed 's/^/   /'
 echo "   UBSan alignment errors: $ERRS"
 echo "   result mismatches:      $(grep -c MISMATCH "$LOG") (harness rc=$RC)"
 grep "runtime error" "$LOG" | sed 's/.*runtime error/   e.g./' | sort -u | head -3
