@@ -380,8 +380,8 @@ static const uint64_t KeccakF1600RoundConstants_vec[24][2] __attribute__((aligne
 
 /* ---------------------------------------------------------------- */
 /* 
- * OPTIMIZED XOR_In macro using direct SIMD loads.
- * This is the key optimization - avoiding GPR-to-SIMD transfers.
+ * XOR_In_Fast: XORs lane argIndex of the two inputs into a state variable,
+ * loading both lanes with LOAD6464().
  */
 #define XOR_In_Fast(Xxx, curData0, curData1, argIndex) \
     XOReq128(Xxx, LOAD6464((curData1) + 8*(argIndex), (curData0) + 8*(argIndex)))
