@@ -147,6 +147,7 @@ An alternate C compiler can be specified via the `CC` environment variable.
 At the time of this writing, the possible target names before the slash are:
 
 * `x86-64`: automatic runtime selection among 64-bit plain C and SSSE3, AVX2 and AVX-512 instruction sets (**recommended for x86-64 platforms**);
+* `aarch64`: automatic runtime selection between 64-bit plain C and the ARMv8.4-A SHA3 instructions for Keccak-p[1600], and implementations of the 2-way and 4-way parallel Keccak-p[1600] permutations that use NEON but not the SHA3 instructions (**recommended for AArch64 platforms**);
 * `compact`: plain C compact implementations;
 * `generic32`: plain C implementation, generically optimized for 32-bit platforms;
 * `generic32lc`: same as `generic32` but featuring the lane complementing technique for platforms without a "and not" instruction;
