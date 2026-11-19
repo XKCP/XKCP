@@ -15,6 +15,6 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef SnP_implementations_h
 #define SnP_implementations_h
 
-void XKCP_PrintImplementations();
+void XKCP_PrintImplementations(void);
 
 #endif

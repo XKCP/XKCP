@@ -31,10 +31,10 @@ typedef union {
     KeccakP1600_plain64_state AVX512_state;
 } KeccakP1600_state;
 
-const char * KeccakP1600_GetImplementation();
-int KeccakP1600_GetFeatures();
+const char * KeccakP1600_GetImplementation(void);
+int KeccakP1600_GetFeatures(void);
 
-void KeccakP1600_StaticInitialize();
+void KeccakP1600_StaticInitialize(void);
 void KeccakP1600_Initialize(KeccakP1600_state *state);
 void KeccakP1600_AddByte(KeccakP1600_state *state, unsigned char data, unsigned int offset);
 void KeccakP1600_AddBytes(KeccakP1600_state *state, const unsigned char *data, unsigned int offset, unsigned int length);

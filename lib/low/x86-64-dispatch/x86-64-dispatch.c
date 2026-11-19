@@ -54,7 +54,7 @@ static void XKCP_InitializeProcessorCapabilities(void)
 
 #include "KeccakP-1600-SnP.h"
 
-const char * KeccakP1600_GetImplementation()
+const char * KeccakP1600_GetImplementation(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -65,7 +65,7 @@ const char * KeccakP1600_GetImplementation()
         return KeccakP1600_plain64_GetImplementation();
 }
 
-int KeccakP1600_GetFeatures()
+int KeccakP1600_GetFeatures(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -76,7 +76,7 @@ int KeccakP1600_GetFeatures()
         return KeccakP1600_plain64_GetFeatures();
 }
 
-void KeccakP1600_StaticInitialize()
+void KeccakP1600_StaticInitialize(void)
 {
     XKCP_EnsureProcessorCapabilities();
 }
@@ -261,7 +261,7 @@ size_t KeccakP1600_12rounds_ODDuplexingFastIn(KeccakP1600_state *state, unsigned
 
 #include "KeccakP-1600-times2-SnP.h"
 
-const char * KeccakP1600times2_GetImplementation()
+const char * KeccakP1600times2_GetImplementation(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -272,7 +272,7 @@ const char * KeccakP1600times2_GetImplementation()
         return "none";
 }
 
-int KeccakP1600times2_GetFeatures()
+int KeccakP1600times2_GetFeatures(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -283,7 +283,7 @@ int KeccakP1600times2_GetFeatures()
         return 0;
 }
 
-void KeccakP1600times2_StaticInitialize()
+void KeccakP1600times2_StaticInitialize(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -590,7 +590,7 @@ size_t KeccakP1600times2_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, 
 
 #include "KeccakP-1600-times4-SnP.h"
 
-const char * KeccakP1600times4_GetImplementation()
+const char * KeccakP1600times4_GetImplementation(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -601,7 +601,7 @@ const char * KeccakP1600times4_GetImplementation()
         return "none";
 }
 
-int KeccakP1600times4_GetFeatures()
+int KeccakP1600times4_GetFeatures(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -612,7 +612,7 @@ int KeccakP1600times4_GetFeatures()
         return 0;
 }
 
-void KeccakP1600times4_StaticInitialize()
+void KeccakP1600times4_StaticInitialize(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -907,7 +907,7 @@ size_t KeccakP1600times4_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, 
 
 #include "KeccakP-1600-times8-SnP.h"
 
-const char * KeccakP1600times8_GetImplementation()
+const char * KeccakP1600times8_GetImplementation(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -916,7 +916,7 @@ const char * KeccakP1600times8_GetImplementation()
         return "none";
 }
 
-int KeccakP1600times8_GetFeatures()
+int KeccakP1600times8_GetFeatures(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -925,7 +925,7 @@ int KeccakP1600times8_GetFeatures()
         return 0;
 }
 
-void KeccakP1600times8_StaticInitialize()
+void KeccakP1600times8_StaticInitialize(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1184,7 +1184,7 @@ size_t KeccakP1600times8_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, 
 
 #include "Xoodoo-SnP.h"
 
-const char * Xoodoo_GetImplementation()
+const char * Xoodoo_GetImplementation(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1195,7 +1195,7 @@ const char * Xoodoo_GetImplementation()
         return Xoodoo_plain_GetImplementation();
 }
 
-int Xoodoo_GetFeatures()
+int Xoodoo_GetFeatures(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1206,7 +1206,7 @@ int Xoodoo_GetFeatures()
         return Xoodoo_plain_GetFeatures();
 }
 
-void Xoodoo_StaticInitialize()
+void Xoodoo_StaticInitialize(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1408,7 +1408,7 @@ size_t Xoodyak_DecryptFullBlocks(Xoodoo_state *state, const uint8_t *I, uint8_t 
 
 #include "Xoodoo-times4-SnP.h"
 
-const char * Xoodootimes4_GetImplementation()
+const char * Xoodootimes4_GetImplementation(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1419,7 +1419,7 @@ const char * Xoodootimes4_GetImplementation()
         return "none";
 }
 
-int Xoodootimes4_GetFeatures()
+int Xoodootimes4_GetFeatures(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1430,7 +1430,7 @@ int Xoodootimes4_GetFeatures()
         return 0;
 }
 
-void Xoodootimes4_StaticInitialize()
+void Xoodootimes4_StaticInitialize(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1603,7 +1603,7 @@ size_t Xooffftimes4_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kR
 
 #include "Xoodoo-times8-SnP.h"
 
-const char * Xoodootimes8_GetImplementation()
+const char * Xoodootimes8_GetImplementation(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1614,7 +1614,7 @@ const char * Xoodootimes8_GetImplementation()
         return "none";
 }
 
-int Xoodootimes8_GetFeatures()
+int Xoodootimes8_GetFeatures(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1625,7 +1625,7 @@ int Xoodootimes8_GetFeatures()
         return 0;
 }
 
-void Xoodootimes8_StaticInitialize()
+void Xoodootimes8_StaticInitialize(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1804,7 +1804,7 @@ size_t Xooffftimes8_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kR
 
 #include "Xoodoo-times16-SnP.h"
 
-const char * Xoodootimes16_GetImplementation()
+const char * Xoodootimes16_GetImplementation(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1813,7 +1813,7 @@ const char * Xoodootimes16_GetImplementation()
         return "none";
 }
 
-int Xoodootimes16_GetFeatures()
+int Xoodootimes16_GetFeatures(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1822,7 +1822,7 @@ int Xoodootimes16_GetFeatures()
         return 0;
 }
 
-void Xoodootimes16_StaticInitialize()
+void Xoodootimes16_StaticInitialize(void)
 {
     XKCP_EnsureProcessorCapabilities();
     if (XKCP_enableAVX512)
@@ -1980,7 +1980,7 @@ size_t Xooffftimes16_ExpandFastLoop(unsigned char *yAccu, const unsigned char *k
 #endif
 
 #if defined(IS_X86)
-static uint64_t xgetbv() {
+static uint64_t xgetbv(void) {
 #if defined(_MSC_VER)
   return _xgetbv(0);
 #else
@@ -2090,7 +2090,7 @@ static enum cpu_feature
   }
 }
 
-void XKCP_SetProcessorCapabilities()
+void XKCP_SetProcessorCapabilities(void)
 {
     enum cpu_feature features = get_cpu_features();
     XKCP_enableSSSE3 = (features & SSSE3);

@@ -26,10 +26,10 @@ typedef union {
     Xoodootimes4_align512SIMD128_states AVX512_states;
 } Xoodootimes4_states;
 
-const char * Xoodootimes4_GetImplementation();
-int Xoodootimes4_GetFeatures();
+const char * Xoodootimes4_GetImplementation(void);
+int Xoodootimes4_GetFeatures(void);
 
-void Xoodootimes4_StaticInitialize();
+void Xoodootimes4_StaticInitialize(void);
 void Xoodootimes4_InitializeAll(Xoodootimes4_states *states);
 
 void Xoodootimes4_AddByte(Xoodootimes4_states *states, unsigned int instanceIndex, unsigned char data, unsigned int offset);

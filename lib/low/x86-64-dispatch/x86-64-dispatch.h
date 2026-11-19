@@ -17,10 +17,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #ifndef _x86_64_dispatch_h_
 #define _x86_64_dispatch_h_
 
-void XKCP_EnableAllCpuFeatures();
-int XKCP_DisableSSSE3();
-int XKCP_DisableAVX2();
-int XKCP_DisableAVX512();
+void XKCP_EnableAllCpuFeatures(void);
+int XKCP_DisableSSSE3(void);
+int XKCP_DisableAVX2(void);
+int XKCP_DisableAVX512(void);
 int XKCP_ProcessCpuFeatureCommandLineOption(const char * arg);
 
 #endif

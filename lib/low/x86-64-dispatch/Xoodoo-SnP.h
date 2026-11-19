@@ -26,10 +26,10 @@ typedef union {
     Xoodoo_align128plain32_state align128plain32_state;
 } Xoodoo_state;
 
-const char * Xoodoo_GetImplementation();
-int Xoodoo_GetFeatures();
+const char * Xoodoo_GetImplementation(void);
+int Xoodoo_GetFeatures(void);
 
-void Xoodoo_StaticInitialize();
+void Xoodoo_StaticInitialize(void);
 void Xoodoo_Initialize(Xoodoo_state *state);
 void Xoodoo_AddByte(Xoodoo_state *state, uint8_t data, unsigned int offset);
 void Xoodoo_AddBytes(Xoodoo_state *state, const uint8_t *data, unsigned int offset, unsigned int length);

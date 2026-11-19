@@ -41,7 +41,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     #include "Xoodoo-times16-SnP.h"
 #endif
 
-void XKCP_PrintImplementations()
+void XKCP_PrintImplementations(void)
 {
     int SnP_feature_mask = ~0;
     int PlSnP_feature_mask __attribute__((unused)) = ~0;
