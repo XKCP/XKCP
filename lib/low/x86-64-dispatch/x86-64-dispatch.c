@@ -207,6 +207,7 @@ size_t KeccakP1600_ODDuplexingFastInOut(KeccakP1600_state *state, unsigned int l
         assert(0);
     else
         return KeccakP1600_plain64_ODDuplexingFastInOut(&state->plain64_state, laneCount, idata, len, odata, odataAdd, trailencAsLane);
+    return 0;
 }
 
 size_t KeccakP1600_12rounds_ODDuplexingFastInOut(KeccakP1600_state *state, unsigned int laneCount, const unsigned char *idata, size_t len, unsigned char *odata, const unsigned char *odataAdd, uint64_t trailencAsLane)
@@ -215,6 +216,7 @@ size_t KeccakP1600_12rounds_ODDuplexingFastInOut(KeccakP1600_state *state, unsig
         assert(0);
     else
         return KeccakP1600_12rounds_plain64_ODDuplexingFastInOut(&state->plain64_state, laneCount, idata, len, odata, odataAdd, trailencAsLane);
+    return 0;
 }
 
 size_t KeccakP1600_ODDuplexingFastOut(KeccakP1600_state *state, unsigned int laneCount, unsigned char *odata, size_t len, const unsigned char *odataAdd, uint64_t trailencAsLane)
@@ -223,6 +225,7 @@ size_t KeccakP1600_ODDuplexingFastOut(KeccakP1600_state *state, unsigned int lan
         assert(0);
     else
         return KeccakP1600_plain64_ODDuplexingFastOut(&state->plain64_state, laneCount, odata, len, odataAdd, trailencAsLane);
+    return 0;
 }
 
 size_t KeccakP1600_12rounds_ODDuplexingFastOut(KeccakP1600_state *state, unsigned int laneCount, unsigned char *odata, size_t len, const unsigned char *odataAdd, uint64_t trailencAsLane)
@@ -231,6 +234,7 @@ size_t KeccakP1600_12rounds_ODDuplexingFastOut(KeccakP1600_state *state, unsigne
         assert(0);
     else
         return KeccakP1600_12rounds_plain64_ODDuplexingFastOut(&state->plain64_state, laneCount, odata, len, odataAdd, trailencAsLane);
+    return 0;
 }
 
 size_t KeccakP1600_ODDuplexingFastIn(KeccakP1600_state *state, unsigned int laneCount, const uint8_t *idata, size_t len, uint64_t trailencAsLane)
@@ -239,6 +243,7 @@ size_t KeccakP1600_ODDuplexingFastIn(KeccakP1600_state *state, unsigned int lane
         assert(0);
     else
         return KeccakP1600_plain64_ODDuplexingFastIn(&state->plain64_state, laneCount, idata, len, trailencAsLane);
+    return 0;
 }
 
 size_t KeccakP1600_12rounds_ODDuplexingFastIn(KeccakP1600_state *state, unsigned int laneCount, const uint8_t *idata, size_t len, uint64_t trailencAsLane)
@@ -247,6 +252,7 @@ size_t KeccakP1600_12rounds_ODDuplexingFastIn(KeccakP1600_state *state, unsigned
         assert(0);
     else
         return KeccakP1600_12rounds_plain64_ODDuplexingFastIn(&state->plain64_state, laneCount, idata, len, trailencAsLane);
+    return 0;
 }
 
 #endif
@@ -446,6 +452,7 @@ size_t KeccakF1600times2_FastLoop_Absorb(KeccakP1600times2_states *states, unsig
         return KeccakF1600times2_SSSE3_FastLoop_Absorb(&states->SSSE3_states, laneCount, laneOffsetParallel, laneOffsetSerial, data, dataByteLen);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_12rounds_FastLoop_Absorb(KeccakP1600times2_states *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen)
@@ -456,26 +463,32 @@ size_t KeccakP1600times2_12rounds_FastLoop_Absorb(KeccakP1600times2_states *stat
         return KeccakP1600times2_12rounds_SSSE3_FastLoop_Absorb(&states->SSSE3_states, laneCount, laneOffsetParallel, laneOffsetSerial, data, dataByteLen);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, const unsigned char *input, size_t inputByteLen)
 {
+    (void)xAccu; (void)kRoll; (void)input; (void)inputByteLen;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, unsigned char *output, size_t outputByteLen)
 {
+    (void)yAccu; (void)kRoll; (void)output; (void)outputByteLen;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 void KeccakP1600times2_KT128ProcessLeaves(const unsigned char *input, unsigned char *output)
 {
+    (void)input; (void)output;
     if (XKCP_enableSSSE3)
         assert(0);
     else
@@ -484,6 +497,7 @@ void KeccakP1600times2_KT128ProcessLeaves(const unsigned char *input, unsigned c
 
 void KeccakP1600times2_KT256ProcessLeaves(const unsigned char *input, unsigned char *output)
 {
+    (void)input; (void)output;
     if (XKCP_enableSSSE3)
         assert(0);
     else
@@ -492,66 +506,82 @@ void KeccakP1600times2_KT256ProcessLeaves(const unsigned char *input, unsigned c
 
 size_t KeccakP1600times2_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
 {
+    (void)Dlast; (void)input; (void)output;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
 {
+    (void)Dlast; (void)input; (void)output;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
 {
+    (void)Dlast; (void)input; (void)output;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
 {
+    (void)Dlast; (void)input; (void)output;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
 {
+    (void)Dlast; (void)offset; (void)odata; (void)olen; (void)oadded;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
 {
+    (void)Dlast; (void)offset; (void)odata; (void)olen; (void)oadded;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
 {
+    (void)Dlast; (void)offset; (void)odata; (void)olen; (void)oadded;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times2_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
 {
+    (void)Dlast; (void)offset; (void)odata; (void)olen; (void)oadded;
     if (XKCP_enableSSSE3)
         assert(0);
     else
         assert(0);
+    return 0;
 }
 
 #endif
@@ -751,6 +781,7 @@ size_t KeccakF1600times4_FastLoop_Absorb(KeccakP1600times4_states *states, unsig
         return KeccakF1600times4_AVX2_FastLoop_Absorb(&states->AVX2_states, laneCount, laneOffsetParallel, laneOffsetSerial, data, dataByteLen);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_12rounds_FastLoop_Absorb(KeccakP1600times4_states *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen)
@@ -761,6 +792,7 @@ size_t KeccakP1600times4_12rounds_FastLoop_Absorb(KeccakP1600times4_states *stat
         return KeccakP1600times4_12rounds_AVX2_FastLoop_Absorb(&states->AVX2_states, laneCount, laneOffsetParallel, laneOffsetSerial, data, dataByteLen);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, const unsigned char *input, size_t inputByteLen)
@@ -769,6 +801,7 @@ size_t KeccakP1600times4_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
         return KeccakP1600times4_AVX2_KravatteCompress(xAccu, kRoll, input, inputByteLen);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, unsigned char *output, size_t outputByteLen)
@@ -777,6 +810,7 @@ size_t KeccakP1600times4_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, 
         return KeccakP1600times4_AVX2_KravatteExpand(yAccu, kRoll, output, outputByteLen);
     else
         assert(0);
+    return 0;
 }
 
 void KeccakP1600times4_KT128ProcessLeaves(const unsigned char *input, unsigned char *output)
@@ -801,6 +835,7 @@ size_t KeccakP1600times4_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned ch
         return KeccakP1600times4_AVX2_TurboSHAKE128_FlightDeckProcessLeaves(Dlast, input, output);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
@@ -809,6 +844,7 @@ size_t KeccakP1600times4_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned ch
         return KeccakP1600times4_AVX2_TurboSHAKE256_FlightDeckProcessLeaves(Dlast, input, output);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
@@ -817,6 +853,7 @@ size_t KeccakP1600times4_SHAKE128_FlightDeckProcessLeaves(const unsigned char *D
         return KeccakP1600times4_AVX2_SHAKE128_FlightDeckProcessLeaves(Dlast, input, output);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
@@ -825,6 +862,7 @@ size_t KeccakP1600times4_SHAKE256_FlightDeckProcessLeaves(const unsigned char *D
         return KeccakP1600times4_AVX2_SHAKE256_FlightDeckProcessLeaves(Dlast, input, output);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
@@ -833,6 +871,7 @@ size_t KeccakP1600times4_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dl
         return KeccakP1600times4_AVX2_TurboSHAKE128_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
@@ -841,6 +880,7 @@ size_t KeccakP1600times4_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dl
         return KeccakP1600times4_AVX2_TurboSHAKE256_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
@@ -849,6 +889,7 @@ size_t KeccakP1600times4_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, 
         return KeccakP1600times4_AVX2_SHAKE128_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times4_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
@@ -857,6 +898,7 @@ size_t KeccakP1600times4_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, 
         return KeccakP1600times4_AVX2_SHAKE256_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
     else
         assert(0);
+    return 0;
 }
 
 #endif
@@ -1018,6 +1060,7 @@ size_t KeccakF1600times8_FastLoop_Absorb(KeccakP1600times8_states *states, unsig
         return KeccakF1600times8_AVX512_FastLoop_Absorb(&states->AVX512_states, laneCount, laneOffsetParallel, laneOffsetSerial, data, dataByteLen);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_12rounds_FastLoop_Absorb(KeccakP1600times8_states *states, unsigned int laneCount, unsigned int laneOffsetParallel, unsigned int laneOffsetSerial, const unsigned char *data, size_t dataByteLen)
@@ -1026,6 +1069,7 @@ size_t KeccakP1600times8_12rounds_FastLoop_Absorb(KeccakP1600times8_states *stat
         return KeccakP1600times8_12rounds_AVX512_FastLoop_Absorb(&states->AVX512_states, laneCount, laneOffsetParallel, laneOffsetSerial, data, dataByteLen);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, const unsigned char *input, size_t inputByteLen)
@@ -1034,6 +1078,7 @@ size_t KeccakP1600times8_KravatteCompress(uint64_t *xAccu, uint64_t *kRoll, cons
         return KeccakP1600times8_AVX512_KravatteCompress(xAccu, kRoll, input, inputByteLen);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, unsigned char *output, size_t outputByteLen)
@@ -1042,6 +1087,7 @@ size_t KeccakP1600times8_KravatteExpand(uint64_t *yAccu, const uint64_t *kRoll, 
         return KeccakP1600times8_AVX512_KravatteExpand(yAccu, kRoll, output, outputByteLen);
     else
         assert(0);
+    return 0;
 }
 
 void KeccakP1600times8_KT128ProcessLeaves(const unsigned char *input, unsigned char *output)
@@ -1066,6 +1112,7 @@ size_t KeccakP1600times8_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned ch
         return KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckProcessLeaves(Dlast, input, output);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
@@ -1074,6 +1121,7 @@ size_t KeccakP1600times8_TurboSHAKE256_FlightDeckProcessLeaves(const unsigned ch
         return KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckProcessLeaves(Dlast, input, output);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_SHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
@@ -1082,6 +1130,7 @@ size_t KeccakP1600times8_SHAKE128_FlightDeckProcessLeaves(const unsigned char *D
         return KeccakP1600times8_AVX512_SHAKE128_FlightDeckProcessLeaves(Dlast, input, output);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_SHAKE256_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
@@ -1090,6 +1139,7 @@ size_t KeccakP1600times8_SHAKE256_FlightDeckProcessLeaves(const unsigned char *D
         return KeccakP1600times8_AVX512_SHAKE256_FlightDeckProcessLeaves(Dlast, input, output);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
@@ -1098,6 +1148,7 @@ size_t KeccakP1600times8_TurboSHAKE128_FlightDeckSqueeze(const unsigned char *Dl
         return KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
@@ -1106,6 +1157,7 @@ size_t KeccakP1600times8_TurboSHAKE256_FlightDeckSqueeze(const unsigned char *Dl
         return KeccakP1600times8_AVX512_TurboSHAKE256_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
@@ -1114,6 +1166,7 @@ size_t KeccakP1600times8_SHAKE128_FlightDeckSqueeze(const unsigned char *Dlast, 
         return KeccakP1600times8_AVX512_SHAKE128_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
     else
         assert(0);
+    return 0;
 }
 
 size_t KeccakP1600times8_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, size_t offset, unsigned char *odata, size_t olen, const unsigned char *oadded)
@@ -1122,6 +1175,7 @@ size_t KeccakP1600times8_SHAKE256_FlightDeckSqueeze(const unsigned char *Dlast, 
         return KeccakP1600times8_AVX512_SHAKE256_FlightDeckSqueeze(Dlast, offset, odata, olen, oadded);
     else
         assert(0);
+    return 0;
 }
 
 #endif
@@ -1159,8 +1213,9 @@ void Xoodoo_StaticInitialize()
         Xoodoo_AVX512_StaticInitialize();
     else if (XKCP_enableSSSE3)
         Xoodoo_SSSE3_StaticInitialize();
-    else
+    else {
         Xoodoo_plain_StaticInitialize();
+    }
 }
 
 void Xoodoo_Initialize(Xoodoo_state *state)
@@ -1530,6 +1585,7 @@ size_t Xooffftimes4_CompressFastLoop(unsigned char *k, unsigned char *x, const u
         return Xooffftimes4_AVX512_CompressFastLoop(k, x, input, length);
     else
         assert(0);
+    return 0;
 }
 
 size_t Xooffftimes4_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, unsigned char *output, size_t length)
@@ -1538,6 +1594,7 @@ size_t Xooffftimes4_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kR
         return Xooffftimes4_AVX512_ExpandFastLoop(yAccu, kRoll, output, length);
     else
         assert(0);
+    return 0;
 }
 
 #endif
@@ -1727,6 +1784,7 @@ size_t Xooffftimes8_CompressFastLoop(unsigned char *k, unsigned char *x, const u
         return Xooffftimes8_AVX2_CompressFastLoop(k, x, input, length);
     else
         assert(0);
+    return 0;
 }
 
 size_t Xooffftimes8_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, unsigned char *output, size_t length)
@@ -1737,6 +1795,7 @@ size_t Xooffftimes8_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kR
         return Xooffftimes8_AVX2_ExpandFastLoop(yAccu, kRoll, output, length);
     else
         assert(0);
+    return 0;
 }
 
 #endif
@@ -1890,6 +1949,7 @@ size_t Xooffftimes16_CompressFastLoop(unsigned char *k, unsigned char *x, const 
         return Xooffftimes16_AVX512_CompressFastLoop(k, x, input, length);
     else
         assert(0);
+    return 0;
 }
 
 size_t Xooffftimes16_ExpandFastLoop(unsigned char *yAccu, const unsigned char *kRoll, unsigned char *output, size_t length)
@@ -1898,6 +1958,7 @@ size_t Xooffftimes16_ExpandFastLoop(unsigned char *yAccu, const unsigned char *k
         return Xooffftimes16_AVX512_ExpandFastLoop(yAccu, kRoll, output, length);
     else
         assert(0);
+    return 0;
 }
 
 #endif
