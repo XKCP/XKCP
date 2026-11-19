@@ -93,8 +93,6 @@ int ParallelOD_Duplexing( ParallelODInstance *pod, unsigned char *output, unsign
         || (outputLen > pod->rho))
         return 1;
 
-    unsigned int laneCount = inputLen / laneSize;
-    unsigned int laneOffset = inOffset / laneSize;
     unsigned char E0 = OD_Concat( E, 0u );
     unsigned char E1 = OD_Concat( E, 1u );
 
@@ -127,9 +125,6 @@ int ParallelOD_Squeezing( ParallelODInstance *pod, unsigned char *output, unsign
     if ((pod->rho == 0u)
         || (outputLen + pod->o > pod->rho))
         return 1;
-
-    unsigned int laneCount = outputLen / laneSize;
-    unsigned int laneOffset = outOffset / laneSize;
 
     if (outputLen > 0) {
         if ((pod->o == 0) && (outputLen % laneSize == 0) && (outOffset % laneSize == 0)) {

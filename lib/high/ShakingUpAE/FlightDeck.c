@@ -41,7 +41,7 @@ size_t FlightDeckString(unsigned char *result, size_t result_size, unsigned int 
 {
     size_t blen = 0;
     unsigned int temp = n;
-    int i;
+    size_t i;
     do {
         for(i=0; i<granularity; i++) {
             blen++;
