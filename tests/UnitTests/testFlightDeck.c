@@ -154,10 +154,10 @@ void testFlightDeck()
 
     #ifdef XKCP_has_OD_Keccak_width1600
     UT_startTest("(Turbo)SHAKE-FlightDeck", "");
-    SHAKE_selfTestFlightDeck(128, 0x5fffde4d);
-    SHAKE_selfTestFlightDeck(256, 0x87f80d7c);
-    TurboSHAKE_selfTestFlightDeck(128, 0xb458b993);
-    TurboSHAKE_selfTestFlightDeck(256, 0x7812c1cf);
+    SHAKE_selfTestFlightDeck(128, 0xa04782d3);
+    SHAKE_selfTestFlightDeck(256, 0x61a26398);
+    TurboSHAKE_selfTestFlightDeck(128, 0x105ffc60);
+    TurboSHAKE_selfTestFlightDeck(256, 0x2637e6dc);
     UT_endTest();
     #endif
 }

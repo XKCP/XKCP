@@ -17,6 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #define performTestFlightDeck           JOIN(prefix, _performTestFlightDeck)
 #define performTestFlightDeck_Duplexing JOIN(prefix, _performTestFlightDeck_Duplexing)
+#define performTestFlightDeck_Squeezing JOIN(prefix, _performTestFlightDeck_Squeezing)
 #define selfTestFlightDeck              JOIN(prefix, _selfTestFlightDeck)
 #define writeTestFlightDeck             JOIN(prefix, _writeTestFlightDeck)
 #define FlightDeckInstance              JOIN(inst, _FlightDeckInstance)
@@ -47,6 +48,23 @@ void performTestFlightDeck_Duplexing(UT_arbitraryChecksumState *checksum, uint32
     UT_arbitraryChecksumAbsorb(checksum, odata, olen);
 }
 
+void performTestFlightDeck_Squeezing(FlightDeckInstance *fd, const unsigned char *idata, size_t ilen, const unsigned char *odata_ref, size_t olen, size_t olen1, size_t olen2)
+{
+    unsigned char odata[olen];
+    size_t olen3 = olen - olen1 - olen2;
+
+    memset(odata, 0, olen);
+    UT_assert(FlightDeck_Duplexing(fd, odata, olen1, idata, ilen, 1, NULL) == 0);
+    UT_assert(is_all_zeroes(odata+olen1, olen-olen1));
+    UT_assert(FlightDeck_Squeezing(fd, odata+olen1, olen2, NULL) == 0);
+    UT_assert(is_all_zeroes(odata+olen1+olen2, olen-olen1-olen2));
+    if (olen3 > 0) {
+        FlightDeckInstance fd_cloned;
+        UT_assert(FlightDeck_Clone(&fd_cloned, fd) == 0);
+        UT_assert(FlightDeck_Squeezing(&fd_cloned, odata+olen1+olen2, olen3, NULL) == 0);
+    }
+    UT_assert(memcmp(odata, odata_ref, olen) == 0);
+}
 
 UT_arbitraryChecksum performTestFlightDeck(unsigned int s)
 {
@@ -90,34 +108,28 @@ UT_arbitraryChecksum performTestFlightDeck(unsigned int s)
         }
     }
     {
-        unsigned char idata[rho];
-        unsigned char odata_ref[rho];
-        unsigned char odata[rho];
-        unsigned int olen1, olen2;
+        size_t ilen = rho;
+        size_t olen = rho*4;
+        unsigned char idata[ilen];
+        unsigned char odata_ref[olen];
+        unsigned char odata[olen];
         FlightDeckInstance fd_cloned;
+        size_t olen1, olen2;
 
-        UT_generateArbitraryMaterial(idata, rho, seed++);
+        UT_generateArbitraryMaterial(idata, ilen, seed++);
 
         UT_assert(FlightDeck_Initialize(&fd, s, key, keyLength) == 0);
         UT_assert(FlightDeck_CloneCompact(&fd_cloned, &fd) == 0);
-        UT_assert(FlightDeck_Duplexing(&fd, odata_ref, rho, idata, rho, 1, NULL) == 0);
-        UT_arbitraryChecksumAbsorb(&checksum, odata_ref, rho);
+        UT_assert(FlightDeck_Duplexing(&fd, odata_ref, olen, idata, ilen, 1, NULL) == 0);
+        UT_arbitraryChecksumAbsorb(&checksum, odata_ref, olen);
 
-        UT_assert(FlightDeck_Duplexing(&fd_cloned, odata, rho, idata, rho, 1, NULL) == 0);
-        UT_assert(memcmp(odata, odata_ref, rho) == 0);
+        UT_assert(FlightDeck_Duplexing(&fd_cloned, odata, olen, idata, ilen, 1, NULL) == 0);
+        UT_assert(memcmp(odata, odata_ref, olen) == 0);
 
-        for(olen1=0; olen1<rho; olen1++) {
-            for(olen2=0; olen2<=(rho-olen1); olen2++) {
-                unsigned int olen3 = rho - olen1 - olen2;
-                memset(odata, 0, rho);
+        for(olen1=0; olen1<=rho*2; olen1++) {
+            for(olen2=0; (olen2<=(olen-olen1)) && (olen2<=rho); olen2++) {
                 UT_assert(FlightDeck_Initialize(&fd, s, key, keyLength) == 0);
-                UT_assert(FlightDeck_Duplexing(&fd, odata, olen1, idata, rho, 1, NULL) == 0);
-                UT_assert(is_all_zeroes(odata+olen1, rho-olen1));
-                UT_assert(FlightDeck_Squeezing(&fd, odata+olen1, olen2, NULL) == 0);
-                UT_assert(is_all_zeroes(odata+olen1+olen2, rho-olen1-olen2));
-                UT_assert(FlightDeck_Clone(&fd_cloned, &fd) == 0);
-                UT_assert(FlightDeck_Squeezing(&fd_cloned, odata+olen1+olen2, olen3, NULL) == 0);
-                UT_assert(memcmp(odata, odata_ref, rho) == 0);
+                performTestFlightDeck_Squeezing(&fd, idata, ilen, odata_ref, olen, olen1, olen2);
             }
         }
     }
@@ -182,6 +194,7 @@ void writeTestFlightDeck(FILE *f, unsigned int s)
 
 #undef performTestFlightDeck
 #undef performTestFlightDeck_Duplexing
+#undef performTestFlightDeck_Squeezing
 #undef selfTestFlightDeck
 #undef writeTestFlightDeck
 #undef FlightDeckInstance
