@@ -141,3 +141,43 @@ jobs:
           # OPTIONS is split into words on purpose.
           # shellcheck disable=SC2086
           tests/MemoryAlignment/run.sh . "$TARGET" $OPTIONS
+
+  # Build the library with the warnings of -Wall -Wextra -Wpedantic as
+  # errors, as some downstream builds do, with GCC and Clang, with and
+  # without NDEBUG. Only the library: the tests and the benchmarks still
+  # give warnings. A new compiler release can add warnings, so this job
+  # can start to fail when the runner image updates its compilers.
+  library_warnings:
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-latest, ubuntu-24.04-arm]
+        compiler: [gcc, clang]
+        ndebug: ["", -DNDEBUG]
+    env:
+      CC: ${{ matrix.compiler }}
+      NDEBUG_FLAG: ${{ matrix.ndebug }}
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y xsltproc clang
+
+      - name: Build the library with warnings as errors
+        run: |
+          if [ "$(uname -m)" = x86_64 ]; then targets="x86-64 generic64"; else targets="aarch64 generic64"; fi
+          "$CC" --version | head -n 1
+          for target in $targets; do
+            echo "== $target"
+            rm -rf bin/.build
+            make -j"$(nproc)" "$target/libXKCP.a" CC="$CC" EXTRA_CFLAGS="-std=c99 -O2 -Wall -Wextra -Wpedantic -Werror $NDEBUG_FLAG"
+          done
