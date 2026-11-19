@@ -250,6 +250,14 @@ int FlightDeck_Squeezing(KeccakWidth1600_FlightDeckInstance *fd, unsigned char *
         fd->o     += x;
         processed += x;
     }
+    if ( (processed < outputLen) && ((fd->o % fd->D.rho) != 0) ) {
+        unsigned int x = MYMIN( fd->D.rho - (fd->o % fd->D.rho), outputLen - processed );
+        OD_Squeezing( &fd->Dsqueeze, output, x, toAdd );
+        output += x;
+        if ( toAdd != NULL ) toAdd += x;
+        fd->o     += x;
+        processed += x;
+    }
 #ifdef XKCP_has_KeccakP1600times8
     ParallelSqueezingLoop( 8 )
 #endif
