@@ -9,7 +9,20 @@ permissions:
 
 jobs:
   permutations_different_low_level_implementations:
-    runs-on: ubuntu-latest
+    # Pinned to ubuntu-24.04 instead of ubuntu-latest, for now.
+    #
+    # GitHub is moving ubuntu-latest to the ubuntu-26.04 image, which has
+    # Docker 29.4.2. The default seccomp profile of that Docker release
+    # makes the 32-bit socketcall system call fail with ENOSYS. The CI image
+    # installs wine32:i386, so "wine" starts the 32-bit Wine loader, and
+    # 32-bit glibc implements socket() with socketcall: the Wine tests then
+    # stop with "wine: socket : Function not implemented".
+    #
+    # Docker 29.4.3 and later allow socketcall again. Switch back to
+    # ubuntu-latest when the ubuntu-26.04 image has one of them
+    # (https://github.com/actions/runner-images/issues/14790 and
+    # https://github.com/actions/runner-images/issues/15205).
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout repository
