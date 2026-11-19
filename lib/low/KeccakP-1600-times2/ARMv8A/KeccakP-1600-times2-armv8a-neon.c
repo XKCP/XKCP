@@ -58,16 +58,6 @@ static inline __attribute__((always_inline)) V128 LOAD6464(const unsigned char *
     return vcombine_u64(lo, hi);
 }
 
-/* Store low 64 bits */
-static inline void STORE64L(uint64_t *a, V128 b) {
-    vst1_u64(a, vget_low_u64(b));
-}
-
-/* Store high 64 bits */
-static inline void STORE64H(uint64_t *a, V128 b) {
-    vst1_u64(a, vget_high_u64(b));
-}
-
 /* 64-bit rotate left within 128-bit vector (both lanes) */
 #define ROL64in128(a, o)    vorrq_u64(vshlq_n_u64(a, o), vshrq_n_u64(a, 64-(o)))
 
