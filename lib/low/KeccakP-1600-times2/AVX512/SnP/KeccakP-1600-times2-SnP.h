@@ -47,4 +47,13 @@ typedef KeccakP1600times2_align512SIMD128_states KeccakP1600times2_states;
 #define KeccakP1600times2_KT128ProcessLeaves(...)
 #define KeccakP1600times2_KT256ProcessLeaves(...)
 
+#define KeccakP1600times2_TurboSHAKE128_FlightDeckProcessLeaves(...)    0
+#define KeccakP1600times2_TurboSHAKE256_FlightDeckProcessLeaves(...)    0
+#define KeccakP1600times2_SHAKE128_FlightDeckProcessLeaves(...)         0
+#define KeccakP1600times2_SHAKE256_FlightDeckProcessLeaves(...)         0
+#define KeccakP1600times2_TurboSHAKE128_FlightDeckSqueeze(...)          0
+#define KeccakP1600times2_TurboSHAKE256_FlightDeckSqueeze(...)          0
+#define KeccakP1600times2_SHAKE128_FlightDeckSqueeze(...)               0
+#define KeccakP1600times2_SHAKE256_FlightDeckSqueeze(...)               0
+
 #endif
