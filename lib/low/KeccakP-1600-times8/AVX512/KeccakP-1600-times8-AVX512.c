@@ -1140,7 +1140,7 @@ void KeccakP1600times8_AVX512_KT256ProcessLeaves(const unsigned char *input, uns
     const unsigned int chunkSize = 5120; \
     const unsigned int rho = 160; \
     KeccakP_DeclareVars; \
-    unsigned int i, j; \
+    unsigned int i __attribute__((unused)), j; \
     unsigned char *outputAsLanes = output; \
     __m256i index; \
     __m512i t0, t1, t2, t3, t4, t5, t6, t7; \
@@ -1160,9 +1160,7 @@ void KeccakP1600times8_AVX512_KT256ProcessLeaves(const unsigned char *input, uns
     const unsigned int chunkSize = 8192; \
     const unsigned int rho = 128; \
     KeccakP_DeclareVars; \
-    unsigned int i, j; \
-    unsigned char *outputAsLanes = output; \
-    __m256i index; \
+    unsigned int i __attribute__((unused)), j; \
     __m512i t0, t1, t2, t3, t4, t5, t6, t7; \
     __m512i r0, r1, r2, r3, r4, r5, r6, r7; \
     const V512 trailer1 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000003ULL); \
@@ -1176,9 +1174,7 @@ void KeccakP1600times8_AVX512_KT256ProcessLeaves(const unsigned char *input, uns
     _se = LOAD64_BROADCAST(XKCP_loadLane64(Dlast, 5)); \
     _si = LOAD64_BROADCAST(XKCP_loadLane64(Dlast, 6)); \
     _so = LOAD64_BROADCAST(XKCP_loadLane64(Dlast, 7)); \
-    _su = LOAD64_BROADCAST(XKCP_loadLane64(Dlast, 8)); \
-    \
-    index = LOAD8_32(7*(chunkSize / 8), 6*(chunkSize / 8), 5*(chunkSize / 8), 4*(chunkSize / 8), 3*(chunkSize / 8), 2*(chunkSize / 8), 1*(chunkSize / 8), 0*(chunkSize / 8));
+    _su = LOAD64_BROADCAST(XKCP_loadLane64(Dlast, 8));
 
 #define Store4(A, B, C, D, offset, distance, output) { \
     __m256i r0, r1, r2, r3, r4, r5, r6, r7; \
@@ -1252,18 +1248,6 @@ void KeccakP1600times8_AVX512_KT256ProcessLeaves(const unsigned char *input, uns
     STORE_SCATTER8_64(outputAsLanes+8*3, index, _bo);
 
 #define Epilogue256 \
-    index = LOAD8_32(7*8, 6*8, 5*8, 4*8, 3*8, 2*8, 1*8, 0*8); \
-    STORE_SCATTER8_64(outputAsLanes+8*0, index, _ba); \
-    STORE_SCATTER8_64(outputAsLanes+8*1, index, _be); \
-    STORE_SCATTER8_64(outputAsLanes+8*2, index, _bi); \
-    STORE_SCATTER8_64(outputAsLanes+8*3, index, _bo); \
-    STORE_SCATTER8_64(outputAsLanes+8*4, index, _bu); \
-    STORE_SCATTER8_64(outputAsLanes+8*5, index, _ga); \
-    STORE_SCATTER8_64(outputAsLanes+8*6, index, _ge); \
-    STORE_SCATTER8_64(outputAsLanes+8*7, index, _gi);
-
-#undef Epilogue256
-#define Epilogue256 \
     Store8(_ba, _be, _bi, _bo, _bu, _ga, _ge, _gi, 0, 64, output) \
 
 size_t KeccakP1600times8_AVX512_TurboSHAKE128_FlightDeckProcessLeaves(const unsigned char *Dlast, const unsigned char *input, unsigned char *output)
@@ -1333,7 +1317,7 @@ size_t KeccakP1600times8_AVX512_SHAKE256_FlightDeckProcessLeaves(const unsigned 
 
 #define Prologue(suffix) \
     KeccakP_DeclareVars; \
-    unsigned int i, j; \
+    unsigned int i __attribute__((unused)); \
     const V512 trailer2 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000006ULL); \
     const V512 increment = LOAD64_BROADCAST(8); \
     V512 r0, r1, r2, r3, r4, r5, r6, r7; \

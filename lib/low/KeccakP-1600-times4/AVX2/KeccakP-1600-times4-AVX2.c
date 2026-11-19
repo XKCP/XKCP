@@ -1548,7 +1548,7 @@ void KeccakP1600times4_AVX2_KT256ProcessLeaves(const unsigned char *input, unsig
     const unsigned int chunkSize = 5120; \
     const unsigned int rho = 160; \
     declareABCDE \
-    unsigned int i, j; \
+    unsigned int i __attribute__((unused)), j; \
     const __m256i trailer1 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000003ULL); \
     const __m256i trailer4 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x800000000000000CULL); \
     __m256i lanesL01, lanesL23, lanesH01, lanesH23; \
@@ -1563,7 +1563,7 @@ void KeccakP1600times4_AVX2_KT256ProcessLeaves(const unsigned char *input, unsig
     const unsigned int chunkSize = 8192; \
     const unsigned int rho = 128; \
     declareABCDE \
-    unsigned int i, j; \
+    unsigned int i __attribute__((unused)), j; \
     const __m256i trailer1 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000003ULL); \
     const __m256i trailer4 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x800000000000000CULL); \
     __m256i lanesL01, lanesL23, lanesH01, lanesH23; \
@@ -1672,7 +1672,7 @@ size_t KeccakP1600times4_AVX2_SHAKE256_FlightDeckProcessLeaves(const unsigned ch
 
 #define Prologue(suffix) \
     declareABCDE \
-    unsigned int i, j; \
+    unsigned int i __attribute__((unused)); \
     const V256 trailer2 = LOAD64_BROADCAST(((uint64_t)suffix << 56) + 0x8000000000000006ULL); \
     const V256 increment = LOAD64_BROADCAST(4); \
     size_t processedBytes = 0; \
