@@ -276,10 +276,11 @@ We wish to thank all the contributors, and in particular:
 - Hussama Ismail for setting up the continuous integration with Travis
 - Kent Ross for various improvements in [XKCP/K12](https://github.com/XKCP/K12) imported here
 - Larry Bassham, NIST for the original `genKAT.c` developed during the SHA-3 contest
+- Phong X. Nguyen for the many improvements and fixes in our code
 - Ryad Benadjila for adding continuous integration on different platforms with qemu
 - Samuel Neves and Jack O'Connor for their processor capability detection code
 - Stéphane Léon for helping support macOS
-- And to all those who fixed bugs or brought improvements (in no specific order): Tyler Young, Robert J Spencer, amane-c, Øystein Heskestad, Norman (Hongyu) Xu, Jorrit Jongma, David Adrian, Sebastian Ramacher, lvd2, Sam Chen, Thom Wiggers, Thomas van der Burgt, Donald Tsang, MoorayJenkins, UnePierre, Diggory Hardy, Joost Rijneveld, Steve Thomas, Benoît Viguier, Ko Stoffelen, Bogdan Vaneev, Alf Watt, surrim, Robert Crossfield, David Leon Gil, Matt Kelly, Ross Biro
+- And to all those who fixed bugs or brought improvements (in no specific order): Frank Denis, Uxio, qnfm, Aditya Pal, Stephan Schmiedmayer, Amir Ayupov, Tyler Young, Robert J Spencer, amane-c, Øystein Heskestad, Norman (Hongyu) Xu, Jorrit Jongma, David Adrian, Sebastian Ramacher, lvd2, Sam Chen, Thom Wiggers, Thomas van der Burgt, Donald Tsang, MoorayJenkins, UnePierre, Diggory Hardy, Joost Rijneveld, Steve Thomas, Benoît Viguier, Ko Stoffelen, Bogdan Vaneev, Alf Watt, surrim, Robert Crossfield, David Leon Gil, Matt Kelly, Ross Biro
 
 ***
 
